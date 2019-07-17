@@ -1,0 +1,58 @@
+---
+title: Markdown 语法
+date: 2018-07-31 17:00:18
+categories: 
+- 工具
+tags: 
+---
+标题
+=====
+# 1
+## 1.1
+### 1.1.1
+#### 1.1.1
+##### 1.1.1 a
+```
+var a="1";
+a+=2;
+print a;
+```
+>这一段，
+><p>引言</p>
+>叫区块引用
+
+*斜体*
+**加粗**
+~~删除线~~
++ 第一教条
++ 第二条
+
+1. 首先
+6. 然后
+3. 最后
+
+
+*   Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
+viverra nec, fringilla in, laoreet vitae, risus.
+*   Donec sit amet nisl. Aliquam semper ipsum sit amet velit.
+Suspendisse id sem consectetuer libero luctus adipiscing.
+
+这个是[百度链接](http://baidu.com/ "点击进入百度首页") 可以使用相对路径
+
+[QQstone笔记](https://qqstone.github.io/qqsnote/ "进入笔记首页")
+
+根据某某某考证，见[该刊][1](http://baidu.com/ )。
+
+![cannot load pic here](http://pic108.huitu.com/res/20180719/1301968_20180719100805887080_1.jpg "Light")
+
+左对齐|居中|右对齐
+---|:--:|---:
+内容|内容|内容
+内容|内容|内容
+
+`console.log('code here')`
+
+```
+console.log('code here')
+```
