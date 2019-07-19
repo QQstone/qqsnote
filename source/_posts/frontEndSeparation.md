@@ -14,12 +14,13 @@ tags:
 #### 访问权限
 浏览器报You don't have permission to access /index.html on this server.
 ```
-<Directory />         Options FollowSymLinks         AllowOverride All         Order deny,allow      Deny from all         Satisfy all</Directory>
---------------------- 
-作者：tianlianchao1982 
-来源：CSDN 
-原文：https://blog.csdn.net/tianlianchao1982/article/details/6161308 
-版权声明：本文为博主原创文章，转载请附上博文链接！
+<Directory />         
+    Options FollowSymLinks         
+    AllowOverride All         
+    Order deny,allow      
+    Deny from all         
+    Satisfy all
+</Directory>
 ```
 上述配置是没毛病的，然而只是Apache22语法，Apache24不支持
 服务器启动报Invalid command Order等
