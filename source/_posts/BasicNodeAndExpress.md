@@ -4,7 +4,43 @@ date: 2019-07-19 18:06:12
 tags:
 ---
 > 一切可以用JavaScript实现的，终将用Javascript来实现
-Node 是js的一种新的运行环境
+
+Node 是js的一种新的运行环境，Node可以编写web 应用程序. Express 是一个简洁而灵活的 node.js Web 应用程序框架, 提供了一系列强大特性帮助你创建各种 Web 应用，和丰富的 HTTP 工具。<br>
+
+server.js
+```
+const express = require('express');
+const app = express();
+
+app.get('/',function(req, res){
+    res.send('hello express')
+});
+
+const listener = app.listen(8080, function(){
+    console.log('express app is running on port '+listener.address().port)
+})
+```
+插一句，require和import<br>
+vscode 建议我将上面第一行代码改为‘import express from 'express'’<br>
+Require是CommonJS的语法，CommonJS的模块是对象，输入时必须查找对象属性。
+```
+declare module.fs{
+  function stat(){}
+  //...
+}
+```
+```
+let { stat, exists, readFile } = require('fs');
+
+// 等同于
+let _fs = require('fs');
+let stat = _fs.stat;
+let exists = _fs.exists;
+let readfile = _fs.readfile;
+```
+ES6模块不是对象，而是通过export命令显示指定输出<strong>代码</strong>，再通过import输入。import的可以是对象或表达式等
+
+express封装了http method 和 router
 ```
 /** A first working Express Server */
 app.get('/',function(req, res){
@@ -15,5 +51,74 @@ app.get('/',function(req, res){
 app.get('/views/index.html',function(req,res){
   let absolutePath = __dirname + '/views/index.html'
   res.sendFile(absolutePath)
+})
+
+/** Serve static assets  */
+app.use('/public', express.static( __dirname + '/public'))
+// 内置中间件函数，访问静态资源文件
+```
+
+中间件middleware
+>Express是一个自身功能极简，完全是路由和中间件构成一个web开发框架：从本质上来说，一个Express应用就是在调用各种中间件。
+```
+app.get('/now', function(req, res, next){
+        let now = new Date().toString();
+        req.time = now;
+        next();
+},
+  function(req, res){
+        res.json({time: req.time})
+})
+```
+可以引用第三方中间件函数
+#### body-parse
+将post body内容编码并放入req.body
+```
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
+/** Get data form POST */
+app.post('/name',function(req, res){
+  res.json({name: req.body.first + ' ' + req.body.last})
+})
+```
+#### cookie-parse
+```
+const cookieparser = require('cookie-parser')
+const util =require('util')
+
+app.use(cookieparser())
+app.get('/getcookie',function(req, res){
+    res.send(util.inspect(req.cookies))
+});
+```
+util.inspect类似于JSON.stringify将json对象属性以{key}={value};的字符串格式输出
+
+#### multer
+文件上传
+```
+var _fs = require('fs') 
+var multer = require('multer')
+ 
+app.use(multer({dest:'/tmp'}).array('image'))
+app.post('/files/upload',function(req,res){
+    console.log(req.files[0])
+    var des_file = __dirname + '/tmp/' +req.files[0].originalname;
+    _fs.readFile(req.files[0].path, function(err, data){
+        _fs.writeFile(des_file, data, function(err){
+            var response={}
+        if(err){
+            console.log(err)
+        }else{
+            response={
+                message:'File uploaded successfully',
+                filename:req.files[0].originalname
+            }
+        }
+        console.log(response);
+        res.end(JSON.stringify(response))
+        })
+    })
 })
 ```
