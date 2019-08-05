@@ -1,5 +1,5 @@
 ---
-title: Ubuntu
+title: Ubuntu 软件安装
 date: 2019-07-24 09:44:50
 tags:
 ---

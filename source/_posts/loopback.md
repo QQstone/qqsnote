@@ -12,9 +12,8 @@ LoopBack 是一个可扩展的开源Node.js 框架。它可以让我们<br>
 + 方便的应用部署，无论在云上还是自己的服务器
 
 ```
-npm install -g strongloop
+npm install -g @loopback/cli
 ```
-新建项目目录
 ```
-slc loopback
+lb4 app
 ```
