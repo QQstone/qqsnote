@@ -1,7 +1,7 @@
 ---
 title: Angular组件交互
 date: 2019-03-27 18:44:26
-tags:
+tags: 前端 Angular
 ---
 ```
 <app-voter *ngFor="let voter of voters"

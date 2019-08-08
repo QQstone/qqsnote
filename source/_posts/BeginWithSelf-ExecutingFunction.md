@@ -1,8 +1,7 @@
 ---
 title: 从javascript自执行函数说起
 date: 2018-08-06 07:47:27
-tags:
-- javascript
+tags: javascript
 ---
  > 出于复用需要的函数封装
 

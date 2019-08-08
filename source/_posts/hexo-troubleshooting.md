@@ -2,6 +2,7 @@
 title: Hexo TroubleShooting
 date: 2019-04-22 11:47:05
 tags:
+- hexo
 ---
 hexo d
 > Error: spawn git ENOENT

@@ -2,6 +2,7 @@
 title: TypeScript
 date: 2019-05-20 16:21:42
 tags:
+- TypeScript
 ---
 #### 基本类型
  1. number 

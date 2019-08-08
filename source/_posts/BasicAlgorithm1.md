@@ -1,7 +1,7 @@
 ---
 title: 基本算法-String, Array
 date: 2018-07-31 17:00:18
-tags: 
+tags: 算法 javascript
 - 字符串操作
 ---
 >实现字符串翻转方法
@@ -22,7 +22,7 @@ splice 以起止下标为界切片从数组中剔除
 ```
 Array.prototype.slice.call(a)
 ```
->实现数字千位分隔符
+>实现数字千位分隔符<br>
 ```
 function kiloFormat(num){
 	num=num.toString().split(".");//区分整数部分和小数部分

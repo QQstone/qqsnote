@@ -47,7 +47,7 @@ Suspendisse id sem consectetuer libero luctus adipiscing.
 ![cannot load pic here](http://pic108.huitu.com/res/20180719/1301968_20180719100805887080_1.jpg "Light")
 
 左对齐|居中|右对齐
----|:--:|---:
+:-----|:--:|-----:
 内容|内容|内容
 内容|内容|内容
 

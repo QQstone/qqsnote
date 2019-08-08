@@ -1,7 +1,7 @@
 ---
-title: AzureFuctions
+title: Azure Fuctions
 date: 2019-08-05 10:50:28
-tags:
+tags: Cloud
 ---
 > Azure Functions 用于在无服务器环境中执行代码，无需先创建 VM 或发布 Web 应用程序。
 
@@ -18,12 +18,39 @@ tags:
 #### 创建Functions
 1. 按 F1 键打开命令面板。 在命令面板中，搜索并选择 Azure Functions: Create new project...。
 2. 按照提示对项目进行预设
-    Prompt|value|description
-    ---|:--:|---
-    Select a language for your function app project|C# or JavaScript|This article supports C# and JavaScript. For Python, see this Python article, and for PowerShell, see this PowerShell article|Select a template for your project's first function|HTTP trigger|Create an HTTP triggered function in the new function app.
-    Provide a function name|HttpTrigger|Press Enter to use the default name.
-    Authorization level|Function|Requires a function key to call the function's HTTP endpoint.
-    Select how you would like to open your project|Add to workspace|Creates the function app in the current workspace.
+    <table>
+        <tr>
+            <td>Prompt</td>
+            <td>value</td>
+            <td>description</td>
+        </tr>
+        <tr>
+            <td>Select a language for your function app project</td>
+            <td>C# or JavaScript</td>
+            <td>This article supports C# and JavaScript. For Python, see this Python article, and for PowerShell, see this PowerShell article</td>
+        </tr>
+        <tr>
+            <td>Select a template for your project’s first function</td>
+            <td>HTTP trigger</td>
+            <td>Create an HTTP triggered function in the new function app.</td>
+        </tr>
+        <tr>
+            <td>Provide a function name</td>
+            <td>HttpTrigger</td>
+            <td>Press Enter to use the default name.</td>
+        </tr>
+        <tr>
+            <td>Authorization level	</td>
+            <td>Function</td>
+            <td>Requires a function key to call the function’s HTTP endpoint.</td>
+        </tr>
+        <tr>
+            <td>Select how you would like to open your project	</td>
+            <td>Add to workspace</td>
+            <td>Creates the function app in the current workspace.</td>
+        </tr>
+    </table>
+
 3.  本地调试<br>
     开启F5 / 停止shiift+F5
 #### 发布Functions到Azure
@@ -35,3 +62,6 @@ tags:
 5. select a hosting plan<br>
     托管计划consumption plan 和 app service plan等，[参考](https://docs.microsoft.com/zh-cn/azure/azure-functions/functions-scale)<br>
     
+#### 连接存储队列
++ 安装[适应于 VS Code 的Azure存储扩展](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurestorage)
++ 安装[Azure存储资源管理器](https://storageexplorer.com/)

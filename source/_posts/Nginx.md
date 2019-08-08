@@ -2,6 +2,7 @@
 title: Nginx
 date: 2019-04-20 17:46:55
 tags:
+- Linux
 ---
 首先配置依赖库。
 
