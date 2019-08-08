@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Linux,">
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="查看RedHat版本1cat /etc/redhat-release 1yum install nginx error:cannot find a valid baseurl pingconnect:network is unreachable ls /etc/sysconfig/network-scripts/ ifcfg-enp0s3 ifcfg-lo ….其中ifcfg-lo是localho">
+<meta name="description" content="查看RedHat版本 1cat /etc/redhat-release 1yum install nginx error:cannot find a valid baseurl ping connect:network is unreachable ls /etc/sysconfig/network-scripts/ ifcfg-enp0s3 ifcfg-lo …. 其中ifcfg-lo是loca">
+<meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux网卡重命名">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/04/20/Linux-rename-networkdevice/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="查看RedHat版本1cat /etc/redhat-release 1yum install nginx error:cannot find a valid baseurl pingconnect:network is unreachable ls /etc/sysconfig/network-scripts/ ifcfg-enp0s3 ifcfg-lo ….其中ifcfg-lo是localho">
+<meta property="og:description" content="查看RedHat版本 1cat /etc/redhat-release 1yum install nginx error:cannot find a valid baseurl ping connect:network is unreachable ls /etc/sysconfig/network-scripts/ ifcfg-enp0s3 ifcfg-lo …. 其中ifcfg-lo是loca">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-18T11:35:05.626Z">
+<meta property="og:updated_time" content="2019-08-08T09:50:11.823Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux网卡重命名">
-<meta name="twitter:description" content="查看RedHat版本1cat /etc/redhat-release 1yum install nginx error:cannot find a valid baseurl pingconnect:network is unreachable ls /etc/sysconfig/network-scripts/ ifcfg-enp0s3 ifcfg-lo ….其中ifcfg-lo是localho">
+<meta name="twitter:description" content="查看RedHat版本 1cat /etc/redhat-release 1yum install nginx error:cannot find a valid baseurl ping connect:network is unreachable ls /etc/sysconfig/network-scripts/ ifcfg-enp0s3 ifcfg-lo …. 其中ifcfg-lo是loca">
 
 
 
@@ -299,17 +300,29 @@
       
 
       
-        <p>查看RedHat版本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/redhat-release</span><br></pre></td></tr></table></figure></p>
+        <p>查看RedHat版本
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/redhat-release</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install nginx</span><br></pre></td></tr></table></figure>
 <p>error:cannot find a valid baseurl</p>
-<p>ping<br>connect:network is unreachable</p>
+<p>ping
+connect:network is unreachable</p>
 <p>ls /etc/sysconfig/network-scripts/</p>
-<p>ifcfg-enp0s3 ifcfg-lo ….<br>其中ifcfg-lo是localhost配置<br>将第一个配置文件重命名<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv ifcfg-enp0s3 ifcfg-eth0</span><br></pre></td></tr></table></figure></p>
-<p>查看网卡<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip add</span><br></pre></td></tr></table></figure></p>
-<p>显示了lo和enp0s3<br>修改默认网卡设置<br>编辑/etc/default/grub文件，在GRUB_CMD_LINE_LINUX=””项中，插入”net.ifnames=0 biosdevname=0”<br>修改ip配置<br>注意<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DEVICE=eth0</span><br></pre></td></tr></table></figure></p>
+<p>ifcfg-enp0s3 ifcfg-lo ….
+其中ifcfg-lo是localhost配置
+将第一个配置文件重命名
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv ifcfg-enp0s3 ifcfg-eth0</span><br></pre></td></tr></table></figure></p>
+<p>查看网卡
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip add</span><br></pre></td></tr></table></figure></p>
+<p>显示了lo和enp0s3
+修改默认网卡设置
+编辑/etc/default/grub文件，在GRUB_CMD_LINE_LINUX=””项中，插入”net.ifnames=0 biosdevname=0”
+修改ip配置
+注意
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DEVICE=eth0</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ONBOOT=no //设置开机启动网卡，将值修改为“yes”</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BOOTPROTO=static //默认为no，修改为static</span><br></pre></td></tr></table></figure>
-<p>重启<br>service network restart</p>
+<p>重启
+service network restart</p>
 <p>reboot</p>
 
       
@@ -325,6 +338,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/qqsnote/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
       
 
       
@@ -415,7 +434,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -437,7 +456,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

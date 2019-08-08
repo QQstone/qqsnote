@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="javascript,">
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="题目11234567function t1()&amp;#123;    console.log(str1);    console.log(str2);    var str1=&amp;quot;xx1&amp;quot;;    str2=&amp;quot;xx2&amp;quot;&amp;#125; 调用t1();输出12undefinedUncaught ReferenceError: str2 is not defined 关键">
+<meta name="description" content="基本概念 作用域 词法作用域 函数级作用域和块级作用域 作用域提升 作用域闭包题目11234567function t1()&amp;#123;    console.log(str1);    console.log(str2);    var str1=&amp;quot;xx1&amp;quot;;    str2=&amp;quot;xx2&amp;quot;&amp;#125;   调用t1();输出 12undefinedUncau">
+<meta name="keywords" content="javascript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="作用域链">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2018/12/27/jsScopeChain/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="题目11234567function t1()&amp;#123;    console.log(str1);    console.log(str2);    var str1=&amp;quot;xx1&amp;quot;;    str2=&amp;quot;xx2&amp;quot;&amp;#125; 调用t1();输出12undefinedUncaught ReferenceError: str2 is not defined 关键">
+<meta property="og:description" content="基本概念 作用域 词法作用域 函数级作用域和块级作用域 作用域提升 作用域闭包题目11234567function t1()&amp;#123;    console.log(str1);    console.log(str2);    var str1=&amp;quot;xx1&amp;quot;;    str2=&amp;quot;xx2&amp;quot;&amp;#125;   调用t1();输出 12undefinedUncau">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-18T11:35:06.058Z">
+<meta property="og:updated_time" content="2019-08-08T09:50:11.824Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="作用域链">
-<meta name="twitter:description" content="题目11234567function t1()&amp;#123;    console.log(str1);    console.log(str2);    var str1=&amp;quot;xx1&amp;quot;;    str2=&amp;quot;xx2&amp;quot;&amp;#125; 调用t1();输出12undefinedUncaught ReferenceError: str2 is not defined 关键">
+<meta name="twitter:description" content="基本概念 作用域 词法作用域 函数级作用域和块级作用域 作用域提升 作用域闭包题目11234567function t1()&amp;#123;    console.log(str1);    console.log(str2);    var str1=&amp;quot;xx1&amp;quot;;    str2=&amp;quot;xx2&amp;quot;&amp;#125;   调用t1();输出 12undefinedUncau">
 
 
 
@@ -299,11 +300,20 @@
       
 
       
-        <h4 id="题目1"><a href="#题目1" class="headerlink" title="题目1"></a>题目1</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function t1()&#123;</span><br><span class="line">    console.log(str1);</span><br><span class="line">    console.log(str2);</span><br><span class="line"></span><br><span class="line">    var str1=&quot;xx1&quot;;</span><br><span class="line">    str2=&quot;xx2&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>调用t1();输出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">undefined</span><br><span class="line">Uncaught ReferenceError: str2 is not defined</span><br></pre></td></tr></table></figure></p>
+        <h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><ul>
+<li>作用域<br></li>
+<li>词法作用域<br></li>
+<li>函数级作用域和块级作用域</li>
+<li>作用域提升</li>
+<li>作用域闭包<h4 id="题目1"><a href="#题目1" class="headerlink" title="题目1"></a>题目1</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function t1()&#123;</span><br><span class="line">    console.log(str1);</span><br><span class="line">    console.log(str2);</span><br><span class="line"></span><br><span class="line">    var str1=&quot;xx1&quot;;</span><br><span class="line">    str2=&quot;xx2&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>调用t1();输出
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">undefined</span><br><span class="line">Uncaught ReferenceError: str2 is not defined</span><br></pre></td></tr></table></figure></p>
 <p>关键字var提示js编译器词法分析对变量进行声明，没有该关键字，分析认为是单纯赋值操作；执行时自上而下，输出str1时未赋值，其值为undefined，而str2为未声明。</p>
 <h4 id="题目2"><a href="#题目2" class="headerlink" title="题目2"></a>题目2</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var i=10;</span><br><span class="line">function t2()&#123;</span><br><span class="line">    i=20;</span><br><span class="line">    for(var i=0;i&lt;6;i++)&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    console.log(this.i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>调用t2()输出10。<br>this指向window对象</p>
+<p>调用t2()输出10。
+this指向window对象</p>
 <h4 id="题目3"><a href="#题目3" class="headerlink" title="题目3"></a>题目3</h4>
       
     </div>
@@ -318,6 +328,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/qqsnote/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
       
 
       
@@ -417,7 +433,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -439,7 +455,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -472,7 +488,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#题目1"><span class="nav-number">1.</span> <span class="nav-text">题目1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#题目2"><span class="nav-number">2.</span> <span class="nav-text">题目2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#题目3"><span class="nav-number">3.</span> <span class="nav-text">题目3</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#题目1"><span class="nav-number">2.</span> <span class="nav-text">题目1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#题目2"><span class="nav-number">3.</span> <span class="nav-text">题目2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#题目3"><span class="nav-number">4.</span> <span class="nav-text">题目3</span></a></li></ol></div>
             
 
           </div>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="前端,">
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="web服务器12345&amp;lt;VirtualHost *:80&amp;gt;    DocumentRoot &amp;quot;E:/wamp/www&amp;quot;    ServerName localhost    ServerAlias localhost&amp;lt;/VirtualHost&amp;gt;  访问权限浏览器报You don’t have permission to access /index.ht">
+<meta name="description" content="web服务器 12345&amp;lt;VirtualHost *:80&amp;gt;    DocumentRoot &amp;quot;E:/wamp/www&amp;quot;    ServerName localhost    ServerAlias localhost&amp;lt;/VirtualHost&amp;gt;  访问权限浏览器报You don’t have permission to access /index.h">
+<meta name="keywords" content="前端">
 <meta property="og:type" content="article">
 <meta property="og:title" content="前后端分离">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/01/08/frontEndSeparation/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="web服务器12345&amp;lt;VirtualHost *:80&amp;gt;    DocumentRoot &amp;quot;E:/wamp/www&amp;quot;    ServerName localhost    ServerAlias localhost&amp;lt;/VirtualHost&amp;gt;  访问权限浏览器报You don’t have permission to access /index.ht">
+<meta property="og:description" content="web服务器 12345&amp;lt;VirtualHost *:80&amp;gt;    DocumentRoot &amp;quot;E:/wamp/www&amp;quot;    ServerName localhost    ServerAlias localhost&amp;lt;/VirtualHost&amp;gt;  访问权限浏览器报You don’t have permission to access /index.h">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-19T01:45:02.284Z">
+<meta property="og:updated_time" content="2019-08-08T09:50:11.822Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="前后端分离">
-<meta name="twitter:description" content="web服务器12345&amp;lt;VirtualHost *:80&amp;gt;    DocumentRoot &amp;quot;E:/wamp/www&amp;quot;    ServerName localhost    ServerAlias localhost&amp;lt;/VirtualHost&amp;gt;  访问权限浏览器报You don’t have permission to access /index.ht">
+<meta name="twitter:description" content="web服务器 12345&amp;lt;VirtualHost *:80&amp;gt;    DocumentRoot &amp;quot;E:/wamp/www&amp;quot;    ServerName localhost    ServerAlias localhost&amp;lt;/VirtualHost&amp;gt;  访问权限浏览器报You don’t have permission to access /index.h">
 
 
 
@@ -300,12 +301,16 @@
 
       
         <blockquote>
-<p>web服务器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    DocumentRoot &quot;E:/wamp/www&quot;</span><br><span class="line">    ServerName localhost</span><br><span class="line">    ServerAlias localhost</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure></p>
+<p>web服务器
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    DocumentRoot &quot;E:/wamp/www&quot;</span><br><span class="line">    ServerName localhost</span><br><span class="line">    ServerAlias localhost</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure></p>
 </blockquote>
-<h4 id="访问权限"><a href="#访问权限" class="headerlink" title="访问权限"></a>访问权限</h4><p>浏览器报You don’t have permission to access /index.html on this server.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;Directory /&gt;         </span><br><span class="line">    Options FollowSymLinks         </span><br><span class="line">    AllowOverride All         </span><br><span class="line">    Order deny,allow      </span><br><span class="line">    Deny from all         </span><br><span class="line">    Satisfy all</span><br><span class="line">&lt;/Directory&gt;</span><br></pre></td></tr></table></figure></p>
-<p>上述配置是没毛病的，然而只是Apache22语法，Apache24不支持<br>服务器启动报Invalid command Order等</p>
+<h4 id="访问权限"><a href="#访问权限" class="headerlink" title="访问权限"></a>访问权限</h4><p>浏览器报You don’t have permission to access /index.html on this server.
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;Directory /&gt;         </span><br><span class="line">    Options FollowSymLinks         </span><br><span class="line">    AllowOverride All         </span><br><span class="line">    Order deny,allow      </span><br><span class="line">    Deny from all         </span><br><span class="line">    Satisfy all</span><br><span class="line">&lt;/Directory&gt;</span><br></pre></td></tr></table></figure></p>
+<p>上述配置是没毛病的，然而只是Apache22语法，Apache24不支持
+服务器启动报Invalid command Order等</p>
 <p>Apache2.4版本中，提供了由mod_authz_host支持的新的访问控制配置语法。而2.2版本中的Order、Allow等命令在新版本中也可以得到兼容，实现这个兼容功能的模块就是mod_access_compat。所以Load这个模块后，apache2.4就能识别这些语句了。</p>
-<p>还有，一般情况下，http.conf中可能有其他关于访问权限的配置，如默认有<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AllowOverride none</span><br><span class="line">Require all denied</span><br></pre></td></tr></table></figure></p>
+<p>还有，一般情况下，http.conf中可能有其他关于访问权限的配置，如默认有
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AllowOverride none</span><br><span class="line">Require all denied</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>解决跨域</p>
 </blockquote>
@@ -323,6 +328,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/qqsnote/tags/前端/" rel="tag"># 前端</a>
+          
+        </div>
       
 
       
@@ -422,7 +433,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -444,7 +455,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

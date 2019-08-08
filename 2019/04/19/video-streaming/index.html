@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="视频流,">
 
 
 
@@ -80,13 +80,14 @@
 
 
 <meta name="description" content="直播原理协议H5 video标签直播流的制作Nginx+ffmpeg安装下载RTMP模块并重编译nginx官方源代码https://github.com/arut/nginx-rtmp-module.git 配置1./configure --prefix=/usr/local/nginx --add-module=~/nginx-rtmp-module --with-http_ssl_module">
+<meta name="keywords" content="视频流">
 <meta property="og:type" content="article">
 <meta property="og:title" content="video和视频流">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/04/19/video-streaming/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="直播原理协议H5 video标签直播流的制作Nginx+ffmpeg安装下载RTMP模块并重编译nginx官方源代码https://github.com/arut/nginx-rtmp-module.git 配置1./configure --prefix=/usr/local/nginx --add-module=~/nginx-rtmp-module --with-http_ssl_module">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-18T11:35:06.110Z">
+<meta property="og:updated_time" content="2019-08-08T09:50:11.824Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="video和视频流">
 <meta name="twitter:description" content="直播原理协议H5 video标签直播流的制作Nginx+ffmpeg安装下载RTMP模块并重编译nginx官方源代码https://github.com/arut/nginx-rtmp-module.git 配置1./configure --prefix=/usr/local/nginx --add-module=~/nginx-rtmp-module --with-http_ssl_module">
@@ -305,8 +306,11 @@
 <h4 id="nginx-reload后报“open-“-usr-local-nginx-logs-nginx-pid”-failed”-执行下面的命令，指定nginx的configure路径"><a href="#nginx-reload后报“open-“-usr-local-nginx-logs-nginx-pid”-failed”-执行下面的命令，指定nginx的configure路径" class="headerlink" title="nginx reload后报“open() “/usr/local/nginx/logs/nginx.pid” failed”,执行下面的命令，指定nginx的configure路径"></a>nginx reload后报“open() “/usr/local/nginx/logs/nginx.pid” failed”,执行下面的命令，指定nginx的configure路径</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./nginx -c /usr/local/nginx/conf/nginx.conf</span><br></pre></td></tr></table></figure>
 <h4 id="编译通过nginx可访问，还没完，配置nginx-conf，在末尾添加rtmp模块配置："><a href="#编译通过nginx可访问，还没完，配置nginx-conf，在末尾添加rtmp模块配置：" class="headerlink" title="编译通过nginx可访问，还没完，配置nginx.conf，在末尾添加rtmp模块配置："></a>编译通过nginx可访问，还没完，配置nginx.conf，在末尾添加rtmp模块配置：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">rtmp&#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 1935;</span><br><span class="line">        chunk_size 4000;</span><br><span class="line"></span><br><span class="line">        # RTMP 直播流配置</span><br><span class="line">        application rtmplive &#123;</span><br><span class="line">            live on;</span><br><span class="line">            max_connections 1024;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # hls 直播流配置</span><br><span class="line">        application hls&#123;</span><br><span class="line">            live on;</span><br><span class="line">            hls on;</span><br><span class="line">            hls_path /usr/local/userdata/live;</span><br><span class="line">            hls_fragment 5s;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>hls_path是分割文件存储路径</p>
-<p>在http模块中添加服务路径<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        location /hls&#123;</span><br><span class="line">            types&#123;</span><br><span class="line">                application/vnd.apple.mpegurl m3u8;</span><br><span class="line">                video/mp2t ts;</span><br><span class="line">            &#125;</span><br><span class="line">            root /usr/local/userdata/live;</span><br><span class="line">            add_header Cache-Control no-cache</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="安装流媒体文件转换工具ffmpeg"><a href="#安装流媒体文件转换工具ffmpeg" class="headerlink" title="安装流媒体文件转换工具ffmpeg"></a>安装流媒体文件转换工具ffmpeg</h2><p>官方release：<a href="http://www.ffmpeg.org/download.html#releases" target="_blank" rel="noopener">http://www.ffmpeg.org/download.html#releases</a><br>解压<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar jxvf ffmpeg-4.1.3.tar.bz2</span><br></pre></td></tr></table></figure></p>
+<p>在http模块中添加服务路径
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        location /hls&#123;</span><br><span class="line">            types&#123;</span><br><span class="line">                application/vnd.apple.mpegurl m3u8;</span><br><span class="line">                video/mp2t ts;</span><br><span class="line">            &#125;</span><br><span class="line">            root /usr/local/userdata/live;</span><br><span class="line">            add_header Cache-Control no-cache</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装流媒体文件转换工具ffmpeg"><a href="#安装流媒体文件转换工具ffmpeg" class="headerlink" title="安装流媒体文件转换工具ffmpeg"></a>安装流媒体文件转换工具ffmpeg</h2><p>官方release：<a href="http://www.ffmpeg.org/download.html#releases" target="_blank" rel="noopener">http://www.ffmpeg.org/download.html#releases</a>
+解压
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar jxvf ffmpeg-4.1.3.tar.bz2</span><br></pre></td></tr></table></figure></p>
 <p>执行configure报“yasm/nasm not found or too old. Use –disable-x86asm for a crippled build”,ffmpeg默认的编译器未安装，需使用–disable-x86asm</p>
 <p>将本地视频文件通过nginx推流</p>
 <p>本地视频文件kon.mp4</p>
@@ -318,9 +322,13 @@
 <blockquote>
 <p>而通用的h.264视频编码器是叫x264：<a href="https://www.videolan.org/developers/x264.html" target="_blank" rel="noopener">https://www.videolan.org/developers/x264.html</a></p>
 </blockquote>
-<p>安装x264需要将类库提供给外部应用程序(如ffmpeg)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure –enable-shared </span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
-<p>配置编译的时候最好有–prefix指明安装路径，否则一般默认到/usr/local/lib路径下<br>需要将/usr/local/lib路径加入共享库配置文件/etc/ld.so.conf中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;/usr/local/lib&quot; &gt;&gt; /etc/ld.so.conf</span><br><span class="line"></span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure></p>
-<p>编译安装含外部解码器的FFmpeg<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure --enable-static --enable-gpl --enable-libx264 --extra-cflags=-I/usr/local/include --extra-ldflags=-L/usr/local/lib</span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
+<p>安装x264需要将类库提供给外部应用程序(如ffmpeg)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure –enable-shared </span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
+<p>配置编译的时候最好有–prefix指明安装路径，否则一般默认到/usr/local/lib路径下
+需要将/usr/local/lib路径加入共享库配置文件/etc/ld.so.conf中
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;/usr/local/lib&quot; &gt;&gt; /etc/ld.so.conf</span><br><span class="line"></span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure></p>
+<p>编译安装含外部解码器的FFmpeg
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure --enable-static --enable-gpl --enable-libx264 --extra-cflags=-I/usr/local/include --extra-ldflags=-L/usr/local/lib</span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -335,6 +343,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/qqsnote/tags/视频流/" rel="tag"># 视频流</a>
+          
+        </div>
       
 
       
@@ -434,7 +448,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -456,7 +470,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

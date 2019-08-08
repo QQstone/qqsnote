@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="前端 Angular,">
 
 
 
@@ -80,13 +80,14 @@
 
 
 <meta name="description" content="1234&amp;lt;app-voter *ngFor=&amp;quot;let voter of voters&amp;quot;      [name]=&amp;quot;voter&amp;quot;      (voted)=&amp;quot;onVoted($event)&amp;quot;&amp;gt;&amp;lt;/app-voter&amp;gt; @Input() @Input()可以带set、get属性  1234567891011121314">
+<meta name="keywords" content="前端 Angular">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Angular组件交互">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/03/27/AngularComponentCommunicate/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="1234&amp;lt;app-voter *ngFor=&amp;quot;let voter of voters&amp;quot;      [name]=&amp;quot;voter&amp;quot;      (voted)=&amp;quot;onVoted($event)&amp;quot;&amp;gt;&amp;lt;/app-voter&amp;gt; @Input() @Input()可以带set、get属性  1234567891011121314">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-18T11:35:05.489Z">
+<meta property="og:updated_time" content="2019-08-08T09:40:57.272Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Angular组件交互">
 <meta name="twitter:description" content="1234&amp;lt;app-voter *ngFor=&amp;quot;let voter of voters&amp;quot;      [name]=&amp;quot;voter&amp;quot;      (voted)=&amp;quot;onVoted($event)&amp;quot;&amp;gt;&amp;lt;/app-voter&amp;gt; @Input() @Input()可以带set、get属性  1234567891011121314">
@@ -308,16 +309,20 @@
 <blockquote>
 <p>ngOnChanges()生命周期钩子是专门用来监听@Input入参的，非传入参数不会触发ngOnChanges()方法</p>
 </blockquote>
-<h3 id="Output"><a href="#Output" class="headerlink" title="@Output()"></a>@Output()</h3><p>子组件发射事件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Output() voted = new EventEmitter&lt;boolean&gt;();</span><br><span class="line"></span><br><span class="line">vote(agreed: boolean) &#123;</span><br><span class="line">    this.voted.emit(agreed);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Output"><a href="#Output" class="headerlink" title="@Output()"></a>@Output()</h3><p>子组件发射事件
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Output() voted = new EventEmitter&lt;boolean&gt;();</span><br><span class="line"></span><br><span class="line">vote(agreed: boolean) &#123;</span><br><span class="line">    this.voted.emit(agreed);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="模板标记子组件"><a href="#模板标记子组件" class="headerlink" title="模板标记子组件"></a>模板标记子组件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;h3&gt;Countdown to Liftoff (via local variable)&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">&lt;button (click)=&quot;timer.start()&quot;&gt;Start&lt;/button&gt;</span><br><span class="line">&lt;button (click)=&quot;timer.stop()&quot;&gt;Stop&lt;/button&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;seconds&quot;&gt;&#123;&#123;timer.seconds&#125;&#125;&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;app-countdown-timer #timer&gt;&lt;/app-countdown-timer&gt;</span><br></pre></td></tr></table></figure>
 <p>#timer 作为父组件的变量，标记在子组件标签中，用以代表子组件，即可使父组件获取子组件的引用，进而可以调用子组件公用方法</p>
 <p>该方法有局限性在于，父组件-子组件的连接必须全部在父组件的模板中进行。父组件本身的代码对子组件没有访问权。</p>
 <h3 id="ViewChild"><a href="#ViewChild" class="headerlink" title="@ViewChild()"></a>@ViewChild()</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@ViewChild(CountdownTimerComponent)</span><br><span class="line">private timerComponent: CountdownTimerComponent;</span><br></pre></td></tr></table></figure>
 <p>使用@ViewChild()装饰器将CountdownTimerComponent实例注入到本组件，记为私有变量timerComponent</p>
 <ul>
-<li><p>特别注意<br>被注入的组件只有在 Angular 显示了父组件视图之后才能访问<br>下面的语法很关键</p>
+<li><p>特别注意
+被注入的组件只有在 Angular 显示了父组件视图之后才能访问
+下面的语法很关键</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ngAfterViewInit() &#123;</span><br><span class="line">    // wait a tick first to avoid one-time devMode</span><br><span class="line">    // unidirectional-data-flow-violation error</span><br><span class="line">    setTimeout(() =&gt;  this.timerComponent.init(), 0);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>父组件要及时调用子组件方法进行初始化，须实现AfterViewInit生命周期钩子，且用定时器异步操作。<br>否则报异常</p>
+<p>父组件要及时调用子组件方法进行初始化，须实现AfterViewInit生命周期钩子，且用定时器异步操作。
+否则报异常</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExpressionChangedAfterItHasBeenCheckedError</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
@@ -336,6 +341,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/qqsnote/tags/前端-Angular/" rel="tag"># 前端 Angular</a>
+          
+        </div>
       
 
       
@@ -435,7 +446,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -457,7 +468,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

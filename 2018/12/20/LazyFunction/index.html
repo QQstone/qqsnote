@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="javascript,">
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="编写方法时，考虑到不同的业务需求（如首次加载配置项js片段，甚至是为了兼容不同内核浏览器）需要用多个if语句加以区分，这将使每次调用都回进行判断，然而往往在具体的情景下是不必要的，比如已经以chrome载入了该页面。一种思路是覆盖方法定义123456789101112131415161718function addEvent (type, element, fun) &amp;#123;    if (e">
+<meta name="description" content="编写方法时，考虑到不同的业务需求（如首次加载配置项js片段，甚至是为了兼容不同内核浏览器）需要用多个if语句加以区分，这将使每次调用都回进行判断，然而往往在具体的情景下是不必要的，比如已经以chrome载入了该页面。 一种思路是覆盖方法定义 123456789101112131415161718function addEvent (type, element, fun) &amp;#123;    if">
+<meta name="keywords" content="javascript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="惰性函数">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2018/12/20/LazyFunction/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="编写方法时，考虑到不同的业务需求（如首次加载配置项js片段，甚至是为了兼容不同内核浏览器）需要用多个if语句加以区分，这将使每次调用都回进行判断，然而往往在具体的情景下是不必要的，比如已经以chrome载入了该页面。一种思路是覆盖方法定义123456789101112131415161718function addEvent (type, element, fun) &amp;#123;    if (e">
+<meta property="og:description" content="编写方法时，考虑到不同的业务需求（如首次加载配置项js片段，甚至是为了兼容不同内核浏览器）需要用多个if语句加以区分，这将使每次调用都回进行判断，然而往往在具体的情景下是不必要的，比如已经以chrome载入了该页面。 一种思路是覆盖方法定义 123456789101112131415161718function addEvent (type, element, fun) &amp;#123;    if">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-18T11:35:05.617Z">
+<meta property="og:updated_time" content="2019-08-08T09:50:11.823Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="惰性函数">
-<meta name="twitter:description" content="编写方法时，考虑到不同的业务需求（如首次加载配置项js片段，甚至是为了兼容不同内核浏览器）需要用多个if语句加以区分，这将使每次调用都回进行判断，然而往往在具体的情景下是不必要的，比如已经以chrome载入了该页面。一种思路是覆盖方法定义123456789101112131415161718function addEvent (type, element, fun) &amp;#123;    if (e">
+<meta name="twitter:description" content="编写方法时，考虑到不同的业务需求（如首次加载配置项js片段，甚至是为了兼容不同内核浏览器）需要用多个if语句加以区分，这将使每次调用都回进行判断，然而往往在具体的情景下是不必要的，比如已经以chrome载入了该页面。 一种思路是覆盖方法定义 123456789101112131415161718function addEvent (type, element, fun) &amp;#123;    if">
 
 
 
@@ -299,8 +300,11 @@
       
 
       
-        <p>编写方法时，考虑到不同的业务需求（如首次加载配置项js片段，甚至是为了兼容不同内核浏览器）需要用多个if语句加以区分，这将使每次调用都回进行判断，然而往往在具体的情景下是不必要的，比如已经以chrome载入了该页面。<br>一种思路是覆盖方法定义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function addEvent (type, element, fun) &#123;</span><br><span class="line">    if (element.addEventListener) &#123;</span><br><span class="line">        addEvent = function (type, element, fun) &#123;</span><br><span class="line">            element.addEventListener(type, fun, false);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else if(element.attachEvent)&#123;</span><br><span class="line">        addEvent = function (type, element, fun) &#123;</span><br><span class="line">            element.attachEvent(&apos;on&apos; + type, fun);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else&#123;</span><br><span class="line">        addEvent = function (type, element, fun) &#123;</span><br><span class="line">            element[&apos;on&apos; + type] = fun;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return addEvent(type, element, fun);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>另一种思想是将函数定义引用一个自执行匿名函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">var addEvent = (function () &#123;</span><br><span class="line">    if (document.addEventListener) &#123;</span><br><span class="line">        return function (type, element, fun) &#123;</span><br><span class="line">            element.addEventListener(type, fun, false);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else if (document.attachEvent) &#123;</span><br><span class="line">        return function (type, element, fun) &#123;</span><br><span class="line">            element.attachEvent(&apos;on&apos; + type, fun);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        return function (type, element, fun) &#123;</span><br><span class="line">            element[&apos;on&apos; + type] = fun;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></p>
+        <p>编写方法时，考虑到不同的业务需求（如首次加载配置项js片段，甚至是为了兼容不同内核浏览器）需要用多个if语句加以区分，这将使每次调用都回进行判断，然而往往在具体的情景下是不必要的，比如已经以chrome载入了该页面。
+一种思路是覆盖方法定义
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function addEvent (type, element, fun) &#123;</span><br><span class="line">    if (element.addEventListener) &#123;</span><br><span class="line">        addEvent = function (type, element, fun) &#123;</span><br><span class="line">            element.addEventListener(type, fun, false);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else if(element.attachEvent)&#123;</span><br><span class="line">        addEvent = function (type, element, fun) &#123;</span><br><span class="line">            element.attachEvent(&apos;on&apos; + type, fun);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else&#123;</span><br><span class="line">        addEvent = function (type, element, fun) &#123;</span><br><span class="line">            element[&apos;on&apos; + type] = fun;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return addEvent(type, element, fun);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>另一种思想是将函数定义引用一个自执行匿名函数
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">var addEvent = (function () &#123;</span><br><span class="line">    if (document.addEventListener) &#123;</span><br><span class="line">        return function (type, element, fun) &#123;</span><br><span class="line">            element.addEventListener(type, fun, false);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else if (document.attachEvent) &#123;</span><br><span class="line">        return function (type, element, fun) &#123;</span><br><span class="line">            element.attachEvent(&apos;on&apos; + type, fun);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        return function (type, element, fun) &#123;</span><br><span class="line">            element[&apos;on&apos; + type] = fun;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></p>
 <p>第二种方式不会给第一次调用增加额外开销，而是在定义时进行了判断</p>
 
       
@@ -316,6 +320,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/qqsnote/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
       
 
       
@@ -406,7 +416,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -428,7 +438,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

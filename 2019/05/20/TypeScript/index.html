@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="TypeScript,">
 
 
 
@@ -80,13 +80,14 @@
 
 
 <meta name="description" content="基本类型 number  boolean string [] enum any void null 和 undefined never 实现es6类型声明let 和 const let const 声明的变量只在当前代码块中有效    12for (var i = 0; i &amp;lt; 10; i++) &amp;#123;&amp;#125;console.log(i); //10 12for(let j = 0">
+<meta name="keywords" content="TypeScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TypeScript">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/05/20/TypeScript/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="基本类型 number  boolean string [] enum any void null 和 undefined never 实现es6类型声明let 和 const let const 声明的变量只在当前代码块中有效    12for (var i = 0; i &amp;lt; 10; i++) &amp;#123;&amp;#125;console.log(i); //10 12for(let j = 0">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-18T11:35:06.015Z">
+<meta property="og:updated_time" content="2019-08-08T09:50:11.865Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TypeScript">
 <meta name="twitter:description" content="基本类型 number  boolean string [] enum any void null 和 undefined never 实现es6类型声明let 和 const let const 声明的变量只在当前代码块中有效    12for (var i = 0; i &amp;lt; 10; i++) &amp;#123;&amp;#125;console.log(i); //10 12for(let j = 0">
@@ -316,35 +317,47 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for (var i = 0; i &lt; 10; i++) &#123;&#125;</span><br><span class="line">console.log(i); //10</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for(let j = 0; j &lt; 10; j++) &#123;&#125;</span><br><span class="line">console.log(j);// Error: j is not define</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>以前需要立即执行表达式(IIFE)解决的问题<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for (var k = 0; k &lt; 5; k++) &#123;</span><br><span class="line">    (function (k) &#123;</span><br><span class="line">      setTimeout(function () &#123;</span><br><span class="line">        console.log(k); //输出0,1,2,3,4</span><br><span class="line">      &#125;,0);</span><br><span class="line">    &#125;)(k);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以前需要立即执行表达式(IIFE)解决的问题
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for (var k = 0; k &lt; 5; k++) &#123;</span><br><span class="line">    (function (k) &#123;</span><br><span class="line">      setTimeout(function () &#123;</span><br><span class="line">        console.log(k); //输出0,1,2,3,4</span><br><span class="line">      &#125;,0);</span><br><span class="line">    &#125;)(k);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for (let j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">    setTimeout(function () &#123;</span><br><span class="line">      console.log(j); //输出0,1,2,3,4</span><br><span class="line">    &#125;,0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>不存在变量提升<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">console.log(foo); // 输出undefined</span><br><span class="line">console.log(bar); // 报错ReferenceError</span><br><span class="line"></span><br><span class="line">var foo = 2;</span><br><span class="line">let bar = 2;</span><br></pre></td></tr></table></figure></p>
+<p>不存在变量提升
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">console.log(foo); // 输出undefined</span><br><span class="line">console.log(bar); // 报错ReferenceError</span><br><span class="line"></span><br><span class="line">var foo = 2;</span><br><span class="line">let bar = 2;</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <blockquote>
-<p>不允许重复声明<br>暂时性死区</p>
+<p>不允许重复声明
+暂时性死区</p>
 </blockquote>
 <pre><code>即不允许在声明位置之前调用该变量
 </code></pre><blockquote>
-<p>const 声明引用值不允许修改，然而const的对象内部状态是可以修改的。区分声明只读类型关键字readonly<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">readonly GIPX = 0x1a;</span><br></pre></td></tr></table></figure></p>
+<p>const 声明引用值不允许修改，然而const的对象内部状态是可以修改的。区分声明只读类型关键字readonly
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">readonly GIPX = 0x1a;</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <h4 id="解构"><a href="#解构" class="headerlink" title="解构"></a>解构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h4 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h4><blockquote>
-<p>鸭子类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">interface LabelledValue	</span><br><span class="line">&#123;		</span><br><span class="line">    label: string; </span><br><span class="line">&#125;</span><br><span class="line">function printLabel(labelledObj:LabelledValue)	</span><br><span class="line">&#123;		</span><br><span class="line">    console.log(labelledObj.label); </span><br><span class="line">&#125;</span><br><span class="line">let myObj = &#123;size: 10, label: &quot;Size 10 Object&quot;&#125;; </span><br><span class="line">printLabel(myObj);</span><br></pre></td></tr></table></figure></p>
+<p>鸭子类型
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">interface LabelledValue	</span><br><span class="line">&#123;		</span><br><span class="line">    label: string; </span><br><span class="line">&#125;</span><br><span class="line">function printLabel(labelledObj:LabelledValue)	</span><br><span class="line">&#123;		</span><br><span class="line">    console.log(labelledObj.label); </span><br><span class="line">&#125;</span><br><span class="line">let myObj = &#123;size: 10, label: &quot;Size 10 Object&quot;&#125;; </span><br><span class="line">printLabel(myObj);</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <p>可见，参数对象并非实现接口，只需对外表现接口的特性</p>
-<p>另外，接口里的属性不全都是必需的<br>接口里的属性不全都是必需的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface SquareConfig &#123; </span><br><span class="line">    color?: string;</span><br><span class="line">    width?: number; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>另外，接口里的属性不全都是必需的
+接口里的属性不全都是必需的
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface SquareConfig &#123; </span><br><span class="line">    color?: string;</span><br><span class="line">    width?: number; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <blockquote>
-<p>定义可索引的类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">interface StringArray &#123;</span><br><span class="line">    [index: number]: string;</span><br><span class="line">&#125;</span><br><span class="line">let myArray: StringArray; </span><br><span class="line">myArray	= [&quot;Bob&quot;, &quot;Fred&quot;];</span><br><span class="line">let myStr: string = myArray[0];</span><br></pre></td></tr></table></figure></p>
+<p>定义可索引的类型
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">interface StringArray &#123;</span><br><span class="line">    [index: number]: string;</span><br><span class="line">&#125;</span><br><span class="line">let myArray: StringArray; </span><br><span class="line">myArray	= [&quot;Bob&quot;, &quot;Fred&quot;];</span><br><span class="line">let myStr: string = myArray[0];</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <p>如上，是一个接口的定义，符合该接口的属性可以number类型为索引。</p>
 <p>另，索引亦可为string类型。注意当同时使用两种类型的索引，数字索引的返回值必须是字符串索引返回值类型的子类型。    这是因为当使用    number    来索引时，JavaScript会将它转换成    string    然后再去索引对象。    就是说用    100    （一个    number    ）去索引等同于使用    “100”    （一个    string    ）去 索引，因此两者需要保持一致。</p>
 <h4 id="类"><a href="#类" class="headerlink" title="类"></a>类</h4><blockquote>
 <p>实现接口</p>
 </blockquote>
-<p> es6是没有constructor的，可以再琢磨下js原型篇。<br> ts中，类是具有两个类型：静态部分的类型和实例的类型。静态部分是类定义本身，实例部分就是生成的类的对象<br> constructor 存在于类的静态部分<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">interface ClockConstructor &#123;</span><br><span class="line">    new (hour: number, minute: number): ClockInterface;</span><br><span class="line">&#125;</span><br><span class="line">interface ClockInterface &#123;</span><br><span class="line">    tick();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function createClock(ctor: ClockConstructor, hour: number, minute: number): ClockInterface &#123;</span><br><span class="line">    return new ctor(hour, minute);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class DigitalClock implements ClockInterface &#123;</span><br><span class="line">    constructor(h: number, m: number) &#123; &#125;</span><br><span class="line">    tick() &#123;</span><br><span class="line">        console.log(&quot;beep beep&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class AnalogClock implements ClockInterface &#123;</span><br><span class="line">    constructor(h: number, m: number) &#123; &#125;</span><br><span class="line">    tick() &#123;</span><br><span class="line">        console.log(&quot;tick tock&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let digital = createClock(DigitalClock, 12, 17);</span><br><span class="line">let analog = createClock(AnalogClock, 7, 32);</span><br></pre></td></tr></table></figure></p>
-<p> 这个是官方示例代码。为了实现定义一个符合ClockInterface接口规范的createClock方法。<br> 而且应将符合ClockConstructor接口规范的类型作为返回值得类型</p>
+<p> es6是没有constructor的，可以再琢磨下js原型篇。
+ ts中，类是具有两个类型：静态部分的类型和实例的类型。静态部分是类定义本身，实例部分就是生成的类的对象
+ constructor 存在于类的静态部分
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">interface ClockConstructor &#123;</span><br><span class="line">    new (hour: number, minute: number): ClockInterface;</span><br><span class="line">&#125;</span><br><span class="line">interface ClockInterface &#123;</span><br><span class="line">    tick();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function createClock(ctor: ClockConstructor, hour: number, minute: number): ClockInterface &#123;</span><br><span class="line">    return new ctor(hour, minute);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class DigitalClock implements ClockInterface &#123;</span><br><span class="line">    constructor(h: number, m: number) &#123; &#125;</span><br><span class="line">    tick() &#123;</span><br><span class="line">        console.log(&quot;beep beep&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class AnalogClock implements ClockInterface &#123;</span><br><span class="line">    constructor(h: number, m: number) &#123; &#125;</span><br><span class="line">    tick() &#123;</span><br><span class="line">        console.log(&quot;tick tock&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let digital = createClock(DigitalClock, 12, 17);</span><br><span class="line">let analog = createClock(AnalogClock, 7, 32);</span><br></pre></td></tr></table></figure></p>
+<p> 这个是官方示例代码。为了实现定义一个符合ClockInterface接口规范的createClock方法。
+ 而且应将符合ClockConstructor接口规范的类型作为返回值得类型</p>
 <h4 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h4> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function identity&lt;T&gt;(arg: T): T </span><br><span class="line">&#123; </span><br><span class="line">    return arg; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h4><blockquote>
 <p>export 和 import</p>
@@ -364,6 +377,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/qqsnote/tags/TypeScript/" rel="tag"># TypeScript</a>
+          
+        </div>
       
 
       
@@ -463,7 +482,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -485,7 +504,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
