@@ -72,10 +72,12 @@ alert(person1.name);//"Nicholas"——来自原型
 使用hasOwnProperty()方法可以检测一个属性是存在于实例中(true)，还是存在于原型中(false)。
 检测属性（无论实例属性或是原型属性）是否存在可以用in，即"name" in person1返回true。
 
-从in说到for in，遍历所有能够通过对象访问的、可枚举的（enumerated）属性，其中 既包括存在于实例中的属性，也包括存在于原型中的属性。
+从in说到for in，遍历所有能够通过对象访问的、可枚举的（enumerated）属性，其中 既包括存在于实例中的属性，也包括存在于原型中的属性。<br>
+"可枚举"相当于"可以出现在对象属性的遍历中"，在数组上使用for in遍历，不仅会包含所有数值索引，还会包含所有可枚举属性，。最好只在对象上应用 for in 循环，如果要遍历数组就使用传统的 for 循环来遍历数值索引<br>
+Object.propertyIsEnumerable()方法可以检查给定属性名是否直接存在于实例中且enumerable = true
 不可枚举属性，即将 [[Enumerable]]标记为 false 的属性，而屏蔽不可枚举属性的实例属性也会遍历到。
-ES5已经提供Object.keys()返回所有可枚举属性的字符串数组。
-
+Object.keys()返回所有可枚举属性的字符串数组。
+Object.getOwnPropertyNames()返回所有属性的数组，无论是否可以枚举
 ### 更多创建对象姿势
 #### 动态原型模式
 ```
@@ -209,3 +211,18 @@ function object(o){
 }
 ```
 关于ES5 Object.create();
+
+操作符instanceOf
+```
+function instance_of(L, R) {//L 表示左表达式，R 表示右表达式
+ var O = R.prototype;// 取 R 的显示原型
+ L = L.__proto__;// 取 L 的隐式原型
+ while (true) { 
+   if (L === null) 
+     return false; 
+   if (O === L)// 这里重点：当 O 严格等于 L 时，返回 true 
+     return true; 
+   L = L.__proto__; 
+ } 
+}
+```
