@@ -60,4 +60,58 @@ Person.create({
     age:18,
     favoriteFoods:'banana'
 },callback)
+
+Person.create(arrayOfPeople,callback);              //批量创建
+```
+Model.find()
+```
+// example find all documents whose name is David
+Person.find({name:'David'},function(error,data){
+  if(!error){
+    console.log(data)
+  }else{
+    console.log(error)
+  }
+})
+
+// find方法在非全匹配情况下的应用，会复杂很多，借助不同的方法及其选项，这些方法以$开头
+// example find whose name contains 'White'
+Person.find(
+  {
+    name:
+    {
+      '$regex':'White',
+      '$options':'i'
+    }
+  },findcallback
+)
+// example find whose favoriteFood Array contains 'ice creame'
+Person.find(
+  {
+    favoriteFood:{
+      $in:['ice cream']
+    },
+  },findcallback
+)
+```
+// update
+```
+var findAndUpdate = function(personName, done) {
+  var ageToSet = 20;
+  Person.findOneAndUpdate(
+    {name:personName},              /* find filter*/
+    {$set:{age:ageToSet}},          /* set options*/
+    {new:true},                     /* return option*/
+    (error,data)=>{
+      if(error)
+        done(error);
+      done(null,data)
+    }
+  )
+  //done(null/*, data*/);
+};
+```
+// findByIdAndRemove
+```
+Person.findByIdAndRemove('5d4a500e994a2154010dc67f',function(){})
 ```

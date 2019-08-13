@@ -54,9 +54,9 @@ person2.sayName();
 ```
 所有对象可以通过引用Person.prototype属性，从而实现共享属性和方法
 ### 原型对象，对象属性和原型属性
-无论什么时候，<u>只要创建了一个新函数（如上文Person），就会根据一组特定的规则为该函数创建一个**原型对象**prototype</u>，在默认情况下，<u>所有原型对象都会自动获得一个 constructor，该构造方法指向 prototype 属性所在函数（即Person.prototype.constructor=Person）</u>。<u>通过这个构造函数，我们还可继续为原型对象添加其他属性和方法</u>。创建了自定义的构造函数之后，其原型对象默认只会取得 constructor 属性；至于其他方法，则都是从 Object 继承而来的。当调用构造函数创建一个新实例后，该实例的内部将包含一个指针（__proto __,注，ECMA-262第5版中管这个指针叫[[Prototype]]。虽然在脚本中没有标准的方式访问[[Prototype]]，但 Firefox、Safari 和 Chrome 在每个对象上都支持属性 __proto __；~~而在其他实现中，这个属性对脚本则是完全不可见的~~），指向构造函数的原型对象（即person1.__proto __=Person.prototype）。
+无论什么时候，<u>只要创建了一个新函数（如上文Person），就会根据一组特定的规则为该函数创建一个**原型对象**prototype</u>，在默认情况下，<u>所有原型对象都会自动获得一个 constructor，该构造方法指向 prototype 属性所在函数（即Person.prototype.constructor=Person）</u>。<u>通过这个构造函数，我们还可继续为原型对象添加其他属性和方法</u>。创建了自定义的构造函数之后，其原型对象默认只会取得 constructor 属性；至于其他方法，则都是从 Object 继承而来的。当调用构造函数创建一个新实例后，该实例的内部将包含一个指针（\_\_proto\_\_,注，ECMA-262第5版中管这个指针叫[[Prototype]]。虽然在脚本中没有标准的方式访问[[Prototype]]，但 Firefox、Safari 和 Chrome 在每个对象上都支持属性 __proto __；~~而在其他实现中，这个属性对脚本则是完全不可见的~~），指向构造函数的原型对象（即person1.\_\_proto\_\_=Person.prototype）。
 <div align=center>![prototype](https://upload-images.jianshu.io/upload_images/3140250-a75fde4f80938b58.PNG "prototype")</div>
-在无法访问[[Prototype]]的情形下（QQs尚未接触到不支持__proto __的环境），可以通过 isPrototypeOf()方法来确定对象之间是否存在这种关系，有Person.prototype.isPrototypeOf(person1)返回true,另ES5提供Object.getPrototypeOf，有Object.getPrototypeOf(person1) == Person.prototype为true。
+在无法访问[[Prototype]]的情形下（QQs尚未接触到不支持\_\_proto\_\_的环境），可以通过 isPrototypeOf()方法来确定对象之间是否存在这种关系，有Person.prototype.isPrototypeOf(person1)返回true,另ES5提供Object.getPrototypeOf，有Object.getPrototypeOf(person1) == Person.prototype为true。
 
 代码读取某个对象的某个属性时，都会执行一次搜索，目标是具有给定名字的属性。搜索首先 从对象实例本身开始。如果在实例中找到了具有给定名字的属性，则返回该属性的值；如果没有找到， 则继续搜索指针指向的原型对象，在原型对象中查找具有给定名字的属性。如果在原型对象中找到了这 个属性，则返回该属性的值。也就是说，在我们调用 person1.sayName()的时候，会先后执行两次搜 索。首先，解析器会问：“实例 person1 有 sayName 属性吗？”答：“没有。”然后，它继续搜索，再 问：“person1 的原型有 sayName 属性吗？”答：“有。”于是，它就读取那个保存在原型对象中的函数。
 
