@@ -2,7 +2,6 @@
 title: ECMAScript6
 date: 2018-08-27 15:04:20
 tags:
-- 前端
 - javascript
 ---
 ## ES6

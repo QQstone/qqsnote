@@ -4,7 +4,7 @@ date: 2019-08-13 17:09:59
 tags:
 - javascript
 ---
-原文：[关于Object的getter和setter](https://zhuanlan.zhihu.com/p/25672454)
+#### “修改默认操作”
 面试题：<br>
 对于对象o有N个属性，不修改下面代码，编写一段程序获取到对象o的所有属性。
 ```
@@ -65,3 +65,49 @@ Object.defineProperty(Object.prototype, key, {
 var o = foo(key);
 console.log(Object.keys(o)); // ['a', 'b']
 ```
+#### 触发其他操作
+搞一个方块，移动10像素
+```
+var box =document.createElement("div");
+box.setAttribute("id","box");
+box.setAttribute("style","width:30px;height:30px;background:red;");
+
+var transformText = 'translateX(' + 10 + 'px)';
+box.style.transform = transformText;
+```
+封装让方块移动的操作 当然可以这样
+```
+function moveBox(distance){
+    box.style.transform = 'translateX(' + distance + 'px)';
+}
+```
+其实也可以这样
+```
+Object.defineProperty(box, 'move', {
+    set: function(value) {
+        var transformText = 'translateX(' + value + 'px)';
+        box.style.webkitTransform = transformText;
+        box.style.transform = transformText;
+    }
+})
+//调用
+box.move = 100;
+```
+#### 熔断逻辑
+Express.js 版本弃用一些旧版本的中间件，为了让用户能够更好地发现，有下面这段代码，通过修改get属性方法，让用户调用废弃属性时抛错并带上自定义的错误信息。
+```
+[
+  'json',
+  'urlencoded',
+  'bodyParser',
+  /* 此处省略很多包名 **/
+].forEach(function (name) {
+  Object.defineProperty(exports, name, {
+    get: function () {
+      throw new Error('Most middleware (like ' + name + ') is no longer bundled with Express and must be installed separately. Please see https://github.com/senchalabs/connect#middleware.');
+    },
+    configurable: true
+  });
+});
+```
+参考原文：[关于Object的getter和setter](https://zhuanlan.zhihu.com/p/25672454) &#160;&#160;[不会Object.defineProperty你就out了](https://imweb.io/topic/56d40adc0848801a4ba198ce)
