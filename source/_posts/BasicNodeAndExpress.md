@@ -60,7 +60,25 @@ app.get('/views/index.html',function(req,res){
 /** Serve static assets  */
 app.use('/public', express.static( __dirname + '/public'))
 // 内置中间件函数，访问静态资源文件
+
+/** params  add a '?' if the parameter is omissible */
+app.get("/api/timestamp/:date_string/:addr_string?",function(req,res){
+  res.json(req.params.date_string)
+})
+/** Request Headers */
+app.get("/api/whoami", function (req, res) {
+  var ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
+  var lang = req.header('Accept-Language');
+  var software = req.header('User-Agent');
+  console.log({"ip":ip,"language":lang,"software":software})
+  res.json({"ip":ip,"language":lang,"software":software});
+});
 ```
+请求参数的获取方式
++ path中的变量，形如/api/user/:userId, 用req.params.userId
++ url参数如?org=dw001&type=1,将直接结构化未req.query对象
++ post请求的RequestBody，使用bodyParser中间件，添加到req.body中
++ req.param(parameterName)方法
 
 中间件middleware
 >Express是一个自身功能极简，完全是路由和中间件构成一个web开发框架：从本质上来说，一个Express应用就是在调用各种中间件。
@@ -105,13 +123,13 @@ util.inspect类似于JSON.stringify将json对象属性以{key}={value};的字符
 var _fs = require('fs') 
 var multer = require('multer')
  
-app.use(multer({dest:'/tmp'}).array('image'))
+app.use(multer({dest:'/tmp'}).array('image')) // image是input [type='file'] 的name属性
 app.post('/files/upload',function(req,res){
     console.log(req.files[0])
     var des_file = __dirname + '/tmp/' +req.files[0].originalname;
     _fs.readFile(req.files[0].path, function(err, data){
-        _fs.writeFile(des_file, data, function(err){
-            var response={}
+      _fs.writeFile(des_file, data, function(err){
+        var response={}
         if(err){
             console.log(err)
         }else{
@@ -122,10 +140,12 @@ app.post('/files/upload',function(req,res){
         }
         console.log(response);
         res.end(JSON.stringify(response))
-        })
+      })
     })
 })
 ```
+
+
 #### 关于Node.js的系统学习
 Node.js的实现的学习才应该是你要学的Node.js本身，而不是无尽的工具和第三方库。<br>
 

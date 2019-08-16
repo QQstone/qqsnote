@@ -46,7 +46,7 @@ var Person = mongoose.model('Person',personSchema); //发布Model
 var document = new Person({                         //创建Entity
   name:'David',
   age:18,
-  favoriteFoods:'ice cream'
+  favoriteFoods:'ice cream'，
 })
 
 document.save(function(error,data){                           //调用实例save方法
@@ -115,3 +115,65 @@ var findAndUpdate = function(personName, done) {
 ```
 Person.findByIdAndRemove('5d4a500e994a2154010dc67f',function(){})
 ```
+#### 实现自增长字段
+```
+var WebSiteSchema = mongoose.Schema({
+  "original_url":String,
+  "short_url":Number
+})
+// model
+var Website = mongoose.model('Website', CounterSchema)
+// counter
+var CounterSchema = Schema({
+    _id: {type: String, required: true},
+    seq: { type: Number, default: 0 }
+});
+var counter = mongoose.model('counter', CounterSchema);
+
+WebSiteSchema.pre('save', function(){
+  var self = this;
+  counter.findByIdAndUpdate(
+    {_id: 'entityId'},
+    {$inc:{req:1}},
+    function(err,data){
+      if(err){
+        return next(err)
+      }
+      self.short_url = data.seq;
+      next();
+    }
+  )
+})
+```
+pre是前置中间件操作，相当于其他语境的拦截器，在保存WebSite实例前调用计数器counter的findByIdAndUpdate。pre作用在Schema级别上，因此要在使用Schema生成model前定义才会生效。
+
+#### 区间条件
+```
+/*
+* collection{
+*    userId:String,
+*    from:Date,
+*    to:Date,
+*    limit:Number
+*}
+*/
+var getLog = function(collection,callback){
+  let queryCondition = {userId:collection.userId}
+  if(collection.from){
+    queryCondition.date = (queryCondition.date || {});
+    queryCondition.date['$gte'] = collection.from;
+  }
+  if(collection.to){
+    queryCondition.date = (queryCondition.date || {});
+    queryCondition.date['$lt'] = collection.to;
+  }
+  console.log('query conditions:',queryCondition)
+  let query = Exercise.find(queryCondition)
+  if(collection.limit){
+    query = query.sort({'date': -1}).limit(collection.limit)
+  }
+  query.exec(callback)
+}
+```
+
+#### 关联查询 population （存目）
