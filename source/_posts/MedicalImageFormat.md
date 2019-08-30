@@ -21,7 +21,7 @@ tags:
         REAL32[3]//Vertex3//顶点3坐标
         UINT16//Attributebytecountend//文件属性统计
 
-    ply (Polygon File Format, 多边形档案),该格式主要用以储存立体扫描结果的三维数值，透过多边形片面的集合描述三维物体,是相较stl更
+    ply (Polygon File Format, 多边形档案),该格式主要用以储存立体扫描结果的三维数值，透过多边形片面的集合描述三维物体,是相较stl更丰富的方式
         ply
         format ascii 1.0             ...{ 文件类型：ascii或binary，版本号 }
         comment made by anonymous    ... { 注释行 }
@@ -53,3 +53,13 @@ tags:
 [维基百科](https://en.wikipedia.org/wiki/Marching_cubes, "Marching Cubes Algorithm")
 
 [Surface Extraction: Creating a mesh from pixel-data using Python and VTK](https://pyscience.wordpress.com/2014/09/11/surface-extraction-creating-a-mesh-from-pixel-data-using-python-and-vtk/)
+
+### 图像处理工具库
+#### pydicom
+```
+import pydicom
+ds = pydicom.dcmread(file)
+```
+#### vtk
+三维计算机图形学、图像处理和可视化软件，内核C++构建，具备多种转换界面，支持Java、Python等方式调用
+#### xslt

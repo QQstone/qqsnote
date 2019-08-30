@@ -156,7 +156,7 @@ const person = {
   }
 };
 ```
-### class 以及 get set
+### class 以及 get set 以及super
 ```
 class Book {
   constructor(author) {
