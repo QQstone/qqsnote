@@ -74,7 +74,7 @@ Person.find({name:'David'},function(error,data){
   }
 })
 
-// find方法在非全匹配情况下的应用，会复杂很多，借助不同的方法及其选项，这些方法以$开头
+// find方法在非完全匹配情况下的应用，会复杂很多，需要借助不同的方法及其选项，这些方法以$开头
 // example find whose name contains 'White'
 Person.find(
   {
