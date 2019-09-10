@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="剔除符号 1str.replace(/[^0-9a-zA-Z]/g,&amp;quot;&amp;quot;);  12345function palindrome(str) &amp;#123;  str = str.replace(/[^0-9a-zA-Z]/g,&amp;quot;&amp;quot;);  str = str.toLowerCase();  return str==str.split(&amp;quot;&amp;quot;)">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-18T11:35:05.663Z">
+<meta property="og:updated_time" content="2019-09-02T05:27:09.758Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="正则表达式">
 <meta name="twitter:description" content="剔除符号 1str.replace(/[^0-9a-zA-Z]/g,&amp;quot;&amp;quot;);  12345function palindrome(str) &amp;#123;  str = str.replace(/[^0-9a-zA-Z]/g,&amp;quot;&amp;quot;);  str = str.toLowerCase();  return str==str.split(&amp;quot;&amp;quot;)">
@@ -310,6 +310,105 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">^(Proxy.+)$</span><br><span class="line">#$1</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <p>$1为()内的内容</p>
+<h3 id="常见用法"><a href="#常见用法" class="headerlink" title="常见用法"></a>常见用法</h3><h4 id="regExp-test-target"><a href="#regExp-test-target" class="headerlink" title="regExp.test(target)"></a>regExp.test(target)</h4><p>判断target是否符合正则表达式规则</p>
+<h4 id="target-match-regExp"><a href="#target-match-regExp" class="headerlink" title="target.match(regExp)"></a>target.match(regExp)</h4><p>返回target字符串中符合正则表达式规则的部分</p>
+<h3 id="匹配语法"><a href="#匹配语法" class="headerlink" title="匹配语法"></a>匹配语法</h3><h4 id="flag-g-i"><a href="#flag-g-i" class="headerlink" title="flag: g, i"></a>flag: g, i</h4><blockquote>
+<p>g: global</p>
+</blockquote>
+<blockquote>
+<p>i: case insensitive</p>
+</blockquote>
+<h4 id="集合"><a href="#集合" class="headerlink" title="集合[]"></a>集合[]</h4><h4 id="非和开头"><a href="#非和开头" class="headerlink" title="非和开头^"></a>非和开头^</h4><blockquote>
+<p>^在集合中表示非
+ <br></p>
+</blockquote>
+<p> 比如上面剔除符号的用法</p>
+<blockquote>
+<p>在集合外表示以…开头</p>
+</blockquote>
+<h4 id="频率-，-，"><a href="#频率-，-，" class="headerlink" title="频率 +， *， ?"></a>频率 +， *， ?</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">symbol</th>
+<th style="text-align:left">description </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"> +</td>
+<td style="text-align:left">出现1次或者多次</td>
+</tr>
+<tr>
+<td style="text-align:center"> *</td>
+<td style="text-align:left">出现任意次</td>
+</tr>
+<tr>
+<td style="text-align:center"> ?</td>
+<td style="text-align:left">出现一次或者不出现</td>
+</tr>
+<tr>
+<td style="text-align:center"> {n}</td>
+<td style="text-align:left">重复n次</td>
+</tr>
+<tr>
+<td style="text-align:center"> {m, n}</td>
+<td style="text-align:left">重复m~n次</td>
+</tr>
+</tbody>
+</table>
+<h4 id="greedy-matching-vs-lazy-matching"><a href="#greedy-matching-vs-lazy-matching" class="headerlink" title="greedy matching vs lazy matching"></a>greedy matching vs lazy matching</h4><p>贪心匹配（?）匹配最长的串，惰性匹配（?）匹配最小的串
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">let text = &quot;&lt;h1&gt;Winter is coming&lt;/h1&gt;&quot;;</span><br><span class="line">let myRegex = /&lt;.*&gt;/; </span><br><span class="line">let result = text.match(myRegex); // matching &lt;h1&gt;Winter is coming&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">myRegex = /&lt;.*?&gt;/; </span><br><span class="line">result = text.match(myRegex); // matching &lt;h1&gt;</span><br><span class="line"></span><br><span class="line">let article = &quot;&lt;h1&gt;Winter is coming&lt;/h1&gt;&lt;div&gt;&lt;/div&gt;&lt;h1&gt;north remembers&lt;/h1&gt;&lt;h1&gt;dragon is coming&lt;/h1&gt;&lt;h1&gt;the Queen is coming&lt;/h1&gt;&quot;</span><br><span class="line">let titles = article.match(/&lt;h1&gt;.*?&lt;\/h1&gt;/g)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>思考：折中的需求</li>
+</ul>
+<p>匹配符合下列规律的字符串,规律是连续的两个parameter，即某规则重复2次
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;parameter key=&quot;xxx&quot; value=&quot;1&quot; /&gt;</span><br><span class="line">&lt;any-other-marks&gt;</span><br><span class="line">&lt;parameter key=&quot;yyy&quot; value=&quot;2&quot; type=&quot;0&quot;/&gt;</span><br></pre></td></tr></table></figure></p>
+<p>可以这样
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xmlInfo.match(/&lt;parameter.*?\/&gt;.*?&lt;parameter.*?\/&gt;/)</span><br></pre></td></tr></table></figure></p>
+<p>里面有重复了两段规则，见下文（）部分</p>
+<h4 id="代码占位符"><a href="#代码占位符" class="headerlink" title="代码占位符"></a>代码占位符</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">symbol</th>
+<th style="text-align:left">description </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">\w</td>
+<td style="text-align:left">字符,空格,标点，下划线等 类似但不等价于[A-Za-z0-9_] </td>
+</tr>
+<tr>
+<td style="text-align:center">\W</td>
+<td style="text-align:left">非字符</td>
+</tr>
+<tr>
+<td style="text-align:center">\d</td>
+<td style="text-align:left">任意数字 相当于[0-9]</td>
+</tr>
+<tr>
+<td style="text-align:center">\D</td>
+<td style="text-align:left">任意非数字</td>
+</tr>
+<tr>
+<td style="text-align:center">\s</td>
+<td style="text-align:left">匹配任意不可见字符，包括空格、制表符、换页符等 相当于[ \f\n\r\t\v]</td>
+</tr>
+<tr>
+<td style="text-align:center">\S</td>
+<td style="text-align:left">匹配任意可见字符</td>
+</tr>
+</tbody>
+</table>
+<h4 id="lookaheads"><a href="#lookaheads" class="headerlink" title="lookaheads"></a>lookaheads</h4><p>暂时不知道如何翻译<br>
+例 密码规则不少于6位，且至少包含连续2位数字
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let pwRegex = /(?=\w&#123;6,&#125;)(?=\D*\d&#123;2&#125;)/;</span><br><span class="line">let result = pwRegex.test(sampleWord);</span><br></pre></td></tr></table></figure></p>
+<p>(?=\D*\d{2})应理解为任意非数字内容（或者不存在这部分内容）加两个数字
+(?=…)检测包含…的字符串，(?!…)检测不包含…的字符串，只检测是否符合条件，不返回匹配片段</p>
+<h4 id><a href="#" class="headerlink" title="()"></a>()</h4><p>括号的本义是封装模式，封装的模式可以用\1 \2的方式代替
+上面有个遗留问题，重复部分可写作
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xmlInfo.match(/(&lt;parameter.*?\/&gt;).*?\1/)</span><br></pre></td></tr></table></figure></p>
+<p>上述代码存在问题</p>
 
       
     </div>
@@ -404,8 +503,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -420,7 +528,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -442,7 +550,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -465,6 +573,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见用法"><span class="nav-number">1.</span> <span class="nav-text">常见用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#regExp-test-target"><span class="nav-number">1.1.</span> <span class="nav-text">regExp.test(target)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#target-match-regExp"><span class="nav-number">1.2.</span> <span class="nav-text">target.match(regExp)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#匹配语法"><span class="nav-number">2.</span> <span class="nav-text">匹配语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#flag-g-i"><span class="nav-number">2.1.</span> <span class="nav-text">flag: g, i</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集合"><span class="nav-number">2.2.</span> <span class="nav-text">集合[]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非和开头"><span class="nav-number">2.3.</span> <span class="nav-text">非和开头^</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#频率-，-，"><span class="nav-number">2.4.</span> <span class="nav-text">频率 +， *， ?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#greedy-matching-vs-lazy-matching"><span class="nav-number">2.5.</span> <span class="nav-text">greedy matching vs lazy matching</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码占位符"><span class="nav-number">2.6.</span> <span class="nav-text">代码占位符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lookaheads"><span class="nav-number">2.7.</span> <span class="nav-text">lookaheads</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">2.8.</span> <span class="nav-text">()</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

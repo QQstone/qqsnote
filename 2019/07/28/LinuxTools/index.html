@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="trial1tail -f filename tail命令读取文件内容到标准输出，-f 循环读取，上述命令查找文件中最尾部的内容显示在屏幕上,并且不但刷新,使你看到最新的文件内容">
+<meta name="description" content="trial1tail -f filename tail命令读取文件内容到标准输出，-f 循环读取，上述命令查找文件中最尾部的内容显示在屏幕上,并且不断刷新,使你看到最新的文件内容 filename 可以是多个文件 以空格分隔即可 tartar 通常是GNU tar，而libarchive库集成了bsdtar，不知道为什么我的windows默认的tar.exe是后者执行下述脚本 1tar -c *">
 <meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux命令行工具">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/07/28/LinuxTools/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="trial1tail -f filename tail命令读取文件内容到标准输出，-f 循环读取，上述命令查找文件中最尾部的内容显示在屏幕上,并且不但刷新,使你看到最新的文件内容">
+<meta property="og:description" content="trial1tail -f filename tail命令读取文件内容到标准输出，-f 循环读取，上述命令查找文件中最尾部的内容显示在屏幕上,并且不断刷新,使你看到最新的文件内容 filename 可以是多个文件 以空格分隔即可 tartar 通常是GNU tar，而libarchive库集成了bsdtar，不知道为什么我的windows默认的tar.exe是后者执行下述脚本 1tar -c *">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-08T09:50:11.823Z">
+<meta property="og:updated_time" content="2019-09-03T06:33:19.867Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux命令行工具">
-<meta name="twitter:description" content="trial1tail -f filename tail命令读取文件内容到标准输出，-f 循环读取，上述命令查找文件中最尾部的内容显示在屏幕上,并且不但刷新,使你看到最新的文件内容">
+<meta name="twitter:description" content="trial1tail -f filename tail命令读取文件内容到标准输出，-f 循环读取，上述命令查找文件中最尾部的内容显示在屏幕上,并且不断刷新,使你看到最新的文件内容 filename 可以是多个文件 以空格分隔即可 tartar 通常是GNU tar，而libarchive库集成了bsdtar，不知道为什么我的windows默认的tar.exe是后者执行下述脚本 1tar -c *">
 
 
 
@@ -301,7 +301,26 @@
 
       
         <h4 id="trial"><a href="#trial" class="headerlink" title="trial"></a>trial</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f filename</span><br></pre></td></tr></table></figure>
-<p>tail命令读取文件内容到标准输出，-f 循环读取，上述命令查找文件中最尾部的内容显示在屏幕上,并且不但刷新,使你看到最新的文件内容</p>
+<p>tail命令读取文件内容到标准输出，-f 循环读取，上述命令查找文件中最尾部的内容显示在屏幕上,并且不断刷新,使你看到最新的文件内容<br>
+filename 可以是多个文件 以空格分隔即可</p>
+<h4 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h4><p>tar 通常是GNU tar，而libarchive库集成了bsdtar，不知道为什么我的windows默认的tar.exe是后者执行下述脚本
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -c * | gzip &gt; Agt.tgz</span><br></pre></td></tr></table></figure></p>
+<p>报异常：tar.exe: Failed to open ‘\.\tape0’
+该路径是缺省的设备起始位置（?），因为bsdtar要求不能缺省输出参数 应为
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -cf - * | gzip &gt; Agt.tgz</span><br></pre></td></tr></table></figure></p>
+<h4 id="后台运行"><a href="#后台运行" class="headerlink" title="后台运行"></a>后台运行</h4><p>后台运行命令
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">anycommand $</span><br></pre></td></tr></table></figure></p>
+<p>将前台命令放到挂起（stopped）<br>
+Ctrl + Z
+查看后台工作项目
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jobs -l</span><br></pre></td></tr></table></figure></p>
+<p>操作后台工作项目</p>
+<ul>
+<li>终止后台工作项目 kill jobNumber</li>
+<li>调至前台继续运行 fg jobNumber</li>
+<li>在后台执行挂起的工作项目 bg jobNumber<h4 id="vi查找"><a href="#vi查找" class="headerlink" title="vi查找"></a>vi查找</h4>在命令模式下敲斜杆( / )这时在状态栏（也就是屏幕左下脚）就出现了 “/” 然后输入你要查找的关键字敲回车就可以了。<br>如果你要继续查找此关键字，敲字符 n 就可以继续查找了。 
+敲字符N（大写N）就会向前查询； </li>
+</ul>
 
       
     </div>
@@ -421,7 +440,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -443,7 +462,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -476,7 +495,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#trial"><span class="nav-number">1.</span> <span class="nav-text">trial</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#trial"><span class="nav-number">1.</span> <span class="nav-text">trial</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tar"><span class="nav-number">2.</span> <span class="nav-text">tar</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后台运行"><span class="nav-number">3.</span> <span class="nav-text">后台运行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vi查找"><span class="nav-number">4.</span> <span class="nav-text">vi查找</span></a></li></ol></div>
             
 
           </div>

@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="ES6ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。 模块化1234/*util1.js*/export default&amp;#123;    a:100&amp;#125; 123/*index.js*/import util1">
+<meta name="description" content="ES6ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。 模块化export require是CommonJS规范的方法,es6 引入了import，可以将模块中的对象部分引入，以减少开销，或者使用import * as">
 <meta name="keywords" content="javascript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ECMAScript6">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2018/08/27/ECMAScript6/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="ES6ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。 模块化1234/*util1.js*/export default&amp;#123;    a:100&amp;#125; 123/*index.js*/import util1">
+<meta property="og:description" content="ES6ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。 模块化export require是CommonJS规范的方法,es6 引入了import，可以将模块中的对象部分引入，以减少开销，或者使用import * as">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-13T01:32:01.479Z">
+<meta property="og:updated_time" content="2019-08-21T05:41:17.165Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ECMAScript6">
-<meta name="twitter:description" content="ES6ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。 模块化1234/*util1.js*/export default&amp;#123;    a:100&amp;#125; 123/*index.js*/import util1">
+<meta name="twitter:description" content="ES6ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。 模块化export require是CommonJS规范的方法,es6 引入了import，可以将模块中的对象部分引入，以减少开销，或者使用import * as">
 
 
 
@@ -301,9 +301,43 @@
 
       
         <h2 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h2><p>ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。</p>
-<h3 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/*util1.js*/</span><br><span class="line">export default&#123;</span><br><span class="line">    a:100</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h3><p>export require是CommonJS规范的方法,es6 引入了import，可以将模块中的对象部分引入，以减少开销，或者使用import * as objName from 引入文件所有对象</p>
+<blockquote>
+<p>Caution: the semicolon at the end of the import is mandatory!
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/*util1.js*/</span><br><span class="line">export default&#123;</span><br><span class="line">    a:100</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/*index.js*/</span><br><span class="line">import util1 from &apos;./util1.js&apos;</span><br><span class="line">console.log(util1)</span><br></pre></td></tr></table></figure>
-
+<h3 id="关于声明"><a href="#关于声明" class="headerlink" title="关于声明"></a>关于声明</h3><blockquote>
+<p>let 代替 var. 同一变量不能重复使用let声明, 否则报错<br></p>
+</blockquote>
+<blockquote>
+<p>const是常量，区别于只读
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const s = [1];</span><br><span class="line">s[0]=0;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>但是可以用Object.freeze()
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function freezeObj() &#123;</span><br><span class="line">  &quot;use strict&quot;;</span><br><span class="line">  const MATH_CONSTANTS = &#123;</span><br><span class="line">    PI: 3.14</span><br><span class="line">  &#125;;</span><br><span class="line">  Object.freeze(MATH_CONSTANTS)</span><br><span class="line">  try &#123;</span><br><span class="line">    MATH_CONSTANTS.PI = 99;</span><br><span class="line">  &#125; catch( ex ) &#123;</span><br><span class="line">    console.log(ex);</span><br><span class="line">  &#125;</span><br><span class="line">  return MATH_CONSTANTS.PI;</span><br><span class="line">&#125;</span><br><span class="line">const PI = freezeObj();</span><br></pre></td></tr></table></figure></p>
+<h3 id="箭头函数表达式"><a href="#箭头函数表达式" class="headerlink" title="箭头函数表达式"></a>箭头函数表达式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">const squaredIntegers = arr.filter(item=&gt;&#123;</span><br><span class="line"> return Math.floor(item)===item&amp;&amp;item&gt;0 ;</span><br><span class="line">&#125;).map(item=&gt;Math.pow(item, 2))</span><br></pre></td></tr></table></figure>
+<h3 id="剩余参数运算符（Rest-Operator）"><a href="#剩余参数运算符（Rest-Operator）" class="headerlink" title="剩余参数运算符（Rest Operator）"></a>剩余参数运算符（Rest Operator）</h3><p>使用Rest Operator定义参数数量可变的函数，参数将存入Rest Operator指定的变量指代的数组中
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function howMany(...args) &#123;</span><br><span class="line">  return &quot;You have passed &quot; + args.length + &quot; arguments.&quot;;</span><br><span class="line">&#125;</span><br><span class="line">console.log(howMany(0, 1, 2)); // You have passed 3 arguments</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const sum = (function() &#123;</span><br><span class="line">  &quot;use strict&quot;;</span><br><span class="line">  return function sum(...args) &#123;</span><br><span class="line">    //const args = [ x, y, z ];</span><br><span class="line">    return args.reduce((a, b) =&gt; a + b, 0);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line">console.log(sum(1, 2, 3)); // 6</span><br></pre></td></tr></table></figure>
+<p>回顾下归并方法reduce，array.reduce(callback,[, initialValue])，callback接受以下参数：previousValue，前一次调用回调函数的返回值；currentValue当前处理的数组元素，currentIndex可选，当前数组元素下标；array可选，调用reduce()方法的数组。initialValue可选，作为第一次调用callback方法的previousValue参数
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var arr = [6, 89, 3, 45];</span><br><span class="line">var maximus = Math.max.apply(null, arr); // returns 89</span><br><span class="line">maximus = Math.max(...arr); // returns 89</span><br><span class="line"></span><br><span class="line">arr0 = [...arr]</span><br><span class="line">console.log(arr0==arr)  // false</span><br></pre></td></tr></table></figure></p>
+<h3 id="解构赋值（Destructuring-Assignment）"><a href="#解构赋值（Destructuring-Assignment）" class="headerlink" title="解构赋值（Destructuring Assignment）"></a>解构赋值（Destructuring Assignment）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var voxel = &#123;x: 3.6, y: 7.4, z: 6.54 &#125;;</span><br><span class="line">const &#123; x, y, z &#125; = voxel; // x = 3.6, y = 7.4, z = 6.54</span><br></pre></td></tr></table></figure>
+<p>或者将部分属性 voxel.x, voxel.y 存入指定变量 a, b
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const &#123; x : a, y : b&#125; = voxel // a = 3.6, b = 7.4</span><br></pre></td></tr></table></figure></p>
+<p>嵌套对象（nested objects）
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const tree = &#123;</span><br><span class="line">    text:&apos;A&apos;,</span><br><span class="line">    value:0,</span><br><span class="line">    parentNode:&#123;</span><br><span class="line">        text:&apos;Root&apos;,</span><br><span class="line">        value:-1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const &#123;parentNode:&#123;value:RootVal&#125;&#125; = tree;</span><br><span class="line">console.log(RootVal)</span><br></pre></td></tr></table></figure></p>
+<p>数组
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const [a, b,,, c] = [1, 2, 3, 4, 5, 6];</span><br><span class="line">console.log(a, b, c); // 1, 2, 5</span><br><span class="line">// use rest operator</span><br><span class="line">const [begining,...rest] = [1, 2, 3, 4, 5, 6];</span><br></pre></td></tr></table></figure></p>
+<p>交换值
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[a, b] = [b, a];</span><br></pre></td></tr></table></figure></p>
+<p>函数传参
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">const stats = &#123;</span><br><span class="line">  max: 56.78,</span><br><span class="line">  standard_deviation: 4.34,</span><br><span class="line">  median: 34.54,</span><br><span class="line">  mode: 23.87,</span><br><span class="line">  min: -0.75,</span><br><span class="line">  average: 35.85</span><br><span class="line">&#125;;</span><br><span class="line">const half = (function() &#123;</span><br><span class="line">  &quot;use strict&quot;; </span><br><span class="line">  return function half(&#123;max,min&#125;) &#123;</span><br><span class="line">    return (max + min) / 2.0;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line">console.log(half(stats)); // 28.015</span><br></pre></td></tr></table></figure></p>
+<h3 id="字符串模块（Template-Literals）"><a href="#字符串模块（Template-Literals）" class="headerlink" title="字符串模块（Template Literals）"></a>字符串模块（Template Literals）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">resultDisplayArray = arr.map(item=&gt;&#123;</span><br><span class="line">   return `&lt;li class=&quot;text-warning&quot;&gt;$&#123;item&#125;&lt;/li&gt;`</span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="简化声明"><a href="#简化声明" class="headerlink" title="简化声明"></a>简化声明</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const person = &#123;</span><br><span class="line">  name: &quot;Taylor&quot;,</span><br><span class="line">  sayHello: function() &#123;</span><br><span class="line">    return `Hello! My name is $&#123;this.name&#125;.`;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可写作
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const person = &#123;</span><br><span class="line">  name: &quot;Taylor&quot;,</span><br><span class="line">  sayHello() &#123;</span><br><span class="line">    return `Hello! My name is $&#123;this.name&#125;.`;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h3 id="class-以及-get-set-以及super"><a href="#class-以及-get-set-以及super" class="headerlink" title="class 以及 get set 以及super"></a>class 以及 get set 以及super</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Book &#123;</span><br><span class="line">  constructor(author) &#123;</span><br><span class="line">    this._author = author;</span><br><span class="line">  &#125;</span><br><span class="line">  // getter</span><br><span class="line">  get writer()&#123;</span><br><span class="line">    return this._author;</span><br><span class="line">  &#125;</span><br><span class="line">  // setter</span><br><span class="line">  set writer(updatedAuthor)&#123;</span><br><span class="line">    this._author = updatedAuthor;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -422,7 +456,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -444,7 +478,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -477,7 +511,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ES6"><span class="nav-number">1.</span> <span class="nav-text">ES6</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模块化"><span class="nav-number">1.1.</span> <span class="nav-text">模块化</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ES6"><span class="nav-number">1.</span> <span class="nav-text">ES6</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模块化"><span class="nav-number">1.1.</span> <span class="nav-text">模块化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于声明"><span class="nav-number">1.2.</span> <span class="nav-text">关于声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#箭头函数表达式"><span class="nav-number">1.3.</span> <span class="nav-text">箭头函数表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#剩余参数运算符（Rest-Operator）"><span class="nav-number">1.4.</span> <span class="nav-text">剩余参数运算符（Rest Operator）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解构赋值（Destructuring-Assignment）"><span class="nav-number">1.5.</span> <span class="nav-text">解构赋值（Destructuring Assignment）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串模块（Template-Literals）"><span class="nav-number">1.6.</span> <span class="nav-text">字符串模块（Template Literals）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简化声明"><span class="nav-number">1.7.</span> <span class="nav-text">简化声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#class-以及-get-set-以及super"><span class="nav-number">1.8.</span> <span class="nav-text">class 以及 get set 以及super</span></a></li></ol></li></ol></div>
             
 
           </div>
