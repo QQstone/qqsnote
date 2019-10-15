@@ -42,7 +42,7 @@ let stat = _fs.stat;
 let exists = _fs.exists;
 let readfile = _fs.readfile;
 ```
-ES6模块不是对象，而是通过export命令显示指定输出<strong>代码</strong>，再通过import输入。import的可以是对象或表达式等
+ES6模块不是对象，而是通过export命令显示指定输出<strong>代码</strong>，再通过import输入。import的可以是对象定义或表达式等
 
 express封装了http method 和 router
 ```

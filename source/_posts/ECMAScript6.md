@@ -172,3 +172,81 @@ class Book {
   }
 }
 ```
+### Promise
+> 区别于回调函数方式的异步编程方案， ES6将其写入语言标准。
+
+> 所谓Promise，简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。从语法上说，Promise 是一个对象，从它可以获取异步操作的消息。
+
+Promise对象的状态<br>
+pending（进行中）、fulfilled（已成功）和rejected（已失败）只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。
+```
+function loadImageAsync(url) {
+  return new Promise(function(resolve, reject) {
+    const image = new Image();
+
+    image.onload = function() {
+      resolve(image);
+    };
+
+    image.onerror = function() {
+      reject(new Error('Could not load image at ' + url));
+    };
+
+    image.src = url;
+  });
+}
+```
+加载图片的异步过程，成功或失败时触发相应的事件(load,error)，resolve和reject刚好对应作为事件响应方法
+### async, await
+async(asynchronous)异步
+
+await(asynchronous wait)等待异步结果
+下面的代码结构被称作callback hell
+其需求是从input.xml文件中读取action，如果action=token，则读取注册表，验证token时效，其中读文件，xml转json，读注册表均为异步操作
+```
+(function(){
+  fs.readfile('input.xml',(err,data)=>{
+    if(err){
+      console.error(err)
+    }else{
+      regedit.list('HKCU\Software\QQSTEST\',(err,data)=>{
+        if(err){
+          console.error(err)
+        }else{
+          xmlParser.parseString(data,(err,data)=>{
+            if(err){
+              console.error(err)
+            }else{
+              done(data)
+            }
+          })
+        }
+      })
+    }
+  })
+})()
+```
+```
+function readfileAsync(filepath){
+  return new Promise((resolve,reject)=>{
+    fs.readFile(filepath,(err,data)=>{
+      if(err){
+        reject(err)
+      }else{
+        resolve(data)
+      }
+    })
+  })
+}
+(async function(){
+  var fileData = '';
+  await readfileAsync('input.xml).then(data=>{
+    fileData=data;
+  },err=>{
+    console.log(err)
+  })
+  if(!fileData) return;
+  await readRegEditAsync('')
+})()
+```
+在async声明的function内使用await, 执行时等待promise对象的结果，完成其resolve或reject操作后向下执行。
