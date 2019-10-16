@@ -229,6 +229,439 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/08/MedicalImageFormat/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/08/08/MedicalImageFormat/" itemprop="url">医学图像格式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-08T18:12:55+08:00">
+                2019-08-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="图像格式"><a href="#图像格式" class="headerlink" title="图像格式"></a>图像格式</h3><h4 id="Images-or-voxel"><a href="#Images-or-voxel" class="headerlink" title="Images(or voxel)"></a>Images(or voxel)</h4><p>dcm (DICOM Image): DICOM的全称是 Digital Imaging and Communications in Medicine (医疗数位影像和传输协定)
+它是一组通用的标准协定，可以整合不同厂商的医疗影像仪器、伺服器、工作站、列印机和网络设备
+和其他格式不同的是它統合了所有的資訊在同一個資料內，也就是說，如果有一張胸腔X光影像在你的病人個人資料內，這個影像決不可能意外地再從你的病人資料中分離。</p>
+<h4 id="Meshes"><a href="#Meshes" class="headerlink" title="Meshes"></a>Meshes</h4><p>stl (STereoLithography, 立體光刻),用于表示三角形网格的一种文件格式。它的文件格式非常简单，只能描述三维物体的几何信息，不支持颜色材质等信息。
+以二进制.stl文件为例，文件起始的80个字节是文件头，用于存贮文件名；紧接着用 4 个字节的整数来描述模型的三角面片个数，后面逐个给出每个三角面片的几何信息。每个三角面片占用固定的50个字节
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">UINT8//Header//文件头</span><br><span class="line">UINT32//Numberoftriangles//三角面片数量</span><br><span class="line">//foreachtriangle（每个三角面片中）</span><br><span class="line">REAL32[3]//Normalvector//法线矢量</span><br><span class="line">REAL32[3]//Vertex1//顶点1坐标</span><br><span class="line">REAL32[3]//Vertex2//顶点2坐标</span><br><span class="line">REAL32[3]//Vertex3//顶点3坐标</span><br><span class="line">UINT16//Attributebytecountend//文件属性统计</span><br></pre></td></tr></table></figure></p>
+<p>ply (Polygon File Format, 多边形档案),该格式主要用以储存立体扫描结果的三维数值，透过多边形片面的集合描述三维物体,是相较stl更丰富的方式
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">ply</span><br><span class="line">format ascii 1.0             ...&#123; 文件类型：ascii或binary，版本号 &#125;</span><br><span class="line">comment made by anonymous    ... &#123; 注释行 &#125;</span><br><span class="line">comment this file is a cube  ...&#123; 注释行 &#125;</span><br><span class="line">element vertex 8             ...&#123; 定义“顶点”元素，其数量为8个 &#125;</span><br><span class="line">property float32 x           ...&#123; 顶点的x属性，数据类型为float32 &#125;</span><br><span class="line">property float32 y           ...&#123; 顶点的y属性，数据类型为float32 &#125;</span><br><span class="line">property float32 z           ...&#123; 顶点的z属性，数据类型为float32 &#125;</span><br><span class="line">element face 6               ...&#123; 定义“面”元素，其数量为6个 &#125;</span><br><span class="line">property list uint8 int32 vertex_index ...&#123; 面的顶点索引属性，类型为uint8的列表 &#125;</span><br><span class="line">end_header                   ...&#123; 文件头结束标志 &#125;</span><br><span class="line">0 0 0                        ...&#123; 顶点元素列表 &#125;</span><br><span class="line">0 0 1</span><br><span class="line">0 1 1</span><br><span class="line">0 1 0</span><br><span class="line">1 0 0</span><br><span class="line">1 0 1</span><br><span class="line">1 1 1</span><br><span class="line">1 1 0</span><br><span class="line">4 0 1 2 3                    ...&#123; 面元素列表 顶点数 顶点编号 &#125;</span><br><span class="line">4 7 6 5 4</span><br><span class="line">4 0 4 5 1</span><br><span class="line">4 1 5 6 2</span><br><span class="line">4 2 6 7 3</span><br><span class="line">4 3 7 4 0</span><br></pre></td></tr></table></figure></p>
+<h3 id="Marching-Cubes-Algorithm"><a href="#Marching-Cubes-Algorithm" class="headerlink" title="Marching Cubes Algorithm"></a>Marching Cubes Algorithm</h3><p><a href="https://en.wikipedia.org/wiki/Marching_cubes," title="Marching Cubes Algorithm" target="_blank" rel="noopener">维基百科</a></p>
+<p><a href="https://pyscience.wordpress.com/2014/09/11/surface-extraction-creating-a-mesh-from-pixel-data-using-python-and-vtk/" target="_blank" rel="noopener">Surface Extraction: Creating a mesh from pixel-data using Python and VTK</a></p>
+<h3 id="图像处理工具库"><a href="#图像处理工具库" class="headerlink" title="图像处理工具库"></a>图像处理工具库</h3><h4 id="pydicom"><a href="#pydicom" class="headerlink" title="pydicom"></a>pydicom</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import pydicom</span><br><span class="line">ds = pydicom.dcmread(file)</span><br></pre></td></tr></table></figure>
+<h4 id="vtk"><a href="#vtk" class="headerlink" title="vtk"></a>vtk</h4><p>三维计算机图形学、图像处理和可视化软件，内核C++构建，具备多种转换界面，支持Java、Python等方式调用</p>
+<h4 id="xslt"><a href="#xslt" class="headerlink" title="xslt"></a>xslt</h4>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/06/NodeProcess/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/08/06/NodeProcess/" itemprop="url">Node.js Process</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-06T12:54:47+08:00">
+                2019-08-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="process模块和process-env环境变量"><a href="#process模块和process-env环境变量" class="headerlink" title="process模块和process.env环境变量"></a>process模块和process.env环境变量</h4>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/05/AzureFuctions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/08/05/AzureFuctions/" itemprop="url">Azure Fuctions</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-05T10:50:28+08:00">
+                2019-08-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>Azure Functions 用于在无服务器环境中执行代码，无需先创建 VM 或发布 Web 应用程序。</p>
+</blockquote>
+<h4 id="安装Azure-Functions-Core-Tools-2-x"><a href="#安装Azure-Functions-Core-Tools-2-x" class="headerlink" title="安装Azure Functions Core Tools 2.x"></a>安装Azure Functions Core Tools 2.x</h4><ul>
+<li>安装 .Net Core 2.x SDK<br>
+<a href="https://dotnet.microsoft.com/download" title="windows 官方下载" target="_blank" rel="noopener">用于 Windows 的 .NET Core 2.x SDK</a>。</li>
+<li><p>使用npm安装Core Tools包</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g azure-functions-core-tools</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>VS Code Azure Functions 扩展<br>
+搜索 azure functions，或者在 Visual Studio Code 中打开此<a href="vscode:extension/ms-azuretools.vscode-azurefunctions" title="点击在VS Code中打开" target="_blank" rel="noopener">链接</a>，安装该扩展。</p>
+</li>
+</ul>
+<h4 id="创建Functions"><a href="#创建Functions" class="headerlink" title="创建Functions"></a>创建Functions</h4><ol>
+<li>按 F1 键打开命令面板。 在命令面板中，搜索并选择 Azure Functions: Create new project…。</li>
+<li><p>按照提示对项目进行预设</p>
+ <table>
+     <tr>
+         <td>Prompt</td>
+         <td>value</td>
+         <td>description</td>
+     </tr>
+     <tr>
+         <td>Select a language for your function app project</td>
+         <td>C# or JavaScript</td>
+         <td>This article supports C# and JavaScript. For Python, see this Python article, and for PowerShell, see this PowerShell article</td>
+     </tr>
+     <tr>
+         <td>Select a template for your project’s first function</td>
+         <td>HTTP trigger</td>
+         <td>Create an HTTP triggered function in the new function app.</td>
+     </tr>
+     <tr>
+         <td>Provide a function name</td>
+         <td>HttpTrigger</td>
+         <td>Press Enter to use the default name.</td>
+     </tr>
+     <tr>
+         <td>Authorization level    </td>
+         <td>Function</td>
+         <td>Requires a function key to call the function’s HTTP endpoint.</td>
+     </tr>
+     <tr>
+         <td>Select how you would like to open your project    </td>
+         <td>Add to workspace</td>
+         <td>Creates the function app in the current workspace.</td>
+     </tr>
+ </table>
+</li>
+<li><p>本地调试<br>
+开启F5 / 停止shiift+F5</p>
+<h4 id="发布Functions到Azure"><a href="#发布Functions到Azure" class="headerlink" title="发布Functions到Azure"></a>发布Functions到Azure</h4><p>发布功能需要开启Azure Functions: Advanced Creation，在VS Code settings中可以设置，或者发布失败时根据弹窗提示更新设置</p>
+</li>
+<li>在 Visual Studio Code 中，按 F1 键打开命令面板。 在命令面板中，搜索并选择 Azure Functions: Deploy to function app…。</li>
+<li>Create New Function App in Azure</li>
+<li>Enter a global unique name for the new function app<br></li>
+<li>select an OS</li>
+<li>select a hosting plan<br>
+ 托管计划consumption plan 和 app service plan等，<a href="https://docs.microsoft.com/zh-cn/azure/azure-functions/functions-scale" target="_blank" rel="noopener">参考</a><br></li>
+</ol>
+<h4 id="连接存储队列"><a href="#连接存储队列" class="headerlink" title="连接存储队列"></a>连接存储队列</h4><ul>
+<li>安装<a href="https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurestorage" target="_blank" rel="noopener">适应于 VS Code 的Azure存储扩展</a></li>
+<li>安装<a href="https://storageexplorer.com/" target="_blank" rel="noopener">Azure存储资源管理器</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/07/31/MongoDB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1199,460 +1632,6 @@ Require是CommonJS的语法，CommonJS的模块是对象，输入时必须查找
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/07/18/PackageJSON/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/07/18/PackageJSON/" itemprop="url">Package.json</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-18T21:10:49+08:00">
-                2019-07-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="author"><a href="#author" class="headerlink" title="author"></a>author</h4><h4 id="description"><a href="#description" class="headerlink" title="description"></a>description</h4><h4 id="license"><a href="#license" class="headerlink" title="license"></a>license</h4><h4 id="keywords"><a href="#keywords" class="headerlink" title="keywords"></a>keywords</h4><h4 id="dependencies"><a href="#dependencies" class="headerlink" title="dependencies"></a>dependencies</h4><p>语义版本控制(Semantic Versioning)</p>
-<blockquote>
-<p>MAJOR version when you make incompatible API changes,</p>
-</blockquote>
-<blockquote>
-<p>MINOR version when you add functionality in a backwards-compatible manner, and</p>
-</blockquote>
-<blockquote>
-<p>PATCH version when you make backwards-compatible bug fixes.</p>
-</blockquote>
-<p>Use the tilde-character (~) to prefix the version of moment in your dependencies and allow npm to update it to any new PATCH release.</p>
-<p>Use the caret-character (^) to prefix the version of moment in your dependencies and allow npm to update it to any new MINOR release.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/05/20/TypeScript/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/05/20/TypeScript/" itemprop="url">TypeScript</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-20T16:21:42+08:00">
-                2019-05-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><ol>
-<li>number </li>
-<li>boolean</li>
-<li>string</li>
-<li>[]</li>
-<li>enum</li>
-<li>any</li>
-<li>void</li>
-<li>null 和 undefined</li>
-<li>never <h4 id="实现es6类型声明let-和-const"><a href="#实现es6类型声明let-和-const" class="headerlink" title="实现es6类型声明let 和 const"></a>实现es6类型声明let 和 const</h4><blockquote>
-<p>let const 声明的变量只在当前代码块中有效</p>
-</blockquote>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for (var i = 0; i &lt; 10; i++) &#123;&#125;</span><br><span class="line">console.log(i); //10</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for(let j = 0; j &lt; 10; j++) &#123;&#125;</span><br><span class="line">console.log(j);// Error: j is not define</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>以前需要立即执行表达式(IIFE)解决的问题
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for (var k = 0; k &lt; 5; k++) &#123;</span><br><span class="line">    (function (k) &#123;</span><br><span class="line">      setTimeout(function () &#123;</span><br><span class="line">        console.log(k); //输出0,1,2,3,4</span><br><span class="line">      &#125;,0);</span><br><span class="line">    &#125;)(k);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for (let j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">    setTimeout(function () &#123;</span><br><span class="line">      console.log(j); //输出0,1,2,3,4</span><br><span class="line">    &#125;,0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>不存在变量提升
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">console.log(foo); // 输出undefined</span><br><span class="line">console.log(bar); // 报错ReferenceError</span><br><span class="line"></span><br><span class="line">var foo = 2;</span><br><span class="line">let bar = 2;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<blockquote>
-<p>不允许重复声明</p>
-</blockquote>
-<blockquote>
-<p>暂时性死区</p>
-</blockquote>
-<p>即不允许在声明位置之前调用该变量</p>
-<blockquote>
-<p>const 声明引用值不允许修改，然而const的对象内部状态是可以修改的。区分声明只读类型关键字readonly
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">readonly GIPX = 0x1a;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<h4 id="解构"><a href="#解构" class="headerlink" title="解构"></a>解构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h4><blockquote>
-<p>鸭子类型
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">interface LabelledValue	</span><br><span class="line">&#123;		</span><br><span class="line">    label: string; </span><br><span class="line">&#125;</span><br><span class="line">function printLabel(labelledObj:LabelledValue)	</span><br><span class="line">&#123;		</span><br><span class="line">    console.log(labelledObj.label); </span><br><span class="line">&#125;</span><br><span class="line">let myObj = &#123;size: 10, label: &quot;Size 10 Object&quot;&#125;; </span><br><span class="line">printLabel(myObj);</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>可见，参数对象并非实现接口，只需对外表现接口的特性</p>
-<p>另外，接口里的属性不全都是必需的
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface SquareConfig &#123; </span><br><span class="line">    color?: string;</span><br><span class="line">    width?: number; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>定义可索引的类型
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">interface StringArray &#123;</span><br><span class="line">    [index: number]: string;</span><br><span class="line">&#125;</span><br><span class="line">let myArray: StringArray; </span><br><span class="line">myArray	= [&quot;Bob&quot;, &quot;Fred&quot;];</span><br><span class="line">let myStr: string = myArray[0];</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>如上，是一个接口的定义，符合该接口的属性可以number类型为索引。</p>
-<p>另，索引亦可为string类型。注意当同时使用两种类型的索引，数字索引的返回值必须是字符串索引返回值类型的子类型。    这是因为当使用    number    来索引时，JavaScript会将它转换成    string    然后再去索引对象。    就是说用    100    （一个    number    ）去索引等同于使用    “100”    （一个    string    ）去 索引，因此两者需要保持一致。</p>
-<h4 id="类"><a href="#类" class="headerlink" title="类"></a>类</h4><blockquote>
-<p>实现接口</p>
-</blockquote>
-<p> es6是没有constructor的，可以再琢磨下js原型篇。
- ts中，类是具有两个类型：静态部分的类型和实例的类型。静态部分是类定义本身，实例部分就是生成的类的对象
- constructor 存在于类的静态部分
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">interface ClockConstructor &#123;</span><br><span class="line">    new (hour: number, minute: number): ClockInterface;</span><br><span class="line">&#125;</span><br><span class="line">interface ClockInterface &#123;</span><br><span class="line">    tick();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function createClock(ctor: ClockConstructor, hour: number, minute: number): ClockInterface &#123;</span><br><span class="line">    return new ctor(hour, minute);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class DigitalClock implements ClockInterface &#123;</span><br><span class="line">    constructor(h: number, m: number) &#123; &#125;</span><br><span class="line">    tick() &#123;</span><br><span class="line">        console.log(&quot;beep beep&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class AnalogClock implements ClockInterface &#123;</span><br><span class="line">    constructor(h: number, m: number) &#123; &#125;</span><br><span class="line">    tick() &#123;</span><br><span class="line">        console.log(&quot;tick tock&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let digital = createClock(DigitalClock, 12, 17);</span><br><span class="line">let analog = createClock(AnalogClock, 7, 32);</span><br></pre></td></tr></table></figure></p>
-<p> 这个是官方示例代码。为了实现定义一个符合ClockInterface接口规范的createClock方法。
- 而且应将符合ClockConstructor接口规范的类型作为返回值得类型</p>
-<h4 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h4> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function identity&lt;T&gt;(arg: T): T </span><br><span class="line">&#123; </span><br><span class="line">    return arg; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h4><blockquote>
-<p>export 和 import</p>
-</blockquote>
-<h4 id="namespace"><a href="#namespace" class="headerlink" title="namespace"></a>namespace</h4><p>####</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/05/14/AssentureInterview/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/05/14/AssentureInterview/" itemprop="url">埃森哲电话面试(前端)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-14T09:08:43+08:00">
-                2019-05-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>该职位期望招聘高级软件开发人员 以完成基础软件开发 具备独立搭建框架能力和较丰富的前后端开发经验</p>
-<h4 id="1介绍一下原型链"><a href="#1介绍一下原型链" class="headerlink" title="1介绍一下原型链"></a>1介绍一下原型链</h4><h4 id="2变量提升"><a href="#2变量提升" class="headerlink" title="2变量提升"></a>2变量提升</h4><h4 id="2属性绑定实现视图更新的原理"><a href="#2属性绑定实现视图更新的原理" class="headerlink" title="2属性绑定实现视图更新的原理"></a>2属性绑定实现视图更新的原理</h4><h4 id="3编写单元测试用例"><a href="#3编写单元测试用例" class="headerlink" title="3编写单元测试用例"></a>3编写单元测试用例</h4><h4 id="4只执行一次的生命周期钩子-constructor-init之间进行了什么"><a href="#4只执行一次的生命周期钩子-constructor-init之间进行了什么" class="headerlink" title="4只执行一次的生命周期钩子 constructor init之间进行了什么"></a>4只执行一次的生命周期钩子 constructor init之间进行了什么</h4><table>
-<thead>
-<tr>
-<th>钩子</th>
-<th>目的</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>ngAfterContentInit | 在Angular将外部内容放到视图内之后。
-ngAfterContentChecked | 在Angular检测放到视图内的外部内容的绑定后。
-ngAfterViewInit | 在Angular创建了组件视图之后。
-ngAfterViewChecked | 在Angular检测了组件视图的绑定之后。</p>
-<blockquote>
-<p>constructor 依赖注入</p>
-</blockquote>
-<h4 id="5依赖注入-反射"><a href="#5依赖注入-反射" class="headerlink" title="5依赖注入 反射"></a>5依赖注入 反射</h4><h4 id="6面向对象的核心——抽象"><a href="#6面向对象的核心——抽象" class="headerlink" title="6面向对象的核心——抽象"></a>6面向对象的核心——抽象</h4><h4 id="7docker"><a href="#7docker" class="headerlink" title="7docker"></a>7docker</h4><h4 id="8持续集成"><a href="#8持续集成" class="headerlink" title="8持续集成"></a>8持续集成</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1703,7 +1682,7 @@ ngAfterViewChecked | 在Angular检测了组件视图的绑定之后。</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1725,7 +1704,7 @@ ngAfterViewChecked | 在Angular检测了组件视图的绑定之后。</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

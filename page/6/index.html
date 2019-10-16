@@ -229,6 +229,478 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/12/20/LazyFunction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2018/12/20/LazyFunction/" itemprop="url">惰性函数</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-20T09:00:18+08:00">
+                2018-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>编写方法时，考虑到不同的业务需求（如首次加载配置项js片段，甚至是为了兼容不同内核浏览器）需要用多个if语句加以区分，这将使每次调用都回进行判断，然而往往在具体的情景下是不必要的，比如已经以chrome载入了该页面。
+一种思路是覆盖方法定义
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function addEvent (type, element, fun) &#123;</span><br><span class="line">    if (element.addEventListener) &#123;</span><br><span class="line">        addEvent = function (type, element, fun) &#123;</span><br><span class="line">            element.addEventListener(type, fun, false);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else if(element.attachEvent)&#123;</span><br><span class="line">        addEvent = function (type, element, fun) &#123;</span><br><span class="line">            element.attachEvent(&apos;on&apos; + type, fun);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else&#123;</span><br><span class="line">        addEvent = function (type, element, fun) &#123;</span><br><span class="line">            element[&apos;on&apos; + type] = fun;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return addEvent(type, element, fun);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>另一种思想是将函数定义引用一个自执行匿名函数
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">var addEvent = (function () &#123;</span><br><span class="line">    if (document.addEventListener) &#123;</span><br><span class="line">        return function (type, element, fun) &#123;</span><br><span class="line">            element.addEventListener(type, fun, false);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else if (document.attachEvent) &#123;</span><br><span class="line">        return function (type, element, fun) &#123;</span><br><span class="line">            element.attachEvent(&apos;on&apos; + type, fun);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        return function (type, element, fun) &#123;</span><br><span class="line">            element[&apos;on&apos; + type] = fun;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></p>
+<p>第二种方式不会给第一次调用增加额外开销，而是在定义时进行了判断</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/12/15/RegularExpression/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2018/12/15/RegularExpression/" itemprop="url">正则表达式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-15T17:00:18+08:00">
+                2018-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>剔除符号
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str.replace(/[^0-9a-zA-Z]/g,&quot;&quot;);</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function palindrome(str) &#123;</span><br><span class="line">  str = str.replace(/[^0-9a-zA-Z]/g,&quot;&quot;);</span><br><span class="line">  str = str.toLowerCase();</span><br><span class="line">  return str==str.split(&quot;&quot;).reverse().join(&quot;&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>指定内容行前注#
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">^(Proxy.+)$</span><br><span class="line">#$1</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>$1为()内的内容</p>
+<h3 id="常见用法"><a href="#常见用法" class="headerlink" title="常见用法"></a>常见用法</h3><h4 id="regExp-test-target"><a href="#regExp-test-target" class="headerlink" title="regExp.test(target)"></a>regExp.test(target)</h4><p>判断target是否符合正则表达式规则</p>
+<h4 id="target-match-regExp"><a href="#target-match-regExp" class="headerlink" title="target.match(regExp)"></a>target.match(regExp)</h4><p>返回target字符串中符合正则表达式规则的部分</p>
+<h3 id="匹配语法"><a href="#匹配语法" class="headerlink" title="匹配语法"></a>匹配语法</h3><h4 id="flag-g-i"><a href="#flag-g-i" class="headerlink" title="flag: g, i"></a>flag: g, i</h4><blockquote>
+<p>g: global</p>
+</blockquote>
+<blockquote>
+<p>i: case insensitive</p>
+</blockquote>
+<h4 id="集合"><a href="#集合" class="headerlink" title="集合[]"></a>集合[]</h4><h4 id="非和开头"><a href="#非和开头" class="headerlink" title="非和开头^"></a>非和开头^</h4><blockquote>
+<p>^在集合中表示非
+ <br></p>
+</blockquote>
+<p> 比如上面剔除符号的用法</p>
+<blockquote>
+<p>在集合外表示以…开头</p>
+</blockquote>
+<h4 id="频率-，-，"><a href="#频率-，-，" class="headerlink" title="频率 +， *， ?"></a>频率 +， *， ?</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">symbol</th>
+<th style="text-align:left">description </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"> +</td>
+<td style="text-align:left">出现1次或者多次</td>
+</tr>
+<tr>
+<td style="text-align:center"> *</td>
+<td style="text-align:left">出现任意次</td>
+</tr>
+<tr>
+<td style="text-align:center"> ?</td>
+<td style="text-align:left">出现一次或者不出现</td>
+</tr>
+<tr>
+<td style="text-align:center"> {n}</td>
+<td style="text-align:left">重复n次</td>
+</tr>
+<tr>
+<td style="text-align:center"> {m, n}</td>
+<td style="text-align:left">重复m~n次</td>
+</tr>
+</tbody>
+</table>
+<h4 id="greedy-matching-vs-lazy-matching"><a href="#greedy-matching-vs-lazy-matching" class="headerlink" title="greedy matching vs lazy matching"></a>greedy matching vs lazy matching</h4><p>贪心匹配（?）匹配最长的串，惰性匹配（?）匹配最小的串
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">let text = &quot;&lt;h1&gt;Winter is coming&lt;/h1&gt;&quot;;</span><br><span class="line">let myRegex = /&lt;.*&gt;/; </span><br><span class="line">let result = text.match(myRegex); // matching &lt;h1&gt;Winter is coming&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">myRegex = /&lt;.*?&gt;/; </span><br><span class="line">result = text.match(myRegex); // matching &lt;h1&gt;</span><br><span class="line"></span><br><span class="line">let article = &quot;&lt;h1&gt;Winter is coming&lt;/h1&gt;&lt;div&gt;&lt;/div&gt;&lt;h1&gt;north remembers&lt;/h1&gt;&lt;h1&gt;dragon is coming&lt;/h1&gt;&lt;h1&gt;the Queen is coming&lt;/h1&gt;&quot;</span><br><span class="line">let titles = article.match(/&lt;h1&gt;.*?&lt;\/h1&gt;/g)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>思考：折中的需求</li>
+</ul>
+<p>匹配符合下列规律的字符串,规律是连续的两个parameter，即某规则重复2次
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;parameter key=&quot;xxx&quot; value=&quot;1&quot; /&gt;</span><br><span class="line">&lt;any-other-marks&gt;</span><br><span class="line">&lt;parameter key=&quot;yyy&quot; value=&quot;2&quot; type=&quot;0&quot;/&gt;</span><br></pre></td></tr></table></figure></p>
+<p>可以这样
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xmlInfo.match(/&lt;parameter.*?\/&gt;.*?&lt;parameter.*?\/&gt;/)</span><br></pre></td></tr></table></figure></p>
+<p>里面有重复了两段规则，见下文（）部分</p>
+<h4 id="代码占位符"><a href="#代码占位符" class="headerlink" title="代码占位符"></a>代码占位符</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">symbol</th>
+<th style="text-align:left">description </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">\w</td>
+<td style="text-align:left">字符,空格,标点，下划线等 类似但不等价于[A-Za-z0-9_] </td>
+</tr>
+<tr>
+<td style="text-align:center">\W</td>
+<td style="text-align:left">非字符</td>
+</tr>
+<tr>
+<td style="text-align:center">\d</td>
+<td style="text-align:left">任意数字 相当于[0-9]</td>
+</tr>
+<tr>
+<td style="text-align:center">\D</td>
+<td style="text-align:left">任意非数字</td>
+</tr>
+<tr>
+<td style="text-align:center">\s</td>
+<td style="text-align:left">匹配任意不可见字符，包括空格、制表符、换页符等 相当于[ \f\n\r\t\v]</td>
+</tr>
+<tr>
+<td style="text-align:center">\S</td>
+<td style="text-align:left">匹配任意可见字符</td>
+</tr>
+</tbody>
+</table>
+<h4 id="lookaheads"><a href="#lookaheads" class="headerlink" title="lookaheads"></a>lookaheads</h4><p>暂时不知道如何翻译<br>
+例 密码规则不少于6位，且至少包含连续2位数字
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let pwRegex = /(?=\w&#123;6,&#125;)(?=\D*\d&#123;2&#125;)/;</span><br><span class="line">let result = pwRegex.test(sampleWord);</span><br></pre></td></tr></table></figure></p>
+<p>(?=\D*\d{2})应理解为任意非数字内容（或者不存在这部分内容）加两个数字
+(?=…)检测包含…的字符串，(?!…)检测不包含…的字符串，只检测是否符合条件，不返回匹配片段</p>
+<h4 id><a href="#" class="headerlink" title="()"></a>()</h4><p>括号的本义是封装模式，封装的模式可以用\1 \2的方式代替
+上面有个遗留问题，重复部分可写作
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xmlInfo.match(/(&lt;parameter.*?\/&gt;).*?\1/)</span><br></pre></td></tr></table></figure></p>
+<p>上述代码存在问题</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/08/31/HighPerformanceSQL-Index/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2018/08/31/HighPerformanceSQL-Index/" itemprop="url">高性能SQL-索引</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-31T10:51:06+08:00">
+                2018-08-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/08/30/Photography-Soft-Light/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -458,6 +930,24 @@
 <p>可写作
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const person = &#123;</span><br><span class="line">  name: &quot;Taylor&quot;,</span><br><span class="line">  sayHello() &#123;</span><br><span class="line">    return `Hello! My name is $&#123;this.name&#125;.`;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 <h3 id="class-以及-get-set-以及super"><a href="#class-以及-get-set-以及super" class="headerlink" title="class 以及 get set 以及super"></a>class 以及 get set 以及super</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Book &#123;</span><br><span class="line">  constructor(author) &#123;</span><br><span class="line">    this._author = author;</span><br><span class="line">  &#125;</span><br><span class="line">  // getter</span><br><span class="line">  get writer()&#123;</span><br><span class="line">    return this._author;</span><br><span class="line">  &#125;</span><br><span class="line">  // setter</span><br><span class="line">  set writer(updatedAuthor)&#123;</span><br><span class="line">    this._author = updatedAuthor;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h3><blockquote>
+<p>区别于回调函数方式的异步编程方案， ES6将其写入语言标准。</p>
+</blockquote>
+<blockquote>
+<p>所谓Promise，简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。从语法上说，Promise 是一个对象，从它可以获取异步操作的消息。</p>
+</blockquote>
+<p>Promise对象的状态<br>
+pending（进行中）、fulfilled（已成功）和rejected（已失败）只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function loadImageAsync(url) &#123;</span><br><span class="line">  return new Promise(function(resolve, reject) &#123;</span><br><span class="line">    const image = new Image();</span><br><span class="line"></span><br><span class="line">    image.onload = function() &#123;</span><br><span class="line">      resolve(image);</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    image.onerror = function() &#123;</span><br><span class="line">      reject(new Error(&apos;Could not load image at &apos; + url));</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    image.src = url;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>加载图片的异步过程，成功或失败时触发相应的事件(load,error)，resolve和reject刚好对应作为事件响应方法</p>
+<h3 id="async-await"><a href="#async-await" class="headerlink" title="async, await"></a>async, await</h3><p>async(asynchronous)异步</p>
+<p>await(asynchronous wait)等待异步结果
+下面的代码结构被称作callback hell
+其需求是从input.xml文件中读取action，如果action=token，则读取注册表，验证token时效，其中读文件，xml转json，读注册表均为异步操作
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">(function()&#123;</span><br><span class="line">  fs.readfile(&apos;input.xml&apos;,(err,data)=&gt;&#123;</span><br><span class="line">    if(err)&#123;</span><br><span class="line">      console.error(err)</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">      regedit.list(&apos;HKCU\Software\QQSTEST\&apos;,(err,data)=&gt;&#123;</span><br><span class="line">        if(err)&#123;</span><br><span class="line">          console.error(err)</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">          xmlParser.parseString(data,(err,data)=&gt;&#123;</span><br><span class="line">            if(err)&#123;</span><br><span class="line">              console.error(err)</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">              done(data)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">function readfileAsync(filepath)&#123;</span><br><span class="line">  return new Promise((resolve,reject)=&gt;&#123;</span><br><span class="line">    fs.readFile(filepath,(err,data)=&gt;&#123;</span><br><span class="line">      if(err)&#123;</span><br><span class="line">        reject(err)</span><br><span class="line">      &#125;else&#123;</span><br><span class="line">        resolve(data)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line">(async function()&#123;</span><br><span class="line">  var fileData = &apos;&apos;;</span><br><span class="line">  await readfileAsync(&apos;input.xml).then(data=&gt;&#123;</span><br><span class="line">    fileData=data;</span><br><span class="line">  &#125;,err=&gt;&#123;</span><br><span class="line">    console.log(err)</span><br><span class="line">  &#125;)</span><br><span class="line">  if(!fileData) return;</span><br><span class="line">  await readRegEditAsync(&apos;&apos;)</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
+<p>在async声明的function内使用await, 执行时等待promise对象的结果，完成其resolve或reject操作后向下执行。</p>
+
           
         
       
@@ -1276,7 +1766,7 @@ splice 以起止下标为界切片从数组中剔除</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1298,7 +1788,7 @@ splice 以起止下标为界切片从数组中剔除</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
