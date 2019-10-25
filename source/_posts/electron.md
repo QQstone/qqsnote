@@ -20,7 +20,7 @@ tags:
 0. 脚手架 npm i -g angular-cli electron
 1. 创建Angular项目 ng new ngelectron --routing 
 2. package.json 
-
+3. 主进程main.js
 #### webpack target
 
 #### 资源打包关于asar vbscript
@@ -28,9 +28,9 @@ tags:
 #### 单例模式 单例参数更新
 
 #### 外观
-无边透明
+无边透明,隐藏任务栏
 ```
-let mainWindow = new BrowserWindow({ transparent: true, frame: false })
+let mainWindow = new BrowserWindow({ transparent: true, frame: false, skipTaskbar:true })
 ```
 实践中发现透明还需另外设置
 ```
@@ -46,4 +46,51 @@ args = process.argv.splice(2)
 执行模式app.exe [args]
 ```
 args = process.argv.splice(1)
+```
+#### electron-builder
+部分配置
+```
+"productName": "CSCportal",
+  "directories": {
+    "output": "release/"
+  },
+  // 额外打包的资源
+  "extraResources": {
+    "from": "addon/",
+    "to": "addon/"
+  },
+  // 打包文件的parttern表达式
+  "files": [
+    "**/*",
+    "!package.json",
+    "!src/"
+  ],
+  // windows环境
+  "win": {
+    "target": [
+      "nsis", // 使用nsis工具生成安装包
+      "zip"   // 生成zip免安装压缩包
+    ]
+  },
+  "nsis":{
+    "oneClick":false, // 禁用一键安装
+    "perMachine":true, // 为所有用户安装
+    "allowToChangeInstallationDirectory":true, // 自定义安装路径
+    "include":"build/installer.nsh" // 包含脚本
+  },
+  "mac": {},
+  "linux": {}
+}
+```
+nsis宏命令 installer.nsh
+```
+!macro customInstall
+  WriteRegStr HKLM "SOFTWARE\Carestream Dental\CSCportal" "InstallDir" $INSTDIR
+!macroend
+```
+uninstaller.nsh
+```
+!macro customUnInstall
+    DeleteRegKey HKLM "SOFTWARE\Carestream Dental\CSCportal" "InstallDir"
+!macroend
 ```

@@ -5,17 +5,17 @@ tags:
 - TypeScript
 ---
 #### 基本类型
- 1. number 
- 2. boolean
- 3. string
- 4. []
- 6. enum
- 7. any
- 8. void
- 9. null 和 undefined
- 10. never 
- #### 实现es6类型声明let 和 const
- > let const 声明的变量只在当前代码块中有效
+1. number 
+2. boolean
+3. string
+4. []
+6. enum
+7. any
+8. void
+9. null 和 undefined
+10. never 
+#### 实现es6类型声明let 和 const
+> let const 声明的变量只在当前代码块中有效
 
 ```
 for (var i = 0; i < 10; i++) {}
@@ -26,7 +26,7 @@ console.log(i); //10
 for(let j = 0; j < 10; j++) {}
 console.log(j);// Error: j is not define
 ```
- > 以前需要立即执行表达式(IIFE)解决的问题
+> 以前需要立即执行表达式(IIFE)解决的问题
 ```
 for (var k = 0; k < 5; k++) {
     (function (k) {
@@ -43,7 +43,7 @@ for (let j = 0; j < 5; j++) {
     },0);
 }
 ```
- >不存在变量提升
+>不存在变量提升
 ```
 console.log(foo); // 输出undefined
 console.log(bar); // 报错ReferenceError
@@ -51,11 +51,12 @@ console.log(bar); // 报错ReferenceError
 var foo = 2;
 let bar = 2;
 ```
- > 不允许重复声明
- > 暂时性死区
- 
-    即不允许在声明位置之前调用该变量
- > const 声明引用值不允许修改，然而const的对象内部状态是可以修改的。区分声明只读类型关键字readonly
+> 不允许重复声明
+
+> 暂时性死区
+
+即不允许在声明位置之前调用该变量
+> const 声明引用值不允许修改，然而const的对象内部状态是可以修改的。区分声明只读类型关键字readonly
  ```
 readonly GIPX = 0x1a;
  ```
@@ -81,7 +82,6 @@ printLabel(myObj);
 可见，参数对象并非实现接口，只需对外表现接口的特性
 
 另外，接口里的属性不全都是必需的
-接口里的属性不全都是必需的
 ```
 interface SquareConfig { 
     color?: string;
