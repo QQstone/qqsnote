@@ -82,7 +82,7 @@ args = process.argv.splice(1)
   "linux": {}
 }
 ```
-nsis宏命令 installer.nsh
+#### nsis宏命令 installer.nsh
 ```
 !macro customInstall
   WriteRegStr HKLM "SOFTWARE\Carestream Dental\CSCportal" "InstallDir" $INSTDIR
@@ -94,3 +94,4 @@ uninstaller.nsh
     DeleteRegKey HKLM "SOFTWARE\Carestream Dental\CSCportal" "InstallDir"
 !macroend
 ```
+参考 [electron-builder文档nsis部分](https://www.electron.build/configuration/nsis)
