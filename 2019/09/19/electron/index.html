@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="须知，vscode是Electron应用，atom是Electron应用，GeForce Experience也是Electron应用，还有Skype。。。  本质是使用chronium浏览器内核和HTML实现应用程序UI，底层业务是基于js”粘合”的，即除了require nodejs native modules之外，还可以将基于其他技术生态的组件集成进来，这里会用到webpack打包。 得">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-10-24T01:46:32.336Z">
+<meta property="og:updated_time" content="2019-10-25T04:39:16.199Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Electron">
 <meta name="twitter:description" content="须知，vscode是Electron应用，atom是Electron应用，GeForce Experience也是Electron应用，还有Skype。。。  本质是使用chronium浏览器内核和HTML实现应用程序UI，底层业务是基于js”粘合”的，即除了require nodejs native modules之外，还可以将基于其他技术生态的组件集成进来，这里会用到webpack打包。 得">
@@ -327,10 +327,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">args = process.argv.splice(1)</span><br></pre></td></tr></table></figure></p>
 <h4 id="electron-builder"><a href="#electron-builder" class="headerlink" title="electron-builder"></a>electron-builder</h4><p>部分配置
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&quot;productName&quot;: &quot;CSCportal&quot;,</span><br><span class="line">  &quot;directories&quot;: &#123;</span><br><span class="line">    &quot;output&quot;: &quot;release/&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  // 额外打包的资源</span><br><span class="line">  &quot;extraResources&quot;: &#123;</span><br><span class="line">    &quot;from&quot;: &quot;addon/&quot;,</span><br><span class="line">    &quot;to&quot;: &quot;addon/&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  // 打包文件的parttern表达式</span><br><span class="line">  &quot;files&quot;: [</span><br><span class="line">    &quot;**/*&quot;,</span><br><span class="line">    &quot;!package.json&quot;,</span><br><span class="line">    &quot;!src/&quot;</span><br><span class="line">  ],</span><br><span class="line">  // windows环境</span><br><span class="line">  &quot;win&quot;: &#123;</span><br><span class="line">    &quot;target&quot;: [</span><br><span class="line">      &quot;nsis&quot;, // 使用nsis工具生成安装包</span><br><span class="line">      &quot;zip&quot;   // 生成zip免安装压缩包</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;nsis&quot;:&#123;</span><br><span class="line">    &quot;oneClick&quot;:false, // 禁用一键安装</span><br><span class="line">    &quot;perMachine&quot;:true, // 为所有用户安装</span><br><span class="line">    &quot;allowToChangeInstallationDirectory&quot;:true, // 自定义安装路径</span><br><span class="line">    &quot;include&quot;:&quot;build/installer.nsh&quot; // 包含脚本</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;mac&quot;: &#123;&#125;,</span><br><span class="line">  &quot;linux&quot;: &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>nsis宏命令 installer.nsh
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!macro customInstall</span><br><span class="line">  WriteRegStr HKLM &quot;SOFTWARE\Carestream Dental\CSCportal&quot; &quot;InstallDir&quot; $INSTDIR</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure></p>
+<h4 id="nsis宏命令-installer-nsh"><a href="#nsis宏命令-installer-nsh" class="headerlink" title="nsis宏命令 installer.nsh"></a>nsis宏命令 installer.nsh</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!macro customInstall</span><br><span class="line">  WriteRegStr HKLM &quot;SOFTWARE\Carestream Dental\CSCportal&quot; &quot;InstallDir&quot; $INSTDIR</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure>
 <p>uninstaller.nsh
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!macro customUnInstall</span><br><span class="line">    DeleteRegKey HKLM &quot;SOFTWARE\Carestream Dental\CSCportal&quot; &quot;InstallDir&quot;</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure></p>
+<p>参考 <a href="https://www.electron.build/configuration/nsis" target="_blank" rel="noopener">electron-builder文档nsis部分</a></p>
 
       
     </div>
@@ -371,8 +371,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/qqsnote/2019/10/10/Promise/" rel="prev" title="Promise">
-                Promise <i class="fa fa-chevron-right"></i>
+              <a href="/qqsnote/2019/10/15/AngularToubleShooting/" rel="prev" title="Angular Touble Shooting">
+                Angular Touble Shooting <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -450,7 +450,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">62</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -472,7 +472,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -505,7 +505,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#构建项目框架"><span class="nav-number">1.</span> <span class="nav-text">构建项目框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#webpack-target"><span class="nav-number">2.</span> <span class="nav-text">webpack target</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#资源打包关于asar-vbscript"><span class="nav-number">3.</span> <span class="nav-text">资源打包关于asar vbscript</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式-单例参数更新"><span class="nav-number">4.</span> <span class="nav-text">单例模式 单例参数更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#外观"><span class="nav-number">5.</span> <span class="nav-text">外观</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令及参数"><span class="nav-number">6.</span> <span class="nav-text">命令及参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#electron-builder"><span class="nav-number">7.</span> <span class="nav-text">electron-builder</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#构建项目框架"><span class="nav-number">1.</span> <span class="nav-text">构建项目框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#webpack-target"><span class="nav-number">2.</span> <span class="nav-text">webpack target</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#资源打包关于asar-vbscript"><span class="nav-number">3.</span> <span class="nav-text">资源打包关于asar vbscript</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式-单例参数更新"><span class="nav-number">4.</span> <span class="nav-text">单例模式 单例参数更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#外观"><span class="nav-number">5.</span> <span class="nav-text">外观</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令及参数"><span class="nav-number">6.</span> <span class="nav-text">命令及参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#electron-builder"><span class="nav-number">7.</span> <span class="nav-text">electron-builder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nsis宏命令-installer-nsh"><span class="nav-number">8.</span> <span class="nav-text">nsis宏命令 installer.nsh</span></a></li></ol></div>
             
 
           </div>

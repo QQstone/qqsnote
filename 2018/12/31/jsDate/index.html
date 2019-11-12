@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="方法 描述     Date() 返回当日的日期和时间。   getDate() 从 Date 对象返回一个月中的某一天 (1 ~ 31)。   getDay() 从 Date 对象返回一周中的某一天 (0 ~ 6)。   getMonth() 从 Date 对象返回月份 (0 ~ 11)。   getFullYear() 从 Date 对象以四位数字返回年份。   getHours() 返">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-08T09:50:11.842Z">
+<meta property="og:updated_time" content="2019-11-07T03:14:08.422Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Date">
 <meta name="twitter:description" content="方法 描述     Date() 返回当日的日期和时间。   getDate() 从 Date 对象返回一个月中的某一天 (1 ~ 31)。   getDay() 从 Date 对象返回一周中的某一天 (0 ~ 6)。   getMonth() 从 Date 对象返回月份 (0 ~ 11)。   getFullYear() 从 Date 对象以四位数字返回年份。   getHours() 返">
@@ -498,7 +498,7 @@
 </tr>
 </tbody>
 </table>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Date.property.format=function(format)&#123;</span><br><span class="line">    // eg: format=&quot;yyyy-MM-dd hh:mm:ssS&quot;</span><br><span class="line">    var o = &#123;</span><br><span class="line">        &quot;M+&quot;: this.getMonth() + 1,</span><br><span class="line">        &quot;d+&quot;: this.getDate(),</span><br><span class="line">        &quot;h+&quot;: this.getHours(),</span><br><span class="line">        &quot;m+&quot;: this.getMinutes(),</span><br><span class="line">        &quot;s+&quot;: this,getSeconds(),</span><br><span class="line">        &quot;q+&quot;: Math.floor((this.getMonth() + 3)/3), //quarter</span><br><span class="line">        &quot;S&quot;: this.getMilliseconds()</span><br><span class="line">    &#125;,</span><br><span class="line">    if(/(y+)/.test(format))&#123;</span><br><span class="line">        format = format.replace(RegExp.$1,(this.getFullYear) + &quot;&quot;).substr(4 - RegExp.$1.length));</span><br><span class="line">    &#125;</span><br><span class="line">    for(var k in o)&#123;</span><br><span class="line">        if(new RegExp(&quot;(&quot; + k + &quot;)&quot;).test(format))&#123;</span><br><span class="line">            format = format.replace(RegExp.$1, RegExp.$1.length == 1?o[k]:(&quot;00&quot; + o[k]).substr((&quot;&quot; + o[k]).length));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return format;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Date.property.format=function(format)&#123;</span><br><span class="line">    // eg: format=&quot;yyyy-MM-dd hh:mm:ssS&quot;</span><br><span class="line">    var o = &#123;</span><br><span class="line">        &quot;M+&quot;: this.getMonth() + 1,</span><br><span class="line">        &quot;d+&quot;: this.getDate(),</span><br><span class="line">        &quot;h+&quot;: this.getHours(),</span><br><span class="line">        &quot;m+&quot;: this.getMinutes(),</span><br><span class="line">        &quot;s+&quot;: this.getSeconds(),</span><br><span class="line">        &quot;q+&quot;: Math.floor((this.getMonth() + 3)/3), //quarter</span><br><span class="line">        &quot;S&quot;: this.getMilliseconds()</span><br><span class="line">    &#125;;</span><br><span class="line">    if(/(y+)/.test(format))&#123;</span><br><span class="line">        format = format.replace(RegExp.$1,(this.getFullYear) + &quot;&quot;).substr(4 - RegExp.$1.length)</span><br><span class="line">    &#125;</span><br><span class="line">    for(var k in o)&#123;</span><br><span class="line">        if(new RegExp(&quot;(&quot; + k + &quot;)&quot;).test(format))&#123;</span><br><span class="line">            format = format.replace(RegExp.$1, RegExp.$1.length == 1?o[k]:(&quot;00&quot; + o[k]).substr((&quot;&quot; + o[k]).length));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return format;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -608,7 +608,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">62</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -630,7 +630,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
