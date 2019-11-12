@@ -62,12 +62,12 @@ Date.property.format=function(format){
         "d+": this.getDate(),
         "h+": this.getHours(),
         "m+": this.getMinutes(),
-        "s+": this,getSeconds(),
+        "s+": this.getSeconds(),
         "q+": Math.floor((this.getMonth() + 3)/3), //quarter
         "S": this.getMilliseconds()
-    },
+    };
     if(/(y+)/.test(format)){
-        format = format.replace(RegExp.$1,(this.getFullYear) + "").substr(4 - RegExp.$1.length));
+        format = format.replace(RegExp.$1,(this.getFullYear) + "").substr(4 - RegExp.$1.length)
     }
     for(var k in o){
         if(new RegExp("(" + k + ")").test(format)){

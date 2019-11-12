@@ -1,7 +1,8 @@
 ---
 title: Angular自定义控件
 date: 2019-03-27 19:18:17
-tags: 前端 Angular
+tags: 
+- Angular
 ---
 ### ControlValueAccessor接口
 ```

@@ -26,6 +26,7 @@ command > filename    |    Redirect command output to a file
    commandA && commandB \|\| commandC | If commandA succeeds run commandB, if it fails commandC
 
    > In most cases the Exit Code is the same as the ErrorLevel
-   ```
 
-   ```
+#### 刷新应用图标
+桌面图标显示为未知文件，调用以下应用可以解决<br>
+run ie4uinit -show

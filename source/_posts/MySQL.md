@@ -44,3 +44,10 @@ mysql> flush privileges;
 ALTER USER 'admin'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
 FLUSH PRIVILEGES;
 ```
+#### 使用自增int作为主键
+[mysql为什么建议使用自增主键](https://zhuanlan.zhihu.com/p/71022670)
+
+#### 使用时间戳
+```
+ALTER TABLE mytable CHANGE COLUMN ptime ptime TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
+```

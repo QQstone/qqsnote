@@ -76,7 +76,7 @@ app.get("/api/whoami", function (req, res) {
 ```
 请求参数的获取方式
 + path中的变量，形如/api/user/:userId, 用req.params.userId
-+ url参数如?org=dw001&type=1,将直接结构化未req.query对象
++ url参数如?org=dw001&type=1,将直接结构化为req.query对象
 + post请求的RequestBody，使用bodyParser中间件，添加到req.body中
 + req.param(parameterName)方法
 
@@ -144,8 +144,26 @@ app.post('/files/upload',function(req,res){
     })
 })
 ```
-
-
+#### 环境变量
+服务端口号变量控制
+```
+// listen for requests
+const listener = app.listen(process.env.PORT, function() {
+  console.log('Your app is listening on port ' + listener.address().port);
+});
+```
+unix shell prompt:
+```
+PORT=1234 node app.js
+```
+windows环境
+```
+set PORT=1234
+```
+windows powershell
+```
+$env:PORT = 1234
+```
 #### 关于Node.js的系统学习
 Node.js的实现的学习才应该是你要学的Node.js本身，而不是无尽的工具和第三方库。<br>
 

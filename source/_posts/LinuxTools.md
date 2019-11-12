@@ -56,3 +56,15 @@ rename 's/\.bak$//' *.bak
 ```
 rename 'y/A-Z/a-z/' *
 ```
+#### 软件
+```
+sudo npm cache clean -f #----- 先清除 npm cache
+sudo apt-get update #------ 更新源
+sudo apt-get upgrade #------ 更新已安装的包
+```
+对于nodejs npm需要使用n模块升级到最新稳定版本
+```
+sudo apt-get install nodejs npm
+npm install -g n 
+sudo n stable 
+```
