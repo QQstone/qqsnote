@@ -1,7 +1,9 @@
 ---
 title: 基本算法-String, Array
 date: 2018-07-31 17:00:18
-tags: 算法 javascript
+tags: 
+- 算法 
+- javascript
 ---
 >实现字符串翻转方法
 ```

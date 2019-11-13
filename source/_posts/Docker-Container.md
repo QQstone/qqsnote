@@ -16,6 +16,8 @@ docker run --name myjenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home --r
 + -v /var/jenkins_home volumn设置
 + --restart always重启策略
 
+[docker run命令](https://www.runoob.com/docker/docker-command-manual.html)
+
 ### 连接到容器
 
 docker attach [containerID]
