@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/qqsnote/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/qqsnote/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/qqsnote/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="WebService,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="比较复杂的概念： 面向服务架构(Service Oriented Ambiguity, SOA),将紧耦合的系统，划分为面向业务的，粗粒度，松耦合，无状态的服务，服务之间彼此通信，用一组互相依赖的服务构成了SOA架构下的系统。  WebService是SOA的最佳实现之一  Web service是一个平台独立的，低耦合的，自包含的、基于可编程的web的应用程序，可使用开放的XML（标准通用标记语">
+<meta name="keywords" content="WebService">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebService">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/11/13/WebService/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="比较复杂的概念： 面向服务架构(Service Oriented Ambiguity, SOA),将紧耦合的系统，划分为面向业务的，粗粒度，松耦合，无状态的服务，服务之间彼此通信，用一组互相依赖的服务构成了SOA架构下的系统。  WebService是SOA的最佳实现之一  Web service是一个平台独立的，低耦合的，自包含的、基于可编程的web的应用程序，可使用开放的XML（标准通用标记语">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/a60edd42gy1g8wc0ixbftj20lj0kdjte.jpg">
+<meta property="og:updated_time" content="2019-11-13T05:55:00.326Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="WebService">
+<meta name="twitter:description" content="比较复杂的概念： 面向服务架构(Service Oriented Ambiguity, SOA),将紧耦合的系统，划分为面向业务的，粗粒度，松耦合，无状态的服务，服务之间彼此通信，用一组互相依赖的服务构成了SOA架构下的系统。  WebService是SOA的最佳实现之一  Web service是一个平台独立的，低耦合的，自包含的、基于可编程的web的应用程序，可使用开放的XML（标准通用标记语">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/a60edd42gy1g8wc0ixbftj20lj0kdjte.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/qqsnote/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://qqstone.github.io/qqsnote/2019/11/13/WebService/">
+
+
+
+
+
+  <title>WebService | QQs'Note</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/qqsnote/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">QQs'Note</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/qqsnote/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/qqsnote/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/11/13/WebService/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">WebService</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-13T09:29:28+08:00">
+                2019-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="比较复杂的概念："><a href="#比较复杂的概念：" class="headerlink" title="比较复杂的概念："></a>比较复杂的概念：</h4><blockquote>
+<p>面向服务架构(Service Oriented Ambiguity, SOA),将紧耦合的系统，划分为面向业务的，粗粒度，松耦合，无状态的服务，服务之间彼此通信，用一组互相依赖的服务构成了SOA架构下的系统。</p>
+</blockquote>
+<p>WebService是SOA的最佳实现之一</p>
+<blockquote>
+<p>Web service是一个平台独立的，低耦合的，自包含的、基于可编程的web的应用程序，可使用开放的XML（标准通用标记语言下的一个子集）标准来描述、发布、发现、协调和配置这些应用程序，用于开发分布式的互操作的应用程序。</p>
+</blockquote>
+<blockquote>
+<p>简单对象访问协议(Simple Object Access Protocol, SOAP), 基于XML在分散或分布式的环境中交换信息的简单的协议。允许服务提供者和服务客户经过防火墙在INTERNET进行通讯交互。</p>
+</blockquote>
+<p>　　SOAP的设计是为了在一个松散的、分布的环境中使用XML对等地交换结构化的和类型化的信息提供了一个简单且轻量级的机制。</p>
+<blockquote>
+<p>网络服务描述语言(Web Services Description Language, WSDL), 它是一门基于 XML 的语言，用于描述 Web Services 以及如何对它们进行访问, WSDL文件是关于如何调用Web Service的文档。</p>
+</blockquote>
+<h4 id="解读WSDL文档"><a href="#解读WSDL文档" class="headerlink" title="解读WSDL文档"></a>解读WSDL文档</h4><p>某wsdl_prod.xml
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;wsdl:definitions  xmlns:wsx=&quot;http://schemas.xmlsoap.org/ws/2004/09/mex&quot;  xmlns:wsa10=&quot;http://www.w3.org/2005/08/addressing&quot;  xmlns:soap12=&quot;http://schemas.xmlsoap.org/wsdl/soap12/&quot;  xmlns:wsaw=&quot;http://www.w3.org/2006/05/addressing/wsdl&quot;  xmlns:msc=&quot;http://schemas.microsoft.com/ws/2005/12/wsdl/contract&quot;  xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;  xmlns:wsap=&quot;http://schemas.xmlsoap.org/ws/2004/08/addressing/policy&quot;  xmlns:i0=&quot;http://sso.xxxxxxxxxxxxx.com/DataService/v1&quot;  xmlns:wsp=&quot;http://schemas.xmlsoap.org/ws/2004/09/policy&quot;  xmlns:wsa=&quot;http://schemas.xmlsoap.org/ws/2004/08/addressing&quot;  xmlns:tns=&quot;http://tempuri.org/&quot;  xmlns:wsam=&quot;http://www.w3.org/2007/05/addressing/metadata&quot; xmlns:soapenc=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot; xmlns:wsu=&quot;http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd&quot; xmlns:soap=&quot;http://schemas.xmlsoap.org/wsdl/soap/&quot; xmlns:wsdl=&quot;http://schemas.xmlsoap.org/wsdl/&quot; targetNamespace=&quot;http://tempuri.org/&quot; name=&quot;SsoDataService&quot;&gt;-&lt;wsp:Policy wsu:Id=&quot;CustomBinding_ISsoDataService_policy&quot;&gt;-&lt;wsp:ExactlyOne&gt;-&lt;wsp:All&gt;-&lt;sp:TransportBinding xmlns:sp=&quot;http://schemas.xmlsoap.org/ws/2005/07/securitypolicy&quot;&gt;-&lt;wsp:Policy&gt;-&lt;sp:TransportToken&gt;-&lt;wsp:Policy&gt;&lt;sp:HttpsToken RequireClientCertificate=&quot;false&quot;/&gt;&lt;/wsp:Policy&gt;&lt;/sp:TransportToken&gt;-&lt;sp:AlgorithmSuite&gt;-&lt;wsp:Policy&gt;&lt;sp:Basic256/&gt;&lt;/wsp:Policy&gt;&lt;/sp:AlgorithmSuite&gt;-&lt;sp:Layout&gt;-&lt;wsp:Policy&gt;&lt;sp:Lax/&gt;&lt;/wsp:Policy&gt;&lt;/sp:Layout&gt;&lt;/wsp:Policy&gt;&lt;/sp:TransportBinding&gt;-&lt;sp:SignedSupportingTokens xmlns:sp=&quot;http://schemas.xmlsoap.org/ws/2005/07/securitypolicy&quot;&gt;-&lt;wsp:Policy&gt;-&lt;sp:UsernameToken sp:IncludeToken=&quot;http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient&quot;&gt;-&lt;wsp:Policy&gt;&lt;sp:WssUsernameToken10/&gt;&lt;/wsp:Policy&gt;&lt;/sp:UsernameToken&gt;&lt;/wsp:Policy&gt;&lt;/sp:SignedSupportingTokens&gt;-&lt;sp:Wss10 xmlns:sp=&quot;http://schemas.xmlsoap.org/ws/2005/07/securitypolicy&quot;&gt;-&lt;wsp:Policy&gt;&lt;sp:MustSupportRefKeyIdentifier/&gt;&lt;sp:MustSupportRefIssuerSerial/&gt;&lt;/wsp:Policy&gt;&lt;/sp:Wss10&gt;-&lt;sp:Trust10 xmlns:sp=&quot;http://schemas.xmlsoap.org/ws/2005/07/securitypolicy&quot;&gt;-&lt;wsp:Policy&gt;&lt;sp:MustSupportIssuedTokens/&gt;&lt;sp:RequireClientEntropy/&gt;&lt;sp:RequireServerEntropy/&gt;&lt;/wsp:Policy&gt;&lt;/sp:Trust10&gt;&lt;/wsp:All&gt;&lt;/wsp:ExactlyOne&gt;&lt;/wsp:Policy&gt;&lt;wsdl:import location=&quot;wsdl0.xml&quot; namespace=&quot;http://sso.xxxxxxxxxxxxx.com/DataService/v1&quot;/&gt;&lt;wsdl:types/&gt;-&lt;wsdl:binding name=&quot;CustomBinding_ISsoDataService&quot; type=&quot;i0:ISsoDataService&quot;&gt;&lt;wsp:PolicyReference URI=&quot;#CustomBinding_ISsoDataService_policy&quot;/&gt;&lt;soap:binding transport=&quot;http://schemas.xmlsoap.org/soap/http&quot;/&gt;-&lt;wsdl:operation name=&quot;ValidateAccountLogin&quot;&gt;&lt;soap:operation style=&quot;document&quot; soapAction=&quot;http://sso.xxxxxxxxxxxxx.com/DataService/v1/ISsoDataService/ValidateAccountLogin&quot;/&gt;-&lt;wsdl:input&gt;&lt;soap:body use=&quot;literal&quot;/&gt;&lt;/wsdl:input&gt;-&lt;wsdl:output&gt;&lt;soap:body use=&quot;literal&quot;/&gt;&lt;/wsdl:output&gt;&lt;/wsdl:operation&gt;&lt;/wsdl:binding&gt;-&lt;wsdl:service name=&quot;SsoDataService&quot;&gt;-&lt;wsdl:port name=&quot;CustomBinding_ISsoDataService&quot; binding=&quot;tns:CustomBinding_ISsoDataService&quot;&gt;&lt;soap:address location=&quot;https://sso.************.com/DataService.svc&quot;/&gt;&lt;/wsdl:port&gt;&lt;/wsdl:service&gt;&lt;/wsdl:definitions&gt;</span><br></pre></td></tr></table></figure></p>
+<p>该文档标注了大量的xml协议，包含用于SOAP header中做安全认证的协议以及格式
+（待日后补充解读）</p>
+<p>其中import wsdl0.xml 该文件主要是接口的协议
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;wsdl:definitions targetNamespace=&quot;http://sso.practiceworks.com/DataService/v1&quot; xmlns:wsdl=&quot;http://schemas.xmlsoap.org/wsdl/&quot; xmlns:soap=&quot;http://schemas.xmlsoap.org/wsdl/soap/&quot; xmlns:wsu=&quot;http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd&quot; xmlns:soapenc=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot; xmlns:wsam=&quot;http://www.w3.org/2007/05/addressing/metadata&quot; xmlns:tns=&quot;http://sso.practiceworks.com/DataService/v1&quot; xmlns:wsa=&quot;http://schemas.xmlsoap.org/ws/2004/08/addressing&quot; xmlns:wsp=&quot;http://schemas.xmlsoap.org/ws/2004/09/policy&quot; xmlns:wsap=&quot;http://schemas.xmlsoap.org/ws/2004/08/addressing/policy&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msc=&quot;http://schemas.microsoft.com/ws/2005/12/wsdl/contract&quot; xmlns:wsaw=&quot;http://www.w3.org/2006/05/addressing/wsdl&quot; xmlns:soap12=&quot;http://schemas.xmlsoap.org/wsdl/soap12/&quot; xmlns:wsa10=&quot;http://www.w3.org/2005/08/addressing&quot; xmlns:wsx=&quot;http://schemas.xmlsoap.org/ws/2004/09/mex&quot;&gt;</span><br><span class="line">&lt;wsdl:types&gt;</span><br><span class="line">	&lt;xsd:schema targetNamespace=&quot;http://sso.practiceworks.com/DataService/v1/Imports&quot;&gt;</span><br><span class="line">		&lt;xsd:import schemaLocation=&quot;xsd0.xml&quot; namespace=&quot;http://sso.practiceworks.com/DataService/v1&quot;/&gt;</span><br><span class="line">		&lt;xsd:import schemaLocation=&quot;xsd1.xml&quot; namespace=&quot;http://schemas.microsoft.com/2003/10/Serialization/&quot;/&gt;</span><br><span class="line">		&lt;xsd:import schemaLocation=&quot;xsd2.xml&quot; namespace=&quot;http://schemas.microsoft.com/2003/10/Serialization/Arrays&quot;/&gt;</span><br><span class="line">	&lt;/xsd:schema&gt;</span><br><span class="line">&lt;/wsdl:types&gt;</span><br><span class="line">	&lt;wsdl:message name=&quot;ISsoDataService_ValidateAccountLogin_InputMessage&quot;&gt;</span><br><span class="line">	&lt;wsdl:part name=&quot;parameters&quot; element=&quot;tns:ValidateAccountLogin&quot;/&gt;</span><br><span class="line">	&lt;/wsdl:message&gt;</span><br><span class="line">	&lt;wsdl:message name=&quot;ISsoDataService_ValidateAccountLogin_OutputMessage&quot;&gt;</span><br><span class="line">	&lt;wsdl:part name=&quot;parameters&quot; element=&quot;tns:ValidateAccountLoginResponse&quot;/&gt;</span><br><span class="line">	&lt;/wsdl:message&gt;</span><br><span class="line">	&lt;wsdl:portType name=&quot;ISsoDataService&quot;&gt;</span><br><span class="line">		&lt;wsdl:operation name=&quot;ValidateAccountLogin&quot;&gt;</span><br><span class="line">			&lt;wsdl:input wsaw:Action=&quot;http://sso.practiceworks.com/DataService/v1/ISsoDataService/ValidateAccountLogin&quot; message=&quot;tns:ISsoDataService_ValidateAccountLogin_InputMessage&quot;/&gt;</span><br><span class="line">			&lt;wsdl:output wsaw:Action=&quot;http://sso.practiceworks.com/DataService/v1/ISsoDataService/ValidateAccountLoginResponse&quot; message=&quot;tns:ISsoDataService_ValidateAccountLogin_OutputMessage&quot;/&gt;</span><br><span class="line">		&lt;/wsdl:operation&gt;</span><br><span class="line">	&lt;/wsdl:portType&gt;</span><br><span class="line">&lt;/wsdl:definitions&gt;</span><br></pre></td></tr></table></figure></p>
+<p>其中xsd1，2，3是参数定义 略</p>
+<p>首先须知xml语法(存目)</p>
+<p>xmlns:el=”url” el元素遵循url定义的规范</p>
+<p>WSDL 文档主要使用以下几个元素来描述某个 web service ：</p>
+<p>portType  “最重要的元素” 描述一个 web service、可被执行的操作，以及相关的消息。</p>
+<p>message 元素定义一个操作的数据元素。</p>
+<p>每个消息均由一个或多个部件组成。可以把这些部件比作传统编程语言中一个函数调用的参数。</p>
+<p>WSDL types</p>
+<p>types 元素定义 web service 使用的数据类型。</p>
+<p>为了最大程度的平台中立性，WSDL 使用 XML Schema 语法来定义数据类型。</p>
+<p>WSDL Bindings</p>
+<p>binding 元素为每个端口定义消息格式和协议细节。</p>
+<h4 id="安全认证（存目）"><a href="#安全认证（存目）" class="headerlink" title="安全认证（存目）"></a>安全认证（存目）</h4><h4 id="SOAP用例"><a href="#SOAP用例" class="headerlink" title="SOAP用例"></a>SOAP用例</h4><p>SOAP结构
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;soap:Envelope xmlns:soap=&quot;http://www.w3.org/2001/12/soap-envelope&quot;</span><br><span class="line">soap:encodingStyle=&quot;http://www.w3.org/2001/12/soap-encoding&quot;&gt;</span><br><span class="line"></span><br><span class="line">  &lt;soap:Header&gt;</span><br><span class="line">      ...</span><br><span class="line">      ...</span><br><span class="line">  &lt;/soap:Header&gt;</span><br><span class="line"></span><br><span class="line">  &lt;soap:Body&gt;</span><br><span class="line">      ...</span><br><span class="line">      ...</span><br><span class="line">      &lt;soap:Fault&gt;</span><br><span class="line">        ...</span><br><span class="line">        ...</span><br><span class="line">      &lt;/soap:Fault&gt;</span><br><span class="line">  &lt;/soap:Body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/soap:Envelope&gt;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://tva1.sinaimg.cn/large/a60edd42gy1g8wc0ixbftj20lj0kdjte.jpg" alt="Postman">
+参考 <a href="https://www.cnblogs.com/fnng/p/5524801.html" target="_blank" rel="noopener">Web Service概念梳理</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/qqsnote/tags/WebService/" rel="tag"># WebService</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/qqsnote/2019/11/12/Excel-tips/" rel="next" title="Excel_tips">
+                <i class="fa fa-chevron-left"></i> Excel_tips
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/qqsnote/2019/11/27/login/" rel="prev" title="login">
+                login <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">QQs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/qqsnote/archives/">
+              
+                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/qqsnote/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/qqsnote/tags/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#比较复杂的概念："><span class="nav-number">1.</span> <span class="nav-text">比较复杂的概念：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解读WSDL文档"><span class="nav-number">2.</span> <span class="nav-text">解读WSDL文档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安全认证（存目）"><span class="nav-number">3.</span> <span class="nav-text">安全认证（存目）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SOAP用例"><span class="nav-number">4.</span> <span class="nav-text">SOAP用例</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/qqsnote/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/qqsnote/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/qqsnote/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/qqsnote/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/qqsnote/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
