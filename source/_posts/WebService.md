@@ -57,22 +57,22 @@ xmlns:el="url" el元素遵循url定义的规范
 
 WSDL 文档主要使用以下几个元素来描述某个 web service ：
 
-<portType>  “最重要的元素” 描述一个 web service、可被执行的操作，以及相关的消息。
+portType  “最重要的元素” 描述一个 web service、可被执行的操作，以及相关的消息。
 
 
-<message> 元素定义一个操作的数据元素。
+message 元素定义一个操作的数据元素。
 
 每个消息均由一个或多个部件组成。可以把这些部件比作传统编程语言中一个函数调用的参数。
 
 WSDL types
 
-<types> 元素定义 web service 使用的数据类型。
+types 元素定义 web service 使用的数据类型。
 
 为了最大程度的平台中立性，WSDL 使用 XML Schema 语法来定义数据类型。
 
 WSDL Bindings
 
-<binding> 元素为每个端口定义消息格式和协议细节。
+binding 元素为每个端口定义消息格式和协议细节。
 
 
 #### 安全认证（存目）
