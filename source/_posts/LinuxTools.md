@@ -68,3 +68,18 @@ sudo apt-get install nodejs npm
 npm install -g n 
 sudo n stable 
 ```
+Nov 25th 遭遇 [issue 27711](https://github.com/nodejs/node/issues/27711) 需将nodejs从v12降至v10
+```
+sudo n 10.16.0
+```
+#### 查看系统版本
+```
+cat /etc/issue 查看发行版
+cat /etc/redhat-release 查看CentOS版本
+uname -r 查看内核版本
+```
+
+#### 查看服务列表
+```
+service --status-all
+```

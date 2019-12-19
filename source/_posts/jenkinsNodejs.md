@@ -8,7 +8,7 @@ tags:
 ### 安装NodeJS 
     
 Manage Jenkins菜单 --> Manage Plugins 
-添加Node.js 并重启Jenkins
+添加Node.js 并<b>重启Jenkins</b>
 进入 Manage Jenkins --> Global Tool Configuration
 找到NodeJS installations 此处可以配置安装多个版本的NodeJS
 如有需要填写Global npm packages to install项

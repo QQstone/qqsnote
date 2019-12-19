@@ -95,3 +95,39 @@ uninstaller.nsh
 !macroend
 ```
 参考 [electron-builder文档nsis部分](https://www.electron.build/configuration/nsis)
+
+#### 调试主进程
+VScode launch.json:
+```
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Main Process",
+        "type": "node",
+        "request": "launch",
+        "cwd": "${workspaceRoot}",
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+        "windows": {
+          "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+        },
+        "args" : [".","--input=d:\\temp\\input.xml","--output=d:\\temp\\output.xml"],
+        "outputCapture": "std"
+      }
+    ]
+  }
+```
+此app设计为由其他客户端程序使用命令调起，传入input参数和output参数，注意调试命令的'electron .'中'.'是第一个参数。
+
+#### 自动更新服务
+原理似乎是这样的，首先是build，将构建好的文件publish到一个下载中心，很多工具都封装了比如GitHub和[Bintray](https://bintray.com/)
+	
+electron-builder方案
+
+1. install [electron-updater](https://yarn.pm/electron-updater) 
+2. 配置publish参数
+一般在package.json中，已分离出electron-build.json配置的在该文件中
+```
+
+```
+

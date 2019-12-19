@@ -20,7 +20,7 @@ tags:
     docker pull httpd
     ```
     > 这里的Docker Hub相当于npmjs.org仓库，镜像是容器的模板，镜像之于容器，如同class之于object。这里的httpd称为应用容器镜像，是包含指定应用的环境。
-+ 删除镜像 docker rmi hello-world
++ 删除镜像 docker rm hello-world
 
 + 启动容器 docker container run [OPTIONS] IMAGE [COMMAND]
     ```

@@ -51,3 +51,28 @@ FLUSH PRIVILEGES;
 ```
 ALTER TABLE mytable CHANGE COLUMN ptime ptime TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
 ```
+#### 联合唯一
+```
+alter table all_user add unique key(employeeid, isvalid)
+```
+#### 数据导入
+MySQL Workbench工具，支持csv，json格式的import wizard，其实可以直接用命令方式导入
+![Capture_mysql_workbench](https://tvax4.sinaimg.cn/large/a60edd42gy1g9swbdtdpbj20rg0mijto.jpg)
+工具提供了直观图形界面和字段映射。<br>
+然而csv的支持是个大坑。
+> Excel在读取csv的时候是通过读取文件头上的bom来识别编码的，如果文件头无bom信息，则默认按照unicode编码读取。
+
+> MySQL读取csv数据不能识别bom头，遇到utf8bom报“Can't analyze file. Please try to change encoding type. If that doesn't help, maybe the file is not: csv, or the file is empty.
+
+应如下操作：
+
++ 在Excel中整理待导入数据的格式，特别提示MySQL datetime类型字段数据源应调整为yyyy-mm-dd hh:mm:ss格式
++ 保存为CSV UTF-8(Comma delimited) 在Excel365的SAVE AS选项中是这样。
++ 用Notepad++打开保存的文件，可见此时默认为Encoding in UTF8-BOM，需Convert to UTF8 （此时再使用Excel打开，会发现出现中文乱码，原因如上所述，找不到BOM将以Unicode解码,应该打开Excel，使用数据导入向导，from text/csv）
++ 使用Workbench Import Wizard导入
+
+#### 关于utf8 和 utf8mb4
+
+[记住，永远不要在MySQL中使用“utf8”](https://juejin.im/entry/5b3055046fb9a00e315c2849)
+
+大致是说，，别人utf-8都是四个字节编码，就MySQL所谓的utf-8是3字节，为与标准对应，又出了utf8mb4，请在MySQL中使用utf8mb4
