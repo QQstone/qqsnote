@@ -39,3 +39,7 @@ Three.js对WebGL工作步骤进一步封装，提供方便理解的绘图API以�
 参考理解 [图解WebGL&Three.js工作原理](https://www.cnblogs.com/wanbo/p/6754066.html)
 
 关于学习Web3D相关技术的经验介绍：[如何学习WebGL和Three.js](http://www.yanhuangxueyuan.com/doc/Three.js/learnWebGLThreejs.html)
+
+### Enable WebGL in your browser
+
+[参考](https://superuser.com/questions/836832/how-can-i-enable-webgl-in-my-browser)

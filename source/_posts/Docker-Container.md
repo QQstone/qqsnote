@@ -8,11 +8,21 @@ tags:
 ```
 docker pull jenkins
 sudo mkdir /var/jenkins_home
-docker run -d --name myjenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home --restart always jenkins
+docker run 
+-d 
+-u root 
+--rm 实际上写这个会报与--restart always冲突
+--name myjenkins 
+-p 8080:8080 -p 50000:50000 
+-v /var/jenkins_home:/var/jenkins_home 
+--restart always 
+jenkins
 ```
 说明
 + docker run启动一个container 
 + -d 后台运行
++ -u root 以root权限执行
++ --rm 容器退出后自动移除
 + --name myjenkins容器Name命名为myjenkins
 + -p 8080:8080 -p 50000:50000 容器端口映射到宿主端口
 + -v volumn设置（详见“卷和持久化数据”）
