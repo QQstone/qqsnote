@@ -229,6 +229,130 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/12/webgllessons/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/09/12/webgllessons/" itemprop="url">WebGL教程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-12T14:45:02+08:00">
+                2019-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="WebGLRenderingContext"><a href="#WebGLRenderingContext" class="headerlink" title="WebGLRenderingContext"></a>WebGLRenderingContext</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const canvas = document.getElementById(&apos;webgl&apos;);</span><br><span class="line">const gl = canvas.getContext(&apos;webgl&apos;);</span><br><span class="line"></span><br><span class="line">// Set clear color to black, fully opaque</span><br><span class="line">gl.clearColor(0.0, 0.0, 0.0, 1.0);</span><br><span class="line">// Clear the color buffer with specified clear color</span><br><span class="line">gl.clear(gl.COLOR_BUFFER_BIT);</span><br></pre></td></tr></table></figure>
+<h4 id="着色器函数"><a href="#着色器函数" class="headerlink" title="着色器函数"></a>着色器函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">private initShader(gl:WebGLRenderingContext, vertexShaderSource:string, fragmentShaderSource:string) &#123;</span><br><span class="line">   //创建顶点着色器对象</span><br><span class="line">   let vertexShader = gl.createShader(gl.VERTEX_SHADER);</span><br><span class="line">   //创建片元着色器对象</span><br><span class="line">   let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);</span><br><span class="line">   //引入顶点、片元着色器源代码</span><br><span class="line">   gl.shaderSource(vertexShader, vertexShaderSource);</span><br><span class="line">   gl.shaderSource(fragmentShader, fragmentShaderSource);</span><br><span class="line">   //编译顶点、片元着色器</span><br><span class="line">   gl.compileShader(vertexShader);</span><br><span class="line">   gl.compileShader(fragmentShader);</span><br><span class="line"></span><br><span class="line">   //创建程序对象program</span><br><span class="line">   let program = gl.createProgram();</span><br><span class="line">   //附着顶点着色器和片元着色器到program</span><br><span class="line">   gl.attachShader(program, vertexShader);</span><br><span class="line">   gl.attachShader(program, fragmentShader);</span><br><span class="line">   //链接program</span><br><span class="line">   gl.linkProgram(program);</span><br><span class="line">   //使用program</span><br><span class="line">   gl.useProgram(program);</span><br><span class="line">   //返回程序program对象</span><br><span class="line">   return program;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="着色器"><a href="#着色器" class="headerlink" title="着色器"></a>着色器</h4><p>着色器是使用 OpenGL ES Shading Language(GLSL)编写的程序，它携带着绘制形状的顶点信息以及构造绘制在屏幕上像素的所需数据，换句话说，它负责记录着像素点的位置和颜色。<br>
+顶点着色器（Programmable Vertex Processor）和 片元着色器（Programmable Fragment Processor）
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">var vertexShaderSource = &apos;&apos; +</span><br><span class="line">//attribute声明vec4类型变量apos</span><br><span class="line">&apos;attribute vec4 apos;&apos; +</span><br><span class="line">&apos;void main()&#123;&apos; +</span><br><span class="line">//顶点坐标apos赋值给内置变量gl_Position</span><br><span class="line">&apos;   gl_Position =apos;&apos; +</span><br><span class="line">&apos;&#125;&apos;;</span><br><span class="line"></span><br><span class="line">//片元着色器（Programmable Fragment Processor）源码</span><br><span class="line">let fragShaderSource = &apos;&apos; +</span><br><span class="line">&apos;void main()&#123;&apos; +</span><br><span class="line">//定义片元颜色</span><br><span class="line">&apos;   gl_FragColor = vec4(1.0,0.0,0.0,1.0);&apos; +</span><br><span class="line">&apos;&#125;&apos;;</span><br><span class="line"></span><br><span class="line">//初始化着色器</span><br><span class="line">let program = this.initShader(this.gl, vertexShaderSource, fragShaderSource);</span><br><span class="line">//获取顶点着色器的位置变量apos</span><br><span class="line">var aposLocation = this.gl.getAttribLocation(program, &apos;apos&apos;);</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/11/jenkinsissues/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1398,168 +1522,6 @@ system 返回值，输出命令输出的最后一行</p>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/29/BasicPython-0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/08/29/BasicPython-0/" itemprop="url">Python 编程基础</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-29T19:15:33+08:00">
-                2019-08-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>目前是python3.5</p>
-<blockquote>
-<p>print() 和 n=input()</p>
-</blockquote>
-<blockquote>
-<p>单行注释# 多行’’’</p>
-</blockquote>
-<blockquote>
-<p>编码声明
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<blockquote>
-<p>缩进<br></p>
-</blockquote>
-<p>Python没有分割代码块符号，以缩进以及冒号:区分层次，一般以4个空格为基本缩进单位。</p>
-<blockquote>
-<p>命名规范</p>
-<ul>
-<li>模块名：全部小写 + 下划线_</li>
-<li>包名：全部小写，不推荐使用下划线</li>
-<li>类名：Pascal风格（首字母大写）</li>
-<li>模块内部类型：_ + Pascal风格<br>
-使用单下划线_开头的变量和函数是受保护的，在使用from xxx import * 时不会被导入；使用双下划线__开头的变量或方法是类私有的</li>
-<li>函数、类的属性和方法：同模块命名</li>
-<li>常量：全部大写</li>
-</ul>
-</blockquote>
-<blockquote>
-<p>字符串类型’’和””和’’’’’’<br></p>
-</blockquote>
-<p>使用’’’表示多行字符,使用r’’屏蔽转义</p>
-<blockquote>
-<p>列表和元组</p>
-</blockquote>
-<blockquote>
-<p>字符串操作</p>
-</blockquote>
-<blockquote>
-<p>global关键字</p>
-</blockquote>
-<p>在python中，变量不需要先声明，直接使用即可，那我们怎么知道用的是局部变量还是全局变量呢？
-首先：python使用的变量，在默认情况下一定是用局部变量。
-其次：python如果想使用作用域之外的全局变量，则需要加global前缀。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1610,7 +1572,7 @@ system 返回值，输出命令输出的最后一行</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
