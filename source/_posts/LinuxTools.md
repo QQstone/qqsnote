@@ -78,8 +78,22 @@ cat /etc/issue 查看发行版
 cat /etc/redhat-release 查看CentOS版本
 uname -r 查看内核版本
 ```
-
+#### 查看硬件信息
+```
+cat /proc/cpuinfo |more
+cat /proc/meminfo |more
+// 磁盘
+cat /proc/partitions 
+fdisk -l 
+```
 #### 查看服务列表
 ```
 service --status-all
+```
+#### 异常：键入命令不显示（回显关闭）
+```
+// 回显关闭
+stty -echo
+// 回显打开
+stty echo
 ```

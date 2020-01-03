@@ -44,8 +44,29 @@ mysql> flush privileges;
 ALTER USER 'admin'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
 FLUSH PRIVILEGES;
 ```
+#### 配置远程链接
+/etc/mysql/mysqld.cnf
+```
+bind-address = 0.0.0.0
+```
+#### 数据库时间
+```
+select now();// yyyy-MM-dd hh24:mi:ss
+select sysdate();// yyyy-MM-dd hh24:mi:ss
+
+select current_date;// yyyy-MM-dd 带()结果相同
+```
 #### 使用自增int作为主键
 [mysql为什么建议使用自增主键](https://zhuanlan.zhihu.com/p/71022670)
+
+关于删除表数据后重置auto increment:
+```
+delete from table1;
+alter table1 AUTO_INCREMENT=1;
+```
+```
+trancate table1;
+```
 
 #### 使用时间戳
 ```
@@ -67,12 +88,19 @@ MySQL Workbench工具，支持csv，json格式的import wizard，其实可以直
 应如下操作：
 
 + 在Excel中整理待导入数据的格式，特别提示MySQL datetime类型字段数据源应调整为yyyy-mm-dd hh:mm:ss格式
++ 第一行列头会作为导入field的标识，这一行不能为中文（此坑已踩）
 + 保存为CSV UTF-8(Comma delimited) 在Excel365的SAVE AS选项中是这样。
 + 用Notepad++打开保存的文件，可见此时默认为Encoding in UTF8-BOM，需Convert to UTF8 （此时再使用Excel打开，会发现出现中文乱码，原因如上所述，找不到BOM将以Unicode解码,应该打开Excel，使用数据导入向导，from text/csv）
 + 使用Workbench Import Wizard导入
+
 
 #### 关于utf8 和 utf8mb4
 
 [记住，永远不要在MySQL中使用“utf8”](https://juejin.im/entry/5b3055046fb9a00e315c2849)
 
 大致是说，，别人utf-8都是四个字节编码，就MySQL所谓的utf-8是3字节，为与标准对应，又出了utf8mb4，请在MySQL中使用utf8mb4
+
+#### 数据库备份
+```
+mysqldump -u admin -padmin schemaName tableName > ~/Workspace/backup.sql
+```

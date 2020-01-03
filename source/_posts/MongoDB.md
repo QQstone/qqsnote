@@ -3,6 +3,7 @@ title: MongoDB
 date: 2019-07-31 18:36:52
 tags:
 - MongoDB
+- 数据库
 ---
 #### "NoSQL" database
 非关系型数据库，不适用SQL作为查询语言，不使用数据表格存放数据。

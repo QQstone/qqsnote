@@ -31,10 +31,13 @@ ply (Polygon File Format, 多边形档案),该格式主要用以储存立体扫�
     format ascii 1.0             ...{ 文件类型：ascii或binary，版本号 }
     comment made by anonymous    ... { 注释行 }
     comment this file is a cube  ...{ 注释行 }
+    comment texture file             {纹理贴图文件}
     element vertex 8             ...{ 定义“顶点”元素，其数量为8个 }
     property float32 x           ...{ 顶点的x属性，数据类型为float32 }
     property float32 y           ...{ 顶点的y属性，数据类型为float32 }
     property float32 z           ...{ 顶点的z属性，数据类型为float32 }
+    property float32 textureu       {纹理坐标}
+    property float32 texturev
     element face 6               ...{ 定义“面”元素，其数量为6个 }
     property list uint8 int32 vertex_index ...{ 面的顶点索引属性，类型为uint8的列表 }
     end_header                   ...{ 文件头结束标志 }
@@ -67,4 +70,6 @@ ds = pydicom.dcmread(file)
 ```
 #### vtk
 三维计算机图形学、图像处理和可视化软件，内核C++构建，具备多种转换界面，支持Java、Python等方式调用
+render: camera actor light
+data set:
 #### xslt

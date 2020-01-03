@@ -154,7 +154,11 @@ const listener = app.listen(process.env.PORT, function() {
 ```
 unix shell prompt:
 ```
-PORT=1234 node app.js
+PORT=1234
+echo $PORT
+echo 'server is launch on port:${PORT}'
+
+unset PORT
 ```
 windows环境
 ```
