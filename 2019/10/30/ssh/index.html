@@ -88,7 +88,7 @@
 <meta property="og:description" content="ubuntu安装后无法ssh远程登录检查是否安装ssh-server 1dpkg -l | grep ssh 默认只有ssh-client,如下  安装命令： 1sudo apt-get install openssh-server 通过进程确认服务已启动 1ps -e | grep ssh 启动与停止 12sudo /etc/init.d/ssh stopsudo /etc/init.d/ssh">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://tvax1.sinaimg.cn/large/a60edd42gy1g8g662fyfoj20le059dgy.jpg">
-<meta property="og:updated_time" content="2019-10-30T05:43:34.045Z">
+<meta property="og:updated_time" content="2020-01-03T01:54:55.151Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ssh">
 <meta name="twitter:description" content="ubuntu安装后无法ssh远程登录检查是否安装ssh-server 1dpkg -l | grep ssh 默认只有ssh-client,如下  安装命令： 1sudo apt-get install openssh-server 通过进程确认服务已启动 1ps -e | grep ssh 启动与停止 12sudo /etc/init.d/ssh stopsudo /etc/init.d/ssh">
@@ -312,6 +312,30 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -e | grep ssh</span><br></pre></td></tr></table></figure></p>
 <p>启动与停止
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo /etc/init.d/ssh stop</span><br><span class="line">sudo /etc/init.d/ssh start</span><br></pre></td></tr></table></figure></p>
+<h4 id="ssh-key"><a href="#ssh-key" class="headerlink" title="ssh key"></a>ssh key</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 查看ssh key目录</span><br><span class="line"> ls -al ~/.ssh</span><br><span class="line"> // 生成</span><br><span class="line"> ssh-keygen -t rsa -C &quot;&quot;</span><br><span class="line"> // 添加密钥到ssh-agent 注 见下文异常</span><br><span class="line"> ssh-add ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>异常：Could not open a connection to your authentication agent
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-agent bash</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>异常：Permissions 0777 for ‘~/.ssh/id_rsa’ are too open.<br>
+It is recommended that your private key files are NOT accessible by others.<br>
+This private key will be ignored.</p>
+</blockquote>
+<p>keys need to be only readable to you 
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 改为只读</span><br><span class="line">chmod 400 ~/.ssh/id_rsa </span><br><span class="line">ssh-add ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure></p>
+<p>返回“identity added blablabla…”</p>
+<h4 id="使用ssh-key连接GitHub"><a href="#使用ssh-key连接GitHub" class="headerlink" title="使用ssh key连接GitHub"></a>使用ssh key连接GitHub</h4><ul>
+<li>复制public key</li>
+<li>测试<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com/qqstone/xxx.git</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>异常：Could not resolve hostname github.com:qqstone/xxx.git： Name or service not known;</p>
+</blockquote>
+<p>尝试ping github.com 发现超时，说明dns给的地址连接超时，然而由于网页上是http协议，是可以有反向代理以及负载均衡配置的(具体原因存疑)，所以网页打开Github反而很流畅。<br>
+另一种情况，主机无法连接正确的dns，解析超时，可以在连接正常的环境中(如无线网络或4g网络)用nslookup查看域名解析，找到实际的公网ip，然后在超时的环境中尝试用ip连接</p>
+<p><i>懒得去服务器上授权密钥，可以将已授权的 id_rsa + xxx.pub(公钥)拷贝覆盖到其他主机</i></p>
 
       
     </div>
@@ -431,7 +455,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-count">81</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -453,7 +477,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -486,7 +510,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#ubuntu安装后无法ssh远程登录"><span class="nav-number">1.</span> <span class="nav-text">ubuntu安装后无法ssh远程登录</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#ubuntu安装后无法ssh远程登录"><span class="nav-number">1.</span> <span class="nav-text">ubuntu安装后无法ssh远程登录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ssh-key"><span class="nav-number">2.</span> <span class="nav-text">ssh key</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用ssh-key连接GitHub"><span class="nav-number">3.</span> <span class="nav-text">使用ssh key连接GitHub</span></a></li></ol></div>
             
 
           </div>
@@ -506,7 +530,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

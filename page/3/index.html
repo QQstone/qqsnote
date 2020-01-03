@@ -229,6 +229,712 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/28/MySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/10/28/MySQL/" itemprop="url">MySQL</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-28T12:48:25+08:00">
+                2019-10-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select version()</span><br></pre></td></tr></table></figure>
+<p>返回8.0.16</p>
+<h4 id="root-初始密码"><a href="#root-初始密码" class="headerlink" title="root 初始密码"></a>root 初始密码</h4><p>mysql安装时为root用户创建初始密码，可以在日志中找到<br>
+/var/log/mysqld.log
+<img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g8du7mi9ihj20j10eijv9.jpg" alt="mysqld.log"></p>
+<p>登录之后会勒令重设密码</p>
+<blockquote>
+<p>You must reset your password using ALTER USRE statement before executing this statement.
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter user &apos;root&apos;@&apos;localhost&apos; identified by &apos;A_Za_z0_9&apos;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h4 id="修改密码级别"><a href="#修改密码级别" class="headerlink" title="修改密码级别"></a>修改密码级别</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; set global validate_password.policy=0;</span><br><span class="line">mysql&gt; set global validate_password.length=3;</span><br></pre></td></tr></table></figure>
+<p>现在可以设密码123了 </p>
+<h4 id="新建管理员"><a href="#新建管理员" class="headerlink" title="新建管理员"></a>新建管理员</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create user &apos;admin&apos;@&apos;%&apos; identified by &apos;admin&apos;;</span><br><span class="line">mysql&gt; grant all privileges on *.* to &apos;admin&apos;@&apos;%&apos;;</span><br><span class="line">mysql&gt; flush privileges;</span><br></pre></td></tr></table></figure>
+<h4 id="native-password"><a href="#native-password" class="headerlink" title="native password"></a>native password</h4><p>异常：</p>
+<blockquote>
+<p>Client does not support authentication protocol requested by server; consider upgrading MySQL client</p>
+</blockquote>
+<p>由于MySQL8 默认用编码口令代替了之前版本的native password，在使用第三方（如应用后台服务）连接数据库时，不符合协议</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER USER &apos;admin&apos;@&apos;%&apos; IDENTIFIED WITH mysql_native_password BY &apos;admin&apos;;</span><br><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+<h4 id="配置远程链接"><a href="#配置远程链接" class="headerlink" title="配置远程链接"></a>配置远程链接</h4><p>/etc/mysql/mysqld.cnf
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bind-address = 0.0.0.0</span><br></pre></td></tr></table></figure></p>
+<h4 id="数据库时间"><a href="#数据库时间" class="headerlink" title="数据库时间"></a>数据库时间</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select now();// yyyy-MM-dd hh24:mi:ss</span><br><span class="line">select sysdate();// yyyy-MM-dd hh24:mi:ss</span><br><span class="line"></span><br><span class="line">select current_date;// yyyy-MM-dd 带()结果相同</span><br></pre></td></tr></table></figure>
+<h4 id="使用自增int作为主键"><a href="#使用自增int作为主键" class="headerlink" title="使用自增int作为主键"></a>使用自增int作为主键</h4><p><a href="https://zhuanlan.zhihu.com/p/71022670" target="_blank" rel="noopener">mysql为什么建议使用自增主键</a></p>
+<p>关于删除表数据后重置auto increment:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">delete from table1;</span><br><span class="line">alter table1 AUTO_INCREMENT=1;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trancate table1;</span><br></pre></td></tr></table></figure>
+<h4 id="使用时间戳"><a href="#使用时间戳" class="headerlink" title="使用时间戳"></a>使用时间戳</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE mytable CHANGE COLUMN ptime ptime TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP</span><br></pre></td></tr></table></figure>
+<h4 id="联合唯一"><a href="#联合唯一" class="headerlink" title="联合唯一"></a>联合唯一</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table all_user add unique key(employeeid, isvalid)</span><br></pre></td></tr></table></figure>
+<h4 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a>数据导入</h4><p>MySQL Workbench工具，支持csv，json格式的import wizard，其实可以直接用命令方式导入
+<img src="https://tvax4.sinaimg.cn/large/a60edd42gy1g9swbdtdpbj20rg0mijto.jpg" alt="Capture_mysql_workbench">
+工具提供了直观图形界面和字段映射。<br>
+然而csv的支持是个大坑。</p>
+<blockquote>
+<p>Excel在读取csv的时候是通过读取文件头上的bom来识别编码的，如果文件头无bom信息，则默认按照unicode编码读取。</p>
+</blockquote>
+<blockquote>
+<p>MySQL读取csv数据不能识别bom头，遇到utf8bom报“Can’t analyze file. Please try to change encoding type. If that doesn’t help, maybe the file is not: csv, or the file is empty.</p>
+</blockquote>
+<p>应如下操作：</p>
+<ul>
+<li>在Excel中整理待导入数据的格式，特别提示MySQL datetime类型字段数据源应调整为yyyy-mm-dd hh:mm:ss格式</li>
+<li>第一行列头会作为导入field的标识，这一行不能为中文（此坑已踩）</li>
+<li>保存为CSV UTF-8(Comma delimited) 在Excel365的SAVE AS选项中是这样。</li>
+<li>用Notepad++打开保存的文件，可见此时默认为Encoding in UTF8-BOM，需Convert to UTF8 （此时再使用Excel打开，会发现出现中文乱码，原因如上所述，找不到BOM将以Unicode解码,应该打开Excel，使用数据导入向导，from text/csv）</li>
+<li>使用Workbench Import Wizard导入</li>
+</ul>
+<h4 id="关于utf8-和-utf8mb4"><a href="#关于utf8-和-utf8mb4" class="headerlink" title="关于utf8 和 utf8mb4"></a>关于utf8 和 utf8mb4</h4><p><a href="https://juejin.im/entry/5b3055046fb9a00e315c2849" target="_blank" rel="noopener">记住，永远不要在MySQL中使用“utf8”</a></p>
+<p>大致是说，，别人utf-8都是四个字节编码，就MySQL所谓的utf-8是3字节，为与标准对应，又出了utf8mb4，请在MySQL中使用utf8mb4</p>
+<h4 id="数据库备份"><a href="#数据库备份" class="headerlink" title="数据库备份"></a>数据库备份</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -u admin -padmin schemaName tableName &gt; ~/Workspace/backup.sql</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/24/jenkinsNodejs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/10/24/jenkinsNodejs/" itemprop="url">Jenkins对Node.js项目的持续集成</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-24T16:59:14+08:00">
+                2019-10-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="安装NodeJS"><a href="#安装NodeJS" class="headerlink" title="安装NodeJS"></a>安装NodeJS</h3><p>Manage Jenkins菜单 –&gt; Manage Plugins 
+添加Node.js 并<b>重启Jenkins</b>
+进入 Manage Jenkins –&gt; Global Tool Configuration
+找到NodeJS installations 此处可以配置安装多个版本的NodeJS
+如有需要填写Global npm packages to install项
+如
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@angular/cli@8.2.2 electron@6.0.2 electron-builder@21.2.0</span><br></pre></td></tr></table></figure></p>
+<h3 id="添加和使用credentials-有用户名密码模式-ssh模式等"><a href="#添加和使用credentials-有用户名密码模式-ssh模式等" class="headerlink" title="添加和使用credentials 有用户名密码模式 ssh模式等"></a>添加和使用credentials 有用户名密码模式 ssh模式等</h3><p>ssh模式粘贴private key即可</p>
+<h3 id="建立Job-选择Freestyle-project"><a href="#建立Job-选择Freestyle-project" class="headerlink" title="建立Job 选择Freestyle project"></a>建立Job 选择Freestyle project</h3><h3 id="配置git并选择credentials"><a href="#配置git并选择credentials" class="headerlink" title="配置git并选择credentials"></a>配置git并选择credentials</h3><h3 id="Build-Environment中-勾选-“Provide-Node-amp-npm-bin-folder-to-PATH”-并选择已安装的版本"><a href="#Build-Environment中-勾选-“Provide-Node-amp-npm-bin-folder-to-PATH”-并选择已安装的版本" class="headerlink" title="Build Environment中 勾选 “Provide Node &amp; npm bin/ folder to PATH” 并选择已安装的版本"></a>Build Environment中 勾选 “Provide Node &amp; npm bin/ folder to PATH” 并选择已安装的版本</h3><p>否则jenkins所在系统无法识别nodejs命令</p>
+<h3 id="最后-Build-步骤可以直接用-“Windows-batch-command”调用"><a href="#最后-Build-步骤可以直接用-“Windows-batch-command”调用" class="headerlink" title="最后 Build 步骤可以直接用 “Windows batch command”调用"></a>最后 Build 步骤可以直接用 “Windows batch command”调用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install &amp;&amp; npm run build</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/18/CSS3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/10/18/CSS3/" itemprop="url">CSS3</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-18T14:58:47+08:00">
+                2019-10-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="transparent-vs-rgba-0-0-0-0"><a href="#transparent-vs-rgba-0-0-0-0" class="headerlink" title="transparent vs rgba(0,0,0,0)"></a>transparent vs rgba(0,0,0,0)</h3>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/15/AngularToubleShooting/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/10/15/AngularToubleShooting/" itemprop="url">Angular Touble Shooting</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-15T17:51:54+08:00">
+                2019-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="异步响应方法中更新数据，视图无法及时更新"><a href="#异步响应方法中更新数据，视图无法及时更新" class="headerlink" title="异步响应方法中更新数据，视图无法及时更新"></a>异步响应方法中更新数据，视图无法及时更新</h3><blockquote>
+<p>解决方法：导入ChangeDetectRef
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import &#123; ChangeDetectorRef &#125; from &apos;@angular/core&apos;;</span><br><span class="line"></span><br><span class="line">constructor(</span><br><span class="line">    private changeDetectorRef:ChangeDetectorRef) &#123; </span><br><span class="line">        // user token updated!</span><br><span class="line">        this.userService.currentUserToken$.subscribe(res=&gt;&#123;</span><br><span class="line">            if(res)&#123;</span><br><span class="line">            this.logged = true;</span><br><span class="line">            this.email = res[&apos;UserName&apos;].value;</span><br><span class="line">            this.changeDetectorRef.detectChanges()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="httpClient的任意方法-get、post-无法发送请求"><a href="#httpClient的任意方法-get、post-无法发送请求" class="headerlink" title="httpClient的任意方法(get、post)无法发送请求"></a>httpClient的任意方法(get、post)无法发送请求</h3><blockquote>
+<p>所在模块未引入HttpClientModule</p>
+</blockquote>
+<h3 id="重复声明Directive"><a href="#重复声明Directive" class="headerlink" title="重复声明Directive"></a>重复声明Directive</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR in Type NumberInputDirective in D:/ProjectX/src/app/common/number-input.directive.ts is part of the declarations of 2 modules: blablaA and blablaB Please consider moving NumberInputDirective to a higher module that imports blablaA and blablaB. You can also create a new NgModule import that NgModule in blablaA and blablaB</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>指令是可声明对象。 它们必须在 NgModule 中声明(declarations)之后，才能用在应用中。指令应当且只能属于一个 NgModule。不要重新声明那些从其它模块中导入的指令。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import &#123; NgModule &#125; from &apos;@angular/core&apos;;</span><br><span class="line">import &#123; CommonModule &#125; from &apos;@angular/common&apos;;</span><br><span class="line">import &#123; NumberInputDirective &#125; from &apos;../common/number-input.directive&apos;;</span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [CommonModule],</span><br><span class="line">    declarations: [NumberInputDirective],</span><br><span class="line">    exports:[NumberInputDirective]</span><br><span class="line">export class SharedModule &#123;&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/19/electron/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/09/19/electron/" itemprop="url">Electron</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-19T19:19:55+08:00">
+                2019-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>须知，vscode是Electron应用，atom是Electron应用，GeForce Experience也是Electron应用，还有Skype。。。</p>
+</blockquote>
+<p>本质是使用chronium浏览器内核和HTML实现应用程序UI，底层业务是基于js”粘合”的，即除了require nodejs native modules之外，还可以将基于其他技术生态的组件集成进来，这里会用到webpack打包。
+得益于HTML UI开发的方便，和nodejs api的丰富，使得app 开发变得方便快捷，而且基于js实现了相当完美的跨平台，然而泻药如下：</p>
+<ul>
+<li>因为不可避免的打包浏览器内核，出品动辄100MB</li>
+<li>因为打包的是chrome家的内核，内存占用相当大</li>
+</ul>
+<p>如果是windows平台的应用需求，wpf的产品将在体积，资源占用，安全的系统访问等方面碾压electron</p>
+<p>迈步越过的坑：</p>
+<h4 id="构建项目框架"><a href="#构建项目框架" class="headerlink" title="构建项目框架"></a>构建项目框架</h4><ol start="0">
+<li>脚手架 npm i -g angular-cli electron</li>
+<li>创建Angular项目 ng new ngelectron –routing </li>
+<li>package.json </li>
+<li>主进程main.js<h4 id="webpack-target"><a href="#webpack-target" class="headerlink" title="webpack target"></a>webpack target</h4></li>
+</ol>
+<h4 id="资源打包关于asar-vbscript"><a href="#资源打包关于asar-vbscript" class="headerlink" title="资源打包关于asar vbscript"></a>资源打包关于asar vbscript</h4><h4 id="单例模式-单例参数更新"><a href="#单例模式-单例参数更新" class="headerlink" title="单例模式 单例参数更新"></a>单例模式 单例参数更新</h4><h4 id="外观"><a href="#外观" class="headerlink" title="外观"></a>外观</h4><p>无边透明,隐藏任务栏
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let mainWindow = new BrowserWindow(&#123; transparent: true, frame: false, skipTaskbar:true &#125;)</span><br></pre></td></tr></table></figure></p>
+<p>实践中发现透明还需另外设置
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">body&#123;</span><br><span class="line">    background:transparent</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="命令及参数"><a href="#命令及参数" class="headerlink" title="命令及参数"></a>命令及参数</h4><p>开发模式electron . [args]
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">args = process.argv.splice(2)</span><br></pre></td></tr></table></figure></p>
+<p>执行模式app.exe [args]
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">args = process.argv.splice(1)</span><br></pre></td></tr></table></figure></p>
+<h4 id="electron-builder"><a href="#electron-builder" class="headerlink" title="electron-builder"></a>electron-builder</h4><p>部分配置
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&quot;productName&quot;: &quot;CSCportal&quot;,</span><br><span class="line">  &quot;directories&quot;: &#123;</span><br><span class="line">    &quot;output&quot;: &quot;release/&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  // 额外打包的资源</span><br><span class="line">  &quot;extraResources&quot;: &#123;</span><br><span class="line">    &quot;from&quot;: &quot;addon/&quot;,</span><br><span class="line">    &quot;to&quot;: &quot;addon/&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  // 打包文件的parttern表达式</span><br><span class="line">  &quot;files&quot;: [</span><br><span class="line">    &quot;**/*&quot;,</span><br><span class="line">    &quot;!package.json&quot;,</span><br><span class="line">    &quot;!src/&quot;</span><br><span class="line">  ],</span><br><span class="line">  // windows环境</span><br><span class="line">  &quot;win&quot;: &#123;</span><br><span class="line">    &quot;target&quot;: [</span><br><span class="line">      &quot;nsis&quot;, // 使用nsis工具生成安装包</span><br><span class="line">      &quot;zip&quot;   // 生成zip免安装压缩包</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;nsis&quot;:&#123;</span><br><span class="line">    &quot;oneClick&quot;:false, // 禁用一键安装</span><br><span class="line">    &quot;perMachine&quot;:true, // 为所有用户安装</span><br><span class="line">    &quot;allowToChangeInstallationDirectory&quot;:true, // 自定义安装路径</span><br><span class="line">    &quot;include&quot;:&quot;build/installer.nsh&quot; // 包含脚本</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;mac&quot;: &#123;&#125;,</span><br><span class="line">  &quot;linux&quot;: &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="nsis宏命令-installer-nsh"><a href="#nsis宏命令-installer-nsh" class="headerlink" title="nsis宏命令 installer.nsh"></a>nsis宏命令 installer.nsh</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!macro customInstall</span><br><span class="line">  WriteRegStr HKLM &quot;SOFTWARE\Carestream Dental\CSCportal&quot; &quot;InstallDir&quot; $INSTDIR</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure>
+<p>uninstaller.nsh
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!macro customUnInstall</span><br><span class="line">    DeleteRegKey HKLM &quot;SOFTWARE\Carestream Dental\CSCportal&quot; &quot;InstallDir&quot;</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure></p>
+<p>参考 <a href="https://www.electron.build/configuration/nsis" target="_blank" rel="noopener">electron-builder文档nsis部分</a></p>
+<h4 id="调试主进程"><a href="#调试主进程" class="headerlink" title="调试主进程"></a>调试主进程</h4><p>VScode launch.json:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;version&quot;: &quot;0.2.0&quot;,</span><br><span class="line">    &quot;configurations&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;name&quot;: &quot;Debug Main Process&quot;,</span><br><span class="line">        &quot;type&quot;: &quot;node&quot;,</span><br><span class="line">        &quot;request&quot;: &quot;launch&quot;,</span><br><span class="line">        &quot;cwd&quot;: &quot;$&#123;workspaceRoot&#125;&quot;,</span><br><span class="line">        &quot;runtimeExecutable&quot;: &quot;$&#123;workspaceRoot&#125;/node_modules/.bin/electron&quot;,</span><br><span class="line">        &quot;windows&quot;: &#123;</span><br><span class="line">          &quot;runtimeExecutable&quot;: &quot;$&#123;workspaceRoot&#125;/node_modules/.bin/electron.cmd&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;args&quot; : [&quot;.&quot;,&quot;--input=d:\\temp\\input.xml&quot;,&quot;--output=d:\\temp\\output.xml&quot;],</span><br><span class="line">        &quot;outputCapture&quot;: &quot;std&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>此app设计为由其他客户端程序使用命令调起，传入input参数和output参数，注意调试命令的’electron .’中’.’是第一个参数。</p>
+<h4 id="自动更新服务"><a href="#自动更新服务" class="headerlink" title="自动更新服务"></a>自动更新服务</h4><p>原理似乎是这样的，首先是build，将构建好的文件publish到一个下载中心，很多工具都封装了比如GitHub和<a href="https://bintray.com/" target="_blank" rel="noopener">Bintray</a></p>
+<p>electron-builder方案</p>
+<ol>
+<li>install <a href="https://yarn.pm/electron-updater" target="_blank" rel="noopener">electron-updater</a> </li>
+<li>配置publish参数
+一般在package.json中，已分离出electron-build.json配置的在该文件中<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/12/webgllessons/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -894,639 +1600,11 @@ system 返回值，输出命令输出的最后一行</p>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/02/jsAdvancedFunctions/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/09/02/jsAdvancedFunctions/" itemprop="url">javascript高级函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-02T18:13:12+08:00">
-                2019-09-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/02/openGL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/09/02/openGL/" itemprop="url">Three.js WebGL OpenGL</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-02T18:07:56+08:00">
-                2019-09-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="OpenGL"><a href="#OpenGL" class="headerlink" title="OpenGL"></a>OpenGL</h3><p>官方：<a href="https://learnopengl.com/" target="_blank" rel="noopener">Learn OpenGL</a><br>
-中文：<a href="https://learnopengl-cn.github.io/" target="_blank" rel="noopener">LearnOpenGL CN</a></p>
-<blockquote>
-<p>事实上OpenGL本身并不是一个API，它仅仅是一个由Khronos组织制定并维护的规范(Specification)</p>
-</blockquote>
-<p>该规范严格规定了每个函数如何执行，以及他们的输出。至于内部具体实现由OpenGL库的开发者自行决定。<br>
-实际的OpenGL库的开发者通常是显卡的生产商。你购买的显卡所支持的OpenGL版本都为这个系列的显卡专门开发的,因此OpenGL版本的bug通常以升级显卡驱动的方式修复。</p>
-<blockquote>
-<p>OpenGL自身是一个巨大的状态机(State Machine)：一系列的变量描述OpenGL此刻应当如何运行。OpenGL的状态通常被称为OpenGL上下文(Context)。</p>
-</blockquote>
-<h3 id="WebGL"><a href="#WebGL" class="headerlink" title="WebGL"></a>WebGL</h3><blockquote>
-<p>WebGL 是一种 3D 绘图标准，这种绘图技术标准允许把 JavaScript 和 OpenGL ES 2.0 结合在一起，通过增加 OpenGL ES 2.0 的一个 JavaScript 绑定，WebGL 可以为 HTML5 Canvas 提供硬件 3D 加速渲染，这样 Web 开发人员就可以借助系统显卡来在浏览器里更流畅地展示3D场景和模型了</p>
-</blockquote>
-<blockquote>
-<p>WebGL 的出现使得在浏览器上面实时显示 3D 图像成为，WebGL 本质上是基于光栅化的 API ,而不是基于 3D 的 API。</p>
-</blockquote>
-<p>webGL是比canvas.getContext(‘2d’)更加底层的图形绘制接口。而它的工作原理，实际上就是遍历每一个像素点，然后给各个像素点填充颜色，然后才构成一幅2d或者3d的图像。</p>
-<p>WebGL的实现是基于HTMLCanvasElement的。</p>
-<h4 id="什么是光栅化"><a href="#什么是光栅化" class="headerlink" title="什么是光栅化"></a>什么是光栅化</h4><p>WebGL重建三维图像的步骤大致包括</p>
-<ul>
-<li>获取顶点坐标</li>
-<li>图元装备 顶点之间存在关系，直观体现为由三个顶点构成一个三角形，称为图元</li>
-<li>光栅化 将图元进一步具象填充，生成片元</li>
-</ul>
-<p>光栅化（Rasterization）是把顶点数据转换为片元的过程，把物体的数学描述以及与物体相关的颜色信息转换为屏幕上用于对应位置的像素及用于填充像素的颜色</p>
-<h4 id="着色器"><a href="#着色器" class="headerlink" title="着色器"></a>着色器</h4><p>webGL工作的基本单位是着色器（shaders）。着色器编程使用glsl语言，运行在显卡中，webgl标准使用js拼装着色器代码，编译成二进制包并塞入显卡执行</p>
-<h3 id="Three-js"><a href="#Three-js" class="headerlink" title="Three.js"></a>Three.js</h3><p>Three.js对WebGL工作步骤进一步封装，提供方便理解的绘图API以操作WebGL接口</p>
-<p>参考理解 <a href="https://www.cnblogs.com/wanbo/p/6754066.html" target="_blank" rel="noopener">图解WebGL&amp;Three.js工作原理</a></p>
-<p>关于学习Web3D相关技术的经验介绍：<a href="http://www.yanhuangxueyuan.com/doc/Three.js/learnWebGLThreejs.html" target="_blank" rel="noopener">如何学习WebGL和Three.js</a></p>
-<h3 id="Enable-WebGL-in-your-browser"><a href="#Enable-WebGL-in-your-browser" class="headerlink" title="Enable WebGL in your browser"></a>Enable WebGL in your browser</h3><p><a href="https://superuser.com/questions/836832/how-can-i-enable-webgl-in-my-browser" target="_blank" rel="noopener">参考</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/29/BasicPython-filesystem/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/08/29/BasicPython-filesystem/" itemprop="url">Python基础——文件系统与IO</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-29T22:55:54+08:00">
-                2019-08-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">base, dirs, files in os.walk(indatadir)</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/29/BasicPython-Module/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/08/29/BasicPython-Module/" itemprop="url">Python基础——模块</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-29T19:55:54+08:00">
-                2019-08-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>模块是天然的单例模式</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/29/BasicPython-innerFunc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/08/29/BasicPython-innerFunc/" itemprop="url">Python基础——内置函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-29T19:53:43+08:00">
-                2019-08-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><a class="page-number" href="/qqsnote/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/qqsnote/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/8/">8</a><a class="extend next" rel="next" href="/qqsnote/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><a class="page-number" href="/qqsnote/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/qqsnote/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/9/">9</a><a class="extend next" rel="next" href="/qqsnote/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1572,7 +1650,7 @@ system 返回值，输出命令输出的最后一行</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-count">81</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1594,7 +1672,7 @@ system 返回值，输出命令输出的最后一行</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -1631,7 +1709,7 @@ system 返回值，输出命令输出的最后一行</p>
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

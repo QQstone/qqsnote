@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="概念 存储过程（Stored Procedure）是一种在数据库中存储复杂程序，以便外部程序调用的一种数据库对象。 存储过程是为了完成特定功能的SQL语句集，经编译创建并保存在数据库中，用户可通过指定存储过程的名字并给定参数(需要时)来调用执行。 存储过程思想上很简单，就是数据库 SQL 语言层面的代码封装与重用。   存储过程可封装，并隐藏复杂的商业逻辑。 当dba与后台开发分离时，代码将以ca">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-12-24T06:56:07.015Z">
+<meta property="og:updated_time" content="2019-12-24T09:00:59.290Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL 存储过程">
 <meta name="twitter:description" content="概念 存储过程（Stored Procedure）是一种在数据库中存储复杂程序，以便外部程序调用的一种数据库对象。 存储过程是为了完成特定功能的SQL语句集，经编译创建并保存在数据库中，用户可通过指定存储过程的名字并给定参数(需要时)来调用执行。 存储过程思想上很简单，就是数据库 SQL 语言层面的代码封装与重用。   存储过程可封装，并隐藏复杂的商业逻辑。 当dba与后台开发分离时，代码将以ca">
@@ -315,9 +315,11 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER $$</span><br><span class="line">或</span><br><span class="line">DELIMITER //</span><br></pre></td></tr></table></figure></p>
 <p>过程体，类似其他变成语言中{语句块}
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BEGIN .... END</span><br></pre></td></tr></table></figure></p>
-<h4 id="1-变量"><a href="#1-变量" class="headerlink" title="1 变量"></a>1 变量</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 存储过程变量，只能在存储过程定义中使用</span><br><span class="line">DECLARE l_int int unsigned default 4000000; </span><br><span class="line"># 用户变量，可以在会话任意位置使用</span><br><span class="line">SET @p_in=1  </span><br><span class="line">SELECT &apos;Hello World&apos; into @x;</span><br></pre></td></tr></table></figure>
+<h4 id="1-变量"><a href="#1-变量" class="headerlink" title="1 变量"></a>1 变量</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-- 存储过程变量，只能在存储过程定义中使用</span><br><span class="line">DECLARE l_int int unsigned default 4000000; </span><br><span class="line">-- 用户变量，可以在会话任意位置使用</span><br><span class="line">SET @p_in=1  </span><br><span class="line">SELECT &apos;Hello World&apos; into @x;</span><br></pre></td></tr></table></figure>
+<p>赋值多个变量
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select col1, col2, col3 into a, b, c from t limit 1;</span><br></pre></td></tr></table></figure></p>
 <h4 id="2-函数"><a href="#2-函数" class="headerlink" title="2 函数"></a>2 函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="3-入参出参"><a href="#3-入参出参" class="headerlink" title="3 入参出参"></a>3 入参出参</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE 存储过程名([[IN |OUT |INOUT ] 参数名 数据类形...])</span><br><span class="line"></span><br><span class="line">set @p_in=1;</span><br><span class="line"># 假设STOREDPROCEDURE1是带一个入参的存储过程</span><br><span class="line">call STOREDPROCEDURE1(@p_in);</span><br><span class="line"># 入参可以是字面量</span><br><span class="line">call STOREDPROCEDURE1(1);</span><br></pre></td></tr></table></figure>
+<h4 id="3-入参出参"><a href="#3-入参出参" class="headerlink" title="3 入参出参"></a>3 入参出参</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE 存储过程名([[IN |OUT |INOUT ] 参数名 数据类形...])</span><br><span class="line"></span><br><span class="line">set @p_in=1;</span><br><span class="line">-- 假设STOREDPROCEDURE1是带一个入参的存储过程</span><br><span class="line">call STOREDPROCEDURE1(@p_in);</span><br><span class="line">-- 入参可以是字面量</span><br><span class="line">call STOREDPROCEDURE1(1);</span><br></pre></td></tr></table></figure>
 <h4 id="条件分支"><a href="#条件分支" class="headerlink" title="条件分支"></a>条件分支</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if a&gt;b then</span><br><span class="line">select a;</span><br><span class="line">else</span><br><span class="line">select b;</span><br><span class="line">end if;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">case type</span><br><span class="line">when 0 then</span><br><span class="line">insert into t values(101);</span><br><span class="line">when 1 then</span><br><span class="line">insert into t values(11);</span><br><span class="line">else</span><br><span class="line">insert into t values(1);</span><br><span class="line">end case</span><br></pre></td></tr></table></figure>
 <h4 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">while i&lt;10 do</span><br><span class="line">insert into t values(i)</span><br><span class="line">end while</span><br></pre></td></tr></table></figure>
@@ -366,6 +368,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/qqsnote/2019/12/26/BasicShell/" rel="prev" title="BasicShell">
+                BasicShell <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -442,7 +448,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-count">81</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -464,7 +470,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -517,7 +523,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
