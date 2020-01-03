@@ -2,6 +2,9 @@
 title: WebGL教程
 date: 2019-09-12 14:45:02
 tags:
+- WebGL
+categories: 
+- 图像处理
 ---
 #### WebGLRenderingContext
 

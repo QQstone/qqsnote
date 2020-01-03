@@ -1,7 +1,10 @@
 ---
 title: 数据可视化入门
 date: 2019-08-16 14:23:37
-tags: 数据可视化
+tags: 
+- 数据可视化
+categories: 
+- 前端技术
 ---
 #### D3.js 和 Echart
 原文：[D3.js与echart.js的应用场景](https://juejin.im/post/5cd65a41e51d456e89634ad3 "掘金文章")<br>

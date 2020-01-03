@@ -3,6 +3,7 @@ title: MongoDB
 date: 2019-07-31 18:36:52
 tags:
 - MongoDB
+categories: 
 - 数据库
 ---
 #### "NoSQL" database

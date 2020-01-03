@@ -3,6 +3,8 @@ title: TypeScript
 date: 2019-05-20 16:21:42
 tags:
 - TypeScript
+categories: 
+- 前端技术
 ---
 #### 基本类型
 1. number 

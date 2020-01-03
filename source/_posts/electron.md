@@ -3,6 +3,8 @@ title: Electron
 date: 2019-09-19 19:19:55
 tags:
 - Electron
+categories: 
+- 前端技术
 ---
 > 须知，vscode是Electron应用，atom是Electron应用，GeForce Experience也是Electron应用，还有Skype。。。
 

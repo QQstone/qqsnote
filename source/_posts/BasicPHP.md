@@ -2,6 +2,9 @@
 title: BasicPHP
 date: 2019-09-03 14:24:19
 tags:
+- PHP
+categories: 
+- 编程语言
 ---
 #### Linux查看 phpinfo
 ```

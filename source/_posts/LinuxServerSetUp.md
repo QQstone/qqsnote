@@ -3,6 +3,8 @@ title: 安装Linux服务器
 date: 2019-12-29 16:22:26
 tags:
 - Linux
+categories: 
+- Linux
 ---
 > 关于使用ubuntu发行版和centos发行版的倾向（存目）
 ### 简单的ubuntu

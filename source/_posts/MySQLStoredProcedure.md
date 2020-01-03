@@ -2,8 +2,9 @@
 title: MySQL 存储过程
 date: 2019-12-23 16:18:01
 tags:
-- 数据库
 - MySQL
+categories: 
+- 数据库
 ---
 ### 概念
 > 存储过程（Stored Procedure）是一种在数据库中存储复杂程序，以便外部程序调用的一种数据库对象。<br>

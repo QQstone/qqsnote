@@ -2,8 +2,9 @@
 title: MySQL
 date: 2019-10-28 12:48:25
 tags:
-- 数据库
 - MySQL
+categories: 
+- 数据库
 ---
 ### 前提
 ```
@@ -102,5 +103,17 @@ MySQL Workbench工具，支持csv，json格式的import wizard，其实可以直
 
 #### 数据库备份
 ```
-mysqldump -u admin -padmin schemaName tableName > ~/Workspace/backup.sql
+mysqldump -u admin -padmin schemaName tableName > backup.sql
 ```
+> 关于使用git实现快捷数据备份的实践
+```
+cd ~/Workspace
+git clone git@projectX.git
+mkdir ~/Workspace/projectX/db 
+mysqldump -u admin -padmin schemaName tableName > backup.sql
+git commit
+git push
+```
+思考：我要是不在本地跑源码(node server.js),是否可以省略拉本地仓库的步骤？是否可以直接将备份文件“push”到远程仓库？
+![](https://tvax2.sinaimg.cn/large/a60edd42gy1gaj6h0z7e5j20m806btb2.jpg)
+编辑文件在上图的workspace范畴中，我想，问题答案应该是否定的。

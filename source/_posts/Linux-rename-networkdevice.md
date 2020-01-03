@@ -3,6 +3,8 @@ title: Linux网卡重命名
 date: 2019-04-20 17:45:19
 tags:
 - Linux
+categories: 
+- Linux
 ---
 查看RedHat版本
 ```

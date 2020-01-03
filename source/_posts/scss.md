@@ -3,6 +3,8 @@ title: SCSS
 date: 2019-01-29 14:13:50
 tags:
 - CSS
+categories: 
+- 前端技术
 ---
 > SCSS 是 Sass 3 引入新的语法，其语法完全兼容 CSS3，并且继承了 Sass 的强大功能。
 

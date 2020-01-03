@@ -3,6 +3,8 @@ title: 作用域链
 date: 2018-12-27 14:55:44
 tags:
 - javascript
+categories: 
+- 编程语言
 ---
 #### 基本概念
 + 作用域<br>

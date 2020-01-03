@@ -2,8 +2,9 @@
 title: 弹性盒子布局
 date: 2018-08-17 14:34:36
 tags:
-- 前端
 - CSS
+categories: 
+- 前端技术
 ---
 display: flex
 ```

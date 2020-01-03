@@ -3,6 +3,9 @@ title: ssh
 date: 2019-10-30 13:33:53
 tags:
 - ssh
+- Linux
+categories: 
+- 工具
 ---
 #### ubuntu安装后无法ssh远程登录
 检查是否安装ssh-server

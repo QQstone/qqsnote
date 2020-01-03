@@ -2,6 +2,8 @@
 title: RaspberryPi
 date: 2019-12-31 10:15:33
 tags:
+- 树莓派
+categories: 
 - 物联网
 ---
 ( Raspberry Pi Model B Plus Rev1.2 )

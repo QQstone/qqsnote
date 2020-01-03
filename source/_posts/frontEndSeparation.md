@@ -1,8 +1,10 @@
 ---
-title: 前后端分离
+title: Apache虚拟主机
 date: 2019-01-08 13:14:02
 tags:
-- 前端
+- Apache
+categories: 
+- 前端技术
 ---
 > web服务器
 ```

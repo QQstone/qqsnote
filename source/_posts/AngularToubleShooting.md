@@ -3,6 +3,8 @@ title: Angular Touble Shooting
 date: 2019-10-15 17:51:54
 tags:
 - Angular
+categories: 
+- 前端技术
 ---
 ### 异步响应方法中更新数据，视图无法及时更新
 > 解决方法：导入ChangeDetectRef

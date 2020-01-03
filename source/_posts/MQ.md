@@ -3,6 +3,8 @@ title: MQ中间件
 date: 2019-12-12 13:22:43
 tags:
 - MQ
+categories: 
+- 中间件
 ---
 #### Message Queue
 > RabbitMQ is one of the most popular open source message brokers. RabbitMQ is lightweight and easy to deploy on premises and in the cloud. It supports multiple messaging protocols.

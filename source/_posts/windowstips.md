@@ -3,6 +3,8 @@ title: Tips in windows
 date: 2019-09-10 09:39:44
 tags:
 - windows
+categories: 
+- 工具
 ---
 #### 调用环境变量
 ```

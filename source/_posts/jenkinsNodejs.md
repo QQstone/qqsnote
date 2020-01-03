@@ -4,6 +4,8 @@ date: 2019-10-24 16:59:14
 tags:
 - Jenkins
 - Node.js
+categories: 
+- 工具
 ---
 ### 安装NodeJS 
     

@@ -3,6 +3,8 @@ title: Docker_Container
 date: 2019-11-05 10:37:10
 tags:
 - Docker
+categories: 
+- 容器
 ---
 #### 启动一个Jenkins docker
 ```

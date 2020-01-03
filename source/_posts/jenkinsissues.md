@@ -3,6 +3,8 @@ title: jenkins issues
 date: 2019-09-11 13:45:16
 tags:
 - Jenkins
+categories: 
+- 工具
 ---
 ### submodules
 

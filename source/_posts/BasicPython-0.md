@@ -3,6 +3,8 @@ title: Python 编程基础
 date: 2019-08-29 19:15:33
 tags:
 - Python
+categories: 
+- 编程语言
 ---
 目前是python3.5
 > print() 和 n=input()

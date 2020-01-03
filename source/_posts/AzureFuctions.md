@@ -2,6 +2,8 @@
 title: Azure Fuctions
 date: 2019-08-05 10:50:28
 tags: Cloud
+categories: 
+- 平台
 ---
 > Azure Functions 用于在无服务器环境中执行代码，无需先创建 VM 或发布 Web 应用程序。
 

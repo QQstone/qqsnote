@@ -3,6 +3,8 @@ title: Linux命令行工具
 date: 2019-07-28 12:59:06
 tags:
 - Linux
+categories: 
+- Linux 
 ---
 #### trial
 ```

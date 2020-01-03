@@ -3,6 +3,8 @@ title: redis
 date: 2019-04-10 13:18:18
 tags:
 - redis
+categories: 
+- 工具
 ---
 ### 概念
 (略)

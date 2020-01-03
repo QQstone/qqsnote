@@ -3,6 +3,9 @@ title: video和视频流
 date: 2019-04-19 21:29:16
 tags:
 - 视频流
+- Linux
+categories: 
+- 前端技术
 ---
 ### 直播原理
 ### 协议

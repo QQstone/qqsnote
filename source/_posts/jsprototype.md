@@ -3,6 +3,8 @@ title: 原型和面向对象
 date: 2018-12-25 11:00:42
 tags:
 - javascript
+categories: 
+- 编程语言
 ---
 ### 创建对象
 #### 1 工厂方式

@@ -2,6 +2,9 @@
 title: loopback
 date: 2019-07-24 14:09:28
 tags:
+- loopback
+categories: 
+- 前端技术
 ---
 LoopBack 是一个可扩展的开源Node.js 框架。它可以让我们<br>
 + 无需写任何代码(或少量的代码)来创建REST API

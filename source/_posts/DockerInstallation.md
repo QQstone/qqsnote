@@ -3,6 +3,8 @@ title: DockerInstallation
 date: 2019-10-31 09:48:11
 tags:
 - Docker
+categories: 
+- 容器
 ---
 一般来说，下文只记录操作记录而不是详细步骤
 + ubuntu install docker

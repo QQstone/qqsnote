@@ -3,6 +3,8 @@ title: Excel_tips
 date: 2019-11-12 13:14:21
 tags:
 - Excel
+categories: 
+- 工具
 ---
 #### 随机数
 ```

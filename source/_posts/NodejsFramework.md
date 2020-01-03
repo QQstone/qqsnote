@@ -2,6 +2,9 @@
 title: Nodejs服务端框架
 date: 2019-12-04 19:03:17
 tags:
+- express
+categories: 
+- 前端技术
 ---
 ### Express
 集合式开发框架，自身已经集成了诸多常用中间件如，router， static， bodyparse等。然而随着开发需求的丰富，仍然不免要在github上调查采集。

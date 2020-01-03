@@ -3,6 +3,8 @@ title: Ubuntu 软件安装
 date: 2019-07-24 09:44:50
 tags:
 - Linux
+categories: 
+- Linux
 ---
 昨天法国人发我一资料，前置工作参照一教程安装nodejs环境，使用apt-get install完了，node -v 一看，是4.x.x的版本<br>
 实际上，这种情况下应该先更新软件的源

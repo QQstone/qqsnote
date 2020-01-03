@@ -3,6 +3,8 @@ title: Date
 date: 2018-12-31 17:16:02
 tags:
 - javascript
+categories: 
+- 编程语言
 ---
 方法|描述
 ---|:--
