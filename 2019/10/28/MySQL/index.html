@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="数据库,MySQL,">
+  <meta name="keywords" content="MySQL,">
 
 
 
@@ -80,7 +80,7 @@
 
 
 <meta name="description" content="前提1select version() 返回8.0.16 root 初始密码mysql安装时为root用户创建初始密码，可以在日志中找到 /var/log/mysqld.log  登录之后会勒令重设密码  You must reset your password using ALTER USRE statement before executing this statement. 1alter u">
-<meta name="keywords" content="数据库,MySQL">
+<meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/10/28/MySQL/index.html">
@@ -89,7 +89,8 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://tvax1.sinaimg.cn/large/a60edd42gy1g8du7mi9ihj20j10eijv9.jpg">
 <meta property="og:image" content="https://tvax4.sinaimg.cn/large/a60edd42gy1g9swbdtdpbj20rg0mijto.jpg">
-<meta property="og:updated_time" content="2020-01-02T08:41:22.394Z">
+<meta property="og:image" content="https://tvax2.sinaimg.cn/large/a60edd42gy1gaj6h0z7e5j20m806btb2.jpg">
+<meta property="og:updated_time" content="2020-01-03T03:18:13.050Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL">
 <meta name="twitter:description" content="前提1select version() 返回8.0.16 root 初始密码mysql安装时为root用户创建初始密码，可以在日志中找到 /var/log/mysqld.log  登录之后会勒令重设密码  You must reset your password using ALTER USRE statement before executing this statement. 1alter u">
@@ -276,6 +277,28 @@
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -351,7 +374,15 @@
 </ul>
 <h4 id="关于utf8-和-utf8mb4"><a href="#关于utf8-和-utf8mb4" class="headerlink" title="关于utf8 和 utf8mb4"></a>关于utf8 和 utf8mb4</h4><p><a href="https://juejin.im/entry/5b3055046fb9a00e315c2849" target="_blank" rel="noopener">记住，永远不要在MySQL中使用“utf8”</a></p>
 <p>大致是说，，别人utf-8都是四个字节编码，就MySQL所谓的utf-8是3字节，为与标准对应，又出了utf8mb4，请在MySQL中使用utf8mb4</p>
-<h4 id="数据库备份"><a href="#数据库备份" class="headerlink" title="数据库备份"></a>数据库备份</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -u admin -padmin schemaName tableName &gt; ~/Workspace/backup.sql</span><br></pre></td></tr></table></figure>
+<h4 id="数据库备份"><a href="#数据库备份" class="headerlink" title="数据库备份"></a>数据库备份</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -u admin -padmin schemaName tableName &gt; backup.sql</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>关于使用git实现快捷数据备份的实践
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd ~/Workspace</span><br><span class="line">git clone git@projectX.git</span><br><span class="line">mkdir ~/Workspace/projectX/db </span><br><span class="line">mysqldump -u admin -padmin schemaName tableName &gt; backup.sql</span><br><span class="line">git commit</span><br><span class="line">git push</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>思考：我要是不在本地跑源码(node server.js),是否可以省略拉本地仓库的步骤？是否可以直接将备份文件“push”到远程仓库？
+<img src="https://tvax2.sinaimg.cn/large/a60edd42gy1gaj6h0z7e5j20m806btb2.jpg" alt>
+编辑文件在上图的workspace范畴中，我想，问题答案应该是否定的。</p>
+
       
     </div>
     
@@ -367,8 +398,6 @@
     <footer class="post-footer">
       
         <div class="post-tags">
-          
-            <a href="/qqsnote/tags/数据库/" rel="tag"># 数据库</a>
           
             <a href="/qqsnote/tags/MySQL/" rel="tag"># MySQL</a>
           
@@ -483,7 +512,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -494,7 +523,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
