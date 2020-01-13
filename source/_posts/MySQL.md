@@ -103,7 +103,7 @@ MySQL Workbench工具，支持csv，json格式的import wizard，其实可以直
 
 #### 数据库备份
 ```
-mysqldump -u admin -padmin schemaName tableName > backup.sql
+mysqldump -u${username} -p${password} schemaName tableName1 tableName2 tableName3 > backup.sql
 ```
 > 关于使用git实现快捷数据备份的实践
 ```

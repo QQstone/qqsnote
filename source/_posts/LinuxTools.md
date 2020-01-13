@@ -6,6 +6,7 @@ tags:
 categories: 
 - Linux 
 ---
+Please keep learning --> [Linux工具快速教程](https://linuxtools-rst.readthedocs.io/zh_CN/latest/)
 #### trial
 ```
 tail -f filename
@@ -99,3 +100,50 @@ stty -echo
 // 回显打开
 stty echo
 ```
+#### 定时任务
+查看服务状态
+```
+service cron status
+```
+crontab
+```
+// 列出该用户的计时器设置
+crontab -l
+// 编辑该用户的计时器设置
+crontab -e
+```
+> 计划任务分为<b>系统任务调度</b>和<b>用户任务调度</b>两类<br>
+系统任务调度：系统周期性所要执行的工作，比如写缓存数据到硬盘、日志清理等 见/etc/crontab时日周月计划。<br>
+用户任务调度：用户可以使用 crontab 工具来定制自己的计划任务。所有用户定义的crontab文件都被保存在/var/spool/cron目录中。其文件名与用户名一致
+
+实际上，crontab文件被设计为不允许(存疑)用户直接编辑，而是通过crontab -e管理
+计划的格式如下
+```
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+```
++ \* 代表取值范围内的数字
++ / 代表”每”
++ \- 代表从某个数字到某个数字
++ , 分开几个离散的数字
+
+例子：<br>
+20 6 * * * pwd 每天的 6:20 执行pwd命令<br>
+20 6 8 6 * pwd 每年的6月8日6:20执行pwd命令<br>
+20 6 * * 0 pwd 每星期日的6:20执行pwd命令<br>
+20 3 10,20 * * pwd 每月10号及20号的3：20执行pwd命令<br>
+25 8-10 * * * pwd 每天8-10点的第25分钟执行pwd命令<br>
+*/15 * * * * pwd 每15分钟执行一次pwd命令 <br>
+20 6 */10 * * pwd 每个月中，每隔10天6:20执行一次pwd命令

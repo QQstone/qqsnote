@@ -64,3 +64,14 @@ ssh -T git@github.com/qqstone/xxx.git
 另一种情况，主机无法连接正确的dns，解析超时，可以在连接正常的环境中(如无线网络或4g网络)用nslookup查看域名解析，找到实际的公网ip，然后在超时的环境中尝试用ip连接
 
 <i>懒得去服务器上授权密钥，可以将已授权的 id_rsa + xxx.pub(公钥)拷贝覆盖到其他主机</i>
+> 异常：The authenticity of host 192.168.xxx.xxx can't be established.ECDSA key fingerprint is blablabla
+```
+ssh  -o StrictHostKeyChecking=no  192.168.xxx.xxx
+```
+> 异常：ssh key在终端有效，在脚本中无效<br>
+在终端执行git 命令，ssh key认证可自动通过，将命令写入shell执行，git命令会要求当前用户访问Repository的密码。
+
+原因可能是ssh key隶属当前用户，而未配置到root用户，root用户默认是禁用的，尝试添加/home/root/\.ssh/\*无效，未尝试添加/root/\.ssh/\*。
+```
+git config core.sshCommand "ssh -i /home/csd/.ssh/id_rsa -o StrictHostKeyChecking=no git@hostname"
+```

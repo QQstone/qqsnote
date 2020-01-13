@@ -27,5 +27,16 @@ disable_overscan=1
 sudo raspi-config
 ```
 Boot Options -> Desktop / CLI -> Console
+> 开启ssh server
+见 [ssh笔记](https://qqstone.github.io/qqsnote/2019/10/30/ssh/)
 #### GPIO
+#### USB摄像头
+[Using a standard USB webcam](https://www.raspberrypi.org/documentation/usage/webcams/)
+实践发现，手上的UVC Camera一旦停止调用就会跳出(中断)<br>
+搭建直播流服务
 #### 4g上网
+实践时 电脑USB接口向树莓派供电 插上网卡就电压不足(Under-voltage detected)<br>
+lsusb命令识别出" ID 05c6:6000 Qualcomm,Inc.Siemens SG75 "<br>
+安装ppp包
+#### 内网穿透
+ipv6
