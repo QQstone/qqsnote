@@ -229,6 +229,335 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/12/12/MQ/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/12/12/MQ/" itemprop="url">MQ中间件</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-12T13:22:43+08:00">
+                2019-12-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="Message-Queue"><a href="#Message-Queue" class="headerlink" title="Message Queue"></a>Message Queue</h4><blockquote>
+<p>RabbitMQ is one of the most popular open source message brokers. RabbitMQ is lightweight and easy to deploy on premises and in the cloud. It supports multiple messaging protocols.</p>
+</blockquote>
+<p><a href="https://zh.wikipedia.org/wiki/Erlang" target="_blank" rel="noopener">Erlang</a>，具备函數語言特色的程序设计语言</p>
+<h4 id="installation"><a href="#installation" class="headerlink" title="installation"></a>installation</h4><p>RPM Manual：</p>
+<p><a href="https://www.rabbitmq.com/install-rpm.html#package-dependencies" target="_blank" rel="noopener">参考官网 Tutorials</a></p>
+<ul>
+<li>Before installing RabbitMQ, you must install a supported version of Erlang/OTP. <a href="https://github.com/rabbitmq/erlang-rpm/releases" target="_blank" rel="noopener">Zero-dependency Erlang RPM for RabbitMQ</a> : this is a (virtually) zero dependency 64-bit Erlang RPM package that provides just enough to run RabbitMQ. It may be easier to install than other Erlang RPMs in most environments. It may or may not be suitable for running other Erlang-based software or 3rd party RabbitMQ plugins.</li>
+<li>other dependencies : <a href="https://pkgs.org/download/socat" target="_blank" rel="noopener">socat</a>, <a href="https://pkgs.org/download/logrotate" target="_blank" rel="noopener">logrotate</a></li>
+<li>download and install rabbit-server.rpm(<a href="https://www.rabbitmq.com/install-rpm.html#downloads" target="_blank" rel="noopener">https://www.rabbitmq.com/install-rpm.html#downloads</a>)</li>
+<li>启动/关闭 /sbin/service rabbitmq-server start/stop</li>
+<li>开机启动 chkconfig rabbitmq-server on</li>
+</ul>
+<p>Docker Image
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull rabbitmq</span><br><span class="line">docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management</span><br></pre></td></tr></table></figure></p>
+<p>启用Management Plugin
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rabbitmq-plugins enable rabbitmq_management</span><br></pre></td></tr></table></figure></p>
+<p>访问 http://{node-hostname}:15672/ 对RabbitMQ-Server进行可视化管理 </p>
+<h4 id="授权，认证-以及-Access-Control"><a href="#授权，认证-以及-Access-Control" class="headerlink" title="授权，认证 以及 Access Control"></a>授权，认证 以及 Access Control</h4><p><a href="https://www.rabbitmq.com/access-control.html" target="_blank" rel="noopener">参考官网 Tutorials</a></p>
+<p>默认用户guest/guest只被允许本地登录
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 创建用户qqs/pass1234</span><br><span class="line">sudo rabbitmqctl add_user qqs pass1234</span><br><span class="line">// 用户列表</span><br><span class="line">sudo rabbitmqctl list_users</span><br><span class="line">// 授权管理员</span><br><span class="line">sudo rabbitmqctl set_user_tags qqs administrator</span><br></pre></td></tr></table></figure></p>
+<p>vhost 是 RabbitMQ 控制权限的最小粒度
+注意，/是默认的vhost，缺省了名称。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rabbitmqctl list_vhosts</span><br><span class="line">rabbitmqctl add_vhost test_vhost</span><br><span class="line">// set_permissions [-p &lt;vhost&gt;] &lt;user&gt; &lt;conf&gt; &lt;write&gt; &lt;read&gt;</span><br><span class="line">rabbitmqctl set_permissions -p /          qqs &quot;.*&quot; &quot;.*&quot; &quot;.*&quot;</span><br><span class="line">rabbitmqctl set_permissions -p test_host  qqs &quot;.*&quot; &quot;.*&quot; &quot;.*&quot;</span><br></pre></td></tr></table></figure></p>
+<h4 id="client-demos"><a href="#client-demos" class="headerlink" title="client demos"></a>client demos</h4><p>见 Github <a href="https://github.com/rabbitmq/rabbitmq-tutorials" target="_blank" rel="noopener">rabbitmq tutorials</a></p>
+<p>javascript client demo：<br>
+package
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i amqplib</span><br></pre></td></tr></table></figure></p>
+<p>send.js
+<figure class="highlight plain"><figcaption><span>node</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">var amqp = require(&apos;amqplib/callback_api&apos;);</span><br><span class="line"></span><br><span class="line">amqp.connect(&apos;amqp://qqs:pass1234@111.111.111.111:5672/&apos;, function(error0, connection) &#123;</span><br><span class="line">    if (error0) &#123;</span><br><span class="line">        throw error0;</span><br><span class="line">    &#125;</span><br><span class="line">    connection.createChannel(function(error1, channel) &#123;</span><br><span class="line">        if (error1) &#123;</span><br><span class="line">            throw error1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        var queue = &apos;hello&apos;;</span><br><span class="line">        var msg = &apos;Hello World!&apos;;</span><br><span class="line"></span><br><span class="line">        channel.assertQueue(queue, &#123;</span><br><span class="line">            durable: false</span><br><span class="line">        &#125;);</span><br><span class="line">        channel.sendToQueue(queue, Buffer.from(msg));</span><br><span class="line"></span><br><span class="line">        console.log(&quot; [x] Sent %s&quot;, msg);</span><br><span class="line">    &#125;);</span><br><span class="line">    setTimeout(function() &#123;</span><br><span class="line">        connection.close();</span><br><span class="line">        process.exit(0);</span><br><span class="line">    &#125;, 500);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>receive.js
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env node</span><br><span class="line"></span><br><span class="line">var amqp = require(&apos;amqplib/callback_api&apos;);</span><br><span class="line"></span><br><span class="line">amqp.connect(&apos;amqp://qqs:pass1234@111.111.111.111:5672/&apos;, function(error0, connection) &#123;</span><br><span class="line">    if (error0) &#123;</span><br><span class="line">        throw error0;</span><br><span class="line">    &#125;</span><br><span class="line">    connection.createChannel(function(error1, channel) &#123;</span><br><span class="line">        if (error1) &#123;</span><br><span class="line">            throw error1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        var queue = &apos;hello&apos;;</span><br><span class="line"></span><br><span class="line">        channel.assertQueue(queue, &#123;</span><br><span class="line">            durable: false</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        console.log(&quot; [*] Waiting for messages in %s. To exit press CTRL+C&quot;, queue);</span><br><span class="line"></span><br><span class="line">        channel.consume(queue, function(msg) &#123;</span><br><span class="line">            console.log(&quot; [x] Received %s&quot;, msg.content.toString());</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            noAck: true</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="定时任务"><a href="#定时任务" class="headerlink" title="定时任务"></a>定时任务</h4>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/12/09/OAuth2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/12/09/OAuth2/" itemprop="url">OAuth2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-09T10:39:14+08:00">
+                2019-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/通信协议/" itemprop="url" rel="index">
+                    <span itemprop="name">通信协议</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h4><p>某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的账号密码。。。</p>
+<p>对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）token，本系统凭此token访问与第三方有关的资源，一般情况下可能只是从第三方获取用户名、头像、邮箱来填充本系统的个人信息识别.
+<img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twfy9pmzj20ud0l8ab4.jpg" alt="stacklogin"></p>
+<p><img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twgcmpxij20ue0l775l.jpg" alt="gitlogin"></p>
+<h4 id="OAuth标准"><a href="#OAuth标准" class="headerlink" title="OAuth标准"></a>OAuth标准</h4><blockquote>
+<p>OAuth在”客户端”与”服务提供商”之间，设置了一个授权层（authorization layer）。”客户端”不能直接登录”服务提供商”，只能登录授权层，使用授权层颁发的令牌（token），访问服务提供商的资源。用户注册在服务端的账户密码，不会暴露给客户端。服务提供商可以自由限制授权层令牌的权限范围和有效期。<br></p>
+</blockquote>
+<h4 id="授权方式"><a href="#授权方式" class="headerlink" title="授权方式"></a>授权方式</h4><h5 id="授权码（authorization-code）"><a href="#授权码（authorization-code）" class="headerlink" title="授权码（authorization code）"></a>授权码（authorization code）</h5><p>授权码方式是最常用且靠谱的授权方式，相比之下，其余三种比较扯淡。
+<img src="https://tvax4.sinaimg.cn/large/a60edd42gy1g9twsgu7ksj20m80cijrk.jpg" alt="authcodemode"></p>
+<ol>
+<li>跳转到B授权页</li>
+<li>确认授权，重定向回A，并带回authorization code</li>
+<li>向B发送请求，传递A身份，以及授权码</li>
+<li>请求返回令牌<h5 id="隐藏式"><a href="#隐藏式" class="headerlink" title="隐藏式"></a>隐藏式</h5>直接返回令牌，安全风险较高 <a href="http://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html" target="_blank" rel="noopener">注1</a><h5 id="密码式"><a href="#密码式" class="headerlink" title="密码式"></a>密码式</h5>返回账号密码，A以此申请访问B的令牌，风险更高。(私以为，既然B予以这种信任，即将访问权限控制让与A，A可以直接以账密登录B而不用可能受限的token)<h5 id="凭据式"><a href="#凭据式" class="headerlink" title="凭据式"></a>凭据式</h5>对于没有前端的命令行应用，以get请求，用query parameters传参直接得到令牌。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/12/06/httpdownload/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1437,343 +1766,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/31/DockerInstallation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/10/31/DockerInstallation/" itemprop="url">DockerInstallation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-31T09:48:11+08:00">
-                2019-10-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/容器/" itemprop="url" rel="index">
-                    <span itemprop="name">容器</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>一般来说，下文只记录操作记录而不是详细步骤</p>
-<ul>
-<li><p>ubuntu install docker</p>
-</li>
-<li><p>usermod aG docker</p>
-</li>
-<li><p>自动启动systemctl enable docker</p>
-</li>
-<li><p>镜像列表docker image ls</p>
-</li>
-<li><p>从Docker Hub搜索并下载镜像</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker search httpd</span><br><span class="line"></span><br><span class="line">docker pull httpd</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>这里的Docker Hub相当于npmjs.org仓库，镜像是容器的模板，镜像之于容器，如同class之于object。这里的httpd称为应用容器镜像，是包含指定应用的环境。</p>
-</blockquote>
-</li>
-<li><p>删除镜像 docker rm hello-world</p>
-</li>
-<li><p>启动容器 docker container run [OPTIONS] IMAGE [COMMAND]</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker container run -it centos:latest /bin/bash</span><br><span class="line"></span><br><span class="line">docker container ls</span><br></pre></td></tr></table></figure></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/30/ssh/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/10/30/ssh/" itemprop="url">ssh</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-30T13:33:53+08:00">
-                2019-10-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="ubuntu安装后无法ssh远程登录"><a href="#ubuntu安装后无法ssh远程登录" class="headerlink" title="ubuntu安装后无法ssh远程登录"></a>ubuntu安装后无法ssh远程登录</h4><p>检查是否安装ssh-server
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpkg -l | grep ssh</span><br></pre></td></tr></table></figure></p>
-<p>默认只有ssh-client,如下</p>
-<p><img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g8g662fyfoj20le059dgy.jpg" alt="20170210203338059">
-安装命令：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install openssh-server</span><br></pre></td></tr></table></figure></p>
-<p>通过进程确认服务已启动
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -e | grep ssh</span><br></pre></td></tr></table></figure></p>
-<p>启动与停止
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo /etc/init.d/ssh stop</span><br><span class="line">sudo /etc/init.d/ssh start</span><br></pre></td></tr></table></figure></p>
-<h4 id="ssh-key"><a href="#ssh-key" class="headerlink" title="ssh key"></a>ssh key</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 查看ssh key目录</span><br><span class="line"> ls -al ~/.ssh</span><br><span class="line"> // 生成</span><br><span class="line"> ssh-keygen -t rsa -C &quot;&quot;</span><br><span class="line"> // 添加密钥到ssh-agent 注 见下文异常</span><br><span class="line"> ssh-add ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>异常：Could not open a connection to your authentication agent
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-agent bash</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<blockquote>
-<p>异常：Permissions 0777 for ‘~/.ssh/id_rsa’ are too open.<br>
-It is recommended that your private key files are NOT accessible by others.<br>
-This private key will be ignored.</p>
-</blockquote>
-<p>keys need to be only readable to you 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 改为只读</span><br><span class="line">chmod 400 ~/.ssh/id_rsa </span><br><span class="line">ssh-add ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure></p>
-<p>返回“identity added blablabla…”</p>
-<h4 id="使用ssh-key连接GitHub"><a href="#使用ssh-key连接GitHub" class="headerlink" title="使用ssh key连接GitHub"></a>使用ssh key连接GitHub</h4><ul>
-<li>复制public key</li>
-<li>测试<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com/qqstone/xxx.git</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<blockquote>
-<p>异常：Could not resolve hostname github.com:qqstone/xxx.git： Name or service not known;</p>
-</blockquote>
-<p>尝试ping github.com 发现超时，说明dns给的地址连接超时，然而由于网页上是http协议，是可以有反向代理以及负载均衡配置的(具体原因存疑)，所以网页打开Github反而很流畅。<br>
-另一种情况，主机无法连接正确的dns，解析超时，可以在连接正常的环境中(如无线网络或4g网络)用nslookup查看域名解析，找到实际的公网ip，然后在超时的环境中尝试用ip连接</p>
-<p><i>懒得去服务器上授权密钥，可以将已授权的 id_rsa + xxx.pub(公钥)拷贝覆盖到其他主机</i></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1824,7 +1816,7 @@ This private key will be ignored.</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">81</span>
+                  <span class="site-state-item-count">83</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1835,7 +1827,7 @@ This private key will be ignored.</p>
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -1846,7 +1838,7 @@ This private key will be ignored.</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

@@ -88,7 +88,7 @@
 <meta property="og:description" content="ubuntu安装后无法ssh远程登录检查是否安装ssh-server 1dpkg -l | grep ssh 默认只有ssh-client,如下  安装命令： 1sudo apt-get install openssh-server 通过进程确认服务已启动 1ps -e | grep ssh 启动与停止 12sudo /etc/init.d/ssh stopsudo /etc/init.d/ssh">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://tvax1.sinaimg.cn/large/a60edd42gy1g8g662fyfoj20le059dgy.jpg">
-<meta property="og:updated_time" content="2020-01-03T03:18:12.958Z">
+<meta property="og:updated_time" content="2020-01-13T01:34:41.903Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ssh">
 <meta name="twitter:description" content="ubuntu安装后无法ssh远程登录检查是否安装ssh-server 1dpkg -l | grep ssh 默认只有ssh-client,如下  安装命令： 1sudo apt-get install openssh-server 通过进程确认服务已启动 1ps -e | grep ssh 启动与停止 12sudo /etc/init.d/ssh stopsudo /etc/init.d/ssh">
@@ -358,6 +358,16 @@ This private key will be ignored.</p>
 <p>尝试ping github.com 发现超时，说明dns给的地址连接超时，然而由于网页上是http协议，是可以有反向代理以及负载均衡配置的(具体原因存疑)，所以网页打开Github反而很流畅。<br>
 另一种情况，主机无法连接正确的dns，解析超时，可以在连接正常的环境中(如无线网络或4g网络)用nslookup查看域名解析，找到实际的公网ip，然后在超时的环境中尝试用ip连接</p>
 <p><i>懒得去服务器上授权密钥，可以将已授权的 id_rsa + xxx.pub(公钥)拷贝覆盖到其他主机</i></p>
+<blockquote>
+<p>异常：The authenticity of host 192.168.xxx.xxx can’t be established.ECDSA key fingerprint is blablabla
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh  -o StrictHostKeyChecking=no  192.168.xxx.xxx</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>异常：ssh key在终端有效，在脚本中无效<br>
+在终端执行git 命令，ssh key认证可自动通过，将命令写入shell执行，git命令会要求当前用户访问Repository的密码。</p>
+</blockquote>
+<p>原因可能是ssh key隶属当前用户，而未配置到root用户，root用户默认是禁用的，尝试添加/home/root/.ssh/*无效，未尝试添加/root/.ssh/*。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config core.sshCommand &quot;ssh -i /home/csd/.ssh/id_rsa -o StrictHostKeyChecking=no git@hostname&quot;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -479,7 +489,7 @@ This private key will be ignored.</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">81</span>
+                  <span class="site-state-item-count">83</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -490,7 +500,7 @@ This private key will be ignored.</p>
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -501,7 +511,7 @@ This private key will be ignored.</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
