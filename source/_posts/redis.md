@@ -10,6 +10,7 @@ categories:
 (略)
 ### 方法
 ```
+keys *
 redis-cli 
 set key value
 get key

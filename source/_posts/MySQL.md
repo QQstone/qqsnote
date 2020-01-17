@@ -77,6 +77,7 @@ ALTER TABLE mytable CHANGE COLUMN ptime ptime TIMESTAMP  ON UPDATE CURRENT_TIMES
 ```
 alter table all_user add unique key(employeeid, isvalid)
 ```
+CAUTION ! 上述语句是为了能在记录标记删除后，原纪录的唯一字段可以重新使用，但是如果isvalid是boolean(0-1)类型的，再次删除会造成违反联合唯一约束，解决方法是将isvalid以自增值标记，或以时间戳标记
 #### 数据导入
 MySQL Workbench工具，支持csv，json格式的import wizard，其实可以直接用命令方式导入
 ![Capture_mysql_workbench](https://tvax4.sinaimg.cn/large/a60edd42gy1g9swbdtdpbj20rg0mijto.jpg)

@@ -32,6 +32,7 @@ headers={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537
 response = requests.get(url,headers=headers)
 print(response.text)
 ```
+上述只是针对user agent检测的手段，通常网站管理员采取的反爬虫基本手段还有封锁IP，检测请求间隔，封锁cookie等，针对这些手段需要采取相应的措施如使用代理，使用sleep模拟点击控制间隔，禁用cookie等
 #### 超时处理
 
 #### 使用代理
