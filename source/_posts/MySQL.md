@@ -45,11 +45,17 @@ mysql> flush privileges;
 ALTER USER 'admin'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
 FLUSH PRIVILEGES;
 ```
-#### 配置远程链接
+#### 配置远程连接
+Ubuntu :<br>
 /etc/mysql/mysqld.cnf
 ```
 bind-address = 0.0.0.0
 ```
+可以注释掉（未验证）
+CentOS<br>
+见/etc/my.conf指定了配置目录<br>
+曾修改主机ip时mysql启动失败（查看状态:service mysqld status），现象是在本地登录mysql -u xxx -p验证密码后报异常:<br>
+<i>ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock'</i>
 #### 数据库时间
 ```
 select now();// yyyy-MM-dd hh24:mi:ss
