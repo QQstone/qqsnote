@@ -25,7 +25,16 @@ categories:
 3. 主进程main.js
 #### webpack target
 
+#### IPC
+IPC 代表 Inter-Process Communication进程间通信。Electron 使用 IPC 来在main主进程和renderer渲染进程之间传递 JSON 信息。
 #### 资源打包关于asar vbscript
+asar 是一种将多个文件合并成一个文件的类 tar 风格的归档格式。 Electron 可以无需解压整个文件，即可从其中读取任意文件内容。
+
+逻辑中视为文件夹
+```
+const fs = require('fs')
+fs.readFileSync('/path/to/example.asar/file.txt')
+```
 
 #### 单例模式 单例参数更新
 
@@ -56,7 +65,7 @@ args = process.argv.splice(1)
   "directories": {
     "output": "release/"
   },
-  // 额外打包的资源
+  // 额外打包的资源 不会打包为asar
   "extraResources": {
     "from": "addon/",
     "to": "addon/"
