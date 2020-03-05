@@ -55,6 +55,8 @@ const PI = freezeObj();
    return Math.floor(item)===item&&item>0 ;
   }).map(item=>Math.pow(item, 2))
 ```
+箭头表达式牵扯到的一个知识点是“箭头表达式不会创建this”
+需知javascript this是区分运行环境的标记，见 [阮一峰 JavaScript 的 this 原理](https://www.ruanyifeng.com/blog/2018/06/javascript-this.html)，箭头表达式继承外层函数运行环境。
 ### 剩余参数运算符（Rest Operator）
 使用Rest Operator定义参数数量可变的函数，参数将存入Rest Operator指定的变量指代的数组中
 ```
