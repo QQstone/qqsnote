@@ -46,8 +46,15 @@ docker exec -it [containerID] bash或sh
 
 #### 使用Container ID 停止和重启等
 ```
+docker ps -a
 docker ps | grep jenkins
 docker stop/restart id
 
 docker rm id
+```
+> Issue：如何得知特定镜像需要的持久化卷配置，即我要创建哪些路径的映射呢？
+
+#### tomcat docker的卷设置 
+```
+docker run --name tomcat -p 8080:8080 -v $PWD/test:/usr/local/tomcat/webapps/test -d tomcat 
 ```

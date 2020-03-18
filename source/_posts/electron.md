@@ -23,6 +23,19 @@ categories:
 1. 创建Angular项目 ng new ngelectron --routing 
 2. package.json 
 3. 主进程main.js
+
+以angular-electron为例，npm run start过程，<br>
+```
+"start": "npm run postinstall:electron && npm-run-all -p ng:serve electron:serve",
+"postinstall:electron": "node postinstall",
+"electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && electron . --serve,
+"electron:serve-tsc": "tsc -p tsconfig-serve.json",
+```
+1. 调用postinstall (postinstall.js)修改angular的webpack target 
+2. 随后运行ng serve 
+3. 连接ng serve启动的localhost:4200
+4. 调用tsc编译main.ts此时生成了main.js
+5. 执行electron .
 #### webpack target
 
 #### IPC
@@ -65,11 +78,14 @@ args = process.argv.splice(1)
   "directories": {
     "output": "release/"
   },
-  // 额外打包的资源 不会打包为asar
+  // 额外打包的资源 不会打包到\resources\app.asar
+  // 以下规则将文件单独打包到\resources\addon
   "extraResources": {
     "from": "addon/",
     "to": "addon/"
   },
+  // 额外打包配置文件到根目录
+  "extraFiles":["config.xml"],
   // 打包文件的parttern表达式
   "files": [
     "**/*",
@@ -130,6 +146,7 @@ VScode launch.json:
 ```
 此app设计为由其他客户端程序使用命令调起，传入input参数和output参数，注意调试命令的'electron .'中'.'是第一个参数。
 
+另外此app是webpack打包的angular electron应用，调试调用主程序js文件，每次更新代码后应使用postinstall进行编译。
 #### 自动更新服务
 原理似乎是这样的，首先是build，将构建好的文件publish到一个下载中心，很多工具都封装了比如GitHub和[Bintray](https://bintray.com/)
 	
@@ -138,7 +155,6 @@ electron-builder方案
 1. install [electron-updater](https://yarn.pm/electron-updater) 
 2. 配置publish参数
 一般在package.json中，已分离出electron-build.json配置的在该文件中
-```
+本章未完待补充QQs
 
-```
-
+#### BrowserWindow.loadURL Issue
