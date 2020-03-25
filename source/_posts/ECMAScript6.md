@@ -201,6 +201,16 @@ function loadImageAsync(url) {
 }
 ```
 加载图片的异步过程，成功或失败时触发相应的事件(load,error)，resolve和reject刚好对应作为事件响应方法
+
+// TODO Promise 链式调用(存目)
+
+Promise().then(...)的第二个参数可以捕捉异常，和链式调用最后的catch有和区别？
+> catch只是一个语法糖而己 还是通过then 来处理的，大概如下所示
+```
+Promise.prototype.catch = function(fn){
+    return this.then(null,fn);
+}
+```
 ### async, await
 async(asynchronous)异步
 

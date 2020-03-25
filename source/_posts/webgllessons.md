@@ -10,13 +10,18 @@ categories:
 
 ```
 const canvas = document.getElementById('webgl');
-const gl = canvas.getContext('webgl');
+// if webgl context isnot exist, init it 
+const webgl = canvas.getContext('webgl');
 
 // Set clear color to black, fully opaque
-gl.clearColor(0.0, 0.0, 0.0, 1.0);
+webgl.clearColor(0.0, 0.0, 0.0, 1.0);
 // Clear the color buffer with specified clear color
-gl.clear(gl.COLOR_BUFFER_BIT);
+webgl.clear(webgl.COLOR_BUFFER_BIT);
 ```
+color 是float 0.0~1.0 映射 0~255<br>
+颜色缓冲区（COLOR_BUFFER_BIT），其他还有深度缓冲区（DEPTH_BUFFER_BIT）模板参数缓冲区（STENCIL_BUFFER_BIT）参考 [官方标准](www.khronos.org)
+#### vs fs shader
+
 #### 着色器函数
 ```
  private initShader(gl:WebGLRenderingContext, vertexShaderSource:string, fragmentShaderSource:string) {
