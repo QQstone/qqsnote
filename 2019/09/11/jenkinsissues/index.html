@@ -88,7 +88,9 @@
 <meta property="og:description" content="submodules首先submodule就是个坑，在包含submodule的项目中通过配置.gitmodules文件与子模块仓库建立联系。  配置包含submodule的项目job   退出、重启等域名+exit/restart env: ‘node’: No such file or directory现于docker jenkins-blueocean，找到nodejs安装路径如“/var/">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://wx2.sinaimg.cn/large/a60edd42ly1g6vkm6ilylj21u342owww.jpg">
-<meta property="og:updated_time" content="2020-01-13T01:34:40.965Z">
+<meta property="og:image" content="https://tvax2.sinaimg.cn/large/a60edd42gy1gd6c791juej20ll0j80tm.jpg">
+<meta property="og:image" content="https://tvax1.sinaimg.cn/large/a60edd42gy1gd8bdr0hgwj21751hqgol.jpg">
+<meta property="og:updated_time" content="2020-03-30T07:27:09.645Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jenkins issues">
 <meta name="twitter:description" content="submodules首先submodule就是个坑，在包含submodule的项目中通过配置.gitmodules文件与子模块仓库建立联系。  配置包含submodule的项目job   退出、重启等域名+exit/restart env: ‘node’: No such file or directory现于docker jenkins-blueocean，找到nodejs安装路径如“/var/">
@@ -330,7 +332,21 @@
 <img src="https://wx2.sinaimg.cn/large/a60edd42ly1g6vkm6ilylj21u342owww.jpg" alt="cannot load pic here"></p>
 </blockquote>
 <h3 id="退出、重启等"><a href="#退出、重启等" class="headerlink" title="退出、重启等"></a>退出、重启等</h3><p>域名+exit/restart</p>
-<h3 id="env-‘node’-No-such-file-or-directory"><a href="#env-‘node’-No-such-file-or-directory" class="headerlink" title="env: ‘node’: No such file or directory"></a>env: ‘node’: No such file or directory</h3><p>现于docker jenkins-blueocean，找到nodejs安装路径如“/var/jenkins_home/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/nodejs_v10/bin”之下的npm命令，执行个npm -v，显示相同提示。</p>
+<h3 id="env-‘node’-No-such-file-or-directory"><a href="#env-‘node’-No-such-file-or-directory" class="headerlink" title="env: ‘node’: No such file or directory"></a>env: ‘node’: No such file or directory</h3><p>现于docker jenkins-blueocean，找到nodejs安装路径如“/var/jenkins_home/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/nodejs_v10/bin”之下的npm命令，执行个npm -v，显示相同提示。<br>
+据说是镜像bug <a href="https://issues.jenkins-ci.org/browse/JENKINS-34815?jql=status%20%3D%20Closed%20AND%20text%20~%20%22jenkins.plugins.nodejs.tools.NodeJSInstallation%22" target="_blank" rel="noopener">JENKINS-34815</a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 进入jenkins对应容器中</span><br><span class="line"># docker exec -it [对应容器id] bash</span><br><span class="line"> </span><br><span class="line"># 安装nodejs</span><br><span class="line"># apk add --no-cache nodejs</span><br><span class="line"> </span><br><span class="line"># 检查node</span><br><span class="line"># node -v</span><br></pre></td></tr></table></figure></p>
+<h3 id="构建完成后拷贝文件到目标服务器"><a href="#构建完成后拷贝文件到目标服务器" class="headerlink" title="构建完成后拷贝文件到目标服务器"></a>构建完成后拷贝文件到目标服务器</h3><p>关于插件publish over ssh
+<img src="https://tvax2.sinaimg.cn/large/a60edd42gy1gd6c791juej20ll0j80tm.jpg" alt="publish over ssh">
+配置中填的是jenkins这边的私钥，应为jenkins生成ssh key 或使用jenkins所在服务器的ssh private key
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;jenkins&quot; -f ~/.ssh/jenkins</span><br></pre></td></tr></table></figure></p>
+<p>上述命令可以生成以名字区分的ssh key，而不覆盖其他的key</p>
+<p>公钥复制到远程服务器，粘贴到~/.ssh/authorized_keys 这个文件没有就创建一个
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 700 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure></p>
+<p>为使ssh agent生效 QQs重启了远程服务器。。。
+回到jenkins配置中，完成接下来的远程服务器配置
+username是登录远程服务器的用户名，与key无关
+<img src="https://tvax1.sinaimg.cn/large/a60edd42gy1gd8bdr0hgwj21751hqgol.jpg" alt="10.196.98.60_8080_job_ams_dev_svr_ng_configure">
+Caution！ 拷贝文件时,如果包含文件夹，Source files路径通配符应写为dist/**</p>
 
       
     </div>
@@ -450,7 +466,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">91</span>
+                  <span class="site-state-item-count">101</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -472,7 +488,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -505,7 +521,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#submodules"><span class="nav-number">1.</span> <span class="nav-text">submodules</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#退出、重启等"><span class="nav-number">2.</span> <span class="nav-text">退出、重启等</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#env-‘node’-No-such-file-or-directory"><span class="nav-number">3.</span> <span class="nav-text">env: ‘node’: No such file or directory</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#submodules"><span class="nav-number">1.</span> <span class="nav-text">submodules</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#退出、重启等"><span class="nav-number">2.</span> <span class="nav-text">退出、重启等</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#env-‘node’-No-such-file-or-directory"><span class="nav-number">3.</span> <span class="nav-text">env: ‘node’: No such file or directory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建完成后拷贝文件到目标服务器"><span class="nav-number">4.</span> <span class="nav-text">构建完成后拷贝文件到目标服务器</span></a></li></ol></div>
             
 
           </div>

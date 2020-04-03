@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="概念(略) 方法12345678keys *redis-cli set key valueget keydel keyhget key fieldnamehget allflushall redis作为认证token数据库ticket=(accountid, token) centos安装Redis参考：Linux 平台将 Redis 设置为服务并开机自启动  服务部署好之后，若无法远程访问 首先">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-01-16T08:16:49.937Z">
+<meta property="og:updated_time" content="2020-03-17T07:32:39.279Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis">
 <meta name="twitter:description" content="概念(略) 方法12345678keys *redis-cli set key valueget keydel keyhget key fieldnamehget allflushall redis作为认证token数据库ticket=(accountid, token) centos安装Redis参考：Linux 平台将 Redis 设置为服务并开机自启动  服务部署好之后，若无法远程访问 首先">
@@ -331,6 +331,13 @@
 <p>首先检查防火墙设置
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl status firewalld # 查看防火墙状态</span><br><span class="line">firewall-cmd --zone= public --query-port=6379/tcp # 查询防火墙端口状态</span><br><span class="line">firewall-cmd --zone=public --add-port=6379/tcp --permanent # 永久开发端口及协议</span><br></pre></td></tr></table></figure></p>
 <p>确认是否绑定服务主机ip 参考 <a href="https://www.jianshu.com/p/c64839414623" target="_blank" rel="noopener">处理CentOS 7.2 x64端口不通的问题</a></p>
+<h4 id="远程访问"><a href="#远程访问" class="headerlink" title="远程访问"></a>远程访问</h4><p>修改/etc/redis/redis.conf
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 注释掉或将其改为服务器静态ip</span><br><span class="line"># bind 127.0.0.1 ::1</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>DENIED Redis is running in protected mode because protected mode is enabled, no bind address was specified, no authentication password is requested to clients…..</p>
+</blockquote>
+<p>受保护的模式,改为no
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protected-mode no</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -450,7 +457,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">91</span>
+                  <span class="site-state-item-count">101</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -472,7 +479,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -505,7 +512,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis作为认证token数据库"><span class="nav-number">3.</span> <span class="nav-text">redis作为认证token数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#centos安装Redis"><span class="nav-number">4.</span> <span class="nav-text">centos安装Redis</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis作为认证token数据库"><span class="nav-number">3.</span> <span class="nav-text">redis作为认证token数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#centos安装Redis"><span class="nav-number">4.</span> <span class="nav-text">centos安装Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#远程访问"><span class="nav-number">4.1.</span> <span class="nav-text">远程访问</span></a></li></ol></li></ol></div>
             
 
           </div>
