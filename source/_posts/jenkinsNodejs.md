@@ -30,7 +30,8 @@ ssh模式粘贴private key即可
 ### Build Environment中 勾选 "Provide Node & npm bin/ folder to PATH" 并选择已安装的版本
 否则jenkins所在系统无法识别nodejs命令
 
-### 最后 Build 步骤可以直接用 "Windows batch command"调用
+### 最后 Build 步骤可以直接用 "Windows batch command" 或者 "execuate shell"调用
 ```
 npm install && npm run build
 ```
+注意 npm 命令是安装了node包管理工具之后的命令行指令，并非是nodejs命令,否则报 syntaxerror unexpected identifier

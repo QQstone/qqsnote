@@ -1,5 +1,5 @@
 ---
-title: Electron
+title: Electron 入坑
 date: 2019-09-19 19:19:55
 tags:
 - Electron
@@ -127,22 +127,22 @@ uninstaller.nsh
 VScode launch.json:
 ```
 {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "name": "Debug Main Process",
-        "type": "node",
-        "request": "launch",
-        "cwd": "${workspaceRoot}",
-        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
-        "windows": {
-          "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
-        },
-        "args" : [".","--input=d:\\temp\\input.xml","--output=d:\\temp\\output.xml"],
-        "outputCapture": "std"
-      }
-    ]
-  }
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Main Process",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+      },
+      "args" : [".","--input=d:\\temp\\input.xml","--output=d:\\temp\\output.xml"],
+      "outputCapture": "std"
+    }
+  ]
+}
 ```
 此app设计为由其他客户端程序使用命令调起，传入input参数和output参数，注意调试命令的'electron .'中'.'是第一个参数。
 
@@ -158,3 +158,15 @@ electron-builder方案
 本章未完待补充QQs
 
 #### BrowserWindow.loadURL Issue
+
+#### npm ERR! code ELIFECYCLE 
+double free exception,重复释放资源，错误使用app.exit()出现此异常
+如
+```
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    // app.quit(); // safe!
+    app.exit(-1) // ELIFECYCLE Exception!!
+  }
+})
+```

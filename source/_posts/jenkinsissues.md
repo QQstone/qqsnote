@@ -46,3 +46,4 @@ chmod 700 ~/.ssh/authorized_keys
 回到jenkins配置中，完成接下来的远程服务器配置
 username是登录远程服务器的用户名，与key无关
 ![10.196.98.60_8080_job_ams_dev_svr_ng_configure](https://tvax1.sinaimg.cn/large/a60edd42gy1gd8bdr0hgwj21751hqgol.jpg)
+Caution！ 拷贝文件时,如果包含文件夹，Source files路径通配符应写为dist/**

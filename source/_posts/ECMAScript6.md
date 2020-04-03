@@ -49,6 +49,15 @@ function freezeObj() {
 }
 const PI = freezeObj();
 ```
+### Object.assign()
+> 将所有可枚举属性的值从一个或多个源对象复制到目标对象<br>
+Object.assign(target, ...sources)
+```
+const target = { a: 1, b: 2 };
+const source = { b: 4, c: 5 };
+
+const returnedTarget = Object.assign(target, source); // expected output: Object { a: 1, b: 4, c: 5 }
+```
 ### 箭头函数表达式
 ```
   const squaredIntegers = arr.filter(item=>{
