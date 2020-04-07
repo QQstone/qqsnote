@@ -2,7 +2,7 @@
 title: VueQuickStart
 date: 2020-03-03 10:43:28
 tags:
--vuejs
+- vuejs
 ---
 [官网](https://cn.vuejs.org/)
 #### 爬行起步方式
