@@ -102,6 +102,11 @@ const { x, y, z } = voxel; // x = 3.6, y = 7.4, z = 6.54
 ```
 const { x : a, y : b} = voxel // a = 3.6, b = 7.4
 ```
+分离多余的变量
+```
+let postData = Object.assign({ extraAttr:'extra' }, dto);
+let { extraAttr, ...entity } = postData;
+```
 嵌套对象（nested objects）
 ```
 const tree = {

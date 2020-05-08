@@ -6,6 +6,101 @@ tags:
 categories: 
 - 前端技术
 ---
+#### 调试
+方法一 <br>
+npm install typescript<br>
+add tsconfig.json
+```
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": true,
+        "outDir": "./dist",
+        "sourceMap": true
+    },
+    "include": [
+        "src/**/*"
+    ]
+}
+```
+add .vscode/tasks.json
+```
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "typescript",
+            "tsconfig": "tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
+```
+Terminal--Run Task--Choose tsconfig.json
+
+add .vscode/launch.json
+```
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "launch",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/dist/main.js",
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector"
+        }
+    ]
+}
+```
+Run Debugging(Choose 'launch', the name definited in the launch.json)
+方法二 <br>
+npm i typescript node-ts<br>
+add tsconfig.js
+```
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": true,
+        "outDir": "./dist",
+        "sourceMap": true
+    },
+    "include": [
+        "src/**/*"
+    ]
+}
+```
+add .vscode/launch.json
+```
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Current TS File",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/node_modules/ts-node/dist/_bin.js",
+            "args": [
+                "${relativeFile}"
+            ],
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector"
+        }
+    ]
+}
+```
 #### 基本类型
 1. number 
 2. boolean
@@ -136,18 +231,17 @@ class AnalogClock implements ClockInterface {
 
 let digital = createClock(DigitalClock, 12, 17);
 let analog = createClock(AnalogClock, 7, 32);
- ```
- 这个是官方示例代码。为了实现定义一个符合ClockInterface接口规范的createClock方法。
- 而且应将符合ClockConstructor接口规范的类型作为返回值得类型
+```
+这个是官方示例代码。为了实现定义一个符合ClockInterface接口规范的createClock方法。
+而且应将符合ClockConstructor接口规范的类型作为返回值得类型
 
- #### 泛型
- ```
+#### 泛型
+```
 function identity<T>(arg: T): T 
 { 
     return arg; 
 }
- ```
- #### 模块
-  > export 和 import
-#### namespace
-####
+```
+#### 模块
+> export 和 import
+#### namespace(存目)

@@ -22,11 +22,11 @@ npm install --global --production windows-build-tools
 ```
 Caution！安装过程中出现 issue#147 [Hangs on Python is already installed, not installing again.](https://github.com/felixrieseberg/windows-build-tools/issues/147) 原因是VisualStudio有进程占用了相关工具链，结束VS进程并重新安装windows-build-tools即可
 
-这样即可具备在windows系统上配置并打包node模块的工具链（QQs：这边并没注意windows-build-tools与Visual Studio的联系，目前的环境已安装VS2013，VS2019）
+当前版本node-gyp使用 vs2017 build tools而不支持2019版本，下文中记述了workaround
 
 python依赖
 
-支持v2.7, v3.5, v3.6, or v3.7 ~~<br>
+支持v2.7, v3.5, v3.6, or v3.7 v3.8 （QQs已实践2.7，3.8）<br>
 如果安装了多个版本 应使用下述命令注明python路径
 ```
 node-gyp <command> --python /path/to/executable/python
@@ -135,3 +135,65 @@ node-gyp configure
 node-gyp build
 ```
 生成编译后的 *.node 的文件。 它会被放进 build/Release/ 目录。
+
+#### 关于VS2019 找不到C++ build tool的问题
+私以为比较好的workaround是创建一个用2017替代2019的shim,详见[node-gyp issue#1663](https://github.com/nodejs/node-gyp/issues/1663#issuecomment-480762647)<br>
+经实践可行
+
+#### 关于rebuild ffi error的问题
+[electron-rebuild issue#308](https://github.com/electron/electron-rebuild/issues/308)
+
+#### 需求：使用Crypt32加密（编码/解码）
+```
+npm i ffi-napi ref ref-struct
+```
+后面两个包是映射C语言类型的接口
+```
+const fs = require("fs");
+const ref = require("ref");
+const ffi = require("ffi-napi");
+const Struct = require("ref-struct");
+
+const DATA_BLOB = Struct({
+    cbData: ref.types.uint32,
+    pbData: ref.refType(ref.types.byte)
+});
+const PDATA_BLOB = new ref.refType(DATA_BLOB);
+const Crypto = new ffi.Library('Crypt32', {
+    "CryptUnprotectData": ['bool', [PDATA_BLOB, 'string', 'string', 'void *', 'string', 'int', PDATA_BLOB]],
+    "CryptProtectData" : ['bool', [PDATA_BLOB, 'string', 'string', 'void *', 'string', 'int', PDATA_BLOB]]
+});
+
+function encrypt(plaintext) {
+    let buf = Buffer.from(plaintext, 'utf16le');
+    let dataBlobInput = new DATA_BLOB();
+    dataBlobInput.pbData = buf;
+    dataBlobInput.cbData = buf.length;
+    let dataBlobOutput = ref.alloc(DATA_BLOB);
+    let result = Crypto.CryptProtectData(dataBlobInput.ref(), null, null, null, null, 0, dataBlobOutput);    
+    let outputDeref = dataBlobOutput.deref();
+    let ciphertext = ref.reinterpret(outputDeref.pbData, outputDeref.cbData, 0);
+    return ciphertext.toString('base64');
+};
+
+function decrypt(ciphertext) {
+    let buf = Buffer.from(ciphertext, 'base64');
+    let dataBlobInput = new DATA_BLOB();
+    dataBlobInput.pbData = buf;
+    dataBlobInput.cbData = buf.length;
+    let dataBlobOutput = ref.alloc(DATA_BLOB);
+    let result = Crypto.CryptUnprotectData(dataBlobInput.ref(), null, null, null, null, 0, dataBlobOutput);
+    let outputDeref = dataBlobOutput.deref();
+    let plaintext = ref.reinterpret(outputDeref.pbData, outputDeref.cbData, 0);
+    return plaintext.toString('utf16le');
+};
+
+let text = "有死之荣，无生之耻";
+let ciphertext = encrypt(text);
+let plaintext = decrypt(ciphertext);
+
+console.log("text:", text);
+console.log("ciphertext:", ciphertext);
+console.log("plaintext:", plaintext);
+```
+以上代码白嫖自[Github node-ffi Issue#355 comments from Wackerberg](https://github.com/node-ffi/node-ffi/issues/355#issuecomment-338391498) 侵删

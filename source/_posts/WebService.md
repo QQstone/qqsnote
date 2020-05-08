@@ -29,10 +29,10 @@ WebService是SOA的最佳实现之一
 其中import wsdl0.xml 该文件主要是接口的协议
 ```
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions targetNamespace="http://sso.practiceworks.com/DataService/v1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://sso.practiceworks.com/DataService/v1" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex">
+<wsdl:definitions targetNamespace="http://sso.xxxxxxxxxxxxx.com/DataService/v1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://sso.xxxxxxxxxxxxx.com/DataService/v1" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex">
 <wsdl:types>
-	<xsd:schema targetNamespace="http://sso.practiceworks.com/DataService/v1/Imports">
-		<xsd:import schemaLocation="xsd0.xml" namespace="http://sso.practiceworks.com/DataService/v1"/>
+	<xsd:schema targetNamespace="http://sso.xxxxxxxxxxxxx.com/DataService/v1/Imports">
+		<xsd:import schemaLocation="xsd0.xml" namespace="http://sso.xxxxxxxxxxxxx.com/DataService/v1"/>
 		<xsd:import schemaLocation="xsd1.xml" namespace="http://schemas.microsoft.com/2003/10/Serialization/"/>
 		<xsd:import schemaLocation="xsd2.xml" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
 	</xsd:schema>
@@ -45,8 +45,8 @@ WebService是SOA的最佳实现之一
 	</wsdl:message>
 	<wsdl:portType name="ISsoDataService">
 		<wsdl:operation name="ValidateAccountLogin">
-			<wsdl:input wsaw:Action="http://sso.practiceworks.com/DataService/v1/ISsoDataService/ValidateAccountLogin" message="tns:ISsoDataService_ValidateAccountLogin_InputMessage"/>
-			<wsdl:output wsaw:Action="http://sso.practiceworks.com/DataService/v1/ISsoDataService/ValidateAccountLoginResponse" message="tns:ISsoDataService_ValidateAccountLogin_OutputMessage"/>
+			<wsdl:input wsaw:Action="http://sso.xxxxxxxxxxxxx.com/DataService/v1/ISsoDataService/ValidateAccountLogin" message="tns:ISsoDataService_ValidateAccountLogin_InputMessage"/>
+			<wsdl:output wsaw:Action="http://sso.xxxxxxxxxxxxx.com/DataService/v1/ISsoDataService/ValidateAccountLoginResponse" message="tns:ISsoDataService_ValidateAccountLogin_OutputMessage"/>
 		</wsdl:operation>
 	</wsdl:portType>
 </wsdl:definitions>
@@ -102,5 +102,5 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
 
 </soap:Envelope>
 ```
-![Postman](https://tva1.sinaimg.cn/large/a60edd42gy1g8wc0ixbftj20lj0kdjte.jpg)
+![Postman](https://tva1.sinaimg.cn/large/a60edd42gy1gdkyuld5t2j20kn0k6764.jpg)
 参考 [Web Service概念梳理](https://www.cnblogs.com/fnng/p/5524801.html)

@@ -14,6 +14,13 @@ categories:
 ```
 echo %JAVA_HOME% | clip
 ```
+#### 显示文件树
+```
+# 显示目录
+tree
+# 递归全部目录及文件
+tree/F
+```
 #### 调用和输出
 
 command|comments 
@@ -43,3 +50,9 @@ run ie4uinit -show
 chkdsk /f
 ```
 检索到了网络上的解决方法chkdsk /f /x /r，后面的参数会极大增加修复错误花的时间，而且/x /r 都包含了/f (fixes errors on the disk. The disk must be locked. If chkdsk cannot lock the drive, a message appears that asks you if you want to check the drive the next time you restart the computer.)
+#### 查找进程及其杀灭
+```
+tasklist|grep cscportal
+
+taskkill /IM "cscportal.exe" /F
+```

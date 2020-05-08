@@ -62,6 +62,18 @@ body{
     background:transparent
 }
 ```
+#### 交互
+保持置顶
+```
+ win = new BrowserWindow({
+    alwaysOnTop: true
+  });
+```
+无窗口UI的拖动<br>
+设置响应鼠标拖动区域，用css标记-webkit-app-region: drag<br>
+参考官方文档: [frameless window 可拖拽区域](https://www.electronjs.org/docs/api/frameless-window#%E5%8F%AF%E6%8B%96%E6%8B%BD%E5%8C%BA)
+
+[electron-drag](https://github.com/kapetan/electron-drag) 方案
 #### 命令及参数
 开发模式electron . [args]
 ```
@@ -90,14 +102,23 @@ args = process.argv.splice(1)
   "files": [
     "**/*",
     "!package.json",
-    "!src/"
+    "!src/",
+    "src/app/shared/*", // 打包main调用的模块（.js）
+    "!src/app/shared/*.ts" // 忽略ts源文件
   ],
   // windows环境
   "win": {
     "target": [
       "nsis", // 使用nsis工具生成安装包
       "zip"   // 生成zip免安装压缩包
-    ]
+    ],
+    // code sign（代码签名）
+    "signingHashAlgorithms":["sha1"], // sign algorithms ['sha1', 'sha256']
+    "certificateFile":"build/cert/XXXXX.pfx", // 证书路径
+    "certificatePassword":"XXXXXXX",  // 证书密码
+    "verifyUpdateCodeSignature":false, // 安装前是否验证签名可用更新（available update）
+    "rfc3161TimeStampServer": "http://timestamp.digicert.com", // time stamp server
+    "signDlls": true //是否签名DLL
   },
   "nsis":{
     "oneClick":false, // 禁用一键安装
@@ -109,6 +130,8 @@ args = process.argv.splice(1)
   "linux": {}
 }
 ```
+[How to share costom .ts file between main.ts and Angular app](https://github.com/maximegris/angular-electron/issues/460#issuecomment-608650812)<br>
+即将文件或目录添加到打包文件的parttern表达式中
 #### nsis宏命令 installer.nsh
 ```
 !macro customInstall

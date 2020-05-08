@@ -7,7 +7,12 @@ categories:
 - Linux 
 ---
 Please keep learning --> [Linux工具快速教程](https://linuxtools-rst.readthedocs.io/zh_CN/latest/)
-#### trial
+#### 查找文件
+find [path] -name [filename]
+```
+find / -name filename
+```
+#### tail
 ```
 tail -f filename
 ```
@@ -110,8 +115,9 @@ crontab
 // 列出该用户的计时器设置
 crontab -l
 // 编辑该用户的计时器设置
-crontab -e
+crontab -u username -e
 ```
+不指定username 则以root用户身份执行
 > 计划任务分为<b>系统任务调度</b>和<b>用户任务调度</b>两类<br>
 系统任务调度：系统周期性所要执行的工作，比如写缓存数据到硬盘、日志清理等 见/etc/crontab时日周月计划。<br>
 用户任务调度：用户可以使用 crontab 工具来定制自己的计划任务。所有用户定义的crontab文件都被保存在/var/spool/cron目录中。其文件名与用户名一致
@@ -157,6 +163,31 @@ MAILTO=root
 */15 * * * * pwd 每15分钟执行一次pwd命令 <br>
 20 6 */10 * * pwd 每个月中，每隔10天6:20执行一次pwd命令
 
+开启系统cron日志<br>
+sudo vim /etc/rsyslog.d/50-default.conf 取消注释
+```
+cron.log
+```
+即可在/var/log/syslog中看到关于CRON的log
+> ISSUE: No MTA installed, discarding output 
+
+cron默认将console output用邮件发送，task有控制台输出但未配置邮件则记如上日志，可以将console output重定向到文件
+```
+echo "" > /home/QQs/corn.log
+```
+若task执行中间过程有报错，报错信息仍会以Email形式发送，非安装邮件服务器不能解决
+[安装postfix](https://cloud.tencent.com/developer/article/1165056)
+
+注意，crontab task 若以root权限执行（syslog中可以看到），root若无重定向日志文件的写权限，仍然会报 “No MTA installed, discarding output”
+
+重载CRON服务
+```
+sudo service cron reload
+```
+启动/关闭
+```
+sudo service cron start/stop
+```
 #### Ubuntu timezone
 显示时间:
 ```

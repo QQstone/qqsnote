@@ -2,6 +2,9 @@
 title: Angular 响应式表单
 date: 2020-01-19 14:30:27
 tags:
+- Angular
+categories: 
+- 前端技术
 ---
 #### 注册响应式表单模块
 <del>该模块定义了响应式表单涉及到的组件等类型或构造方法</del>
