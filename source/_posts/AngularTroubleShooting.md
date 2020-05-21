@@ -44,3 +44,6 @@ import { NumberInputDirective } from '../common/number-input.directive';
     exports:[NumberInputDirective]
 export class SharedModule {}
 ```
+### angular.json "should NOT have additional properties(xxxx)"
+
+因框架版本问题（归根结蒂是包版本差异问题），不支持xxx属性，如angular原生国际化配置v8与v9存在配置差异，查看文档应区分文档版本

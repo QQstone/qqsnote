@@ -16,7 +16,7 @@ Manage Jenkins菜单 --> Manage Plugins
 如有需要填写Global npm packages to install项
 如
 ```
-@angular/cli@8.2.2 electron@6.0.2 electron-builder@21.2.0
+@angular/cli@8.2.2 electron@6.0.2 electron-builder@21.2.0 node-gyp@6.1.0
 ```
 
 ### 添加和使用credentials 有用户名密码模式 ssh模式等

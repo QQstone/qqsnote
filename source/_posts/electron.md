@@ -193,3 +193,7 @@ app.on('window-all-closed', () => {
   }
 })
 ```
+#### shell.openExternal
+> Open the given external protocol URL in the desktop's default manner. 对于系统支持的协议，以系统默认行为打开URL
+
+windows 开始 搜索“按协议指定默认应用程序”或“Choose default apps by protocol”

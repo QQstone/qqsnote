@@ -56,3 +56,12 @@ tasklist|grep cscportal
 
 taskkill /IM "cscportal.exe" /F
 ```
+#### 琐碎文件的删除
+win10 系统中删除文件夹，会进行文件统计，对于文件目录和源代码目录琐碎的情形，它敢给你统计几个小时，正确的删除姿势有两种
+a. 安全模式
+
+b. 命令行(分两步：删除文件；删除目录)
+```
+del /s/f/q node_modules
+rmdir /s/q node_modules
+```
