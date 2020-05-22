@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="Please keep learning –&amp;gt; Linux工具快速教程 查找文件find [path] -name [filename] 1find / -name filename tail1tail -f filename tail命令读取文件内容到标准输出，-f 循环读取，上述命令查找文件中最尾部的内容显示在屏幕上,并且不断刷新,使你看到最新的文件内容 filename 可以是多个文件">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-04-28T02:27:42.680Z">
+<meta property="og:updated_time" content="2020-05-07T07:04:43.395Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux命令行工具">
 <meta name="twitter:description" content="Please keep learning –&amp;gt; Linux工具快速教程 查找文件find [path] -name [filename] 1find / -name filename tail1tail -f filename tail命令读取文件内容到标准输出，-f 循环读取，上述命令查找文件中最尾部的内容显示在屏幕上,并且不断刷新,使你看到最新的文件内容 filename 可以是多个文件">
@@ -366,7 +366,8 @@ Ctrl + Z
 <h4 id="定时任务"><a href="#定时任务" class="headerlink" title="定时任务"></a>定时任务</h4><p>查看服务状态
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service cron status</span><br></pre></td></tr></table></figure></p>
 <p>crontab
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 列出该用户的计时器设置</span><br><span class="line">crontab -l</span><br><span class="line">// 编辑该用户的计时器设置</span><br><span class="line">crontab -e</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 列出该用户的计时器设置</span><br><span class="line">crontab -l</span><br><span class="line">// 编辑该用户的计时器设置</span><br><span class="line">crontab -u username -e</span><br></pre></td></tr></table></figure></p>
+<p>不指定username 则以root用户身份执行</p>
 <blockquote>
 <p>计划任务分为<b>系统任务调度</b>和<b>用户任务调度</b>两类<br>
 系统任务调度：系统周期性所要执行的工作，比如写缓存数据到硬盘、日志清理等 见/etc/crontab时日周月计划。<br>
@@ -409,9 +410,13 @@ sudo vim /etc/rsyslog.d/50-default.conf 取消注释
 </blockquote>
 <p>cron默认将console output用邮件发送，task有控制台输出但未配置邮件则记如上日志，可以将console output重定向到文件
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;&quot; &gt; /home/QQs/corn.log</span><br></pre></td></tr></table></figure></p>
-<p>注意，crontab task 是以root权限执行的（syslog中可以看到），因此root若无重定向日志文件的写权限，仍然会报 “No MTA installed, discarding output”</p>
-<p>重启CRON服务
+<p>若task执行中间过程有报错，报错信息仍会以Email形式发送，非安装邮件服务器不能解决
+<a href="https://cloud.tencent.com/developer/article/1165056" target="_blank" rel="noopener">安装postfix</a></p>
+<p>注意，crontab task 若以root权限执行（syslog中可以看到），root若无重定向日志文件的写权限，仍然会报 “No MTA installed, discarding output”</p>
+<p>重载CRON服务
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service cron reload</span><br></pre></td></tr></table></figure></p>
+<p>启动/关闭
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service cron start/stop</span><br></pre></td></tr></table></figure></p>
 <h4 id="Ubuntu-timezone"><a href="#Ubuntu-timezone" class="headerlink" title="Ubuntu timezone"></a>Ubuntu timezone</h4><p>显示时间:
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date -R</span><br></pre></td></tr></table></figure></p>
 <p>某年月日，测试scheduled tasks，总是无法在期望时间触发，经查系统时间为‘Universal Time’（即格林威治时间时间）
@@ -543,7 +548,7 @@ sudo vim /etc/rsyslog.d/50-default.conf 取消注释
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">113</span>
+                  <span class="site-state-item-count">121</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -565,7 +570,7 @@ sudo vim /etc/rsyslog.d/50-default.conf 取消注释
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

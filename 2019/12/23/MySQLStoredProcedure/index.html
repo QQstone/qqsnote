@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="MySQL,">
+  <meta name="keywords" content="MySQL StoredProcedure,">
 
 
 
@@ -80,14 +80,14 @@
 
 
 <meta name="description" content="概念 存储过程（Stored Procedure）是一种在数据库中存储复杂程序，以便外部程序调用的一种数据库对象。 存储过程是为了完成特定功能的SQL语句集，经编译创建并保存在数据库中，用户可通过指定存储过程的名字并给定参数(需要时)来调用执行。 存储过程思想上很简单，就是数据库 SQL 语言层面的代码封装与重用。   存储过程可封装，并隐藏复杂的商业逻辑。 当dba与后台开发分离时，代码将以ca">
-<meta name="keywords" content="MySQL">
+<meta name="keywords" content="MySQL StoredProcedure">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL 存储过程">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/12/23/MySQLStoredProcedure/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="概念 存储过程（Stored Procedure）是一种在数据库中存储复杂程序，以便外部程序调用的一种数据库对象。 存储过程是为了完成特定功能的SQL语句集，经编译创建并保存在数据库中，用户可通过指定存储过程的名字并给定参数(需要时)来调用执行。 存储过程思想上很简单，就是数据库 SQL 语言层面的代码封装与重用。   存储过程可封装，并隐藏复杂的商业逻辑。 当dba与后台开发分离时，代码将以ca">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-01-13T01:34:40.864Z">
+<meta property="og:updated_time" content="2020-05-19T04:40:02.592Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL 存储过程">
 <meta name="twitter:description" content="概念 存储过程（Stored Procedure）是一种在数据库中存储复杂程序，以便外部程序调用的一种数据库对象。 存储过程是为了完成特定功能的SQL语句集，经编译创建并保存在数据库中，用户可通过指定存储过程的名字并给定参数(需要时)来调用执行。 存储过程思想上很简单，就是数据库 SQL 语言层面的代码封装与重用。   存储过程可封装，并隐藏复杂的商业逻辑。 当dba与后台开发分离时，代码将以ca">
@@ -331,10 +331,17 @@
 <li>存储过程可封装，并隐藏复杂的商业逻辑。<br>
 当dba与后台开发分离时，代码将以call xStoredProcedure 的形式访问数据库</li>
 <li>存储过程可以回传值，并可以接受参数。</li>
-<li>存储过程，往往定制化于特定的数据库上，因为支持的编程语言不同。当切换到其他厂商的数据库系统时，需要重写原有的存储过程。</li>
+<li>存储过程，往往定制化于特定的数据库上，因为支持的编程语言不同。当切换到其他厂商的数据库系统时，需要重写原有的存储过程。<h4 id="使用存储过程-or-使用-DAO-SQL"><a href="#使用存储过程-or-使用-DAO-SQL" class="headerlink" title="使用存储过程 or 使用 DAO SQL"></a>使用存储过程 or 使用 DAO SQL</h4>Stored Procedure|DAO SQL
+:—–|:—-
+数据操作与底层业务解耦，以提供多方使用|不同服务做类似查询需要各自实现
+版本控制与代码分离|一致地版本控制
+仅需开发select和execuate权限|底层应用掌握较高地数据库权限
+增加了数据库运算压力|
+无法应对分表等业务扩展|扩展灵活
+数据库层面拼接查询或无法使用到索引|
+法国人说，使用存储过程封装数据操作主要是因为第一条地目的，然而私以为解耦数据操作和业务的话添加基础服务或中间件更好一些<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><h4 id="0-语句结构"><a href="#0-语句结构" class="headerlink" title="0 语句结构"></a>0 语句结构</h4>修改语句结束符，从分号 ; 临时改为两个 $$，使得过程体中使用的分号被直接传递到服务器，而不会被客户端（如mysql）解释。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER $$</span><br><span class="line">或</span><br><span class="line">DELIMITER //</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><h4 id="0-语句结构"><a href="#0-语句结构" class="headerlink" title="0 语句结构"></a>0 语句结构</h4><p>修改语句结束符，从分号 ; 临时改为两个 $$，使得过程体中使用的分号被直接传递到服务器，而不会被客户端（如mysql）解释。
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER $$</span><br><span class="line">或</span><br><span class="line">DELIMITER //</span><br></pre></td></tr></table></figure></p>
 <p>过程体，类似其他变成语言中{语句块}
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BEGIN .... END</span><br></pre></td></tr></table></figure></p>
 <h4 id="1-变量"><a href="#1-变量" class="headerlink" title="1 变量"></a>1 变量</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-- 存储过程变量，只能在存储过程定义中使用</span><br><span class="line">DECLARE l_int int unsigned default 4000000; </span><br><span class="line">-- 用户变量，可以在会话任意位置使用</span><br><span class="line">SET @p_in=1  </span><br><span class="line">SELECT &apos;Hello World&apos; into @x;</span><br></pre></td></tr></table></figure>
@@ -366,7 +373,7 @@
       
         <div class="post-tags">
           
-            <a href="/qqsnote/tags/MySQL/" rel="tag"># MySQL</a>
+            <a href="/qqsnote/tags/MySQL-StoredProcedure/" rel="tag"># MySQL StoredProcedure</a>
           
         </div>
       
@@ -468,7 +475,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">113</span>
+                  <span class="site-state-item-count">121</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -490,7 +497,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -523,7 +530,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">2.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0-语句结构"><span class="nav-number">2.1.</span> <span class="nav-text">0 语句结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-变量"><span class="nav-number">2.2.</span> <span class="nav-text">1 变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-函数"><span class="nav-number">2.3.</span> <span class="nav-text">2 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-入参出参"><span class="nav-number">2.4.</span> <span class="nav-text">3 入参出参</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条件分支"><span class="nav-number">2.5.</span> <span class="nav-text">条件分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#循环"><span class="nav-number">2.6.</span> <span class="nav-text">循环</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#游标"><span class="nav-number">2.7.</span> <span class="nav-text">游标</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用存储过程-or-使用-DAO-SQL"><span class="nav-number">1.1.</span> <span class="nav-text">使用存储过程 or 使用 DAO SQL</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">2.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0-语句结构"><span class="nav-number">2.1.</span> <span class="nav-text">0 语句结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-变量"><span class="nav-number">2.2.</span> <span class="nav-text">1 变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-函数"><span class="nav-number">2.3.</span> <span class="nav-text">2 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-入参出参"><span class="nav-number">2.4.</span> <span class="nav-text">3 入参出参</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条件分支"><span class="nav-number">2.5.</span> <span class="nav-text">条件分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#循环"><span class="nav-number">2.6.</span> <span class="nav-text">循环</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#游标"><span class="nav-number">2.7.</span> <span class="nav-text">游标</span></a></li></ol></li></ol></div>
             
 
           </div>

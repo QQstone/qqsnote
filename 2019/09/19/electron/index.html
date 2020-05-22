@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="须知，vscode是Electron应用，atom是Electron应用，GeForce Experience也是Electron应用，还有Skype。。。  本质是使用chronium浏览器内核和HTML实现应用程序UI，底层业务是基于js”粘合”的，即除了require nodejs native modules之外，还可以将基于其他技术生态的组件集成进来，这里会用到webpack打包。 得">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-04-28T02:49:46.746Z">
+<meta property="og:updated_time" content="2020-05-15T03:22:55.548Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Electron 入坑">
 <meta name="twitter:description" content="须知，vscode是Electron应用，atom是Electron应用，GeForce Experience也是Electron应用，还有Skype。。。  本质是使用chronium浏览器内核和HTML实现应用程序UI，底层业务是基于js”粘合”的，即除了require nodejs native modules之外，还可以将基于其他技术生态的组件集成进来，这里会用到webpack打包。 得">
@@ -389,6 +389,10 @@
 <h4 id="BrowserWindow-loadURL-Issue"><a href="#BrowserWindow-loadURL-Issue" class="headerlink" title="BrowserWindow.loadURL Issue"></a>BrowserWindow.loadURL Issue</h4><h4 id="npm-ERR-code-ELIFECYCLE"><a href="#npm-ERR-code-ELIFECYCLE" class="headerlink" title="npm ERR! code ELIFECYCLE"></a>npm ERR! code ELIFECYCLE</h4><p>double free exception,重复释放资源，错误使用app.exit()出现此异常
 如
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">app.on(&apos;window-all-closed&apos;, () =&gt; &#123;</span><br><span class="line">  if (process.platform !== &apos;darwin&apos;) &#123;</span><br><span class="line">    // app.quit(); // safe!</span><br><span class="line">    app.exit(-1) // ELIFECYCLE Exception!!</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<h4 id="shell-openExternal"><a href="#shell-openExternal" class="headerlink" title="shell.openExternal"></a>shell.openExternal</h4><blockquote>
+<p>Open the given external protocol URL in the desktop’s default manner. 对于系统支持的协议，以系统默认行为打开URL</p>
+</blockquote>
+<p>windows 开始 搜索“按协议指定默认应用程序”或“Choose default apps by protocol”</p>
 
       
     </div>
@@ -508,7 +512,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">113</span>
+                  <span class="site-state-item-count">121</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -530,7 +534,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -563,7 +567,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#构建项目框架"><span class="nav-number">1.</span> <span class="nav-text">构建项目框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#webpack-target"><span class="nav-number">2.</span> <span class="nav-text">webpack target</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IPC"><span class="nav-number">3.</span> <span class="nav-text">IPC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#资源打包关于asar-vbscript"><span class="nav-number">4.</span> <span class="nav-text">资源打包关于asar vbscript</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式-单例参数更新"><span class="nav-number">5.</span> <span class="nav-text">单例模式 单例参数更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#外观"><span class="nav-number">6.</span> <span class="nav-text">外观</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#交互"><span class="nav-number">7.</span> <span class="nav-text">交互</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令及参数"><span class="nav-number">8.</span> <span class="nav-text">命令及参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#electron-builder"><span class="nav-number">9.</span> <span class="nav-text">electron-builder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nsis宏命令-installer-nsh"><span class="nav-number">10.</span> <span class="nav-text">nsis宏命令 installer.nsh</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调试主进程"><span class="nav-number">11.</span> <span class="nav-text">调试主进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自动更新服务"><span class="nav-number">12.</span> <span class="nav-text">自动更新服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BrowserWindow-loadURL-Issue"><span class="nav-number">13.</span> <span class="nav-text">BrowserWindow.loadURL Issue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#npm-ERR-code-ELIFECYCLE"><span class="nav-number">14.</span> <span class="nav-text">npm ERR! code ELIFECYCLE</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#构建项目框架"><span class="nav-number">1.</span> <span class="nav-text">构建项目框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#webpack-target"><span class="nav-number">2.</span> <span class="nav-text">webpack target</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IPC"><span class="nav-number">3.</span> <span class="nav-text">IPC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#资源打包关于asar-vbscript"><span class="nav-number">4.</span> <span class="nav-text">资源打包关于asar vbscript</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式-单例参数更新"><span class="nav-number">5.</span> <span class="nav-text">单例模式 单例参数更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#外观"><span class="nav-number">6.</span> <span class="nav-text">外观</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#交互"><span class="nav-number">7.</span> <span class="nav-text">交互</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令及参数"><span class="nav-number">8.</span> <span class="nav-text">命令及参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#electron-builder"><span class="nav-number">9.</span> <span class="nav-text">electron-builder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nsis宏命令-installer-nsh"><span class="nav-number">10.</span> <span class="nav-text">nsis宏命令 installer.nsh</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调试主进程"><span class="nav-number">11.</span> <span class="nav-text">调试主进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自动更新服务"><span class="nav-number">12.</span> <span class="nav-text">自动更新服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BrowserWindow-loadURL-Issue"><span class="nav-number">13.</span> <span class="nav-text">BrowserWindow.loadURL Issue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#npm-ERR-code-ELIFECYCLE"><span class="nav-number">14.</span> <span class="nav-text">npm ERR! code ELIFECYCLE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shell-openExternal"><span class="nav-number">15.</span> <span class="nav-text">shell.openExternal</span></a></li></ol></div>
             
 
           </div>
