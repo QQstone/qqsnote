@@ -238,10 +238,3 @@ Please run \`ng add @angular/localize\` from the Angular CLI.
     })
     export class AppModule { }
    ```
-#### ngx-translate
-> NGX-Translate is an internationalization library for Angular. NGX-Translate is also extremely modular. It is written in a way that makes it really easy to replace any part with a custom implementation in case the existing one doesn't fit your needs.
-
-载入翻译文件
-+ [Http Loader](https://github.com/ngx-translate/http-loader): load json translation files with http
-+ [Angular Universal Loader](https://gist.github.com/ocombe/593d21598d988bf6a8609ba5fc00b67e): load json translation files with fs instead of http
-+ [Po Loader](https://github.com/biesbjerg/ng2-translate-po-loader): load .po files with http
