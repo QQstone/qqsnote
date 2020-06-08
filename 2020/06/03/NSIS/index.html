@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/qqsnote/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/qqsnote/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/qqsnote/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="NSIS,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="变量和常量a. 用var关键字来定义变量，使用$来引用变量。 b. 寄存器变量 \$0~\$9,\$R0~\$R9 c. 系统预置变量  \$INSTDIR 用户定义的解压路径。 \$PROGRAMFILES 程序文件目录(通常为 C:\Program Files 但是运行时会检测)。 \$COMMONFILES 公用文件目录。这是应用程序共享组件的目录(通常为 C:\Program Files\">
+<meta name="keywords" content="NSIS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NSIS 基础">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/06/03/NSIS/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="变量和常量a. 用var关键字来定义变量，使用$来引用变量。 b. 寄存器变量 \$0~\$9,\$R0~\$R9 c. 系统预置变量  \$INSTDIR 用户定义的解压路径。 \$PROGRAMFILES 程序文件目录(通常为 C:\Program Files 但是运行时会检测)。 \$COMMONFILES 公用文件目录。这是应用程序共享组件的目录(通常为 C:\Program Files\">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-06-08T02:01:41.567Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NSIS 基础">
+<meta name="twitter:description" content="变量和常量a. 用var关键字来定义变量，使用$来引用变量。 b. 寄存器变量 \$0~\$9,\$R0~\$R9 c. 系统预置变量  \$INSTDIR 用户定义的解压路径。 \$PROGRAMFILES 程序文件目录(通常为 C:\Program Files 但是运行时会检测)。 \$COMMONFILES 公用文件目录。这是应用程序共享组件的目录(通常为 C:\Program Files\">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/qqsnote/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://qqstone.github.io/qqsnote/2020/06/03/NSIS/">
+
+
+
+
+
+  <title>NSIS 基础 | QQs'Note</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/qqsnote/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">QQs'Note</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/qqsnote/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/qqsnote/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/06/03/NSIS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">NSIS 基础</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-03T10:49:20+08:00">
+                2020-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="变量和常量"><a href="#变量和常量" class="headerlink" title="变量和常量"></a>变量和常量</h4><p>a. 用var关键字来定义变量，使用$来引用变量。</p>
+<p>b. 寄存器变量 \$0~\$9,\$R0~\$R9</p>
+<p>c. 系统预置变量</p>
+<ul>
+<li>\$INSTDIR
+用户定义的解压路径。</li>
+<li>\$PROGRAMFILES
+程序文件目录(通常为 C:\Program Files 但是运行时会检测)。</li>
+<li>\$COMMONFILES
+公用文件目录。这是应用程序共享组件的目录(通常为 C:\Program Files\Common Files 但是运行时会检测)。</li>
+<li>\$DESKTOP
+Windows 桌面目录(通常为 C:\windows\desktop 但是运行时会检测)。该常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
+<li>\$EXEDIR
+安装程序运行时的位置。(从技术上来说你可以修改改变量，但并不是一个好方法)。</li>
+<li>\${NSISDIR}
+包含 NSIS 安装目录的一个标记。在编译时会检测到。常用于在你想调用一个在 NSIS 目录下的资源时，例如：图标、界面……</li>
+<li>\$WINDIR
+Windows 目录(通常为 C:\windows 或 C:\winnt 但在运行时会检测)</li>
+<li>\$SYSDIR
+Windows 系统目录(通常为 C:\windows\system 或 C:\winnt\system32 但在运行时会检测)</li>
+<li>\$TEMP
+系统临时目录(通常为 C:\windows\temp 但在运行时会检测)</li>
+<li>\$STARTMENU
+开始菜单目录(常用于添加一个开始菜单项，使用 CreateShortCut)。该常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
+<li>\$SMPROGRAMS
+开始菜单程序目录(当你想定位 + \$STARTMENU\程序 时可以使用它)。该常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
+<li>\$SMSTARTUP
+开始菜单程序/启动 目录。该常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
+<li>\$QUICKLAUNCH
+在 IE4 活动桌面及以上的快速启动目录。如果快速启动不可用，仅仅返回和 + \$TEMP 一样。</li>
+<li>\$DOCUMENTS
+文档目录。一个当前用户典型的路径形如 C:\Documents and Settings\Foo\My Documents。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量在 Windows 95 且 Internet Explorer 4 没有安装时无效。</li>
+<li>\$SENDTO
+该目录包含了“发送到”菜单快捷项。</li>
+<li>\$RECENT
+该目录包含了指向用户最近文档的快捷方式。</li>
+<li>\$FAVORITES
+该目录包含了指向用户网络收藏夹、文档等的快捷方式。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量在 Windows 95 且 Internet Explorer 4 没有安装时无效。</li>
+<li>\$MUSIC
+用户的音乐文件目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量仅在 Windows XP、ME 及以上才有效。</li>
+<li>\$PICTURES
+用户的图片目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量仅在 Windows 2000、XP、ME 及以上才有效。</li>
+<li>\$VIDEOS
+用户的视频文件目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量仅在 Windows XP、ME 及以上才有效。</li>
+<li>\$NETHOOD
+该目录包含了可能存在于我的网络位置、网上邻居文件夹的链接对象。
+该常量在 Windows 95 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
+<li>\$FONTS
+系统字体目录。</li>
+<li>\$TEMPLATES
+文档模板目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
+<li>\$APPDATA
+应用程序数据目录。当前用户路径的检测需要 Internet Explorer 4 及以上。所有用户路径的检测需要 Internet Explorer 5 及以上。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量在 Windows 95 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
+<li>\$PRINTHOOD
+该目录包含了可能存在于打印机文件夹的链接对象。
+该常量在 Windows 95 和 Windows 98 上无效。</li>
+<li>\$INTERNET_CACHE
+Internet Explorer 的临时文件目录。
+该常量在 Windows 95 和 Windows NT 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
+<li>\$COOKIES
+Internet Explorer 的 Cookies 目录。
+该常量在 Windows 95 和 Windows NT 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
+<li>\$HISTORY
+Internet Explorer 的历史记录目录。
+该常量在 Windows 95 和 Windows NT 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
+<li>\$PROFILE
+用户的个人配置目录。一个典型的路径如 C:\Documents and Settings\Foo。
+该常量在 Windows 2000 及以上有效。</li>
+<li>\$ADMINTOOLS
+一个保存管理工具的目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量在 Windows 2000、ME 及以上有效。</li>
+<li>\$RESOURCES
+该资源目录保存了主题和其他 Windows 资源(通常为 C:\Windows\Resources 但在运行时会检测)。
+该常量在 Windows XP 及以上有效。</li>
+<li>\$RESOURCES_LOCALIZED
+该本地的资源目录保存了主题和其他 Windows 资源(通常为 C:\Windows\Resources\1033 但在运行时会检测)。
+该常量在 Windows XP 及以上有效。</li>
+<li>\$CDBURN_AREA
+一个在烧录 CD 时储存文件的目录。.
+该常量在 Windows XP 及以上有效。</li>
+<li>\$HWNDPARENT
+父窗口的十进制 HWND。</li>
+<li>\$PLUGINSDIR
+该路径是一个临时目录，当第一次使用一个插件或一个调用 InitPluginsDir 时被创建。该文件夹当解压包退出时会被自动删除。这个文件夹的用意是用来保存给 InstallOptions 使用的 INI 文件、启动画面位图或其他插件运行需要的文件。</li>
+</ul>
+<h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><p>NSIS函数本身没有输出输出，但是可以访问变量和堆栈<br>
+使用Pop Push实现输入输出
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Function LCIDtoTAG </span><br><span class="line">    $&#123;case&#125; &quot;1036&quot;</span><br><span class="line">    Push &quot;fr_FR&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;case&#125; &quot;1049&quot;</span><br><span class="line">    Push &quot;ru_RU&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;case&#125; &quot;1041&quot;</span><br><span class="line">    Push &quot;ja_JP&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;case&#125; &quot;2052&quot;</span><br><span class="line">    Push &quot;zh_CN&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;default&#125;</span><br><span class="line">    Push &quot;en_US&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;endswitch&#125;</span><br><span class="line">FunctionEnd</span><br><span class="line">Section</span><br><span class="line">    Call LCIDtoTAG</span><br><span class="line">    Pop $0</span><br><span class="line">SectionEnd</span><br></pre></td></tr></table></figure></p>
+<h4 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">StrCmp $1 &quot;&quot; +1 +2</span><br><span class="line">DetailPrint &quot;parameter is empty&quot;</span><br><span class="line"></span><br><span class="line">DetailPrint &quot;parameter is not empty&quot;</span><br></pre></td></tr></table></figure>
+<p>+n是从该语句向下偏移的“指针”，空行过滤掉不计入偏移量</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/qqsnote/tags/NSIS/" rel="tag"># NSIS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/qqsnote/2020/06/01/NSIS-plugin/" rel="next" title="NSIS插件">
+                <i class="fa fa-chevron-left"></i> NSIS插件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/qqsnote/2020/06/05/fastDFS/" rel="prev" title="FastDFS">
+                FastDFS <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">QQs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/qqsnote/archives/">
+              
+                  <span class="site-state-item-count">124</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/qqsnote/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/qqsnote/tags/index.html">
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#变量和常量"><span class="nav-number">1.</span> <span class="nav-text">变量和常量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#函数"><span class="nav-number">2.</span> <span class="nav-text">函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跳转"><span class="nav-number">3.</span> <span class="nav-text">跳转</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/qqsnote/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/qqsnote/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/qqsnote/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/qqsnote/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/qqsnote/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

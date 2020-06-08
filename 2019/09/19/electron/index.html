@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="须知，vscode是Electron应用，atom是Electron应用，GeForce Experience也是Electron应用，还有Skype。。。  本质是使用chronium浏览器内核和HTML实现应用程序UI，底层业务是基于js”粘合”的，即除了require nodejs native modules之外，还可以将基于其他技术生态的组件集成进来，这里会用到webpack打包。 得">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-05-15T03:22:55.548Z">
+<meta property="og:updated_time" content="2020-06-08T01:37:38.307Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Electron 入坑">
 <meta name="twitter:description" content="须知，vscode是Electron应用，atom是Electron应用，GeForce Experience也是Electron应用，还有Skype。。。  本质是使用chronium浏览器内核和HTML实现应用程序UI，底层业务是基于js”粘合”的，即除了require nodejs native modules之外，还可以将基于其他技术生态的组件集成进来，这里会用到webpack打包。 得">
@@ -370,10 +370,36 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&quot;productName&quot;: &quot;CSCportal&quot;,</span><br><span class="line">  &quot;directories&quot;: &#123;</span><br><span class="line">    &quot;output&quot;: &quot;release/&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  // 额外打包的资源 不会打包到\resources\app.asar</span><br><span class="line">  // 以下规则将文件单独打包到\resources\addon</span><br><span class="line">  &quot;extraResources&quot;: &#123;</span><br><span class="line">    &quot;from&quot;: &quot;addon/&quot;,</span><br><span class="line">    &quot;to&quot;: &quot;addon/&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  // 额外打包配置文件到根目录</span><br><span class="line">  &quot;extraFiles&quot;:[&quot;config.xml&quot;],</span><br><span class="line">  // 打包文件的parttern表达式</span><br><span class="line">  &quot;files&quot;: [</span><br><span class="line">    &quot;**/*&quot;,</span><br><span class="line">    &quot;!package.json&quot;,</span><br><span class="line">    &quot;!src/&quot;,</span><br><span class="line">    &quot;src/app/shared/*&quot;, // 打包main调用的模块（.js）</span><br><span class="line">    &quot;!src/app/shared/*.ts&quot; // 忽略ts源文件</span><br><span class="line">  ],</span><br><span class="line">  // windows环境</span><br><span class="line">  &quot;win&quot;: &#123;</span><br><span class="line">    &quot;target&quot;: [</span><br><span class="line">      &quot;nsis&quot;, // 使用nsis工具生成安装包</span><br><span class="line">      &quot;zip&quot;   // 生成zip免安装压缩包</span><br><span class="line">    ],</span><br><span class="line">    // code sign（代码签名）</span><br><span class="line">    &quot;signingHashAlgorithms&quot;:[&quot;sha1&quot;], // sign algorithms [&apos;sha1&apos;, &apos;sha256&apos;]</span><br><span class="line">    &quot;certificateFile&quot;:&quot;build/cert/XXXXX.pfx&quot;, // 证书路径</span><br><span class="line">    &quot;certificatePassword&quot;:&quot;XXXXXXX&quot;,  // 证书密码</span><br><span class="line">    &quot;verifyUpdateCodeSignature&quot;:false, // 安装前是否验证签名可用更新（available update）</span><br><span class="line">    &quot;rfc3161TimeStampServer&quot;: &quot;http://timestamp.digicert.com&quot;, // time stamp server</span><br><span class="line">    &quot;signDlls&quot;: true //是否签名DLL</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;nsis&quot;:&#123;</span><br><span class="line">    &quot;oneClick&quot;:false, // 禁用一键安装</span><br><span class="line">    &quot;perMachine&quot;:true, // 为所有用户安装</span><br><span class="line">    &quot;allowToChangeInstallationDirectory&quot;:true, // 自定义安装路径</span><br><span class="line">    &quot;include&quot;:&quot;build/installer.nsh&quot; // 包含脚本</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;mac&quot;: &#123;&#125;,</span><br><span class="line">  &quot;linux&quot;: &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><a href="https://github.com/maximegris/angular-electron/issues/460#issuecomment-608650812" target="_blank" rel="noopener">How to share costom .ts file between main.ts and Angular app</a><br>
 即将文件或目录添加到打包文件的parttern表达式中</p>
-<h4 id="nsis宏命令-installer-nsh"><a href="#nsis宏命令-installer-nsh" class="headerlink" title="nsis宏命令 installer.nsh"></a>nsis宏命令 installer.nsh</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!macro customInstall</span><br><span class="line">  WriteRegStr HKLM &quot;SOFTWARE\Carestream Dental\CSCportal&quot; &quot;InstallDir&quot; $INSTDIR</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure>
+<h4 id="nsis宏命令-installer-nsh"><a href="#nsis宏命令-installer-nsh" class="headerlink" title="nsis宏命令 installer.nsh"></a>nsis宏命令 installer.nsh</h4><p>在electron-builder.json配置中引入.nsh脚本，脚本定义了NSIS打包生命周期中插入的宏指令<br>
+可插入宏：</p>
+<ul>
+<li><p><b>customHeader</b> 
+可以配置NSIS的一些环境或运行条件，如显示详细信息框：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">!macro customHeader</span><br><span class="line">  ShowInstDetails show</span><br><span class="line">  ShowUninstDetails show</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure>
+<p>详见<a href="https://github.com/electron-userland/electron-builder/blob/c35b3150536be66a9e1c2aae75f7e8f7f610699d/packages/app-builder-lib/templates/nsis/installer.nsi" target="_blank" rel="noopener">调用源码</a></p>
+</li>
+<li><b>preInit</b><br>This macro is inserted at the beginning of the NSIS .OnInit callback</li>
+<li><b>customInit</b></li>
+<li><b>customUnInit</b></li>
+<li><b>customInstall</b>
+安装</li>
+<li><b>customUnInstall</b>
+卸载</li>
+<li><b>customRemoveFiles</b></li>
+<li><b>customInstallMode</b><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!macro customInstall</span><br><span class="line">  WriteRegStr HKLM &quot;SOFTWARE\Carestream Dental\CSCportal&quot; &quot;InstallDir&quot; $INSTDIR</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 <p>uninstaller.nsh
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!macro customUnInstall</span><br><span class="line">    DeleteRegKey HKLM &quot;SOFTWARE\Carestream Dental\CSCportal&quot; &quot;InstallDir&quot;</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure></p>
-<p>参考 <a href="https://www.electron.build/configuration/nsis" target="_blank" rel="noopener">electron-builder文档nsis部分</a></p>
+<p>BUILD_RESOURCES_DIR and PROJECT_DIR are defined.</p>
+<p>build is added as addincludedir (i.e. you don’t need to use BUILD_RESOURCES_DIR to include files).</p>
+<p>build/x86-unicode and build/x86-ansi are added as addplugindir.
+<span style="color:#ff0;font-weight:bold">Caution!</span> 我的angular-electron6项目中，仍然要手动载入plugin，写法同《NSIS插件》笔记中的代码</p>
+<p>File associations macro registerFileAssociations and unregisterFileAssociations are still defined.</p>
+<p>LogicLib.nsh默认已包含</p>
+<p>All other electron-builder specific flags (e.g. ONE_CLICK) are still defined.</p>
+<p>参考 <a href="https://www.electron.build/configuration/nsis" target="_blank" rel="noopener">electron-builder文档nsis部分</a> 参考NSIS相关笔记</p>
+<p><span style="color:#ff0;font-weight:bold">Caution!</span>以上文档对应最新版本electron-builder,经实践v22.7.0可以返回build异常信息，应更新并使用新版本</p>
 <h4 id="调试主进程"><a href="#调试主进程" class="headerlink" title="调试主进程"></a>调试主进程</h4><p>VScode launch.json:
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;version&quot;: &quot;0.2.0&quot;,</span><br><span class="line">  &quot;configurations&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Debug Main Process&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;node&quot;,</span><br><span class="line">      &quot;request&quot;: &quot;launch&quot;,</span><br><span class="line">      &quot;cwd&quot;: &quot;$&#123;workspaceRoot&#125;&quot;,</span><br><span class="line">      &quot;runtimeExecutable&quot;: &quot;$&#123;workspaceRoot&#125;/node_modules/.bin/electron&quot;,</span><br><span class="line">      &quot;windows&quot;: &#123;</span><br><span class="line">        &quot;runtimeExecutable&quot;: &quot;$&#123;workspaceRoot&#125;/node_modules/.bin/electron.cmd&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;args&quot; : [&quot;.&quot;,&quot;--input=d:\\temp\\input.xml&quot;,&quot;--output=d:\\temp\\output.xml&quot;],</span><br><span class="line">      &quot;outputCapture&quot;: &quot;std&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>此app设计为由其他客户端程序使用命令调起，传入input参数和output参数，注意调试命令的’electron .’中’.’是第一个参数。</p>
@@ -512,7 +538,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">121</span>
+                  <span class="site-state-item-count">124</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -534,7 +560,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

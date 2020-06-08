@@ -229,6 +229,474 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/04/19/video-streaming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/04/19/video-streaming/" itemprop="url">video和视频流</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-19T21:29:16+08:00">
+                2019-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="直播原理"><a href="#直播原理" class="headerlink" title="直播原理"></a>直播原理</h3><h3 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h3><h3 id="H5-video标签"><a href="#H5-video标签" class="headerlink" title="H5 video标签"></a>H5 video标签</h3><h3 id="直播流的制作"><a href="#直播流的制作" class="headerlink" title="直播流的制作"></a>直播流的制作</h3><h3 id="Nginx-ffmpeg"><a href="#Nginx-ffmpeg" class="headerlink" title="Nginx+ffmpeg"></a>Nginx+ffmpeg</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><h3 id="下载RTMP模块并重编译nginx"><a href="#下载RTMP模块并重编译nginx" class="headerlink" title="下载RTMP模块并重编译nginx"></a>下载RTMP模块并重编译nginx</h3><p>官方源代码<a href="https://github.com/arut/nginx-rtmp-module.git" target="_blank" rel="noopener">https://github.com/arut/nginx-rtmp-module.git</a></p>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/local/nginx --add-module=~/nginx-rtmp-module --with-http_ssl_module</span><br></pre></td></tr></table></figure>
+<h4 id="编译并安装"><a href="#编译并安装" class="headerlink" title="编译并安装"></a>编译并安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<h4 id="nginx-reload后报“open-“-usr-local-nginx-logs-nginx-pid”-failed”-执行下面的命令，指定nginx的configure路径"><a href="#nginx-reload后报“open-“-usr-local-nginx-logs-nginx-pid”-failed”-执行下面的命令，指定nginx的configure路径" class="headerlink" title="nginx reload后报“open() “/usr/local/nginx/logs/nginx.pid” failed”,执行下面的命令，指定nginx的configure路径"></a>nginx reload后报“open() “/usr/local/nginx/logs/nginx.pid” failed”,执行下面的命令，指定nginx的configure路径</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./nginx -c /usr/local/nginx/conf/nginx.conf</span><br></pre></td></tr></table></figure>
+<h4 id="编译通过nginx可访问，还没完，配置nginx-conf，在末尾添加rtmp模块配置："><a href="#编译通过nginx可访问，还没完，配置nginx-conf，在末尾添加rtmp模块配置：" class="headerlink" title="编译通过nginx可访问，还没完，配置nginx.conf，在末尾添加rtmp模块配置："></a>编译通过nginx可访问，还没完，配置nginx.conf，在末尾添加rtmp模块配置：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">rtmp&#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 1935;</span><br><span class="line">        chunk_size 4000;</span><br><span class="line"></span><br><span class="line">        # RTMP 直播流配置</span><br><span class="line">        application rtmplive &#123;</span><br><span class="line">            live on;</span><br><span class="line">            max_connections 1024;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # hls 直播流配置</span><br><span class="line">        application hls&#123;</span><br><span class="line">            live on;</span><br><span class="line">            hls on;</span><br><span class="line">            hls_path /usr/local/userdata/live;</span><br><span class="line">            hls_fragment 5s;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>hls_path是分割文件存储路径</p>
+<p>在http模块中添加服务路径
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        location /hls&#123;</span><br><span class="line">            types&#123;</span><br><span class="line">                application/vnd.apple.mpegurl m3u8;</span><br><span class="line">                video/mp2t ts;</span><br><span class="line">            &#125;</span><br><span class="line">            root /usr/local/userdata/live;</span><br><span class="line">            add_header Cache-Control no-cache</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装流媒体文件转换工具ffmpeg"><a href="#安装流媒体文件转换工具ffmpeg" class="headerlink" title="安装流媒体文件转换工具ffmpeg"></a>安装流媒体文件转换工具ffmpeg</h2><p>官方release：<a href="http://www.ffmpeg.org/download.html#releases" target="_blank" rel="noopener">http://www.ffmpeg.org/download.html#releases</a>
+解压
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar jxvf ffmpeg-4.1.3.tar.bz2</span><br></pre></td></tr></table></figure></p>
+<p>执行configure报“yasm/nasm not found or too old. Use –disable-x86asm for a crippled build”,ffmpeg默认的编译器未安装，需使用–disable-x86asm</p>
+<p>将本地视频文件通过nginx推流</p>
+<p>本地视频文件kon.mp4</p>
+<h3 id="推送RTMP流"><a href="#推送RTMP流" class="headerlink" title="推送RTMP流"></a>推送RTMP流</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -re -i test.mp4 -vcodec libx264 -acodec acc -f flv rtmp://127.0.0.1:1935/rtmplive/rtmp</span><br></pre></td></tr></table></figure>
+<h3 id="推送HLS流"><a href="#推送HLS流" class="headerlink" title="推送HLS流"></a>推送HLS流</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -re -i test.mp4 -vcodec libx264 -acodec acc -f flv rtmp://127.0.0.1:1935/hls/stream</span><br></pre></td></tr></table></figure>
+<h2 id="这里有一个关于编码器的坑"><a href="#这里有一个关于编码器的坑" class="headerlink" title="这里有一个关于编码器的坑"></a>这里有一个关于编码器的坑</h2><blockquote>
+<p>vcodec acodec 分别指明了视频、音频的编码器，其实这里可以用copy也就是不需要转码，从官方GitHub下载安装的ffmpeg是没有libx264的编码器的，故而在执行上述推流命令时报unkown encoder libx264</p>
+</blockquote>
+<blockquote>
+<p>而通用的h.264视频编码器是叫x264：<a href="https://www.videolan.org/developers/x264.html" target="_blank" rel="noopener">https://www.videolan.org/developers/x264.html</a></p>
+</blockquote>
+<p>安装x264需要将类库提供给外部应用程序(如ffmpeg)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure –enable-shared </span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
+<p>配置编译的时候最好有–prefix指明安装路径，否则一般默认到/usr/local/lib路径下
+需要将/usr/local/lib路径加入共享库配置文件/etc/ld.so.conf中
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;/usr/local/lib&quot; &gt;&gt; /etc/ld.so.conf</span><br><span class="line"></span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure></p>
+<p>编译安装含外部解码器的FFmpeg
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure --enable-static --enable-gpl --enable-libx264 --extra-cflags=-I/usr/local/include --extra-ldflags=-L/usr/local/lib</span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/04/10/redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/04/10/redis/" itemprop="url">redis</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-10T13:18:18+08:00">
+                2019-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>(略)</p>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">keys *</span><br><span class="line">redis-cli </span><br><span class="line">set key value</span><br><span class="line">get key</span><br><span class="line">del key</span><br><span class="line">hget key fieldname</span><br><span class="line">hget all</span><br><span class="line">flushall</span><br></pre></td></tr></table></figure>
+<h3 id="redis作为认证token数据库"><a href="#redis作为认证token数据库" class="headerlink" title="redis作为认证token数据库"></a>redis作为认证token数据库</h3><p>ticket=(accountid, token)</p>
+<h3 id="centos安装Redis"><a href="#centos安装Redis" class="headerlink" title="centos安装Redis"></a>centos安装Redis</h3><p>参考：<a href="https://blog.csdn.net/Mrqiang9001/article/details/80295261" target="_blank" rel="noopener">Linux 平台将 Redis 设置为服务并开机自启动
+</a></p>
+<p>服务部署好之后，若无法远程访问</p>
+<p>首先检查防火墙设置
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl status firewalld # 查看防火墙状态</span><br><span class="line">firewall-cmd --zone= public --query-port=6379/tcp # 查询防火墙端口状态</span><br><span class="line">firewall-cmd --zone=public --add-port=6379/tcp --permanent # 永久开发端口及协议</span><br></pre></td></tr></table></figure></p>
+<p>确认是否绑定服务主机ip 参考 <a href="https://www.jianshu.com/p/c64839414623" target="_blank" rel="noopener">处理CentOS 7.2 x64端口不通的问题</a></p>
+<h4 id="远程访问"><a href="#远程访问" class="headerlink" title="远程访问"></a>远程访问</h4><p>修改/etc/redis/redis.conf
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 注释掉或将其改为服务器静态ip</span><br><span class="line"># bind 127.0.0.1 ::1</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>DENIED Redis is running in protected mode because protected mode is enabled, no bind address was specified, no authentication password is requested to clients…..</p>
+</blockquote>
+<p>受保护的模式,改为no
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protected-mode no</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/04/10/JMS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/04/10/JMS/" itemprop="url">JMS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-10T13:17:08+08:00">
+                2019-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/03/27/AngularCustomizeControl/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1274,649 +1742,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/01/03/ComplexAlgorithm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/01/03/ComplexAlgorithm/" itemprop="url">复杂算法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-03T10:04:49+08:00">
-                2019-01-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="P类问题-Polynomial-Problem"><a href="#P类问题-Polynomial-Problem" class="headerlink" title="P类问题(Polynomial Problem)"></a>P类问题(Polynomial Problem)</h4><p>简单的认为，P问题就是可以在多项式时间被图灵机判定的语言类。这里又涉及到图灵机，那么我们可以简单的认为，如果一个算法可以在多项式时间内求解，那么就可以认为它是P类问题。这样你就会感觉好多算法都是P类问题，对！没错！如何证明一个问题是否是P类问题呢？只要它满足以下两个条（证明它在多项式时间内完成）</p>
-<ol>
-<li>运行步骤数要有多项式上届时间</li>
-<li>每一步都要保证它可以由合理的确定模型在多项式时间内完成，其实就是每一步的求解过程也是多项式时间</li>
-</ol>
-<p>这样步骤是多项式时间的，而每一步也是多项式时间，整合起来整个算法还是多项式时间的。</p>
-<h4 id="NP类问题-Non-deterministic-Polynomial-Problem"><a href="#NP类问题-Non-deterministic-Polynomial-Problem" class="headerlink" title="NP类问题(Non-deterministic Polynomial Problem)"></a>NP类问题(Non-deterministic Polynomial Problem)</h4><p>NP问题指的是，这个算法可以在多项式时间内可验证，什么意思呢？我们知道对于P类问题，可以在多项式时间内求解出来，但是NP问题不行。可以这样理解，NP虽然不能在多项式时间内被求解，但是如果给出这个问题的某个解，那么我们可以在多项式时间内验证这个解是不是这个问题的解。
-P是属于NP的，但是NP是否等于P是著名的千禧年七大难题之一 <del>(有人说证明NP=P，相当于论证，世间万事皆有捷径)</del></p>
-<h4 id="NPC-Non-deterministic-Polynomial-Complete-Problem"><a href="#NPC-Non-deterministic-Polynomial-Complete-Problem" class="headerlink" title="NPC(Non-deterministic Polynomial Complete Problem)"></a>NPC(Non-deterministic Polynomial Complete Problem)</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/12/31/jsDate/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2018/12/31/jsDate/" itemprop="url">Date</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-31T17:16:02+08:00">
-                2018-12-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <table>
-<thead>
-<tr>
-<th>方法</th>
-<th style="text-align:left">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Date()</td>
-<td style="text-align:left">返回当日的日期和时间。</td>
-</tr>
-<tr>
-<td>getDate()</td>
-<td style="text-align:left">从 Date 对象返回一个月中的某一天 (1 ~ 31)。</td>
-</tr>
-<tr>
-<td>getDay()</td>
-<td style="text-align:left">从 Date 对象返回一周中的某一天 (0 ~ 6)。</td>
-</tr>
-<tr>
-<td>getMonth()</td>
-<td style="text-align:left">从 Date 对象返回月份 (0 ~ 11)。</td>
-</tr>
-<tr>
-<td>getFullYear()</td>
-<td style="text-align:left">从 Date 对象以四位数字返回年份。</td>
-</tr>
-<tr>
-<td>getHours()</td>
-<td style="text-align:left">返回 Date 对象的小时 (0 ~ 23)。</td>
-</tr>
-<tr>
-<td>getMinutes()</td>
-<td style="text-align:left">返回 Date 对象的分钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>getSeconds()</td>
-<td style="text-align:left">返回 Date 对象的秒数 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>getMilliseconds()</td>
-<td style="text-align:left">返回 Date 对象的毫秒(0 ~ 999)。</td>
-</tr>
-<tr>
-<td>getTime()</td>
-<td style="text-align:left">返回 1970 年 1 月 1 日至今的毫秒数。</td>
-</tr>
-<tr>
-<td>getTimezoneOffset()</td>
-<td style="text-align:left">返回本地时间与格林威治标准时间 (GMT) 的分钟差。</td>
-</tr>
-<tr>
-<td>getUTCDate()</td>
-<td style="text-align:left">根据世界时从 Date 对象返回月中的一天 (1 ~ 31)。</td>
-</tr>
-<tr>
-<td>getUTCDay()</td>
-<td style="text-align:left">根据世界时从 Date 对象返回周中的一天 (0 ~ 6)。</td>
-</tr>
-<tr>
-<td>getUTCMonth()</td>
-<td style="text-align:left">根据世界时从 Date 对象返回月份 (0 ~ 11)。</td>
-</tr>
-<tr>
-<td>getUTCFullYear()</td>
-<td style="text-align:left">根据世界时从 Date 对象返回四位数的年份。</td>
-</tr>
-<tr>
-<td>getUTCHours()</td>
-<td style="text-align:left">根据世界时返回 Date 对象的小时 (0 ~ 23)。</td>
-</tr>
-<tr>
-<td>getUTCMinutes()</td>
-<td style="text-align:left">根据世界时返回 Date 对象的分钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>getUTCSeconds()</td>
-<td style="text-align:left">根据世界时返回 Date 对象的秒钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>getUTCMilliseconds()</td>
-<td style="text-align:left">根据世界时返回 Date 对象的毫秒(0 ~ 999)。</td>
-</tr>
-<tr>
-<td>parse()</td>
-<td style="text-align:left">返回1970年1月1日午夜到指定日期（字符串）的毫秒数。</td>
-</tr>
-<tr>
-<td>setDate()</td>
-<td style="text-align:left">设置 Date 对象中月的某一天 (1 ~ 31)。</td>
-</tr>
-<tr>
-<td>setMonth()</td>
-<td style="text-align:left">设置 Date 对象中月份 (0 ~ 11)。</td>
-</tr>
-<tr>
-<td>setFullYear()</td>
-<td style="text-align:left">设置 Date 对象中的年份（四位数字）。</td>
-</tr>
-<tr>
-<td>setYear()</td>
-<td style="text-align:left">请使用 setFullYear() 方法代替。</td>
-</tr>
-<tr>
-<td>setHours()</td>
-<td style="text-align:left">设置 Date 对象中的小时 (0 ~ 23)。</td>
-</tr>
-<tr>
-<td>setMinutes()</td>
-<td style="text-align:left">设置 Date 对象中的分钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>setSeconds()</td>
-<td style="text-align:left">设置 Date 对象中的秒钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>setMilliseconds()</td>
-<td style="text-align:left">设置 Date 对象中的毫秒 (0 ~ 999)。</td>
-</tr>
-<tr>
-<td>setTime()</td>
-<td style="text-align:left">以毫秒设置 Date 对象。</td>
-</tr>
-<tr>
-<td>setUTCDate()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中月份的一天 (1 ~ 31)。</td>
-</tr>
-<tr>
-<td>setUTCMonth()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中的月份 (0 ~ 11)。</td>
-</tr>
-<tr>
-<td>setUTCFullYear()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中的年份（四位数字）。</td>
-</tr>
-<tr>
-<td>setUTCHours()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中的小时 (0 ~ 23)。</td>
-</tr>
-<tr>
-<td>setUTCMinutes()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中的分钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>setUTCSeconds()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中的秒钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>setUTCMilliseconds()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中的毫秒 (0 ~ 999)。</td>
-</tr>
-<tr>
-<td>toSource()</td>
-<td style="text-align:left">返回该对象的源代码。</td>
-</tr>
-<tr>
-<td>toString()</td>
-<td style="text-align:left">把 Date 对象转换为字符串。</td>
-</tr>
-<tr>
-<td>toTimeString()</td>
-<td style="text-align:left">把 Date 对象的时间部分转换为字符串。</td>
-</tr>
-<tr>
-<td>toDateString()</td>
-<td style="text-align:left">把 Date 对象的日期部分转换为字符串。</td>
-</tr>
-<tr>
-<td>toGMTString()</td>
-<td style="text-align:left">请使用 toUTCString() 方法代替。</td>
-</tr>
-<tr>
-<td>toUTCString()</td>
-<td style="text-align:left">根据世界时，把 Date 对象转换为字符串。</td>
-</tr>
-<tr>
-<td>toLocaleString()</td>
-<td style="text-align:left">根据本地时间格式，把 Date 对象转换为字符串。</td>
-</tr>
-<tr>
-<td>toLocaleTimeString()</td>
-<td style="text-align:left">根据本地时间格式，把 Date 对象的时间部分转换为字符串。</td>
-</tr>
-<tr>
-<td>toLocaleDateString()</td>
-<td style="text-align:left">根据本地时间格式，把 Date 对象的日期部分转换为字符串。</td>
-</tr>
-<tr>
-<td>UTC()</td>
-<td style="text-align:left">根据世界时返回 1970 年 1 月 1 日 到指定日期的毫秒数。</td>
-</tr>
-<tr>
-<td>valueOf()</td>
-<td style="text-align:left">返回 Date 对象的原始值。</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Date.property.format=function(format)&#123;</span><br><span class="line">    // eg: format=&quot;yyyy-MM-dd hh:mm:ssS&quot;</span><br><span class="line">    var o = &#123;</span><br><span class="line">        &quot;M+&quot;: this.getMonth() + 1,</span><br><span class="line">        &quot;d+&quot;: this.getDate(),</span><br><span class="line">        &quot;h+&quot;: this.getHours(),</span><br><span class="line">        &quot;m+&quot;: this.getMinutes(),</span><br><span class="line">        &quot;s+&quot;: this.getSeconds(),</span><br><span class="line">        &quot;q+&quot;: Math.floor((this.getMonth() + 3)/3), //quarter</span><br><span class="line">        &quot;S&quot;: this.getMilliseconds()</span><br><span class="line">    &#125;;</span><br><span class="line">    if(/(y+)/.test(format))&#123;</span><br><span class="line">        format = format.replace(RegExp.$1,(this.getFullYear) + &quot;&quot;).substr(4 - RegExp.$1.length)</span><br><span class="line">    &#125;</span><br><span class="line">    for(var k in o)&#123;</span><br><span class="line">        if(new RegExp(&quot;(&quot; + k + &quot;)&quot;).test(format))&#123;</span><br><span class="line">            format = format.replace(RegExp.$1, RegExp.$1.length == 1?o[k]:(&quot;00&quot; + o[k]).substr((&quot;&quot; + o[k]).length));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return format;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/12/27/jsScopeChain/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2018/12/27/jsScopeChain/" itemprop="url">作用域链</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-27T14:55:44+08:00">
-                2018-12-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><ul>
-<li>作用域<br></li>
-<li>词法作用域<br></li>
-<li>函数级作用域和块级作用域</li>
-<li>作用域提升</li>
-<li>作用域闭包<h4 id="题目1"><a href="#题目1" class="headerlink" title="题目1"></a>题目1</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function t1()&#123;</span><br><span class="line">    console.log(str1);</span><br><span class="line">    console.log(str2);</span><br><span class="line"></span><br><span class="line">    var str1=&quot;xx1&quot;;</span><br><span class="line">    str2=&quot;xx2&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>调用t1();输出
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">undefined</span><br><span class="line">Uncaught ReferenceError: str2 is not defined</span><br></pre></td></tr></table></figure></p>
-<p>关键字var提示js编译器词法分析对变量进行声明，没有该关键字，分析认为是单纯赋值操作；执行时自上而下，输出str1时未赋值，其值为undefined，而str2为未声明。</p>
-<h4 id="题目2"><a href="#题目2" class="headerlink" title="题目2"></a>题目2</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var i=10;</span><br><span class="line">function t2()&#123;</span><br><span class="line">    i=20;</span><br><span class="line">    for(var i=0;i&lt;6;i++)&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    console.log(this.i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>调用t2()输出10。
-this指向window对象</p>
-<h4 id="题目3"><a href="#题目3" class="headerlink" title="题目3"></a>题目3</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1967,7 +1792,7 @@ this指向window对象</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">121</span>
+                  <span class="site-state-item-count">124</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1989,7 +1814,7 @@ this指向window对象</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

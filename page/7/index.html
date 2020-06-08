@@ -229,6 +229,537 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/11/05/Docker-Container/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/11/05/Docker-Container/" itemprop="url">Docker_Container</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-05T10:37:10+08:00">
+                2019-11-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/容器/" itemprop="url" rel="index">
+                    <span itemprop="name">容器</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="启动一个Jenkins-docker"><a href="#启动一个Jenkins-docker" class="headerlink" title="启动一个Jenkins docker"></a>启动一个Jenkins docker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">docker pull jenkins</span><br><span class="line">sudo mkdir /var/jenkins_home</span><br><span class="line">docker run </span><br><span class="line">-d </span><br><span class="line">-u root </span><br><span class="line">--rm </span><br><span class="line">--name myjenkins </span><br><span class="line">-p 8080:8080 -p 50000:50000 </span><br><span class="line">-v /var/jenkins_home:/var/jenkins_home </span><br><span class="line">--restart always </span><br><span class="line">jenkins</span><br></pre></td></tr></table></figure>
+<p>说明</p>
+<ul>
+<li>docker run启动一个container </li>
+<li>-d 后台运行</li>
+<li>-u root 以root权限执行 尤其对于jenkins 权限不足会影响持久化卷的访问</li>
+<li>–rm 容器退出后自动移除 实际上写这个会报与–restart always冲突</li>
+<li>–name myjenkins容器Name命名为myjenkins</li>
+<li>-p 8080:8080 -p 50000:50000 容器端口映射到宿主端口</li>
+<li>-v volumn设置（详见“卷和持久化数据”）</li>
+<li>–restart always重启策略</li>
+<li>jenkins 镜像</li>
+</ul>
+<p>参考
+ <a href="https://www.runoob.com/docker/docker-command-manual.html" target="_blank" rel="noopener">docker run命令</a></p>
+<h4 id="连接到容器"><a href="#连接到容器" class="headerlink" title="连接到容器"></a>连接到容器</h4><p>docker attach [containerID]</p>
+<p>docker exec -it [containerID] bash或sh</p>
+<p>前者是直接进入容器启动命令的终端，不开启新的进程
+后者是打开一个新的终端(bash或sh)<br>
+在容器终端键入 exit 退出</p>
+<h4 id="使用Container-ID-停止和重启等"><a href="#使用Container-ID-停止和重启等" class="headerlink" title="使用Container ID 停止和重启等"></a>使用Container ID 停止和重启等</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br><span class="line">docker ps | grep jenkins</span><br><span class="line">docker stop/restart id</span><br><span class="line"></span><br><span class="line">docker rm id</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Issue：如何得知特定镜像需要的持久化卷配置，即我要创建哪些路径的映射呢？</p>
+</blockquote>
+<h4 id="tomcat-docker的卷设置"><a href="#tomcat-docker的卷设置" class="headerlink" title="tomcat docker的卷设置"></a>tomcat docker的卷设置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name tomcat -p 8080:8080 -v $PWD/test:/usr/local/tomcat/webapps/test -d tomcat</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/31/DockerInstallation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/10/31/DockerInstallation/" itemprop="url">DockerInstallation</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-31T09:48:11+08:00">
+                2019-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/容器/" itemprop="url" rel="index">
+                    <span itemprop="name">容器</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>一般来说，下文只记录操作记录而不是详细步骤</p>
+<ul>
+<li><p>ubuntu install docker</p>
+</li>
+<li><p>usermod aG docker</p>
+</li>
+<li><p>自动启动systemctl enable docker</p>
+</li>
+<li><p>镜像列表docker image ls</p>
+</li>
+<li><p>从Docker Hub搜索并下载镜像</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker search httpd</span><br><span class="line"></span><br><span class="line">docker pull httpd</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这里的Docker Hub相当于npmjs.org仓库，镜像是容器的模板，镜像之于容器，如同class之于object。这里的httpd称为应用容器镜像，是包含指定应用的环境。</p>
+</blockquote>
+</li>
+<li><p>删除镜像 docker image rm hello-world</p>
+</li>
+<li><p>启动容器 docker container run [OPTIONS] IMAGE [COMMAND]</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker container run -it centos:latest /bin/bash</span><br><span class="line"></span><br><span class="line">docker container ls</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/30/ssh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/10/30/ssh/" itemprop="url">ssh</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-30T13:33:53+08:00">
+                2019-10-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="ubuntu安装后无法ssh远程登录"><a href="#ubuntu安装后无法ssh远程登录" class="headerlink" title="ubuntu安装后无法ssh远程登录"></a>ubuntu安装后无法ssh远程登录</h4><p>检查是否安装ssh-server
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpkg -l | grep ssh</span><br></pre></td></tr></table></figure></p>
+<p>默认只有ssh-client,如下</p>
+<p><img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g8g662fyfoj20le059dgy.jpg" alt="20170210203338059">
+安装命令：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install openssh-server</span><br></pre></td></tr></table></figure></p>
+<p>通过进程确认服务已启动
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -e | grep ssh</span><br></pre></td></tr></table></figure></p>
+<p>启动与停止
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo /etc/init.d/ssh stop</span><br><span class="line">sudo /etc/init.d/ssh start</span><br></pre></td></tr></table></figure></p>
+<h4 id="ssh-key"><a href="#ssh-key" class="headerlink" title="ssh key"></a>ssh key</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 查看ssh key目录</span><br><span class="line"> ls -al ~/.ssh</span><br><span class="line"> // 生成</span><br><span class="line"> ssh-keygen -t rsa -C &quot;&quot;</span><br><span class="line"> // 添加密钥到ssh-agent 注 见下文异常</span><br><span class="line"> ssh-add ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>异常：Could not open a connection to your authentication agent
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-agent bash</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>异常：Permissions 0777 for ‘~/.ssh/id_rsa’ are too open.<br>
+It is recommended that your private key files are NOT accessible by others.<br>
+This private key will be ignored.</p>
+</blockquote>
+<p>keys need to be only readable to you 
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 改为只读</span><br><span class="line">chmod 400 ~/.ssh/id_rsa </span><br><span class="line">ssh-add ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure></p>
+<p>返回“identity added blablabla…”</p>
+<h4 id="使用ssh-key连接GitHub"><a href="#使用ssh-key连接GitHub" class="headerlink" title="使用ssh key连接GitHub"></a>使用ssh key连接GitHub</h4><ul>
+<li>复制public key</li>
+<li>测试<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com/qqstone/xxx.git</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>异常：Could not resolve hostname github.com:qqstone/xxx.git： Name or service not known;</p>
+</blockquote>
+<p>尝试ping github.com 发现超时，说明dns给的地址连接超时，然而由于网页上是http协议，是可以有反向代理以及负载均衡配置的(具体原因存疑)，所以网页打开Github反而很流畅。<br>
+另一种情况，主机无法连接正确的dns，解析超时，可以在连接正常的环境中(如无线网络或4g网络)用nslookup查看域名解析，找到实际的公网ip，然后在超时的环境中尝试用ip连接</p>
+<p><i>懒得去服务器上授权密钥，可以将已授权的 id_rsa + xxx.pub(公钥)拷贝覆盖到其他主机</i></p>
+<blockquote>
+<p>异常：The authenticity of host 192.168.xxx.xxx can’t be established.ECDSA key fingerprint is blablabla
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh  -o StrictHostKeyChecking=no  192.168.xxx.xxx</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>异常：ssh key在终端有效，在脚本中无效<br>
+在终端执行git 命令，ssh key认证可自动通过，将命令写入shell执行，git命令会要求当前用户访问Repository的密码。</p>
+</blockquote>
+<p>原因可能是ssh key隶属当前用户，而未配置到root用户，root用户默认是禁用的，尝试添加/home/root/.ssh/*无效，未尝试添加/root/.ssh/*。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config core.sshCommand &quot;ssh -i /home/csd/.ssh/id_rsa -o StrictHostKeyChecking=no git@hostname&quot;</span><br></pre></td></tr></table></figure></p>
+<h4 id="linux系统之前的ssh授权访问"><a href="#linux系统之前的ssh授权访问" class="headerlink" title="linux系统之前的ssh授权访问"></a>linux系统之前的ssh授权访问</h4><p>一、概述</p>
+<p>1、就是为了让两个linux机器之间使用ssh不需要用户名和密码。采用了数字签名RSA或者DSA来完成这个操作</p>
+<p>2、模型分析</p>
+<p>假设 A （192.168.20.59）为客户机器，B（192.168.20.60）为目标机；</p>
+<p>要达到的目的：
+A机器ssh登录B机器无需输入密码；
+加密方式选 rsa|dsa均可以，默认dsa</p>
+<p>二、具体操作流程</p>
+<p>单向登陆的操作过程（能满足上边的目的）：
+1、登录A机器
+2、ssh-keygen -t [rsa|dsa]，将会生成密钥文件和私钥文件 id_rsa,id_rsa.pub或id_dsa,id_dsa.pub
+3、将 .pub 文件复制到B机器的 .ssh 目录， 并 cat id_dsa.pub &gt;&gt; ~/.ssh/authorized_keys
+4、大功告成，从A机器登录B机器的目标账户，不再需要密码了；（直接运行 #ssh 192.168.20.60 ）</p>
+<p>双向登陆的操作过程：</p>
+<p>1、ssh-keygen做密码验证可以使在向对方机器上ssh ,scp不用使用密码.具体方法如下:
+2、两个节点都执行操作：#ssh-keygen -t rsa
+  然后全部回车,采用默认值.</p>
+<p>3、这样生成了一对密钥，存放在用户目录的~/.ssh下。
+将公钥考到对方机器的用户目录下，并将其复制到~/.ssh/authorized_keys中（操作命令：#cat id_dsa.pub &gt;&gt; ~/.ssh/authorized_keys）。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/28/MySQL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1021,10 +1552,36 @@ CentOS<br>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&quot;productName&quot;: &quot;CSCportal&quot;,</span><br><span class="line">  &quot;directories&quot;: &#123;</span><br><span class="line">    &quot;output&quot;: &quot;release/&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  // 额外打包的资源 不会打包到\resources\app.asar</span><br><span class="line">  // 以下规则将文件单独打包到\resources\addon</span><br><span class="line">  &quot;extraResources&quot;: &#123;</span><br><span class="line">    &quot;from&quot;: &quot;addon/&quot;,</span><br><span class="line">    &quot;to&quot;: &quot;addon/&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  // 额外打包配置文件到根目录</span><br><span class="line">  &quot;extraFiles&quot;:[&quot;config.xml&quot;],</span><br><span class="line">  // 打包文件的parttern表达式</span><br><span class="line">  &quot;files&quot;: [</span><br><span class="line">    &quot;**/*&quot;,</span><br><span class="line">    &quot;!package.json&quot;,</span><br><span class="line">    &quot;!src/&quot;,</span><br><span class="line">    &quot;src/app/shared/*&quot;, // 打包main调用的模块（.js）</span><br><span class="line">    &quot;!src/app/shared/*.ts&quot; // 忽略ts源文件</span><br><span class="line">  ],</span><br><span class="line">  // windows环境</span><br><span class="line">  &quot;win&quot;: &#123;</span><br><span class="line">    &quot;target&quot;: [</span><br><span class="line">      &quot;nsis&quot;, // 使用nsis工具生成安装包</span><br><span class="line">      &quot;zip&quot;   // 生成zip免安装压缩包</span><br><span class="line">    ],</span><br><span class="line">    // code sign（代码签名）</span><br><span class="line">    &quot;signingHashAlgorithms&quot;:[&quot;sha1&quot;], // sign algorithms [&apos;sha1&apos;, &apos;sha256&apos;]</span><br><span class="line">    &quot;certificateFile&quot;:&quot;build/cert/XXXXX.pfx&quot;, // 证书路径</span><br><span class="line">    &quot;certificatePassword&quot;:&quot;XXXXXXX&quot;,  // 证书密码</span><br><span class="line">    &quot;verifyUpdateCodeSignature&quot;:false, // 安装前是否验证签名可用更新（available update）</span><br><span class="line">    &quot;rfc3161TimeStampServer&quot;: &quot;http://timestamp.digicert.com&quot;, // time stamp server</span><br><span class="line">    &quot;signDlls&quot;: true //是否签名DLL</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;nsis&quot;:&#123;</span><br><span class="line">    &quot;oneClick&quot;:false, // 禁用一键安装</span><br><span class="line">    &quot;perMachine&quot;:true, // 为所有用户安装</span><br><span class="line">    &quot;allowToChangeInstallationDirectory&quot;:true, // 自定义安装路径</span><br><span class="line">    &quot;include&quot;:&quot;build/installer.nsh&quot; // 包含脚本</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;mac&quot;: &#123;&#125;,</span><br><span class="line">  &quot;linux&quot;: &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><a href="https://github.com/maximegris/angular-electron/issues/460#issuecomment-608650812" target="_blank" rel="noopener">How to share costom .ts file between main.ts and Angular app</a><br>
 即将文件或目录添加到打包文件的parttern表达式中</p>
-<h4 id="nsis宏命令-installer-nsh"><a href="#nsis宏命令-installer-nsh" class="headerlink" title="nsis宏命令 installer.nsh"></a>nsis宏命令 installer.nsh</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!macro customInstall</span><br><span class="line">  WriteRegStr HKLM &quot;SOFTWARE\Carestream Dental\CSCportal&quot; &quot;InstallDir&quot; $INSTDIR</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure>
+<h4 id="nsis宏命令-installer-nsh"><a href="#nsis宏命令-installer-nsh" class="headerlink" title="nsis宏命令 installer.nsh"></a>nsis宏命令 installer.nsh</h4><p>在electron-builder.json配置中引入.nsh脚本，脚本定义了NSIS打包生命周期中插入的宏指令<br>
+可插入宏：</p>
+<ul>
+<li><p><b>customHeader</b> 
+可以配置NSIS的一些环境或运行条件，如显示详细信息框：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">!macro customHeader</span><br><span class="line">  ShowInstDetails show</span><br><span class="line">  ShowUninstDetails show</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure>
+<p>详见<a href="https://github.com/electron-userland/electron-builder/blob/c35b3150536be66a9e1c2aae75f7e8f7f610699d/packages/app-builder-lib/templates/nsis/installer.nsi" target="_blank" rel="noopener">调用源码</a></p>
+</li>
+<li><b>preInit</b><br>This macro is inserted at the beginning of the NSIS .OnInit callback</li>
+<li><b>customInit</b></li>
+<li><b>customUnInit</b></li>
+<li><b>customInstall</b>
+安装</li>
+<li><b>customUnInstall</b>
+卸载</li>
+<li><b>customRemoveFiles</b></li>
+<li><b>customInstallMode</b><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!macro customInstall</span><br><span class="line">  WriteRegStr HKLM &quot;SOFTWARE\Carestream Dental\CSCportal&quot; &quot;InstallDir&quot; $INSTDIR</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 <p>uninstaller.nsh
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!macro customUnInstall</span><br><span class="line">    DeleteRegKey HKLM &quot;SOFTWARE\Carestream Dental\CSCportal&quot; &quot;InstallDir&quot;</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure></p>
-<p>参考 <a href="https://www.electron.build/configuration/nsis" target="_blank" rel="noopener">electron-builder文档nsis部分</a></p>
+<p>BUILD_RESOURCES_DIR and PROJECT_DIR are defined.</p>
+<p>build is added as addincludedir (i.e. you don’t need to use BUILD_RESOURCES_DIR to include files).</p>
+<p>build/x86-unicode and build/x86-ansi are added as addplugindir.
+<span style="color:#ff0;font-weight:bold">Caution!</span> 我的angular-electron6项目中，仍然要手动载入plugin，写法同《NSIS插件》笔记中的代码</p>
+<p>File associations macro registerFileAssociations and unregisterFileAssociations are still defined.</p>
+<p>LogicLib.nsh默认已包含</p>
+<p>All other electron-builder specific flags (e.g. ONE_CLICK) are still defined.</p>
+<p>参考 <a href="https://www.electron.build/configuration/nsis" target="_blank" rel="noopener">electron-builder文档nsis部分</a> 参考NSIS相关笔记</p>
+<p><span style="color:#ff0;font-weight:bold">Caution!</span>以上文档对应最新版本electron-builder,经实践v22.7.0可以返回build异常信息，应更新并使用新版本</p>
 <h4 id="调试主进程"><a href="#调试主进程" class="headerlink" title="调试主进程"></a>调试主进程</h4><p>VScode launch.json:
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;version&quot;: &quot;0.2.0&quot;,</span><br><span class="line">  &quot;configurations&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Debug Main Process&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;node&quot;,</span><br><span class="line">      &quot;request&quot;: &quot;launch&quot;,</span><br><span class="line">      &quot;cwd&quot;: &quot;$&#123;workspaceRoot&#125;&quot;,</span><br><span class="line">      &quot;runtimeExecutable&quot;: &quot;$&#123;workspaceRoot&#125;/node_modules/.bin/electron&quot;,</span><br><span class="line">      &quot;windows&quot;: &#123;</span><br><span class="line">        &quot;runtimeExecutable&quot;: &quot;$&#123;workspaceRoot&#125;/node_modules/.bin/electron.cmd&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;args&quot; : [&quot;.&quot;,&quot;--input=d:\\temp\\input.xml&quot;,&quot;--output=d:\\temp\\output.xml&quot;],</span><br><span class="line">      &quot;outputCapture&quot;: &quot;std&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>此app设计为由其他客户端程序使用命令调起，传入input参数和output参数，注意调试命令的’electron .’中’.’是第一个参数。</p>
@@ -1389,511 +1946,6 @@ Caution！ 拷贝文件时,如果包含文件夹，Source files路径通配符�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/10/windowstips/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/09/10/windowstips/" itemprop="url">Tips in windows</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-10T09:39:44+08:00">
-                2019-09-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="调用环境变量"><a href="#调用环境变量" class="headerlink" title="调用环境变量"></a>调用环境变量</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%JAVA_HOME%</span><br></pre></td></tr></table></figure>
-<h4 id="输出到剪切板"><a href="#输出到剪切板" class="headerlink" title="输出到剪切板"></a>输出到剪切板</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo %JAVA_HOME% | clip</span><br></pre></td></tr></table></figure>
-<h4 id="显示文件树"><a href="#显示文件树" class="headerlink" title="显示文件树"></a>显示文件树</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 显示目录</span><br><span class="line">tree</span><br><span class="line"># 递归全部目录及文件</span><br><span class="line">tree/F</span><br></pre></td></tr></table></figure>
-<h4 id="调用和输出"><a href="#调用和输出" class="headerlink" title="调用和输出"></a>调用和输出</h4><table>
-<thead>
-<tr>
-<th style="text-align:left">command</th>
-<th style="text-align:left">comments </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">command &gt; filename</td>
-<td style="text-align:left">Redirect command output to a file</td>
-</tr>
-<tr>
-<td style="text-align:left">command &gt;&gt; filename</td>
-<td style="text-align:left">APPEND into a file</td>
-</tr>
-<tr>
-<td style="text-align:left">command &lt; filename</td>
-<td style="text-align:left">Type a text file and pass the text to command</td>
-</tr>
-<tr>
-<td style="text-align:left">commandA  \</td>
-<td style="text-align:left">commandB</td>
-<td>Pipe the output from commandA into commandB</td>
-</tr>
-<tr>
-<td style="text-align:left">commandA &amp;  commandB</td>
-<td style="text-align:left">Run commandA and then run commandB</td>
-</tr>
-<tr>
-<td style="text-align:left">commandA &amp;&amp; commandB</td>
-<td style="text-align:left">Run commandA, if it succeeds then run commandB</td>
-</tr>
-<tr>
-<td style="text-align:left">commandA \</td>
-<td style="text-align:left">\</td>
-<td>commandB</td>
-<td>Run commandA, if it fails then run commandB</td>
-</tr>
-<tr>
-<td style="text-align:left">commandA &amp;&amp; commandB \</td>
-<td style="text-align:left">\</td>
-<td>commandC</td>
-<td>If commandA succeeds run commandB, if it fails commandC</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>In most cases the Exit Code is the same as the ErrorLevel</p>
-</blockquote>
-<h4 id="刷新应用图标"><a href="#刷新应用图标" class="headerlink" title="刷新应用图标"></a>刷新应用图标</h4><p>桌面图标显示为未知文件，调用以下应用可以解决<br>
-run ie4uinit -show</p>
-<h4 id="Fix-The-Parameter-is-Incorrect-Exception"><a href="#Fix-The-Parameter-is-Incorrect-Exception" class="headerlink" title="Fix The Parameter is Incorrect Exception"></a>Fix The Parameter is Incorrect Exception</h4><p>某年月日因磁盘松动，重新连接后报如图异常</p>
-<p><img src="https://tvax4.sinaimg.cn/large/a60edd42gy1gc3wq4b78fj20a304ljrj.jpg" alt></p>
-<p>命令行执行
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chkdsk /f</span><br></pre></td></tr></table></figure></p>
-<p>检索到了网络上的解决方法chkdsk /f /x /r，后面的参数会极大增加修复错误花的时间，而且/x /r 都包含了/f (fixes errors on the disk. The disk must be locked. If chkdsk cannot lock the drive, a message appears that asks you if you want to check the drive the next time you restart the computer.)</p>
-<h4 id="查找进程及其杀灭"><a href="#查找进程及其杀灭" class="headerlink" title="查找进程及其杀灭"></a>查找进程及其杀灭</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tasklist|grep cscportal</span><br><span class="line"></span><br><span class="line">taskkill /IM &quot;cscportal.exe&quot; /F</span><br></pre></td></tr></table></figure>
-<h4 id="琐碎文件的删除"><a href="#琐碎文件的删除" class="headerlink" title="琐碎文件的删除"></a>琐碎文件的删除</h4><p>win10 系统中删除文件夹，会进行文件统计，对于文件目录和源代码目录琐碎的情形，它敢给你统计几个小时，正确的删除姿势有两种
-a. 安全模式</p>
-<p>b. 命令行(分两步：删除文件；删除目录)
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">del /s/f/q node_modules</span><br><span class="line">rmdir /s/q node_modules</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/09/ionic/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/09/09/ionic/" itemprop="url">ionic</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-09T13:32:10+08:00">
-                2019-09-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
-                    <span itemprop="name">前端技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g cordave ionic</span><br></pre></td></tr></table></figure>
-<p>说明一下ionic和cordave<br>
-ionic 是一款开源的Html5移动App开发框架,是Angular移动端解决方案,Ionic以流行的跨平台移动app开发框架phoengap为蓝本，让开发者可以通过命令行工具快速生成android、ios移动app应用。将项目打包生成移动app应用，需要用到phoengap，而cordave是phoengap的开源发行版。<br></p>
-<p>新建项目:
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ionic start myApp tabs</span><br></pre></td></tr></table></figure></p>
-<p>运行项目:
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cd myApp</span><br><span class="line">ionic serve</span><br><span class="line"></span><br><span class="line">// 打包成单页面项目运行在微信/web浏览器:</span><br><span class="line"></span><br><span class="line">$ ionic build</span><br><span class="line"></span><br><span class="line">// 打包成混合app项目:</span><br><span class="line"></span><br><span class="line">$ ionic build</span><br><span class="line">$ ionic cordova platform add ios</span><br><span class="line">$ ionic cordova run android // Run an Ionic project on a connected device</span><br></pre></td></tr></table></figure></p>
-<p>使用cordova构建移动app 还有额外开发环境要求，如<a href="https://developer.android.com/studio#downloads" target="_blank" rel="noopener">Android SDK tools</a> 
-Java</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/03/BasicPHP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/09/03/BasicPHP/" itemprop="url">BasicPHP</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-03T14:24:19+08:00">
-                2019-09-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="Linux查看-phpinfo"><a href="#Linux查看-phpinfo" class="headerlink" title="Linux查看 phpinfo"></a>Linux查看 phpinfo</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -i</span><br></pre></td></tr></table></figure>
-<p>或者
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r &quot;phpinfo();&quot;</span><br></pre></td></tr></table></figure></p>
-<h4 id="system"><a href="#system" class="headerlink" title="system"></a>system</h4><p>执行外部程序
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$last_time = system(&quot;ls&quot;, $retVal)</span><br></pre></td></tr></table></figure></p>
-<p>返回值和返会状态。 
-$retVal 可选参数， 记录命令执行后的返回状态。<br>
-system 返回值，输出命令输出的最后一行</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1944,7 +1996,7 @@ system 返回值，输出命令输出的最后一行</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">121</span>
+                  <span class="site-state-item-count">124</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1966,7 +2018,7 @@ system 返回值，输出命令输出的最后一行</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

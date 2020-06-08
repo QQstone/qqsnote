@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="app.quit未完全结束进程  在exe执行中未现问题  Cannot find module ‘./src/….’ Github Issue 将文件pattern添加到electron-builder的打包规则中  另外，require import的路径均不区分大小写，configure.ts被活生生编译并打包为Configure.js以及Configure.map.js  import编">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-05-07T09:37:40.624Z">
+<meta property="og:updated_time" content="2020-05-29T06:59:01.591Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="electron_issues">
 <meta name="twitter:description" content="app.quit未完全结束进程  在exe执行中未现问题  Cannot find module ‘./src/….’ Github Issue 将文件pattern添加到electron-builder的打包规则中  另外，require import的路径均不区分大小写，configure.ts被活生生编译并打包为Configure.js以及Configure.map.js  import编">
@@ -338,6 +338,11 @@ import编译成require，找不到configure</p>
 </blockquote>
 <p>该问题是由于webview plugin无法设置透明背景造成的，在BrowserWindow show过程中显示了webview的白色背景，目前的workaround可以延迟页面内容的显示
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function showBrowserWindow() &#123;</span><br><span class="line">  win.setOpacity(0);</span><br><span class="line">  win.show();</span><br><span class="line">  setTimeout(() =&gt; &#123;</span><br><span class="line">    win.setOpacity(1);</span><br><span class="line">  &#125;, 50);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>rebuild fail
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gyp ERR! clean error</span><br><span class="line">gyp ERR! stack Error: EPERM: operation not permitted, unlink &apos;D:\projxxx\node_modules\ref\build\Release\binding.node&apos;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>往往是项目文件正在使用中（正在参与其他进程的编译或执行）</p>
 
       
     </div>
@@ -368,8 +373,8 @@ import编译成require，找不到configure</p>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/qqsnote/2020/04/20/NSIS/" rel="next" title="NSIS">
-                <i class="fa fa-chevron-left"></i> NSIS
+              <a href="/qqsnote/2020/04/20/NSIS-macro/" rel="next" title="NSIS宏">
+                <i class="fa fa-chevron-left"></i> NSIS宏
               </a>
             
           </div>
@@ -448,7 +453,7 @@ import编译成require，找不到configure</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">121</span>
+                  <span class="site-state-item-count">124</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -470,7 +475,7 @@ import编译成require，找不到configure</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
