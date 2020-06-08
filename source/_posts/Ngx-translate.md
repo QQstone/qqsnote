@@ -116,6 +116,25 @@ msgstr "产品版本"
 ```
 <h1>{{ "AboutDialog|.About" |translate}}</h1>
 ```
+另外，gettext-parser会将分段的msgid和msgstr进行合并，即
+```
+msgctxt "ErrorMessage|"
+msgid ""
+"Application preferences have been damaged. Reinstall the application to "
+"solve the problem."
+msgstr ""
+"Předvolby aplikace byly poškozeny. Problém vyřešíte opětovnou instalací "
+"aplikace."
+====>
+{
+    ...
+    "ErrorMessage|":{
+        msgctxt:"ErrorMessage|",
+        msgid:"Application preferences have been damaged. Reinstall the application to solve the problem.",
+        msgstr:["Předvolby aplikace byly poškozeny. Problém vyřešíte opětovnou instalací aplikace."]
+    }
+}
+```
 原理见@ngx-translate/core/fesm2015/ngx-translate-core.js
 ```
 getValue(target, key) {

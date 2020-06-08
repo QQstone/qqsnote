@@ -25,3 +25,13 @@ categories:
 ```
 #### 批量取消科学计数法
 格式化单元格 Number--Custom--0
+#### 进制转换
+ 16进制-->十进制： HEX2DEC
+
+#### VLOOKUP
+y=vlookup(x, source_table, column_index, boolean)
+在source_table中找到x所在行，返回第column_index列的对应结果，boolean：TRUE 模糊匹配 FALSE 严格匹配
+
+#### 条件格式
+如 Home-->Conditional Formatting-->Highlight Cell Rules-->Duplicate Values<br>
+高亮显示所选区域中存在重复值的cell

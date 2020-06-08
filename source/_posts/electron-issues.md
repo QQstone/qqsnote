@@ -29,3 +29,9 @@ function showBrowserWindow() {
   }, 50);
 }
 ```
+> rebuild fail
+```
+gyp ERR! clean error
+gyp ERR! stack Error: EPERM: operation not permitted, unlink 'D:\projxxx\node_modules\ref\build\Release\binding.node'
+```
+往往是项目文件正在使用中（正在参与其他进程的编译或执行）

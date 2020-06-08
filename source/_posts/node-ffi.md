@@ -19,4 +19,4 @@ node-gyp rebuild
 ```
 [Node FFI Tutorial](https://github.com/node-ffi/node-ffi/wiki/Node-FFI-Tutorial)
 
-> node-ffi 停止更新当前不支持最新版本node.js，事实上 经QQs实践基于node10的electron6无法与之集成构建，Github上有替代方案[node-ffi-napi](https://github.com/node-ffi-napi/node-ffi-napi)
+> node-ffi 停止更新当前不支持最新版本node.js，事实上 经QQs实践基于node10的electron6无法与之集成构建，Github上有替代方案 [node-ffi-napi](https://github.com/node-ffi-napi/node-ffi-napi)

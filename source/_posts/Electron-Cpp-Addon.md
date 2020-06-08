@@ -63,8 +63,18 @@ node-gyp configure
 node-gyp build
 ```
 生成编译后的 *.node 的文件。 它会被放进 build/Release/ 目录。
-#### Electron-rebuild
+#### [Electron-rebuild](https://github.com/electron/electron-rebuild)
 开源社区提供，基于node-gyp进一步封装的工具，用于Electron原生模块的编译，不需要node-gyp的一些额外配置（头文件下载地址、版本映射等）
+```
+npm i electron-rebuild --save-dev
+```
+package.json
+```
+"scripts": {
+    ...
+    "rebuild": "electron-rebuild -f -w yourmodule"
+  }
+```
 
 #### [node-pre-gyp](https://github.com/mapbox/node-pre-gyp)
 > node-pre-gyp makes it easy to publish and install Node.js C++ addons from binaries.<br>

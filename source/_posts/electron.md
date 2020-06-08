@@ -133,6 +133,27 @@ args = process.argv.splice(1)
 [How to share costom .ts file between main.ts and Angular app](https://github.com/maximegris/angular-electron/issues/460#issuecomment-608650812)<br>
 即将文件或目录添加到打包文件的parttern表达式中
 #### nsis宏命令 installer.nsh
+在electron-builder.json配置中引入.nsh脚本，脚本定义了NSIS打包生命周期中插入的宏指令<br>
+可插入宏：
++ <b>customHeader</b> 
+  可以配置NSIS的一些环境或运行条件，如显示详细信息框：
+  ```
+  !macro customHeader
+    ShowInstDetails show
+    ShowUninstDetails show
+  !macroend
+  ```
+  详见[调用源码](https://github.com/electron-userland/electron-builder/blob/c35b3150536be66a9e1c2aae75f7e8f7f610699d/packages/app-builder-lib/templates/nsis/installer.nsi)
++ <b>preInit</b>  
+This macro is inserted at the beginning of the NSIS .OnInit callback
++ <b>customInit</b>
++ <b>customUnInit</b>
++ <b>customInstall</b>
+  安装
++ <b>customUnInstall</b>
+  卸载
++ <b>customRemoveFiles</b>
++ <b>customInstallMode</b>
 ```
 !macro customInstall
   WriteRegStr HKLM "SOFTWARE\Carestream Dental\CSCportal" "InstallDir" $INSTDIR
@@ -144,8 +165,22 @@ uninstaller.nsh
     DeleteRegKey HKLM "SOFTWARE\Carestream Dental\CSCportal" "InstallDir"
 !macroend
 ```
-参考 [electron-builder文档nsis部分](https://www.electron.build/configuration/nsis)
+BUILD_RESOURCES_DIR and PROJECT_DIR are defined.
 
+build is added as addincludedir (i.e. you don’t need to use BUILD_RESOURCES_DIR to include files).
+
+build/x86-unicode and build/x86-ansi are added as addplugindir.
+<span style="color:#ff0;font-weight:bold">Caution!</span> 我的angular-electron6项目中，仍然要手动载入plugin，写法同《NSIS插件》笔记中的代码
+
+File associations macro registerFileAssociations and unregisterFileAssociations are still defined.
+
+LogicLib.nsh默认已包含
+
+All other electron-builder specific flags (e.g. ONE_CLICK) are still defined.
+
+参考 [electron-builder文档nsis部分](https://www.electron.build/configuration/nsis) 参考NSIS相关笔记
+
+<span style="color:#ff0;font-weight:bold">Caution!</span>以上文档对应最新版本electron-builder,经实践v22.7.0可以返回build异常信息，应更新并使用新版本
 #### 调试主进程
 VScode launch.json:
 ```
