@@ -229,6 +229,746 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/01/29/scss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/01/29/scss/" itemprop="url">SCSS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-29T14:13:50+08:00">
+                2019-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>SCSS 是 Sass 3 引入新的语法，其语法完全兼容 CSS3，并且继承了 Sass 的强大功能。</p>
+</blockquote>
+<h4 id="将Angular项目样式由css改为scss"><a href="#将Angular项目样式由css改为scss" class="headerlink" title="将Angular项目样式由css改为scss"></a>将Angular项目样式由css改为scss</h4><p>安装 node-sass sass-loader<br>
+修改angular.json<br>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&quot;styles&quot;: [</span><br><span class="line">    &quot;src/styles.scss&quot;</span><br><span class="line">],</span><br><span class="line">&quot;default&quot;: &#123;</span><br><span class="line">    &quot;styleExt&quot;:&quot;scss&quot;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></p>
+<p>上面的修改也就看看，不做实操指导，新建ng项目时可以选择样式类型，当时选scss便可，免得多事</p>
+<blockquote>
+<p>SCSS嵌套结构样式优先级高于非嵌套结构样式，因此可以用某元素父元素嵌套的写法覆盖该元素样式</p>
+</blockquote>
+<h4 id="常用新语法"><a href="#常用新语法" class="headerlink" title="常用新语法"></a>常用新语法</h4><h5 id="map类型"><a href="#map类型" class="headerlink" title="map类型"></a>map类型</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$pie:(</span><br><span class="line">    width:125px</span><br><span class="line">    height:140px</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">width:map-get($pie, width)</span><br></pre></td></tr></table></figure>
+<h5 id="import-mixin"><a href="#import-mixin" class="headerlink" title="@import @mixin"></a>@import @mixin</h5><p>定义一个Mixin模块
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@mixin button&#123;</span><br><span class="line">    font-size:1em;</span><br><span class="line">    padding:0.5em;</span><br><span class="line">    color:#fff</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.button-green&#123;</span><br><span class="line">    @include button;</span><br><span class="line">    back-ground:green</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="extend"><a href="#extend" class="headerlink" title="@extend"></a>@extend</h5><p>引用已定义的样式
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.button-green-mini&#123;</span><br><span class="line">    @extend .button-green;</span><br><span class="line">    width:2em</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="循环语句创建样式"><a href="#循环语句创建样式" class="headerlink" title="循环语句创建样式"></a>循环语句创建样式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$lvlcolors:(</span><br><span class="line">    1:$color-danger</span><br><span class="line">    2:$color-orange</span><br><span class="line">    3:$color-warning</span><br><span class="line">    4:$color-blue</span><br><span class="line">)</span><br><span class="line">for $lvl from 1 through 4&#123;</span><br><span class="line">    .lvl#&#123;$lvl&#125; &#123;background: map-get($lvlcolors, $lvl)&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/01/28/JavaSteam/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/01/28/JavaSteam/" itemprop="url">Java流库</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-28T13:52:20+08:00">
+                2019-01-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/01/16/jsthread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/01/16/jsthread/" itemprop="url">js线程和多线程js</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-16T18:41:54+08:00">
+                2019-01-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="多线程-worker-js"><a href="#多线程-worker-js" class="headerlink" title="多线程 worker.js"></a>多线程 worker.js</h4><h4 id="单线程和阻塞操作"><a href="#单线程和阻塞操作" class="headerlink" title="单线程和阻塞操作"></a>单线程和阻塞操作</h4><h4 id="异步-回调-事件队列"><a href="#异步-回调-事件队列" class="headerlink" title="异步 回调 事件队列"></a>异步 回调 事件队列</h4><blockquote>
+<p>异步与回调并没有直接的联系，只是异步操作长需要用回调函数的方式返回数据，同步函数也可以传入function作为回调函数</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/01/08/frontEndSeparation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/01/08/frontEndSeparation/" itemprop="url">Apache虚拟主机</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-08T13:14:02+08:00">
+                2019-01-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>web服务器
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    DocumentRoot &quot;E:/wamp/www&quot;</span><br><span class="line">    ServerName localhost</span><br><span class="line">    ServerAlias localhost</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h4 id="访问权限"><a href="#访问权限" class="headerlink" title="访问权限"></a>访问权限</h4><p>浏览器报You don’t have permission to access /index.html on this server.
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;Directory /&gt;         </span><br><span class="line">    Options FollowSymLinks         </span><br><span class="line">    AllowOverride All         </span><br><span class="line">    Order deny,allow      </span><br><span class="line">    Deny from all         </span><br><span class="line">    Satisfy all</span><br><span class="line">&lt;/Directory&gt;</span><br></pre></td></tr></table></figure></p>
+<p>上述配置是没毛病的，然而只是Apache22语法，Apache24不支持
+服务器启动报Invalid command Order等</p>
+<p>Apache2.4版本中，提供了由mod_authz_host支持的新的访问控制配置语法。而2.2版本中的Order、Allow等命令在新版本中也可以得到兼容，实现这个兼容功能的模块就是mod_access_compat。所以Load这个模块后，apache2.4就能识别这些语句了。</p>
+<p>还有，一般情况下，http.conf中可能有其他关于访问权限的配置，如默认有
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AllowOverride none</span><br><span class="line">Require all denied</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>解决跨域</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/01/03/AngularJS-Directives/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/01/03/AngularJS-Directives/" itemprop="url">AngularJS Directives</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-03T14:49:58+08:00">
+                2019-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/01/03/ComplexAlgorithm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1195,928 +1935,6 @@ Object.getOwnPropertyNames()返回所有属性的数组，无论是否可以枚�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/12/15/RegularExpression/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2018/12/15/RegularExpression/" itemprop="url">正则表达式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-15T17:00:18+08:00">
-                2018-12-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>剔除符号
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str.replace(/[^0-9a-zA-Z]/g,&quot;&quot;);</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function palindrome(str) &#123;</span><br><span class="line">  str = str.replace(/[^0-9a-zA-Z]/g,&quot;&quot;);</span><br><span class="line">  str = str.toLowerCase();</span><br><span class="line">  return str==str.split(&quot;&quot;).reverse().join(&quot;&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>指定内容行前注#
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">^(Proxy.+)$</span><br><span class="line">#$1</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>$1为()内的内容</p>
-<h3 id="常见用法"><a href="#常见用法" class="headerlink" title="常见用法"></a>常见用法</h3><h4 id="regExp-test-target"><a href="#regExp-test-target" class="headerlink" title="regExp.test(target)"></a>regExp.test(target)</h4><p>判断target是否符合正则表达式规则</p>
-<h4 id="target-match-regExp"><a href="#target-match-regExp" class="headerlink" title="target.match(regExp)"></a>target.match(regExp)</h4><p>返回target字符串中符合正则表达式规则的部分</p>
-<h3 id="匹配语法"><a href="#匹配语法" class="headerlink" title="匹配语法"></a>匹配语法</h3><h4 id="flag-g-i"><a href="#flag-g-i" class="headerlink" title="flag: g, i"></a>flag: g, i</h4><blockquote>
-<p>g: global</p>
-</blockquote>
-<blockquote>
-<p>i: case insensitive</p>
-</blockquote>
-<h4 id="集合"><a href="#集合" class="headerlink" title="集合[]"></a>集合[]</h4><h4 id="非和开头"><a href="#非和开头" class="headerlink" title="非和开头^"></a>非和开头^</h4><blockquote>
-<p>^在集合中表示非
- <br></p>
-</blockquote>
-<p> 比如上面剔除符号的用法</p>
-<blockquote>
-<p>在集合外表示以…开头</p>
-</blockquote>
-<h4 id="频率-，-，"><a href="#频率-，-，" class="headerlink" title="频率 +， *， ?"></a>频率 +， *， ?</h4><table>
-<thead>
-<tr>
-<th style="text-align:center">symbol</th>
-<th style="text-align:left">description </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"> +</td>
-<td style="text-align:left">出现1次或者多次</td>
-</tr>
-<tr>
-<td style="text-align:center"> *</td>
-<td style="text-align:left">出现任意次</td>
-</tr>
-<tr>
-<td style="text-align:center"> ?</td>
-<td style="text-align:left">出现一次或者不出现</td>
-</tr>
-<tr>
-<td style="text-align:center"> {n}</td>
-<td style="text-align:left">重复n次</td>
-</tr>
-<tr>
-<td style="text-align:center"> {m, n}</td>
-<td style="text-align:left">重复m~n次</td>
-</tr>
-</tbody>
-</table>
-<h4 id="greedy-matching-vs-lazy-matching"><a href="#greedy-matching-vs-lazy-matching" class="headerlink" title="greedy matching vs lazy matching"></a>greedy matching vs lazy matching</h4><p>贪心匹配（?）匹配最长的串，惰性匹配（?）匹配最小的串
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">let text = &quot;&lt;h1&gt;Winter is coming&lt;/h1&gt;&quot;;</span><br><span class="line">let myRegex = /&lt;.*&gt;/; </span><br><span class="line">let result = text.match(myRegex); // matching &lt;h1&gt;Winter is coming&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">myRegex = /&lt;.*?&gt;/; </span><br><span class="line">result = text.match(myRegex); // matching &lt;h1&gt;</span><br><span class="line"></span><br><span class="line">let article = &quot;&lt;h1&gt;Winter is coming&lt;/h1&gt;&lt;div&gt;&lt;/div&gt;&lt;h1&gt;north remembers&lt;/h1&gt;&lt;h1&gt;dragon is coming&lt;/h1&gt;&lt;h1&gt;the Queen is coming&lt;/h1&gt;&quot;</span><br><span class="line">let titles = article.match(/&lt;h1&gt;.*?&lt;\/h1&gt;/g)</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>思考：折中的需求</li>
-</ul>
-<p>匹配符合下列规律的字符串,规律是连续的两个parameter，即某规则重复2次
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;parameter key=&quot;xxx&quot; value=&quot;1&quot; /&gt;</span><br><span class="line">&lt;any-other-marks&gt;</span><br><span class="line">&lt;parameter key=&quot;yyy&quot; value=&quot;2&quot; type=&quot;0&quot;/&gt;</span><br></pre></td></tr></table></figure></p>
-<p>可以这样
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xmlInfo.match(/&lt;parameter.*?\/&gt;.*?&lt;parameter.*?\/&gt;/)</span><br></pre></td></tr></table></figure></p>
-<p>里面有重复了两段规则，见下文（）部分</p>
-<h4 id="代码占位符"><a href="#代码占位符" class="headerlink" title="代码占位符"></a>代码占位符</h4><table>
-<thead>
-<tr>
-<th style="text-align:center">symbol</th>
-<th style="text-align:left">description </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">\w</td>
-<td style="text-align:left">字符,空格,标点，下划线等 类似但不等价于[A-Za-z0-9_] </td>
-</tr>
-<tr>
-<td style="text-align:center">\W</td>
-<td style="text-align:left">非字符</td>
-</tr>
-<tr>
-<td style="text-align:center">\d</td>
-<td style="text-align:left">任意数字 相当于[0-9]</td>
-</tr>
-<tr>
-<td style="text-align:center">\D</td>
-<td style="text-align:left">任意非数字</td>
-</tr>
-<tr>
-<td style="text-align:center">\s</td>
-<td style="text-align:left">匹配任意不可见字符，包括空格、制表符、换页符等 相当于[ \f\n\r\t\v]</td>
-</tr>
-<tr>
-<td style="text-align:center">\S</td>
-<td style="text-align:left">匹配任意可见字符</td>
-</tr>
-</tbody>
-</table>
-<h4 id="lookaheads"><a href="#lookaheads" class="headerlink" title="lookaheads"></a>lookaheads</h4><p>暂时不知道如何翻译<br>
-例 密码规则不少于6位，且至少包含连续2位数字
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let pwRegex = /(?=\w&#123;6,&#125;)(?=\D*\d&#123;2&#125;)/;</span><br><span class="line">let result = pwRegex.test(sampleWord);</span><br></pre></td></tr></table></figure></p>
-<p>(?=\D*\d{2})应理解为任意非数字内容（或者不存在这部分内容）加两个数字
-(?=…)检测包含…的字符串，(?!…)检测不包含…的字符串，只检测是否符合条件，不返回匹配片段</p>
-<h4 id><a href="#" class="headerlink" title="()"></a>()</h4><p>括号的本义是封装模式，封装的模式可以用\1 \2的方式代替
-上面有个遗留问题，重复部分可写作
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xmlInfo.match(/(&lt;parameter.*?\/&gt;).*?\1/)</span><br></pre></td></tr></table></figure></p>
-<p>上述代码存在问题</p>
-<h4 id="写过的例子"><a href="#写过的例子" class="headerlink" title="写过的例子"></a>写过的例子</h4><ul>
-<li>常见邮箱格式<br>
-/^([A-Za-z0-9_-.])+\@([A-Za-z0-9_-.])+.([A-Za-z]{2,4})$/</li>
-<li>以,分隔的邮箱地址<br>
-/^(([A-Za-z0-9_-.])+\@([A-Za-z0-9_-.])+.([A-Za-z]{2,4}),)*(([A-Za-z0-9_-.])+\@([A-Za-z0-9_-.])+.([A-Za-z]{2,4}))$/</li>
-<li></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/08/31/HighPerformanceSQL-Index/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2018/08/31/HighPerformanceSQL-Index/" itemprop="url">高性能SQL-索引</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-31T10:51:06+08:00">
-                2018-08-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/08/30/Photography-Soft-Light/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2018/08/30/Photography-Soft-Light/" itemprop="url">Sexual Photography With Soft Light</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-30T13:24:32+08:00">
-                2018-08-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/美学/" itemprop="url" rel="index">
-                    <span itemprop="name">美学</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="http://viviennemok.foliodrop.com/categories/portfolio" target="_blank" rel="noopener">http://viviennemok.foliodrop.com/categories/portfolio</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/08/27/ECMAScript6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2018/08/27/ECMAScript6/" itemprop="url">ECMAScript6</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-27T15:04:20+08:00">
-                2018-08-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
-                    <span itemprop="name">前端技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h2><p>ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。</p>
-<h3 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h3><p>export require是CommonJS规范的方法,es6 引入了import，可以将模块中的对象部分引入，以减少开销，或者使用import * as objName from 引入文件所有对象</p>
-<blockquote>
-<p>Caution: the semicolon at the end of the import is mandatory!
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/*util1.js*/</span><br><span class="line">export default&#123;</span><br><span class="line">    a:100</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/*index.js*/</span><br><span class="line">import util1 from &apos;./util1.js&apos;</span><br><span class="line">console.log(util1)</span><br></pre></td></tr></table></figure>
-<h3 id="关于声明"><a href="#关于声明" class="headerlink" title="关于声明"></a>关于声明</h3><blockquote>
-<p>let 代替 var. 同一变量不能重复使用let声明, 否则报错<br></p>
-</blockquote>
-<blockquote>
-<p>const是常量，区别于只读
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const s = [1];</span><br><span class="line">s[0]=0;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>但是可以用Object.freeze()
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function freezeObj() &#123;</span><br><span class="line">  &quot;use strict&quot;;</span><br><span class="line">  const MATH_CONSTANTS = &#123;</span><br><span class="line">    PI: 3.14</span><br><span class="line">  &#125;;</span><br><span class="line">  Object.freeze(MATH_CONSTANTS)</span><br><span class="line">  try &#123;</span><br><span class="line">    MATH_CONSTANTS.PI = 99;</span><br><span class="line">  &#125; catch( ex ) &#123;</span><br><span class="line">    console.log(ex);</span><br><span class="line">  &#125;</span><br><span class="line">  return MATH_CONSTANTS.PI;</span><br><span class="line">&#125;</span><br><span class="line">const PI = freezeObj();</span><br></pre></td></tr></table></figure></p>
-<h3 id="Object-assign"><a href="#Object-assign" class="headerlink" title="Object.assign()"></a>Object.assign()</h3><blockquote>
-<p>将所有可枚举属性的值从一个或多个源对象复制到目标对象<br>
-Object.assign(target, …sources)
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const target = &#123; a: 1, b: 2 &#125;;</span><br><span class="line">const source = &#123; b: 4, c: 5 &#125;;</span><br><span class="line"></span><br><span class="line">const returnedTarget = Object.assign(target, source); // expected output: Object &#123; a: 1, b: 4, c: 5 &#125;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<h3 id="箭头函数表达式"><a href="#箭头函数表达式" class="headerlink" title="箭头函数表达式"></a>箭头函数表达式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">const squaredIntegers = arr.filter(item=&gt;&#123;</span><br><span class="line"> return Math.floor(item)===item&amp;&amp;item&gt;0 ;</span><br><span class="line">&#125;).map(item=&gt;Math.pow(item, 2))</span><br></pre></td></tr></table></figure>
-<p>箭头表达式牵扯到的一个知识点是“箭头表达式不会创建this”
-需知javascript this是区分运行环境的标记，见 <a href="https://www.ruanyifeng.com/blog/2018/06/javascript-this.html" target="_blank" rel="noopener">阮一峰 JavaScript 的 this 原理</a>，箭头表达式继承外层函数运行环境。</p>
-<h3 id="剩余参数运算符（Rest-Operator）"><a href="#剩余参数运算符（Rest-Operator）" class="headerlink" title="剩余参数运算符（Rest Operator）"></a>剩余参数运算符（Rest Operator）</h3><p>使用Rest Operator定义参数数量可变的函数，参数将存入Rest Operator指定的变量指代的数组中
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function howMany(...args) &#123;</span><br><span class="line">  return &quot;You have passed &quot; + args.length + &quot; arguments.&quot;;</span><br><span class="line">&#125;</span><br><span class="line">console.log(howMany(0, 1, 2)); // You have passed 3 arguments</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const sum = (function() &#123;</span><br><span class="line">  &quot;use strict&quot;;</span><br><span class="line">  return function sum(...args) &#123;</span><br><span class="line">    //const args = [ x, y, z ];</span><br><span class="line">    return args.reduce((a, b) =&gt; a + b, 0);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line">console.log(sum(1, 2, 3)); // 6</span><br></pre></td></tr></table></figure>
-<p>回顾下归并方法reduce，array.reduce(callback,[, initialValue])，callback接受以下参数：previousValue，前一次调用回调函数的返回值；currentValue当前处理的数组元素，currentIndex可选，当前数组元素下标；array可选，调用reduce()方法的数组。initialValue可选，作为第一次调用callback方法的previousValue参数
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var arr = [6, 89, 3, 45];</span><br><span class="line">var maximus = Math.max.apply(null, arr); // returns 89</span><br><span class="line">maximus = Math.max(...arr); // returns 89</span><br><span class="line"></span><br><span class="line">arr0 = [...arr]</span><br><span class="line">console.log(arr0==arr)  // false</span><br></pre></td></tr></table></figure></p>
-<h3 id="解构赋值（Destructuring-Assignment）"><a href="#解构赋值（Destructuring-Assignment）" class="headerlink" title="解构赋值（Destructuring Assignment）"></a>解构赋值（Destructuring Assignment）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var voxel = &#123;x: 3.6, y: 7.4, z: 6.54 &#125;;</span><br><span class="line">const &#123; x, y, z &#125; = voxel; // x = 3.6, y = 7.4, z = 6.54</span><br></pre></td></tr></table></figure>
-<p>或者将部分属性 voxel.x, voxel.y 存入指定变量 a, b
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const &#123; x : a, y : b&#125; = voxel // a = 3.6, b = 7.4</span><br></pre></td></tr></table></figure></p>
-<p>分离多余的变量
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let postData = Object.assign(&#123; extraAttr:&apos;extra&apos; &#125;, dto);</span><br><span class="line">let &#123; extraAttr, ...entity &#125; = postData;</span><br></pre></td></tr></table></figure></p>
-<p>嵌套对象（nested objects）
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const tree = &#123;</span><br><span class="line">    text:&apos;A&apos;,</span><br><span class="line">    value:0,</span><br><span class="line">    parentNode:&#123;</span><br><span class="line">        text:&apos;Root&apos;,</span><br><span class="line">        value:-1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const &#123;parentNode:&#123;value:RootVal&#125;&#125; = tree;</span><br><span class="line">console.log(RootVal)</span><br></pre></td></tr></table></figure></p>
-<p>数组
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const [a, b,,, c] = [1, 2, 3, 4, 5, 6];</span><br><span class="line">console.log(a, b, c); // 1, 2, 5</span><br><span class="line">// use rest operator</span><br><span class="line">const [begining,...rest] = [1, 2, 3, 4, 5, 6];</span><br></pre></td></tr></table></figure></p>
-<p>交换值
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[a, b] = [b, a];</span><br></pre></td></tr></table></figure></p>
-<p>函数传参
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">const stats = &#123;</span><br><span class="line">  max: 56.78,</span><br><span class="line">  standard_deviation: 4.34,</span><br><span class="line">  median: 34.54,</span><br><span class="line">  mode: 23.87,</span><br><span class="line">  min: -0.75,</span><br><span class="line">  average: 35.85</span><br><span class="line">&#125;;</span><br><span class="line">const half = (function() &#123;</span><br><span class="line">  &quot;use strict&quot;; </span><br><span class="line">  return function half(&#123;max,min&#125;) &#123;</span><br><span class="line">    return (max + min) / 2.0;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line">console.log(half(stats)); // 28.015</span><br></pre></td></tr></table></figure></p>
-<h3 id="字符串模块（Template-Literals）"><a href="#字符串模块（Template-Literals）" class="headerlink" title="字符串模块（Template Literals）"></a>字符串模块（Template Literals）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">resultDisplayArray = arr.map(item=&gt;&#123;</span><br><span class="line">   return `&lt;li class=&quot;text-warning&quot;&gt;$&#123;item&#125;&lt;/li&gt;`</span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="简化声明"><a href="#简化声明" class="headerlink" title="简化声明"></a>简化声明</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const person = &#123;</span><br><span class="line">  name: &quot;Taylor&quot;,</span><br><span class="line">  sayHello: function() &#123;</span><br><span class="line">    return `Hello! My name is $&#123;this.name&#125;.`;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>可写作
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const person = &#123;</span><br><span class="line">  name: &quot;Taylor&quot;,</span><br><span class="line">  sayHello() &#123;</span><br><span class="line">    return `Hello! My name is $&#123;this.name&#125;.`;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<h3 id="class-以及-get-set-以及super"><a href="#class-以及-get-set-以及super" class="headerlink" title="class 以及 get set 以及super"></a>class 以及 get set 以及super</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Book &#123;</span><br><span class="line">  constructor(author) &#123;</span><br><span class="line">    this._author = author;</span><br><span class="line">  &#125;</span><br><span class="line">  // getter</span><br><span class="line">  get writer()&#123;</span><br><span class="line">    return this._author;</span><br><span class="line">  &#125;</span><br><span class="line">  // setter</span><br><span class="line">  set writer(updatedAuthor)&#123;</span><br><span class="line">    this._author = updatedAuthor;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h3><blockquote>
-<p>区别于回调函数方式的异步编程方案， ES6将其写入语言标准。</p>
-</blockquote>
-<blockquote>
-<p>所谓Promise，简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。从语法上说，Promise 是一个对象，从它可以获取异步操作的消息。</p>
-</blockquote>
-<p>Promise对象的状态<br>
-pending（进行中）、fulfilled（已成功）和rejected（已失败）只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function loadImageAsync(url) &#123;</span><br><span class="line">  return new Promise(function(resolve, reject) &#123;</span><br><span class="line">    const image = new Image();</span><br><span class="line"></span><br><span class="line">    image.onload = function() &#123;</span><br><span class="line">      resolve(image);</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    image.onerror = function() &#123;</span><br><span class="line">      reject(new Error(&apos;Could not load image at &apos; + url));</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    image.src = url;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>加载图片的异步过程，成功或失败时触发相应的事件(load,error)，resolve和reject刚好对应作为事件响应方法</p>
-<p>// TODO Promise 链式调用(存目)</p>
-<p>Promise().then(…)的第二个参数可以捕捉异常，和链式调用最后的catch有和区别？</p>
-<blockquote>
-<p>catch只是一个语法糖而己 还是通过then 来处理的，大概如下所示
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Promise.prototype.catch = function(fn)&#123;</span><br><span class="line">    return this.then(null,fn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<h3 id="async-await"><a href="#async-await" class="headerlink" title="async, await"></a>async, await</h3><p>async(asynchronous)异步</p>
-<p>await(asynchronous wait)等待异步结果
-下面的代码结构被称作callback hell
-其需求是从input.xml文件中读取action，如果action=token，则读取注册表，验证token时效，其中读文件，xml转json，读注册表均为异步操作
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">(function()&#123;</span><br><span class="line">  fs.readfile(&apos;input.xml&apos;,(err,data)=&gt;&#123;</span><br><span class="line">    if(err)&#123;</span><br><span class="line">      console.error(err)</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">      regedit.list(&apos;HKCU\Software\QQSTEST\&apos;,(err,data)=&gt;&#123;</span><br><span class="line">        if(err)&#123;</span><br><span class="line">          console.error(err)</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">          xmlParser.parseString(data,(err,data)=&gt;&#123;</span><br><span class="line">            if(err)&#123;</span><br><span class="line">              console.error(err)</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">              done(data)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">function readfileAsync(filepath)&#123;</span><br><span class="line">  return new Promise((resolve,reject)=&gt;&#123;</span><br><span class="line">    fs.readFile(filepath,(err,data)=&gt;&#123;</span><br><span class="line">      if(err)&#123;</span><br><span class="line">        reject(err)</span><br><span class="line">      &#125;else&#123;</span><br><span class="line">        resolve(data)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line">(async function()&#123;</span><br><span class="line">  var fileData = &apos;&apos;;</span><br><span class="line">  await readfileAsync(&apos;input.xml).then(data=&gt;&#123;</span><br><span class="line">    fileData=data;</span><br><span class="line">  &#125;,err=&gt;&#123;</span><br><span class="line">    console.log(err)</span><br><span class="line">  &#125;)</span><br><span class="line">  if(!fileData) return;</span><br><span class="line">  await readRegEditAsync(&apos;&apos;)</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
-<p>在async声明的function内使用await, 执行时等待promise对象的结果，完成其resolve或reject操作后向下执行。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/08/17/FlexBox/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2018/08/17/FlexBox/" itemprop="url">弹性盒子布局</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-17T14:34:36+08:00">
-                2018-08-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
-                    <span itemprop="name">前端技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>display: flex
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">  #box-container &#123;</span><br><span class="line">    height: 500px;</span><br><span class="line">    display: flex;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  #box-1 &#123;</span><br><span class="line">    background-color: dodgerblue;</span><br><span class="line">    width: 50%;</span><br><span class="line">    height: 50%;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  #box-2 &#123;</span><br><span class="line">    background-color: orangered;</span><br><span class="line">    width: 50%;</span><br><span class="line">    height: 50%;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;div id=&quot;box-container&quot;&gt;</span><br><span class="line">  &lt;div id=&quot;box-1&quot;&gt;&lt;/div&gt;</span><br><span class="line">  &lt;div id=&quot;box-2&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<p>flex-direction<br>
-value: row | column | row-reverse | column-reverse</p>
-<p>justify-content<br>
-value: flex-start | flex-end | space-betwee | space-around
-子元素不占满父元素时，在水平方向设置排列和空余的选项</p>
-<p>align-items<br>
-value: flex-start | flex-end | space-betwee | space-around
-子元素不占满父元素时，在垂直方向设置排列和空余的选项</p>
-<p>flex-wrap<br>
-value: nowrap | wrap | wrap-reverse
-当子元素宽度之和超过弹性布局容器时，设置换行</p>
-<p>flex-shrink<br>
-value:(number)
-设置子元素在弹性布局容器中的宽度压缩比例</p>
-<p>flex-grow<br>
-value:(number)
-设置子元素在弹性布局容器中的高度拉伸比例</p>
-<p>flex-basis<br>
-value:(px, em, %)
-在进行flex-shrink和flex-grow前初始化子元素尺寸</p>
-<p>缩写
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">flex: 1 0 10px;</span><br><span class="line">// same as</span><br><span class="line">flex-grow: 1;</span><br><span class="line">flex-shrink: 0;</span><br><span class="line">flex-basis: 10px;</span><br></pre></td></tr></table></figure></p>
-<p>order
-value:(number)
-次序</p>
-<p>align-self<br>
-value:auto | flex-start | flex-end | center | baseline | stretch | inherit
-设置在各子元素与父元素的align-item作用对应并覆盖align-item效果</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2167,7 +1985,7 @@ value:auto | flex-start | flex-end | center | baseline | stretch | inherit
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">124</span>
+                  <span class="site-state-item-count">129</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2189,7 +2007,7 @@ value:auto | flex-start | flex-end | center | baseline | stretch | inherit
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

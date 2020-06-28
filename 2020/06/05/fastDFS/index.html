@@ -90,7 +90,7 @@
 <meta property="og:image" content="https://tvax4.sinaimg.cn/large/a60edd42gy1gfip5ah0saj20f70dln0y.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/a60edd42gy1gfirk6itslj20td0ey75n.jpg">
 <meta property="og:image" content="https://tvax1.sinaimg.cn/large/a60edd42gy1gfirmkezk3j20mw0akjug.jpg">
-<meta property="og:updated_time" content="2020-06-06T10:59:52.027Z">
+<meta property="og:updated_time" content="2020-06-08T02:23:40.781Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FastDFS">
 <meta name="twitter:description" content="FastDFS是国人大神开发的用于小文件（&amp;lt;500Mb）存储的分布式文件管理系统  Github: happyfish100/fastdfs 戳–&amp;gt;详细配置步骤，超级详细，傻瓜式，环境是Centos。对于ubuntu，安装编译环境的方式会有不同 centos编译环境1yum install git gcc gcc-c++ make automake autoconf libtool">
@@ -314,11 +314,21 @@
 <h4 id="tracker和storage"><a href="#tracker和storage" class="headerlink" title="tracker和storage"></a>tracker和storage</h4><p><img src="https://tvax4.sinaimg.cn/large/a60edd42gy1gfip5ah0saj20f70dln0y.jpg" alt="fdfs">
 如配置步骤所述，fdfs安装好后有tracker配置文件和storage配置文件，前者配置tracker用于上传下载的调度，后者配置storage作为文件存储。<br>
 tracher监听storage的状态同步消息，使当client上传或下载时，提供可用的storage路径<br>
-storage可以配置为group，相同group的文件会相互拷贝（这个是需要一定时间的，在集群方案中需要考虑）<br>
-上传文件<br>
+storage可以配置为group，相同group的文件会相互拷贝（这个是需要一定时间的，在集群方案中需要考虑）<br></p>
+<p>上传文件<br>
 <img src="https://tva1.sinaimg.cn/large/a60edd42gy1gfirk6itslj20td0ey75n.jpg" alt="上传">
-下载文件<br>
-<img src="https://tvax1.sinaimg.cn/large/a60edd42gy1gfirmkezk3j20mw0akjug.jpg" alt="下载"></p>
+为使业务应用服务器实现上传fDFS，应实现client功能，即</p>
+<ul>
+<li>请求tracker 获取可用storage的 ip port等</li>
+<li>调用相应的storage接口上传文件，接受返回的file_id信息</li>
+</ul>
+<p>下载文件<br></p>
+<p><img src="https://tvax1.sinaimg.cn/large/a60edd42gy1gfirmkezk3j20mw0akjug.jpg" alt="下载">
+如图，client实现下载，需</p>
+<ul>
+<li>请求tracker 获拉取下载的storage的 ip port等</li>
+<li>调用相应的storage接口下载文件</li>
+</ul>
 
       
     </div>
@@ -358,6 +368,10 @@ storage可以配置为group，相同group的文件会相互拷贝（这个是需
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/qqsnote/2020/06/09/vsftp/" rel="prev" title="vsftp">
+                vsftp <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -434,7 +448,7 @@ storage可以配置为group，相同group的文件会相互拷贝（这个是需
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">124</span>
+                  <span class="site-state-item-count">129</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -456,7 +470,7 @@ storage可以配置为group，相同group的文件会相互拷贝（这个是需
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
