@@ -75,3 +75,10 @@ systemctl start firewalld.service #启动
 firewall-cmd --zone=public --permanent --add-port 22/tcp #开启端口
 systemctl restart firewalld.service #重启
 ```
+#### 关闭selinux
+```
+sestatus // 查看状态
+setenforce 0 // 临时关闭
+```
+禁用selinux<br>
+编辑/etc/selinux/config, set SELINUX=disabled。

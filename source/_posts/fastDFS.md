@@ -23,7 +23,16 @@ apt install git gcc g++ make automake autoconf libtool libpcre3 libpcre3-dev zli
 如配置步骤所述，fdfs安装好后有tracker配置文件和storage配置文件，前者配置tracker用于上传下载的调度，后者配置storage作为文件存储。<br>
 tracher监听storage的状态同步消息，使当client上传或下载时，提供可用的storage路径<br>
 storage可以配置为group，相同group的文件会相互拷贝（这个是需要一定时间的，在集群方案中需要考虑）<br>
+
 上传文件<br>
 ![上传](https://tva1.sinaimg.cn/large/a60edd42gy1gfirk6itslj20td0ey75n.jpg)
+为使业务应用服务器实现上传fDFS，应实现client功能，即
++ 请求tracker 获取可用storage的 ip port等
++ 调用相应的storage接口上传文件，接受返回的file_id信息
+
 下载文件<br>
+
 ![下载](https://tvax1.sinaimg.cn/large/a60edd42gy1gfirmkezk3j20mw0akjug.jpg)
+如图，client实现下载，需
++ 请求tracker 获拉取下载的storage的 ip port等
++ 调用相应的storage接口下载文件
