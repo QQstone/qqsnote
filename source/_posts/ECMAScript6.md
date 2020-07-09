@@ -278,3 +278,9 @@ function readfileAsync(filepath){
 })()
 ```
 在async声明的function内使用await, 执行时等待promise对象的结果，完成其resolve或reject操作后向下执行。
+
+<span style="color:#ff0;font-weight:bold">Caution!</span> 在forEach中加async await不能阻塞循环，事实上forEach回调函数无法跳出循环，不要在forEach里面使用async-await、break、return，在有相关需求的场景下使用for循环语法
+[Q160解析](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/389#issuecomment-634385007)
+
+#### 关注木易杨每日面试题
+[Daily Interview Question](https://github.com/Advanced-Frontend/Daily-Interview-Question)

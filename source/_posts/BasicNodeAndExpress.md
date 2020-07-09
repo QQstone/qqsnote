@@ -177,3 +177,13 @@ Node.js的实现的学习才应该是你要学的Node.js本身，而不是无尽
 + 熟悉<a href="https://link.zhihu.com/?target=https%3A//nodejs.org/api/repl.html" class=" wrap external" target="_blank" rel="nofollow noreferrer" data-za-detail-view-id="1043">Node.js REPL</a>(Read Eval Print Loop:交互式解释器) 
 + 常用全局变量<a href="https://nodejs.org/api/globals.html" class=" wrap external" target="_blank" rel="nofollow noreferrer" data-za-detail-view-id="1043">Global Objects</a> / <a href="https://nodejs.org/api/util.html" class=" wrap external" target="_blank" rel="nofollow noreferrer" data-za-detail-view-id="1043">util</a>
 + 核心概念 <a href="https://nodejs.org/api/timers.html" class=" wrap external" target="_blank" rel="nofollow noreferrer" data-za-detail-view-id="1043">Timers</a> /<a href="https://nodejs.org/api/buffer.html" class=" wrap external" target="_blank" rel="nofollow noreferrer" data-za-detail-view-id="1043">Buffer</a> / <a href="https://nodejs.org/api/events.html" class=" wrap external" target="_blank" rel="nofollow noreferrer" data-za-detail-view-id="1043">Events</a> / <a href="https://nodejs.org/api/stream.html" class=" wrap external" target="_blank" rel="nofollow noreferrer" data-za-detail-view-id="1043">Stream</a> / <a href="https://nodejs.org/api/modules.html" class=" wrap external" target="_blank" rel="nofollow noreferrer" data-za-detail-view-id="1043">Modules</a> / <a href="https://nodejs.org/api/errors.html" class=" wrap external" target="_blank" rel="nofollow noreferrer" data-za-detail-view-id="1043">Errors</a>
+
+> 外部服务访问静态文件也会有跨域问题, 解决方法:
+```
+let options = {
+  setHeaders: function (res, path, stat) {
+    res.set('Access-Control-Allow-Origin', '*')
+  }
+}
+app.use(express.static('public', options))
+```

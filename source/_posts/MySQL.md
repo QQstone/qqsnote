@@ -121,8 +121,14 @@ mysqldump -u admin -padmin schemaName tableName > backup.sql
 git commit
 git push
 ```
+///
 思考：我要是不在本地跑源码(node server.js),是否可以省略拉本地仓库的步骤？是否可以直接将备份文件“push”到远程仓库？
 ![](https://tvax2.sinaimg.cn/large/a60edd42gy1gaj6h0z7e5j20m806btb2.jpg)
 编辑文件在上图的workspace范畴中，我想，问题答案应该是否定的。
-
+#### 常用查询
+```
+show databases;
+use csc;
+show tables;
+```
 #### key, primary key, unique key

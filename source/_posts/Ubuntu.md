@@ -27,3 +27,9 @@ upgrade 是在上述基础上将本地软件安装升级
 
 处理控制台进程无响应<br>
 Ctrl C无法终结，按Ctrl Z将进程转到后台执行，然后ps -ef查看进程列表，kill无响应的进程
+
+#### ubuntu lts 的IP设置
+```
+sudo nano /etc/netplan/01-xxxx.yaml
+sudo netplan apply
+```
