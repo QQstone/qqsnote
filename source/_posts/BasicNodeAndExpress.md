@@ -156,19 +156,23 @@ const listener = app.listen(process.env.PORT, function() {
 ```
 unix shell prompt:
 ```
-PORT=1234
-echo $PORT
-echo 'server is launch on port:${PORT}'
+export PORT=1234
+echo env|PORT
 
 unset PORT
 ```
-windows环境
+windows CMD
 ```
+# 设置
 set PORT=1234
+# 移除
+set PORT=
 ```
 windows powershell
 ```
 $env:PORT = 1234
+
+del env:PORT
 ```
 #### 关于Node.js的系统学习
 Node.js的实现的学习才应该是你要学的Node.js本身，而不是无尽的工具和第三方库。<br>

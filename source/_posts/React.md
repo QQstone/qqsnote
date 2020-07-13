@@ -226,3 +226,40 @@ class MyComponent extends React.Component {
   }
 };
 ```
+#### 条件渲染
+```
+render() {
+  const isLoggedIn = this.state.isLoggedIn;
+  let button;
+  if (isLoggedIn) {
+    button = <LogoutButton onClick={this.handleLogoutClick} />;
+  } else {
+    button = <LoginButton onClick={this.handleLoginClick} />;
+  }
+
+  return (
+    <div>
+      <Greeting isLoggedIn={isLoggedIn} />
+      {button}
+    </div>
+  );
+}
+```
+与运算&&
+```
+{flag && <toggleComponent />}
+```
+三目运算
+```
+render() {
+  const isLoggedIn = this.state.isLoggedIn;
+
+  return (
+    <div>
+      <Greeting isLoggedIn={isLoggedIn} />
+      {isLoggedIn?<LogoutButton onClick={this.handleLogoutClick} />:<LoginButton onClick={this.handleLoginClick} />}
+    </div>
+  );
+}
+```
+#### ReactDOMServer

@@ -26,8 +26,4 @@ vscode debug
         ]
     }
 ```
-Linux Server
-```
-    export NODE_ENV=development
-    env | grep NODE_ENV
-```
+关于设置环境变量 {% post_link BasicNodeAndExpress Node及Express入门 %}
