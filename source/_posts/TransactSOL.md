@@ -2,7 +2,7 @@
 title: TransactSOL
 date: 2020-05-19 12:39:34
 tags:
-- sqlServer StoredProcedure
+- SQL_Server
 categories: 
 - 数据库
 ---

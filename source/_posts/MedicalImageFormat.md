@@ -75,3 +75,6 @@ ds = pydicom.dcmread(file)
 render: camera actor light
 data set:
 #### xslt
+
+#### PACS
+医学影像存档与通信系统（英语：Picture archiving and communication system，PACS）

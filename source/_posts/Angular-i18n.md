@@ -11,7 +11,7 @@ categories:
 
 国际化是将应用程序设计以及预备，使之支持不同的语言的过程。 本地化是一个把国际化的应用根据区域配置翻译成特定语言的过程。
 
-国际化设计是实现“多语言切换”的前提，angular框架的国际化基础是i8n模块
+国际化设计是实现“多语言切换”的前提，angular框架的国际化基础是i18n模块
 
 #### 框架本地化（Localization）
 为应用配置“地区”，这个地区成为查找相应的本地化数据的依据。
@@ -238,3 +238,6 @@ Please run \`ng add @angular/localize\` from the Angular CLI.
     })
     export class AppModule { }
    ```
+
+#### 多语言切换 ngx-translate
+关于ngx-translate {% post_link Ngx-translate Ngx-translate文章 %}

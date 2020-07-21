@@ -1,11 +1,10 @@
 ---
 title: Azure Fuctions
 date: 2019-08-05 10:50:28
-tags: Cloud
-categories: 
-- 平台
+tags: 
+- Azure
 ---
-> Azure Functions 用于在无服务器环境中执行代码，无需先创建 VM 或发布 Web 应用程序。
+Azure Functions 是微软云提供的部署Api服务的一种功能，利用Azure Functions部署些Api，无需创建/配置服务器环境。即无需先创建 VM 或发布 Web 应用程序。
 
 #### 安装Azure Functions Core Tools 2.x
 + 安装 .Net Core 2.x SDK<br>

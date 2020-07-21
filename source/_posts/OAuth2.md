@@ -2,9 +2,9 @@
 title: OAuth2
 date: 2019-12-09 10:39:14
 tags:
-- 加密
+- 认证&授权
 categories: 
-- 通信协议
+- 协议和规范
 ---
 #### 案例
 
@@ -35,3 +35,5 @@ categories:
 返回账号密码，A以此申请访问B的令牌，风险更高。(私以为，既然B予以这种信任，即将访问权限控制让与A，A可以直接以账密登录B而不用可能受限的token)
 ##### 凭据式
 对于没有前端的命令行应用，以get请求，用query parameters传参直接得到令牌。
+#### 前后端分离的SSO
+![互联网图片侵删](https://tvax3.sinaimg.cn/large/a60edd42gy1ggrgt64oe1j20p60mywgl.jpg)
