@@ -50,3 +50,5 @@ Three.js对WebGL工作步骤进一步封装，提供方便理解的绘图API以�
 ### Enable WebGL in your browser
 
 [参考](https://superuser.com/questions/836832/how-can-i-enable-webgl-in-my-browser)
+
+### [Ali Hilo](https://hiloteam.github.io/tutorial/index.html)

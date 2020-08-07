@@ -18,8 +18,8 @@ categories:
 <del>此外在CS Scanflow登录Cloud地模块中，设计期望以账密登录后返回两个token，其中A是访问Cloud相关资源地凭据，B是保持登录(Remember me)需要token，当A过期时，调用接口，Cloud认证B合法，返回新的A，即可在后续使用A继续访问Cloud资源。</del>
 
 #### OAuth标准
-> OAuth在"客户端(认证请求方)"与"服务提供商"之间，设置了一个授权层（authorization layer）。"客户端"不能直接登录"服务提供商"，只能登录授权层，使用授权层颁发的令牌（token），访问服务提供商的资源。用户注册在服务端的账户密码，不会暴露给客户端。服务提供商可以自由限制授权层令牌的权限范围和有效期。<br>
-
+> OAuth在"客户端(受限资源/服务请求方)"与"服务提供商"之间，设置了一个授权层（authorization layer）。"客户端"不能直接登录"服务提供商"，只能登录授权层，使用授权层颁发的令牌（token），访问服务提供商的资源。用户注册在服务端的账户密码，不会暴露给客户端。服务提供商可以自由限制授权层令牌的权限范围和有效期。<br>
+QQs：OAuth不强调认证，它是一个授权协议，实现的是支持由第三方提供授权访问的标准。
 #### 授权方式
 ##### 授权码（authorization code）
 上文已提到的使用第三方登录的方式即授权码方式，授权码方式是最常用且靠谱的授权方式，相比之下，其余三种比较扯淡。<br>
@@ -29,11 +29,18 @@ categories:
 2. 确认授权，重定向回A，并带回authorization code
 3. 向B请求访问受限数据，传递A身份，以及授权码
 4. 请求返回可访问受限数据令牌
-##### 隐藏式
-直接返回令牌，安全风险较高 [注1](http://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html)
+##### 隐藏式（隐式授权）
+直接返回令牌，安全风险较高 <sup>[注1](http://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html)</sup>
 ##### 密码式
 返回账号密码，A以此申请访问B的令牌，风险更高。(私以为，既然B予以这种信任，即将访问权限控制让与A，A可以直接以账密登录B而不用可能受限的token)
 ##### 凭据式
 对于没有前端的命令行应用，以get请求，用query parameters传参直接得到令牌。
 #### 前后端分离的SSO
 ![互联网图片侵删](https://tvax3.sinaimg.cn/large/a60edd42gy1ggrgt64oe1j20p60mywgl.jpg)
+#### 关于OAuth, OpenId, OIDC什么的
+网上有文章说OAuth是authorization， OpenId是authentication，这听起来很谜。。
+> OpenID是一个去中心化的网上身份认证系统。（维基百科）
+
+所谓认证系统，解决的是"你是谁"的问题，用户在在identity provider（idp）的服务上注册，客户端登录即去idp获取OpenID标识对应的token，服务提供者校验身份，是拿客户端的token去idp确认。
+OIDC（OpenID Connect）OpenID + OAuth2.0认证（授权访问）服务
+![](https://tvax3.sinaimg.cn/large/a60edd42gy1gh5i7z0q6bj20e808jwfe.jpg)

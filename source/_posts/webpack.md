@@ -26,3 +26,5 @@ module.exports = {
 ```
     npx webpack --config webpack.config.js
 ```
+#### source map devtool plugin
+参考 [SourceMapDevToolPlugin](https://webpack.js.org/plugins/source-map-dev-tool-plugin/#root)

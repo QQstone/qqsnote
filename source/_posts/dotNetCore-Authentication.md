@@ -10,7 +10,8 @@ tags:
 
 身份验证中间件
 
-> 已注册的身份验证处理程序及其配置选项被称为“方案”。
+> 已注册的身份验证处理程序及其配置选项被称为“方案（schema）”。
+
 startup.cs
 ```
 public void ConfigureServices(IServiceCollection services){
@@ -100,6 +101,89 @@ public void ConfigureServices(IServiceCollection services)
     {
         options.AddPolicy("PolicyBased01", policy =>
             policy.Requirements.Add(new MinimumAgeRequirement(21)));
+    });
+}
+```
+#### 指定特定授权方案
+参考 [Authorize with a specific scheme in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/limitingidentitybyscheme?view=aspnetcore-3.1)
+
+> An authentication scheme is named when the authentication service is configured during authentication. Startup的服务配置中, AddAuthentication后添加方案
+```
+public void ConfigureServices(IServiceCollection services)
+{
+    // Code omitted for brevity
+
+    services.AddAuthentication()
+        .AddCookie(options => {
+            options.LoginPath = "/Account/Unauthorized/";
+            options.AccessDeniedPath = "/Account/Forbidden/";
+        })
+        .AddJwtBearer(options => {
+            options.Audience = "http://localhost:5001/";
+            options.Authority = "http://localhost:5000/";
+        });
+    ....
+}
+```
+使用授权属性选择方案
+```
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+public class MixedController : Controller
+.....
+```
+使用策略并指定授权方案
+> If you prefer to specify the desired schemes in policy, you can set the AuthenticationSchemes collection when adding your policy. 添加授权策略时设置AuthenticationSchemes列表，将对应的scheme添加进去
+```
+services.AddAuthorization(options =>
+{
+    options.AddPolicy("Over18", policy =>
+    {
+        policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+        policy.RequireAuthenticatedUser();
+        policy.Requirements.Add(new MinimumAgeRequirement());
+    });
+});
+```
+在属性中使用指定策略
+```
+[Authorize(Policy = "Over18")]
+public class RegistrationController : Controller
+```
+使用多种方案<br>
+the following code in Startup.ConfigureServices adds two JWT bearer authentication schemes with different issuers:颁发者不同的两种JWT Bearer认证方案
+```
+public void ConfigureServices(IServiceCollection services)
+{
+    // Code omitted for brevity
+
+    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.Audience = "https://localhost:5000/";
+            options.Authority = "https://localhost:5000/identity/";
+        })
+        .AddJwtBearer("AzureAD", options =>
+        {
+            options.Audience = "https://localhost:5000/";
+            options.Authority = "https://login.microsoftonline.com/eb971100-6f99-4bdc-8611-1bc8edd7f436/";
+        });
+    ...
+}
+```
+更新授权策略, 上面两种JWTBearer认证方案，将一个要注册到默认认证方案“JwtBearerDefaults.AuthenticationScheme”，另外的认证方案需要以唯一的方案注册（Only one JWT bearer authentication is registered with the default authentication scheme JwtBearerDefaults.AuthenticationScheme. Additional authentication has to be registered with a unique authentication scheme.）
+```
+public void ConfigureServices(IServiceCollection services)
+{
+    // Code omitted for brevity
+
+    services.AddAuthorization(options =>
+    {
+        var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
+            JwtBearerDefaults.AuthenticationScheme,
+            "AzureAD");
+        defaultAuthorizationPolicyBuilder = 
+            defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
+        options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
     });
 }
 ```

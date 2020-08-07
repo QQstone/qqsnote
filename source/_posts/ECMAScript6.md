@@ -1,5 +1,5 @@
 ---
-title: ECMAScript6
+title: ECMAScript
 date: 2018-08-27 15:04:20
 tags:
 - javascript
@@ -150,6 +150,7 @@ const half = (function() {
 })();
 console.log(half(stats)); // 28.015
 ```
+ES9 剩余运算符可应用于解构语法
 ### 字符串模块（Template Literals）
 ```
  resultDisplayArray = arr.map(item=>{
@@ -225,6 +226,39 @@ Promise.prototype.catch = function(fn){
     return this.then(null,fn);
 }
 ```
+
+## ES7
+### Array.protorype.includes
+array.includes(x) 相当于 array.indexOf(x)<br>
+ES6中已添加了String.prototype.includes
+### 指数运算符 **
+```
+  2 ** 2 // 4
+  2 ** 3 // 8
+```
+js引擎（V8）对**的实现与Math.pow的运算结果是会有差别的
+
+## ES8
+### 字符串填充
+以指定字符/字符串/函数方式, 在首或尾填充字符串至特定长度
+```
+  str.padStart(targetLength [, padString])
+
+  str.padEnd(targetLength [, padString])
+```
+### Object.values, Object.entries
+获取对象属性值的集合
+```
+  const obj = { x: 'xxx', y: 1 };
+  Object.values(obj); // ['xxx', 1]
+```
+其实现是for in，因此obj也可以是Array或string，其输出结果也是遍历逐个下标组成的集合。
+
+获取对象键值对的集合
+```
+const obj = { x: 'xxx', y: 1 };
+Object.entries(obj); // [['x', 'xxx'], ['y', 1]]
+```
 ### async, await
 async(asynchronous)异步
 
@@ -282,5 +316,67 @@ function readfileAsync(filepath){
 <span style="color:#ff0;font-weight:bold">Caution!</span> 在forEach中加async await不能阻塞循环，事实上forEach回调函数无法跳出循环，不要在forEach里面使用async-await、break、return，在有相关需求的场景下使用for循环语法
 [Q160解析](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/389#issuecomment-634385007)
 
+见下文 ES 9 异步迭代 
+
+## ES9
+### 异步迭代
+```
+  async function process(array) {
+    for await (let i of array) {
+      doSomething(i);
+    }
+  }
+```
+### Promise.finally
+```
+  iPromise.then(do_sth1).then(do_sth2)
+  .catch(err_handle)
+  .finally(complete_handle)
+```
+### 在正则表达式中命名模式匹配结果
+模式指使用()封装的规则，在ES9中可以用(?\<name\>)的方式封装，在之后的js逻辑中，可以使用命名变量
+```
+// 将"年-月-日"改为"月-日-年"
+  const reDate = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/,
+  d = '2018-04-30',
+  usDate = d.replace(reDate, '$<month>-$<day>-$<year>');
+```
+### 正则表达式断言和反向断言
+见{% post_link RegularExpression 正则表达式 %}
+### 正则表达式dotAll
+正则表达式中点.匹配除回车外的任何单字符，标记s改变这种行为，使之匹配包含终止符的所有字符，例
+```
+/hello.world/.test('hello\nworld');  // false
+/hello.world/s.test('hello\nworld'); // true
+```
+### 正则表达式 Unicode 转义
+转义语法\p{...}
+```
+const reGreekSymbol = /\p{Script=Greek}/u;
+reGreekSymbol.test('π'); // true
+```
+## ES10
+### Array.prototype.flat, flatMap
+可指定层次数（允许Infinity）迭代遍历，输出元素的集合 ———— 数组降维
+```
+var arr3 = [1, 2, [3, 4, [5, 6]]];
+arr3.flat(2); // [1, 2, 3, 4, 5, 6]
+
+```
+flat自动移除空项
+### Array.prototype.flatMap
+如array.map(callback)一样遍历每个元素，之后，把运算结果“压平”成一个数组，QQs：不如改叫mapFlat
+```
+[1,2,3].flatMap(i=>{return new Array(i).fill(i)})
+// output: [1, 2, 2, 3, 3, 3]
+```
+### String.prototype.trimStart, trimEnd
+去除首/尾的空白字符
+### Object.prototype.fromEntries
+是ES8 Object.entries 的反向操作
+### String.prototype.matchAll
+返回匹配正则表达式的所有结果的集合
+### 新增基本数据类型 BigInt
+js基本数据类型（值类型）已不止5种（ES6之后是六种）！ES10后一共有七种基本数据类型，分别是： String、Number、Boolean、Null、Undefined、Symbol、BigInt
 #### 关注木易杨每日面试题
 [Daily Interview Question](https://github.com/Advanced-Frontend/Daily-Interview-Question)

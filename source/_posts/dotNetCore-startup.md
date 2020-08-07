@@ -17,10 +17,11 @@ tags:
     
     dotnet new -i Microsoft.DotNet.Web.Spa.ProjectTemplates
   ```
+  另，代码生成器（[codesmith generator studio](https://codesmith.atlassian.net/wiki)） 和[Nhibernate Template](https://codesmith.atlassian.net/wiki/spaces/NHibernate/pages/529104/Getting+Started) 根据数据库表生成实体类及MVC分层结构
 + NuGet<br>
 包管理工具，用于安装依赖NuGet包或用于安装模板
 
-#### asp.net core mvc 和 asp.net core 
+#### `asp.net core `
   经典的 .net mvc 分层：<br>
   view controller model<br>
   asp.net (asp, Active Server Pages 动态服务器页面):<br>
@@ -56,6 +57,8 @@ public class Startup
   }
 }
 ```
+startup.cs中using所需地package，包括需要加载（use）地中间件。
+
 另，这里引入了SQL Server需要安装并引入 Microsoft.EntityFrameworkCore;
 Microsoft.EntityFrameworkCore.SqlServer;
 #### 创建Model
@@ -288,8 +291,6 @@ return View() 返回视图，路由是根据Controller名称和方法名称组�
     </tr>
 }
 ```
-#### 搜索
-
 #### 模型驱动数据库设计
 因需求变动，模型结构变化，与数据库产生冲突<br>
 Code First迁移数据模型<br>
@@ -299,7 +300,7 @@ Add-Migration updateModelStructure
 // updateModelStructure 是一个数据库操作的标题，是任意命名的，仅用于记录更新记录和历史
 Update-Database
 ```
-Add-Migration之后项目中生成了Migrations类，这些类阐释了如何修改数据库见《Entity Framework》篇<br>
+Add-Migration之后项目中生成了Migrations类，这些类阐释了如何修改数据库见 {% post_link entityframework 《Entity Framework》篇 %}<br>
 issue: The entity type 'XXModel' requires a primary key to be defined.<br>
 Model类型需标注主键
 ```
@@ -312,7 +313,7 @@ public Guid ID
 ```
 #### 业务API
 
-#### 前端组件[Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor
+#### 前端组件 [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
 
 #### 发布到IIS
 
@@ -323,7 +324,7 @@ public Guid ID
 
 下载后得到dotnet-hosting-3.0.x.exe
 另：IIS的远程访问允许
-> [新建防火墙规则](https://my.oschina.net/zhangqiliang/blog/1932042)
+ [新建防火墙规则](https://my.oschina.net/zhangqiliang/blog/1932042)
 
 另: IIS 路由站点
 新建IIS 的网站指向一个物理路径就可以了，右击网站添加应用程序，指向发布的文件目录，并添加别名，事实上这个别名会作为虚拟路径(子路由)，实现192.168.1.100:80/App1这样的部署。

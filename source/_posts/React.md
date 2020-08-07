@@ -171,6 +171,7 @@ MyComponent.propTypes = {
 [使用 PropTypes 进行类型检查](https://zh-hans.reactjs.org/docs/typechecking-with-proptypes.html#requiring-single-child)
 
 #### state及组件生命周期
+props是传入参数，而state是组件内部表征状态的对象，往往在构造函数中，根据props初始化state
 ```
 class Clock extends React.Component {
   constructor(props) {
@@ -263,3 +264,23 @@ render() {
 }
 ```
 #### ReactDOMServer
+
+#### Create React App
+这是一个package [create-react-app](https://www.npmjs.com/package/create-react-app), 如angular-cli，和vue-cli中包含的命令工具，用以创建基于React的完整应用。
+```
+my-app/
+  node_modules/
+  public/
+    index.html
+    favicon.ico
+  src/
+    App.css
+    App.js
+    App.test.js
+    index.css
+    index.js
+    logo.svg
+  README.md
+  package.json
+
+```

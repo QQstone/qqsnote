@@ -44,6 +44,11 @@ Suspendisse id sem consectetuer libero luctus adipiscing.
 
 根据某某某考证，见[该刊][1](http://baidu.com/ )。
 
+站内超链接：关于websockt 详见 {% post_link websocket WebSocket篇 %}
+```
+{% post_link 文章文件名 显示文字 %}
+```
+
 ![cannot load pic here](http://pic108.huitu.com/res/20180719/1301968_20180719100805887080_1.jpg "Light")
 
 左对齐|居中|右对齐

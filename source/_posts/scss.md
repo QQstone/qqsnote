@@ -69,3 +69,11 @@ for $lvl from 1 through 4{
     .lvl#{$lvl} {background: map-get($lvlcolors, $lvl)}
 }
 ```
+> issue: scss variables are not working in calc
+```
+.main {
+	width: 100%;
+	height: calc(100% - #{$header-height});
+	background: #313030;
+}
+```

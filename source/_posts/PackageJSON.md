@@ -22,11 +22,11 @@ categories:
 
 > MINOR version when you add functionality in a backwards-compatible manner, and
 
->PATCH version when you make backwards-compatible bug fixes.
+> PATCH version when you make backwards-compatible bug fixes.
 
-Use the tilde-character (~) to prefix the version of moment in your dependencies and allow npm to update it to any new PATCH release.
+Use the tilde-character (~) to prefix the version of moment in your dependencies and allow npm to update it to any new PATCH release(补丁).
 
-Use the caret-character (^) to prefix the version of moment in your dependencies and allow npm to update it to any new MINOR release.
+Use the caret-character (^) to prefix the version of moment in your dependencies and allow npm to update it to any new MINOR release(小版本).
 
 #### 本地依赖
 ```
