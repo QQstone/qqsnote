@@ -70,6 +70,10 @@ Guid id = Guid.NewGuid();
 ```
 Model定义中的数据库特性
 
+从数据库生成模型
+```
+Scaffold-DbContext  "Data Source=HostName; Initial Catalog=DBName; Persist Security Info=True; User ID=UserName; Password=******;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+```
 #### DBContext
 ```
     public class DataServiceContext: DbContext

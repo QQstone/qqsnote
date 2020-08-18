@@ -70,7 +70,7 @@ Application ID URI:Add an Application ID URI
 Managed application in local directory:Demo website
 ```
 这里的Redireact URI是http://localhost:8888/auth，期望在本机运行Web Api应用程序，访问Api跳转到Azure Page登录，成功后进入到该地址。<br>
-进入管理--认证(Authentication),选择使用隐式授权流(Implicit grant), 并添加Redirect Uri<br>
+进入管理--认证(Authentication),选择使用隐式授权流(Implicit grant, 见笔记{% post_link OAuth2 OAuth2 %}), 并添加Redirect Uri<br>
 ![04register_app_add_auth_url](https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjztlsc1j21820oyadq.jpg)
 进入管理--公开API(expose API),Application ID URI set 为https://qqstudio.onmicrosoft.com/api 默认是由GUID组成的<br>
 添加scope(Add a scope)
@@ -78,7 +78,7 @@ Managed application in local directory:Demo website
 scope是控制访问权限的定义，将在后续步骤中被授权到已注册的client<br>
 
 #### 配置Web Api应用的Authorization
-使Web Api能将token拿到Azure AD B2C去校验，例子中从config.js读取配置
+使Web Api能将token拿到Azure AD B2C去校验，官方Sample中从config.js读取配置
 ```
 const config = {
     identityMetadata: "https://" + b2cDomainHost + "/" + tenantId + "/" + policyName + "/v2.0/.well-known/openid-configuration/",
@@ -203,10 +203,14 @@ namespace active_directory_b2c_wpf
 }
 ```
 #### 关于校验和跳转的包的实现的推测
-+ 客户端访问api，Http/Https Request 
-+ Request使用Jwt Bearer Authentication
-  TODO image10
-+ api发现request中token缺少或过期返回
++ 客户端访问api，Http/Https Request
++ 客户端Request使用Jwt Bearer Authentication 传递token
+  ![10 bearer auth](https://tvax4.sinaimg.cn/large/a60edd42gy1ghejipxhdkj213f0cmjru.jpg)
++ 服务端接收到的request中token缺少或过期，返回401
++ 客户端收到401打开Azure Sign in Page，附带重定向回api end point 的url
++ Azure AD 框架进行认证
++ Azure AD 框架查询并授权 颁发相应的token
++ 客户端接收到token并缓存
 #### 使用Azure AD 作为identity provider（存目）
 以实现一键(使用AD凭据)登录
 #### 对接wechat 作为identity provider（存目）

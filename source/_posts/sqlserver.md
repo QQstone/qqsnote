@@ -57,3 +57,30 @@ SELECT SERVERPROPERTY(N'Collation')
 ```
 SELECT * from ::fn_helpcollations()
 ```
+#### 内置对象的表
++ sys.schemas
+  
++ 执行历史
+  ```
+	SELECT TOP 1000 QS.creation_time, 
+	SUBSTRING(ST.text, 
+			(QS.statement_start_offset / 2) + 1, 
+			((CASE QS.statement_end_offset 
+				WHEN - 1 THEN DATALENGTH(st.text) 
+				ELSE QS.statement_end_offset 
+				END - QS.statement_start_offset) / 2) + 1)
+				AS statement_text, 
+			ST.text, 
+			QS.total_worker_time, 
+			QS.last_worker_time, 
+			QS.max_worker_time, 
+			QS.min_worker_time
+	FROM        
+	sys.dm_exec_query_stats QS CROSS APPLY sys.dm_exec_sql_text(QS.sql_handle) ST
+	WHERE   1=1 
+  ```
+  #### STUFF
+
+  ```
+STUFF ( character_expression , start , length , character_expression )
+  ```
