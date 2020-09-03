@@ -7,18 +7,14 @@ tags:
 #### .net core
 > [.NET Core](https://docs.microsoft.com/zh-cn/dotnet/core/introduction) 是一个通用的开放源代码开发平台。 可以使用多种编程语言针对 x64、x86、ARM32 和 ARM64 处理器创建适用于 Windows、macOS 和 Linux 的 .NET Core 应用。 为云、IoT、客户端 UI 和机器学习提供了框架和 API。
 
-+ 运行时和SDK<br>
++ 运行时和SDK
   运行 .NET Core 应用，需安装 .NET Core 运行时。
-创建 .NET Core 应用，需安装 .NET Core SDK。
+  创建 .NET Core 应用，需安装 .NET Core SDK。
 + 命令行工具
-  ```
-    :: 用模板创建项目
-    dotnet new <TEMPLATE>
-    
-    dotnet new -i Microsoft.DotNet.Web.Spa.ProjectTemplates
-  ```
+  在命令行键入dotnet --help 文章{% post_link ASPandSPA ASP和SPA %}有所应用。
+  
   另，代码生成器（[codesmith generator studio](https://codesmith.atlassian.net/wiki)） 和[Nhibernate Template](https://codesmith.atlassian.net/wiki/spaces/NHibernate/pages/529104/Getting+Started) 根据数据库表生成实体类及MVC分层结构
-+ NuGet<br>
++ NuGet
 包管理工具，用于安装依赖NuGet包或用于安装模板
 
 #### `asp.net core `
@@ -38,6 +34,24 @@ tags:
   强类型视图
   标记帮助程序
   查看组件
+#### Program.cs
+```
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
+```
+Host(宿主)为app提供运行环境并负责启动,创建HostBuilder,指定Startup作为启动类
 #### Startup.cs
 ```
 public class Startup
@@ -61,6 +75,38 @@ startup.cs中using所需地package，包括需要加载（use）地中间件。
 
 另，这里引入了SQL Server需要安装并引入 Microsoft.EntityFrameworkCore;
 Microsoft.EntityFrameworkCore.SqlServer;
+#### launchSettings.json
+Properties/launchSettings.json
+```
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:8080",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "RestrictedProductMaintenance": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
+    }
+  }
+}
+```
+这个配置似乎都是关于运行asp的IIS的。
 #### 创建Model
 > issue: Unable to cast object of type 'System.Guid' to type 'System.String'.<br>
 SQL Server 的 uniqueidentifier类型列，在 .net core 中直接映射为Guid类型，不存在与string的隐式转换，因此对应Model里的字段应该是Guid，在必要的场合使用toString<br>
@@ -255,6 +301,10 @@ public class ProductsController : Controller
 }
 ```
 return View() 返回视图，路由是根据Controller名称和方法名称组成的，如这里的Product/Index，Product/Create
+> Controller vs ControllerBase
+
+如果你创建一个 .net core api项目，你会发现api的controller继承ControllerBase，而asp继承Controller<br>
+Controller是ControllerBase的衍生类，支持asp的Views。
 #### Views
 创建Product/Index.cshtml, 这是一个列表页。顶头：
 @model IEnumerable\<ProductMaintenance.Models.Product\><br>

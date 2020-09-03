@@ -1,5 +1,5 @@
 ---
-title: TransactSOL
+title: TransactSQL
 date: 2020-05-19 12:39:34
 tags:
 - SQL_Server

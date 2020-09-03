@@ -25,6 +25,10 @@ PRIMARY KEY CLUSTERED
 ```
 create schema ent
 ```
+变更schema
+```
+ALTER SCHEMA ent TRANSFER OBJECT::dbo.table1;  
+```
 #### 创建新用户及授权访问
 [参考原文](https://www.fujieace.com/mssql/create-login.html)<br>
 + 配置登录名 Database Server --> Security --> Logins
@@ -79,8 +83,17 @@ SELECT * from ::fn_helpcollations()
 	sys.dm_exec_query_stats QS CROSS APPLY sys.dm_exec_sql_text(QS.sql_handle) ST
 	WHERE   1=1 
   ```
-  #### STUFF
+#### edit data
+SSIS提供了Edit Top 200 Rows,但是写入表格内容各种格式不正确，宜Script Table to...Insert to<br>
+Guid用NEWID(),时间就用SYSDATETIME()
+#### STUFF
 
-  ```
+```
 STUFF ( character_expression , start , length , character_expression )
-  ```
+```
+#### CAST & CONVERT
+数据类型转换
+```
+SELECT CAST(t1.num AS varchar) from t1;
+SELECT CONVERT(varchar, t1.num) from t1;
+```

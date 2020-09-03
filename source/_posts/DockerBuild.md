@@ -16,3 +16,5 @@ docker build -t tomcat8.5.51 .
 + . 是当前目录,即执行当前目录下的Dockerfile
 
 执行完成后可在 docker images中查到tomcat8.5.51
+
+#### 使用docker为某项开发封装开发环境（存目）

@@ -196,3 +196,10 @@ public async Task<IActionResult> Details(string code)
 ```
 #### 关联存储
 [here](https://docs.microsoft.com/zh-cn/ef/core/saving/related-data)
+
+#### select
+```
+ var studentsWithSameName = context.Students
+                                      .Where(s => s.FirstName == GetName())
+                                      .ToList();
+```

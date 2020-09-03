@@ -47,3 +47,16 @@ export class SharedModule {}
 ### angular.json "should NOT have additional properties(xxxx)"
 
 因框架版本问题（归根结蒂是包版本差异问题），不支持xxx属性，如angular原生国际化配置v8与v9存在配置差异，查看文档应区分文档版本
+
+### 关于升级
+参考[Angular 升级指南](https://update.angular.io/)
+
+另，@angular/cli和angular-cli 是两个东西，安装了后者可以使用部分ng命令，可知ng version是beta版本，ng update无效且报“does not match any file...”
+
+> issue 升级到9后，渲染中止，报“Uncaught SyntaxError: Strict mode code may not include a with statement”
+
+见[stackoverflow](https://stackoverflow.com/questions/60114758/uncaught-syntaxerror-strict-mode-code-may-not-include-a-with-statement)回答<br>
+remove from main.ts
+```
+export { renderModule, renderModuleFactory } from '@angular/platform-server';
+```

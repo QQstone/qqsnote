@@ -58,3 +58,24 @@ docker rm id
 ```
 docker run --name tomcat -p 8080:8080 -v $PWD/test:/usr/local/tomcat/webapps/test -d tomcat 
 ```
+
+#### 容器重连
+有的封装服务的容器是可以docker run -d 保持后台运行的，很多容器如ubuntu等，断开终端连接往往会结束运行，在docker ps -a中看到状态是Exited。<br>
+启动容器并附加到当前进程
+```
+docker start -a -i `docker ps -q -l`
+```
+说明：
+docker start启动容器（需要名称或ID）
+ -a附加到容器
+ -i交互模式
+docker ps列表容器
+ -q列表仅容器ID 
+ -l列表仅最后创建容器
+
+检索自[腾讯云问答](https://cloud.tencent.com/developer/ask/145603)
+
+另，对于这种容器，可以保持一个“前台”的进程运行，如
+```
+docker run ubuntu /bin/bash -c "while true; do echo docker connected; sleep 5; done" // 每5s 输出一次
+```

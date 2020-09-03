@@ -2,7 +2,7 @@
 title: MySQL 存储过程
 date: 2019-12-23 16:18:01
 tags:
-- MySQL StoredProcedure
+- 存储过程
 categories: 
 - 数据库
 ---
@@ -131,3 +131,5 @@ end
 ```
 注意：跳出循环的句柄是not found，意味着循环体中将empty set赋值给变量会跳出loop<br>
 如 selete * into _list where 1=2;
+
+SQL Server中调用存储过程的语法稍有不同, 见文章{% post_link TransactSQL TransactSQL%}

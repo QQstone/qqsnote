@@ -7,6 +7,14 @@ categories:
 - Linux 
 ---
 Please keep learning --> [Linux工具快速教程](https://linuxtools-rst.readthedocs.io/zh_CN/latest/)
+#### 测试网络连接
+linux 上一般是不装ping的
+```
+telnet 8.8.8.8 80
+curl 8.8.8.8:80
+ssh -v -p qqs@8.8.8.8
+wget 8.8.8.8:80
+```
 #### 查找文件
 find [path] -name [filename]
 ```
