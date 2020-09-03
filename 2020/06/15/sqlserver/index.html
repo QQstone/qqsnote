@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="创建新用户及授权访问参考原文  配置登录名 Database Server –&amp;gt; Security –&amp;gt; Logins 常规General标签页中，配置认证方式等 服务器角色（Server Roles）添加 public sysadmon 用户映射（User Mapping）添加创建的新用户 安全对象（Securable）搜索 –&amp;gt; 选择 The Server(当前数据库服务器名">
+<meta name="description" content="schema在MySQL中schema的概念和database一致 微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner 导出表结构（create table）语句时会带着schema 12345678create table [ent].[tabletemp](	[Id] [uniqueide">
 <meta name="keywords" content="SQL_Server">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQL Server">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/06/15/sqlserver/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="创建新用户及授权访问参考原文  配置登录名 Database Server –&amp;gt; Security –&amp;gt; Logins 常规General标签页中，配置认证方式等 服务器角色（Server Roles）添加 public sysadmon 用户映射（User Mapping）添加创建的新用户 安全对象（Securable）搜索 –&amp;gt; 选择 The Server(当前数据库服务器名">
+<meta property="og:description" content="schema在MySQL中schema的概念和database一致 微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner 导出表结构（create table）语句时会带着schema 12345678create table [ent].[tabletemp](	[Id] [uniqueide">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-06-23T08:59:16.561Z">
+<meta property="og:updated_time" content="2020-09-02T04:37:55.238Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQL Server">
-<meta name="twitter:description" content="创建新用户及授权访问参考原文  配置登录名 Database Server –&amp;gt; Security –&amp;gt; Logins 常规General标签页中，配置认证方式等 服务器角色（Server Roles）添加 public sysadmon 用户映射（User Mapping）添加创建的新用户 安全对象（Securable）搜索 –&amp;gt; 选择 The Server(当前数据库服务器名">
+<meta name="twitter:description" content="schema在MySQL中schema的概念和database一致 微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner 导出表结构（create table）语句时会带着schema 12345678create table [ent].[tabletemp](	[Id] [uniqueide">
 
 
 
@@ -273,6 +273,28 @@
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -300,7 +322,16 @@
       
 
       
-        <h4 id="创建新用户及授权访问"><a href="#创建新用户及授权访问" class="headerlink" title="创建新用户及授权访问"></a>创建新用户及授权访问</h4><p><a href="https://www.fujieace.com/mssql/create-login.html" target="_blank" rel="noopener">参考原文</a><br></p>
+        <h4 id="schema"><a href="#schema" class="headerlink" title="schema"></a>schema</h4><p>在MySQL中schema的概念和database一致<br>
+微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner<br>
+导出表结构（create table）语句时会带着schema
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">create table [ent].[tabletemp](</span><br><span class="line">	[Id] [uniqueidentifier] NOT NULL,</span><br><span class="line">	[Name] [nvarchar](50) NULL,</span><br><span class="line">PRIMARY KEY CLUSTERED </span><br><span class="line">(</span><br><span class="line">	[Id] ASC</span><br><span class="line">)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]</span><br><span class="line">) ON [PRIMARY]</span><br></pre></td></tr></table></figure></p>
+<p>迁移时执行该语句会提示”The specified schema name “env” either does not exist or you do not have permission to use it.”<br>
+创建schema
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create schema ent</span><br></pre></td></tr></table></figure></p>
+<p>变更schema
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER SCHEMA ent TRANSFER OBJECT::dbo.table1;</span><br></pre></td></tr></table></figure></p>
+<h4 id="创建新用户及授权访问"><a href="#创建新用户及授权访问" class="headerlink" title="创建新用户及授权访问"></a>创建新用户及授权访问</h4><p><a href="https://www.fujieace.com/mssql/create-login.html" target="_blank" rel="noopener">参考原文</a><br></p>
 <ul>
 <li>配置登录名 Database Server –&gt; Security –&gt; Logins</li>
 <li>常规General标签页中，配置认证方式等</li>
@@ -310,6 +341,27 @@
 <li>状态默认</li>
 </ul>
 <h4 id="调用存储过程"><a href="#调用存储过程" class="headerlink" title="调用存储过程"></a>调用存储过程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXEC storedProcedure1 @param=&apos;01&apos;</span><br></pre></td></tr></table></figure>
+<h4 id="关于大小写"><a href="#关于大小写" class="headerlink" title="关于大小写"></a>关于大小写</h4><p>据说sqlserver 安装过程中有是否区分大小写的选项，默认情况下无论表名、列名、字段、参数都不区分大小写，更过分的是查询条件的值也不区分————where name=’abc’和where name=’AbC’是一样的结果。如果要区分查询条件的大小写，中文网络上建议如下例子，追加条件
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table1 where name=&apos;abc&apos; collate Chinese_PRC_CS_AI_WS</span><br></pre></td></tr></table></figure></p>
+<p>Chinese_PRC_CS_AI_WS实际表示中国大陆UNICODE字符集规则（Chinese PRC），区分大小写（Case Sensitive，CS），不区分重音（Accent Insensitive，AI），区分宽度（Width Sensitive，WS，半角/全角字符受此条件影响）<br>
+类似的还有
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL_Latin1_General_CP1_CS_AI</span><br><span class="line">Latin1_General_CS_AI</span><br></pre></td></tr></table></figure></p>
+<p>查询当前默认规则
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT SERVERPROPERTY(N&apos;Collation&apos;)</span><br></pre></td></tr></table></figure></p>
+<p>查询支持的字符集规则
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * from ::fn_helpcollations()</span><br></pre></td></tr></table></figure></p>
+<h4 id="内置对象的表"><a href="#内置对象的表" class="headerlink" title="内置对象的表"></a>内置对象的表</h4><ul>
+<li><p>sys.schemas</p>
+</li>
+<li><p>执行历史</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">SELECT TOP 1000 QS.creation_time, </span><br><span class="line">SUBSTRING(ST.text, </span><br><span class="line">		(QS.statement_start_offset / 2) + 1, </span><br><span class="line">		((CASE QS.statement_end_offset </span><br><span class="line">			WHEN - 1 THEN DATALENGTH(st.text) </span><br><span class="line">			ELSE QS.statement_end_offset </span><br><span class="line">			END - QS.statement_start_offset) / 2) + 1)</span><br><span class="line">			AS statement_text, </span><br><span class="line">		ST.text, </span><br><span class="line">		QS.total_worker_time, </span><br><span class="line">		QS.last_worker_time, </span><br><span class="line">		QS.max_worker_time, </span><br><span class="line">		QS.min_worker_time</span><br><span class="line">FROM        </span><br><span class="line">sys.dm_exec_query_stats QS CROSS APPLY sys.dm_exec_sql_text(QS.sql_handle) ST</span><br><span class="line">WHERE   1=1</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="edit-data"><a href="#edit-data" class="headerlink" title="edit data"></a>edit data</h4><p>SSIS提供了Edit Top 200 Rows,但是写入表格内容各种格式不正确，宜Script Table to…Insert to<br>
+Guid用NEWID(),时间就用SYSDATETIME()</p>
+<h4 id="STUFF"><a href="#STUFF" class="headerlink" title="STUFF"></a>STUFF</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">STUFF ( character_expression , start , length , character_expression )</span><br></pre></td></tr></table></figure>
+<h4 id="CAST-amp-CONVERT"><a href="#CAST-amp-CONVERT" class="headerlink" title="CAST &amp; CONVERT"></a>CAST &amp; CONVERT</h4><p>数据类型转换
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT CAST(t1.num AS varchar) from t1;</span><br><span class="line">SELECT CONVERT(varchar, t1.num) from t1;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -429,7 +481,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">129</span>
+                  <span class="site-state-item-count">148</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -440,7 +492,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -451,7 +503,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -484,7 +536,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建新用户及授权访问"><span class="nav-number">1.</span> <span class="nav-text">创建新用户及授权访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调用存储过程"><span class="nav-number">2.</span> <span class="nav-text">调用存储过程</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#schema"><span class="nav-number">1.</span> <span class="nav-text">schema</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建新用户及授权访问"><span class="nav-number">2.</span> <span class="nav-text">创建新用户及授权访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调用存储过程"><span class="nav-number">3.</span> <span class="nav-text">调用存储过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于大小写"><span class="nav-number">4.</span> <span class="nav-text">关于大小写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内置对象的表"><span class="nav-number">5.</span> <span class="nav-text">内置对象的表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#edit-data"><span class="nav-number">6.</span> <span class="nav-text">edit data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#STUFF"><span class="nav-number">7.</span> <span class="nav-text">STUFF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CAST-amp-CONVERT"><span class="nav-number">8.</span> <span class="nav-text">CAST &amp; CONVERT</span></a></li></ol></div>
             
 
           </div>

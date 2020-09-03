@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="加密,">
+  <meta name="keywords" content="认证&授权,">
 
 
 
@@ -79,21 +79,23 @@
 
 
 
-<meta name="description" content="案例某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的账号密码。。。 对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）token，本系统凭此token访问与第三方有关的资">
-<meta name="keywords" content="加密">
+<meta name="description" content="案例某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的SSO账号密码。。。 对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）授权码，本系统凭此授权码访问与第三方有关的资源">
+<meta name="keywords" content="认证&amp;授权">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OAuth2">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/12/09/OAuth2/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="案例某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的账号密码。。。 对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）token，本系统凭此token访问与第三方有关的资">
+<meta property="og:description" content="案例某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的SSO账号密码。。。 对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）授权码，本系统凭此授权码访问与第三方有关的资源">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twfy9pmzj20ud0l8ab4.jpg">
 <meta property="og:image" content="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twgcmpxij20ue0l775l.jpg">
 <meta property="og:image" content="https://tvax4.sinaimg.cn/large/a60edd42gy1g9twsgu7ksj20m80cijrk.jpg">
-<meta property="og:updated_time" content="2020-01-17T02:09:37.360Z">
+<meta property="og:image" content="https://tvax3.sinaimg.cn/large/a60edd42gy1ggrgt64oe1j20p60mywgl.jpg">
+<meta property="og:image" content="https://tvax3.sinaimg.cn/large/a60edd42gy1gh5i7z0q6bj20e808jwfe.jpg">
+<meta property="og:updated_time" content="2020-08-04T01:43:26.760Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OAuth2">
-<meta name="twitter:description" content="案例某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的账号密码。。。 对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）token，本系统凭此token访问与第三方有关的资">
+<meta name="twitter:description" content="案例某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的SSO账号密码。。。 对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）授权码，本系统凭此授权码访问与第三方有关的资源">
 <meta name="twitter:image" content="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twfy9pmzj20ud0l8ab4.jpg">
 
 
@@ -289,8 +291,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/通信协议/" itemprop="url" rel="index">
-                    <span itemprop="name">通信协议</span>
+                  <a href="/qqsnote/categories/协议和规范/" itemprop="url" rel="index">
+                    <span itemprop="name">协议和规范</span>
                   </a>
                 </span>
 
@@ -326,22 +328,30 @@
       
 
       
-        <h4 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h4><p>某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的账号密码。。。</p>
-<p>对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）token，本系统凭此token访问与第三方有关的资源，通常可能只是从第三方获取用户名、头像、邮箱来填充本系统的个人信息识别.
+        <h4 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h4><p>某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的SSO账号密码。。。</p>
+<p>对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）授权码，本系统凭此授权码访问与第三方有关的资源，通常可能只是从第三方获取用户名、头像、邮箱来填充本系统的个人信息识别.
 <img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twfy9pmzj20ud0l8ab4.jpg" alt="stacklogin"></p>
 <p><img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twgcmpxij20ue0l775l.jpg" alt="gitlogin"></p>
-<p>此外在CSD Scanflow登录Cloud地模块中，设计期望以账密登录后返回两个token，其中A是访问Cloud相关资源地凭据，B是保持登录(Remember me)需要token，当A过期时，调用接口，Cloud认证B合法，返回新的A，即可在后续使用A继续访问Cloud资源。</p>
+<p><del>此外在CS Scanflow登录Cloud地模块中，设计期望以账密登录后返回两个token，其中A是访问Cloud相关资源地凭据，B是保持登录(Remember me)需要token，当A过期时，调用接口，Cloud认证B合法，返回新的A，即可在后续使用A继续访问Cloud资源。</del></p>
 <h4 id="OAuth标准"><a href="#OAuth标准" class="headerlink" title="OAuth标准"></a>OAuth标准</h4><blockquote>
-<p>OAuth在”客户端(认证请求方)”与”服务提供商”之间，设置了一个授权层（authorization layer）。”客户端”不能直接登录”服务提供商”，只能登录授权层，使用授权层颁发的令牌（token），访问服务提供商的资源。用户注册在服务端的账户密码，不会暴露给客户端。服务提供商可以自由限制授权层令牌的权限范围和有效期。<br></p>
+<p>OAuth在”客户端(受限资源/服务请求方)”与”服务提供商”之间，设置了一个授权层（authorization layer）。”客户端”不能直接登录”服务提供商”，只能登录授权层，使用授权层颁发的令牌（token），访问服务提供商的资源。用户注册在服务端的账户密码，不会暴露给客户端。服务提供商可以自由限制授权层令牌的权限范围和有效期。<br>
+QQs：OAuth不强调认证，它是一个授权协议，实现的是支持由第三方提供授权访问的标准。</p>
 </blockquote>
-<h4 id="授权方式"><a href="#授权方式" class="headerlink" title="授权方式"></a>授权方式</h4><h5 id="授权码（authorization-code）"><a href="#授权码（authorization-code）" class="headerlink" title="授权码（authorization code）"></a>授权码（authorization code）</h5><p>授权码方式是最常用且靠谱的授权方式，相比之下，其余三种比较扯淡。
+<h4 id="授权方式"><a href="#授权方式" class="headerlink" title="授权方式"></a>授权方式</h4><h5 id="授权码（authorization-code）"><a href="#授权码（authorization-code）" class="headerlink" title="授权码（authorization code）"></a>授权码（authorization code）</h5><p>上文已提到的使用第三方登录的方式即授权码方式，授权码方式是最常用且靠谱的授权方式，相比之下，其余三种比较扯淡。<br>
+下图中A.com实为客户端，如某电商平台，B.com为用户信息持有方，如某社交平台(包含了受限数据服务以及授权服务)，经过对接A.com可以通过如图的流程使用B.com的用户登录
 <img src="https://tvax4.sinaimg.cn/large/a60edd42gy1g9twsgu7ksj20m80cijrk.jpg" alt="authcodemode"></p>
 <ol>
 <li>跳转到B授权页</li>
 <li>确认授权，重定向回A，并带回authorization code</li>
-<li>向B发送请求，传递A身份，以及授权码</li>
-<li>请求返回令牌<h5 id="隐藏式"><a href="#隐藏式" class="headerlink" title="隐藏式"></a>隐藏式</h5>直接返回令牌，安全风险较高 <a href="http://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html" target="_blank" rel="noopener">注1</a><h5 id="密码式"><a href="#密码式" class="headerlink" title="密码式"></a>密码式</h5>返回账号密码，A以此申请访问B的令牌，风险更高。(私以为，既然B予以这种信任，即将访问权限控制让与A，A可以直接以账密登录B而不用可能受限的token)<h5 id="凭据式"><a href="#凭据式" class="headerlink" title="凭据式"></a>凭据式</h5>对于没有前端的命令行应用，以get请求，用query parameters传参直接得到令牌。</li>
+<li>向B请求访问受限数据，传递A身份，以及授权码</li>
+<li>请求返回可访问受限数据令牌<h5 id="隐藏式（隐式授权）"><a href="#隐藏式（隐式授权）" class="headerlink" title="隐藏式（隐式授权）"></a>隐藏式（隐式授权）</h5>直接返回令牌，安全风险较高 <sup><a href="http://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html" target="_blank" rel="noopener">注1</a></sup><h5 id="密码式"><a href="#密码式" class="headerlink" title="密码式"></a>密码式</h5>返回账号密码，A以此申请访问B的令牌，风险更高。(私以为，既然B予以这种信任，即将访问权限控制让与A，A可以直接以账密登录B而不用可能受限的token)<h5 id="凭据式"><a href="#凭据式" class="headerlink" title="凭据式"></a>凭据式</h5>对于没有前端的命令行应用，以get请求，用query parameters传参直接得到令牌。<h4 id="前后端分离的SSO"><a href="#前后端分离的SSO" class="headerlink" title="前后端分离的SSO"></a>前后端分离的SSO</h4><img src="https://tvax3.sinaimg.cn/large/a60edd42gy1ggrgt64oe1j20p60mywgl.jpg" alt="互联网图片侵删"><h4 id="关于OAuth-OpenId-OIDC什么的"><a href="#关于OAuth-OpenId-OIDC什么的" class="headerlink" title="关于OAuth, OpenId, OIDC什么的"></a>关于OAuth, OpenId, OIDC什么的</h4>网上有文章说OAuth是authorization， OpenId是authentication，这听起来很谜。。<blockquote>
+<p>OpenID是一个去中心化的网上身份认证系统。（维基百科）</p>
+</blockquote>
+</li>
 </ol>
+<p>所谓认证系统，解决的是”你是谁”的问题，用户在在identity provider（idp）的服务上注册，客户端登录即去idp获取OpenID标识对应的token，服务提供者校验身份，是拿客户端的token去idp确认。
+OIDC（OpenID Connect）OpenID + OAuth2.0认证（授权访问）服务
+<img src="https://tvax3.sinaimg.cn/large/a60edd42gy1gh5i7z0q6bj20e808jwfe.jpg" alt></p>
 
       
     </div>
@@ -359,7 +369,7 @@
       
         <div class="post-tags">
           
-            <a href="/qqsnote/tags/加密/" rel="tag"># 加密</a>
+            <a href="/qqsnote/tags/认证-授权/" rel="tag"># 认证&授权</a>
           
         </div>
       
@@ -461,7 +471,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">129</span>
+                  <span class="site-state-item-count">148</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -472,7 +482,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -483,7 +493,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -516,7 +526,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#案例"><span class="nav-number">1.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OAuth标准"><span class="nav-number">2.</span> <span class="nav-text">OAuth标准</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#授权方式"><span class="nav-number">3.</span> <span class="nav-text">授权方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#授权码（authorization-code）"><span class="nav-number">3.1.</span> <span class="nav-text">授权码（authorization code）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#隐藏式"><span class="nav-number">3.2.</span> <span class="nav-text">隐藏式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#密码式"><span class="nav-number">3.3.</span> <span class="nav-text">密码式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#凭据式"><span class="nav-number">3.4.</span> <span class="nav-text">凭据式</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#案例"><span class="nav-number">1.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OAuth标准"><span class="nav-number">2.</span> <span class="nav-text">OAuth标准</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#授权方式"><span class="nav-number">3.</span> <span class="nav-text">授权方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#授权码（authorization-code）"><span class="nav-number">3.1.</span> <span class="nav-text">授权码（authorization code）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#隐藏式（隐式授权）"><span class="nav-number">3.2.</span> <span class="nav-text">隐藏式（隐式授权）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#密码式"><span class="nav-number">3.3.</span> <span class="nav-text">密码式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#凭据式"><span class="nav-number">3.4.</span> <span class="nav-text">凭据式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#前后端分离的SSO"><span class="nav-number">4.</span> <span class="nav-text">前后端分离的SSO</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于OAuth-OpenId-OIDC什么的"><span class="nav-number">5.</span> <span class="nav-text">关于OAuth, OpenId, OIDC什么的</span></a></li></ol></div>
             
 
           </div>

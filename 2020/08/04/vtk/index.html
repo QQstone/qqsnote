@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/qqsnote/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/qqsnote/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/qqsnote/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="The Rendering Engine mapper vtkActor派生自vtkProp类，渲染场景中数据的可视化表达是通过vtkProp的子类负责的。比如，本例要渲染一个柱体，柱体的数据类型是vtkPolyData，数据要在场景中渲染时，不是直接把数据加入渲染场景就可以，待渲染的数据是以vtkProp对象存在于渲染场景中。 三维空间中渲染对象最常用的vtkProp子类是vtkActor(表达">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vtk">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/08/04/vtk/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="The Rendering Engine mapper vtkActor派生自vtkProp类，渲染场景中数据的可视化表达是通过vtkProp的子类负责的。比如，本例要渲染一个柱体，柱体的数据类型是vtkPolyData，数据要在场景中渲染时，不是直接把数据加入渲染场景就可以，待渲染的数据是以vtkProp对象存在于渲染场景中。 三维空间中渲染对象最常用的vtkProp子类是vtkActor(表达">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://tvax2.sinaimg.cn/large/a60edd42gy1ghelso7vv1j20gz08paaw.jpg">
+<meta property="og:updated_time" content="2020-08-06T08:38:49.838Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vtk">
+<meta name="twitter:description" content="The Rendering Engine mapper vtkActor派生自vtkProp类，渲染场景中数据的可视化表达是通过vtkProp的子类负责的。比如，本例要渲染一个柱体，柱体的数据类型是vtkPolyData，数据要在场景中渲染时，不是直接把数据加入渲染场景就可以，待渲染的数据是以vtkProp对象存在于渲染场景中。 三维空间中渲染对象最常用的vtkProp子类是vtkActor(表达">
+<meta name="twitter:image" content="https://tvax2.sinaimg.cn/large/a60edd42gy1ghelso7vv1j20gz08paaw.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/qqsnote/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://qqstone.github.io/qqsnote/2020/08/04/vtk/">
+
+
+
+
+
+  <title>vtk | QQs'Note</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/qqsnote/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">QQs'Note</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/qqsnote/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/qqsnote/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/08/04/vtk/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">vtk</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-04T10:03:13+08:00">
+                2020-08-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>The Rendering Engine
+mapper</p>
+<h4 id="vtkActor"><a href="#vtkActor" class="headerlink" title="vtkActor"></a>vtkActor</h4><p>派生自vtkProp类，渲染场景中数据的可视化表达是通过vtkProp的子类负责的。<del>比如，本例要渲染一个柱体，柱体的数据类型是vtkPolyData，</del>数据要在场景中渲染时，不是直接把数据加入渲染场景就可以，待渲染的数据是以vtkProp对象存在于渲染场景中。</p>
+<p>三维空间中渲染对象最常用的vtkProp子类是vtkActor(表达场景中的几何数据)和vtkVolume(表达场景中的体数据)；二维空间中的数据则是用vtkActor2D表达。</p>
+<p>vtkProp子类负责确定渲染场景中对象的位置、大小和方向信息。Prop依赖于两个对象(Prop一词来源于戏剧里的“道具”，在VTK里表示的是渲染场景中可以看得到的对象。)，一个是Mapper(vtkMapper)对象，负责存放数据和渲染信息，另一个是属性(vtkProperty)对象，负责控制颜色、不透明度等参数。</p>
+<p>VTK中定义了大量(超过50个)的Prop类，如vtkImageActor(负责图像显示)和vtkPieChartActor(用于创建数组数据的饼图可视化表达)。其中的一些Prop内部直接包括了控制显示的参数和待渲染数据的索引，因此并不需要额外的Property和Mapper对象。vtkActor的子类vtkFollower可以自动的更新方向信息以保持始终面向一个特定的相机。这样无论怎样旋转，三维场景中的广告板(Billboards)或者文本都是可见的。vtkActor的子类vtkLODActor可以自动改变自身的几何表达来实现需要达到的交互帧率。vtkProp3D的子类vtkLODProp3D则是通过从许多Mapper(可以是体数据的Mapper和几何数据的Mapper集合)中进行选择来实现交互。vtkAssembly建立Actor的等级结构以便在整个结构平移、旋转或者缩放时能够更合理的控制变换。</p>
+<p>vtkActor::SetMapper()——设置生成几何图元的Mapper。即连接一个Actor到可视化pipeline的末端(可视化pipeline的末端就是Mapper)。</p>
+<h4 id="vtkMapper"><a href="#vtkMapper" class="headerlink" title="vtkMapper"></a>vtkMapper</h4><p>将输入的数据转换为几何图元(点、线、多边形)进行渲染。</p>
+<h4 id="vtkRenderWindow"><a href="#vtkRenderWindow" class="headerlink" title="vtkRenderWindow"></a>vtkRenderWindow</h4><p>连接操作系统与VTK渲染引擎</p>
+<h4 id="vtkRenderer"><a href="#vtkRenderer" class="headerlink" title="vtkRenderer"></a>vtkRenderer</h4><p>负责管理场景的渲染过程。组成场景的所有对象包括Prop，照相机(Camera)和光照(Light)都被集中在一个vtkRenderer对象中。父类vtkViewport。一个vtkRenderWindow中可以有多个vtkRenderer对象，而这些vtkRenderer可以渲染在窗口中不同的矩形区域中(即视口)，或者覆盖整个窗口区域。</p>
+<ul>
+<li>vtkRenderer::AddActor()</li>
+<li><p>vtkRenderer::SetBackground()</p>
+<h4 id="Interactor"><a href="#Interactor" class="headerlink" title="Interactor"></a>Interactor</h4><p>提供平台独立的响应鼠标、键盘和时钟事件的交互机制，通过VTK的Command/Observer设计模式将监听到的特定平台的鼠标、键盘和时钟事件交由vtkInteractorObserver或其子类，如vtkInteractorStyle进行处理。vtkInteractorStyle等监听这些消息并进行处理以完成旋转、拉伸和放缩等运动控制。vtkRenderWindowInteractor自动建立一个默认的3D场景交互器样式(Interactor Style)：vtkInteractorStyleSwitch，当然你也可以选择其他的交互器样式，或者是创建自己的交互器样式。在本例中，我们就是选择了其他的交互器样式来替代默认的：vtkInteractorStyleTrackballCamera</p>
+</li>
+<li><p>vtkRenderWindowInteractor::SetRenderWindow()——设置渲染窗口，消息是通过渲染窗口捕获到的，所以必须要给交互器对象设置渲染窗口。</p>
+</li>
+<li><p>vtkRenderWindowInteractor::SetInteractorStyle()——定义交互器样式，默认的交互样式为vtkInteractorStyleSwitch。</p>
+</li>
+<li><p>vtkRenderWindowInteractor::Initialize() ——为处理窗口事件做准备，交互器工作之前必须先调用这个方法进行初始化。</p>
+</li>
+<li><p>vtkRenderWindowInteractor::Start() ——开始进入事件响应循环，交互器处于等待状态，等待用户交互事件的发生。进入事件响应循环之前必须先调用Initialize()方法。</p>
+</li>
+</ul>
+<h4 id="vtkInteractorStyleTrackballCamera"><a href="#vtkInteractorStyleTrackballCamera" class="headerlink" title="vtkInteractorStyleTrackballCamera"></a>vtkInteractorStyleTrackballCamera</h4><p>交互器样式的一种，该样式下，用户是通过控制相机对物体作旋转、放大、缩小等操作。</p>
+<p><img src="https://tvax2.sinaimg.cn/large/a60edd42gy1ghelso7vv1j20gz08paaw.jpg" alt="vtk scope"></p>
+<h4 id="pipeline"><a href="#pipeline" class="headerlink" title="pipeline"></a>pipeline</h4><h4 id="官方-paraview"><a href="#官方-paraview" class="headerlink" title="官方 paraview"></a>官方 paraview</h4>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/qqsnote/2020/07/30/Redux/" rel="next" title="Redux">
+                <i class="fa fa-chevron-left"></i> Redux
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/qqsnote/2020/08/18/webassembly/" rel="prev" title="webassembly">
+                webassembly <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">QQs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/qqsnote/archives/">
+              
+                  <span class="site-state-item-count">148</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/qqsnote/categories/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/qqsnote/tags/index.html">
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#vtkActor"><span class="nav-number">1.</span> <span class="nav-text">vtkActor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vtkMapper"><span class="nav-number">2.</span> <span class="nav-text">vtkMapper</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vtkRenderWindow"><span class="nav-number">3.</span> <span class="nav-text">vtkRenderWindow</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vtkRenderer"><span class="nav-number">4.</span> <span class="nav-text">vtkRenderer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Interactor"><span class="nav-number">5.</span> <span class="nav-text">Interactor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vtkInteractorStyleTrackballCamera"><span class="nav-number">6.</span> <span class="nav-text">vtkInteractorStyleTrackballCamera</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pipeline"><span class="nav-number">7.</span> <span class="nav-text">pipeline</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#官方-paraview"><span class="nav-number">8.</span> <span class="nav-text">官方 paraview</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/qqsnote/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/qqsnote/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/qqsnote/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/qqsnote/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/qqsnote/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/05/20/TypeScript/">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/29/BasicPython-Module/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQs">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/qqsnote/2019/05/20/TypeScript/" itemprop="url">TypeScript</a></h1>
+                <a class="post-title-link" href="/qqsnote/2019/08/29/BasicPython-Module/" itemprop="url">Python基础——模块</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-20T16:21:42+08:00">
-                2019-05-20
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-29T19:55:54+08:00">
+                2019-08-29
               </time>
             
 
@@ -283,8 +283,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
-                    <span itemprop="name">前端技术</span>
+                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
                   </a>
                 </span>
 
@@ -322,393 +322,8 @@
       
         
           
-            <h4 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h4><p>方法一 <br>
-npm install typescript<br>
-add tsconfig.json
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;compilerOptions&quot;: &#123;</span><br><span class="line">        &quot;module&quot;: &quot;commonjs&quot;,</span><br><span class="line">        &quot;target&quot;: &quot;es5&quot;,</span><br><span class="line">        &quot;noImplicitAny&quot;: true,</span><br><span class="line">        &quot;outDir&quot;: &quot;./dist&quot;,</span><br><span class="line">        &quot;sourceMap&quot;: true</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;include&quot;: [</span><br><span class="line">        &quot;src/**/*&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>add .vscode/tasks.json
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    // See https://go.microsoft.com/fwlink/?LinkId=733558</span><br><span class="line">    // for the documentation about the tasks.json format</span><br><span class="line">    &quot;version&quot;: &quot;2.0.0&quot;,</span><br><span class="line">    &quot;tasks&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;type&quot;: &quot;typescript&quot;,</span><br><span class="line">            &quot;tsconfig&quot;: &quot;tsconfig.json&quot;,</span><br><span class="line">            &quot;problemMatcher&quot;: [</span><br><span class="line">                &quot;$tsc&quot;</span><br><span class="line">            ],</span><br><span class="line">            &quot;group&quot;: &#123;</span><br><span class="line">                &quot;kind&quot;: &quot;build&quot;,</span><br><span class="line">                &quot;isDefault&quot;: true</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>Terminal–Run Task–Choose tsconfig.json</p>
-<p>add .vscode/launch.json
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;version&quot;: &quot;0.2.0&quot;,</span><br><span class="line">    &quot;configurations&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;name&quot;: &quot;launch&quot;,</span><br><span class="line">            &quot;type&quot;: &quot;node&quot;,</span><br><span class="line">            &quot;request&quot;: &quot;launch&quot;,</span><br><span class="line">            &quot;program&quot;: &quot;$&#123;workspaceRoot&#125;/dist/main.js&quot;,</span><br><span class="line">            &quot;args&quot;: [],</span><br><span class="line">            &quot;cwd&quot;: &quot;$&#123;workspaceRoot&#125;&quot;,</span><br><span class="line">            &quot;protocol&quot;: &quot;inspector&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>Run Debugging(Choose ‘launch’, the name definited in the launch.json)
-方法二 <br>
-npm i typescript node-ts<br>
-add tsconfig.js
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;compilerOptions&quot;: &#123;</span><br><span class="line">        &quot;module&quot;: &quot;commonjs&quot;,</span><br><span class="line">        &quot;target&quot;: &quot;es5&quot;,</span><br><span class="line">        &quot;noImplicitAny&quot;: true,</span><br><span class="line">        &quot;outDir&quot;: &quot;./dist&quot;,</span><br><span class="line">        &quot;sourceMap&quot;: true</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;include&quot;: [</span><br><span class="line">        &quot;src/**/*&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>add .vscode/launch.json
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;version&quot;: &quot;0.2.0&quot;,</span><br><span class="line">    &quot;configurations&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;name&quot;: &quot;Current TS File&quot;,</span><br><span class="line">            &quot;type&quot;: &quot;node&quot;,</span><br><span class="line">            &quot;request&quot;: &quot;launch&quot;,</span><br><span class="line">            &quot;program&quot;: &quot;$&#123;workspaceRoot&#125;/node_modules/ts-node/dist/_bin.js&quot;,</span><br><span class="line">            &quot;args&quot;: [</span><br><span class="line">                &quot;$&#123;relativeFile&#125;&quot;</span><br><span class="line">            ],</span><br><span class="line">            &quot;cwd&quot;: &quot;$&#123;workspaceRoot&#125;&quot;,</span><br><span class="line">            &quot;protocol&quot;: &quot;inspector&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><ol>
-<li>number </li>
-<li>boolean</li>
-<li>string</li>
-<li>[]</li>
-<li>enum</li>
-<li>any</li>
-<li>void</li>
-<li>null 和 undefined</li>
-<li>never <h4 id="实现es6类型声明let-和-const"><a href="#实现es6类型声明let-和-const" class="headerlink" title="实现es6类型声明let 和 const"></a>实现es6类型声明let 和 const</h4><blockquote>
-<p>let const 声明的变量只在当前代码块中有效</p>
-</blockquote>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for (var i = 0; i &lt; 10; i++) &#123;&#125;</span><br><span class="line">console.log(i); //10</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for(let j = 0; j &lt; 10; j++) &#123;&#125;</span><br><span class="line">console.log(j);// Error: j is not define</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>以前需要立即执行表达式(IIFE)解决的问题
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for (var k = 0; k &lt; 5; k++) &#123;</span><br><span class="line">    (function (k) &#123;</span><br><span class="line">      setTimeout(function () &#123;</span><br><span class="line">        console.log(k); //输出0,1,2,3,4</span><br><span class="line">      &#125;,0);</span><br><span class="line">    &#125;)(k);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for (let j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">    setTimeout(function () &#123;</span><br><span class="line">      console.log(j); //输出0,1,2,3,4</span><br><span class="line">    &#125;,0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>不存在变量提升
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">console.log(foo); // 输出undefined</span><br><span class="line">console.log(bar); // 报错ReferenceError</span><br><span class="line"></span><br><span class="line">var foo = 2;</span><br><span class="line">let bar = 2;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<blockquote>
-<p>不允许重复声明</p>
-</blockquote>
-<blockquote>
-<p>暂时性死区</p>
-</blockquote>
-<p>即不允许在声明位置之前调用该变量</p>
-<blockquote>
-<p>const 声明引用值不允许修改，然而const的对象内部状态是可以修改的。区分声明只读类型关键字readonly
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">readonly GIPX = 0x1a;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<h4 id="解构"><a href="#解构" class="headerlink" title="解构"></a>解构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h4><blockquote>
-<p>鸭子类型
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">interface LabelledValue	</span><br><span class="line">&#123;		</span><br><span class="line">    label: string; </span><br><span class="line">&#125;</span><br><span class="line">function printLabel(labelledObj:LabelledValue)	</span><br><span class="line">&#123;		</span><br><span class="line">    console.log(labelledObj.label); </span><br><span class="line">&#125;</span><br><span class="line">let myObj = &#123;size: 10, label: &quot;Size 10 Object&quot;&#125;; </span><br><span class="line">printLabel(myObj);</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>可见，参数对象并非实现接口，只需对外表现接口的特性</p>
-<p>另外，接口里的属性不全都是必需的
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface SquareConfig &#123; </span><br><span class="line">    color?: string;</span><br><span class="line">    width?: number; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>定义可索引的类型
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">interface StringArray &#123;</span><br><span class="line">    [index: number]: string;</span><br><span class="line">&#125;</span><br><span class="line">let myArray: StringArray; </span><br><span class="line">myArray	= [&quot;Bob&quot;, &quot;Fred&quot;];</span><br><span class="line">let myStr: string = myArray[0];</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>如上，是一个接口的定义，符合该接口的属性可以number类型为索引。</p>
-<p>另，索引亦可为string类型。注意当同时使用两种类型的索引，数字索引的返回值必须是字符串索引返回值类型的子类型。    这是因为当使用    number    来索引时，JavaScript会将它转换成    string    然后再去索引对象。    就是说用    100    （一个    number    ）去索引等同于使用    “100”    （一个    string    ）去 索引，因此两者需要保持一致。</p>
-<h4 id="类"><a href="#类" class="headerlink" title="类"></a>类</h4><blockquote>
-<p>实现接口</p>
-</blockquote>
-<p> es6是没有constructor的，可以再琢磨下js原型篇。
- ts中，类是具有两个类型：静态部分的类型和实例的类型。静态部分是类定义本身，实例部分就是生成的类的对象
- constructor 存在于类的静态部分
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">interface ClockConstructor &#123;</span><br><span class="line">    new (hour: number, minute: number): ClockInterface;</span><br><span class="line">&#125;</span><br><span class="line">interface ClockInterface &#123;</span><br><span class="line">    tick();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function createClock(ctor: ClockConstructor, hour: number, minute: number): ClockInterface &#123;</span><br><span class="line">    return new ctor(hour, minute);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class DigitalClock implements ClockInterface &#123;</span><br><span class="line">    constructor(h: number, m: number) &#123; &#125;</span><br><span class="line">    tick() &#123;</span><br><span class="line">        console.log(&quot;beep beep&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class AnalogClock implements ClockInterface &#123;</span><br><span class="line">    constructor(h: number, m: number) &#123; &#125;</span><br><span class="line">    tick() &#123;</span><br><span class="line">        console.log(&quot;tick tock&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let digital = createClock(DigitalClock, 12, 17);</span><br><span class="line">let analog = createClock(AnalogClock, 7, 32);</span><br></pre></td></tr></table></figure></p>
-<p>这个是官方示例代码。为了实现定义一个符合ClockInterface接口规范的createClock方法。
-而且应将符合ClockConstructor接口规范的类型作为返回值得类型</p>
-<h4 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function identity&lt;T&gt;(arg: T): T </span><br><span class="line">&#123; </span><br><span class="line">    return arg; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h4><blockquote>
-<p>export 和 import</p>
-</blockquote>
-<h4 id="namespace-存目"><a href="#namespace-存目" class="headerlink" title="namespace(存目)"></a>namespace(存目)</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/05/14/AssentureInterview/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/05/14/AssentureInterview/" itemprop="url">埃森哲电话面试(前端)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-14T09:08:43+08:00">
-                2019-05-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/职场经验/" itemprop="url" rel="index">
-                    <span itemprop="name">职场经验</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>该职位期望招聘高级软件开发人员 以完成基础软件开发 具备独立搭建框架能力和较丰富的前后端开发经验</p>
-<h4 id="1介绍一下原型链"><a href="#1介绍一下原型链" class="headerlink" title="1介绍一下原型链"></a>1介绍一下原型链</h4><h4 id="2变量提升"><a href="#2变量提升" class="headerlink" title="2变量提升"></a>2变量提升</h4><h4 id="2属性绑定实现视图更新的原理"><a href="#2属性绑定实现视图更新的原理" class="headerlink" title="2属性绑定实现视图更新的原理"></a>2属性绑定实现视图更新的原理</h4><h4 id="3编写单元测试用例"><a href="#3编写单元测试用例" class="headerlink" title="3编写单元测试用例"></a>3编写单元测试用例</h4><h4 id="4只执行一次的生命周期钩子-constructor-init之间进行了什么"><a href="#4只执行一次的生命周期钩子-constructor-init之间进行了什么" class="headerlink" title="4只执行一次的生命周期钩子 constructor init之间进行了什么"></a>4只执行一次的生命周期钩子 constructor init之间进行了什么</h4><table>
-<thead>
-<tr>
-<th>钩子</th>
-<th>目的</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>ngAfterContentInit | 在Angular将外部内容放到视图内之后。
-ngAfterContentChecked | 在Angular检测放到视图内的外部内容的绑定后。
-ngAfterViewInit | 在Angular创建了组件视图之后。
-ngAfterViewChecked | 在Angular检测了组件视图的绑定之后。</p>
-<blockquote>
-<p>constructor 依赖注入</p>
-</blockquote>
-<h4 id="5依赖注入-反射"><a href="#5依赖注入-反射" class="headerlink" title="5依赖注入 反射"></a>5依赖注入 反射</h4><h4 id="6面向对象的核心——抽象"><a href="#6面向对象的核心——抽象" class="headerlink" title="6面向对象的核心——抽象"></a>6面向对象的核心——抽象</h4><h4 id="7docker"><a href="#7docker" class="headerlink" title="7docker"></a>7docker</h4><h4 id="8持续集成"><a href="#8持续集成" class="headerlink" title="8持续集成"></a>8持续集成</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/04/22/hexo-troubleshooting/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/04/22/hexo-troubleshooting/" itemprop="url">Hexo TroubleShooting</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-22T11:47:05+08:00">
-                2019-04-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>hexo d</p>
-<blockquote>
-<p>Error: spawn git ENOENT
-hexo s
-cannot GET </p>
+            <blockquote>
+<p>模块是天然的单例模式</p>
 </blockquote>
 
           
@@ -758,7 +373,7 @@ cannot GET </p>
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/04/20/Nginx/">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/29/BasicPython-innerFunc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQs">
@@ -777,7 +392,7 @@ cannot GET </p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/qqsnote/2019/04/20/Nginx/" itemprop="url">Nginx</a></h1>
+                <a class="post-title-link" href="/qqsnote/2019/08/29/BasicPython-innerFunc/" itemprop="url">Python基础——内置函数</a></h1>
         
 
         <div class="post-meta">
@@ -789,679 +404,8 @@ cannot GET </p>
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-20T17:46:55+08:00">
-                2019-04-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="配置依赖库。"><a href="#配置依赖库。" class="headerlink" title="配置依赖库。"></a>配置依赖库。</h4><ul>
-<li><p>gcc(GNU Compiler Collection)</p>
-</li>
-<li><p>pcre依赖库</p>
-</li>
-<li><p>zlib依赖库</p>
-</li>
-<li><p>SSL依赖库</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install gcc pcre-devel zlib zlib-devel openssl openssl-devel</span><br></pre></td></tr></table></figure>
-<h4 id="安装NGINX"><a href="#安装NGINX" class="headerlink" title="安装NGINX"></a>安装NGINX</h4><p>官网下载地址: <a href="http://nginx.org/en/download.html" target="_blank" rel="noopener">http://nginx.org/en/download.html</a></p>
-<p>–&gt; 解压
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf nginx-1.14.2.tar.gz</span><br></pre></td></tr></table></figure></p>
-<p>z(gz格式)j(bz2格式)x(解压)v(显示所有过程)f(使用档案名称命名)
-–&gt; configure
-进入解压目录下
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br></pre></td></tr></table></figure></p>
-<p>–&gt;编译
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></p>
-<h4 id="启动和停止"><a href="#启动和停止" class="headerlink" title="启动和停止"></a>启动和停止</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/nginx/sbin/nginx</span><br><span class="line">/nginx/sbin/nginx -s stop</span><br><span class="line"></span><br><span class="line">/nginx/sbin/nginx -s reload</span><br></pre></td></tr></table></figure>
-<p>–&gt;查看进程
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -ef | grep nginx</span><br></pre></td></tr></table></figure></p>
-<p>访问index.html页面，404<br>
-–&gt;检查端口
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">telnet 127.0.0.1 8080</span><br></pre></td></tr></table></figure></p>
-<p>显示Connection closed by foreign host</p>
-<p>–&gt;查看和关闭防火墙
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --state</span><br><span class="line">systemctl stop firewalld.service</span><br></pre></td></tr></table></figure></p>
-<p>–&gt;服务开机启动
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl disable firewalld.service</span><br><span class="line">systemctl enable nginx.service</span><br></pre></td></tr></table></figure></p>
-<p>手动下载源码，并编译安装的是没有nginx.service的，手动创建
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /lib/systemd/system/nginx.service</span><br></pre></td></tr></table></figure></p>
-<p>编辑内容如下
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=nginx</span><br><span class="line">After=network.target</span><br><span class="line">  </span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/usr/local/nginx/sbin/nginx</span><br><span class="line">ExecReload=/usr/local/nginx/sbin/nginx -s reload</span><br><span class="line">ExecStop=/usr/local/nginx/sbin/nginx -s quit</span><br><span class="line">PrivateTmp=true</span><br><span class="line">  </span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure></p>
-<h4 id="web服务及反向代理"><a href="#web服务及反向代理" class="headerlink" title="web服务及反向代理"></a>web服务及反向代理</h4><p>/usr/local/nginx/nginx.conf
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> server &#123;</span><br><span class="line">        listen 8080;        #nginx服务器的代理端口</span><br><span class="line">        server_name _;    </span><br><span class="line">location / &#123;</span><br><span class="line">        proxy_pass http://172.18.78.14:6080;    #需要反向代理的IP地址+端口</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;Upgrade&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h4><p><a href="https://juejin.im/post/5b01336af265da0b8a67e5c9" target="_blank" rel="noopener">juejin</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/04/20/Linux-rename-networkdevice/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/04/20/Linux-rename-networkdevice/" itemprop="url">Linux网卡重命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-20T17:45:19+08:00">
-                2019-04-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>查看RedHat版本
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/redhat-release</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install nginx</span><br></pre></td></tr></table></figure>
-<p>error:cannot find a valid baseurl</p>
-<p>ping
-connect:network is unreachable</p>
-<p>ls /etc/sysconfig/network-scripts/</p>
-<p>ifcfg-enp0s3 ifcfg-lo ….
-其中ifcfg-lo是localhost配置
-将第一个配置文件重命名
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv ifcfg-enp0s3 ifcfg-eth0</span><br></pre></td></tr></table></figure></p>
-<p>查看网卡
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip add</span><br></pre></td></tr></table></figure></p>
-<p>显示了lo和enp0s3
-修改默认网卡设置
-编辑/etc/default/grub文件，在GRUB_CMD_LINE_LINUX=””项中，插入”net.ifnames=0 biosdevname=0”
-修改ip配置
-注意
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DEVICE=eth0</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ONBOOT=no //设置开机启动网卡，将值修改为“yes”</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BOOTPROTO=static //默认为no，修改为static</span><br></pre></td></tr></table></figure>
-<p>重启
-service network restart</p>
-<p>reboot</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/04/19/video-streaming/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/04/19/video-streaming/" itemprop="url">video和视频流</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-19T21:29:16+08:00">
-                2019-04-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
-                    <span itemprop="name">前端技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="直播原理"><a href="#直播原理" class="headerlink" title="直播原理"></a>直播原理</h3><h3 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h3><h3 id="H5-video标签"><a href="#H5-video标签" class="headerlink" title="H5 video标签"></a>H5 video标签</h3><h3 id="直播流的制作"><a href="#直播流的制作" class="headerlink" title="直播流的制作"></a>直播流的制作</h3><h3 id="Nginx-ffmpeg"><a href="#Nginx-ffmpeg" class="headerlink" title="Nginx+ffmpeg"></a>Nginx+ffmpeg</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><h3 id="下载RTMP模块并重编译nginx"><a href="#下载RTMP模块并重编译nginx" class="headerlink" title="下载RTMP模块并重编译nginx"></a>下载RTMP模块并重编译nginx</h3><p>官方源代码<a href="https://github.com/arut/nginx-rtmp-module.git" target="_blank" rel="noopener">https://github.com/arut/nginx-rtmp-module.git</a></p>
-<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/local/nginx --add-module=~/nginx-rtmp-module --with-http_ssl_module</span><br></pre></td></tr></table></figure>
-<h4 id="编译并安装"><a href="#编译并安装" class="headerlink" title="编译并安装"></a>编译并安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-<h4 id="nginx-reload后报“open-“-usr-local-nginx-logs-nginx-pid”-failed”-执行下面的命令，指定nginx的configure路径"><a href="#nginx-reload后报“open-“-usr-local-nginx-logs-nginx-pid”-failed”-执行下面的命令，指定nginx的configure路径" class="headerlink" title="nginx reload后报“open() “/usr/local/nginx/logs/nginx.pid” failed”,执行下面的命令，指定nginx的configure路径"></a>nginx reload后报“open() “/usr/local/nginx/logs/nginx.pid” failed”,执行下面的命令，指定nginx的configure路径</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./nginx -c /usr/local/nginx/conf/nginx.conf</span><br></pre></td></tr></table></figure>
-<h4 id="编译通过nginx可访问，还没完，配置nginx-conf，在末尾添加rtmp模块配置："><a href="#编译通过nginx可访问，还没完，配置nginx-conf，在末尾添加rtmp模块配置：" class="headerlink" title="编译通过nginx可访问，还没完，配置nginx.conf，在末尾添加rtmp模块配置："></a>编译通过nginx可访问，还没完，配置nginx.conf，在末尾添加rtmp模块配置：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">rtmp&#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 1935;</span><br><span class="line">        chunk_size 4000;</span><br><span class="line"></span><br><span class="line">        # RTMP 直播流配置</span><br><span class="line">        application rtmplive &#123;</span><br><span class="line">            live on;</span><br><span class="line">            max_connections 1024;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # hls 直播流配置</span><br><span class="line">        application hls&#123;</span><br><span class="line">            live on;</span><br><span class="line">            hls on;</span><br><span class="line">            hls_path /usr/local/userdata/live;</span><br><span class="line">            hls_fragment 5s;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>hls_path是分割文件存储路径</p>
-<p>在http模块中添加服务路径
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        location /hls&#123;</span><br><span class="line">            types&#123;</span><br><span class="line">                application/vnd.apple.mpegurl m3u8;</span><br><span class="line">                video/mp2t ts;</span><br><span class="line">            &#125;</span><br><span class="line">            root /usr/local/userdata/live;</span><br><span class="line">            add_header Cache-Control no-cache</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="安装流媒体文件转换工具ffmpeg"><a href="#安装流媒体文件转换工具ffmpeg" class="headerlink" title="安装流媒体文件转换工具ffmpeg"></a>安装流媒体文件转换工具ffmpeg</h2><p>官方release：<a href="http://www.ffmpeg.org/download.html#releases" target="_blank" rel="noopener">http://www.ffmpeg.org/download.html#releases</a>
-解压
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar jxvf ffmpeg-4.1.3.tar.bz2</span><br></pre></td></tr></table></figure></p>
-<p>执行configure报“yasm/nasm not found or too old. Use –disable-x86asm for a crippled build”,ffmpeg默认的编译器未安装，需使用–disable-x86asm</p>
-<p>将本地视频文件通过nginx推流</p>
-<p>本地视频文件kon.mp4</p>
-<h3 id="推送RTMP流"><a href="#推送RTMP流" class="headerlink" title="推送RTMP流"></a>推送RTMP流</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -re -i test.mp4 -vcodec libx264 -acodec acc -f flv rtmp://127.0.0.1:1935/rtmplive/rtmp</span><br></pre></td></tr></table></figure>
-<h3 id="推送HLS流"><a href="#推送HLS流" class="headerlink" title="推送HLS流"></a>推送HLS流</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -re -i test.mp4 -vcodec libx264 -acodec acc -f flv rtmp://127.0.0.1:1935/hls/stream</span><br></pre></td></tr></table></figure>
-<h2 id="这里有一个关于编码器的坑"><a href="#这里有一个关于编码器的坑" class="headerlink" title="这里有一个关于编码器的坑"></a>这里有一个关于编码器的坑</h2><blockquote>
-<p>vcodec acodec 分别指明了视频、音频的编码器，其实这里可以用copy也就是不需要转码，从官方GitHub下载安装的ffmpeg是没有libx264的编码器的，故而在执行上述推流命令时报unkown encoder libx264</p>
-</blockquote>
-<blockquote>
-<p>而通用的h.264视频编码器是叫x264：<a href="https://www.videolan.org/developers/x264.html" target="_blank" rel="noopener">https://www.videolan.org/developers/x264.html</a></p>
-</blockquote>
-<p>安装x264需要将类库提供给外部应用程序(如ffmpeg)
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure –enable-shared </span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
-<p>配置编译的时候最好有–prefix指明安装路径，否则一般默认到/usr/local/lib路径下
-需要将/usr/local/lib路径加入共享库配置文件/etc/ld.so.conf中
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;/usr/local/lib&quot; &gt;&gt; /etc/ld.so.conf</span><br><span class="line"></span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure></p>
-<p>编译安装含外部解码器的FFmpeg
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure --enable-static --enable-gpl --enable-libx264 --extra-cflags=-I/usr/local/include --extra-ldflags=-L/usr/local/lib</span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/04/10/redis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/04/10/redis/" itemprop="url">redis</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-10T13:18:18+08:00">
-                2019-04-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>(略)</p>
-<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">keys *</span><br><span class="line">redis-cli </span><br><span class="line">set key value</span><br><span class="line">get key</span><br><span class="line">del key</span><br><span class="line">hget key fieldname</span><br><span class="line">hget all</span><br><span class="line">flushall</span><br></pre></td></tr></table></figure>
-<h3 id="redis作为认证token数据库"><a href="#redis作为认证token数据库" class="headerlink" title="redis作为认证token数据库"></a>redis作为认证token数据库</h3><p>ticket=(accountid, token)</p>
-<h3 id="centos安装Redis"><a href="#centos安装Redis" class="headerlink" title="centos安装Redis"></a>centos安装Redis</h3><p>参考：<a href="https://blog.csdn.net/Mrqiang9001/article/details/80295261" target="_blank" rel="noopener">Linux 平台将 Redis 设置为服务并开机自启动
-</a></p>
-<p>服务部署好之后，若无法远程访问</p>
-<p>首先检查防火墙设置
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl status firewalld # 查看防火墙状态</span><br><span class="line">firewall-cmd --zone= public --query-port=6379/tcp # 查询防火墙端口状态</span><br><span class="line">firewall-cmd --zone=public --add-port=6379/tcp --permanent # 永久开发端口及协议</span><br></pre></td></tr></table></figure></p>
-<p>确认是否绑定服务主机ip 参考 <a href="https://www.jianshu.com/p/c64839414623" target="_blank" rel="noopener">处理CentOS 7.2 x64端口不通的问题</a></p>
-<h4 id="远程访问"><a href="#远程访问" class="headerlink" title="远程访问"></a>远程访问</h4><p>修改/etc/redis/redis.conf
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 注释掉或将其改为服务器静态ip</span><br><span class="line"># bind 127.0.0.1 ::1</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>DENIED Redis is running in protected mode because protected mode is enabled, no bind address was specified, no authentication password is requested to clients…..</p>
-</blockquote>
-<p>受保护的模式,改为no
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protected-mode no</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/04/10/JMS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/04/10/JMS/" itemprop="url">JMS</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-10T13:17:08+08:00">
-                2019-04-10
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-29T19:53:43+08:00">
+                2019-08-29
               </time>
             
 
@@ -1570,7 +514,7 @@ service network restart</p>
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/03/27/AngularCustomizeControl/">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/29/BasicPython-0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQs">
@@ -1589,7 +533,7 @@ service network restart</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/qqsnote/2019/03/27/AngularCustomizeControl/" itemprop="url">Angular自定义控件</a></h1>
+                <a class="post-title-link" href="/qqsnote/2019/08/29/BasicPython-0/" itemprop="url">Python 编程基础</a></h1>
         
 
         <div class="post-meta">
@@ -1601,8 +545,8 @@ service network restart</p>
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-27T19:18:17+08:00">
-                2019-03-27
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-29T19:15:33+08:00">
+                2019-08-29
               </time>
             
 
@@ -1624,8 +568,8 @@ service network restart</p>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
-                    <span itemprop="name">前端技术</span>
+                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
                   </a>
                 </span>
 
@@ -1663,15 +607,57 @@ service network restart</p>
       
         
           
-            <h3 id="ControlValueAccessor接口"><a href="#ControlValueAccessor接口" class="headerlink" title="ControlValueAccessor接口"></a>ControlValueAccessor接口</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// angular2/packages/forms/src/directives/control_value_accessor.ts </span><br><span class="line">export interface ControlValueAccessor &#123;</span><br><span class="line">  writeValue(obj: any): void;</span><br><span class="line">  registerOnChange(fn: any): void;</span><br><span class="line">  registerOnTouched(fn: any): void;</span><br><span class="line">  setDisabledState?(isDisabled: boolean): void;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+            <p>目前是python3.5</p>
+<blockquote>
+<p>print() 和 n=input()</p>
+</blockquote>
+<blockquote>
+<p>单行注释# 多行’’’</p>
+</blockquote>
+<blockquote>
+<p>编码声明
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>缩进<br></p>
+</blockquote>
+<p>Python没有分割代码块符号，以缩进以及冒号:区分层次，一般以4个空格为基本缩进单位。</p>
+<blockquote>
+<p>命名规范</p>
 <ul>
-<li><p>writeValue(obj: any)：该方法用于将模型中的新值写入视图或 DOM 属性中。</p>
-</li>
-<li><p>registerOnChange(fn: any)：设置当控件接收到 change 事件后，调用的函数</p>
-</li>
-<li>registerOnTouched(fn: any)：设置当控件接收到 touched 事件后，调用的函数</li>
-<li>setDisabledState?(isDisabled: boolean)：当控件状态变成 DISABLED 或从 DISABLED 状态变化成 ENABLE 状态时，会调用该函数。该函数会根据参数值，启用或禁用指定的 DOM 元素。</li>
+<li>模块名：全部小写 + 下划线_</li>
+<li>包名：全部小写，不推荐使用下划线</li>
+<li>类名：Pascal风格（首字母大写）</li>
+<li>模块内部类型：_ + Pascal风格<br>
+使用单下划线_开头的变量和函数是受保护的，在使用from xxx import * 时不会被导入；使用双下划线__开头的变量或方法是类私有的</li>
+<li>函数、类的属性和方法：同模块命名</li>
+<li>常量：全部大写</li>
 </ul>
+</blockquote>
+<blockquote>
+<p>字符串类型’’和””和’’’’’’<br></p>
+</blockquote>
+<p>使用’’’表示多行字符,使用r’’屏蔽转义</p>
+<blockquote>
+<p>列表和元组</p>
+</blockquote>
+<blockquote>
+<p>字符串操作</p>
+</blockquote>
+<blockquote>
+<p>global关键字</p>
+</blockquote>
+<p>在python中，变量不需要先声明，直接使用即可，那我们怎么知道用的是局部变量还是全局变量呢？
+首先：python使用的变量，在默认情况下一定是用局部变量。
+其次：python如果想使用作用域之外的全局变量，则需要加global前缀。</p>
+<h4 id="关于python2-7和python3-5的一万种冲突方式"><a href="#关于python2-7和python3-5的一万种冲突方式" class="headerlink" title="关于python2.7和python3.5的一万种冲突方式"></a>关于python2.7和python3.5的一万种冲突方式</h4><p>目前的很多情况下，linux的软件管理工具仍然会将python2.7作为默认安装版本，然后在某个时刻你会看到
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error: xxxx requires python 3.5 or above</span><br></pre></td></tr></table></figure></p>
+<p>于是你再安装一个python3，然而python -V依然是2.7<br>
+于是乎卸载python<br>
+做link: alias python=python3 均是徒劳</p>
+<p>最后
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install python-is-python3</span><br></pre></td></tr></table></figure></p>
+<p>唉，行吧。。</p>
 
           
         
@@ -1720,7 +706,7 @@ service network restart</p>
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/03/27/AngularComponentCommunicate/">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/19/DICOM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQs">
@@ -1739,7 +725,7 @@ service network restart</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/qqsnote/2019/03/27/AngularComponentCommunicate/" itemprop="url">Angular组件交互</a></h1>
+                <a class="post-title-link" href="/qqsnote/2019/08/19/DICOM/" itemprop="url">DICOM</a></h1>
         
 
         <div class="post-meta">
@@ -1751,8 +737,354 @@ service network restart</p>
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-27T18:44:26+08:00">
-                2019-03-27
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-19T17:09:38+08:00">
+                2019-08-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/图像处理/" itemprop="url" rel="index">
+                    <span itemprop="name">图像处理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>参考CSDN zssure 文集。</p>
+<blockquote>
+<p>将DICOM协议当做是专属于医疗领域的“HTTP”传输协议，常见的HTTP协议是通过上表中的各种服务来实现浏览器与服务器之间HTML格式数据的传输；DICOM协议是通过上表中的各种服务实现了医疗设备与数据中心之间DCM格式数据的传输。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">对比</th>
+<th style="text-align:left">HTTP</th>
+<th style="text-align:left">DICOM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">OSI层</td>
+<td style="text-align:left">应用层</td>
+<td style="text-align:left">应用层</td>
+</tr>
+<tr>
+<td style="text-align:center">数据</td>
+<td style="text-align:left">HTML文件</td>
+<td style="text-align:left">.DCM文件</td>
+</tr>
+<tr>
+<td style="text-align:center">服务</td>
+<td style="text-align:left">GET、POST、HEAD、PUT、DELETE、TRACE、CONNECT、OPTIONS</td>
+<td style="text-align:left">C-ECHO、C-FIND、C-STORE、C-MOVE、C-GET、N-GET、N-SET、N-ACTION、N-CREATE、N-DELETE、N-EVENT-REPORT</td>
+</tr>
+<tr>
+<td style="text-align:center">应用</td>
+<td style="text-align:left">互联网B/S模式，也可以用于C/S模式</td>
+<td style="text-align:left">C/S模式，也可以用于WADO(B/S模式)</td>
+</tr>
+</tbody>
+</table>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/19/SQLndNoSQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/08/19/SQLndNoSQL/" itemprop="url">关系型数据库和非关系型数据库</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-19T14:11:51+08:00">
+                2019-08-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="非关系型数据库"><a href="#非关系型数据库" class="headerlink" title="非关系型数据库"></a>非关系型数据库</h3><p>来自Mongodb开发者的话，出自<a href="https://www.zhihu.com/question/20059632" title="MongoDB 等 NoSQL 与关系型数据库相比，有什么优缺点及适用场景？" target="_blank" rel="noopener">知乎</a><br></p>
+<blockquote>
+<p>「让开发者更高效」概括了 MongoDB 相较于关系型数据库带来的全部价值。这要放在最近十年整个行业的大背景下理解。软件行业的工资水平是出了名得高。这意味着软件开发的成本中，人力成本已经超越了硬件成本，成为成本里的大头。曾经长周期、瀑布式的开发流程被强调快速迭代的开发流程所替代。所有这些，加上你经常听说的热词，比如敏捷开发，微服务，DevOps，都指向「让开发者更高效」。这一背景下，基于关系表的关系型的数据模式也被灵活的非关系型数据模式替代。<br></p>
+</blockquote>
+<h4 id="使用文档模型"><a href="#使用文档模型" class="headerlink" title="使用文档模型"></a>使用文档模型</h4><p>文档模型与面向对象的数据表达方式更相似更自然。与关系型数据库中表结构不同，文档中可任意嵌入数组和子文档，就像程序中的数组和成员变量一样。这是关系型数据库三范式不允许的。但实际中我们经常看到一对多和一对一的数据。比如，一篇博客文章的 Tag 列表作为文章的一部分非常直观，而把 Tag 与文章的从属关系单独建立一张关系表就不那么自然。再比如，一个订单下面的收货地址，包括省、市、区、街道和门牌，作为一个子文档，与订单的信用卡地址很容易区分开。更方便的是，嵌入的数组和子文档之上可以直接建立索引，比如我可以很快找到所有 Tag 包含 MongoDB 的文章。<br></p>
+<h4 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h4><p>在关系数据库中，为了满足一个查询，多个表的数据都要参与 Join，每一个表都对应着磁盘的一次读取。这和数据放在一个地方，一次读完，当然完全不同。更简单的数据访问模式也让开发者更容易理解数据库的性能表现，尤其是当涉及到索引时。</p>
+<h4 id="灵活"><a href="#灵活" class="headerlink" title="灵活"></a>灵活</h4><p>关系数据库，常见的运维问题是给已有数据加一个新的属性，从数据表到应用数据层都要改。尽管有些工具可以把它自动化，这仍然是一个复杂的工作，尤其是更新产品线上数据库的时候。MongoDB 没有定义 Schema（模式）的话，就不需要改动数据库，只需要在应用层做必要的改动。<br>
+另一个问题是，纯粹业务需要的自定义属性，如不同商品的各种特性，我能理解的是在商品筛选的时候，这些特性可能临时成为区分用的指标，产品这个表应该怎么设计？最简单的方案，是把每个可能的属性都变成单独一列，当然这个方案不能扩展。另一个例子，一个通讯录允许用户随意添加新的联系方式，你有 Facebook，他有 Twitter。一种方案是在程序里把所有自定义属性序列化，比如用 JSON 放到同一字段里。另一种方案，叫做 Entity-attribute-value Model，把自定义属性和他们的数据类型，进一步抽象，增加关系表来表现。这时，相比这些复杂方案，MongoDB 没有 Schema 的优点就显现出来了。</p>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>数据一台机器放不下了，就需要 sharding（分片）把它放到几台机器上去。分片是 MongoDB 多年以来的原生功能，与 MongoDB 其他功能高效整合。例如，分片集群中一个复杂的聚合查询会自动地根据 Shard Key（片键）分配到多个结点上运行，尽可能将计算任务下推到数据结点上，最后在一个结点上聚合所有结点的结果。分片还可以在各个结点间自动迁移数据，均衡其数据量。<br>
+为了升级数据库容量，相较于关系型数据库分库分表需要同时改动应用和数据库，MongoDB分片的运维也简单很多，能够做到对应用透明。<br>
+我们希望即使机器硬件有问题，数据也不要丢，服务不受影响。分片后机器更多，任一机器出问题的概率也就更高。Replication 复制解决了这个问题。它把同一份数据实时地复制到多个结点，自动地在其中切换。MongoDB 的商业客户中，不论规模大小，使用复制集已经成了一个标准，因为数据丢失的代价远大于冗余机器的成本。</p>
+<h3 id="关系型数据库"><a href="#关系型数据库" class="headerlink" title="关系型数据库"></a>关系型数据库</h3><h4 id="第一范式"><a href="#第一范式" class="headerlink" title="第一范式"></a>第一范式</h4><p>实体中的某个属性不能有多个值或者不能有重复的属性。即要求数据库表的无重复列，同一列不能有多个值。<br>
+如果出现重复的属性，就可能需要定义一个新的实体，新的实体由重复的多个属性构成，新实体与原实体之间为一对多关系</p>
+<h4 id="第二范式"><a href="#第二范式" class="headerlink" title="第二范式"></a>第二范式</h4><p>非主属性完全依赖于主关键字。
+经典的例子是考察一个学生在某门课程中的信息，以（学号，课程）为主关键字的话，考察成绩、教室、教师、上课时间等都没有问题，考察教材时，因为教材应该仅依赖课程，考察学生信息（姓名、性别、专业），因为学生信息只依赖学生。这里存在违反第二范式的隐患。<br>
+上述表大致为
+serialNo|姓名|专业|上课时间|上课地点|任课教授|资料|成绩
+ :——|:–:|:–:|:–:|:–:|:–:|:–:|:–:
+ 120022001|王丫蛋|声乐|周三|12教102|Professor Steven|人教版|90
+ 120022201|李铁锤|机械|周四|11教412|Professor Johnson|人教版|75
+ 360022201|李铁锤|机械|周五|12教308|Professor Hassan|人教版|75
+ 首先，调整部分依赖的字段会很麻烦：因考研大纲修改，开课改用外研社教材。需修改大量记录，李铁锤改名李婉如，修改大量记录，即<strong>数据冗余</strong><br>
+ 其次，学校新设电子竞技课程，指定了教材，尚未有学生选课，数据是写不进去的，即<strong>插入异常</strong><br>
+ 然后，哪天这门课程被教育部指定有悖社会主义核心价值体系，学校偷偷删除了所有选课记录，此时导致表中的学生信息大量遗失，即<strong>删除异常</strong>
+ 因此应有课程-教材关系表 学号-学生信息关系表</p>
+<h4 id="第三范式"><a href="#第三范式" class="headerlink" title="第三范式"></a>第三范式</h4><p>符合第二范式的关系模式（具备必要的关系表）中，不应出现依赖于非主属性的属性<br>
+例如，存在一个部门信息表，其中每个部门有部门编号（dept_id）、部门名称、部门简介等信息。那么在的员工信息表中列出部门编号后就不能再将部门名称、部门简介等与部门有关的信息再加入员工信息表中。即消除了传递依赖</p>
+<h4 id="BCNF"><a href="#BCNF" class="headerlink" title="BCNF"></a>BCNF</h4><p>根据候选键关系进一步消除传递依赖（没看懂）</p>
+<h4 id="第四范式"><a href="#第四范式" class="headerlink" title="第四范式"></a>第四范式</h4><p>满足BCNF，属性不应含有多值，如联系方式相关字段的设计</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/16/BasicDataVisualization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/08/16/BasicDataVisualization/" itemprop="url">数据可视化入门</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-16T14:23:37+08:00">
+                2019-08-16
               </time>
             
 
@@ -1813,33 +1145,655 @@ service network restart</p>
       
         
           
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;app-voter *ngFor=&quot;let voter of voters&quot;</span><br><span class="line">      [name]=&quot;voter&quot;</span><br><span class="line">      (voted)=&quot;onVoted($event)&quot;&gt;</span><br><span class="line">&lt;/app-voter&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="Input"><a href="#Input" class="headerlink" title="@Input()"></a>@Input()</h3><blockquote>
-<p>@Input()可以带set、get属性</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Component, Input &#125; from &apos;@angular/core&apos;;</span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;app-voter&apos;,</span><br><span class="line">  template: &apos;&lt;h3&gt;&quot;&#123;&#123;name&#125;&#125;&quot;&lt;/h3&gt;&apos;</span><br><span class="line">&#125;)</span><br><span class="line">export class VoterComponent &#123;</span><br><span class="line">  private _name = &apos;&apos;;</span><br><span class="line"></span><br><span class="line">  @Input()</span><br><span class="line">  set name(name: string) &#123;</span><br><span class="line">    this._name = (name &amp;&amp; name.trim()) || &apos;&lt;no name set&gt;&apos;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  get name(): string &#123; return this._name; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在set、get时进行格式化等操作。</p>
+            <h4 id="D3-js-和-Echart"><a href="#D3-js-和-Echart" class="headerlink" title="D3.js 和 Echart"></a>D3.js 和 Echart</h4><p>原文：<a href="https://juejin.im/post/5cd65a41e51d456e89634ad3" title="掘金文章" target="_blank" rel="noopener">D3.js与echart.js的应用场景</a><br></p>
 <blockquote>
-<p>ngOnChanges()生命周期钩子是专门用来监听@Input入参的，非传入参数不会触发ngOnChanges()方法</p>
+<p>echarts和D3都是常用的数据可视化库，实现了能应用于各场景的图表等插件，两者之间的不同之处就在于echarts是使用canvas来绘制图形的，而D3是通过Svg来绘制图形的。svg可以操作dom支持事件处理器，想要实现某个操作，直接调用相关的方法实现效果就行，svg操作存在链式语法，与jQuery的链式调用差不多，简单易读。canvas不支持事件处理器所以只能展示数据，而不能修改。</p>
 </blockquote>
-<h3 id="Output"><a href="#Output" class="headerlink" title="@Output()"></a>@Output()</h3><p>子组件发射事件
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Output() voted = new EventEmitter&lt;boolean&gt;();</span><br><span class="line"></span><br><span class="line">vote(agreed: boolean) &#123;</span><br><span class="line">    this.voted.emit(agreed);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="模板标记子组件"><a href="#模板标记子组件" class="headerlink" title="模板标记子组件"></a>模板标记子组件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;h3&gt;Countdown to Liftoff (via local variable)&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">&lt;button (click)=&quot;timer.start()&quot;&gt;Start&lt;/button&gt;</span><br><span class="line">&lt;button (click)=&quot;timer.stop()&quot;&gt;Stop&lt;/button&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;seconds&quot;&gt;&#123;&#123;timer.seconds&#125;&#125;&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;app-countdown-timer #timer&gt;&lt;/app-countdown-timer&gt;</span><br></pre></td></tr></table></figure>
-<p>#timer 作为父组件的变量，标记在子组件标签中，用以代表子组件，即可使父组件获取子组件的引用，进而可以调用子组件公用方法</p>
-<p>该方法有局限性在于，父组件-子组件的连接必须全部在父组件的模板中进行。父组件本身的代码对子组件没有访问权。</p>
-<h3 id="ViewChild"><a href="#ViewChild" class="headerlink" title="@ViewChild()"></a>@ViewChild()</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@ViewChild(CountdownTimerComponent)</span><br><span class="line">private timerComponent: CountdownTimerComponent;</span><br></pre></td></tr></table></figure>
-<p>使用@ViewChild()装饰器将CountdownTimerComponent实例注入到本组件，记为私有变量timerComponent</p>
 <ul>
-<li><p>特别注意
-被注入的组件只有在 Angular 显示了父组件视图之后才能访问
-下面的语法很关键</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ngAfterViewInit() &#123;</span><br><span class="line">    // wait a tick first to avoid one-time devMode</span><br><span class="line">    // unidirectional-data-flow-violation error</span><br><span class="line">    setTimeout(() =&gt;  this.timerComponent.init(), 0);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>父组件要及时调用子组件方法进行初始化，须实现AfterViewInit生命周期钩子，且用定时器异步操作。
-否则报异常</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExpressionChangedAfterItHasBeenCheckedError</span><br></pre></td></tr></table></figure>
-</li>
+<li>D3使用svg绘制图形，echarts使用canvas绘制图形</li>
+<li>D3兼容IE9及以上主流浏览器，echarts兼容IE6及以上主流浏览器</li>
+<li>D3使用灵活，学习成本大，echarts封装好的，使用简单，不够灵活</li>
 </ul>
-<h3 id="引入第三者通信"><a href="#引入第三者通信" class="headerlink" title="引入第三者通信"></a>引入第三者通信</h3><p>这类方法包括注入服务，借助相同父组件以及借助发布订阅可观察对象等，此处略。</p>
+<p>因为D3支持事件处理器可以操作dom，所以如果在项目开发中如果有较多用户交互的场景，可以使用D3.如果项目中一般没有用户交互的场景，我们只需要将图表展示给用户看，而不需要更改，可以使用echarts。因为D3它展示的每一个数据都是一个标签，所以当数据发生改变的时候图表会重新渲染，会不停的操作dom，这对性能的消耗是非常大的（存疑，对于同样需要交互的需求，究竟是D3因为绑定了数据的dom频繁渲染消耗大，还是任意修改都需要重绘整个canvas的Echart消耗大呢?）。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/13/jsGetterSetter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/08/13/jsGetterSetter/" itemprop="url">JavaScript getter setter</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-13T17:09:59+08:00">
+                2019-08-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="“修改默认操作”"><a href="#“修改默认操作”" class="headerlink" title="“修改默认操作”"></a>“修改默认操作”</h4><p>面试题：<br>
+对于对象o有N个属性，不修改下面代码，编写一段程序获取到对象o的所有属性。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var foo = (function()&#123;</span><br><span class="line">    var o = &#123;</span><br><span class="line">       a: 1,</span><br><span class="line">       b: 2,</span><br><span class="line">       /**更多属性**/</span><br><span class="line">    &#125;;</span><br><span class="line">    return function(key) &#123;</span><br><span class="line">        return o[key];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></p>
+<p>对象o只是函数作用域中的一个局部变量，而对外提供的唯一接口foo(key)可以获取到对象o单独的某个key对应的value，如：foo(‘a’)返回1。但是这里要求获取一个未知属性个数对象o的所有属性。</p>
+<blockquote>
+<p>在 ES5 中可以使用 getter 和 setter 部分改写默认操作，但是只能应用在单个属性上，无法应用在整个对象上。getter是一个隐藏函数，会在获取属性值时调用。setter也是一个隐藏函数，会在设置属性值时调用。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">var test = &#123;</span><br><span class="line">    get o()&#123;</span><br><span class="line">        console.log(&apos;监听到正在获取属性o的值&apos;);</span><br><span class="line">        return this._o;</span><br><span class="line">    &#125;,</span><br><span class="line">    set o(v)&#123;</span><br><span class="line">        console.log(&apos;监听到正在设置属性o的值为：&apos; + v);</span><br><span class="line">        this._o = v;</span><br><span class="line">        return this._o;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test.o = 14; // 监听到正在设置属性o的值为：14</span><br><span class="line">console.log(test.o); // 监听到正在获取属性o的值</span><br></pre></td></tr></table></figure>
+<h4 id="答题提示：添加一个属性，并且借助修改其默认get方法暴露this-（闭包应用）"><a href="#答题提示：添加一个属性，并且借助修改其默认get方法暴露this-（闭包应用）" class="headerlink" title="答题提示：添加一个属性，并且借助修改其默认get方法暴露this （闭包应用）"></a>答题提示：添加一个属性，并且借助修改其默认get方法暴露this （闭包应用）</h4><p>答案：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Object.defineProperty(Object.prototype, &apos;self&apos;, &#123;</span><br><span class="line">    get() &#123;</span><br><span class="line">        return this;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">var o = foo(&apos;self&apos;);</span><br><span class="line">console.log(Object.keys(o)); // [&apos;a&apos;, &apos;b&apos;]</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>评论：因为o上的属性有若干个，你不确定o上是否存在属性名为self的的属性，如果存在，你就获取不到原型上的self了，所以最好使用Symbol。
+改进：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var key = Symbol();</span><br><span class="line">Object.defineProperty(Object.prototype, key, &#123;</span><br><span class="line">    get() &#123;</span><br><span class="line">        return this;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">var o = foo(key);</span><br><span class="line">console.log(Object.keys(o)); // [&apos;a&apos;, &apos;b&apos;]</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h4 id="触发其他操作"><a href="#触发其他操作" class="headerlink" title="触发其他操作"></a>触发其他操作</h4><p>搞一个方块，移动10像素
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var box =document.createElement(&quot;div&quot;);</span><br><span class="line">box.setAttribute(&quot;id&quot;,&quot;box&quot;);</span><br><span class="line">box.setAttribute(&quot;style&quot;,&quot;width:30px;height:30px;background:red;&quot;);</span><br><span class="line"></span><br><span class="line">var transformText = &apos;translateX(&apos; + 10 + &apos;px)&apos;;</span><br><span class="line">box.style.transform = transformText;</span><br></pre></td></tr></table></figure></p>
+<p>封装让方块移动的操作 当然可以这样
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function moveBox(distance)&#123;</span><br><span class="line">    box.style.transform = &apos;translateX(&apos; + distance + &apos;px)&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其实也可以这样
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Object.defineProperty(box, &apos;move&apos;, &#123;</span><br><span class="line">    set: function(value) &#123;</span><br><span class="line">        var transformText = &apos;translateX(&apos; + value + &apos;px)&apos;;</span><br><span class="line">        box.style.webkitTransform = transformText;</span><br><span class="line">        box.style.transform = transformText;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line">//调用</span><br><span class="line">box.move = 100;</span><br></pre></td></tr></table></figure></p>
+<h4 id="熔断逻辑"><a href="#熔断逻辑" class="headerlink" title="熔断逻辑"></a>熔断逻辑</h4><p>Express.js 版本弃用一些旧版本的中间件，为了让用户能够更好地发现，有下面这段代码，通过修改get属性方法，让用户调用废弃属性时抛错并带上自定义的错误信息。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &apos;json&apos;,</span><br><span class="line">  &apos;urlencoded&apos;,</span><br><span class="line">  &apos;bodyParser&apos;,</span><br><span class="line">  /* 此处省略很多包名 **/</span><br><span class="line">].forEach(function (name) &#123;</span><br><span class="line">  Object.defineProperty(exports, name, &#123;</span><br><span class="line">    get: function () &#123;</span><br><span class="line">      throw new Error(&apos;Most middleware (like &apos; + name + &apos;) is no longer bundled with Express and must be installed separately. Please see https://github.com/senchalabs/connect#middleware.&apos;);</span><br><span class="line">    &#125;,</span><br><span class="line">    configurable: true</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>参考原文：<a href="https://zhuanlan.zhihu.com/p/25672454" target="_blank" rel="noopener">关于Object的getter和setter</a> &#160;&#160;<a href="https://imweb.io/topic/56d40adc0848801a4ba198ce" target="_blank" rel="noopener">不会Object.defineProperty你就out了</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/12/deepcopy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/08/12/deepcopy/" itemprop="url">深拷贝</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-12T13:07:50+08:00">
+                2019-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>之前只知道
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">JSON.parse(JSON.stringify(obj))</span><br></pre></td></tr></table></figure></p>
+<p>简单实用，可以应付一般对象的场景，其实，这种方式还是有缺陷的————抛弃了原型及构造方法（原类型变成Object），另外JSON序列化会忽略违法安全原则的类型，如undefined、function、symbol（ES6+）、RegExp对象，以及循环引用无法复制,
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ajson = &#123;a:undefined,b:function()&#123;return 1;&#125;&#125; //&#123;a: undefined, b: ƒ&#125;</span><br><span class="line">bjson = JSON.parse(JSON.stringify(ajson))     //&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>深拷贝是各种库都会涉及的工具，也是面试老生常谈的问题<br></p>
+<h4 id="jQuery"><a href="#jQuery" class="headerlink" title="jQuery"></a>jQuery</h4><p>jQuery提供了拷贝DOM对象的clone()方法
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">clone: function( dataAndEvents, deepDataAndEvents ) &#123;</span><br><span class="line">    dataAndEvents = dataAndEvents == null ? false : dataAndEvents;</span><br><span class="line">    deepDataAndEvents = deepDataAndEvents == null ? dataAndEvents : deepDataAndEvents;</span><br><span class="line"></span><br><span class="line">    return this.map( function() &#123;</span><br><span class="line">        return jQuery.clone( this, dataAndEvents, deepDataAndEvents );</span><br><span class="line">    &#125; );</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></p>
+<p>.clone( [withDataAndEvents ] [, deepWithDataAndEvents ] )<br>
+withDataAndEvents Type：Boolean(default: false)<br>
+deepWithDataAndEvents Type: Boolean(default: value of withDataAndEvents)
+<br>
+通过调用extend()实现深拷贝：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var x=&#123;a:1, b: &#123; f: &#123; g: 1 &#125; &#125;, c: [ 1, 2, 3 ]&#125;;</span><br><span class="line">var y = $.extend(true, &#123;&#125;, x);</span><br></pre></td></tr></table></figure></p>
+<p>合并对象方法，将第三个及之后的参数对象的各属性合并到target：<br>
+jQuery.extend( [deep ], target, object1[, objectN ] )<br>
+deep = true 则以深拷贝处理 无此参数相当于false</p>
+<h4 id="lodash"><a href="#lodash" class="headerlink" title="lodash"></a>lodash</h4><p>一个JavaScript工具库,lodash提供_.cloneDeep()方法，该方法用了大量代码实现对ES6新标准对象的支持。</p>
+<h4 id="原型拷贝方式"><a href="#原型拷贝方式" class="headerlink" title="原型拷贝方式"></a>原型拷贝方式</h4><p>作者: <a href="https://github.com/zry656565" target="_blank" rel="noopener">Jerry Zhou</a> 原文:
+<a href="https://jerryzou.com/posts/dive-into-deep-clone-in-javascript/" target="_blank" rel="noopener">深入剖析 JavaScript 的深复制</a><br>
+该方法对各种类型进行了细致的分类处理，并且考虑到了存在环形引用关系，以及保留对象所属自定义类型<br>
+定义defineMethod，用于向各种类型的原型上面添加自定义方法<br>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/* </span><br><span class="line"> * protoArray需修改的原型的集合</span><br><span class="line"> * nameToFunc自定义方法的map</span><br><span class="line"> */</span><br><span class="line">function defineMethods(protoArray, nameToFunc) &#123;</span><br><span class="line">    protoArray.forEach(function(proto) &#123;</span><br><span class="line">        var names = Object.keys(nameToFunc),</span><br><span class="line">            i = 0;</span><br><span class="line"></span><br><span class="line">        for (; i &lt; names.length; i++) &#123;</span><br><span class="line">            Object.defineProperty(proto, names[i], &#123;</span><br><span class="line">                enumerable: false,</span><br><span class="line">                configurable: true,</span><br><span class="line">                writable: true,</span><br><span class="line">                value: nameToFunc[names[i]]</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>关于Object.defineProperty()存目</p>
+<p>首先对于Number, Boolean 和 String
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">defineMethods([</span><br><span class="line">    Number.prototype,</span><br><span class="line">    Boolean.prototype,</span><br><span class="line">    String.prototype</span><br><span class="line">], &#123;</span><br><span class="line">    &apos;$clone&apos;: function() &#123; return this.valueOf(); &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>私以为，按照作者的理念此处应该返回对象（String，Number，Boolean），然而valueOf()出来的都是值类型（string，number，bool），如果返回对象，需要分开写比如 function() { return new String(this.valueOf()) 像他处理Date类型一样
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">defineMethods([ Date.prototype ], &#123;</span><br><span class="line">        &apos;$clone&apos;: function() &#123; return new Date(this.valueOf()); &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>重点在于Object 和 Array 对象，需要递归深拷贝
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">defineMethods([ Array.prototype, Object.prototype ], &#123;</span><br><span class="line">    &apos;$clone&apos;: function (srcStack, dstStack) &#123;</span><br><span class="line">        var obj = Object.create(Object.getPrototypeOf(this)),</span><br><span class="line">            keys = Object.keys(this),</span><br><span class="line">            index,</span><br><span class="line">            prop;</span><br><span class="line"></span><br><span class="line">        srcStack = srcStack || [];</span><br><span class="line">        dstStack = dstStack || [];</span><br><span class="line">        srcStack.push(this);</span><br><span class="line">        dstStack.push(obj);</span><br><span class="line"></span><br><span class="line">        for (var i = 0; i &lt; keys.length; i++) &#123;</span><br><span class="line">            prop = this[keys[i]];</span><br><span class="line">            if (prop === null || prop === undefined) &#123;</span><br><span class="line">                obj[keys[i]] = prop;</span><br><span class="line">            &#125;else if()</span><br><span class="line">            </span><br><span class="line">            </span><br><span class="line">             if (!prop instanceOf Function) &#123;</span><br><span class="line">                if (prop.constructor.name===&apos;Object&apos;) &#123;</span><br><span class="line">                    index = srcStack.lastIndexOf(prop);</span><br><span class="line">                    if (index &gt; 0) &#123;</span><br><span class="line">                        obj[keys[i]] = dstStack[index];</span><br><span class="line">                        continue;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                obj[keys[i]] = prop.$clone(srcStack, dstStack);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return obj;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>注意 原生的js中没有一个可靠的方法确定对象的类型，人家本来就是这样的精神————‘弱类型’，typeof 和 instanceof 都会混淆各种类型，而上面的constructor.name返回构造方法名称，而未必就是类名，因此也是不严谨的，原文作者为每种类型定义了$isFunction、$isPlainObject等属性方法来区分类型<br>
+此外$clone()还需处理RegExp对象 Function等
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">defineMethods([ RegExp.prototype ], &#123;</span><br><span class="line">    &apos;$clone&apos;: function () &#123;</span><br><span class="line">        var pattern = this.valueOf();</span><br><span class="line">        var flags = &apos;&apos;;</span><br><span class="line">        flags += pattern.global ? &apos;g&apos; : &apos;&apos;;</span><br><span class="line">        flags += pattern.ignoreCase ? &apos;i&apos; : &apos;&apos;;</span><br><span class="line">        flags += pattern.multiline ? &apos;m&apos; : &apos;&apos;;</span><br><span class="line">        return new RegExp(pattern.source, flags);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h4><p>实现一个完美的深拷贝方法是很繁琐复杂甚至是没有必要的，有些轮子是必要的，而在生产实践中，不说因地制宜，实现方式的复杂度是必须考量的。探究比较深拷贝方法的优劣，其实是对原型，类型等概念的深刻理解的比较好的实践。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/08/MedicalImageFormat/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/08/08/MedicalImageFormat/" itemprop="url">医学图像格式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-08T18:12:55+08:00">
+                2019-08-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/图像处理/" itemprop="url" rel="index">
+                    <span itemprop="name">图像处理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="图像格式"><a href="#图像格式" class="headerlink" title="图像格式"></a>图像格式</h3><h4 id="Images-or-voxel"><a href="#Images-or-voxel" class="headerlink" title="Images(or voxel)"></a>Images(or voxel)</h4><p>dcm (DICOM Image): DICOM的全称是 Digital Imaging and Communications in Medicine (医疗数位影像和传输协定)
+它是一组通用的标准协定，可以整合不同厂商的医疗影像仪器、伺服器、工作站、列印机和网络设备
+和其他格式不同的是它統合了所有的資訊在同一個資料內，也就是說，如果有一張胸腔X光影像在你的病人個人資料內，這個影像決不可能意外地再從你的病人資料中分離。</p>
+<h4 id="Meshes"><a href="#Meshes" class="headerlink" title="Meshes"></a>Meshes</h4><p>stl (STereoLithography, 立體光刻),用于表示三角形网格的一种文件格式。它的文件格式非常简单，只能描述三维物体的几何信息，不支持颜色材质等信息。
+以二进制.stl文件为例，文件起始的80个字节是文件头，用于存贮文件名；紧接着用 4 个字节的整数来描述模型的三角面片个数，后面逐个给出每个三角面片的几何信息。每个三角面片占用固定的50个字节
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">UINT8//Header//文件头</span><br><span class="line">UINT32//Numberoftriangles//三角面片数量</span><br><span class="line">//foreachtriangle（每个三角面片中）</span><br><span class="line">REAL32[3]//Normalvector//法线矢量</span><br><span class="line">REAL32[3]//Vertex1//顶点1坐标</span><br><span class="line">REAL32[3]//Vertex2//顶点2坐标</span><br><span class="line">REAL32[3]//Vertex3//顶点3坐标</span><br><span class="line">UINT16//Attributebytecountend//文件属性统计</span><br></pre></td></tr></table></figure></p>
+<p>ply (Polygon File Format, 多边形档案),该格式主要用以储存立体扫描结果的三维数值，透过多边形片面的集合描述三维物体,是相较stl更丰富的方式
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">ply</span><br><span class="line">format ascii 1.0             ...&#123; 文件类型：ascii或binary，版本号 &#125;</span><br><span class="line">comment made by anonymous    ... &#123; 注释行 &#125;</span><br><span class="line">comment this file is a cube  ...&#123; 注释行 &#125;</span><br><span class="line">comment texture file             &#123;纹理贴图文件&#125;</span><br><span class="line">element vertex 8             ...&#123; 定义“顶点”元素，其数量为8个 &#125;</span><br><span class="line">property float32 x           ...&#123; 顶点的x属性，数据类型为float32 &#125;</span><br><span class="line">property float32 y           ...&#123; 顶点的y属性，数据类型为float32 &#125;</span><br><span class="line">property float32 z           ...&#123; 顶点的z属性，数据类型为float32 &#125;</span><br><span class="line">property float32 textureu       &#123;纹理坐标&#125;</span><br><span class="line">property float32 texturev</span><br><span class="line">element face 6               ...&#123; 定义“面”元素，其数量为6个 &#125;</span><br><span class="line">property list uint8 int32 vertex_index ...&#123; 面的顶点索引属性，类型为uint8的列表 &#125;</span><br><span class="line">end_header                   ...&#123; 文件头结束标志 &#125;</span><br><span class="line">0 0 0                        ...&#123; 顶点元素列表 &#125;</span><br><span class="line">0 0 1</span><br><span class="line">0 1 1</span><br><span class="line">0 1 0</span><br><span class="line">1 0 0</span><br><span class="line">1 0 1</span><br><span class="line">1 1 1</span><br><span class="line">1 1 0</span><br><span class="line">4 0 1 2 3                    ...&#123; 面元素列表 顶点数 顶点编号 &#125;</span><br><span class="line">4 7 6 5 4</span><br><span class="line">4 0 4 5 1</span><br><span class="line">4 1 5 6 2</span><br><span class="line">4 2 6 7 3</span><br><span class="line">4 3 7 4 0</span><br></pre></td></tr></table></figure></p>
+<h3 id="Marching-Cubes-Algorithm"><a href="#Marching-Cubes-Algorithm" class="headerlink" title="Marching Cubes Algorithm"></a>Marching Cubes Algorithm</h3><p><a href="https://en.wikipedia.org/wiki/Marching_cubes," title="Marching Cubes Algorithm" target="_blank" rel="noopener">维基百科</a></p>
+<p><a href="https://pyscience.wordpress.com/2014/09/11/surface-extraction-creating-a-mesh-from-pixel-data-using-python-and-vtk/" target="_blank" rel="noopener">Surface Extraction: Creating a mesh from pixel-data using Python and VTK</a></p>
+<h3 id="图像处理工具库"><a href="#图像处理工具库" class="headerlink" title="图像处理工具库"></a>图像处理工具库</h3><h4 id="pydicom"><a href="#pydicom" class="headerlink" title="pydicom"></a>pydicom</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import pydicom</span><br><span class="line">ds = pydicom.dcmread(file)</span><br></pre></td></tr></table></figure>
+<h4 id="vtk"><a href="#vtk" class="headerlink" title="vtk"></a>vtk</h4><p>三维计算机图形学、图像处理和可视化软件，内核C++构建，具备多种转换界面，支持Java、Python等方式调用
+render: camera actor light
+data set:</p>
+<h4 id="xslt"><a href="#xslt" class="headerlink" title="xslt"></a>xslt</h4><h4 id="PACS"><a href="#PACS" class="headerlink" title="PACS"></a>PACS</h4><p>医学影像存档与通信系统（英语：Picture archiving and communication system，PACS）</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/06/NodeProcess/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/08/06/NodeProcess/" itemprop="url">Node.js Process</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-06T12:54:47+08:00">
+                2019-08-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="process模块和process-env环境变量"><a href="#process模块和process-env环境变量" class="headerlink" title="process模块和process.env环境变量"></a>process模块和process.env环境变量</h4><p>vscode debug
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;version&quot;: &quot;0.2.0&quot;,</span><br><span class="line">    &quot;configurations&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;type&quot;: &quot;node&quot;,</span><br><span class="line">            &quot;request&quot;: &quot;launch&quot;,</span><br><span class="line">            &quot;name&quot;: &quot;Launch Program&quot;,</span><br><span class="line">            &quot;program&quot;: &quot;$&#123;workspaceFolder&#125;\\server.js&quot;,</span><br><span class="line">            &quot;args&quot;: [&quot;--trace-sync-io&quot;],</span><br><span class="line">            &quot;env&quot;:&#123;</span><br><span class="line">                &quot;NODE_ENV&quot;:&quot;production&quot;,</span><br><span class="line">                &quot;PORT&quot;:&quot;3001&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>关于设置环境变量 <a href="/qqsnote/2019/07/19/BasicNodeAndExpress/" title="Node及Express入门">Node及Express入门</a></p>
 
           
         
@@ -1879,7 +1833,7 @@ service network restart</p>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/qqsnote/page/12/">12</a><a class="page-number" href="/qqsnote/page/13/">13</a><a class="extend next" rel="next" href="/qqsnote/page/12/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/qqsnote/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/15/">15</a><a class="extend next" rel="next" href="/qqsnote/page/12/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1925,7 +1879,7 @@ service network restart</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">129</span>
+                  <span class="site-state-item-count">148</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1936,7 +1890,7 @@ service network restart</p>
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -1947,7 +1901,7 @@ service network restart</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

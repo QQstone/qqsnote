@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/21/electron-issues/">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/06/15/sqlserver/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQs">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/qqsnote/2020/04/21/electron-issues/" itemprop="url">electron_issues</a></h1>
+                <a class="post-title-link" href="/qqsnote/2020/06/15/sqlserver/" itemprop="url">SQL Server</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,916 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-21T10:00:11+08:00">
-                2020-04-21
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-15T14:19:55+08:00">
+                2020-06-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="schema"><a href="#schema" class="headerlink" title="schema"></a>schema</h4><p>在MySQL中schema的概念和database一致<br>
+微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner<br>
+导出表结构（create table）语句时会带着schema
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">create table [ent].[tabletemp](</span><br><span class="line">	[Id] [uniqueidentifier] NOT NULL,</span><br><span class="line">	[Name] [nvarchar](50) NULL,</span><br><span class="line">PRIMARY KEY CLUSTERED </span><br><span class="line">(</span><br><span class="line">	[Id] ASC</span><br><span class="line">)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]</span><br><span class="line">) ON [PRIMARY]</span><br></pre></td></tr></table></figure></p>
+<p>迁移时执行该语句会提示”The specified schema name “env” either does not exist or you do not have permission to use it.”<br>
+创建schema
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create schema ent</span><br></pre></td></tr></table></figure></p>
+<p>变更schema
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER SCHEMA ent TRANSFER OBJECT::dbo.table1;</span><br></pre></td></tr></table></figure></p>
+<h4 id="创建新用户及授权访问"><a href="#创建新用户及授权访问" class="headerlink" title="创建新用户及授权访问"></a>创建新用户及授权访问</h4><p><a href="https://www.fujieace.com/mssql/create-login.html" target="_blank" rel="noopener">参考原文</a><br></p>
+<ul>
+<li>配置登录名 Database Server –&gt; Security –&gt; Logins</li>
+<li>常规General标签页中，配置认证方式等</li>
+<li>服务器角色（Server Roles）添加 public sysadmon</li>
+<li>用户映射（User Mapping）添加创建的新用户</li>
+<li>安全对象（Securable）搜索 –&gt; 选择 The Server(当前数据库服务器名)</li>
+<li>状态默认</li>
+</ul>
+<h4 id="调用存储过程"><a href="#调用存储过程" class="headerlink" title="调用存储过程"></a>调用存储过程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXEC storedProcedure1 @param=&apos;01&apos;</span><br></pre></td></tr></table></figure>
+<h4 id="关于大小写"><a href="#关于大小写" class="headerlink" title="关于大小写"></a>关于大小写</h4><p>据说sqlserver 安装过程中有是否区分大小写的选项，默认情况下无论表名、列名、字段、参数都不区分大小写，更过分的是查询条件的值也不区分————where name=’abc’和where name=’AbC’是一样的结果。如果要区分查询条件的大小写，中文网络上建议如下例子，追加条件
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table1 where name=&apos;abc&apos; collate Chinese_PRC_CS_AI_WS</span><br></pre></td></tr></table></figure></p>
+<p>Chinese_PRC_CS_AI_WS实际表示中国大陆UNICODE字符集规则（Chinese PRC），区分大小写（Case Sensitive，CS），不区分重音（Accent Insensitive，AI），区分宽度（Width Sensitive，WS，半角/全角字符受此条件影响）<br>
+类似的还有
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL_Latin1_General_CP1_CS_AI</span><br><span class="line">Latin1_General_CS_AI</span><br></pre></td></tr></table></figure></p>
+<p>查询当前默认规则
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT SERVERPROPERTY(N&apos;Collation&apos;)</span><br></pre></td></tr></table></figure></p>
+<p>查询支持的字符集规则
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * from ::fn_helpcollations()</span><br></pre></td></tr></table></figure></p>
+<h4 id="内置对象的表"><a href="#内置对象的表" class="headerlink" title="内置对象的表"></a>内置对象的表</h4><ul>
+<li><p>sys.schemas</p>
+</li>
+<li><p>执行历史</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">SELECT TOP 1000 QS.creation_time, </span><br><span class="line">SUBSTRING(ST.text, </span><br><span class="line">		(QS.statement_start_offset / 2) + 1, </span><br><span class="line">		((CASE QS.statement_end_offset </span><br><span class="line">			WHEN - 1 THEN DATALENGTH(st.text) </span><br><span class="line">			ELSE QS.statement_end_offset </span><br><span class="line">			END - QS.statement_start_offset) / 2) + 1)</span><br><span class="line">			AS statement_text, </span><br><span class="line">		ST.text, </span><br><span class="line">		QS.total_worker_time, </span><br><span class="line">		QS.last_worker_time, </span><br><span class="line">		QS.max_worker_time, </span><br><span class="line">		QS.min_worker_time</span><br><span class="line">FROM        </span><br><span class="line">sys.dm_exec_query_stats QS CROSS APPLY sys.dm_exec_sql_text(QS.sql_handle) ST</span><br><span class="line">WHERE   1=1</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="edit-data"><a href="#edit-data" class="headerlink" title="edit data"></a>edit data</h4><p>SSIS提供了Edit Top 200 Rows,但是写入表格内容各种格式不正确，宜Script Table to…Insert to<br>
+Guid用NEWID(),时间就用SYSDATETIME()</p>
+<h4 id="STUFF"><a href="#STUFF" class="headerlink" title="STUFF"></a>STUFF</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">STUFF ( character_expression , start , length , character_expression )</span><br></pre></td></tr></table></figure>
+<h4 id="CAST-amp-CONVERT"><a href="#CAST-amp-CONVERT" class="headerlink" title="CAST &amp; CONVERT"></a>CAST &amp; CONVERT</h4><p>数据类型转换
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT CAST(t1.num AS varchar) from t1;</span><br><span class="line">SELECT CONVERT(varchar, t1.num) from t1;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/06/11/dotNetCore-DataAccess/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/06/11/dotNetCore-DataAccess/" itemprop="url">.Net Core 数据访问</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-11T10:23:42+08:00">
+                2020-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="entity-framwork-dbcontext-datarepository"><a href="#entity-framwork-dbcontext-datarepository" class="headerlink" title="entity framwork,dbcontext, datarepository"></a>entity framwork,dbcontext, datarepository</h4><h4 id="Dapper-net"><a href="#Dapper-net" class="headerlink" title="Dapper.net"></a>Dapper.net</h4>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/06/09/vsftp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/06/09/vsftp/" itemprop="url">vsftp</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-09T14:19:52+08:00">
+                2020-06-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>据说vsftp是very safe FTP
+参数定义–&gt;<a href="https://security.appspot.com/vsftpd/vsftpd_conf.html" target="_blank" rel="noopener">here</a></p>
+</blockquote>
+<h4 id="主动和被动"><a href="#主动和被动" class="headerlink" title="主动和被动"></a>主动和被动</h4><h4 id="issue-“tcp-wrappers-is-set-to-YES-but-no-tcp-wrapper-support-compiled-in”"><a href="#issue-“tcp-wrappers-is-set-to-YES-but-no-tcp-wrapper-support-compiled-in”" class="headerlink" title="issue “tcp_wrappers is set to YES but no tcp wrapper support compiled in”"></a>issue “tcp_wrappers is set to YES but no tcp wrapper support compiled in”</h4><h4 id="ftp-vs-sftp"><a href="#ftp-vs-sftp" class="headerlink" title="ftp vs sftp"></a>ftp vs sftp</h4><p>sftp是用openssl加密ftp传输过程,连接端口21变为22，使用sftp后无法直接用资源管理器访问<br></p>
+<h4 id="issue-“Insecure-server-it-does-not-support-FTP-over-TLS-”"><a href="#issue-“Insecure-server-it-does-not-support-FTP-over-TLS-”" class="headerlink" title="issue “Insecure server, it does not support FTP over TLS.”"></a>issue “Insecure server, it does not support FTP over TLS.”</h4><h4 id="匿名"><a href="#匿名" class="headerlink" title="匿名"></a>匿名</h4>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/06/05/fastDFS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/06/05/fastDFS/" itemprop="url">FastDFS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-05T16:36:14+08:00">
+                2020-06-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>FastDFS是国人大神开发的用于小文件（&lt;500Mb）存储的分布式文件管理系统</p>
+</blockquote>
+<p><a href="https://github.com/happyfish100/fastdfs" target="_blank" rel="noopener">Github: happyfish100/fastdfs</a></p>
+<p>戳–&gt;<a href="https://github.com/happyfish100/fastdfs/wiki" target="_blank" rel="noopener">详细配置步骤</a>，超级详细，傻瓜式，环境是Centos。对于ubuntu，安装编译环境的方式会有不同</p>
+<h4 id="centos编译环境"><a href="#centos编译环境" class="headerlink" title="centos编译环境"></a>centos编译环境</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install git gcc gcc-c++ make automake autoconf libtool pcre pcre-devel zlib zlib-devel openssl-devel wget vi -y</span><br></pre></td></tr></table></figure>
+<h4 id="ubuntu编译环境"><a href="#ubuntu编译环境" class="headerlink" title="ubuntu编译环境"></a>ubuntu编译环境</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install git gcc g++ make automake autoconf libtool libpcre3 libpcre3-dev zlib1g zlib1g-dev  libssl-dev wget vi</span><br></pre></td></tr></table></figure>
+<h4 id="tracker和storage"><a href="#tracker和storage" class="headerlink" title="tracker和storage"></a>tracker和storage</h4><p><img src="https://tvax4.sinaimg.cn/large/a60edd42gy1gfip5ah0saj20f70dln0y.jpg" alt="fdfs">
+如配置步骤所述，fdfs安装好后有tracker配置文件和storage配置文件，前者配置tracker用于上传下载的调度，后者配置storage作为文件存储。<br>
+tracher监听storage的状态同步消息，使当client上传或下载时，提供可用的storage路径<br>
+storage可以配置为group，相同group的文件会相互拷贝（这个是需要一定时间的，在集群方案中需要考虑）<br></p>
+<p>上传文件<br>
+<img src="https://tva1.sinaimg.cn/large/a60edd42gy1gfirk6itslj20td0ey75n.jpg" alt="上传">
+为使业务应用服务器实现上传fDFS，应实现client功能，即</p>
+<ul>
+<li>请求tracker 获取可用storage的 ip port等</li>
+<li>调用相应的storage接口上传文件，接受返回的file_id信息</li>
+</ul>
+<p>下载文件<br></p>
+<p><img src="https://tvax1.sinaimg.cn/large/a60edd42gy1gfirmkezk3j20mw0akjug.jpg" alt="下载">
+如图，client实现下载，需</p>
+<ul>
+<li>请求tracker 获拉取下载的storage的 ip port等</li>
+<li>调用相应的storage接口下载文件</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/06/03/NSIS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/06/03/NSIS/" itemprop="url">NSIS 基础</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-03T10:49:20+08:00">
+                2020-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="变量和常量"><a href="#变量和常量" class="headerlink" title="变量和常量"></a>变量和常量</h4><p>a. 用var关键字来定义变量，使用$来引用变量。</p>
+<p>b. 寄存器变量 \$0~\$9,\$R0~\$R9</p>
+<p>c. 系统预置变量</p>
+<ul>
+<li>\$INSTDIR
+用户定义的解压路径。</li>
+<li>\$PROGRAMFILES
+程序文件目录(通常为 C:\Program Files 但是运行时会检测)。</li>
+<li>\$COMMONFILES
+公用文件目录。这是应用程序共享组件的目录(通常为 C:\Program Files\Common Files 但是运行时会检测)。</li>
+<li>\$DESKTOP
+Windows 桌面目录(通常为 C:\windows\desktop 但是运行时会检测)。该常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
+<li>\$EXEDIR
+安装程序运行时的位置。(从技术上来说你可以修改改变量，但并不是一个好方法)。</li>
+<li>\${NSISDIR}
+包含 NSIS 安装目录的一个标记。在编译时会检测到。常用于在你想调用一个在 NSIS 目录下的资源时，例如：图标、界面……</li>
+<li>\$WINDIR
+Windows 目录(通常为 C:\windows 或 C:\winnt 但在运行时会检测)</li>
+<li>\$SYSDIR
+Windows 系统目录(通常为 C:\windows\system 或 C:\winnt\system32 但在运行时会检测)</li>
+<li>\$TEMP
+系统临时目录(通常为 C:\windows\temp 但在运行时会检测)</li>
+<li>\$STARTMENU
+开始菜单目录(常用于添加一个开始菜单项，使用 CreateShortCut)。该常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
+<li>\$SMPROGRAMS
+开始菜单程序目录(当你想定位 + \$STARTMENU\程序 时可以使用它)。该常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
+<li>\$SMSTARTUP
+开始菜单程序/启动 目录。该常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
+<li>\$QUICKLAUNCH
+在 IE4 活动桌面及以上的快速启动目录。如果快速启动不可用，仅仅返回和 + \$TEMP 一样。</li>
+<li>\$DOCUMENTS
+文档目录。一个当前用户典型的路径形如 C:\Documents and Settings\Foo\My Documents。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量在 Windows 95 且 Internet Explorer 4 没有安装时无效。</li>
+<li>\$SENDTO
+该目录包含了“发送到”菜单快捷项。</li>
+<li>\$RECENT
+该目录包含了指向用户最近文档的快捷方式。</li>
+<li>\$FAVORITES
+该目录包含了指向用户网络收藏夹、文档等的快捷方式。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量在 Windows 95 且 Internet Explorer 4 没有安装时无效。</li>
+<li>\$MUSIC
+用户的音乐文件目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量仅在 Windows XP、ME 及以上才有效。</li>
+<li>\$PICTURES
+用户的图片目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量仅在 Windows 2000、XP、ME 及以上才有效。</li>
+<li>\$VIDEOS
+用户的视频文件目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量仅在 Windows XP、ME 及以上才有效。</li>
+<li>\$NETHOOD
+该目录包含了可能存在于我的网络位置、网上邻居文件夹的链接对象。
+该常量在 Windows 95 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
+<li>\$FONTS
+系统字体目录。</li>
+<li>\$TEMPLATES
+文档模板目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
+<li>\$APPDATA
+应用程序数据目录。当前用户路径的检测需要 Internet Explorer 4 及以上。所有用户路径的检测需要 Internet Explorer 5 及以上。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量在 Windows 95 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
+<li>\$PRINTHOOD
+该目录包含了可能存在于打印机文件夹的链接对象。
+该常量在 Windows 95 和 Windows 98 上无效。</li>
+<li>\$INTERNET_CACHE
+Internet Explorer 的临时文件目录。
+该常量在 Windows 95 和 Windows NT 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
+<li>\$COOKIES
+Internet Explorer 的 Cookies 目录。
+该常量在 Windows 95 和 Windows NT 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
+<li>\$HISTORY
+Internet Explorer 的历史记录目录。
+该常量在 Windows 95 和 Windows NT 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
+<li>\$PROFILE
+用户的个人配置目录。一个典型的路径如 C:\Documents and Settings\Foo。
+该常量在 Windows 2000 及以上有效。</li>
+<li>\$ADMINTOOLS
+一个保存管理工具的目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
+该常量在 Windows 2000、ME 及以上有效。</li>
+<li>\$RESOURCES
+该资源目录保存了主题和其他 Windows 资源(通常为 C:\Windows\Resources 但在运行时会检测)。
+该常量在 Windows XP 及以上有效。</li>
+<li>\$RESOURCES_LOCALIZED
+该本地的资源目录保存了主题和其他 Windows 资源(通常为 C:\Windows\Resources\1033 但在运行时会检测)。
+该常量在 Windows XP 及以上有效。</li>
+<li>\$CDBURN_AREA
+一个在烧录 CD 时储存文件的目录。.
+该常量在 Windows XP 及以上有效。</li>
+<li>\$HWNDPARENT
+父窗口的十进制 HWND。</li>
+<li>\$PLUGINSDIR
+该路径是一个临时目录，当第一次使用一个插件或一个调用 InitPluginsDir 时被创建。该文件夹当解压包退出时会被自动删除。这个文件夹的用意是用来保存给 InstallOptions 使用的 INI 文件、启动画面位图或其他插件运行需要的文件。</li>
+</ul>
+<h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><p>NSIS函数本身没有输出输出，但是可以访问变量和堆栈<br>
+使用Pop Push实现输入输出
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Function LCIDtoTAG </span><br><span class="line">    $&#123;case&#125; &quot;1036&quot;</span><br><span class="line">    Push &quot;fr_FR&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;case&#125; &quot;1049&quot;</span><br><span class="line">    Push &quot;ru_RU&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;case&#125; &quot;1041&quot;</span><br><span class="line">    Push &quot;ja_JP&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;case&#125; &quot;2052&quot;</span><br><span class="line">    Push &quot;zh_CN&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;default&#125;</span><br><span class="line">    Push &quot;en_US&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;endswitch&#125;</span><br><span class="line">FunctionEnd</span><br><span class="line">Section</span><br><span class="line">    Call LCIDtoTAG</span><br><span class="line">    Pop $0</span><br><span class="line">SectionEnd</span><br></pre></td></tr></table></figure></p>
+<h4 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">StrCmp $1 &quot;&quot; +1 +2</span><br><span class="line">DetailPrint &quot;parameter is empty&quot;</span><br><span class="line"></span><br><span class="line">DetailPrint &quot;parameter is not empty&quot;</span><br></pre></td></tr></table></figure>
+<p>+n是从该语句向下偏移的“指针”，空行过滤掉不计入偏移量</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/06/01/NSIS-plugin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/06/01/NSIS-plugin/" itemprop="url">NSIS插件</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-01T12:52:11+08:00">
+                2020-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>–&gt; NSIS收录插件 <a href="https://nsis.sourceforge.io/Category:Plugins" target="_blank" rel="noopener">https://nsis.sourceforge.io/Category:Plugins</a></p>
+<p>–&gt; 插件本体是托管dll文件，区分unicode编码和ansi编码</p>
+<p>–&gt; NSIS默认检索在NSIS代码目录下的Plugins文件夹，作为插件路径，或可使用标识符!addplugindir 指定其他目录</p>
+<p>一个栗子
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">!ifndef TARGETDIR</span><br><span class="line">!ifdef NSIS_UNICODE</span><br><span class="line">!define TARGETDIR &quot;..\binU&quot;</span><br><span class="line">!else</span><br><span class="line">!define TARGETDIR &quot;..\bin&quot;</span><br><span class="line">!endif</span><br><span class="line">!endif</span><br><span class="line"></span><br><span class="line">!addplugindir &quot;$&#123;TARGETDIR&#125;&quot;</span><br></pre></td></tr></table></figure></p>
+<p>曾将!ifdef误解为if not define，NSIS用！xxx做关键字真的是坑。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/05/21/Ngx-translate/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/05/21/Ngx-translate/" itemprop="url">Ngx-translate</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-21T16:18:45+08:00">
+                2020-05-21
               </time>
             
 
@@ -323,26 +1231,46 @@
         
           
             <blockquote>
-<p>app.quit未完全结束进程</p>
+<p><a href="https://github.com/ngx-translate/core" target="_blank" rel="noopener">NGX-Translate</a> is an internationalization library for Angular. NGX-Translate is also extremely modular. It is written in a way that makes it really easy to replace any part with a custom implementation in case the existing one doesn’t fit your needs.</p>
 </blockquote>
-<p>在exe执行中未现问题</p>
 <blockquote>
-<p>Cannot find module ‘./src/….’
-<a href="https://github.com/electron-userland/electron-builder/issues/303" target="_blank" rel="noopener">Github Issue</a>
-将文件pattern添加到electron-builder的打包规则中</p>
+<p><a href="https://github.com/ngx-translate/core/issues/495#issuecomment-291158036" target="_blank" rel="noopener">Why ngx-translate exists if we already have built-in Angular i18n</a></p>
 </blockquote>
-<p>另外，require import的路径均不区分大小写，configure.ts被活生生编译并打包为Configure.js以及Configure.map.js 
-import编译成require，找不到configure</p>
-<blockquote>
-<p>无边透明窗体显示时出现闪烁 <a href="https://github.com/electron/electron/issues/10069" target="_blank" rel="noopener">Issue#10069</a></p>
-</blockquote>
-<p>该问题是由于webview plugin无法设置透明背景造成的，在BrowserWindow show过程中显示了webview的白色背景，目前的workaround可以延迟页面内容的显示
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function showBrowserWindow() &#123;</span><br><span class="line">  win.setOpacity(0);</span><br><span class="line">  win.show();</span><br><span class="line">  setTimeout(() =&gt; &#123;</span><br><span class="line">    win.setOpacity(1);</span><br><span class="line">  &#125;, 50);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>rebuild fail
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gyp ERR! clean error</span><br><span class="line">gyp ERR! stack Error: EPERM: operation not permitted, unlink &apos;D:\projxxx\node_modules\ref\build\Release\binding.node&apos;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>往往是项目文件正在使用中（正在参与其他进程的编译或执行）</p>
+<h4 id="关于载入翻译文件"><a href="#关于载入翻译文件" class="headerlink" title="关于载入翻译文件"></a>关于载入翻译文件</h4><ul>
+<li><a href="https://github.com/ngx-translate/http-loader" target="_blank" rel="noopener">Http Loader</a>: load json translation files with http</li>
+<li><a href="https://gist.github.com/ocombe/593d21598d988bf6a8609ba5fc00b67e" target="_blank" rel="noopener">Angular Universal Loader</a>: load json translation files with fs instead of http</li>
+<li><a href="https://github.com/biesbjerg/ng2-translate-po-loader" target="_blank" rel="noopener">Po Loader</a>: load .po files with http</li>
+</ul>
+<h4 id="集成步骤"><a href="#集成步骤" class="headerlink" title="集成步骤"></a>集成步骤</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install @ngx-translate/core @ngx-translate/http-loader --save</span><br></pre></td></tr></table></figure>
+<p>在模块中引入
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import &#123;TranslateModule&#125; from &apos;@ngx-translate/core&apos;;</span><br><span class="line"></span><br><span class="line">export function createTranslateLoader(http: HttpClient) &#123;</span><br><span class="line">  return new TranslateHttpLoader(http, &apos;./assets/i18n/&apos;, &apos;.json&apos;);</span><br><span class="line">&#125;</span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [</span><br><span class="line">        BrowserModule,</span><br><span class="line">        HttpClientModule,</span><br><span class="line">        TranslateModule.forRoot(&#123;</span><br><span class="line">            loader: &#123;</span><br><span class="line">            provide: TranslateLoader,</span><br><span class="line">            useFactory: createTranslateLoader,</span><br><span class="line">            deps: [HttpClient]</span><br><span class="line">      &#125;,</span><br><span class="line">      defaultLanguage: &apos;en&apos;</span><br><span class="line">        &#125;)</span><br><span class="line">    ],</span><br><span class="line">    bootstrap: [AppComponent]</span><br><span class="line">&#125;)</span><br><span class="line">export class AppModule &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>组件注入及初始化
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">export class AppComponent &#123;</span><br><span class="line">    constructor(translate: TranslateService) &#123;</span><br><span class="line">        // this language will be used as a fallback when a translation isn&apos;t found in the current language</span><br><span class="line">        translate.setDefaultLang(&apos;en&apos;);</span><br><span class="line">         // the lang to use, if the lang isn&apos;t available, it will use the current loader to get them</span><br><span class="line">        translate.use(&apos;en&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在模板中使用管道标记待翻译标记
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123;&quot;sayHi&quot; | translate&#125;&#125;&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;p&gt;&#123;&#123;&apos;sayHiWithParameter&apos; | translate:userObj&#125;&#125;&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;p&gt;&#123;&#123; &apos;ROLES.&apos; + role | uppercase | translate &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure></p>
+<p>翻译文件，对于HTTP Loader是以Locale_ID命名的Json
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">src</span><br><span class="line">├───assets</span><br><span class="line">│   ├───i18n</span><br><span class="line">│   │       en.json</span><br><span class="line">│   │       fr.json</span><br><span class="line">│   │       zh.json</span><br></pre></td></tr></table></figure></p>
+<p>翻译格式
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;introductionHeader&quot;:&quot;你好&quot;,</span><br><span class="line">    &quot;ROLE&quot;:&#123;</span><br><span class="line">        &quot;ADMIN&quot;: &quot;管理员&quot;，</span><br><span class="line">        &quot;USER&quot;: &quot;用户&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;sayHiWithParameter&quot;:&quot;你好，&#123;&#123;pride&#125;&#125;的&#123;&#123;lastname&#125;&#125;&#125;先生&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在ts代码中引用翻译
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">translate.get(&apos;HELLO&apos;, &#123;value: &apos;world&apos;&#125;).subscribe((res: string) =&gt; &#123;</span><br><span class="line">    console.log(res);</span><br><span class="line">    //=&gt; &apos;hello world&apos;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>使用 PO Loader<br>
+官方提供给的 @biesbjerg/ngx-translate-po-http-loader，很遗憾，并不好使，或许是因为新版本的gettext-parser将msgctxt（信息上下文）作为一级父节点，而ngx-translate-po-http-loader一直没有更新使支持msgctxt<br>
+部分zh_CN.po文件:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">msgid &quot;&quot;</span><br><span class="line">msgstr &quot;&quot;</span><br><span class="line">&quot;MIME-Version: 1.0\n&quot;</span><br><span class="line">&quot;Content-Type: text/plain; charset=UTF-8\n&quot;</span><br><span class="line">&quot;Content-Transfer-Encoding: 8bit\n&quot;</span><br><span class="line">&quot;Plural-Forms: nplurals=1; plural=0;\n&quot;</span><br><span class="line">&quot;X-Language: zh_CN\n&quot;</span><br><span class="line">&quot;X-Qt-Contexts: true\n&quot;</span><br><span class="line"></span><br><span class="line">#: ../scanflow/res/qml/Dialog/AboutDialog.qml:25</span><br><span class="line">msgctxt &quot;AboutDialog|&quot;</span><br><span class="line">msgid &quot;About&quot;</span><br><span class="line">msgstr &quot;关于&quot;</span><br><span class="line"></span><br><span class="line">#: ../scanflow/res/qml/Dialog/AboutDialog.qml:52</span><br><span class="line">msgctxt &quot;AboutDialog|&quot;</span><br><span class="line">msgid &quot;Product Version&quot;</span><br><span class="line">msgstr &quot;产品版本&quot;</span><br></pre></td></tr></table></figure></p>
+<p>通过上文“翻译格式”可知，ngx-translate允许多级属性mapping，如
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;h1&gt;&#123;&#123; &quot;AboutDialog|.About&quot; |translate&#125;&#125;&lt;/h1&gt;</span><br></pre></td></tr></table></figure></p>
+<p>另外，gettext-parser会将分段的msgid和msgstr进行合并，即
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">msgctxt &quot;ErrorMessage|&quot;</span><br><span class="line">msgid &quot;&quot;</span><br><span class="line">&quot;Application preferences have been damaged. Reinstall the application to &quot;</span><br><span class="line">&quot;solve the problem.&quot;</span><br><span class="line">msgstr &quot;&quot;</span><br><span class="line">&quot;Předvolby aplikace byly poškozeny. Problém vyřešíte opětovnou instalací &quot;</span><br><span class="line">&quot;aplikace.&quot;</span><br><span class="line">====&gt;</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    &quot;ErrorMessage|&quot;:&#123;</span><br><span class="line">        msgctxt:&quot;ErrorMessage|&quot;,</span><br><span class="line">        msgid:&quot;Application preferences have been damaged. Reinstall the application to solve the problem.&quot;,</span><br><span class="line">        msgstr:[&quot;Předvolby aplikace byly poškozeny. Problém vyřešíte opětovnou instalací aplikace.&quot;]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>原理见@ngx-translate/core/fesm2015/ngx-translate-core.js
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">getValue(target, key) &#123;</span><br><span class="line">    /** @type &#123;?&#125; */</span><br><span class="line">    let keys = typeof key === &apos;string&apos; ? key.split(&apos;.&apos;) : [key];</span><br><span class="line">    key = &apos;&apos;;</span><br><span class="line">    do &#123;</span><br><span class="line">        key += keys.shift();</span><br><span class="line">        if (isDefined(target) &amp;&amp; isDefined(target[key]) &amp;&amp; (typeof target[key] === &apos;object&apos; || !keys.length)) &#123;</span><br><span class="line">            target = target[key];</span><br><span class="line">            key = &apos;&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (!keys.length) &#123;</span><br><span class="line">            target = undefined;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            key += &apos;.&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; while (keys.length);</span><br><span class="line">    return target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>结合ngx-translate解析翻译时的逻辑，在实现PO Loader的getTranslation方法（关于自定义loader的继承和实现，ngx-translate有指引 -&gt; <a href="https://github.com/ngx-translate/core#write--use-your-own-loader" target="_blank" rel="noopener">link</a>）时，应将msgctxt，msgid转为父子属性形式
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">public getTranslation(lang: string): Observable&lt;any&gt; &#123;</span><br><span class="line">    return this._http</span><br><span class="line">        .get(`$&#123;this._prefix&#125;/$&#123;lang&#125;$&#123;this._suffix&#125;`, &#123; responseType: &apos;text&apos; &#125;)</span><br><span class="line">        .pipe(</span><br><span class="line">            map((contents: string) =&gt; this.parse(contents)));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">* Parse po file</span><br><span class="line">* @param contents</span><br><span class="line">* @returns &#123;any&#125;</span><br><span class="line">*/</span><br><span class="line">public parse(contents: string): any &#123;</span><br><span class="line">    let translations: &#123; [key: string]: object | string &#125; = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    const po = gettext.po.parse(contents, &apos;utf-8&apos;);</span><br><span class="line">    if (!po.translations.hasOwnProperty(this.domain)) &#123;</span><br><span class="line">        return translations;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Object.keys(po.translations)</span><br><span class="line">        .forEach(domain =&gt; &#123;</span><br><span class="line">            if (domain.length === 0) &#123; return; &#125;</span><br><span class="line">            if (po.translations[domain].msgstr) &#123; // there is no msgctxt</span><br><span class="line">                translations[domain] = po.translations[domain].msgstr;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // context</span><br><span class="line">                translations[domain] = &#123;&#125;;</span><br><span class="line">                Object.keys(po.translations[domain]).forEach(key =&gt; &#123;</span><br><span class="line">                    let translation: string | Array&lt;string&gt; = po.translations[domain][key].msgstr.pop();</span><br><span class="line">                    if (translation instanceof Array &amp;&amp; translation.length &gt; 0) &#123;</span><br><span class="line">                        translation = translation[0];</span><br><span class="line">                    &#125;</span><br><span class="line">                    if (key.length &gt; 0 &amp;&amp; translation.length &gt; 0) &#123;</span><br><span class="line">                        translations[domain][key] = translation;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    return translations;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>引入自己的 loader module
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import &#123; TranslatePoHttpLoader &#125; from &apos;./edited-po-loader&apos;;</span><br><span class="line">export function createTranslateLoader(http: HttpClient) &#123;</span><br><span class="line">	return new TranslatePoHttpLoader(http, &apos;assets/i18n&apos;, &apos;.po&apos;);</span><br></pre></td></tr></table></figure></p>
+<p>缺失的翻译 handle missing translations
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import &#123;MissingTranslationHandler, MissingTranslationHandlerParams&#125; from &apos;@ngx-translate/core&apos;;</span><br><span class="line"></span><br><span class="line">export class MyMissingTranslationHandler implements MissingTranslationHandler &#123;</span><br><span class="line">    handle(params: MissingTranslationHandlerParams) &#123;</span><br><span class="line">        return &apos;some value&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [</span><br><span class="line">        BrowserModule,</span><br><span class="line">        TranslateModule.forRoot(&#123;</span><br><span class="line">            missingTranslationHandler: &#123;provide: MissingTranslationHandler, useClass: MyMissingTranslationHandler&#125;,</span><br><span class="line">            useDefaultLang: false</span><br><span class="line">        &#125;)</span><br><span class="line">    ],</span><br><span class="line">    providers: [</span><br><span class="line"></span><br><span class="line">    ],</span><br><span class="line">    bootstrap: [AppComponent]</span><br><span class="line">&#125;)</span><br><span class="line">export class AppModule &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="plural-and-select"><a href="#plural-and-select" class="headerlink" title="plural and select"></a>plural and select</h4><p>这个库没有相应的api与i18n的 plural / select 模式相对应，对于这些场景需要使用ngIf或ngSwitch指令实现</p>
 
           
         
@@ -391,7 +1319,7 @@ import编译成require，找不到configure</p>
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/20/NSIS-macro/">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/05/21/AngularAOTandJIT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQs">
@@ -410,7 +1338,7 @@ import编译成require，找不到configure</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/qqsnote/2020/04/20/NSIS-macro/" itemprop="url">NSIS宏</a></h1>
+                <a class="post-title-link" href="/qqsnote/2020/05/21/AngularAOTandJIT/" itemprop="url">AngularAOTandJIT</a></h1>
         
 
         <div class="post-meta">
@@ -422,639 +1350,8 @@ import编译成require，找不到configure</p>
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-20T09:31:23+08:00">
-                2020-04-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>NSIS（Nullsoft Scriptable Install System）</p>
-<blockquote>
-<p>Macros are used to insert code at compile time, depending on defines and using the values of the defines. The macro’s commands are inserted at compile time. This allows you to write general code only once and use it a lot of times but with few changes</p>
-</blockquote>
-<p>如上所述，宏的作用是“insert”代码，和通常的编程语言中的#define是一样的。insert的锚点标识是!insertmacro<br></p>
-<h4 id="宏指令"><a href="#宏指令" class="headerlink" title="宏指令"></a>宏指令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">!macro Hello</span><br><span class="line">  DetailPrint &quot;Hello world&quot;</span><br><span class="line">!macroend</span><br><span class="line"> </span><br><span class="line">Section Test</span><br><span class="line">  !insertmacro Hello</span><br><span class="line">SectionEnd</span><br></pre></td></tr></table></figure>
-<h4 id="含参宏"><a href="#含参宏" class="headerlink" title="含参宏"></a>含参宏</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">!macro Hello What</span><br><span class="line">  DetailPrint &quot;Hello $&#123;What&#125;&quot;</span><br><span class="line">!macroend</span><br><span class="line"> </span><br><span class="line">Section Test</span><br><span class="line">  !insertmacro Hello &quot;World&quot;</span><br><span class="line">  !insertmacro Hello &quot;Tree&quot;</span><br><span class="line">  !insertmacro Hello &quot;Flower&quot;</span><br><span class="line">SectionEnd</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/16/node-ffi/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/04/16/node-ffi/" itemprop="url">node-ffi</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-16T09:55:57+08:00">
-                2020-04-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://github.com/node-ffi/node-ffi#nodejs-foreign-function-interface" target="_blank" rel="noopener">node-ffi (Node.js Foreign Function Interface)</a></p>
-<p>install:
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i ffi</span><br></pre></td></tr></table></figure></p>
-<p>如果install的ffi有问题，可以拉source下来编译
-compile:
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm i -g node-gyp</span><br><span class="line">git clone git://github.com/node-ffi/node-ffi.git</span><br><span class="line">cd node-ffi</span><br><span class="line">node-gyp rebuild</span><br></pre></td></tr></table></figure></p>
-<p><a href="https://github.com/node-ffi/node-ffi/wiki/Node-FFI-Tutorial" target="_blank" rel="noopener">Node FFI Tutorial</a></p>
-<blockquote>
-<p>node-ffi 停止更新当前不支持最新版本node.js，事实上 经QQs实践基于node10的electron6无法与之集成构建，Github上有替代方案 <a href="https://github.com/node-ffi-napi/node-ffi-napi" target="_blank" rel="noopener">node-ffi-napi</a></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/09/websocket/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/04/09/websocket/" itemprop="url">websocket</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-09T12:57:16+08:00">
-                2020-04-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="ws-a-Node-js-WebSocket-library"><a href="#ws-a-Node-js-WebSocket-library" class="headerlink" title="ws: a Node.js WebSocket library"></a><a href="https://github.com/websockets/ws" target="_blank" rel="noopener">ws: a Node.js WebSocket library</a></h1><p><a href="https://www.npmjs.com/package/ws" target="_blank" rel="noopener"><img src="https://img.shields.io/npm/v/ws.svg?logo=npm" alt="Version npm"></a>
-<a href="https://travis-ci.com/websockets/ws" target="_blank" rel="noopener"><img src="https://img.shields.io/travis/websockets/ws/master.svg?logo=travis" alt="Linux Build"></a>
-<a href="https://ci.appveyor.com/project/lpinca/ws" target="_blank" rel="noopener"><img src="https://img.shields.io/appveyor/ci/lpinca/ws/master.svg?logo=appveyor" alt="Windows Build"></a>
-<a href="https://coveralls.io/github/websockets/ws" target="_blank" rel="noopener"><img src="https://img.shields.io/coveralls/websockets/ws/master.svg" alt="Coverage Status"></a></p>
-<p>ws is a simple to use, blazing fast, and thoroughly tested WebSocket client and
-server implementation.</p>
-<p>Passes the quite extensive Autobahn test suite: <a href="http://websockets.github.io/ws/autobahn/servers/" target="_blank" rel="noopener">server</a>,
-<a href="http://websockets.github.io/ws/autobahn/clients/" target="_blank" rel="noopener">client</a>.</p>
-<p><strong>Note</strong>: This module does not work in the browser. The client in the docs is a
-reference to a back end with the role of a client in the WebSocket
-communication. Browser clients must use the native
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSocket" target="_blank" rel="noopener"><code>WebSocket</code></a>
-object(QQs: browser client should call the Websocket constructor provided by browser, see the example at bottom of this article). To make the same code work seamlessly on Node.js and the browser, you
-can use one of the many wrappers available on npm, like
-<a href="https://github.com/heineiuo/isomorphic-ws" target="_blank" rel="noopener">isomorphic-ws</a>.</p>
-<h2 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h2><ul>
-<li><a href="#ws-a-nodejs-websocket-library">ws: a Node.js WebSocket library</a><ul>
-<li><a href="#table-of-contents">Table of Contents</a></li>
-<li><a href="#protocol-support">Protocol support</a></li>
-<li><a href="#installing">Installing</a><ul>
-<li><a href="#opt-in-for-performance-and-spec-compliance">Opt-in for performance and spec compliance</a></li>
-</ul>
-</li>
-<li><a href="#api-docs">API docs</a></li>
-<li><a href="#websocket-compression">WebSocket compression</a></li>
-<li><a href="#usage-examples">Usage examples</a><ul>
-<li><a href="#sending-and-receiving-text-data">Sending and receiving text data</a></li>
-<li><a href="#sending-binary-data">Sending binary data</a></li>
-<li><a href="#simple-server">Simple server</a></li>
-<li><a href="#external-https-server">External HTTP/S server</a></li>
-<li><a href="#multiple-servers-sharing-a-single-https-server">Multiple servers sharing a single HTTP/S server</a></li>
-<li><a href="#client-authentication">Client authentication</a></li>
-<li><a href="#server-broadcast">Server broadcast</a></li>
-<li><a href="#echowebsocketorg-demo">echo.websocket.org demo</a></li>
-<li><a href="#use-the-nodejs-streams-api">Use the Node.js streams API</a></li>
-<li><a href="#other-examples">Other examples</a></li>
-</ul>
-</li>
-<li><a href="#faq">FAQ</a><ul>
-<li><a href="#how-to-get-the-ip-address-of-the-client">How to get the IP address of the client?</a></li>
-<li><a href="#how-to-detect-and-close-broken-connections">How to detect and close broken connections?</a></li>
-<li><a href="#how-to-connect-via-a-proxy">How to connect via a proxy?</a></li>
-</ul>
-</li>
-<li><a href="#changelog">Changelog</a></li>
-<li><a href="#license">License</a><ul>
-<li><a href="#browser-client">Browser Client</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="Protocol-support"><a href="#Protocol-support" class="headerlink" title="Protocol support"></a>Protocol support</h2><ul>
-<li><strong>HyBi drafts 07-12</strong> (Use the option <code>protocolVersion: 8</code>)</li>
-<li><strong>HyBi drafts 13-17</strong> (Current default, alternatively option
-<code>protocolVersion: 13</code>)</li>
-</ul>
-<h2 id="Installing"><a href="#Installing" class="headerlink" title="Installing"></a>Installing</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install ws</span><br></pre></td></tr></table></figure>
-<h3 id="Opt-in-for-performance-and-spec-compliance"><a href="#Opt-in-for-performance-and-spec-compliance" class="headerlink" title="Opt-in for performance and spec compliance"></a>Opt-in for performance and spec compliance</h3><p>There are 2 optional modules that can be installed along side with the ws
-module. These modules are binary addons which improve certain operations.
-Prebuilt binaries are available for the most popular platforms so you don’t
-necessarily need to have a C++ compiler installed on your machine.</p>
-<ul>
-<li><code>npm install --save-optional bufferutil</code>: Allows to efficiently perform
-operations such as masking and unmasking the data payload of the WebSocket
-frames.</li>
-<li><code>npm install --save-optional utf-8-validate</code>: Allows to efficiently check if a
-message contains valid UTF-8 as required by the spec.</li>
-</ul>
-<h2 id="API-docs"><a href="#API-docs" class="headerlink" title="API docs"></a>API docs</h2><p>See <a href="./doc/ws.md"><code>/doc/ws.md</code></a> for Node.js-like documentation of ws classes and
-utility functions.</p>
-<h2 id="WebSocket-compression"><a href="#WebSocket-compression" class="headerlink" title="WebSocket compression"></a>WebSocket compression</h2><p>ws supports the <a href="https://tools.ietf.org/html/rfc7692" target="_blank" rel="noopener">permessage-deflate extension</a> which enables
-the client and server to negotiate a compression algorithm and its parameters,
-and then selectively apply it to the data payloads of each WebSocket message.</p>
-<p>The extension is disabled by default on the server and enabled by default on the
-client. It adds a significant overhead in terms of performance and memory
-consumption so we suggest to enable it only if it is really needed.</p>
-<p>Note that Node.js has a variety of issues with high-performance compression,
-where increased concurrency, especially on Linux, can lead to <a href="https://github.com/nodejs/node/issues/8871" target="_blank" rel="noopener">catastrophic
-memory fragmentation</a> and slow performance. If you intend to use
-permessage-deflate in production, it is worthwhile to set up a test
-representative of your workload and ensure Node.js/zlib will handle it with
-acceptable performance and memory usage.</p>
-<p>Tuning of permessage-deflate can be done via the options defined below. You can
-also use <code>zlibDeflateOptions</code> and <code>zlibInflateOptions</code>, which is passed directly
-into the creation of <a href="https://nodejs.org/api/zlib.html#zlib_zlib_createdeflateraw_options" target="_blank" rel="noopener">raw deflate/inflate streams</a>.</p>
-<p>See <a href="https://github.com/websockets/ws/blob/master/doc/ws.md#new-websocketserveroptions-callback" target="_blank" rel="noopener">the docs</a> for more options.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123;</span><br><span class="line">  port: <span class="number">8080</span>,</span><br><span class="line">  perMessageDeflate: &#123;</span><br><span class="line">    zlibDeflateOptions: &#123;</span><br><span class="line">      <span class="comment">// See zlib defaults.</span></span><br><span class="line">      chunkSize: <span class="number">1024</span>,</span><br><span class="line">      memLevel: <span class="number">7</span>,</span><br><span class="line">      level: <span class="number">3</span></span><br><span class="line">    &#125;,</span><br><span class="line">    zlibInflateOptions: &#123;</span><br><span class="line">      chunkSize: <span class="number">10</span> * <span class="number">1024</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// Other options settable:</span></span><br><span class="line">    clientNoContextTakeover: <span class="literal">true</span>, <span class="comment">// Defaults to negotiated value.</span></span><br><span class="line">    serverNoContextTakeover: <span class="literal">true</span>, <span class="comment">// Defaults to negotiated value.</span></span><br><span class="line">    serverMaxWindowBits: <span class="number">10</span>, <span class="comment">// Defaults to negotiated value.</span></span><br><span class="line">    <span class="comment">// Below options specified as default values.</span></span><br><span class="line">    concurrencyLimit: <span class="number">10</span>, <span class="comment">// Limits zlib concurrency for perf.</span></span><br><span class="line">    threshold: <span class="number">1024</span> <span class="comment">// Size (in bytes) below which messages</span></span><br><span class="line">    <span class="comment">// should not be compressed.</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>The client will only use the extension if it is supported and enabled on the
-server. To always disable the extension on the client set the
-<code>perMessageDeflate</code> option to <code>false</code>.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">'ws://www.host.com/path'</span>, &#123;</span><br><span class="line">  perMessageDeflate: <span class="literal">false</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h2 id="Usage-examples"><a href="#Usage-examples" class="headerlink" title="Usage examples"></a>Usage examples</h2><h3 id="Sending-and-receiving-text-data"><a href="#Sending-and-receiving-text-data" class="headerlink" title="Sending and receiving text data"></a>Sending and receiving text data</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">'ws://www.host.com/path'</span>);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">'open'</span>, <span class="function"><span class="keyword">function</span> <span class="title">open</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  ws.send(<span class="string">'something'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span> <span class="title">incoming</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="Sending-binary-data"><a href="#Sending-binary-data" class="headerlink" title="Sending binary data"></a>Sending binary data</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">'ws://www.host.com/path'</span>);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">'open'</span>, <span class="function"><span class="keyword">function</span> <span class="title">open</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> array = <span class="keyword">new</span> <span class="built_in">Float32Array</span>(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; array.length; ++i) &#123;</span><br><span class="line">    array[i] = i / <span class="number">2</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ws.send(array);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="Simple-server"><a href="#Simple-server" class="headerlink" title="Simple server"></a>Simple server</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">port</span>: <span class="number">8080</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  ws.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span> <span class="title">incoming</span>(<span class="params">message</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'received: %s'</span>, message);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  ws.send(<span class="string">'something'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="External-HTTP-S-server"><a href="#External-HTTP-S-server" class="headerlink" title="External HTTP/S server"></a>External HTTP/S server</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"><span class="keyword">const</span> https = <span class="built_in">require</span>(<span class="string">'https'</span>);</span><br><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = https.createServer(&#123;</span><br><span class="line">  cert: fs.readFileSync(<span class="string">'/path/to/cert.pem'</span>),</span><br><span class="line">  key: fs.readFileSync(<span class="string">'/path/to/key.pem'</span>)</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; server &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  ws.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span> <span class="title">incoming</span>(<span class="params">message</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'received: %s'</span>, message);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  ws.send(<span class="string">'something'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>);</span><br></pre></td></tr></table></figure>
-<h3 id="Multiple-servers-sharing-a-single-HTTP-S-server"><a href="#Multiple-servers-sharing-a-single-HTTP-S-server" class="headerlink" title="Multiple servers sharing a single HTTP/S server"></a>Multiple servers sharing a single HTTP/S server</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer();</span><br><span class="line"><span class="keyword">const</span> wss1 = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">noServer</span>: <span class="literal">true</span> &#125;);</span><br><span class="line"><span class="keyword">const</span> wss2 = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">noServer</span>: <span class="literal">true</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss1.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">wss2.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">'upgrade'</span>, <span class="function"><span class="keyword">function</span> <span class="title">upgrade</span>(<span class="params">request, socket, head</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> pathname = url.parse(request.url).pathname;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (pathname === <span class="string">'/foo'</span>) &#123;</span><br><span class="line">    wss1.handleUpgrade(request, socket, head, <span class="function"><span class="keyword">function</span> <span class="title">done</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">      wss1.emit(<span class="string">'connection'</span>, ws, request);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pathname === <span class="string">'/bar'</span>) &#123;</span><br><span class="line">    wss2.handleUpgrade(request, socket, head, <span class="function"><span class="keyword">function</span> <span class="title">done</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">      wss2.emit(<span class="string">'connection'</span>, ws, request);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    socket.destroy();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>);</span><br></pre></td></tr></table></figure>
-<h3 id="Client-authentication"><a href="#Client-authentication" class="headerlink" title="Client authentication"></a>Client authentication</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer();</span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">noServer</span>: <span class="literal">true</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws, request, client</span>) </span>&#123;</span><br><span class="line">  ws.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span> <span class="title">message</span>(<span class="params">msg</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Received message <span class="subst">$&#123;msg&#125;</span> from user <span class="subst">$&#123;client&#125;</span>`</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">'upgrade'</span>, <span class="function"><span class="keyword">function</span> <span class="title">upgrade</span>(<span class="params">request, socket, head</span>) </span>&#123;</span><br><span class="line">  authenticate(request, (err, client) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (err || !client) &#123;</span><br><span class="line">      socket.destroy();</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    wss.handleUpgrade(request, socket, head, <span class="function"><span class="keyword">function</span> <span class="title">done</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">      wss.emit(<span class="string">'connection'</span>, ws, request, client);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>);</span><br></pre></td></tr></table></figure>
-<p>Also see the provided <a href="./examples/express-session-parse">example</a> using <code>express-session</code>.</p>
-<h3 id="Server-broadcast"><a href="#Server-broadcast" class="headerlink" title="Server broadcast"></a>Server broadcast</h3><p>A client WebSocket broadcasting to all connected WebSocket clients, including
-itself.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">port</span>: <span class="number">8080</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  ws.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span> <span class="title">incoming</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    wss.clients.forEach(<span class="function"><span class="keyword">function</span> <span class="title">each</span>(<span class="params">client</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (client.readyState === WebSocket.OPEN) &#123;</span><br><span class="line">        client.send(data);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>A client WebSocket broadcasting to every other connected WebSocket clients,
-excluding itself.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">port</span>: <span class="number">8080</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  ws.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span> <span class="title">incoming</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    wss.clients.forEach(<span class="function"><span class="keyword">function</span> <span class="title">each</span>(<span class="params">client</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (client !== ws &amp;&amp; client.readyState === WebSocket.OPEN) &#123;</span><br><span class="line">        client.send(data);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="echo-websocket-org-demo"><a href="#echo-websocket-org-demo" class="headerlink" title="echo.websocket.org demo"></a>echo.websocket.org demo</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">'wss://echo.websocket.org/'</span>, &#123;</span><br><span class="line">  origin: <span class="string">'https://websocket.org'</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">'open'</span>, <span class="function"><span class="keyword">function</span> <span class="title">open</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'connected'</span>);</span><br><span class="line">  ws.send(<span class="built_in">Date</span>.now());</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">'close'</span>, <span class="function"><span class="keyword">function</span> <span class="title">close</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'disconnected'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span> <span class="title">incoming</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`Roundtrip time: <span class="subst">$&#123;<span class="built_in">Date</span>.now() - data&#125;</span> ms`</span>);</span><br><span class="line"></span><br><span class="line">  setTimeout(<span class="function"><span class="keyword">function</span> <span class="title">timeout</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    ws.send(<span class="built_in">Date</span>.now());</span><br><span class="line">  &#125;, <span class="number">500</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="Use-the-Node-js-streams-API"><a href="#Use-the-Node-js-streams-API" class="headerlink" title="Use the Node.js streams API"></a>Use the Node.js streams API</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">'wss://echo.websocket.org/'</span>, &#123;</span><br><span class="line">  origin: <span class="string">'https://websocket.org'</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> duplex = WebSocket.createWebSocketStream(ws, &#123; <span class="attr">encoding</span>: <span class="string">'utf8'</span> &#125;);</span><br><span class="line"></span><br><span class="line">duplex.pipe(process.stdout);</span><br><span class="line">process.stdin.pipe(duplex);</span><br></pre></td></tr></table></figure>
-<h3 id="Other-examples"><a href="#Other-examples" class="headerlink" title="Other examples"></a>Other examples</h3><p>For a full example with a browser client communicating with a ws server, see the
-examples folder.</p>
-<p>Otherwise, see the test cases.</p>
-<h2 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h2><h3 id="How-to-get-the-IP-address-of-the-client"><a href="#How-to-get-the-IP-address-of-the-client" class="headerlink" title="How to get the IP address of the client?"></a>How to get the IP address of the client?</h3><p>The remote IP address can be obtained from the raw socket.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">port</span>: <span class="number">8080</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws, req</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> ip = req.connection.remoteAddress;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>When the server runs behind a proxy like NGINX, the de-facto standard is to use
-the <code>X-Forwarded-For</code> header.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wss.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws, req</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> ip = req.headers[<span class="string">'x-forwarded-for'</span>].split(<span class="regexp">/\s*,\s*/</span>)[<span class="number">0</span>];</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="How-to-detect-and-close-broken-connections"><a href="#How-to-detect-and-close-broken-connections" class="headerlink" title="How to detect and close broken connections?"></a>How to detect and close broken connections?</h3><p>Sometimes the link between the server and the client can be interrupted in a way
-that keeps both the server and the client unaware of the broken state of the
-connection (e.g. when pulling the cord).</p>
-<p>In these cases ping messages can be used as a means to verify that the remote
-endpoint is still responsive.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">noop</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">heartbeat</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.isAlive = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">port</span>: <span class="number">8080</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  ws.isAlive = <span class="literal">true</span>;</span><br><span class="line">  ws.on(<span class="string">'pong'</span>, heartbeat);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> interval = setInterval(<span class="function"><span class="keyword">function</span> <span class="title">ping</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  wss.clients.forEach(<span class="function"><span class="keyword">function</span> <span class="title">each</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (ws.isAlive === <span class="literal">false</span>) <span class="keyword">return</span> ws.terminate();</span><br><span class="line"></span><br><span class="line">    ws.isAlive = <span class="literal">false</span>;</span><br><span class="line">    ws.ping(noop);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;, <span class="number">30000</span>);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">'close'</span>, <span class="function"><span class="keyword">function</span> <span class="title">close</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  clearInterval(interval);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>Pong messages are automatically sent in response to ping messages as required by
-the spec.</p>
-<p>Just like the server example above your clients might as well lose connection
-without knowing it. You might want to add a ping listener on your clients to
-prevent that. A simple implementation would be:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">heartbeat</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  clearTimeout(<span class="keyword">this</span>.pingTimeout);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Use `WebSocket#terminate()`, which immediately destroys the connection,</span></span><br><span class="line">  <span class="comment">// instead of `WebSocket#close()`, which waits for the close timer.</span></span><br><span class="line">  <span class="comment">// Delay should be equal to the interval at which your server</span></span><br><span class="line">  <span class="comment">// sends out pings plus a conservative assumption of the latency.</span></span><br><span class="line">  <span class="keyword">this</span>.pingTimeout = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.terminate();</span><br><span class="line">  &#125;, <span class="number">30000</span> + <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> client = <span class="keyword">new</span> WebSocket(<span class="string">'wss://echo.websocket.org/'</span>);</span><br><span class="line"></span><br><span class="line">client.on(<span class="string">'open'</span>, heartbeat);</span><br><span class="line">client.on(<span class="string">'ping'</span>, heartbeat);</span><br><span class="line">client.on(<span class="string">'close'</span>, <span class="function"><span class="keyword">function</span> <span class="title">clear</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  clearTimeout(<span class="keyword">this</span>.pingTimeout);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="How-to-connect-via-a-proxy"><a href="#How-to-connect-via-a-proxy" class="headerlink" title="How to connect via a proxy?"></a>How to connect via a proxy?</h3><p>Use a custom <code>http.Agent</code> implementation like <a href="https://github.com/TooTallNate/node-https-proxy-agent" target="_blank" rel="noopener">https-proxy-agent</a> or
-<a href="https://github.com/TooTallNate/node-socks-proxy-agent" target="_blank" rel="noopener">socks-proxy-agent</a>.</p>
-<h2 id="Changelog"><a href="#Changelog" class="headerlink" title="Changelog"></a>Changelog</h2><p>We’re using the GitHub <a href="https://github.com/websockets/ws/releases" target="_blank" rel="noopener">releases</a> for changelog entries.</p>
-<h2 id="License"><a href="#License" class="headerlink" title="License"></a>License</h2><p><a href="LICENSE">MIT</a></p>
-<h3 id="Browser-Client"><a href="#Browser-Client" class="headerlink" title="Browser Client"></a>Browser Client</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// Create WebSocket connection.</span><br><span class="line">const socket = new WebSocket(&apos;ws://localhost:8080&apos;);</span><br><span class="line"></span><br><span class="line">// Connection opened</span><br><span class="line">socket.addEventListener(&apos;open&apos;, function (event) &#123;</span><br><span class="line">    socket.send(&apos;Hello Server!&apos;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">// Listen for messages</span><br><span class="line">socket.addEventListener(&apos;message&apos;, function (event) &#123;</span><br><span class="line">    console.log(&apos;Message from server &apos;, event.data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/09/GitFlow/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/04/09/GitFlow/" itemprop="url">GitFlow</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-09T09:52:34+08:00">
-                2020-04-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="Branch"><a href="#Branch" class="headerlink" title="Branch"></a>Branch</h4><ul>
-<li>master</li>
-<li>dev</li>
-<li>feature/xxxx</li>
-<li>hotfix/1.x.x<h4 id="Tag"><a href="#Tag" class="headerlink" title="Tag"></a>Tag</h4></li>
-</ul>
-<p>hotfix 合并到master 以及 dev
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br><span class="line">git merge --no-ff hotfix/1.x.x</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/09/jenkins-parameterize/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/04/09/jenkins-parameterize/" itemprop="url">jenkins参数化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-09T09:36:17+08:00">
-                2020-04-09
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-21T10:29:17+08:00">
+                2020-05-21
               </time>
             
 
@@ -1076,8 +1373,8 @@ prevent that. A simple implementation would be:</p>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
                   </a>
                 </span>
 
@@ -1115,395 +1412,16 @@ prevent that. A simple implementation would be:</p>
       
         
           
-            <p>使用Git Parameter简化GitFlow工作方式的持续集成<br></p>
-<ul>
-<li>安装Git Parameter Plugin</li>
-<li>设置 Jenkins Job ‘this project is parameterized’</li>
-<li>设置变量BRANCH_NAME，变量类型为Branch or Tag, 默认为master</li>
-<li>设置 Source Code Management - Branches to build 为 $BRANCH_NAME</li>
-</ul>
-<p>完成后可使用该项目的build with Parameters功能，即选择特定分支进行构建</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/07/Git/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/04/07/Git/" itemprop="url">Git</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-07T09:37:30+08:00">
-                2020-04-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>常规
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.email &quot;QQs@xxxx.xxx&quot;</span><br><span class="line">git config --global user.name &quot;QQs&quot;</span><br><span class="line">git init</span><br><span class="line">git remote add origin git@xxxx.xxx:projectX.git</span><br><span class="line">// 添加远程主机命名为origin</span><br><span class="line">git pull origin master:local</span><br><span class="line">// 拉取origin上的master分支 命名为local</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;blablabla&quot;</span><br><span class="line">git push origin master</span><br><span class="line">// 将修改推送到origin上的master分支上</span><br></pre></td></tr></table></figure></p>
-<h4 id="忽略本地修改拉取远程分支"><a href="#忽略本地修改拉取远程分支" class="headerlink" title="忽略本地修改拉取远程分支"></a>忽略本地修改拉取远程分支</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch --all</span><br><span class="line">git reset --hard origin/master</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>可以认为git pull是git fetch和git merge两个步骤的结合<br>
-git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;<br>
-//取回远程主机某个分支的更新，再与本地的指定分支合并。</p>
+            <blockquote>
+<p>ng build, ng serve是JIT， ng build –aot, ng build –prod, ng serve –aot是AOT</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin master:temp </span><br><span class="line">//在本地新建一个temp分支，并将远程origin仓库的master分支代码下载到本地temp分支</span><br><span class="line">git diff tmp </span><br><span class="line">//来比较本地代码与刚刚从远程下载下来的代码的区别</span><br><span class="line">git merge tmp</span><br><span class="line">//合并temp分支到本地的master分支</span><br><span class="line">git branch -d temp</span><br><span class="line">//删除temp分支</span><br></pre></td></tr></table></figure>
-<p>回退
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard cd8462xxxx</span><br></pre></td></tr></table></figure></p>
-<p>即将HEAD游标指向到之前的一次commit</p>
-<h4 id="部分检出"><a href="#部分检出" class="headerlink" title="部分检出"></a>部分检出</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config core.sparsecheckout true</span><br><span class="line">echo /db/* &gt;&gt; .git/info/sparse-checkout</span><br></pre></td></tr></table></figure>
-<h4 id="reset-revert-以及-rebase"><a href="#reset-revert-以及-rebase" class="headerlink" title="reset revert 以及 rebase"></a>reset revert 以及 rebase</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git reset --soft &lt;commit&gt; // 重置到&lt;commit&gt;版本，修改内容放入缓存区（unstage）</span><br><span class="line">git reset --hard &lt;commit&gt; // 重置到&lt;commit&gt;版本，修改内容永久删除</span><br><span class="line"></span><br><span class="line">git revert &lt;commit-last&gt; .. &lt;commit-somewhere&gt; // 提交一个记录来撤销所罗列出的&lt;commit&gt;</span><br><span class="line"></span><br><span class="line">git rebase -i &lt;start-commit&gt; &lt;end-commit&gt; //(start-commit, end-commit] 前开后闭区间，合并到当前分支，默认 end-commit 为当前 HEAD</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/07/CAS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/04/07/CAS/" itemprop="url">CAS</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-07T09:37:30+08:00">
-                2020-04-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/03/form-data/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/04/03/form-data/" itemprop="url">form-data 以及 basic auth</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-03T12:47:08+08:00">
-                2020-04-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Postman
-<img src="https://tvax4.sinaimg.cn/large/a60edd42gy1gdghu6ikgmj210109x0tb.jpg" alt="postform-data-auth">
-<img src="https://tvax2.sinaimg.cn/large/a60edd42gy1gdghv8sf7zj210309gdgd.jpg" alt="postform-data">
-Node.js Server
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">const express = require(&apos;express&apos;);</span><br><span class="line">const app = express();</span><br><span class="line">var multer = require(&apos;multer&apos;);</span><br><span class="line">var upload = multer();</span><br><span class="line"></span><br><span class="line">// Parse URL-encoded bodies (as sent by HTML forms)</span><br><span class="line">app.use(express.urlencoded());</span><br><span class="line"></span><br><span class="line">// for parsing multipart/form-data</span><br><span class="line">app.use(upload.array()); </span><br><span class="line">app.use(express.static(&apos;public&apos;));</span><br><span class="line">app.post(&apos;/&apos;, function(request, response)&#123;</span><br><span class="line">    console.log(request.body);</span><br><span class="line">    response.json(&#123;res:&apos;ok&apos;,data:request.body&#125;)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">const listener = app.listen(process.env.PORT || 3000, function () &#123;</span><br><span class="line">console.log(&apos;Your app is listening on port &apos; + listener.address().port);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>Node.js client
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">const http = require(&apos;http&apos;)</span><br><span class="line">const FormData = require(&apos;form-data&apos;)</span><br><span class="line"></span><br><span class="line">function btoa(str) &#123;</span><br><span class="line">    return Buffer.from(str).toString(&apos;base64&apos;)</span><br><span class="line">&#125;</span><br><span class="line">const formData = new FormData();</span><br><span class="line">formData.append(&apos;username&apos;, &apos;QQs&apos;);</span><br><span class="line">formData.append(&apos;password&apos;, btoa(&apos;*****&apos;));</span><br><span class="line">const authorizationData = &apos;Basic &apos; + btoa(&apos;authorizationID:authorizationPassword&apos;);</span><br><span class="line">const options = &#123;</span><br><span class="line">    hostname: &apos;localhost&apos;,</span><br><span class="line">    port: 3000,</span><br><span class="line">    path: &apos;&apos;,</span><br><span class="line">    method: &apos;POST&apos;,</span><br><span class="line">    headers: formData.getHeaders(),</span><br><span class="line">    auth: authorizationData</span><br><span class="line">&#125;;</span><br><span class="line">const req = http.request(options, (res) =&gt; &#123;</span><br><span class="line">    res.setEncoding(&apos;utf8&apos;);</span><br><span class="line">    res.on(&apos;data&apos;, (chunk) =&gt; &#123;</span><br><span class="line">        console.log(`BODY: $&#123;chunk&#125;`);</span><br><span class="line">    &#125;);</span><br><span class="line">    res.on(&apos;end&apos;, () =&gt; &#123;</span><br><span class="line">        console.log(&apos;No more data in response.&apos;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">req.on(&apos;error&apos;, (e) =&gt; &#123;</span><br><span class="line">    console.error(`problem with request: $&#123;e.message&#125;`);</span><br><span class="line">&#125;);</span><br><span class="line">formData.pipe(req);</span><br></pre></td></tr></table></figure></p>
-<p>Angular httpclient
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const formData = new FormData();</span><br><span class="line">formData.append(&apos;username&apos;, &apos;QQs&apos;);</span><br><span class="line">formData.append(&apos;password&apos;, btoa(&apos;*****&apos;));</span><br><span class="line">const postUrl = &apos;http://loacalhost:3000/&apos;;</span><br><span class="line">const authorizationData = &apos;Basic &apos; + btoa(&apos;authorizationID:authorizationPassword&apos;);</span><br><span class="line">const headers = new HttpHeaders(&#123;</span><br><span class="line">    &apos;Authorization&apos;: authorizationData</span><br><span class="line">&#125;);</span><br><span class="line">return this.http.post(postUrl, postData, &#123; headers: headers &#125;).pipe(</span><br><span class="line">    map(response =&gt; &#123;</span><br><span class="line"></span><br><span class="line">    &#125;)</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<p>html form
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;form action=&quot;http://authorizationID:authorizationPassword@localhost:3000/&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; name=&quot;username&quot; id=&quot;username&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; name=&quot;password&quot; id=&quot;password&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;submit&quot; value=&quot;Post&quot;&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure></p>
+<p>aot会根据angular.json 的配置生成到/dist之类的目录</p>
+<blockquote>
+<p>Angular v9 默认 AOT</p>
+</blockquote>
+<h4 id="The-difference-between-AOT-and-JIT"><a href="#The-difference-between-AOT-and-JIT" class="headerlink" title="The difference between AOT and JIT"></a>The difference between AOT and JIT</h4><blockquote>
+<p>The Angular ahead-of-time (AOT) compiler converts Angular HTML and TypeScript code into efficient JavaScript code during the build phase, before the browser downloads and runs that code. This is the best compilation mode for production environments, with decreased load time and increased performance compared to just-in-time (JIT) compilation.AOT 编译器在浏览器下载并运行之前，将Angular HTML、 ts代码转为es5代码，是生产环境的最佳实践，相比JIT更能缩短加载时间并提高性能</p>
+</blockquote>
 
           
         
@@ -1552,7 +1470,7 @@ Node.js Server
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/03/31/electron-lifecycle/">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/05/19/DAC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQs">
@@ -1571,7 +1489,7 @@ Node.js Server
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/qqsnote/2020/03/31/electron-lifecycle/" itemprop="url">Electron 生命周期</a></h1>
+                <a class="post-title-link" href="/qqsnote/2020/05/19/DAC/" itemprop="url">DAC</a></h1>
         
 
         <div class="post-meta">
@@ -1583,8 +1501,8 @@ Node.js Server
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-31T14:46:26+08:00">
-                2020-03-31
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-19T14:09:02+08:00">
+                2020-05-19
               </time>
             
 
@@ -1623,7 +1541,163 @@ Node.js Server
       
         
           
+            <blockquote>
+<p>数据层应用程序 (DAC) 是一个逻辑数据库管理实体，用于定义与用户数据库关联的所有 SQL Server 对象，如表、视图和实例对象（包括登录名）。 DAC 是 SQL Server 数据库部署的一个自包含单元，它使数据层开发人员和数据库管理员能够将 SQL Server 对象打包到一个名为“DAC 包”（也称作 DACPAC）的可移植项目中。</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/05/19/TransactSQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/05/19/TransactSQL/" itemprop="url">TransactSQL</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
             
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-19T12:39:34+08:00">
+                2020-05-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>Transact-SQL（又称T-SQL），是在Microsoft SQL Server和Sybase SQL Server上的ANSI SQL实现，与Oracle的PL/SQL性质相近（不只是实现ANSI SQL，也为自身数据库系统的特性提供实现支持），当前在Microsoft SQL Server和Sybase Adaptive Server中仍然被使用为核心的查询语言。</p>
+</blockquote>
+<p>下文涉及的函数/方法限T-SQL使用，在MySQL和Oracle中未必兼容</p>
+<h4 id="存储过程的查询条件"><a href="#存储过程的查询条件" class="headerlink" title="存储过程的查询条件"></a>存储过程的查询条件</h4><p>待改进的一种条件拼接：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM LocalExport where </span><br><span class="line">SSO=IIF(@SSO is null, SSO, @SSO)</span><br><span class="line">and SN=IIF(@SN is null, SN, @SN)</span><br></pre></td></tr></table></figure></p>
+<p>T-SQL方法 <br> IIF(expression, return value when ture, return value when false)<br>
+待改进是因为存在下述bug：当缺省SN过滤条件（即@SN为null）时，记录中SN列的值为空的行不会查出，即null=null为false<br>
+可以这么表达
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * from LocalExport where </span><br><span class="line">(ISNULL(@SSO, &apos;&apos;)=&apos;&apos; OR SSO=@SSO)</span><br><span class="line">and (ISNULL(@SN, &apos;&apos;)=&apos;&apos; OR SN=@SN)</span><br></pre></td></tr></table></figure></p>
+<p>动态SQL语句
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">SET @SQL=&apos;select * from LocalExport where 1=1&apos;;</span><br><span class="line">IF  @SSO is not null</span><br><span class="line">BEGIN</span><br><span class="line">    SET @SQL=@SQL+&apos; AND SSO=@SSO&apos;</span><br><span class="line">END</span><br><span class="line">IF  @SN is not null</span><br><span class="line">BEGIN</span><br><span class="line">    SET @SQL=@SQL+&apos; AND SN=@SN&apos;</span><br><span class="line">END</span><br><span class="line">EXEC sp_executesql  @SQL</span><br></pre></td></tr></table></figure></p>
+
           
         
       
@@ -1662,7 +1736,7 @@ Node.js Server
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><a class="page-number" href="/qqsnote/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/qqsnote/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/13/">13</a><a class="extend next" rel="next" href="/qqsnote/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><a class="page-number" href="/qqsnote/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/qqsnote/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/15/">15</a><a class="extend next" rel="next" href="/qqsnote/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1708,7 +1782,7 @@ Node.js Server
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">129</span>
+                  <span class="site-state-item-count">148</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1719,7 +1793,7 @@ Node.js Server
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -1730,7 +1804,7 @@ Node.js Server
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

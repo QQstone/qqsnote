@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="MySQL StoredProcedure,">
+  <meta name="keywords" content="存储过程,">
 
 
 
@@ -80,14 +80,14 @@
 
 
 <meta name="description" content="概念 存储过程（Stored Procedure）是一种在数据库中存储复杂程序，以便外部程序调用的一种数据库对象。 存储过程是为了完成特定功能的SQL语句集，经编译创建并保存在数据库中，用户可通过指定存储过程的名字并给定参数(需要时)来调用执行。 存储过程思想上很简单，就是数据库 SQL 语言层面的代码封装与重用。   存储过程可封装，并隐藏复杂的商业逻辑。 当dba与后台开发分离时，代码将以ca">
-<meta name="keywords" content="MySQL StoredProcedure">
+<meta name="keywords" content="存储过程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL 存储过程">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/12/23/MySQLStoredProcedure/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="概念 存储过程（Stored Procedure）是一种在数据库中存储复杂程序，以便外部程序调用的一种数据库对象。 存储过程是为了完成特定功能的SQL语句集，经编译创建并保存在数据库中，用户可通过指定存储过程的名字并给定参数(需要时)来调用执行。 存储过程思想上很简单，就是数据库 SQL 语言层面的代码封装与重用。   存储过程可封装，并隐藏复杂的商业逻辑。 当dba与后台开发分离时，代码将以ca">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-05-19T04:40:02.592Z">
+<meta property="og:updated_time" content="2020-09-02T07:07:57.101Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL 存储过程">
 <meta name="twitter:description" content="概念 存储过程（Stored Procedure）是一种在数据库中存储复杂程序，以便外部程序调用的一种数据库对象。 存储过程是为了完成特定功能的SQL语句集，经编译创建并保存在数据库中，用户可通过指定存储过程的名字并给定参数(需要时)来调用执行。 存储过程思想上很简单，就是数据库 SQL 语言层面的代码封装与重用。   存储过程可封装，并隐藏复杂的商业逻辑。 当dba与后台开发分离时，代码将以ca">
@@ -356,6 +356,7 @@
 <h4 id="游标"><a href="#游标" class="headerlink" title="游标"></a>游标</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">create procedure asset_owner_clean()</span><br><span class="line">begin</span><br><span class="line">declare _id int; -- asset list primary key</span><br><span class="line">declare targetid int; -- target user employee ID</span><br><span class="line">declare asset_owner varchar(80);</span><br><span class="line">declare asset_ownerid int;</span><br><span class="line">declare done int default false;</span><br><span class="line">-- set cursor traverse asset list whose owner is not null</span><br><span class="line">declare asset cursor for </span><br><span class="line">(select asset_id,owner,owner_id from all_asset where </span><br><span class="line">(owner is not null and owner &lt;&gt;&apos;&apos;) or (owner_id is not null and owner_id &lt;&gt;&apos;&apos;));</span><br><span class="line"></span><br><span class="line">declare continue handler for not found set done = true;</span><br><span class="line">open asset;</span><br><span class="line">checkloop: loop</span><br><span class="line">fetch asset into _id,asset_owner,asset_ownerid;</span><br><span class="line">SELECT _id, asset_owner, asset_ownerid;</span><br><span class="line">if done then</span><br><span class="line">leave checkloop;</span><br><span class="line">end if;</span><br><span class="line">-- loop body start</span><br><span class="line">&lt;insert statements&gt;</span><br><span class="line">-- loop body end</span><br><span class="line">end loop checkloop;</span><br><span class="line">close asset;</span><br><span class="line">commit;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 <p>注意：跳出循环的句柄是not found，意味着循环体中将empty set赋值给变量会跳出loop<br>
 如 selete * into _list where 1=2;</p>
+<p>SQL Server中调用存储过程的语法稍有不同, 见文章<a href="/qqsnote/2020/05/19/TransactSQL/" title="TransactSQL">TransactSQL</a></p>
 
       
     </div>
@@ -373,7 +374,7 @@
       
         <div class="post-tags">
           
-            <a href="/qqsnote/tags/MySQL-StoredProcedure/" rel="tag"># MySQL StoredProcedure</a>
+            <a href="/qqsnote/tags/存储过程/" rel="tag"># 存储过程</a>
           
         </div>
       
@@ -475,7 +476,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">129</span>
+                  <span class="site-state-item-count">148</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -486,7 +487,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -497,7 +498,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="启动一个Jenkins docker1234567891011docker pull jenkinssudo mkdir /var/jenkins_homedocker run -d -u root --rm --name myjenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home --restart a">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-03-27T02:46:59.439Z">
+<meta property="og:updated_time" content="2020-09-03T02:11:09.190Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker_Container">
 <meta name="twitter:description" content="启动一个Jenkins docker1234567891011docker pull jenkinssudo mkdir /var/jenkins_homedocker run -d -u root --rm --name myjenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home --restart a">
@@ -347,6 +347,20 @@
 <p>Issue：如何得知特定镜像需要的持久化卷配置，即我要创建哪些路径的映射呢？</p>
 </blockquote>
 <h4 id="tomcat-docker的卷设置"><a href="#tomcat-docker的卷设置" class="headerlink" title="tomcat docker的卷设置"></a>tomcat docker的卷设置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name tomcat -p 8080:8080 -v $PWD/test:/usr/local/tomcat/webapps/test -d tomcat</span><br></pre></td></tr></table></figure>
+<h4 id="容器重连"><a href="#容器重连" class="headerlink" title="容器重连"></a>容器重连</h4><p>有的封装服务的容器是可以docker run -d 保持后台运行的，很多容器如ubuntu等，断开终端连接往往会结束运行，在docker ps -a中看到状态是Exited。<br>
+启动容器并附加到当前进程
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start -a -i `docker ps -q -l`</span><br></pre></td></tr></table></figure></p>
+<p>说明：
+docker start启动容器（需要名称或ID）
+ -a附加到容器
+ -i交互模式
+docker ps列表容器
+ -q列表仅容器ID 
+ -l列表仅最后创建容器</p>
+<p>检索自<a href="https://cloud.tencent.com/developer/ask/145603" target="_blank" rel="noopener">腾讯云问答</a></p>
+<p>另，对于这种容器，可以保持一个“前台”的进程运行，如
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run ubuntu /bin/bash -c &quot;while true; do echo docker connected; sleep 5; done&quot; // 每5s 输出一次</span><br></pre></td></tr></table></figure></p>
+
       
     </div>
     
@@ -465,7 +479,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">129</span>
+                  <span class="site-state-item-count">148</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -476,7 +490,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -487,7 +501,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -520,7 +534,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#启动一个Jenkins-docker"><span class="nav-number">1.</span> <span class="nav-text">启动一个Jenkins docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连接到容器"><span class="nav-number">2.</span> <span class="nav-text">连接到容器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用Container-ID-停止和重启等"><span class="nav-number">3.</span> <span class="nav-text">使用Container ID 停止和重启等</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tomcat-docker的卷设置"><span class="nav-number">4.</span> <span class="nav-text">tomcat docker的卷设置</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#启动一个Jenkins-docker"><span class="nav-number">1.</span> <span class="nav-text">启动一个Jenkins docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连接到容器"><span class="nav-number">2.</span> <span class="nav-text">连接到容器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用Container-ID-停止和重启等"><span class="nav-number">3.</span> <span class="nav-text">使用Container ID 停止和重启等</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tomcat-docker的卷设置"><span class="nav-number">4.</span> <span class="nav-text">tomcat docker的卷设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#容器重连"><span class="nav-number">5.</span> <span class="nav-text">容器重连</span></a></li></ol></div>
             
 
           </div>

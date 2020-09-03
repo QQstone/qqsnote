@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="认证&授权,">
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="JwtBearer">
+<meta name="description" content="参考ASP.NET Core 中的那些认证中间件及一些重要知识点  在 ASP.NET Core 中，身份验证由 IAuthenticationService 负责，而它供身份验证中间件使用。  身份验证中间件  已注册的身份验证处理程序及其配置选项被称为“方案（schema）”。  startup.cs 12345public void ConfigureServices(IServiceCol">
+<meta name="keywords" content="认证&amp;授权">
 <meta property="og:type" content="article">
-<meta property="og:title" content=".Net Core Authentication">
+<meta property="og:title" content=".Net Core Authentication &amp; Authorization">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/05/09/dotNetCore-Authentication/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="JwtBearer">
+<meta property="og:description" content="参考ASP.NET Core 中的那些认证中间件及一些重要知识点  在 ASP.NET Core 中，身份验证由 IAuthenticationService 负责，而它供身份验证中间件使用。  身份验证中间件  已注册的身份验证处理程序及其配置选项被称为“方案（schema）”。  startup.cs 12345public void ConfigureServices(IServiceCol">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-06-23T02:59:40.303Z">
+<meta property="og:updated_time" content="2020-07-27T06:44:57.352Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content=".Net Core Authentication">
-<meta name="twitter:description" content="JwtBearer">
+<meta name="twitter:title" content=".Net Core Authentication &amp; Authorization">
+<meta name="twitter:description" content="参考ASP.NET Core 中的那些认证中间件及一些重要知识点  在 ASP.NET Core 中，身份验证由 IAuthenticationService 负责，而它供身份验证中间件使用。  身份验证中间件  已注册的身份验证处理程序及其配置选项被称为“方案（schema）”。  startup.cs 12345public void ConfigureServices(IServiceCol">
 
 
 
@@ -125,7 +126,7 @@
 
 
 
-  <title>.Net Core Authentication | QQs'Note</title>
+  <title>.Net Core Authentication & Authorization | QQs'Note</title>
   
 
 
@@ -249,7 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">.Net Core Authentication</h1>
+          <h1 class="post-title" itemprop="name headline">.Net Core Authentication & Authorization</h1>
         
 
         <div class="post-meta">
@@ -299,7 +300,50 @@
       
 
       
-        <h4 id="JwtBearer"><a href="#JwtBearer" class="headerlink" title="JwtBearer"></a>JwtBearer</h4>
+        <p>参考<a href="https://www.cnblogs.com/savorboard/p/aspnetcore-authentication.html" target="_blank" rel="noopener">ASP.NET Core 中的那些认证中间件及一些重要知识点</a></p>
+<blockquote>
+<p>在 ASP.NET Core 中，身份验证由 IAuthenticationService 负责，而它供身份验证中间件使用。</p>
+</blockquote>
+<p>身份验证中间件</p>
+<blockquote>
+<p>已注册的身份验证处理程序及其配置选项被称为“方案（schema）”。</p>
+</blockquote>
+<p>startup.cs
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void ConfigureServices(IServiceCollection services)&#123;</span><br><span class="line">    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)</span><br><span class="line">    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =&gt; Configuration.Bind(&quot;JwtSettings&quot;, options))</span><br><span class="line">    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =&gt; Configuration.Bind(&quot;CookieSettings&quot;, options));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可使用多种身份验证方案
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    // 认证方案</span><br><span class="line"></span><br><span class="line">    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)</span><br><span class="line">        .AddJwtBearer(options =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            options.Audience = &quot;https://localhost:5000/&quot;;</span><br><span class="line">            options.Authority = &quot;https://localhost:5000/identity/&quot;;</span><br><span class="line">        &#125;)</span><br><span class="line">        .AddJwtBearer(&quot;AzureAD&quot;, options =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            options.Audience = &quot;https://localhost:5000/&quot;;</span><br><span class="line">            options.Authority = &quot;https://login.microsoftonline.com/eb971100-6f99-4bdc-8611-1bc8edd7f436/&quot;;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">    // 授权访问</span><br><span class="line">    services.AddAuthorization(options =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(</span><br><span class="line">            JwtBearerDefaults.AuthenticationScheme,</span><br><span class="line">            &quot;AzureAD&quot;);</span><br><span class="line">        defaultAuthorizationPolicyBuilder = </span><br><span class="line">            defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();</span><br><span class="line">        options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="选择具有策略的方案"><a href="#选择具有策略的方案" class="headerlink" title="选择具有策略的方案"></a>选择具有策略的方案</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =&gt; Configuration.Bind(&quot;JwtSettings&quot;, options))</span><br><span class="line">    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =&gt; Configuration.Bind(&quot;CookieSettings&quot;, options));</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>ASP.NET Core 中的授权通过 AuthorizeAttribute 和其各种参数来控制。 在最简单的形式中，将 [Authorize] 属性应用于控制器、操作或 Razor 页面，将对该组件的访问限制为任何经过身份验证的用户。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">namespace QQsServices.Controllers</span><br><span class="line">&#123;</span><br><span class="line">    [Authorize]</span><br><span class="line">    [Route(&quot;api/v1/[controller]&quot;)]</span><br><span class="line">    [ApiController]</span><br><span class="line">    public class IOScannerController : ControllerBase</span><br><span class="line">    &#123;</span><br><span class="line">        ......</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>允许未通过验证的访问–AllowAnonymous
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[Authorize]</span><br><span class="line">public class AccountController : Controller</span><br><span class="line">&#123;</span><br><span class="line">    [AllowAnonymous]</span><br><span class="line">    public ActionResult Login()</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public ActionResult Logout()</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Authorize从controller到action向下继承，而AllowAnonymous覆盖Authorize(AllowAnonymous优先级高于Authorize)</p>
+<h4 id="JwtBearer"><a href="#JwtBearer" class="headerlink" title="JwtBearer"></a>JwtBearer</h4><p>持有者身份验证</p>
+<h4 id="Basic-Auth"><a href="#Basic-Auth" class="headerlink" title="Basic Auth"></a>Basic Auth</h4><h4 id="Cors"><a href="#Cors" class="headerlink" title="Cors"></a>Cors</h4><h4 id="基于策略的授权"><a href="#基于策略的授权" class="headerlink" title="基于策略的授权"></a>基于策略的授权</h4><p>startup.cs
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    services.AddControllersWithViews();</span><br><span class="line">    services.AddRazorPages();</span><br><span class="line">    services.AddAuthorization(options =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        options.AddPolicy(&quot;PolicyBased01&quot;, policy =&gt;</span><br><span class="line">            policy.Requirements.Add(new MinimumAgeRequirement(21)));</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="指定特定授权方案"><a href="#指定特定授权方案" class="headerlink" title="指定特定授权方案"></a>指定特定授权方案</h4><p>参考 <a href="https://docs.microsoft.com/en-us/aspnet/core/security/authorization/limitingidentitybyscheme?view=aspnetcore-3.1" target="_blank" rel="noopener">Authorize with a specific scheme in ASP.NET Core</a></p>
+<blockquote>
+<p>An authentication scheme is named when the authentication service is configured during authentication. Startup的服务配置中, AddAuthentication后添加方案
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    // Code omitted for brevity</span><br><span class="line"></span><br><span class="line">    services.AddAuthentication()</span><br><span class="line">        .AddCookie(options =&gt; &#123;</span><br><span class="line">            options.LoginPath = &quot;/Account/Unauthorized/&quot;;</span><br><span class="line">            options.AccessDeniedPath = &quot;/Account/Forbidden/&quot;;</span><br><span class="line">        &#125;)</span><br><span class="line">        .AddJwtBearer(options =&gt; &#123;</span><br><span class="line">            options.Audience = &quot;http://localhost:5001/&quot;;</span><br><span class="line">            options.Authority = &quot;http://localhost:5000/&quot;;</span><br><span class="line">        &#125;);</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>使用授权属性选择方案
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]</span><br><span class="line">public class MixedController : Controller</span><br><span class="line">.....</span><br></pre></td></tr></table></figure></p>
+<p>使用策略并指定授权方案</p>
+<blockquote>
+<p>If you prefer to specify the desired schemes in policy, you can set the AuthenticationSchemes collection when adding your policy. 添加授权策略时设置AuthenticationSchemes列表，将对应的scheme添加进去
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">services.AddAuthorization(options =&gt;</span><br><span class="line">&#123;</span><br><span class="line">    options.AddPolicy(&quot;Over18&quot;, policy =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);</span><br><span class="line">        policy.RequireAuthenticatedUser();</span><br><span class="line">        policy.Requirements.Add(new MinimumAgeRequirement());</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>在属性中使用指定策略
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[Authorize(Policy = &quot;Over18&quot;)]</span><br><span class="line">public class RegistrationController : Controller</span><br></pre></td></tr></table></figure></p>
+<p>使用多种方案<br>
+the following code in Startup.ConfigureServices adds two JWT bearer authentication schemes with different issuers:颁发者不同的两种JWT Bearer认证方案
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    // Code omitted for brevity</span><br><span class="line"></span><br><span class="line">    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)</span><br><span class="line">        .AddJwtBearer(options =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            options.Audience = &quot;https://localhost:5000/&quot;;</span><br><span class="line">            options.Authority = &quot;https://localhost:5000/identity/&quot;;</span><br><span class="line">        &#125;)</span><br><span class="line">        .AddJwtBearer(&quot;AzureAD&quot;, options =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            options.Audience = &quot;https://localhost:5000/&quot;;</span><br><span class="line">            options.Authority = &quot;https://login.microsoftonline.com/eb971100-6f99-4bdc-8611-1bc8edd7f436/&quot;;</span><br><span class="line">        &#125;);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>更新授权策略, 上面两种JWTBearer认证方案，将一个要注册到默认认证方案“JwtBearerDefaults.AuthenticationScheme”，另外的认证方案需要以唯一的方案注册（Only one JWT bearer authentication is registered with the default authentication scheme JwtBearerDefaults.AuthenticationScheme. Additional authentication has to be registered with a unique authentication scheme.）
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    // Code omitted for brevity</span><br><span class="line"></span><br><span class="line">    services.AddAuthorization(options =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(</span><br><span class="line">            JwtBearerDefaults.AuthenticationScheme,</span><br><span class="line">            &quot;AzureAD&quot;);</span><br><span class="line">        defaultAuthorizationPolicyBuilder = </span><br><span class="line">            defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();</span><br><span class="line">        options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>参考<a href="https://docs.microsoft.com/zh-cn/aspnet/core/security/authorization/iauthorizationpolicyprovider?view=aspnetcore-3.1" target="_blank" rel="noopener">在 ASP.NET Core 中使用 IAuthorizationPolicyProvider 的自定义授权策略提供程序</a></p>
+
       
     </div>
     
@@ -313,6 +357,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/qqsnote/tags/认证-授权/" rel="tag"># 认证&授权</a>
+          
+        </div>
       
 
       
@@ -412,7 +462,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">129</span>
+                  <span class="site-state-item-count">148</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -423,7 +473,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -434,7 +484,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -467,7 +517,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#JwtBearer"><span class="nav-number">1.</span> <span class="nav-text">JwtBearer</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#选择具有策略的方案"><span class="nav-number">1.</span> <span class="nav-text">选择具有策略的方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JwtBearer"><span class="nav-number">2.</span> <span class="nav-text">JwtBearer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic-Auth"><span class="nav-number">3.</span> <span class="nav-text">Basic Auth</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cors"><span class="nav-number">4.</span> <span class="nav-text">Cors</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于策略的授权"><span class="nav-number">5.</span> <span class="nav-text">基于策略的授权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指定特定授权方案"><span class="nav-number">6.</span> <span class="nav-text">指定特定授权方案</span></a></li></ol></div>
             
 
           </div>

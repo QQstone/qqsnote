@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="WebGLRenderingContext12345678const canvas = document.getElementById(&amp;apos;webgl&amp;apos;);// if webgl context isnot exist, init it const webgl = canvas.getContext(&amp;apos;webgl&amp;apos;);// Set clear color to">
+<meta name="description" content="三维模型的平面投影————矩阵运算图解webgl WebGLRenderingContext12345678const canvas = document.getElementById(&amp;apos;webgl&amp;apos;);// if webgl context isnot exist, init it const webgl = canvas.getContext(&amp;apos;webgl&amp;apo">
 <meta name="keywords" content="WebGL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="WebGL教程">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/09/12/webgllessons/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="WebGLRenderingContext12345678const canvas = document.getElementById(&amp;apos;webgl&amp;apos;);// if webgl context isnot exist, init it const webgl = canvas.getContext(&amp;apos;webgl&amp;apos;);// Set clear color to">
+<meta property="og:description" content="三维模型的平面投影————矩阵运算图解webgl WebGLRenderingContext12345678const canvas = document.getElementById(&amp;apos;webgl&amp;apos;);// if webgl context isnot exist, init it const webgl = canvas.getContext(&amp;apos;webgl&amp;apo">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-03-23T01:22:56.012Z">
+<meta property="og:updated_time" content="2020-07-13T07:34:34.298Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WebGL教程">
-<meta name="twitter:description" content="WebGLRenderingContext12345678const canvas = document.getElementById(&amp;apos;webgl&amp;apos;);// if webgl context isnot exist, init it const webgl = canvas.getContext(&amp;apos;webgl&amp;apos;);// Set clear color to">
+<meta name="twitter:description" content="三维模型的平面投影————矩阵运算图解webgl WebGLRenderingContext12345678const canvas = document.getElementById(&amp;apos;webgl&amp;apos;);// if webgl context isnot exist, init it const webgl = canvas.getContext(&amp;apos;webgl&amp;apo">
 
 
 
@@ -322,7 +322,8 @@
       
 
       
-        <h4 id="WebGLRenderingContext"><a href="#WebGLRenderingContext" class="headerlink" title="WebGLRenderingContext"></a>WebGLRenderingContext</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const canvas = document.getElementById(&apos;webgl&apos;);</span><br><span class="line">// if webgl context isnot exist, init it </span><br><span class="line">const webgl = canvas.getContext(&apos;webgl&apos;);</span><br><span class="line"></span><br><span class="line">// Set clear color to black, fully opaque</span><br><span class="line">webgl.clearColor(0.0, 0.0, 0.0, 1.0);</span><br><span class="line">// Clear the color buffer with specified clear color</span><br><span class="line">webgl.clear(webgl.COLOR_BUFFER_BIT);</span><br></pre></td></tr></table></figure>
+        <h4 id="三维模型的平面投影————矩阵运算"><a href="#三维模型的平面投影————矩阵运算" class="headerlink" title="三维模型的平面投影————矩阵运算"></a>三维模型的平面投影————矩阵运算</h4><p><a href="https://juejin.im/entry/58fdb9b544d9040069ef2488" target="_blank" rel="noopener">图解webgl</a></p>
+<h4 id="WebGLRenderingContext"><a href="#WebGLRenderingContext" class="headerlink" title="WebGLRenderingContext"></a>WebGLRenderingContext</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const canvas = document.getElementById(&apos;webgl&apos;);</span><br><span class="line">// if webgl context isnot exist, init it </span><br><span class="line">const webgl = canvas.getContext(&apos;webgl&apos;);</span><br><span class="line"></span><br><span class="line">// Set clear color to black, fully opaque</span><br><span class="line">webgl.clearColor(0.0, 0.0, 0.0, 1.0);</span><br><span class="line">// Clear the color buffer with specified clear color</span><br><span class="line">webgl.clear(webgl.COLOR_BUFFER_BIT);</span><br></pre></td></tr></table></figure>
 <p>color 是float 0.0~1.0 映射 0~255<br>
 颜色缓冲区（COLOR_BUFFER_BIT），其他还有深度缓冲区（DEPTH_BUFFER_BIT）模板参数缓冲区（STENCIL_BUFFER_BIT）参考 <a href="www.khronos.org">官方标准</a></p>
 <h4 id="vs-fs-shader"><a href="#vs-fs-shader" class="headerlink" title="vs fs shader"></a>vs fs shader</h4><h4 id="着色器函数"><a href="#着色器函数" class="headerlink" title="着色器函数"></a>着色器函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">private initShader(gl:WebGLRenderingContext, vertexShaderSource:string, fragmentShaderSource:string) &#123;</span><br><span class="line">   //创建顶点着色器对象</span><br><span class="line">   let vertexShader = gl.createShader(gl.VERTEX_SHADER);</span><br><span class="line">   //创建片元着色器对象</span><br><span class="line">   let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);</span><br><span class="line">   //引入顶点、片元着色器源代码</span><br><span class="line">   gl.shaderSource(vertexShader, vertexShaderSource);</span><br><span class="line">   gl.shaderSource(fragmentShader, fragmentShaderSource);</span><br><span class="line">   //编译顶点、片元着色器</span><br><span class="line">   gl.compileShader(vertexShader);</span><br><span class="line">   gl.compileShader(fragmentShader);</span><br><span class="line"></span><br><span class="line">   //创建程序对象program</span><br><span class="line">   let program = gl.createProgram();</span><br><span class="line">   //附着顶点着色器和片元着色器到program</span><br><span class="line">   gl.attachShader(program, vertexShader);</span><br><span class="line">   gl.attachShader(program, fragmentShader);</span><br><span class="line">   //链接program</span><br><span class="line">   gl.linkProgram(program);</span><br><span class="line">   //使用program</span><br><span class="line">   gl.useProgram(program);</span><br><span class="line">   //返回程序program对象</span><br><span class="line">   return program;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
@@ -448,7 +449,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">129</span>
+                  <span class="site-state-item-count">148</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -459,7 +460,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -470,7 +471,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -503,7 +504,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#WebGLRenderingContext"><span class="nav-number">1.</span> <span class="nav-text">WebGLRenderingContext</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vs-fs-shader"><span class="nav-number">2.</span> <span class="nav-text">vs fs shader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#着色器函数"><span class="nav-number">3.</span> <span class="nav-text">着色器函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#着色器"><span class="nav-number">4.</span> <span class="nav-text">着色器</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#三维模型的平面投影————矩阵运算"><span class="nav-number">1.</span> <span class="nav-text">三维模型的平面投影————矩阵运算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WebGLRenderingContext"><span class="nav-number">2.</span> <span class="nav-text">WebGLRenderingContext</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vs-fs-shader"><span class="nav-number">3.</span> <span class="nav-text">vs fs shader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#着色器函数"><span class="nav-number">4.</span> <span class="nav-text">着色器函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#着色器"><span class="nav-number">5.</span> <span class="nav-text">着色器</span></a></li></ol></div>
             
 
           </div>
