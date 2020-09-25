@@ -32,3 +32,40 @@ module.exports = {
 #### webpack-bundle-analyzer
 模块打包结构分析插件,参考[webpack官方--webpack-bundle-analyzer
 ](https://github.com/webpack-contrib/webpack-bundle-analyzer)
+
+安装
+```
+npm intall --save-dev webpack-bundle-analyzer
+```
+在Angular项目中使用
+```
+ng build --prod --stats-json
+npx webpack-bundle-analyzer dist/stats.json
+```
+在自定义项目中, 添加plugin
+```
+// webpack.config.js 文件
+
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+module.exports={
+  plugins: [
+    new BundleAnalyzerPlugin()  // 使用默认配置
+    // 默认配置的具体配置项
+    // new BundleAnalyzerPlugin({
+    //   analyzerMode: 'server',
+    //   analyzerHost: '127.0.0.1',
+    //   analyzerPort: '8888',
+    //   reportFilename: 'report.html',
+    //   defaultSizes: 'parsed',
+    //   openAnalyzer: true,
+    //   generateStatsFile: false,
+    //   statsFilename: 'stats.json',
+    //   statsOptions: null,
+    //   excludeAssets: null,
+    //   logLevel: info
+    // })
+  ]
+}
+```
+![link-app-bundle-analyze](https://tva1.sinaimg.cn/large/a60edd42gy1gij0uq9lyqj21fx0py7ft.jpg)
+scan-link, react+vtk.js+materialUI的项目

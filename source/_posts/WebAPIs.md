@@ -13,6 +13,13 @@ function reqListener () {
 
 var oReq = new XMLHttpRequest();
 oReq.addEventListener("load", reqListener);
-oReq.open("GET", "http://www.example.org/example.txt");
+oReq.open("GET", "http://www.example.org/getsomething");
+oReq.responseType = "json";
 oReq.send();
+```
+发送
+```
+var xhr = new XMLHttpRequest;
+xhr.open("POST", url, false);
+xhr.send(data);
 ```

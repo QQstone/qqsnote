@@ -10,7 +10,15 @@ Angular CLI 会下载并安装试用 Jasmine 测试框架 测试 Angular 应用<
 X.spec.ts文件用于Jasmine做单元测试
 #### 单元测试
 > 单元测试（英語：Unit Testing）又称为模块测试，是针对程序模块（软件设计的最小单位）来进行正确性检验的测试工作。 程序单元是应用的最小可测试部件。 在过程化编程中，一个单元就是单个程序、函数、过程等；对于面向对象编程，最小单元就是方法，包括基类（超类）、抽象类、或者派生类（子类）中的方法。
-
+#### Karma 
+Karma, 业（佛教观念，个人因果的集合）Karma是测试JavaScript代码而生的自动化测试管理工具，可监控文件的变化，自动执行测试。
+```
+    "karma": "^5.0.2",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage-istanbul-reporter": "~2.1.0",
+    "karma-jasmine": "~2.0.1",
+    "karma-jasmine-html-reporter": "^1.4.2",
+```
 #### Jasmine （Jasminum 茉莉）
 download ZIP
 ```
@@ -94,5 +102,3 @@ init with Node.js
 npm install --save-dev jasmine
 npx jasmine init
 ```
-#### Karma 
-Karma, 业（佛教观念，个人因果的集合）

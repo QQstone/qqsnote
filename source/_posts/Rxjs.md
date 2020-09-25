@@ -47,6 +47,21 @@ getDict(dictname): Observable<DictItem[]> {
 
 据说这些方法被实现为只next一次 
 
+#### Subject
+> A Subject is a special type of Observable which shares a single execution path among observers.
+
+被比喻成广播者
+```
+const subject = new Subject();
+
+subject.subscribe(log('s1 subject'));
+subject.subscribe(log('s2 subject'));
+
+subject.next('r');
+subject.next('x');
+```
+
+
 #### 同步数据转Observable
 场景：组件粒度小，在视图中多次实例化，或者重复初始化，为防止频繁调用后台接口应加入数据缓存，
 基础数据缓存实现为，第一次调用，从httpclient获取接口数据的Observable对象，并用管道处理加入缓存，之后将缓存数据取出转为Observable对象
@@ -113,4 +128,74 @@ function multiplyByTen(input: Observable<any>): Observable<any> {
     });
   });
 }
+```
+##### 创建操作符 of from interval等：
+
+from  <br>
+转化Promise对象、类数组对象、[迭代器对象](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Iteration_protocols#iterable)转化为 Observables
+将数组转化为 Observable
+```
+var array = [10, 20, 30];
+var result = Rx.Observable.from(array);
+result.subscribe(x => console.log(x));
+
+// 结果如下:
+// 10 20 30
+```
+将一个无限的迭代器(来自于 generator)转化为 Observable。
+```
+function* generateDoubles(seed) {
+  var i = seed;
+  while (true) {
+    yield i;
+    i = 2 * i; // double it
+  }
+}
+
+var iterator = generateDoubles(3);
+var result = Rx.Observable.from(iterator).take(10);
+result.subscribe(x => console.log(x));
+
+// Results in the following:
+// 3 6 12 24 48 96 192 384 768 1536
+```
+##### 转化操作符 map mapTo merge mergeMap等：
+map类似于Array.prototype.map投射函数应用于每个值;mapTo相当于忽略实际订阅接受结果，替换为指定值；<br>
+merge将多个订阅捋直成一个订阅；mergeMap将投射函数应用于每个值，并将多个订阅捋直(啥?不懂)
+
+##### take
+
+##### filter
+
+##### tap
+> Perform a side effect for every emission on the source Observable, but return an Observable that is identical to the source.对源可观察对象的每个‘发射’应用一个副作用，但仍然返回与源相同的可观察对象
+```
+tap<T>(nextOrObserver?: NextObserver<T> | ErrorObserver<T> | CompletionObserver<T> | (
+  (x: T) => void),
+  error?: (e: any) => void,
+  complete?: () => void): MonoTypeOperatorFunction<T>
+```
+参数可以是可观察对象或回调方法
+
+##### BehaviorSubject
+
+>Subject 的作用是实现 Observable 的多播。由于其 Observable execution 是在多个订阅者之间共享的，所以它可以确保每个订阅者接收到的数据绝对相等。不仅使用 Subject 可以实现多播，RxJS 还提供了一些 Subject 的变体以应对不同场景，那就是：BehaviorSubject、ReplaySubject 以及 AsyncSubject。
+
+BehaviorSubject 的特性就是它会存储“当前”的值。这意味着你始终可以直接拿到 BehaviorSubject 最后一次发出的值
+```
+const subject = new Rx.BehaviorSubject(Math.random());
+
+// 订阅者 A
+subject.subscribe((data) => {
+  console.log('Subscriber A:', data);
+});
+
+subject.next(Math.random());
+
+// 订阅者 B
+subject.subscribe((data) => {
+  console.log('Subscriber B:', data);
+});
+
+subject.next(Math.random());
 ```

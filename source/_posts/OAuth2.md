@@ -1,5 +1,5 @@
 ---
-title: OAuth2
+title: OAuth
 date: 2019-12-09 10:39:14
 tags:
 - 认证&授权
@@ -17,9 +17,13 @@ categories:
 
 <del>此外在CS Scanflow登录Cloud地模块中，设计期望以账密登录后返回两个token，其中A是访问Cloud相关资源地凭据，B是保持登录(Remember me)需要token，当A过期时，调用接口，Cloud认证B合法，返回新的A，即可在后续使用A继续访问Cloud资源。</del>
 
+#### OpenID
+OpenID 去中心化的身份识别框架，根据协议，任何网站可以作为identity provider，通过一串 URI 向某个网站证明用户的身份。
 #### OAuth标准
 > OAuth在"客户端(受限资源/服务请求方)"与"服务提供商"之间，设置了一个授权层（authorization layer）。"客户端"不能直接登录"服务提供商"，只能登录授权层，使用授权层颁发的令牌（token），访问服务提供商的资源。用户注册在服务端的账户密码，不会暴露给客户端。服务提供商可以自由限制授权层令牌的权限范围和有效期。<br>
 QQs：OAuth不强调认证，它是一个授权协议，实现的是支持由第三方提供授权访问的标准。
+#### OIDC
+OpenID Connect 基于OAuth 2.0协议之上的简单身份层，它允许客户端根据授权服务器的认证结果最终确认终端用户的身份，以及获取基本的用户信息；它支持包括Web、移动、JavaScript在内的所有客户端类型去请求和接收终端用户信息和身份认证会话信息；它是可扩展的协议，允许你使用某些可选功能，如身份数据加密、OpenID提供商发现、会话管理等。
 #### 授权方式
 ##### 授权码（authorization code）
 上文已提到的使用第三方登录的方式即授权码方式，授权码方式是最常用且靠谱的授权方式，相比之下，其余三种比较扯淡。<br>
@@ -44,3 +48,9 @@ QQs：OAuth不强调认证，它是一个授权协议，实现的是支持由第
 所谓认证系统，解决的是"你是谁"的问题，用户在在identity provider（idp）的服务上注册，客户端登录即去idp获取OpenID标识对应的token，服务提供者校验身份，是拿客户端的token去idp确认。
 OIDC（OpenID Connect）OpenID + OAuth2.0认证（授权访问）服务
 ![](https://tvax3.sinaimg.cn/large/a60edd42gy1gh5i7z0q6bj20e808jwfe.jpg)
+
+> access token 是客户端和资源服务器之间的凭据
+
+那access token在资源服务器上是如何验证的呢？每个请求过来，资源服务器都会拿access token到SSO上去核对吗？
+
+事实上是不一定的。以JTW为例。如果Access Token是JWT形式签发，资源服务可以使用验证签名的方式判断是否合法，只需要把签名密钥在资源服务同步一份即可。典型的是使用非对称加密（见{% post_link Encryption 加密%}篇），资源服务保留一份公钥，access token由授权服务使用私钥签发，资源服务是可以对其进行校验的。JWT允许携带一些信息，如用户，权限，有效期等，因此资源服务判断JWT合法之后可以继续根据携带信息来判断是否可访问资源。这样就有可以快速验证有效性，不需要频繁访问授权服务的优点，缺点是Access Token一旦签发，将很难收回，只能通过过期来失效。

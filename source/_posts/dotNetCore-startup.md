@@ -22,7 +22,6 @@ tags:
   view controller model<br>
   asp.net (asp, Active Server Pages 动态服务器页面):<br>
 #### 路由
-
   模型绑定
   模型验证
   依赖关系注入
@@ -76,6 +75,30 @@ startup.cs中using所需地package，包括需要加载（use）地中间件。
 另，这里引入了SQL Server需要安装并引入 Microsoft.EntityFrameworkCore;
 Microsoft.EntityFrameworkCore.SqlServer;
 #### launchSettings.json
+依赖注入Iconfigure，读取配置文件
+```
+public class OidcConfigurationController : ControllerBase
+{
+    private IConfiguration _configuration;
+    public OidcConfigurationController(IConfiguration Configuration)
+    {
+        _configuration = Configuration;
+    }
+
+    [HttpGet]
+    [Route("snmapi/[controller]/auth")]
+    public CSResult GetOidcConfigure()
+    {
+        var authSettings = new JObject{
+            { "client_id", _configuration["Auth:client_id"] },
+            { "redirect_uri", _configuration["Auth:redirect_uri"] },
+            { "post_logout_redirect_uri", _configuration["Auth:post_logout_redirect_uri"] },
+        };
+    }
+}
+```
+只能逐个value地取值，其他读取方法见[ASP.Net Core读取配置文件的三种方法](https://juejin.im/post/6844904070847660045)
+
 Properties/launchSettings.json
 ```
 {
@@ -385,3 +408,6 @@ public Guid ID
 
 > [IIS Issue: Chrome 400 Bad Request](https://stackoverflow.com/questions/6538926/chrome-returns-bad-request-request-too-long-when-navigating-to-local-iis-exp/38402830)<br>
 某次更新服务后，在IIS上Browser website测试正常，在远程chrome上访问只能get post全部400，新打开一个ie发现是好的(实际上新打开一个chrome隐私窗口也会是好的，这个问题初步被认为与浏览器写了太多cookie有关)
+
+#### 配置多个环境
+https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/environments?view=aspnetcore-3.1

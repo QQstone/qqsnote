@@ -6,6 +6,9 @@ tags:
 categories: 
 - 前端技术
 ---
+### 资料
+见知乎·[Angular资料获取不完全指南](https://zhuanlan.zhihu.com/p/36385830?utm_source=wechat_session&utm_medium=social&utm_oi=44172316770304&utm_campaign=shareopn)
+
 ### 异步响应方法中更新数据，视图无法及时更新
 > 解决方法：导入ChangeDetectRef
 ```

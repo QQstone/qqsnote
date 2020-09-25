@@ -5,7 +5,7 @@ tags:
 - webassembly
 - 性能优化
 ---
-本节知识储备或许会涵盖“编译原理”，Rust，v8开发
+webassembly知识储备或许会涵盖“编译原理”，Rust，v8开发，
 
 > WebAssembly或称wasm是一个实验性的低端编程语言，应用于浏览器内的客户端。WebAssembly是便携式的抽象语法树，被设计来提供比JavaScript更快速的编译及运行。WebAssembly将让开发者能运用自己熟悉的编程语言编译，再藉虚拟机引擎在浏览器内运行。 ---维基百科
 
@@ -15,6 +15,11 @@ tags:
 优势：
 + 运行效率高 如应用于文件上传中的扫描<sup>[注1](https://www.zhihu.com/question/265700379/answer/951118579)</sup>
 + 保密性好 见Google reCAPTCHA
+
+课外：为了提高浏览器性能，曾出现过从 NaCl、PNaCl 到 ASM.js，这些技术作为wasm的前辈，有以下特点————(于航《WebAssembly入门》)
+1. 源码中都使用了类型明确的变量；
+2. 应用都拥有独立的运行时环境，并且与原有的 JavaScript 运行时环境分离；
+3. 支持将原有的 C/C++ 应用通过某种方式转换到基于这些技术的实现，并可以直接运行在 Web 浏览器中。
 
 现状是，四大厂（Mozilla，Google，Microsoft，Apple）共同倾力开发, WebAssembly 技术已成为 W3C 的标准, 其MVP版本(Minimum Viable Product)被主流浏览器支持
 
@@ -59,7 +64,7 @@ make: *** [ffbuild/common.mak:60: libavformat/mov_esds.o] Interrupt
 
 旧版本函数参数不一致导致的问题，已被修复，见[[FFmpeg-devel] avutil/mem: Fix invalid use of av_alloc_size](https://patchwork.ffmpeg.org/project/ffmpeg/patch/20181124210202.52207-1-mark.hsj@gmail.com/)<br>
 
-——————two weeks later————————
+——————two weeks later————————<br>
 上次因clone了有问题的版本，make时就失败了，这次准备一个新环境再试：
 启动一个ubuntu的docker
 ```
@@ -92,10 +97,11 @@ ffmpeg -i test.mov -strict -2 -vf crop=720:405:0:451 out.mp4
 ![ffmegoutput](https://tva1.sinaimg.cn/large/a60edd42gy1gidep9pbn7j20kg07y410.jpg)
 这个泛着绿光的ffmpeg就是Binaryen（二进制文件）
 [LLVM](https://zh.wikipedia.org/wiki/LLVM)(low level virtual machine)不限于字面意思的编译环境
-关于emcc
+关于emcc<br>
 ![](https://emcc.zcopy.site/_images/EmscriptenToolchain.png)
 + Emcc 使用 Clang 和 LLVM 编译生成 Wasm或者asm.js
 + Emscripten SDK (emsdk) 配置 .emscriten, 用于管理多份SDK和工具，指定当前正在使用的编译代码(Active Tool/SDK)。
+
 工具链依赖
 ```
 apt-get install -y cmake python3.8
@@ -109,6 +115,8 @@ git pull
 ./emsdk activate latest 
 source ./emsdk_env.sh // 定义环境变量
 ```
+> You always have to source ./emsdk_env.sh first in a new terminal session
+> 
 输入emcc -v查看信息
 ![emcc](https://tvax3.sinaimg.cn/large/a60edd42gy1gidk1ak7cyj20kg05aq50.jpg)
 看起来比较正常，说明工具安装成功

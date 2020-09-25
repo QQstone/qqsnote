@@ -70,7 +70,7 @@ Application ID URI:Add an Application ID URI
 Managed application in local directory:Demo website
 ```
 这里的Redireact URI是http://localhost:8888/auth，期望在本机运行Web Api应用程序，访问Api跳转到Azure Page登录，成功后进入到该地址。<br>
-进入管理--认证(Authentication),选择使用隐式授权流(Implicit grant, 见笔记{% post_link OAuth2 OAuth2 %}), 并添加Redirect Uri<br>
+进入管理--认证(Authentication),选择使用[隐式授权流](https://docs.microsoft.com/zh-cn/azure/active-directory/develop/v2-oauth2-implicit-grant-flow?WT.mc_id=Portal-Microsoft_AAD_RegisteredApps)(Implicit grant, 见笔记{% post_link OAuth2 OAuth2 %}), 并添加Redirect Uri<br>
 ![04register_app_add_auth_url](https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjztlsc1j21820oyadq.jpg)
 进入管理--公开API(expose API),Application ID URI set 为https://qqstudio.onmicrosoft.com/api 默认是由GUID组成的<br>
 添加scope(Add a scope)
@@ -214,3 +214,7 @@ namespace active_directory_b2c_wpf
 #### 使用Azure AD 作为identity provider（存目）
 以实现一键(使用AD凭据)登录
 #### 对接wechat 作为identity provider（存目）
+
+#### 关于系统角色dingy
+多个系统使用Azure AD B2C，各个系统地权限角色是否要在Azure方维护呢？是否是在expose API时定义scope呢？<br>
+私以为并不是，鉴于{% post_link OAuth2 OAuth %}一篇中所述，资源服务器保留私钥对access token进行校验，甚至可以从中解析出当前用户key，过期时间等信息，籍此完全可以查询本系统定义地权限角色，而无须频繁访问SSO。

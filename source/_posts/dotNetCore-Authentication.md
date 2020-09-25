@@ -2,6 +2,7 @@
 title: .Net Core Authentication & Authorization
 date: 2020-05-09 14:09:38
 tags:
+- .Net
 - 认证&授权
 ---
 
@@ -12,14 +13,16 @@ tags:
 
 > 已注册的身份验证处理程序及其配置选项被称为“方案（schema）”。
 
-startup.cs
+>Authentication schemes are specified by registering authentication services in Startup.ConfigureServices:<br>在startup.cs的ConfigureServices中通过注册身份认证，指定认证方案
 ```
 public void ConfigureServices(IServiceCollection services){
-    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    services.AddAuthentication("YourSchemaName")
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => Configuration.Bind("JwtSettings", options))
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => Configuration.Bind("CookieSettings", options));
 }
 ```
+AddAuthentication的参数是方案名称，默认使用JwtBearerDefaults.AuthenticationScheme作为名称。
+
 可使用多种身份验证方案
 ```
 public void ConfigureServices(IServiceCollection services)
@@ -50,6 +53,68 @@ public void ConfigureServices(IServiceCollection services)
     });
 }
 ```
+再说方案名称（AuthenticationScheme），授权策略（authorization policy）可使用方案名称来指定应使用哪种（或哪些）身份验证方案来对用户进行身份验证。 当配置身份验证时，通常是指定默认身份验证方案。 除非资源请求了特定方案，否则使用默认方案。下文中有使用特性注解为资源（如api）指定授权方案的栗子
+[自定义策略提供程序-IAuthorizationPolicyProvider](https://github.com/dotnet/AspNetCore/tree/release/3.1/src/Security/samples/CustomPolicyProvider)
+
+文章[Asp.Net Basic Authentication](https://jasonwatmore.com/post/2018/09/08/aspnet-core-21-basic-authentication-tutorial-with-example-api)自定义了使用Basic Auth进行认证的方案，配置方案如
+```
+services.AddAuthentication("BasicAuthentication")
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+```
+
+BasicAuthenticationHandler是自定义的身份验证处理程序，派生自AuthenticationHandler\<TOptions\>
+```
+public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+{
+    private readonly IUserService _userService;
+
+    public BasicAuthenticationHandler(
+        IOptionsMonitor<AuthenticationSchemeOptions> options,
+        ILoggerFactory logger,
+        UrlEncoder encoder,
+        ISystemClock clock,
+        IUserService userService)
+        : base(options, logger, encoder, clock)
+    {
+        _userService = userService;
+    }
+
+    protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
+    {
+        if (!Request.Headers.ContainsKey("Authorization"))
+            return AuthenticateResult.Fail("Missing Authorization Header");
+
+        User user = null;
+        try
+        {
+            var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+            var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
+            var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
+            var username = credentials[0];
+            var password = credentials[1];
+            user = await _userService.Authenticate(username, password);
+        }
+        catch
+        {
+            return AuthenticateResult.Fail("Invalid Authorization Header");
+        }
+
+        if (user == null)
+            return AuthenticateResult.Fail("Invalid Username or Password");
+
+        var claims = new[] {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Username),
+        };
+        var identity = new ClaimsIdentity(claims, Scheme.Name);
+        var principal = new ClaimsPrincipal(identity);
+        var ticket = new AuthenticationTicket(principal, Scheme.Name);
+
+        return AuthenticateResult.Success(ticket);
+    }
+}
+```
+类型定义身份验证操作，负责根据请求上下文构造用户的身份。 返回一个 AuthenticateResult指示身份验证是否成功
 #### 选择具有策略的方案
 ```
 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => Configuration.Bind("JwtSettings", options))
