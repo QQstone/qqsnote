@@ -82,7 +82,7 @@
 <meta name="description" content="案例某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的SSO账号密码。。。 对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）授权码，本系统凭此授权码访问与第三方有关的资源">
 <meta name="keywords" content="认证&amp;授权">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OAuth2">
+<meta property="og:title" content="OAuth">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/12/09/OAuth2/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="案例某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的SSO账号密码。。。 对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）授权码，本系统凭此授权码访问与第三方有关的资源">
@@ -92,9 +92,9 @@
 <meta property="og:image" content="https://tvax4.sinaimg.cn/large/a60edd42gy1g9twsgu7ksj20m80cijrk.jpg">
 <meta property="og:image" content="https://tvax3.sinaimg.cn/large/a60edd42gy1ggrgt64oe1j20p60mywgl.jpg">
 <meta property="og:image" content="https://tvax3.sinaimg.cn/large/a60edd42gy1gh5i7z0q6bj20e808jwfe.jpg">
-<meta property="og:updated_time" content="2020-08-04T01:43:26.760Z">
+<meta property="og:updated_time" content="2020-09-24T06:25:53.215Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OAuth2">
+<meta name="twitter:title" content="OAuth">
 <meta name="twitter:description" content="案例某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的SSO账号密码。。。 对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）授权码，本系统凭此授权码访问与第三方有关的资源">
 <meta name="twitter:image" content="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twfy9pmzj20ud0l8ab4.jpg">
 
@@ -132,7 +132,7 @@
 
 
 
-  <title>OAuth2 | QQs'Note</title>
+  <title>OAuth | QQs'Note</title>
   
 
 
@@ -256,7 +256,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">OAuth2</h1>
+          <h1 class="post-title" itemprop="name headline">OAuth</h1>
         
 
         <div class="post-meta">
@@ -333,10 +333,12 @@
 <img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twfy9pmzj20ud0l8ab4.jpg" alt="stacklogin"></p>
 <p><img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twgcmpxij20ue0l775l.jpg" alt="gitlogin"></p>
 <p><del>此外在CS Scanflow登录Cloud地模块中，设计期望以账密登录后返回两个token，其中A是访问Cloud相关资源地凭据，B是保持登录(Remember me)需要token，当A过期时，调用接口，Cloud认证B合法，返回新的A，即可在后续使用A继续访问Cloud资源。</del></p>
+<h4 id="OpenID"><a href="#OpenID" class="headerlink" title="OpenID"></a>OpenID</h4><p>OpenID 去中心化的身份识别框架，根据协议，任何网站可以作为identity provider，通过一串 URI 向某个网站证明用户的身份。</p>
 <h4 id="OAuth标准"><a href="#OAuth标准" class="headerlink" title="OAuth标准"></a>OAuth标准</h4><blockquote>
 <p>OAuth在”客户端(受限资源/服务请求方)”与”服务提供商”之间，设置了一个授权层（authorization layer）。”客户端”不能直接登录”服务提供商”，只能登录授权层，使用授权层颁发的令牌（token），访问服务提供商的资源。用户注册在服务端的账户密码，不会暴露给客户端。服务提供商可以自由限制授权层令牌的权限范围和有效期。<br>
 QQs：OAuth不强调认证，它是一个授权协议，实现的是支持由第三方提供授权访问的标准。</p>
 </blockquote>
+<h4 id="OIDC"><a href="#OIDC" class="headerlink" title="OIDC"></a>OIDC</h4><p>OpenID Connect 基于OAuth 2.0协议之上的简单身份层，它允许客户端根据授权服务器的认证结果最终确认终端用户的身份，以及获取基本的用户信息；它支持包括Web、移动、JavaScript在内的所有客户端类型去请求和接收终端用户信息和身份认证会话信息；它是可扩展的协议，允许你使用某些可选功能，如身份数据加密、OpenID提供商发现、会话管理等。</p>
 <h4 id="授权方式"><a href="#授权方式" class="headerlink" title="授权方式"></a>授权方式</h4><h5 id="授权码（authorization-code）"><a href="#授权码（authorization-code）" class="headerlink" title="授权码（authorization code）"></a>授权码（authorization code）</h5><p>上文已提到的使用第三方登录的方式即授权码方式，授权码方式是最常用且靠谱的授权方式，相比之下，其余三种比较扯淡。<br>
 下图中A.com实为客户端，如某电商平台，B.com为用户信息持有方，如某社交平台(包含了受限数据服务以及授权服务)，经过对接A.com可以通过如图的流程使用B.com的用户登录
 <img src="https://tvax4.sinaimg.cn/large/a60edd42gy1g9twsgu7ksj20m80cijrk.jpg" alt="authcodemode"></p>
@@ -352,6 +354,11 @@ QQs：OAuth不强调认证，它是一个授权协议，实现的是支持由第
 <p>所谓认证系统，解决的是”你是谁”的问题，用户在在identity provider（idp）的服务上注册，客户端登录即去idp获取OpenID标识对应的token，服务提供者校验身份，是拿客户端的token去idp确认。
 OIDC（OpenID Connect）OpenID + OAuth2.0认证（授权访问）服务
 <img src="https://tvax3.sinaimg.cn/large/a60edd42gy1gh5i7z0q6bj20e808jwfe.jpg" alt></p>
+<blockquote>
+<p>access token 是客户端和资源服务器之间的凭据</p>
+</blockquote>
+<p>那access token在资源服务器上是如何验证的呢？每个请求过来，资源服务器都会拿access token到SSO上去核对吗？</p>
+<p>事实上是不一定的。以JTW为例。如果Access Token是JWT形式签发，资源服务可以使用验证签名的方式判断是否合法，只需要把签名密钥在资源服务同步一份即可。典型的是使用非对称加密（见<a href="/qqsnote/2019/07/19/Encryption/" title="加密">加密</a>篇），资源服务保留一份公钥，access token由授权服务使用私钥签发，资源服务是可以对其进行校验的。JWT允许携带一些信息，如用户，权限，有效期等，因此资源服务判断JWT合法之后可以继续根据携带信息来判断是否可访问资源。这样就有可以快速验证有效性，不需要频繁访问授权服务的优点，缺点是Access Token一旦签发，将很难收回，只能通过过期来失效。</p>
 
       
     </div>
@@ -471,7 +478,7 @@ OIDC（OpenID Connect）OpenID + OAuth2.0认证（授权访问）服务
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">148</span>
+                  <span class="site-state-item-count">152</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -526,7 +533,7 @@ OIDC（OpenID Connect）OpenID + OAuth2.0认证（授权访问）服务
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#案例"><span class="nav-number">1.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OAuth标准"><span class="nav-number">2.</span> <span class="nav-text">OAuth标准</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#授权方式"><span class="nav-number">3.</span> <span class="nav-text">授权方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#授权码（authorization-code）"><span class="nav-number">3.1.</span> <span class="nav-text">授权码（authorization code）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#隐藏式（隐式授权）"><span class="nav-number">3.2.</span> <span class="nav-text">隐藏式（隐式授权）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#密码式"><span class="nav-number">3.3.</span> <span class="nav-text">密码式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#凭据式"><span class="nav-number">3.4.</span> <span class="nav-text">凭据式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#前后端分离的SSO"><span class="nav-number">4.</span> <span class="nav-text">前后端分离的SSO</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于OAuth-OpenId-OIDC什么的"><span class="nav-number">5.</span> <span class="nav-text">关于OAuth, OpenId, OIDC什么的</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#案例"><span class="nav-number">1.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OpenID"><span class="nav-number">2.</span> <span class="nav-text">OpenID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OAuth标准"><span class="nav-number">3.</span> <span class="nav-text">OAuth标准</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OIDC"><span class="nav-number">4.</span> <span class="nav-text">OIDC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#授权方式"><span class="nav-number">5.</span> <span class="nav-text">授权方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#授权码（authorization-code）"><span class="nav-number">5.1.</span> <span class="nav-text">授权码（authorization code）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#隐藏式（隐式授权）"><span class="nav-number">5.2.</span> <span class="nav-text">隐藏式（隐式授权）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#密码式"><span class="nav-number">5.3.</span> <span class="nav-text">密码式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#凭据式"><span class="nav-number">5.4.</span> <span class="nav-text">凭据式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#前后端分离的SSO"><span class="nav-number">6.</span> <span class="nav-text">前后端分离的SSO</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于OAuth-OpenId-OIDC什么的"><span class="nav-number">7.</span> <span class="nav-text">关于OAuth, OpenId, OIDC什么的</span></a></li></ol></div>
             
 
           </div>

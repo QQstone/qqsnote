@@ -79,18 +79,21 @@
 
 
 
-<meta name="description" content="schema在MySQL中schema的概念和database一致 微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner 导出表结构（create table）语句时会带着schema 12345678create table [ent].[tabletemp](	[Id] [uniqueide">
+<meta name="description" content="schema在MySQL中schema的概念和database一致 但是微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner 导出表结构（create table）语句时会带着schema 12345678create table [ent].[tabletemp](	[Id] [uniquei">
 <meta name="keywords" content="SQL_Server">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQL Server">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/06/15/sqlserver/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="schema在MySQL中schema的概念和database一致 微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner 导出表结构（create table）语句时会带着schema 12345678create table [ent].[tabletemp](	[Id] [uniqueide">
+<meta property="og:description" content="schema在MySQL中schema的概念和database一致 但是微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner 导出表结构（create table）语句时会带着schema 12345678create table [ent].[tabletemp](	[Id] [uniquei">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-09-02T04:37:55.238Z">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/a60edd42gy1gij7y2m0oxj20u40qm75y.jpg">
+<meta property="og:image" content="https://tvax3.sinaimg.cn/large/a60edd42gy1gij89zv9myj20ef0hk75n.jpg">
+<meta property="og:updated_time" content="2020-09-08T06:33:40.984Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQL Server">
-<meta name="twitter:description" content="schema在MySQL中schema的概念和database一致 微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner 导出表结构（create table）语句时会带着schema 12345678create table [ent].[tabletemp](	[Id] [uniqueide">
+<meta name="twitter:description" content="schema在MySQL中schema的概念和database一致 但是微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner 导出表结构（create table）语句时会带着schema 12345678create table [ent].[tabletemp](	[Id] [uniquei">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/a60edd42gy1gij7y2m0oxj20u40qm75y.jpg">
 
 
 
@@ -323,7 +326,7 @@
 
       
         <h4 id="schema"><a href="#schema" class="headerlink" title="schema"></a>schema</h4><p>在MySQL中schema的概念和database一致<br>
-微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner<br>
+但是微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner<br>
 导出表结构（create table）语句时会带着schema
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">create table [ent].[tabletemp](</span><br><span class="line">	[Id] [uniqueidentifier] NOT NULL,</span><br><span class="line">	[Name] [nvarchar](50) NULL,</span><br><span class="line">PRIMARY KEY CLUSTERED </span><br><span class="line">(</span><br><span class="line">	[Id] ASC</span><br><span class="line">)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]</span><br><span class="line">) ON [PRIMARY]</span><br></pre></td></tr></table></figure></p>
 <p>迁移时执行该语句会提示”The specified schema name “env” either does not exist or you do not have permission to use it.”<br>
@@ -340,6 +343,16 @@
 <li>安全对象（Securable）搜索 –&gt; 选择 The Server(当前数据库服务器名)</li>
 <li>状态默认</li>
 </ul>
+<h4 id="ServerName"><a href="#ServerName" class="headerlink" title="ServerName"></a>ServerName</h4><p>sqlserver实例默认以计算机名+服务提供者命名，如SHAL400/SQLEXPRESS, 甚至用ip代替计算机名都会导致无法连接.<br>
+配置sqlserver支持远程访问:<br></p>
+<ol>
+<li>从本地SSMS连接数据库，右键服务器–Facets–Server Configuration–RemoteAccessEnable=true
+<img src="https://tva1.sinaimg.cn/large/a60edd42gy1gij7y2m0oxj20u40qm75y.jpg" alt="sqlserver_remote_access"></li>
+<li>打开SQL Server Configuration Manager(SSCM) SQL Server Browser Running, </li>
+<li>SSCM–SQL Server Network Configuration–Protocols for SQLEXPRESS–TCP/IP Enable, 然后右键打开Properties设置ip及端口如下（注意IPAll的TCP Dynamic Ports不要写死）
+ <img src="https://tvax3.sinaimg.cn/large/a60edd42gy1gij89zv9myj20ef0hk75n.jpg" alt="sqlserver_remote_access_tcpip"></li>
+<li>配置防火墙略<br></li>
+</ol>
 <h4 id="调用存储过程"><a href="#调用存储过程" class="headerlink" title="调用存储过程"></a>调用存储过程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXEC storedProcedure1 @param=&apos;01&apos;</span><br></pre></td></tr></table></figure>
 <h4 id="关于大小写"><a href="#关于大小写" class="headerlink" title="关于大小写"></a>关于大小写</h4><p>据说sqlserver 安装过程中有是否区分大小写的选项，默认情况下无论表名、列名、字段、参数都不区分大小写，更过分的是查询条件的值也不区分————where name=’abc’和where name=’AbC’是一样的结果。如果要区分查询条件的大小写，中文网络上建议如下例子，追加条件
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table1 where name=&apos;abc&apos; collate Chinese_PRC_CS_AI_WS</span><br></pre></td></tr></table></figure></p>
@@ -481,7 +494,7 @@ Guid用NEWID(),时间就用SYSDATETIME()</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">148</span>
+                  <span class="site-state-item-count">152</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -536,7 +549,7 @@ Guid用NEWID(),时间就用SYSDATETIME()</p>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#schema"><span class="nav-number">1.</span> <span class="nav-text">schema</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建新用户及授权访问"><span class="nav-number">2.</span> <span class="nav-text">创建新用户及授权访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调用存储过程"><span class="nav-number">3.</span> <span class="nav-text">调用存储过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于大小写"><span class="nav-number">4.</span> <span class="nav-text">关于大小写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内置对象的表"><span class="nav-number">5.</span> <span class="nav-text">内置对象的表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#edit-data"><span class="nav-number">6.</span> <span class="nav-text">edit data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#STUFF"><span class="nav-number">7.</span> <span class="nav-text">STUFF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CAST-amp-CONVERT"><span class="nav-number">8.</span> <span class="nav-text">CAST &amp; CONVERT</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#schema"><span class="nav-number">1.</span> <span class="nav-text">schema</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建新用户及授权访问"><span class="nav-number">2.</span> <span class="nav-text">创建新用户及授权访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ServerName"><span class="nav-number">3.</span> <span class="nav-text">ServerName</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调用存储过程"><span class="nav-number">4.</span> <span class="nav-text">调用存储过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于大小写"><span class="nav-number">5.</span> <span class="nav-text">关于大小写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内置对象的表"><span class="nav-number">6.</span> <span class="nav-text">内置对象的表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#edit-data"><span class="nav-number">7.</span> <span class="nav-text">edit data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#STUFF"><span class="nav-number">8.</span> <span class="nav-text">STUFF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CAST-amp-CONVERT"><span class="nav-number">9.</span> <span class="nav-text">CAST &amp; CONVERT</span></a></li></ol></div>
             
 
           </div>

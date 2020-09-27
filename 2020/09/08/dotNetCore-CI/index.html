@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/qqsnote/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/qqsnote/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/qqsnote/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content=".Net,Jenkins,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="显然，.Net Core开发过程中，使用Visual Studio提供的近乎完美IDE，build和deploy都非常简单，如果说是用jenkins进行持续集成，那便相当于用脚本完成更新源码–构建–部署等过程。 jenkins ant Apache Ant，是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。由Apache软件基金会所提供。默认情况下">
+<meta name="keywords" content=".Net,Jenkins">
+<meta property="og:type" content="article">
+<meta property="og:title" content=".Net Core的持续集成">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/09/08/dotNetCore-CI/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="显然，.Net Core开发过程中，使用Visual Studio提供的近乎完美IDE，build和deploy都非常简单，如果说是用jenkins进行持续集成，那便相当于用脚本完成更新源码–构建–部署等过程。 jenkins ant Apache Ant，是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。由Apache软件基金会所提供。默认情况下">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://tvax4.sinaimg.cn/large/a60edd42ly1gijd2ewcpyj20wz0lo3zk.jpg">
+<meta property="og:updated_time" content="2020-09-08T09:31:05.202Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content=".Net Core的持续集成">
+<meta name="twitter:description" content="显然，.Net Core开发过程中，使用Visual Studio提供的近乎完美IDE，build和deploy都非常简单，如果说是用jenkins进行持续集成，那便相当于用脚本完成更新源码–构建–部署等过程。 jenkins ant Apache Ant，是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。由Apache软件基金会所提供。默认情况下">
+<meta name="twitter:image" content="https://tvax4.sinaimg.cn/large/a60edd42ly1gijd2ewcpyj20wz0lo3zk.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/qqsnote/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://qqstone.github.io/qqsnote/2020/09/08/dotNetCore-CI/">
+
+
+
+
+
+  <title>.Net Core的持续集成 | QQs'Note</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/qqsnote/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">QQs'Note</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/qqsnote/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/qqsnote/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/09/08/dotNetCore-CI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">.Net Core的持续集成</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-08T16:24:39+08:00">
+                2020-09-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>显然，.Net Core开发过程中，使用Visual Studio提供的近乎完美IDE，build和deploy都非常简单，如果说是用jenkins进行持续集成，那便相当于用脚本完成更新源码–构建–部署等过程。</p>
+<h4 id="jenkins-ant"><a href="#jenkins-ant" class="headerlink" title="jenkins ant"></a>jenkins ant</h4><blockquote>
+<p>Apache Ant，是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。由Apache软件基金会所提供。默认情况下，它的buildfile(XML文件)名为build.xml。——————wiki</p>
+</blockquote>
+<p>build.xml定义了若干步骤（即target），以xml节点格式定义每个步骤的目录，执行程序，以及参数等
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; ?&gt; </span><br><span class="line">&lt;project name=&quot;Hello World&quot; default=&quot;execute&quot;&gt;</span><br><span class="line"></span><br><span class="line">	&lt;target name=&quot;init&quot;&gt;</span><br><span class="line">		&lt;mkdir dir=&quot;build/classes&quot;/&gt;</span><br><span class="line">		&lt;mkdir dir=&quot;dist&quot;/&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line">	&lt;target name=&quot;compile&quot; depends=&quot;init&quot;&gt;</span><br><span class="line">		&lt;javac srcdir=&quot;src&quot; destdir=&quot;build/classes&quot;/&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name=&quot;compress&quot; depends=&quot;compile&quot;&gt;</span><br><span class="line">	        &lt;jar destfile=&quot;dist/HelloWorld.jar&quot; basedir=&quot;build/classes&quot;  /&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line"></span><br><span class="line">	&lt;target name=&quot;execute&quot; depends=&quot;compile&quot;&gt;</span><br><span class="line">		&lt;java classname=&quot;HelloWorld&quot; classpath=&quot;build/classes&quot;/&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在Jenkins中可以配置使用Apache Ant，在构建时便可以使用build.xml来管理步骤
+<img src="https://tvax4.sinaimg.cn/large/a60edd42ly1gijd2ewcpyj20wz0lo3zk.jpg" alt="JenkinsAnt">
+源码目录build/build.xml:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;project name=&quot;PartnerPortal&quot; default=&quot;PartnerPortal&quot; basedir=&quot;.&quot;&gt;</span><br><span class="line">	&lt;description&gt;</span><br><span class="line">	PartnerPortal Daily Build File.</span><br><span class="line">	&lt;/description&gt;</span><br><span class="line"></span><br><span class="line">	&lt;property file=&quot;build.properties&quot;/&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name=&quot;build_partner_portal&quot; description=&quot;Build CS ScanFlow with Microsoft Visual Studio&quot;&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;      build CSD PP x64         &quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;MSVC    : $&#123;msbuild.exe&#125;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;root    : $&#123;root_dir&#125;&quot;/&gt;</span><br><span class="line">		&lt;exec dir=&quot;.&quot; executable=&quot;restore_dotnet.bat&quot; failonerror=&quot;true&quot; /&gt;</span><br><span class="line">		&lt;exec dir=&quot;.&quot; executable=&quot;$&#123;msbuild.exe&#125;&quot; failonerror=&quot;true&quot;&gt;</span><br><span class="line">			&lt;arg line=&quot;../CSD.PartnerPortal.sln /property:Configuration=Release&quot;/&gt;</span><br><span class="line">		&lt;/exec&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name=&quot;restore_envirement&quot; description=&quot;restore dotnet&quot;&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;      restore dotnet         &quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;exec dir=&quot;.&quot; executable=&quot;restore_dotnet.bat&quot; failonerror=&quot;true&quot; /&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name=&quot;publish_to_server&quot; description=&quot;publish to server&quot;&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;      publish  start       &quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;exec dir=&quot;.&quot; executable=&quot;publish.bat&quot; failonerror=&quot;true&quot; /&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line"></span><br><span class="line">	&lt;target name =&quot;PartnerPortal&quot; description=&quot;Build solution&quot;&gt;</span><br><span class="line">		&lt;antcall target=&quot;restore_envirement&quot; /&gt;</span><br><span class="line">		&lt;antcall target=&quot;build_partner_portal&quot; /&gt;</span><br><span class="line">		&lt;antcall target=&quot;publish_to_server&quot; /&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure></p>
+<p>build/restore_dotnet.bat:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet restore ../CSD.PartnerPortal.sln</span><br></pre></td></tr></table></figure></p>
+<p>build/publish.bat:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet publish --no-build -c Release &quot;..\CSD.PartnerPortal.csproj&quot; /p:PublishProfile=&quot;..\Properties\PUblishProfiles\CSDPPci - Web Deploy.pubxml&quot; /p:Password=xxxxxxxxxxxxxxxxxxxxxxxxxxx</span><br></pre></td></tr></table></figure></p>
+<p>项目的Properties目录下的 .pubxml配置：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;Project ToolsVersion=&quot;4.0&quot; xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&gt;</span><br><span class="line">  &lt;PropertyGroup&gt;</span><br><span class="line">    &lt;WebPublishMethod&gt;MSDeploy&lt;/WebPublishMethod&gt;</span><br><span class="line">    &lt;ResourceId&gt;/subscriptions/subscriptionid01/resourceGroups/resourcegroupname01/providers/Microsoft.Web/sites/CSDPPci&lt;/ResourceId&gt;</span><br><span class="line">    &lt;ResourceGroup&gt;resourcegroupname01&lt;/ResourceGroup&gt;</span><br><span class="line">    &lt;PublishProvider&gt;AzureWebSite&lt;/PublishProvider&gt;</span><br><span class="line">    &lt;LastUsedBuildConfiguration&gt;Release&lt;/LastUsedBuildConfiguration&gt;</span><br><span class="line">    &lt;LastUsedPlatform&gt;Any CPU&lt;/LastUsedPlatform&gt;</span><br><span class="line">    &lt;SiteUrlToLaunchAfterPublish&gt;http://csdppci.azurewebsites.net&lt;/SiteUrlToLaunchAfterPublish&gt;</span><br><span class="line">    &lt;LaunchSiteAfterPublish&gt;True&lt;/LaunchSiteAfterPublish&gt;</span><br><span class="line">    &lt;ExcludeApp_Data&gt;False&lt;/ExcludeApp_Data&gt;</span><br><span class="line">    &lt;ProjectGuid&gt;2df39477-f1f3-4522-9ca7-d0eefb5b16b7&lt;/ProjectGuid&gt;</span><br><span class="line">    &lt;MSDeployServiceURL&gt;csdppci.scm.azurewebsites.net:443&lt;/MSDeployServiceURL&gt;</span><br><span class="line">    &lt;DeployIisAppPath&gt;CSDPPci&lt;/DeployIisAppPath&gt;</span><br><span class="line">    &lt;RemoteSitePhysicalPath /&gt;</span><br><span class="line">    &lt;SkipExtraFilesOnServer&gt;True&lt;/SkipExtraFilesOnServer&gt;</span><br><span class="line">    &lt;MSDeployPublishMethod&gt;WMSVC&lt;/MSDeployPublishMethod&gt;</span><br><span class="line">    &lt;EnableMSDeployBackup&gt;True&lt;/EnableMSDeployBackup&gt;</span><br><span class="line">    &lt;UserName&gt;$CSDPPci&lt;/UserName&gt;</span><br><span class="line">    &lt;_SavePWD&gt;True&lt;/_SavePWD&gt;</span><br><span class="line">    &lt;_DestinationType&gt;AzureWebSite&lt;/_DestinationType&gt;</span><br><span class="line">    &lt;InstallAspNetCoreSiteExtension&gt;False&lt;/InstallAspNetCoreSiteExtension&gt;</span><br><span class="line">  &lt;/PropertyGroup&gt;</span><br><span class="line">&lt;/Project&gt;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/qqsnote/tags/Net/" rel="tag"># .Net</a>
+          
+            <a href="/qqsnote/tags/Jenkins/" rel="tag"># Jenkins</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/qqsnote/2020/09/07/Diagrams/" rel="next" title="设计图">
+                <i class="fa fa-chevron-left"></i> 设计图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/qqsnote/2020/09/09/wasm-fundation/" rel="prev" title="WebAssembly基础">
+                WebAssembly基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">QQs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/qqsnote/archives/">
+              
+                  <span class="site-state-item-count">152</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/qqsnote/categories/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/qqsnote/tags/index.html">
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#jenkins-ant"><span class="nav-number">1.</span> <span class="nav-text">jenkins ant</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/qqsnote/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/qqsnote/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/qqsnote/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/qqsnote/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/qqsnote/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

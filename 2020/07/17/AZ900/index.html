@@ -87,10 +87,14 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="订阅  付费边界 访问管理策略的边界 影响成本的因素：资源类型 服务 位置 pricing carculator 产品定价计算器和总拥有成本计算器 降低成本：  执行成本分析 使用Azure顾问监视使用情况 使用支出限制 使用Azure预订 提前付款产品 选择低成本地点和地区 使用标签标识成本所有者 cost manage工具 改进应用程序SLA 承诺的性能目标 如某级别月累计停机时间不超过xxx">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-09-02T04:52:48.753Z">
+<meta property="og:image" content="https://docs.microsoft.com/zh-cn/learn/modules/principles-cloud-computing/media/2-vm-vs-container-vs-serverless.png">
+<meta property="og:image" content="https://tvax1.sinaimg.cn/large/a60edd42gy1giulu4by1nj219h0fnabt.jpg">
+<meta property="og:image" content="https://docs.microsoft.com/zh-cn/azure/azure-resource-manager/management/media/overview/scope-levels.png">
+<meta property="og:updated_time" content="2020-09-25T13:29:59.354Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AZ900">
 <meta name="twitter:description" content="订阅  付费边界 访问管理策略的边界 影响成本的因素：资源类型 服务 位置 pricing carculator 产品定价计算器和总拥有成本计算器 降低成本：  执行成本分析 使用Azure顾问监视使用情况 使用支出限制 使用Azure预订 提前付款产品 选择低成本地点和地区 使用标签标识成本所有者 cost manage工具 改进应用程序SLA 承诺的性能目标 如某级别月累计停机时间不超过xxx">
+<meta name="twitter:image" content="https://docs.microsoft.com/zh-cn/learn/modules/principles-cloud-computing/media/2-vm-vs-container-vs-serverless.png">
 
 
 
@@ -312,15 +316,128 @@ pricing carculator 产品定价计算器和总拥有成本计算器
 <li>选择低成本地点和地区</li>
 <li>使用标签标识成本所有者
 cost manage工具
-改进应用程序SLA 承诺的性能目标 如某级别月累计停机时间不超过xxx
-我的答案D4 DBC BBBCA ？D</li>
+改进应用程序SLA 承诺的性能目标 如某级别月累计停机时间不超过xxx</li>
+</ul>
+<h4 id="云计算概览"><a href="#云计算概览" class="headerlink" title="云计算概览"></a>云计算概览</h4><p><img src="https://docs.microsoft.com/zh-cn/learn/modules/principles-cloud-computing/media/2-vm-vs-container-vs-serverless.png" alt></p>
+<blockquote>
+<p>自称：经济高效、可缩放、具有弹性、始终保持最新状态、可靠且安全</p>
+</blockquote>
+<ul>
+<li>资本支出 (Capital Expenditure, CapEx)实体基础设施投入费用, 如服务器、存储、网络、备份、灾后重建、技术人员</li>
+<li>运营支出 (Operational Expenditure, OpEx) 服务/产品使用费用<br> </li>
 </ul>
 <blockquote>
 <p>issue: 测试从Azure Serveice 到 remote DB server的network connections
 背景：老板要将正在开发的项目放到公网可以访问的服务器上以用来演示，迁移数据库到云端是费事且有额外成本的。</p>
 </blockquote>
 <pre><code>日前的实践找到了控制台的解决方法 创建App Service后其管理面板上Development Tools--SSH，其进入后是linux终端，路径在wwwroot下，常用网络连接工具见{% post-link LinuxTools Linux命令行工具 %} curl命令可用
-</code></pre>
+</code></pre><h4 id="benefit"><a href="#benefit" class="headerlink" title="benefit"></a>benefit</h4><p>The public cloud is a shared entity whereby multiple corporations each use a portion of the resources in the cloud. It is the benefit of using a public cloud service for the servers over an on-premises network</p>
+<h4 id="混合云（Hybrid-Cloud）"><a href="#混合云（Hybrid-Cloud）" class="headerlink" title="混合云（Hybrid Cloud）"></a>混合云（Hybrid Cloud）</h4><p>公有云的缺点：使用公有云可能无法满足特定的安全要求；公有云可能无法满足政府政策、行业标准或法律要求；不拥有硬件或服务，也无法按照你的意愿管理它们；可能很难满足独特的业务需求，例如必须维护旧版应用程序</p>
+<p>私有云服务和公有云服务的结合，即要架设开放的商用应用，又对部分资源存在硬件或自主管理方面的要求，宜选择私有云<br>
+例题：Suppose you have two types of applications: legacy applications that require specialized mainframe hardware and newer applications that can run on commodity hardware. Which cloud deployment model would be best for you?<br>
+A. Public cloud
+B. Private cloud
+C. Hybrid cloud</p>
+<p>保留预置的(on-premise)服务器，并且扩展需求，宜选择混合云，即保留原服务器以消除迁移成本，且用公有平台（或其他资源）进行方便的扩展</p>
+<p>例题：You have an on-premises network that contains 100 servers.
+You need to recommend a solution that provides additional resources to your users. The solution must minimize capital and operational expenditure costs.<br>
+A. a complete migration to the public cloud
+B. an additional data center
+C. a private cloud
+D. a hybrid cloud  </p>
+<p>极具<a href="https://www.examtopics.com/discussions/microsoft/view/5732-exam-az-900-topic-1-question-5-discussion/" target="_blank" rel="noopener">争议</a>的一道判断题：An organization that hosts its infrastructure in a private cloud can decommission its data center.<br>
+答案是False. 希望不要在考场上遇到这么坑爹的表述，题干问如果organization在私有云上架设自己的设施，那他自己数据中心是不可或缺的还是可以decommission（拆除），其想表达的是如果你用公有云或者混合云，就没有必要自己经营数据中心了。</p>
+<h4 id="IaaS-PaaS-SaaS"><a href="#IaaS-PaaS-SaaS" class="headerlink" title="IaaS PaaS SaaS"></a>IaaS PaaS SaaS</h4><p>Infrastructure as a service (IaaS) is an instant computing infrastructure, provisioned and managed over the internet. It’s one of the four types of cloud services, along with software as a service (SaaS), platform as a service (PaaS), and serverless.
+<img src="https://tvax1.sinaimg.cn/large/a60edd42gy1giulu4by1nj219h0fnabt.jpg" alt="IaaS">
+IaaS 通常用于以下场景：迁移工作负载；测试和开发；存储、备份和恢复。
+Caution！ 虚拟机是IaaS</p>
+<p>例题：Your company plans to migrate all its data and resources to Azure.
+The company’s migration plan states that only platform as a service (PaaS) solutions must be used in Azure.
+You need to deploy an Azure environment that supports the planned migration.
+Solution: You create an Azure App Service and Azure SQL databases.</p>
+<p>A: Correct. Azure SQL databases 也属于 PaaS，区别于在虚拟机中安装的SQL Server（IaaS）</p>
+<p>例题：Your company plans to migrate all its data and resources to Azure.
+The company’s migration plan states that only Platform as a Service (PaaS) solutions must be used in Azure.
+You need to deploy an Azure environment that meets the company migration plan.
+Solution: You create an Azure App Service and Azure Storage accounts. </p>
+<p>A: False. Azure Storage accounts is IaaS</p>
+<p><a href="https://docs.microsoft.com/en-us/azure/cosmos-db/introduction" target="_blank" rel="noopener">Cosmos DB</a> is PaaS</p>
+<h4 id="区域、中心"><a href="#区域、中心" class="headerlink" title="区域、中心"></a>区域、中心</h4><p>Q:Deploying an app can be done directly to what level of physical granularity(尺度)? A:Region</p>
+<p>You need to ensure that the services running on the virtual machines are available if a  single data center fails.
+Solution: You deploy the virtual machines to two or more regions.
+or You deploy the virtual machines to two or more availability zones</p>
+<p>区域间数据传输根据带宽收费</p>
+<blockquote>
+<p>Azure availability zone can be used to protect access to Azure services from an Azure data center failure</p>
+</blockquote>
+<h4 id="计价"><a href="#计价" class="headerlink" title="计价"></a>计价</h4><p>例题：If you create two Azure virtual machines that use the B2S size, each virtual machine will always generate the same monthly costs.（False）</p>
+<p>Two virtual machines using the same size could have different disk configurations. Therefore, the monthly
+costs could be different.</p>
+<p>“pay-as-you-go”<br>
+When planning to migrate a public website to Azure, you must plan to pay monthly usage costs. .</p>
+<p>“elasticity”<br>
+<a href="https://azure.microsoft.com/zh-cn/overview/what-is-elastic-computing/" target="_blank" rel="noopener">弹性计算</a>, 系统监控工具控制，无需中断操作即可使分配的资源量与实际所需资源量相匹配。通过云灵活性，公司可避免就未用容量或闲置资源付费，且不必担心投入资金购买或维护额外的资源和设备。</p>
+<h4 id="订阅"><a href="#订阅" class="headerlink" title="订阅"></a>订阅</h4><blockquote>
+<p>An Azure AD tenant can have multiple subscriptions but an Azure subscription can only be associated with one Azure AD tenant.
+见<a href="https://docs.microsoft.com/zh-cn/azure/active-directory/fundamentals/active-directory-how-subscriptions-associated-directory" target="_blank" rel="noopener">将 Azure 订阅关联或添加到 Azure Active Directory 租户</a></p>
+</blockquote>
+<p><img src="https://docs.microsoft.com/zh-cn/azure/azure-resource-manager/management/media/overview/scope-levels.png" alt></p>
+<h4 id="资源组"><a href="#资源组" class="headerlink" title="资源组"></a>资源组</h4><blockquote>
+<p>A resource can interact with resources in other resource groups</p>
+</blockquote>
+<blockquote>
+<p>Deleting the resource group will remove the resource group as well as all the resources in that resource group. </p>
+</blockquote>
+<blockquote>
+<p>Resources from multiple different regions can be placed in a resource group.</p>
+<ul>
+<li>资源组中的所有资源应该具有相同的生命周期。 一起部署、更新和删除这些资源。 </li>
+<li>每个资源只能存在于一个资源组中。可以将资源从一个资源组移到另一个组</li>
+<li>资源组中的资源可以位于与资源组不同的区域。 </li>
+</ul>
+</blockquote>
+<p>锁定资源以防止意外：
+CanNotDelete和ReadOnly, 资源可以存在多个删除锁，自动继承上层锁。</p>
+<p><b>Azure virtual machines</b> should you use from the Azure portal to view service failure notifications that can
+affect the availability of VM1(your virtual machine)?</p>
+<p>例题：You need to view a list of planned maintenance events that can affect the availability of an Azure subscription.</p>
+<p>On the <b>Help and Support</b> blade, there is a Service Health option. If you click Service Health, a new blade opens. The Service Health blade contains the Planned Maintenance link which opens a blade where you can view a list of planned maintenance events that can affect the availability of an Azure subscription.</p>
+<h4 id="Azure服务"><a href="#Azure服务" class="headerlink" title="Azure服务"></a>Azure服务</h4><p>An integrated solution for the deployment of code - <b>Azure DevOps</b>
+A tool that provides guidance and recommendation to improve an Azure environment - <b>zure Advisor</b>
+A simplified tool to build intelligent Artificial Intelligence (AI) applications - <b>Azure Cognitive services</b>
+Monitors web applications - <b>Azure Application Insights</b></p>
+<h4 id="规模集（scale-set）"><a href="#规模集（scale-set）" class="headerlink" title="规模集（scale set）"></a>规模集（scale set）</h4><p>如用于创建并管理一组负载均衡的 VM，根据需求或定义的计划自动增减 VM 实例的数目，为应用程序提供搞可用性</p>
+<h4 id="DevTest-Lab"><a href="#DevTest-Lab" class="headerlink" title="DevTest Lab"></a>DevTest Lab</h4><p>开发测试实验室，利用基架/模板快速创建环境</p>
+<h4 id="存储账户"><a href="#存储账户" class="headerlink" title="存储账户"></a>存储账户</h4><blockquote>
+<p>Data that is copied to Azure Storage account is maintained automatically in at least three copies.</p>
+</blockquote>
+<p>存储账户的数据冗余选项有4个 每种都以不同的措施复制三次 见<a href="https://docs.microsoft.com/zh-cn/azure/storage/common/storage-account-overview" target="_blank" rel="noopener">存储帐户概述</a></p>
+<h4 id="Cloud-shell"><a href="#Cloud-shell" class="headerlink" title="Cloud shell"></a>Cloud shell</h4><p>Cloud shell就是页面上那个命令行工具，从中可以运行PowerShell命令或Bash命令</p>
+<p>另install azure cli then it can be used in Command Prompt or Windows PowerShell </p>
+<p>例题：An Azure administrator plans to run a PowerShell script that creates Azure resources. You need to recommend which computer configuration to use to run the script.
+Solution: Run the script from a computer that runs Linux and has the Azure CLI tools installed.
+Does this meet the goal?</p>
+<p>answer：A PowerShell script is a file that contains PowerShell cmdlets and code. A PowerShell script needs to be run in PowerShell.
+PowerShell can now be installed on Linux. However, the question states that the computer has Azure CLI tools, not PowerShell installed. Therefore, this solution does not meet the goal.</p>
+<p>PowerShell已经是跨平台应用</p>
+<h4 id="Data-Lake"><a href="#Data-Lake" class="headerlink" title="Data Lake"></a>Data Lake</h4><p>例题：You plan to store 20 TB of data in Azure. The data will be accessed infrequently and visualized by using Microsoft Power BI. 
+You need to recommend a storage solution for the data.
+A. Azure Data Lake
+B. Azure Cosmos DB
+C. Azure SQL Data Warehouse
+D. Azure SQL Database
+E. Azure Database for PostgreSQL </p>
+<p>answer is AC，<a href="https://azure.microsoft.com/zh-cn/solutions/data-lake/" target="_blank" rel="noopener">Azure Data Lake</a></p>
+<h4 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h4><p> <a href="https://docs.microsoft.com/zh-cn/azure/vpn-gateway/vpn-gateway-howto-site-to-site-resource-manager-portal" target="_blank" rel="noopener">Local Network Gateway 创建从azure到本地网关的连接</a> </p>
+<p>You have an Azure environment that contains 10 virtual networks and 100 virtual machines.
+You need to limit the amount of inbound traffic to all the Azure virtual networks.
+What should you create?
+A. one application security group (ASG)
+B. 10 virtual network gateways
+C. 10 Azure ExpressRoute circuits
+D. one Azure firewall </p>
+<p>answer is D</p>
+
       
     </div>
     
@@ -414,8 +531,17 @@ cost manage工具
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -430,7 +556,7 @@ cost manage工具
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">148</span>
+                  <span class="site-state-item-count">152</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -475,6 +601,22 @@ cost manage工具
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#云计算概览"><span class="nav-number">1.</span> <span class="nav-text">云计算概览</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#benefit"><span class="nav-number">2.</span> <span class="nav-text">benefit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#混合云（Hybrid-Cloud）"><span class="nav-number">3.</span> <span class="nav-text">混合云（Hybrid Cloud）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IaaS-PaaS-SaaS"><span class="nav-number">4.</span> <span class="nav-text">IaaS PaaS SaaS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#区域、中心"><span class="nav-number">5.</span> <span class="nav-text">区域、中心</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计价"><span class="nav-number">6.</span> <span class="nav-text">计价</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#订阅"><span class="nav-number">7.</span> <span class="nav-text">订阅</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#资源组"><span class="nav-number">8.</span> <span class="nav-text">资源组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Azure服务"><span class="nav-number">9.</span> <span class="nav-text">Azure服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#规模集（scale-set）"><span class="nav-number">10.</span> <span class="nav-text">规模集（scale set）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DevTest-Lab"><span class="nav-number">11.</span> <span class="nav-text">DevTest Lab</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#存储账户"><span class="nav-number">12.</span> <span class="nav-text">存储账户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cloud-shell"><span class="nav-number">13.</span> <span class="nav-text">Cloud shell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Data-Lake"><span class="nav-number">14.</span> <span class="nav-text">Data Lake</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网络"><span class="nav-number">15.</span> <span class="nav-text">网络</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

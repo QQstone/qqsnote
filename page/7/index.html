@@ -229,6 +229,581 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/03/04/VueGrammar/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/03/04/VueGrammar/" itemprop="url">VueGrammer</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-04T15:14:46+08:00">
+                2020-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="模板与绑定"><a href="#模板与绑定" class="headerlink" title="模板与绑定"></a>模板与绑定</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;span&gt;Message: &#123;&#123; msg &#125;&#125;&lt;/span&gt;</span><br><span class="line">&lt;span v-html=&quot;rawHtml&quot;&gt;&lt;/span&gt;</span><br><span class="line">&lt;div v-bind:id=&quot;dynamicId&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;p v-if=&quot;seen&quot;&gt;现在你看到我了&lt;/p&gt;</span><br><span class="line">&lt;a v-on:click=&quot;doSomething&quot;&gt;...&lt;/a&gt;</span><br><span class="line">&lt;li v-for=&quot;item in items&quot;&gt;...&lt;/li&gt;</span><br></pre></td></tr></table></figure>
+<p>@click is short for v-on:click<br>
+方法的括号（）不是必须的<br>
+支持动态属性名和事件名称
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;a v-bind:[attributeName]=&quot;url&quot;&gt; ... &lt;/a&gt;</span><br><span class="line">&lt;a v-on:[eventName]=&quot;doSomething&quot;&gt; ... &lt;/a&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Vue实例"><a href="#Vue实例" class="headerlink" title="Vue实例"></a>Vue实例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var data = &#123; a: 1 &#125;</span><br><span class="line">var vm = new Vue(&#123;</span><br><span class="line">    el: &apos;#example&apos;,</span><br><span class="line">    data: data</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>当一个 Vue 实例被创建时，它将 data 对象中的所有的属性加入到 Vue 的响应式系统中。当这些属性的值发生改变时，视图将会产生“响应”，即匹配更新为新的值。</p>
+<p>常用实例方法：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vm.$data === data // =&gt; true</span><br><span class="line">vm.$el === document.getElementById(&apos;example&apos;) // =&gt; true</span><br><span class="line">vm.$watch(&apos;a&apos;, function (newValue, oldValue) &#123;</span><br><span class="line">  // 这个回调将在 `vm.a` 改变后调用</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>生命周期钩子
+<img src="https://tvax4.sinaimg.cn/large/a60edd42gy1gciycw8nxuj20xc2cftaj.jpg" alt="生命周期">
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">new Vue(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    a: 1</span><br><span class="line">  &#125;,</span><br><span class="line">  created: function () &#123;</span><br><span class="line">    // `this` 指向 vm 实例</span><br><span class="line">    console.log(&apos;a is: &apos; + this.a)</span><br><span class="line">  &#125;</span><br><span class="line">  mounted: function () &#123;</span><br><span class="line">    console.log(&apos;a is: &apos; + this.a)</span><br><span class="line">  &#125;</span><br><span class="line">  beforeDestroy:function()&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>内联处理器方法
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">new Vue(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    </span><br><span class="line">  &#125;,</span><br><span class="line">  methods:&#123;</span><br><span class="line">      // TODO functions</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/03/03/VueQuickStart/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/03/03/VueQuickStart/" itemprop="url">VueQuickStart</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-03T10:43:28+08:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://cn.vuejs.org/" target="_blank" rel="noopener">官网</a></p>
+<h4 id="爬行起步方式"><a href="#爬行起步方式" class="headerlink" title="爬行起步方式"></a>爬行起步方式</h4><p>Caution! 限定的引入顺序：
+template –&gt; vue.js –&gt; vue controller 
+其中 template 和 vue.js 交换没有影响
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Hi vue&lt;/title&gt;</span><br><span class="line">    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue/dist/vue.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id=&quot;app&quot;&gt;</span><br><span class="line">        &#123;&#123; message &#125;&#125;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">        var app = new Vue(&#123;</span><br><span class="line">            el: &apos;#app&apos;,</span><br><span class="line">            data: &#123;</span><br><span class="line">                message: &apos;here here&apos;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="常规起步方式"><a href="#常规起步方式" class="headerlink" title="常规起步方式"></a>常规起步方式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install -g @vue/cli</span><br><span class="line"></span><br><span class="line">vue create vueproj</span><br></pre></td></tr></table></figure>
+<p>阅读 <a href="https://cli.vuejs.org/zh/guide/creating-a-project.html#vue-create" target="_blank" rel="noopener">vue-cli指引</a></p>
+<h4 id="原力起飞方式"><a href="#原力起飞方式" class="headerlink" title="原力起飞方式"></a>原力起飞方式</h4><p><a href="https://juejin.im/post/5ae43d9a6fb9a07aad1747f9" target="_blank" rel="noopener">webpack 打包 vue 基础</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/03/03/CSharpRazor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/03/03/CSharpRazor/" itemprop="url">CSharpRazor</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-03T10:42:19+08:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p><a href="http://antaris.github.io/RazorEngine" target="_blank" rel="noopener">RazorEngine</a>: Open source templating engine based on Microsoft’s Razor parsing engine.</p>
+</blockquote>
+<h4 id="Razor文件类型"><a href="#Razor文件类型" class="headerlink" title="Razor文件类型"></a>Razor文件类型</h4><p>Razor可以在vb.net和C#中使用。分别对应了两种文件类型，.vbhtml和.cshtml </p>
+<h4 id="Razor的标识符"><a href="#Razor的标识符" class="headerlink" title="Razor的标识符"></a>Razor的标识符</h4><p>@字符被定义为Razor服务器代码块的标识符，表示是服务器代码。web form中使用&lt;%%&gt;中写服务器代码一个道理。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@&#123;</span><br><span class="line">    string userName= &quot;邓星林&quot;;</span><br><span class="line">&#125; &lt;!-- 块级作用域 --&gt;</span><br><span class="line">&lt;span&gt;@userName&lt;/span&gt;</span><br><span class="line">&lt;span&gt;@DateTime.Now.ToString(&quot;yyyy-MM-hh&quot;)&lt;/span&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h4><p>@Href(“~/“)//表示网站的根目录</p>
+<p>@Html.Raw(Module.Content)  输出HTML</p>
+<h4 id="Razor标识混合HTML"><a href="#Razor标识混合HTML" class="headerlink" title="Razor标识混合HTML"></a>Razor标识混合HTML</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@&#123;</span><br><span class="line">    // html标签</span><br><span class="line">    &lt;div&gt;&lt;/div&gt;</span><br><span class="line">    var str = &quot;abc&quot;;</span><br><span class="line">    // 下面会输出：this is a mail：dxl0321@qq.com, this is var: abc,this is mail@str,this is @；</span><br><span class="line">    @: this is a mail：dxl0321@qq.com, this is var: @str,this is  mail@str,this is @@；</span><br><span class="line">    // 下面输出abc</span><br><span class="line">    @str</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>a.在作用域内如果是以html标签开始则视为文本输出</p>
+<p>b.如果要输出符号@，则使用@@</p>
+<p>c.如果要输出非html标签和非Razor语句的代码，则用@:，他的作用是相当于在处于html下面编写一样了，如在@：后面可以加上@就是表示Razor语句的变量</p>
+<h4 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@&#123;</span><br><span class="line">   @*</span><br><span class="line">       多行注释</span><br><span class="line">       多行注释</span><br><span class="line">   *@</span><br><span class="line">   var i = 10;  @* asdfasf *@</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Layout-视图片段"><a href="#Layout-视图片段" class="headerlink" title="Layout 视图片段"></a>Layout 视图片段</h4><p>插入指定路径定义的布局视图模板
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@&#123;</span><br><span class="line">    ViewData[&quot;Title&quot;] = &quot;分享优惠券管理&quot;;</span><br><span class="line">    Layout = &quot;~/Views/Shared/_Layoutv2.cshtml&quot;;</span><br><span class="line">&#125;</span><br><span class="line">&lt;div class=&quot;main&quot;&gt;</span><br><span class="line">    ...</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="插入Page"><a href="#插入Page" class="headerlink" title="插入Page"></a>插入Page</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;area&quot;&gt;</span><br><span class="line">    @RenderPage(&quot;/b.cshtml&quot;)</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="Section"><a href="#Section" class="headerlink" title="Section"></a>Section</h4><h4 id="Helper"><a href="#Helper" class="headerlink" title="Helper"></a>Helper</h4><p>helper就是可以定义可重复使用的帮助器方法，不仅可以在同一个页面不同地方使用，还可以在不同的页面使用。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@helper sum(int a,int b)</span><br><span class="line">&#123;  </span><br><span class="line">   var result=a+b;</span><br><span class="line">　　@result  </span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&lt;div &gt;</span><br><span class="line">    &lt;p&gt;2+3=@sum(2,3)&lt;/p&gt; </span><br><span class="line">    &lt;p&gt;5+9=@sum(5,9)&lt;/p&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="自带类型转换"><a href="#自带类型转换" class="headerlink" title="自带类型转换"></a>自带类型转换</h4><ul>
+<li>AsInt()</li>
+<li>IsInt()</li>
+<li>AsBool()</li>
+<li>IsBool()</li>
+<li>AsFloat()</li>
+<li>IsFloat()</li>
+<li>AsDecimal()</li>
+<li>IsDecimal()</li>
+<li>AsDateTime()</li>
+<li>IsDateTime()</li>
+<li>ToString()</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/02/20/JSInventingLang/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/02/20/JSInventingLang/" itemprop="url">Inventing JavaScript</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-20T12:30:16+08:00">
+                2020-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="https://tva1.sinaimg.cn/large/a60edd42gy1gc2rdmb6h9j20hr0k40tx.jpg" alt="inventing js"></p>
+<h4 id="关于0-1-0-2-0-3-false"><a href="#关于0-1-0-2-0-3-false" class="headerlink" title="关于0.1+0.2==0.3 false"></a>关于0.1+0.2==0.3 false</h4><p><a href="https://juejin.im/post/5b90e00e6fb9a05cf9080dff" target="_blank" rel="noopener">0.1 + 0.2不等于0.3？为什么JavaScript有这种“骚”操作？</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/02/18/AngularIvy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1021,628 +1596,11 @@ edit.component.ts:
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/01/06/ppp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/01/06/ppp/" itemprop="url">Point to Point Protocal</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T09:31:59+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/通信协议/" itemprop="url" rel="index">
-                    <span itemprop="name">通信协议</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>参考：<a href="https://www.jianshu.com/p/0d05e5f71a70" target="_blank" rel="noopener">Android 上网概述</a></p>
-<p>使用3g/4g/5g网络的移动设备，通过ppp协议与蜂窝网络的基站建立通信</p>
-<p><img src="https://tva2.sinaimg.cn/large/a60edd42gy1gan1ycy4iqj20xc0jrgqy.jpg" alt="基带和蜂窝网络">
-ppp协议是链路层协议</p>
-<p><img src="https://tva1.sinaimg.cn/large/a60edd42gy1gan1zsxm2cj20xc0eemyv.jpg" alt="协议结构">
-Linux对PPP数据链路的建立过程进行抽象，实现了pppd拨号应用程序，专门用于管理PPP数据链路的建立与关闭，见下图。<br>
-pppd是一个后台服务进程(daemon)，实现了所有鉴权、压缩/解压和加密/解密等扩展功能的控制协议，负责把要发送的数据包传递给PPP协议处理模块，设置PPP协议的参数，用来建立/关闭连接。</p>
-<p><img src="https://tva2.sinaimg.cn/large/a60edd42gy1gan281gkvkj20xc0rgtfz.jpg" alt="Android设备网络访问架构"></p>
-<p>链路建立的大致过程：
-<img src="https://tvax2.sinaimg.cn/large/a60edd42gy1gan2bxh8erj20xc0fvdkr.jpg" alt="链路建立"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/12/31/AliyunIOT/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/12/31/AliyunIOT/" itemprop="url">AliyunIOT</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-31T10:16:15+08:00">
-                2019-12-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/平台/" itemprop="url" rel="index">
-                    <span itemprop="name">平台</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/12/31/RaspberryPi/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/12/31/RaspberryPi/" itemprop="url">RaspberryPi</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-31T10:15:33+08:00">
-                2019-12-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/物联网/" itemprop="url" rel="index">
-                    <span itemprop="name">物联网</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>( Raspberry Pi Model B Plus Rev1.2 )</p>
-<h4 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h4><p>官方指引：<a href="https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up" target="_blank" rel="noopener">Setting up your Raspberry Pi</a></p>
-<blockquote>
-<p>常见异常：HDMI无响应<br></p>
-</blockquote>
-<p>修改/boot/config.txt
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hdmi_force_hotplug=1</span><br><span class="line">config_hdmi_boost=4</span><br><span class="line">hdmi_group=2</span><br><span class="line">hdmi_mode=9</span><br><span class="line">hdmi_drive=2</span><br><span class="line">hdmi_ignore_edid=0xa5000080</span><br><span class="line">disable_overscan=1</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>设置默认命令行启动
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo raspi-config</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>Boot Options -&gt; Desktop / CLI -&gt; Console</p>
-<blockquote>
-<p>开启ssh server
-见 <a href="https://qqstone.github.io/qqsnote/2019/10/30/ssh/">ssh笔记</a></p>
-</blockquote>
-<h4 id="GPIO"><a href="#GPIO" class="headerlink" title="GPIO"></a>GPIO</h4><h4 id="USB摄像头"><a href="#USB摄像头" class="headerlink" title="USB摄像头"></a>USB摄像头</h4><p><a href="https://www.raspberrypi.org/documentation/usage/webcams/" target="_blank" rel="noopener">Using a standard USB webcam</a>
-实践发现，手上的UVC Camera一旦停止调用就会跳出(中断)<br>
-搭建直播流服务</p>
-<h4 id="4g上网"><a href="#4g上网" class="headerlink" title="4g上网"></a>4g上网</h4><p>实践时 电脑USB接口向树莓派供电 插上网卡就电压不足(Under-voltage detected)<br>
-lsusb命令识别出” ID 05c6:6000 Qualcomm,Inc.Siemens SG75 “<br>
-安装ppp包</p>
-<h4 id="内网穿透"><a href="#内网穿透" class="headerlink" title="内网穿透"></a>内网穿透</h4><p>ipv6</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/12/29/LinuxServerSetUp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/12/29/LinuxServerSetUp/" itemprop="url">安装Linux服务器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-29T16:22:26+08:00">
-                2019-12-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>关于使用ubuntu发行版和centos发行版的倾向（存目）</p>
-</blockquote>
-<h3 id="简单的ubuntu"><a href="#简单的ubuntu" class="headerlink" title="简单的ubuntu"></a>简单的ubuntu</h3><h4 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h4><p>实践日期：2019-12-29 <a href="http://mirror.sax.uk.as61049.net/releases.ubuntu.com/18.04.3/ubuntu-18.04.3-live-server-amd64.iso" target="_blank" rel="noopener">ubuntu-18.04.3-live-server-amd64.iso</a></p>
-<h4 id="安装和分区（存目）"><a href="#安装和分区（存目）" class="headerlink" title="安装和分区（存目）"></a>安装和分区（存目）</h4><h4 id="安装ssl"><a href="#安装ssl" class="headerlink" title="安装ssl"></a>安装ssl</h4><h4 id="配置网卡"><a href="#配置网卡" class="headerlink" title="配置网卡"></a>配置网卡</h4><p>不知道怎么就安装了cloud image<br>
-参考<a href="https://graspingtech.com/ubuntu-server-18.04-static-ip/" target="_blank" rel="noopener">Configure Ubuntu Server 18.04 to use a static IP address</a></p>
-<h4 id="在线安装Applications"><a href="#在线安装Applications" class="headerlink" title="在线安装Applications"></a>在线安装Applications</h4><h4 id="配置apache"><a href="#配置apache" class="headerlink" title="配置apache"></a>配置apache</h4><ul>
-<li>复制 ams.conf 到sites-availiable</li>
-<li>a2ensite ams</li>
-<li>enable Proxy modules<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo a2enmod proxy</span><br><span class="line">sudo a2enmod proxy_http</span><br><span class="line">sudo a2enmod proxy_balancer</span><br><span class="line">sudo a2enmod lbmethod_byrequests</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="令人发狂的CentOS（Selinux）"><a href="#令人发狂的CentOS（Selinux）" class="headerlink" title="令人发狂的CentOS（Selinux）"></a>令人发狂的CentOS（Selinux）</h3><h4 id="镜像-1"><a href="#镜像-1" class="headerlink" title="镜像"></a>镜像</h4><p>实践日期：2019-12-29 <a href="http://www.gtlib.gatech.edu/pub/centos/8.0.1905/isos/x86_64/CentOS-8-x86_64-1905-dvd1.iso" target="_blank" rel="noopener">CentOS-8-x86_64-1905-dvd1.iso</a></p>
-<h4 id="网卡设置"><a href="#网卡设置" class="headerlink" title="网卡设置"></a>网卡设置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ip add</span><br><span class="line">nmcli device show</span><br><span class="line">nmcli device status</span><br><span class="line">nmcli connection down enp0s3</span><br><span class="line">nmcli connection up enp0s3</span><br><span class="line">nmcli c reload</span><br></pre></td></tr></table></figure>
-<h4 id="静态IP"><a href="#静态IP" class="headerlink" title="静态IP"></a>静态IP</h4><p>/etc/sysconfig/network-scripts/ifcfg-enp0s3
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">TYPE=Ethernet</span><br><span class="line">PROXY_METHOD=none</span><br><span class="line">BROWSER_ONLY=no</span><br><span class="line">BOOTPROTO=none # 默认是dhcp，根据dhcp分配 改为none或static</span><br><span class="line">NAME=enp0s3</span><br><span class="line">DEFROUTE=yes</span><br><span class="line">IPV4_FAILURE_FATAL=no</span><br><span class="line">IPV6INIT=yes</span><br><span class="line">IPV6_AUTOCONF=yes</span><br><span class="line">IPV6_DEFROUTE=yes</span><br><span class="line">IPV6_FAILURE_FATAL=no</span><br><span class="line">IPV6_ADDR_GEN_MODE=stable-privacy</span><br><span class="line">NAME=enp0s3</span><br><span class="line">UUID=0b813e18-6008-485c-ba8c-d19e259a847a</span><br><span class="line">DEVICE=enp0s3</span><br><span class="line">ONBOOT=yes # 开机启用该配置</span><br><span class="line">IPADDR=10.196.98.99</span><br><span class="line">GATEWAY=10.196.98.1</span><br><span class="line">NETMASK=255.255.254.0</span><br><span class="line">DNS1=10.192.0.100</span><br><span class="line">PREFIX=24</span><br></pre></td></tr></table></figure></p>
-<h4 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld.service #关闭</span><br><span class="line">systemctl start firewalld.service #启动</span><br><span class="line"></span><br><span class="line">firewall-cmd --zone=public --permanent --add-port 22/tcp #开启端口</span><br><span class="line">systemctl restart firewalld.service #重启</span><br></pre></td></tr></table></figure>
-<h4 id="关闭selinux"><a href="#关闭selinux" class="headerlink" title="关闭selinux"></a>关闭selinux</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sestatus // 查看状态</span><br><span class="line">setenforce 0 // 临时关闭</span><br></pre></td></tr></table></figure>
-<p>禁用selinux<br>
-编辑/etc/selinux/config, set SELINUX=disabled。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/qqsnote/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/15/">15</a><a class="extend next" rel="next" href="/qqsnote/page/8/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/qqsnote/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/16/">16</a><a class="extend next" rel="next" href="/qqsnote/page/8/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1688,7 +1646,7 @@ lsusb命令识别出” ID 05c6:6000 Qualcomm,Inc.Siemens SG75 “<br>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">148</span>
+                  <span class="site-state-item-count">152</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
