@@ -2,6 +2,7 @@
 title: Git
 date: 2020-04-07 09:37:30
 tags:
+- git
 ---
 常规
 ```
@@ -54,4 +55,12 @@ echo /db/* >> .git/info/sparse-checkout
     git revert <commit-last> .. <commit-somewhere> // 提交一个记录来撤销所罗列出的<commit>
 
     git rebase -i <start-commit> <end-commit> //(start-commit, end-commit] 前开后闭区间，合并到当前分支，默认 end-commit 为当前 HEAD
+```
+#### repository 迁移
+```
+git clone --bare git@old-repo.git 
+cd old-repo
+git remote add bitbucket git@bitbucket-repo.git
+git push --all bitbucket
+git push --tags bitbucket
 ```

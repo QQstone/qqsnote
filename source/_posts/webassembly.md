@@ -5,6 +5,8 @@ tags:
 - webassembly
 - 性能优化
 ---
+应该首先从[官方网站](http://webassembly.org.cn/getting-started/developers-guide/)获取知识
+
 webassembly知识储备或许会涵盖“编译原理”，Rust，v8开发，
 
 > WebAssembly或称wasm是一个实验性的低端编程语言，应用于浏览器内的客户端。WebAssembly是便携式的抽象语法树，被设计来提供比JavaScript更快速的编译及运行。WebAssembly将让开发者能运用自己熟悉的编程语言编译，再藉虚拟机引擎在浏览器内运行。 ---维基百科
@@ -28,14 +30,72 @@ webassembly知识储备或许会涵盖“编译原理”，Rust，v8开发，
 工具链[Emscripten](https://github.com/emscripten-core/emscripten),Rust, AssemblyScript
 
 > In case of conflict, consider users over authors over implementors over specifiers over theoretical purity.
+#### helloworld.wasm
+准备一个新的开发环境：
+启动一个ubuntu的docker
+```
+docker pull ubuntu
+sudo docker run -it -u root --name labdocker -v labdocker_home:/var/labdocker_home ubuntu bash
+```
+上面的语句映射的是docker中的/var/labdocker_home和宿主的/var/lib/docker/volumes/labdocker_home/_data wtf???
+给‘空’的ubuntu安装必要工具
+```
+apt-get update
+apt-get install -y nodejs npm git
+```
+编译工具链依赖
+```
+apt-get install -y cmake python3.8
+```
+安装emsdk
+```
+git clone https://github.com/emscripten-core/emsdk.git
+cd emsdk
+git pull
+./emsdk install latest // 这一步依赖python
+./emsdk activate latest 
+source ./emsdk_env.sh // 定义环境变量
+```
+> You always have to source ./emsdk_env.sh first in a new terminal session
+> 
+输入emcc -v查看信息
+![emcc](https://tvax3.sinaimg.cn/large/a60edd42gy1gidk1ak7cyj20kg05aq50.jpg)
+看起来比较正常，说明工具安装成功
 
+![emsdk setup](https://tvax4.sinaimg.cn/large/a60edd42gy1gidgl4nx6yj20ka0c2n1n.jpg)
+
+另，其实安装emsdk不是必须的，docker hub中有现成的
+```
+docker pull emscripten/emsdk
+docker run --rm -v $(pwd):/src -u $(id -u):$(id -g) \
+  emscripten/emsdk emcc helloworld.cpp -o helloworld.js
+```
+创建一个c项目
+```
+mkdir /home/Workspace/hello
+cd /home/Workspace/hello
+echo '' > hello.c
+```
+回忆起c的hello world
+```
+#include<stdio.h>
+int main(int argc, char** argv){
+  printf("hello hello~/n");
+}
+```
+走你
+```
+emcc hello.c -s WASM=1 -o hello.html
+```
++ 参数-s WASM=1 要求生成.wasm否则编译成asm.js
++ -o hello.html Emscripten 生成一个我们所写程序的HTML页面，并带有 wasm 和 JavaScript 文件
+编译生成hello.wasm hello.js hello.html 可以用emrun运行这个html(直接用浏览器打开会认为读取file://文件违反policy) 因为docker没有映射端口，拷出来用http-server运行，是这样婶的：
+![emscript_helloworld](https://tva3.sinaimg.cn/large/a60edd42ly1gj59qkbh1mj20qo0i2wf9.jpg)
 #### FFmpeg.js 的实现
 原文：[Build FFmpeg WebAssembly version (= ffmpeg.wasm)](https://itnext.io/build-ffmpeg-webassembly-version-ffmpeg-js-part-1-preparation-ed12bf4c8fac) 此链接国内网络或无法访问，可参考国内博客的类似文章，keyword:"webassembyly" + "ffmpeg"
 
 关于ffmpeg,{% post_link video-streaming video和视频流 % }那篇曾用其进行视频的转码和输出流。<br>
 > FFmpeg 是一个开放源代码的自由软件，可以运行音频和视频多种格式的录影、转换、流功能，包含了libavcodec(用于多个项目中音频和视频的解码器库)，以及libavformat(音频与视频格式转换库)。————维基百科
-
-
 clone FFmpeg 源码
 ```
 git clone https://github.com/FFmpeg/FFmpeg
@@ -65,18 +125,6 @@ make: *** [ffbuild/common.mak:60: libavformat/mov_esds.o] Interrupt
 旧版本函数参数不一致导致的问题，已被修复，见[[FFmpeg-devel] avutil/mem: Fix invalid use of av_alloc_size](https://patchwork.ffmpeg.org/project/ffmpeg/patch/20181124210202.52207-1-mark.hsj@gmail.com/)<br>
 
 ——————two weeks later————————<br>
-上次因clone了有问题的版本，make时就失败了，这次准备一个新环境再试：
-启动一个ubuntu的docker
-```
-docker pull ubuntu
-sudo docker run -it -u root --name labdocker -v labdocker_home:/var/labdocker_home ubuntu bash
-```
-安装工具链
-```
-apt-get update
-apt-get install -y nodejs npm git
-```
-接下来
 ```
 git clone https://github.com/FFmpeg/FFmpeg
 cd FFmpeg
@@ -178,4 +226,13 @@ ARGS=(
   -s INITIAL_MEMORY=33554432      # 33554432 bytes = 32 MB
 )
 emcc "${ARGS[@]}"
+```
+#### EMCC_DEBUG
+设置EMCC_DEBUG变量使用调试模式编译wasm
+```
+EMCC_DEBUG=1 emcc dip.cc 
+  -s WASM=1 
+  -O3 
+  --no-entry 
+  -o dip.wasm
 ```

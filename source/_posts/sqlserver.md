@@ -107,3 +107,13 @@ STUFF ( character_expression , start , length , character_expression )
 SELECT CAST(t1.num AS varchar) from t1;
 SELECT CONVERT(varchar, t1.num) from t1;
 ```
+#### 将自然键替换为人工键
+原实体以序列号为主键，现添加ID列并填充GUID
+```
+  ALTER TABLE dbo.Table1 DROP CONSTRAINT PK_Table1 // 移除原主键
+  ALTER TABLE dbo.Table1 DROP COLUMN SerialNumber // 移除列
+  ALTER TABLE dbo.Table1 ADD ID uniqueidentifier NOT NULL default newID()
+```
+> exception The object 'DF__Table1__ID__34C8D9D1' is dependent on column 'ID'. ALTER TABLE DROP COLUMN failed because one or more objects access this column
+
+ID作为列名会默认添加CONSTRAINT，如上所提及的DF__Table1__ID__34C8D9D1 因此要删除这个ID列需要先 ALTER TABLE dbo.Table1 DROP CONSTRAINT DF__Table1__ID__34C8D9D1

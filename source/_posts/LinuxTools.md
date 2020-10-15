@@ -15,6 +15,13 @@ curl 8.8.8.8:80
 ssh -v -p qqs@8.8.8.8
 wget 8.8.8.8:80
 ```
+#### 拷贝目录
+将工作空间目录下的test文件夹拷到labhome下面
+```
+cp -ri /home/Workspace/test /var/labhome/
+```
++ -r 递归
++ -i 询问是否覆盖
 #### 查找文件
 find [path] -name [filename]
 ```
@@ -221,4 +228,15 @@ Linux 以一定时间间隔更新内核时间，做上述调整后立即重启�
 #### user
 ```
 su -l USERNAME
+```
+#### chmod
+![](https://www.runoob.com/wp-content/uploads/2014/08/file-permissions-rwx.jpg)
+![](https://www.runoob.com/wp-content/uploads/2014/08/rwx-standard-unix-permission-bits.png)
+```
+chmod [ugoa...][[+-=][rwxX]
+```
+栗子
+```
+chmod ugo+r file1.txt //将文件 file1.txt 设为所有人皆可读
+chmod a+r file1.txt // 同上
 ```
