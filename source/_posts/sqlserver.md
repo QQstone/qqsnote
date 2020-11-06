@@ -117,3 +117,63 @@ SELECT CONVERT(varchar, t1.num) from t1;
 > exception The object 'DF__Table1__ID__34C8D9D1' is dependent on column 'ID'. ALTER TABLE DROP COLUMN failed because one or more objects access this column
 
 ID作为列名会默认添加CONSTRAINT，如上所提及的DF__Table1__ID__34C8D9D1 因此要删除这个ID列需要先 ALTER TABLE dbo.Table1 DROP CONSTRAINT DF__Table1__ID__34C8D9D1
+#### 层次结构数据
+具有父级、子级关系的层次结构数据
+Oracle的递归查询语法:
+```
+  select  * from t_dw CONNECT BY PRIOR id = parentID START WITH id='dw001'
+```
+SqlServer中没有上述语法，而使用内置hierarchyid简化层次结构数据的存储和查询，
+
+https://www.meziantou.net/using-hierarchyid-with-entity-framework-core.htm
+
+```
+-- 根节点 /
+update t_dw set orgLvl=HierarchyID::GetRoot() where parentID is null
+-- 子树   /1/,/2/
+update t_dw set orgLvl=HierarchyID::Parse('/1/') where name='dw1'
+update t_dw set orgLvl=HierarchyID::Parse('/2/') where name='dw2'
+-- 叶    /1/3/
+update t_dw set orgLvl=HierarchyID::Parse('/1/1/') where name='dw1-a'
+```
+插入
+```
+insert t_dw (id,name,ParentID,orgLvl) 
+values(newid(),'dw1-b','xxxxxxxxxxxxxxx',
+HierarchyID::Parse('/1/').GetDescendant(CAST('/1/1/' AS hierarchyid), NULL))
+```
+得到/1/2/ dw1-b 即在/1/的子节点，左树为/1/1/右树为null位置插入新节点
+
+层级
+```
+SELECT CAST('/1/2/' AS hierarchyid).GetLevel() -- 结果：2
+```
+后代
+```
+SELECT name, orgLvl.ToString()
+FROM t_dw
+WHERE orgLvl.IsDescendantOf(CAST('/1/' AS hierarchyid)) = 1
+```
+IsDescendant为1(表示true)返回所有后代(实际上也包括‘/1/’自己), 0返回所有非后代（父代，sibling树）
+```
+SELECT name, orgLvl.ToString()
+FROM t_dw
+WHERE orgLvl.GetAncestor(2) = HierarchyID::Parse('/1/')
+```
+GetAncestor返回指定层级的后代，参数为层级：0返回‘/1/’自己；1返回所有子节点，2返回所有孙子节点
+
+移动
+```
+DECLARE @CurrentNode hierarchyid , @OldParent hierarchyid, @NewParent hierarchyid 
+select  @CurrentNode=orgLvl from t_dw where name='dw_x'; -- /1/1/
+select  @OldParent=orgLvl from t_dw where name='dw_old'; -- /1/
+select  @NewParent=orgLvl from t_dw where name='dw_new'; -- /3/
+UPDATE t_dw  
+SET OrgNode = @CurrentNode.GetReparentedValue(@OldParent, @NewParent)   
+WHERE OrgNode = @CurrentNode ; -- /3/1/ 
+GO  
+```
+其他进阶操作：
+[查找祖先](https://docs.microsoft.com/zh-cn/sql/relational-databases/hierarchical-data-sql-server?view=sql-server-ver15#finding-ancestors-by-using-the-clr)
+[列出祖先]([列出祖先](https://docs.microsoft.com/zh-cn/sql/relational-databases/hierarchical-data-sql-server?view=sql-server-ver15#listing-ancestors))
+[移动子树](https://docs.microsoft.com/zh-cn/sql/relational-databases/hierarchical-data-sql-server?view=sql-server-ver15#moving-subtrees)

@@ -37,3 +37,22 @@ pm2 start ecosystem.config.js --env production
 ```
 #### pm2 plus
 know more about [pm2.io](https://app.pm2.io/)
+
+#### 开机自启
+键入下面的命令生成startup脚本
+```
+pm2 startup
+```
+提示执行配置命令,如
+```
+[PM2] To setup the Startup Script, copy/paste >the following command:", 
+sudo env >PATH=$PATH:/usr/local/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u username --hp /home/username
+```
+按照提示执行提示的命令, 执行后终端列出已安装的服务信息
+
+Caution！升级nodejs对startup有影响
+```
+pm2 unstartup
+
+pm2 startup
+```

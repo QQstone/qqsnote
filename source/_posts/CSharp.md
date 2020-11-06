@@ -2,7 +2,13 @@
 title: C#
 date: 2020-07-27 10:45:30
 tags:
+- C#
 ---
+#### decimal
+因为float计算时有精度损耗，而且产生损耗时在程序中并不提示，于是创建decimal类型，付出额外的性能，进行高精度计算
+```
+decimal d=1.23M
+```
 #### foreach 
 ```
 foreach (Object item in items){
@@ -22,4 +28,9 @@ result = await _context.Oembrand
         .Where(brand => brand.name != "CSD")
         .Select(brand=>new JObject{{"name", brand.name}, {"logo", brand.logo}})
         .ToListAsync();
+```
+#### 正则表达式极其校验
+```
+string pattern = @"^[A-Z]{4}[AB0-9][0-9]{3}$";
+flag = Regex.IsMatch(sn, pattern)
 ```

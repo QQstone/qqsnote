@@ -157,7 +157,34 @@ public class Post
 + Post.Blog是一个引用导航属性
 + Blog.Posts是集合导航属性
 + Post.Blog是的反向导航属性 
-关联关系
+#### 一对一
+```
+public class Blog
+{
+    public int BlogId { get; set; }
+    public string Url { get; set; }
+
+    public BlogImage BlogImage { get; set; }
+}
+
+public class BlogImage
+{
+    public int BlogImageId { get; set; }
+    public byte[] Image { get; set; }
+    public string Caption { get; set; }
+
+    public int BlogId { get; set; }
+    public Blog Blog { get; set; }
+}
+```
+配置关系时HasForeignKey必须指定实体类型，这一点区别于上面的书写方式
+```
+modelBuilder.Entity<Blog>()
+    .HasOne(b => b.BlogImage)
+    .WithOne(i => i.Blog)
+    .HasForeignKey<BlogImage>(b => b.BlogForeignKey);
+```
+#### 关联关系
 ```
 class MyContext : DbContext
 {
@@ -172,6 +199,7 @@ class MyContext : DbContext
             .HasForeignKey(p => p.BlogId);
     }
 }
+关联关系有Reqiuired和Optional之分，前者的情况下，对主体实体的删除会导致依赖实体被级联删除，而对于后者，默认不被配置为级联删除而将外键属性置为null
 ```
 #### 关联查询
 ```
@@ -196,10 +224,167 @@ public async Task<IActionResult> Details(string code)
 ```
 #### 关联存储
 [here](https://docs.microsoft.com/zh-cn/ef/core/saving/related-data)
+向导航属性（blog.Posts）中添加新实体，EF自动发现关联实体并将其插入数据库
+```
+await using (var context = new BloggingContext())
+{
+    var blog = await context.Blogs.Include(b => b.Posts).FirstAsync();
+    var post = new Post { Title = "Intro to EF Core" };
 
-#### select
+    blog.Posts.Add(post);
+    await context.SaveChangesAsync();
+}
 ```
- var studentsWithSameName = context.Students
-                                      .Where(s => s.FirstName == GetName())
-                                      .ToList();
+自动更改外键列
 ```
+await using (var context = new BloggingContext())
+{
+    var blog = new Blog { Url = "http://blogs.msdn.com/visualstudio" };
+    var post = await context.Posts.FirstAsync();
+
+    post.Blog = blog;
+    await context.SaveChangesAsync();
+}
+```
+上面的代码没有显式操作外键post.blogId，但EF会自动更新，并且将所需的新实体blog插入数据库
+#### CRUD
+```
+// create
+context.Add(new Student{
+    FirstName="Jack",
+    SurName="Ma"
+});
+context.SaveChanges();
+// select
+var MaYun = context.Students
+            .Where(s => s.FirstName == GetName()).ToList();
+// update
+MaYun.Age=8;
+context.SaveChanges()
+// delete
+context.Remove(MaYun);
+context.SaveChanges()
+```
+一般在web应用中使用异步
+```
+// create
+context.Add(new Student{
+    FirstName="Jack",
+    SurName="Ma"
+});
+context.SaveChangesAsync();
+// select
+var MaYun = context.Students
+            .Where(s => s.FirstName == GetName()).ToListAsync();
+// update
+MaYun.Age=8;
+context.SaveChangesAsync()
+// delete
+context.Remove(MaYun);
+context.SaveChangesAsync()
+```
+#### DBcontext和connectionstring
+startup.cs
+```
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddDbContext<BloggingContext>(options =>
+        options.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
+}
+```
+#### 重连
+数据库如SQL Server的provider程序，可以识别可重试（retry）的异常类型
+```
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddDbContext<PicnicContext>(
+        options => options.UseSqlServer(
+            Configuration.GetConnectionString("DBConnection"),
+            providerOptions => providerOptions.EnableRetryOnFailure()));
+}
+```
+#### 事务
+额外的，[Transaction commit failure](https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency)
+
+对于多项实体操作(CRUD)后SaveChanges，SaveChanges是事务性的，意味着前面所有操作成功或失败，而不会产生部分成功部分失败
+
+#### Lazy load
+访问导航属性（外键）时再次查询数据库
+```
+using (var dbContext = new CategoryEntities())
+{
+    dbContext.Configuration.LazyLoadingEnabled = true; // 默认是true，针对导航属性
+        var categoryList = dbContext.Set<Category>().Where(p => p.CategoryId == 3);
+        // 只会在数据库里面查询Category表，不会查询ProductDetail表
+        foreach(var category in categoryList)
+        {
+            Console.WriteLine("CategoryId:"+category.CategoryId+ ",CategoryName:"+category.CategoryName);
+            // 这时才会去数据库查询ProductDetail表
+            foreach (var product in category.ProductDetails)
+            {
+                Console.WriteLine("ProductName:"+product.ProductName);
+            }
+        }
+}
+```
+不再继续查询
+```
+using (var dbContext = new CategoryEntities())
+{
+    dbContext.Configuration.LazyLoadingEnabled = false; // 不延迟加载,不会再次查询了
+    var categoryList = dbContext.Set<Category>().Where(p => p.CategoryId == 3);
+    // 只会在数据库里面查询Category表，不会查询ProductDetail表
+    foreach (var category in categoryList)
+    {
+        Console.WriteLine("CategoryId:" + category.CategoryId + ",CategoryName:" + category.CategoryName);
+        // 这时不会去数据库查询了，所以用户全是空的
+        foreach (var product in category.ProductDetails)
+        {
+            Console.WriteLine("ProductName:" + product.ProductName);
+        }
+    }
+}
+```
+一次性完成查询
+```
+// 显示加载
+using (var dbContext = new CategoryEntities())
+{
+    // 不延迟加载，指定Include，一次性加载主表和从表的所有数据
+    var categoryList = dbContext.Set<Category>().Include("ProductDetails").Where(p => p.CategoryId == 3);
+    foreach (var category in categoryList)
+    {
+        Console.WriteLine("CategoryId:" + category.CategoryId + ",CategoryName:" + category.CategoryName);
+        // 不会再查询
+        foreach (var product in category.ProductDetails)
+        {
+            Console.WriteLine("ProductName:" + product.ProductName);
+        }
+    }
+}
+```
+> issue: Data is Null. This method or property cannot be called on Null values.
+> 
+一个很简单的出错原因是model的基本类型（非对象，不能设置为null）如int，Guid等的属性，其对应的table field为null。
+应以int?,Guid?作为属性类型以支持null
+#### Parent/Child
+对应于使用id，parentid组织的父子关系表，常见的组织机构树，职能头衔树等
+```
+public class ScannerGroup
+{
+    public Guid ID { get; set; }
+    public string Name { get; set; }
+    public Guid? ParentID { get; set; }
+    public ScannerGroup Parent { get; set; }
+    public virtual Oembrand Brand { get; set; }
+    
+    public ICollection<ScannerGroup> Children { get; } = new List<ScannerGroup>();
+}
+```
+查询子树
+```
+var data = (await _context.ScannerGroup.ToListAsync())
+            .Where(g => g.ID == new Guid(groupId))
+            .ToList();
+```
+#### Hierarchy Data(存目)

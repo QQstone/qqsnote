@@ -215,6 +215,14 @@ namespace active_directory_b2c_wpf
 以实现一键(使用AD凭据)登录
 #### 对接wechat 作为identity provider（存目）
 
-#### 关于系统角色dingy
+#### 关于系统角色定义
 多个系统使用Azure AD B2C，各个系统地权限角色是否要在Azure方维护呢？是否是在expose API时定义scope呢？<br>
 私以为并不是，鉴于{% post_link OAuth2 OAuth %}一篇中所述，资源服务器保留私钥对access token进行校验，甚至可以从中解析出当前用户key，过期时间等信息，籍此完全可以查询本系统定义地权限角色，而无须频繁访问SSO。
+#### Q&A
+> issue: The application associated with client id has no registered redirect URIs.
+
+按说在App Registry中配置 Redirect URI是optional的，曾遇到此问题是没有勾选隐式授权（Authentication-->Implicit grant）
+
+> 一定需要注册Redirect URI吗，可以在跳转到登录页时作为query parameter传递吗？
+
+> Silent Sign In Workflow
