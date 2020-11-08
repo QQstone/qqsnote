@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="git,">
 
 
 
@@ -80,13 +80,14 @@
 
 
 <meta name="description" content="常规 1234567891011git config --global user.email &amp;quot;QQs@xxxx.xxx&amp;quot;git config --global user.name &amp;quot;QQs&amp;quot;git initgit remote add origin git@xxxx.xxx:projectX.git// 添加远程主机命名为origingit pull or">
+<meta name="keywords" content="git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/04/07/Git/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="常规 1234567891011git config --global user.email &amp;quot;QQs@xxxx.xxx&amp;quot;git config --global user.name &amp;quot;QQs&amp;quot;git initgit remote add origin git@xxxx.xxx:projectX.git// 添加远程主机命名为origingit pull or">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-06-03T08:31:50.167Z">
+<meta property="og:updated_time" content="2020-10-13T11:43:55.100Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git">
 <meta name="twitter:description" content="常规 1234567891011git config --global user.email &amp;quot;QQs@xxxx.xxx&amp;quot;git config --global user.name &amp;quot;QQs&amp;quot;git initgit remote add origin git@xxxx.xxx:projectX.git// 添加远程主机命名为origingit pull or">
@@ -313,6 +314,7 @@ git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;
 <p>即将HEAD游标指向到之前的一次commit</p>
 <h4 id="部分检出"><a href="#部分检出" class="headerlink" title="部分检出"></a>部分检出</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config core.sparsecheckout true</span><br><span class="line">echo /db/* &gt;&gt; .git/info/sparse-checkout</span><br></pre></td></tr></table></figure>
 <h4 id="reset-revert-以及-rebase"><a href="#reset-revert-以及-rebase" class="headerlink" title="reset revert 以及 rebase"></a>reset revert 以及 rebase</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git reset --soft &lt;commit&gt; // 重置到&lt;commit&gt;版本，修改内容放入缓存区（unstage）</span><br><span class="line">git reset --hard &lt;commit&gt; // 重置到&lt;commit&gt;版本，修改内容永久删除</span><br><span class="line"></span><br><span class="line">git revert &lt;commit-last&gt; .. &lt;commit-somewhere&gt; // 提交一个记录来撤销所罗列出的&lt;commit&gt;</span><br><span class="line"></span><br><span class="line">git rebase -i &lt;start-commit&gt; &lt;end-commit&gt; //(start-commit, end-commit] 前开后闭区间，合并到当前分支，默认 end-commit 为当前 HEAD</span><br></pre></td></tr></table></figure>
+<h4 id="repository-迁移"><a href="#repository-迁移" class="headerlink" title="repository 迁移"></a>repository 迁移</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone --bare git@old-repo.git </span><br><span class="line">cd old-repo</span><br><span class="line">git remote add bitbucket git@bitbucket-repo.git</span><br><span class="line">git push --all bitbucket</span><br><span class="line">git push --tags bitbucket</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -326,6 +328,12 @@ git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/qqsnote/tags/git/" rel="tag"># git</a>
+          
+        </div>
       
 
       
@@ -425,7 +433,7 @@ git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">152</span>
+                  <span class="site-state-item-count">159</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -447,7 +455,7 @@ git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -480,7 +488,7 @@ git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#忽略本地修改拉取远程分支"><span class="nav-number">1.</span> <span class="nav-text">忽略本地修改拉取远程分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部分检出"><span class="nav-number">2.</span> <span class="nav-text">部分检出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reset-revert-以及-rebase"><span class="nav-number">3.</span> <span class="nav-text">reset revert 以及 rebase</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#忽略本地修改拉取远程分支"><span class="nav-number">1.</span> <span class="nav-text">忽略本地修改拉取远程分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部分检出"><span class="nav-number">2.</span> <span class="nav-text">部分检出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reset-revert-以及-rebase"><span class="nav-number">3.</span> <span class="nav-text">reset revert 以及 rebase</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#repository-迁移"><span class="nav-number">4.</span> <span class="nav-text">repository 迁移</span></a></li></ol></div>
             
 
           </div>
