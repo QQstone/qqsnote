@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="关于ORM参考阮一峰《ORM 实例教程》: 面向对象编程（我们的后台）把所以实体看成对象（即Object），关系型数据库则是采用实体之间的关系（即Relation）连接数据，打通后台对象和关系数据库之间的关系而做的映射（Mapping）就是ORM。或者说ORM是通过对象实例语法，完成关系型数据库操作的技术。 举个栗子 123SELECT id, first_name, last_name, pho">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-09-15T10:29:48.225Z">
+<meta property="og:updated_time" content="2020-11-10T02:15:38.076Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content=".Net Core 数据访问">
 <meta name="twitter:description" content="关于ORM参考阮一峰《ORM 实例教程》: 面向对象编程（我们的后台）把所以实体看成对象（即Object），关系型数据库则是采用实体之间的关系（即Relation）连接数据，打通后台对象和关系数据库之间的关系而做的映射（Mapping）就是ORM。或者说ORM是通过对象实例语法，完成关系型数据库操作的技术。 举个栗子 123SELECT id, first_name, last_name, pho">
@@ -306,7 +306,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT id, first_name, last_name, phone, birth_date, sex</span><br><span class="line"> FROM persons </span><br><span class="line"> WHERE id = 10</span><br></pre></td></tr></table></figure></p>
 <p>编程调用SQL的写法大致是
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">res = db.execSql(sql);</span><br><span class="line">name = res[0][&quot;FIRST_NAME&quot;];</span><br></pre></td></tr></table></figure></p>
-<p>OEM要实现的写法是
+<p>ORM要实现的写法是
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p = Person.get(10);</span><br><span class="line">name = p.first_name;</span><br></pre></td></tr></table></figure></p>
 <p>优点：</p>
 <ul>
@@ -323,7 +323,7 @@
 <li><del>ORM 抽象掉了数据库层，开发者无法了解底层的数据库操作，也无法定制一些特殊的 SQL。</del></li>
 </ul>
 <p>(删除线部分QQs不是特别赞同)</p>
-<p>同属OEM技术的比如 Hibernate, MyBatis<sup><a href="https://www.zhihu.com/question/39454008" target="_blank" rel="noopener">注</a></sup></p>
+<p>同属ORM技术的比如 Hibernate, MyBatis<sup><a href="https://www.zhihu.com/question/39454008" target="_blank" rel="noopener">注</a></sup></p>
 <h4 id="关于ODBC"><a href="#关于ODBC" class="headerlink" title="关于ODBC"></a>关于ODBC</h4><p>开放式数据库连接(Open Database Connection),连接数据库进行查询的规范(specification)</p>
 <h4 id="entity-framwork-dbcontext-datarepository"><a href="#entity-framwork-dbcontext-datarepository" class="headerlink" title="entity framwork,dbcontext, datarepository"></a>entity framwork,dbcontext, datarepository</h4><p>Include, ThenInclude:
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">result = await _context.employees.Where(employee =&gt; employee.level == highlvl)</span><br><span class="line">    .Include(employee =&gt; employee.department)</span><br><span class="line">    .ThenInclude(department =&gt; department.bills).ToListAsync();</span><br></pre></td></tr></table></figure></p>
