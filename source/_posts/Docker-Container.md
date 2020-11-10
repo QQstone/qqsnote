@@ -40,7 +40,7 @@ docker attach [containerID]
 
 docker exec -it [containerID] bash或sh
 
-前者是直接进入容器启动命令的终端，不开启新的进程
+前者是直接进入容器启动命令的终端，不开启新的进程，退出终端意味着容器命令被终结
 后者是打开一个新的终端(bash或sh)<br>
 在容器终端键入 exit 退出
 

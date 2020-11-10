@@ -240,3 +240,7 @@ chmod [ugoa...][[+-=][rwxX]
 chmod ugo+r file1.txt //将文件 file1.txt 设为所有人皆可读
 chmod a+r file1.txt // 同上
 ```
+#### 查看端口使用
+```
+sudo lsof -i:8080
+```

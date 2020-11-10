@@ -370,21 +370,65 @@ using (var dbContext = new CategoryEntities())
 #### Parent/Child
 对应于使用id，parentid组织的父子关系表，常见的组织机构树，职能头衔树等
 ```
-public class ScannerGroup
+public class Group
 {
     public Guid ID { get; set; }
     public string Name { get; set; }
     public Guid? ParentID { get; set; }
-    public ScannerGroup Parent { get; set; }
-    public virtual Oembrand Brand { get; set; }
+    public Group Parent { get; set; }
     
-    public ICollection<ScannerGroup> Children { get; } = new List<ScannerGroup>();
+    public ICollection<Group> Children { get; } = new List<Group>();
 }
 ```
 查询子树
 ```
-var data = (await _context.ScannerGroup.ToListAsync())
+var data = (await _context.Group.ToListAsync())
             .Where(g => g.ID == new Guid(groupId))
             .ToList();
 ```
-#### Hierarchy Data(存目)
+#### Hierarchy Data
+参考[Using SQL Server HierarchyId with Entity Framework Core](https://www.meziantou.net/using-hierarchyid-with-entity-framework-core.htm)
+package: 
++ Microsoft.EntityFrameworkCore.SqlServer
++ EntityFrameworkCore.SqlServer.HierarchyId
+数据库上下文需要配置启用HierarchyId，否则出现下述异常
+> The property is of type 'HierarchyId' which is not supported by current database provider. Either change the property CLR type or ignore the property using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'.
+
+在Startup.cs,配置启用HierarchyId
+```
+ public void ConfigureServices(IServiceCollection services)
+{
+    ...
+    services.AddDbContext<DataContext>(options =>
+        options.UseSqlServer(Configuration.GetConnectionString("DataContext"), conf=>
+            {
+                conf.UseHierarchyId();
+            }
+        ));
+    ...
+}
+```
+model定义
+```
+public class Group
+{
+    public Guid ID { get; set; }
+    public string Name { get; set; }
+    public HierarchyId GroupLevel { get; set; }
+    
+    public ICollection<Group> Children { get; } = new List<Group>();
+}
+```
+查询linq
+```
+public async Task<List<Group>> GetChildrenByGroupIDAsync(Guid groupID)
+{
+    Group self = await _context.Groups.FindAsync(groupID);
+    List<Group> groups = await _context.Groups
+        .Where(g => g.GroupLevel.IsDescendantOf(self.GroupLevel))
+        .ToListAsync();
+
+    return groups; //.FindAll(g => g.ID != groupID);
+}
+```
+其他查询见文章{% post_link sqlserver SQLServer %}

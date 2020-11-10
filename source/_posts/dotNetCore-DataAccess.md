@@ -19,7 +19,7 @@ SELECT id, first_name, last_name, phone, birth_date, sex
 res = db.execSql(sql);
 name = res[0]["FIRST_NAME"];
 ```
-OEM要实现的写法是
+ORM要实现的写法是
 ```
 p = Person.get(10);
 name = p.first_name;
@@ -38,7 +38,7 @@ name = p.first_name;
 
 (删除线部分QQs不是特别赞同)
 
-同属OEM技术的比如 Hibernate, MyBatis<sup>[注](https://www.zhihu.com/question/39454008)</sup>
+同属ORM技术的比如 Hibernate, MyBatis<sup>[注](https://www.zhihu.com/question/39454008)</sup>
 
 #### 关于ODBC
 开放式数据库连接(Open Database Connection),连接数据库进行查询的规范(specification)

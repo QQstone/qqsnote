@@ -128,6 +128,7 @@ git push
 #### 常用查询
 ```
 show databases;
+create database csc;
 use csc;
 show tables;
 ```

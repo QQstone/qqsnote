@@ -24,8 +24,8 @@ vm.children = parentList.Select(parentItem => parentItem.Child).ToList();
 
 #### 初始化Object
 ```
-result = await _context.Oembrand
-        .Where(brand => brand.name != "CSD")
+result = await _context.OurBrand
+        .Where(brand => brand.name != "QQsIndustry")
         .Select(brand=>new JObject{{"name", brand.name}, {"logo", brand.logo}})
         .ToListAsync();
 ```

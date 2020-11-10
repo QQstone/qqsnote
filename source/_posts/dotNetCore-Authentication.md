@@ -128,7 +128,7 @@ namespace QQsServices.Controllers
     [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class IOScannerController : ControllerBase
+    public class UserController : ControllerBase
     {
         ......
     }
