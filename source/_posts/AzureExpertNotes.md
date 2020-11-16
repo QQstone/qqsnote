@@ -4,7 +4,34 @@ date: 2020-10-20 09:42:13
 tags:
 - Azure
 ---
-#### Networking
+### Overview
+There are 7 modules to learn:
++ Prerequisites for Azure administrators
++ Manage identities and governance in Azure
++ Implement and manage storage in Azure
++ Deploy and manage Azure compute resources
++ Configure and manage virtual networks for Azure administrators
++ Monitor and back up Azure Resources
+即Azure的订阅和资源，管理身份，实施和管理存储，虚拟机，虚拟网络, 监视和备份
+### 虚拟机
++ 可以自己提供非官方镜像用于创建虚拟机
+> It is possible to change the size of a VM after it's been created, but the VM must be stopped first. So, it's best to size it appropriately from the start if possible.调整vm配置需要停机
++ 几个size：普通的（B，D..）大数据存储（L-series），图形渲染（N-series），高性能（H-series）
+> You can store data on the primary drive along with the OS(默认挂载/dev/sda,最大2018G), but a better approach is to create dedicated data disks（可以挂几万GiB）. 
++ 关于硬盘的unmanaged（以容量和IO计费）和managed（提供存储的伸缩性，提供快照和备份等）
++ ssh
+  创建虚拟机时可以选择生成key pair，创建完成后下载pem文件用于连接，抑或在本地生成key pair使用其中的public key创建
+  连接上VM使用下述方式添加更多的public key
+  ```
+    # 创建公钥私钥对
+    ssh-keygen -t rsa -b 4098
+    # 将公钥贴到虚拟机上
+    ssh-copy-id -i ~/.ssh/id_rsa.pub azureuser@myserver
+  ```
++ 虚拟机创建完成的初始网络状态是：Outbound request are allowed. Inbound traffic is only allowed from within the virtual network.即出站任意，入站限制为允许虚拟网络内的访问
++ Windows虚拟机相关：远程桌面连接(RDP 3389); 网络安全组（NSG）设置入站出站规则，软件防火墙 
+> The rules are evaluated in priority-order, starting with the lowest priority rule. Deny rules always stop the evaluation. The last rule is always a Deny All rule.That means to have traffic pass through the security group you must have an allow rule or it will be blocked by the default final rule. 规则使用优先级层叠，若无允许则被底层规则(the final rule)禁止
+### Networking
 issue: test connectivity between Azure and 3rd party Server
 
 进入命令行help可看到所有支持的命令，用tcping代替ping

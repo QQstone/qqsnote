@@ -3,6 +3,8 @@ title: Git
 date: 2020-04-07 09:37:30
 tags:
 - git
+categories: 
+- 工具
 ---
 常规
 ```

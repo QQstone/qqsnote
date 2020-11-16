@@ -432,3 +432,25 @@ public async Task<List<Group>> GetChildrenByGroupIDAsync(Guid groupID)
 }
 ```
 其他查询见文章{% post_link sqlserver SQLServer %}
+
+#### Transient Error
+> Exception: An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding 'EnableRetryOnFailure()' to the 'UseSqlServer' call.
+
+见[StackOverflow: Getting transient errors when making calls against Azure SQL Database from Azure Function](https://stackoverflow.com/questions/54186894/getting-transient-errors-when-making-calls-against-azure-sql-database-from-azure)
+
+数据库系统偶现Transient Error，这种暂时性错误的根本原因（underlying cause）很快就能自行解决，且在错误抛出时，.net程序会抛出上述的SqlException，为了处理这些错误，可应用程序代码中实现重试逻辑，而不是以应用程序错误的形式呈现给用户。
+在Startup.cs,配置启用RetryOnFailure
+```
+ public void ConfigureServices(IServiceCollection services)
+{
+    ...
+    services.AddDbContext<DataContext>(options =>
+        options.UseSqlServer(Configuration.GetConnectionString("DataContext"), conf=>
+            {
+                conf.EnableRetryOnFailure();
+            }
+        ));
+    ...
+}
+```
+但是这里有个bug [System.ArgumentException thrown when EnableRetryOnFailure is used.](https://github.com/efcore/EFCore.SqlServer.HierarchyId/issues/24)

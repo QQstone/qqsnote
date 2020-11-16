@@ -2,6 +2,9 @@
 title: ChromeTools
 date: 2020-03-27 11:03:02
 tags:
+- Web开发
+categories: 
+- 工具
 ---
 #### capture full size screenshot
 1. F12
@@ -22,3 +25,6 @@ tags:
 1. F12
 2. Network Tab
 3. Change "Online" to "Slow 3G"
+#### 页面元素断点
+第三方UI控件会动态添加元素事件，使用css的hover，focus无法触发，把光标放上去触发又无法查看code，设置element的breakpoint可以在指定元素被修改时break，无论查看js逻辑还是元素的样式变化都很方便
+![]()
