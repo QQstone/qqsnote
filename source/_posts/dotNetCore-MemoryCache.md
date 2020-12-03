@@ -1,7 +1,8 @@
 ---
-title: dotNetCore-MemoryCache
+title: .Net Core 缓存
 date: 2020-10-08 16:51:04
 tags:
+- .Net
 ---
 参考 [.net core 中的缓存内存](https://docs.microsoft.com/zh-cn/aspnet/core/performance/caching/memory?view=aspnetcore-3.1)
 ```

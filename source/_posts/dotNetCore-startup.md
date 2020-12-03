@@ -393,7 +393,7 @@ public Guid ID
 #### 前端组件 [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
 
 #### 发布到IIS
-
+[TroubleShooting](https://docs.microsoft.com/en-us/aspnet/core/test/troubleshoot-azure-iis?view=aspnetcore-5.0)
 > [ IIS Issue: HTTP错误500.19 ](https://www.cnblogs.com/breakus/p/10475246.html)
 
 微软.net core 下载页面有如下加粗提示：

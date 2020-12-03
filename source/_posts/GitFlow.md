@@ -8,6 +8,7 @@ tags:
 + master
 + dev
 + feature/xxxx
++ release/1.x.x
 + hotfix/1.x.x
 #### Tag
 

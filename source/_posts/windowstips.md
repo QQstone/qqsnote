@@ -6,7 +6,12 @@ tags:
 categories: 
 - 工具
 ---
-#### 调用环境变量
+#### 环境变量
+添加变量,set为临时，永久设置换setx
+```
+set JAVA_HOME="C:\jre\bin"
+```
+调用
 ```
 %JAVA_HOME%
 ```

@@ -65,8 +65,20 @@ $lvlcolors:(
     3:$color-warning
     4:$color-blue
 )
-for $lvl from 1 through 4{
+@for $lvl from 1 through 4{
     .lvl#{$lvl} {background: map-get($lvlcolors, $lvl)}
+}
+```
+each：
+```
+$icons: ("eye": "\f112", "start": "\f12e", "stop": "\f12f");
+
+@each $name, $glyph in $icons {
+  .icon-#{$name}:before {
+    display: inline-block;
+    font-family: "Icon Font";
+    content: $glyph;
+  }
 }
 ```
 > issue: scss variables are not working in calc
@@ -77,3 +89,25 @@ for $lvl from 1 through 4{
 	background: #313030;
 }
 ```
+#### 拼接url
+```
+$sites: ("twitter.com", "facebook.com", "linkedin.com");
+
+@each $site in $sites {
+  a[href*="#{$site}"] {
+    background-image: url("/images/" + $site + ".png");
+  }
+}
+```
+总结一下就是#{}这个符号用于将变量拼接在css选择器上，包括class名，属性名等，在样式的值中，字符串与变量的拼接可以直接用“+”连接
+#### issues
+jenkins build fail
+```
+npm i -g node-sass
+```
+以下理解未必完全正确，但包含了若干方面的可能因素，可日后进一步探究（QQs：不太会探究）：jenkins 在打包angular过程中为webpack的sass-loader安装所需包node-sass，但是缺少node-gyp，python等工具链的调用权限，因而build失败，至于npm install为什么会build，electron编译过程中也遇到过，编译对象是package中调用的c++库。对此的解决方案之一是在jenkins所在的物理机上全局安装node-sass，当下的默认版本是5.0.0，曾尝试在项目package.json中将node-sass更新为5.0.0，然而angular9中的sass-loader似乎是支持node-sass^4.0.0，因此出现“Node Sass version 5.0.0 is incompatible with ^4.0.0”的报错，应在全局重装npm i -g node-sass@4
+
+参考
+[node-sass troubleshooting#Running with sudo or as root](https://github.com/sass/node-sass/blob/master/TROUBLESHOOTING.md#running-with-sudo-or-as-root)
+[stackoverflow:Error: Node Sass version 5.0.0 is incompatible with ^4.0.0](https://stackoverflow.com/questions/64625050/error-node-sass-version-5-0-0-is-incompatible-with-4-0-0)
+[node-sass issues#941](https://github.com/sass/node-sass/issues/941)

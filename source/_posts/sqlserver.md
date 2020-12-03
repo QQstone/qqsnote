@@ -52,6 +52,18 @@ sqlserver实例默认以计算机名+服务提供者命名，如SHAL400/SQLEXPRE
 ```
 EXEC storedProcedure1 @param='01'
 ```
+#### 约束Constraint
+```
+CREATE TABLE [dbo].[Group](
+	[ID] [uniqueidentifier] NOT NULL,
+	[CreateTime] [datetime2](7) NULL,
+	[Name] [nvarchar](80) NULL,
+	[Valid] [bit] NOT NULL,
+	[UpdateTime] [datetime2](7) NULL,
+	[Comment] [nvarchar](500) NULL,
+    CONSTRAINT [AK_Group_Name] UNIQUE ([Name])
+) ON [PRIMARY]
+```
 #### 关于大小写
 据说sqlserver 安装过程中有是否区分大小写的选项，默认情况下无论表名、列名、字段、参数都不区分大小写，更过分的是查询条件的值也不区分————where name='abc'和where name='AbC'是一样的结果。如果要区分查询条件的大小写，中文网络上建议如下例子，追加条件
 ```

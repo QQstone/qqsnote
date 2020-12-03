@@ -22,3 +22,9 @@ npx是npm的命令，创建React App时使用了如下命令
 npx create-react-app my-app
 ```
 npm 用于包管理（安装、卸载、调用已安装的包blabla），npx在此基础上提高使用包的体验，实际上，调用上述命令时，npm依次查找create-react-app的依赖，无法找到则从网络安装，随后调用创建项目，并在包命令执行结束后删除。
+#### npm link
+#### 用软链接共享node_modules
+须知node_modules使用Portable的方式管理依赖，规避了依赖树上的版本冲突，见 [知乎：每个项目文件夹下都需要有node_modules吗？](https://www.zhihu.com/question/55089754/answer/145129917)
+```
+mklink /d D:\project\B\node_modules D:\project\A\node_modules
+```
