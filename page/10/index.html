@@ -229,6 +229,957 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/12/20/Https/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/12/20/Https/" itemprop="url">Https</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-20T13:22:21+08:00">
+                2019-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/通信协议/" itemprop="url" rel="index">
+                    <span itemprop="name">通信协议</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ul>
+<li>https本身没有端口限制</li>
+<li>https支持传输ssl证书以避免服务端仿冒</li>
+<li>https报文使用对称加密 密钥包含在证书中</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/12/17/DockerVolume/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/12/17/DockerVolume/" itemprop="url">卷和持久化数据</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-17T16:08:15+08:00">
+                2019-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/容器/" itemprop="url" rel="index">
+                    <span itemprop="name">容器</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>数据分为持久化和非持久化两类。对于容器，非持久化数据从属其容器，生命周期与容器相同，删除容器时也会删除所有非持久化数据。如果希望自己的容器数据保存下来，需要将数据存储在卷上，卷与容器是解耦的，可以独立地创建并管理。</p>
+</blockquote>
+<h4 id="卷命令"><a href="#卷命令" class="headerlink" title="卷命令"></a>卷命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker volume create myvol</span><br><span class="line">docker volume ls // 查看已创建地卷</span><br><span class="line">docker volume inspect myvol // 查看指定卷详细信息</span><br><span class="line">docker volume rm myvol // 删除指定卷</span><br><span class="line">docker volume prune // 删除所有未装入容器使用的卷</span><br></pre></td></tr></table></figure>
+<h4 id="装入容器"><a href="#装入容器" class="headerlink" title="装入容器"></a>装入容器</h4><p>-v, –volume<br>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name myjenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home --restart always jenkins</span><br></pre></td></tr></table></figure></p>
+<p>用:分隔的3个field，卷名称 : 路径或文件 : 选项，通常只保留卷路径<br>
+ro 即 readonly<br>
+原文：</p>
+<blockquote>
+<p>In the case of named volumes, the first field is the name of the volume, and is unique on a given host machine. For anonymous volumes, the first field is omitted.<br>
+The second field is the path where the file or directory will be mounted in the container.<br>
+The third field is optional, and is a comma-separated list of options, such as ro.</p>
+</blockquote>
+<p>上例中，-v /var/jenkins_home:/var/jenkins_home 两个field前者是宿主路径，后者是容器路径，即将jenkins用户数据保存到容器的/var/jenkins_home同时持久化到本地位于/var/jenkins_home的卷中</p>
+<p>引述 <a href="https://jenkins.io/doc/book/installing/#downloading-and-running-jenkins-in-docker" target="_blank" rel="noopener">jenkins官网</a></p>
+<blockquote>
+<p>-v $HOME/jenkins:/var/jenkins_home would map the container’s /var/jenkins_home directory to the jenkins subdirectory within the $HOME directory on your local machine, which would typically be /Users/<your-username>/jenkins or /home/<your-username>/jenkins.</your-username></your-username></p>
+</blockquote>
+<p>–mount<br>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run --name myjenkins -p 8080:8080 -p 50000:50000 \ </span><br><span class="line">--mount source=jenkins_home,target=/var/jenkins_home,driver=local --restart always jenkins</span><br></pre></td></tr></table></figure></p>
+<p>用 , 分隔三个字段，卷名称，目标路径或文件，驱动。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/12/12/MQ/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/12/12/MQ/" itemprop="url">MQ中间件</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-12T13:22:43+08:00">
+                2019-12-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="Message-Queue"><a href="#Message-Queue" class="headerlink" title="Message Queue"></a>Message Queue</h4><blockquote>
+<p>RabbitMQ is one of the most popular open source message brokers. RabbitMQ is lightweight and easy to deploy on premises and in the cloud. It supports multiple messaging protocols.</p>
+</blockquote>
+<p><a href="https://zh.wikipedia.org/wiki/Erlang" target="_blank" rel="noopener">Erlang</a>，具备函數語言特色的程序设计语言</p>
+<h4 id="installation"><a href="#installation" class="headerlink" title="installation"></a>installation</h4><p>RPM Manual：</p>
+<p><a href="https://www.rabbitmq.com/install-rpm.html#package-dependencies" target="_blank" rel="noopener">参考官网 Tutorials</a></p>
+<ul>
+<li>Before installing RabbitMQ, you must install a supported version of Erlang/OTP. <a href="https://github.com/rabbitmq/erlang-rpm/releases" target="_blank" rel="noopener">Zero-dependency Erlang RPM for RabbitMQ</a> : this is a (virtually) zero dependency 64-bit Erlang RPM package that provides just enough to run RabbitMQ. It may be easier to install than other Erlang RPMs in most environments. It may or may not be suitable for running other Erlang-based software or 3rd party RabbitMQ plugins.</li>
+<li>other dependencies : <a href="https://pkgs.org/download/socat" target="_blank" rel="noopener">socat</a>, <a href="https://pkgs.org/download/logrotate" target="_blank" rel="noopener">logrotate</a></li>
+<li>download and install rabbit-server.rpm(<a href="https://www.rabbitmq.com/install-rpm.html#downloads" target="_blank" rel="noopener">https://www.rabbitmq.com/install-rpm.html#downloads</a>)</li>
+<li>启动/关闭 /sbin/service rabbitmq-server start/stop</li>
+<li>开机启动 chkconfig rabbitmq-server on</li>
+</ul>
+<p>Docker Image
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull rabbitmq</span><br><span class="line">docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management</span><br></pre></td></tr></table></figure></p>
+<p>启用Management Plugin
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rabbitmq-plugins enable rabbitmq_management</span><br></pre></td></tr></table></figure></p>
+<p>访问 http://{node-hostname}:15672/ 对RabbitMQ-Server进行可视化管理 </p>
+<h4 id="授权，认证-以及-Access-Control"><a href="#授权，认证-以及-Access-Control" class="headerlink" title="授权，认证 以及 Access Control"></a>授权，认证 以及 Access Control</h4><p><a href="https://www.rabbitmq.com/access-control.html" target="_blank" rel="noopener">参考官网 Tutorials</a></p>
+<p>默认用户guest/guest只被允许本地登录
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 创建用户qqs/pass1234</span><br><span class="line">sudo rabbitmqctl add_user qqs pass1234</span><br><span class="line">// 用户列表</span><br><span class="line">sudo rabbitmqctl list_users</span><br><span class="line">// 授权管理员</span><br><span class="line">sudo rabbitmqctl set_user_tags qqs administrator</span><br></pre></td></tr></table></figure></p>
+<p>vhost 是 RabbitMQ 控制权限的最小粒度
+注意，/是默认的vhost，缺省了名称。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rabbitmqctl list_vhosts</span><br><span class="line">rabbitmqctl add_vhost test_vhost</span><br><span class="line">// set_permissions [-p &lt;vhost&gt;] &lt;user&gt; &lt;conf&gt; &lt;write&gt; &lt;read&gt;</span><br><span class="line">rabbitmqctl set_permissions -p /          qqs &quot;.*&quot; &quot;.*&quot; &quot;.*&quot;</span><br><span class="line">rabbitmqctl set_permissions -p test_host  qqs &quot;.*&quot; &quot;.*&quot; &quot;.*&quot;</span><br></pre></td></tr></table></figure></p>
+<h4 id="client-demos"><a href="#client-demos" class="headerlink" title="client demos"></a>client demos</h4><p>见 Github <a href="https://github.com/rabbitmq/rabbitmq-tutorials" target="_blank" rel="noopener">rabbitmq tutorials</a></p>
+<p>javascript client demo：<br>
+package
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i amqplib</span><br></pre></td></tr></table></figure></p>
+<p>send.js
+<figure class="highlight plain"><figcaption><span>node</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">var amqp = require(&apos;amqplib/callback_api&apos;);</span><br><span class="line"></span><br><span class="line">amqp.connect(&apos;amqp://qqs:pass1234@111.111.111.111:5672/&apos;, function(error0, connection) &#123;</span><br><span class="line">    if (error0) &#123;</span><br><span class="line">        throw error0;</span><br><span class="line">    &#125;</span><br><span class="line">    connection.createChannel(function(error1, channel) &#123;</span><br><span class="line">        if (error1) &#123;</span><br><span class="line">            throw error1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        var queue = &apos;hello&apos;;</span><br><span class="line">        var msg = &apos;Hello World!&apos;;</span><br><span class="line"></span><br><span class="line">        channel.assertQueue(queue, &#123;</span><br><span class="line">            durable: false</span><br><span class="line">        &#125;);</span><br><span class="line">        channel.sendToQueue(queue, Buffer.from(msg));</span><br><span class="line"></span><br><span class="line">        console.log(&quot; [x] Sent %s&quot;, msg);</span><br><span class="line">    &#125;);</span><br><span class="line">    setTimeout(function() &#123;</span><br><span class="line">        connection.close();</span><br><span class="line">        process.exit(0);</span><br><span class="line">    &#125;, 500);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>receive.js
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env node</span><br><span class="line"></span><br><span class="line">var amqp = require(&apos;amqplib/callback_api&apos;);</span><br><span class="line"></span><br><span class="line">amqp.connect(&apos;amqp://qqs:pass1234@111.111.111.111:5672/&apos;, function(error0, connection) &#123;</span><br><span class="line">    if (error0) &#123;</span><br><span class="line">        throw error0;</span><br><span class="line">    &#125;</span><br><span class="line">    connection.createChannel(function(error1, channel) &#123;</span><br><span class="line">        if (error1) &#123;</span><br><span class="line">            throw error1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        var queue = &apos;hello&apos;;</span><br><span class="line"></span><br><span class="line">        channel.assertQueue(queue, &#123;</span><br><span class="line">            durable: false</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        console.log(&quot; [*] Waiting for messages in %s. To exit press CTRL+C&quot;, queue);</span><br><span class="line"></span><br><span class="line">        channel.consume(queue, function(msg) &#123;</span><br><span class="line">            console.log(&quot; [x] Received %s&quot;, msg.content.toString());</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            noAck: true</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="定时任务"><a href="#定时任务" class="headerlink" title="定时任务"></a>定时任务</h4>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/12/09/OAuth2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/12/09/OAuth2/" itemprop="url">OAuth</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-09T10:39:14+08:00">
+                2019-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/协议和规范/" itemprop="url" rel="index">
+                    <span itemprop="name">协议和规范</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h4><p>某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的SSO账号密码。。。</p>
+<p>对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）授权码，本系统凭此授权码访问与第三方有关的资源，通常可能只是从第三方获取用户名、头像、邮箱来填充本系统的个人信息识别.
+<img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twfy9pmzj20ud0l8ab4.jpg" alt="stacklogin"></p>
+<p><img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twgcmpxij20ue0l775l.jpg" alt="gitlogin"></p>
+<p><del>此外在CS Scanflow登录Cloud地模块中，设计期望以账密登录后返回两个token，其中A是访问Cloud相关资源地凭据，B是保持登录(Remember me)需要token，当A过期时，调用接口，Cloud认证B合法，返回新的A，即可在后续使用A继续访问Cloud资源。</del></p>
+<h4 id="OpenID"><a href="#OpenID" class="headerlink" title="OpenID"></a>OpenID</h4><p>OpenID 去中心化的身份识别框架，根据协议，任何网站可以作为identity provider，通过一串 URI 向某个网站证明用户的身份。</p>
+<h4 id="OAuth标准"><a href="#OAuth标准" class="headerlink" title="OAuth标准"></a>OAuth标准</h4><blockquote>
+<p>OAuth在”客户端(受限资源/服务请求方)”与”服务提供商”之间，设置了一个授权层（authorization layer）。”客户端”不能直接登录”服务提供商”，只能登录授权层，使用授权层颁发的令牌（token），访问服务提供商的资源。用户注册在服务端的账户密码，不会暴露给客户端。服务提供商可以自由限制授权层令牌的权限范围和有效期。<br>
+QQs：OAuth不强调认证，它是一个授权协议，实现的是支持由第三方提供授权访问的标准。</p>
+</blockquote>
+<h4 id="OIDC"><a href="#OIDC" class="headerlink" title="OIDC"></a>OIDC</h4><p>OpenID Connect 基于OAuth 2.0协议之上的简单身份层，它允许客户端根据授权服务器的认证结果最终确认终端用户的身份，以及获取基本的用户信息；它支持包括Web、移动、JavaScript在内的所有客户端类型去请求和接收终端用户信息和身份认证会话信息；它是可扩展的协议，允许你使用某些可选功能，如身份数据加密、OpenID提供商发现、会话管理等。</p>
+<h4 id="授权方式"><a href="#授权方式" class="headerlink" title="授权方式"></a>授权方式</h4><h5 id="授权码（authorization-code）"><a href="#授权码（authorization-code）" class="headerlink" title="授权码（authorization code）"></a>授权码（authorization code）</h5><p>上文已提到的使用第三方登录的方式即授权码方式，授权码方式是最常用且靠谱的授权方式，相比之下，其余三种比较扯淡。<br>
+下图中A.com实为客户端，如某电商平台，B.com为用户信息持有方，如某社交平台(包含了受限数据服务以及授权服务)，经过对接A.com可以通过如图的流程使用B.com的用户登录
+<img src="https://tvax4.sinaimg.cn/large/a60edd42gy1g9twsgu7ksj20m80cijrk.jpg" alt="authcodemode"></p>
+<ol>
+<li>跳转到B授权页</li>
+<li>确认授权，重定向回A，并带回authorization code</li>
+<li>向B请求访问受限数据，传递A身份，以及授权码</li>
+<li>请求返回可访问受限数据令牌<h5 id="隐藏式（隐式授权）"><a href="#隐藏式（隐式授权）" class="headerlink" title="隐藏式（隐式授权）"></a>隐藏式（隐式授权）</h5>直接返回令牌，安全风险较高 <sup><a href="http://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html" target="_blank" rel="noopener">注1</a></sup><h5 id="密码式"><a href="#密码式" class="headerlink" title="密码式"></a>密码式</h5>返回账号密码，A以此申请访问B的令牌，风险更高。(私以为，既然B予以这种信任，即将访问权限控制让与A，A可以直接以账密登录B而不用可能受限的token)<h5 id="凭据式"><a href="#凭据式" class="headerlink" title="凭据式"></a>凭据式</h5>对于没有前端的命令行应用，以get请求，用query parameters传参直接得到令牌。<h4 id="前后端分离的SSO"><a href="#前后端分离的SSO" class="headerlink" title="前后端分离的SSO"></a>前后端分离的SSO</h4><img src="https://tvax3.sinaimg.cn/large/a60edd42gy1ggrgt64oe1j20p60mywgl.jpg" alt="互联网图片侵删"><h4 id="关于OAuth-OpenId-OIDC什么的"><a href="#关于OAuth-OpenId-OIDC什么的" class="headerlink" title="关于OAuth, OpenId, OIDC什么的"></a>关于OAuth, OpenId, OIDC什么的</h4>网上有文章说OAuth是authorization， OpenId是authentication，这听起来很谜。。<blockquote>
+<p>OpenID是一个去中心化的网上身份认证系统。（维基百科）</p>
+</blockquote>
+</li>
+</ol>
+<p>所谓认证系统，解决的是”你是谁”的问题，用户在在identity provider（idp）的服务上注册，客户端登录即去idp获取OpenID标识对应的token，服务提供者校验身份，是拿客户端的token去idp确认。
+OIDC（OpenID Connect）OpenID + OAuth2.0认证（授权访问）服务
+<img src="https://tvax3.sinaimg.cn/large/a60edd42gy1gh5i7z0q6bj20e808jwfe.jpg" alt></p>
+<blockquote>
+<p>access token 是客户端和资源服务器之间的凭据</p>
+</blockquote>
+<p>那access token在资源服务器上是如何验证的呢？每个请求过来，资源服务器都会拿access token到SSO上去核对吗？</p>
+<p>事实上是不一定的。以JWT为例。如果Access Token是JWT形式签发，资源服务可以使用验证签名的方式判断是否合法，只需要把签名密钥在资源服务同步一份即可。典型的是使用非对称加密（见<a href="/qqsnote/2019/07/19/Encryption/" title="加密">加密</a>篇），资源服务保留一份公钥，access token由授权服务使用私钥签发，资源服务是可以对其进行校验的。JWT允许携带一些信息，如用户，权限，有效期等，因此资源服务判断JWT合法之后可以继续根据携带信息来判断是否可访问资源。这样就有可以快速验证有效性，不需要频繁访问授权服务的优点，缺点是Access Token一旦签发，将很难收回，只能通过过期来失效。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/12/06/httpdownload/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/12/06/httpdownload/" itemprop="url">一个Download的实现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-06T12:42:47+08:00">
+                2019-12-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="需求：导出列表"><a href="#需求：导出列表" class="headerlink" title="需求：导出列表"></a>需求：导出列表</h4><p>一个服务端分页的可检索列表，页面只缓存当前页的数据，导出功能无法完全在前端，点击export将现有检索条件传到后端，由后端查询数据库并生成excel文件，传到前端。</p>
+<h4 id="后端实现-Express-js"><a href="#后端实现-Express-js" class="headerlink" title="后端实现(Express.js)"></a>后端实现(Express.js)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">app.post(&apos;/list/export&apos;, (req,res)=&gt;&#123;</span><br><span class="line">    const data = getDataFromDB(req.body)</span><br><span class="line">        generateExcel(results, ()=&gt;&#123;</span><br><span class="line">            res.download(path.join(__dirname,&apos;list.xlsx&apos;));</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;, err =&gt; &#123;</span><br><span class="line">        res.json(err)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const columns = [</span><br><span class="line">    &#123; header: &apos;ID&apos;, key: &apos;id&apos;, width: 32 &#125;,</span><br><span class="line">    &#123; header: &apos;Name&apos;, key: &apos;name&apos;, width: 32 &#125;];</span><br><span class="line">const generateExcel = function(data, callback)&#123;</span><br><span class="line">    const excel = require(&apos;exceljs&apos;);</span><br><span class="line">    // create excel workbook</span><br><span class="line">    var options = &#123;</span><br><span class="line">        filename:path.join(__dirname, &apos;list.xlsx&apos;),</span><br><span class="line">        useStyles: true,</span><br><span class="line">        useSharedStrings: true</span><br><span class="line">    &#125;;</span><br><span class="line">    const workbook = new excel.stream.xlsx.WorkbookWriter(options);</span><br><span class="line">    workbook.creator = &apos;QQs&apos;;</span><br><span class="line">    workbook.created = new Date();</span><br><span class="line">    workbook.modified = new Date();</span><br><span class="line">    // views</span><br><span class="line">    workbook.views = [</span><br><span class="line">        &#123;</span><br><span class="line">            x: 0, y: 0, width: 10000, height: 20000,</span><br><span class="line">            firstSheet: 0, activeTab: 1, visibility: &apos;visible&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">    // add worksheet</span><br><span class="line">    const sheet = workbook.addWorksheet(&apos;List&apos;);</span><br><span class="line">    // define columns</span><br><span class="line">    sheet.columns = columns;</span><br><span class="line">    // add rows</span><br><span class="line">    /*</span><br><span class="line">    数据量大的情况下考虑到nodejs内存分配瓶颈</span><br><span class="line">    *应限制每次select的条数分批addRow并且Row.commit</span><br><span class="line">    */</span><br><span class="line">    data.forEach(record =&gt; &#123;</span><br><span class="line">        const row = record;</span><br><span class="line">        // TODO data convertor</span><br><span class="line">        sheet.addRow(row).commit();</span><br><span class="line">    &#125;);</span><br><span class="line">    sheet.commit();</span><br><span class="line">    workbook.commit().then(callback);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>生成Excel用到了第三方库exceljs，该库实现了流式写excel的方法，可以在数据量较大的情况下缓解IO压力(待考证)</p>
+<p>response.download(filename)方法以Blob方式返回数据</p>
+<h4 id="前端实现-Angular8"><a href="#前端实现-Angular8" class="headerlink" title="前端实现(Angular8)"></a>前端实现(Angular8)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">export() &#123;</span><br><span class="line">    const postParams = new Object();</span><br><span class="line">    // TODO collect query parameters</span><br><span class="line">    this.httpClient</span><br><span class="line">      .post(&apos;list/export&apos;, postParams, &#123;</span><br><span class="line">        responseType: &apos;blob&apos;,</span><br><span class="line">        headers: new HttpHeaders().append(&apos;Content-Type&apos;, &apos;application/json&apos;),</span><br><span class="line">      &#125;)</span><br><span class="line">      .subscribe(res =&gt; &#123;</span><br><span class="line">        this.downloadFile(res);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  /**</span><br><span class="line">   * 创建blob对象，并利用浏览器打开url进行下载</span><br><span class="line">   * @param data 文件流数据</span><br><span class="line">   */</span><br><span class="line">  downloadFile(data) &#123;</span><br><span class="line">    // 下载类型 xls</span><br><span class="line">    const contentType = &apos;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&apos;;</span><br><span class="line">    const blob = new Blob([data], &#123; type: contentType &#125;);</span><br><span class="line">    const url = window.URL.createObjectURL(blob);</span><br><span class="line">    // 打开新窗口方式进行下载</span><br><span class="line">    // window.open(url);</span><br><span class="line"></span><br><span class="line">    // 以动态创建a标签进行下载</span><br><span class="line">    const a = document.createElement(&apos;a&apos;);</span><br><span class="line">    a.href = url;</span><br><span class="line">    // a.download = fileName;</span><br><span class="line">    a.download = &apos;list.xlsx&apos;;</span><br><span class="line">    a.click();</span><br><span class="line">    window.URL.revokeObjectURL(url);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>接受请求必须设置response headers，否则默认设置无法取得返回值并进入next回调。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/12/04/NodejsFramework/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/12/04/NodejsFramework/" itemprop="url">Nodejs服务端框架</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-04T19:03:17+08:00">
+                2019-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Express"><a href="#Express" class="headerlink" title="Express"></a>Express</h3><p>集合式开发框架，自身已经集成了诸多常用中间件如，router， static， bodyparse等。然而随着开发需求的丰富，仍然不免要在github上调查采集。</p>
+<p>某年月日，基于express.js的服务，使用了morgan格式化日志，如何记response body是个难题，因为一旦response.end()或者response.json(x),其发送的内容将不复存在。</p>
+<blockquote>
+<p>express 的中间件机制是线性执行的</p>
+</blockquote>
+<p>受限于当时的js标准，异步过程只能以回调的方式实现，如果顺位在后的中间件返回结果到前一个，必须在调用后者时就带上回调函数, 当中间件“链”很长时，就成了Callback Hell</p>
+<p>于是作者（TJ Holowaychuk大神）又写了一个Koa，实现洋葱模型的中间件机制。</p>
+<h3 id="Koa"><a href="#Koa" class="headerlink" title="Koa"></a>Koa</h3><p>据说是轻量级、渐进式框架。</p>
+<h3 id="Egg"><a href="#Egg" class="headerlink" title="Egg"></a>Egg</h3><p>阿里基于Koa统一规范化常用服务及功能，给出较为详细的文档说明，势必免去开发者一些调查采集的工作。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/11/27/login/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -842,1056 +1793,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/11/07/LinuxResetPassword/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/11/07/LinuxResetPassword/" itemprop="url">LinuxResetPassword</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-07T12:55:50+08:00">
-                2019-11-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>c.f. <a href="https://askubuntu.com/questions/24006/how-do-i-reset-a-lost-administrative-password" target="_blank" rel="noopener">How do I reset a lost administrative password?</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/11/05/Docker-Container/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/11/05/Docker-Container/" itemprop="url">Docker_Container</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-05T10:37:10+08:00">
-                2019-11-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/容器/" itemprop="url" rel="index">
-                    <span itemprop="name">容器</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="启动一个Jenkins-docker"><a href="#启动一个Jenkins-docker" class="headerlink" title="启动一个Jenkins docker"></a>启动一个Jenkins docker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">docker pull jenkins</span><br><span class="line">sudo mkdir /var/jenkins_home</span><br><span class="line">docker run </span><br><span class="line">-d </span><br><span class="line">-u root </span><br><span class="line">--rm </span><br><span class="line">--name myjenkins </span><br><span class="line">-p 8080:8080 -p 50000:50000 </span><br><span class="line">-v /var/jenkins_home:/var/jenkins_home </span><br><span class="line">--restart always </span><br><span class="line">jenkins</span><br></pre></td></tr></table></figure>
-<p>说明</p>
-<ul>
-<li>docker run启动一个container </li>
-<li>-d 后台运行</li>
-<li>-u root 以root权限执行 尤其对于jenkins 权限不足会影响持久化卷的访问</li>
-<li>–rm 容器退出后自动移除 实际上写这个会报与–restart always冲突</li>
-<li>–name myjenkins容器Name命名为myjenkins</li>
-<li>-p 8080:8080 -p 50000:50000 容器端口映射到宿主端口</li>
-<li>-v volumn设置（详见“卷和持久化数据”）</li>
-<li>–restart always重启策略</li>
-<li>jenkins 镜像</li>
-</ul>
-<p>参考
- <a href="https://www.runoob.com/docker/docker-command-manual.html" target="_blank" rel="noopener">docker run命令</a></p>
-<h4 id="连接到容器"><a href="#连接到容器" class="headerlink" title="连接到容器"></a>连接到容器</h4><p>docker attach [containerID]</p>
-<p>docker exec -it [containerID] bash或sh</p>
-<p>前者是直接进入容器启动命令的终端，不开启新的进程，退出终端意味着容器命令被终结
-后者是打开一个新的终端(bash或sh)<br>
-在容器终端键入 exit 退出</p>
-<h4 id="使用Container-ID-停止和重启等"><a href="#使用Container-ID-停止和重启等" class="headerlink" title="使用Container ID 停止和重启等"></a>使用Container ID 停止和重启等</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br><span class="line">docker ps | grep jenkins</span><br><span class="line">docker stop/restart id</span><br><span class="line"></span><br><span class="line">docker rm id</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>Issue：如何得知特定镜像需要的持久化卷配置，即我要创建哪些路径的映射呢？</p>
-</blockquote>
-<h4 id="tomcat-docker的卷设置"><a href="#tomcat-docker的卷设置" class="headerlink" title="tomcat docker的卷设置"></a>tomcat docker的卷设置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name tomcat -p 8080:8080 -v $PWD/test:/usr/local/tomcat/webapps/test -d tomcat</span><br></pre></td></tr></table></figure>
-<h4 id="容器重连"><a href="#容器重连" class="headerlink" title="容器重连"></a>容器重连</h4><p>有的封装服务的容器是可以docker run -d 保持后台运行的，很多容器如ubuntu等，断开终端连接往往会结束运行，在docker ps -a中看到状态是Exited。<br>
-启动容器并附加到当前进程
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start -a -i `docker ps -q -l`</span><br></pre></td></tr></table></figure></p>
-<p>说明：
-docker start启动容器（需要名称或ID）
- -a附加到容器
- -i交互模式
-docker ps列表容器
- -q列表仅容器ID 
- -l列表仅最后创建容器</p>
-<p>检索自<a href="https://cloud.tencent.com/developer/ask/145603" target="_blank" rel="noopener">腾讯云问答</a></p>
-<p>另，对于这种容器，可以保持一个“前台”的进程运行，如
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run ubuntu /bin/bash -c &quot;while true; do echo docker connected; sleep 5; done&quot; // 每5s 输出一次</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/31/DockerInstallation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/10/31/DockerInstallation/" itemprop="url">DockerInstallation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-31T09:48:11+08:00">
-                2019-10-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/容器/" itemprop="url" rel="index">
-                    <span itemprop="name">容器</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>一般来说，下文只记录操作记录而不是详细步骤</p>
-<ul>
-<li><p>ubuntu install docker</p>
-</li>
-<li><p>usermod aG docker</p>
-</li>
-<li><p>自动启动systemctl enable docker</p>
-</li>
-<li><p>镜像列表docker image ls</p>
-</li>
-<li><p>从Docker Hub搜索并下载镜像</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker search httpd</span><br><span class="line"></span><br><span class="line">docker pull httpd</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>这里的Docker Hub相当于npmjs.org仓库，镜像是容器的模板，镜像之于容器，如同class之于object。这里的httpd称为应用容器镜像，是包含指定应用的环境。</p>
-</blockquote>
-</li>
-<li><p>删除镜像 docker image rm hello-world</p>
-</li>
-<li><p>启动容器 docker container run [OPTIONS] IMAGE [COMMAND]</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker container run -it centos:latest /bin/bash</span><br><span class="line"></span><br><span class="line">docker container ls</span><br></pre></td></tr></table></figure></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/30/ssh/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/10/30/ssh/" itemprop="url">ssh</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-30T13:33:53+08:00">
-                2019-10-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="ubuntu安装后无法ssh远程登录"><a href="#ubuntu安装后无法ssh远程登录" class="headerlink" title="ubuntu安装后无法ssh远程登录"></a>ubuntu安装后无法ssh远程登录</h4><p>检查是否安装ssh-server
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpkg -l | grep ssh</span><br></pre></td></tr></table></figure></p>
-<p>默认只有ssh-client,如下</p>
-<p><img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g8g662fyfoj20le059dgy.jpg" alt="20170210203338059">
-安装命令：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install openssh-server</span><br></pre></td></tr></table></figure></p>
-<p>通过进程确认服务已启动
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -e | grep ssh</span><br></pre></td></tr></table></figure></p>
-<p>启动与停止
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo /etc/init.d/ssh stop</span><br><span class="line">sudo /etc/init.d/ssh start</span><br></pre></td></tr></table></figure></p>
-<h4 id="ssh-key"><a href="#ssh-key" class="headerlink" title="ssh key"></a>ssh key</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 查看ssh key目录</span><br><span class="line"> ls -al ~/.ssh</span><br><span class="line"> // 生成</span><br><span class="line"> ssh-keygen -t rsa -C &quot;&quot;</span><br><span class="line"> // 添加密钥到ssh-agent 注 见下文异常</span><br><span class="line"> ssh-add ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>异常：Could not open a connection to your authentication agent
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-agent bash</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<blockquote>
-<p>异常：Permissions 0777 for ‘~/.ssh/id_rsa’ are too open.<br>
-It is recommended that your private key files are NOT accessible by others.<br>
-This private key will be ignored.</p>
-</blockquote>
-<p>keys need to be only readable to you 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 改为只读</span><br><span class="line">chmod 400 ~/.ssh/id_rsa </span><br><span class="line">ssh-add ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure></p>
-<p>返回“identity added blablabla…”</p>
-<h4 id="使用ssh-key连接GitHub"><a href="#使用ssh-key连接GitHub" class="headerlink" title="使用ssh key连接GitHub"></a>使用ssh key连接GitHub</h4><ul>
-<li>复制public key</li>
-<li>测试<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com/qqstone/xxx.git</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<blockquote>
-<p>异常：Could not resolve hostname github.com:qqstone/xxx.git： Name or service not known;</p>
-</blockquote>
-<p>尝试ping github.com 发现超时，说明dns给的地址连接超时，然而由于网页上是http协议，是可以有反向代理以及负载均衡配置的(具体原因存疑)，所以网页打开Github反而很流畅。<br>
-另一种情况，主机无法连接正确的dns，解析超时，可以在连接正常的环境中(如无线网络或4g网络)用nslookup查看域名解析，找到实际的公网ip，然后在超时的环境中尝试用ip连接</p>
-<p><i>懒得去服务器上授权密钥，可以将已授权的 id_rsa + xxx.pub(公钥)拷贝覆盖到其他主机</i></p>
-<blockquote>
-<p>异常：The authenticity of host 192.168.xxx.xxx can’t be established.ECDSA key fingerprint is blablabla
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh  -o StrictHostKeyChecking=no  192.168.xxx.xxx</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<blockquote>
-<p>异常：ssh key在终端有效，在脚本中无效<br>
-在终端执行git 命令，ssh key认证可自动通过，将命令写入shell执行，git命令会要求当前用户访问Repository的密码。</p>
-</blockquote>
-<p>原因可能是ssh key隶属当前用户，而未配置到root用户，root用户默认是禁用的，尝试添加/home/root/.ssh/*无效，未尝试添加/root/.ssh/*。
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config core.sshCommand &quot;ssh -i /home/csd/.ssh/id_rsa -o StrictHostKeyChecking=no git@hostname&quot;</span><br></pre></td></tr></table></figure></p>
-<h4 id="linux系统之前的ssh授权访问"><a href="#linux系统之前的ssh授权访问" class="headerlink" title="linux系统之前的ssh授权访问"></a>linux系统之前的ssh授权访问</h4><p>一、概述</p>
-<p>1、就是为了让两个linux机器之间使用ssh不需要用户名和密码。采用了数字签名RSA或者DSA来完成这个操作</p>
-<p>2、模型分析</p>
-<p>假设 A （192.168.20.59）为客户机器，B（192.168.20.60）为目标机；</p>
-<p>要达到的目的：
-A机器ssh登录B机器无需输入密码；
-加密方式选 rsa|dsa均可以，默认dsa</p>
-<p>二、具体操作流程</p>
-<p>单向登陆的操作过程（能满足上边的目的）：
-1、登录A机器
-2、ssh-keygen -t [rsa|dsa]，将会生成密钥文件和私钥文件 id_rsa,id_rsa.pub或id_dsa,id_dsa.pub
-3、将 .pub 文件复制到B机器的 .ssh 目录， 并 cat id_dsa.pub &gt;&gt; ~/.ssh/authorized_keys
-4、大功告成，从A机器登录B机器的目标账户，不再需要密码了；（直接运行 #ssh 192.168.20.60 ）</p>
-<p>双向登陆的操作过程：</p>
-<p>1、ssh-keygen做密码验证可以使在向对方机器上ssh ,scp不用使用密码.具体方法如下:
-2、两个节点都执行操作：#ssh-keygen -t rsa
-  然后全部回车,采用默认值.</p>
-<p>3、这样生成了一对密钥，存放在用户目录的~/.ssh下。
-将公钥考到对方机器的用户目录下，并将其复制到~/.ssh/authorized_keys中（操作命令：#cat id_dsa.pub &gt;&gt; ~/.ssh/authorized_keys）。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/28/MySQL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/10/28/MySQL/" itemprop="url">MySQL</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-28T12:48:25+08:00">
-                2019-10-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select version()</span><br></pre></td></tr></table></figure>
-<p>返回8.0.16</p>
-<h4 id="root-初始密码"><a href="#root-初始密码" class="headerlink" title="root 初始密码"></a>root 初始密码</h4><p>mysql安装时为root用户创建初始密码，可以在日志中找到<br>
-/var/log/mysqld.log
-<img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g8du7mi9ihj20j10eijv9.jpg" alt="mysqld.log"></p>
-<p>登录之后会勒令重设密码</p>
-<blockquote>
-<p>You must reset your password using ALTER USRE statement before executing this statement.
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter user &apos;root&apos;@&apos;localhost&apos; identified by &apos;A_Za_z0_9&apos;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<h4 id="修改密码级别"><a href="#修改密码级别" class="headerlink" title="修改密码级别"></a>修改密码级别</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; set global validate_password.policy=0;</span><br><span class="line">mysql&gt; set global validate_password.length=3;</span><br></pre></td></tr></table></figure>
-<p>现在可以设密码123了 </p>
-<h4 id="新建管理员"><a href="#新建管理员" class="headerlink" title="新建管理员"></a>新建管理员</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create user &apos;admin&apos;@&apos;%&apos; identified by &apos;admin&apos;;</span><br><span class="line">mysql&gt; grant all privileges on *.* to &apos;admin&apos;@&apos;%&apos;;</span><br><span class="line">mysql&gt; flush privileges;</span><br></pre></td></tr></table></figure>
-<h4 id="native-password"><a href="#native-password" class="headerlink" title="native password"></a>native password</h4><p>异常：</p>
-<blockquote>
-<p>Client does not support authentication protocol requested by server; consider upgrading MySQL client</p>
-</blockquote>
-<p>由于MySQL8 默认用编码口令代替了之前版本的native password，在使用第三方（如应用后台服务）连接数据库时，不符合协议</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER USER &apos;admin&apos;@&apos;%&apos; IDENTIFIED WITH mysql_native_password BY &apos;admin&apos;;</span><br><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
-<h4 id="配置远程连接"><a href="#配置远程连接" class="headerlink" title="配置远程连接"></a>配置远程连接</h4><p>Ubuntu :<br>
-/etc/mysql/mysqld.cnf
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bind-address = 0.0.0.0</span><br></pre></td></tr></table></figure></p>
-<p>可以注释掉（未验证）
-CentOS<br>
-见/etc/my.conf指定了配置目录<br>
-曾修改主机ip时mysql启动失败（查看状态:service mysqld status），现象是在本地登录mysql -u xxx -p验证密码后报异常:<br>
-<i>ERROR 2002 (HY000): Can’t connect to local MySQL server through socket ‘/var/run/mysqld/mysqld.sock’</i></p>
-<h4 id="数据库时间"><a href="#数据库时间" class="headerlink" title="数据库时间"></a>数据库时间</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select now();// yyyy-MM-dd hh24:mi:ss</span><br><span class="line">select sysdate();// yyyy-MM-dd hh24:mi:ss</span><br><span class="line"></span><br><span class="line">select current_date;// yyyy-MM-dd 带()结果相同</span><br></pre></td></tr></table></figure>
-<h4 id="使用自增int作为主键"><a href="#使用自增int作为主键" class="headerlink" title="使用自增int作为主键"></a>使用自增int作为主键</h4><p><a href="https://zhuanlan.zhihu.com/p/71022670" target="_blank" rel="noopener">mysql为什么建议使用自增主键</a></p>
-<p>关于删除表数据后重置auto increment:
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">delete from table1;</span><br><span class="line">alter table1 AUTO_INCREMENT=1;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trancate table1;</span><br></pre></td></tr></table></figure>
-<h4 id="使用时间戳"><a href="#使用时间戳" class="headerlink" title="使用时间戳"></a>使用时间戳</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE mytable CHANGE COLUMN ptime ptime TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP</span><br></pre></td></tr></table></figure>
-<h4 id="联合唯一"><a href="#联合唯一" class="headerlink" title="联合唯一"></a>联合唯一</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table all_user add unique key(employeeid, isvalid)</span><br></pre></td></tr></table></figure>
-<p>CAUTION ! 上述语句是为了能在记录标记删除后，原纪录的唯一字段可以重新使用，但是如果isvalid是boolean(0-1)类型的，再次删除会造成违反联合唯一约束，解决方法是将isvalid以自增值标记，或以时间戳标记</p>
-<h4 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a>数据导入</h4><p>MySQL Workbench工具，支持csv，json格式的import wizard，其实可以直接用命令方式导入
-<img src="https://tvax4.sinaimg.cn/large/a60edd42gy1g9swbdtdpbj20rg0mijto.jpg" alt="Capture_mysql_workbench">
-工具提供了直观图形界面和字段映射。<br>
-然而csv的支持是个大坑。</p>
-<blockquote>
-<p>Excel在读取csv的时候是通过读取文件头上的bom来识别编码的，如果文件头无bom信息，则默认按照unicode编码读取。</p>
-</blockquote>
-<blockquote>
-<p>MySQL读取csv数据不能识别bom头，遇到utf8bom报“Can’t analyze file. Please try to change encoding type. If that doesn’t help, maybe the file is not: csv, or the file is empty.</p>
-</blockquote>
-<p>应如下操作：</p>
-<ul>
-<li>在Excel中整理待导入数据的格式，特别提示MySQL datetime类型字段数据源应调整为yyyy-mm-dd hh:mm:ss格式</li>
-<li>第一行列头会作为导入field的标识，这一行不能为中文（此坑已踩）</li>
-<li>保存为CSV UTF-8(Comma delimited) 在Excel365的SAVE AS选项中是这样。</li>
-<li>用Notepad++打开保存的文件，可见此时默认为Encoding in UTF8-BOM，需Convert to UTF8 （此时再使用Excel打开，会发现出现中文乱码，原因如上所述，找不到BOM将以Unicode解码,应该打开Excel，使用数据导入向导，from text/csv）</li>
-<li>使用Workbench Import Wizard导入</li>
-</ul>
-<h4 id="关于utf8-和-utf8mb4"><a href="#关于utf8-和-utf8mb4" class="headerlink" title="关于utf8 和 utf8mb4"></a>关于utf8 和 utf8mb4</h4><p><a href="https://juejin.im/entry/5b3055046fb9a00e315c2849" target="_blank" rel="noopener">记住，永远不要在MySQL中使用“utf8”</a></p>
-<p>大致是说，，别人utf-8都是四个字节编码，就MySQL所谓的utf-8是3字节，为与标准对应，又出了utf8mb4，请在MySQL中使用utf8mb4</p>
-<h4 id="数据库备份"><a href="#数据库备份" class="headerlink" title="数据库备份"></a>数据库备份</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -u$&#123;username&#125; -p$&#123;password&#125; schemaName tableName1 tableName2 tableName3 &gt; backup.sql</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>关于使用git实现快捷数据备份的实践
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd ~/Workspace</span><br><span class="line">git clone git@projectX.git</span><br><span class="line">mkdir ~/Workspace/projectX/db </span><br><span class="line">mysqldump -u admin -padmin schemaName tableName &gt; backup.sql</span><br><span class="line">git commit</span><br><span class="line">git push</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>///
-思考：我要是不在本地跑源码(node server.js),是否可以省略拉本地仓库的步骤？是否可以直接将备份文件“push”到远程仓库？
-<img src="https://tvax2.sinaimg.cn/large/a60edd42gy1gaj6h0z7e5j20m806btb2.jpg" alt>
-编辑文件在上图的workspace范畴中，我想，问题答案应该是否定的。</p>
-<h4 id="常用查询"><a href="#常用查询" class="headerlink" title="常用查询"></a>常用查询</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">show databases;</span><br><span class="line">create database csc;</span><br><span class="line">use csc;</span><br><span class="line">show tables;</span><br></pre></td></tr></table></figure>
-<h4 id="key-primary-key-unique-key"><a href="#key-primary-key-unique-key" class="headerlink" title="key, primary key, unique key"></a>key, primary key, unique key</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/24/jenkinsNodejs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/10/24/jenkinsNodejs/" itemprop="url">Jenkins对Node.js项目的持续集成</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-24T16:59:14+08:00">
-                2019-10-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="安装NodeJS"><a href="#安装NodeJS" class="headerlink" title="安装NodeJS"></a>安装NodeJS</h3><p>Manage Jenkins菜单 –&gt; Manage Plugins 
-添加Node.js 并<b>重启Jenkins</b>
-进入 Manage Jenkins –&gt; Global Tool Configuration
-找到NodeJS installations 此处可以配置安装多个版本的NodeJS
-如有需要填写Global npm packages to install项
-如
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@angular/cli@8.2.2 electron@6.0.2 electron-builder@21.2.0 node-gyp@6.1.0</span><br></pre></td></tr></table></figure></p>
-<h3 id="添加和使用credentials-有用户名密码模式-ssh模式等"><a href="#添加和使用credentials-有用户名密码模式-ssh模式等" class="headerlink" title="添加和使用credentials 有用户名密码模式 ssh模式等"></a>添加和使用credentials 有用户名密码模式 ssh模式等</h3><p>ssh模式粘贴private key即可</p>
-<h3 id="建立Job-选择Freestyle-project"><a href="#建立Job-选择Freestyle-project" class="headerlink" title="建立Job 选择Freestyle project"></a>建立Job 选择Freestyle project</h3><h3 id="配置git并选择credentials"><a href="#配置git并选择credentials" class="headerlink" title="配置git并选择credentials"></a>配置git并选择credentials</h3><h3 id="Build-Environment中-勾选-“Provide-Node-amp-npm-bin-folder-to-PATH”-并选择已安装的版本"><a href="#Build-Environment中-勾选-“Provide-Node-amp-npm-bin-folder-to-PATH”-并选择已安装的版本" class="headerlink" title="Build Environment中 勾选 “Provide Node &amp; npm bin/ folder to PATH” 并选择已安装的版本"></a>Build Environment中 勾选 “Provide Node &amp; npm bin/ folder to PATH” 并选择已安装的版本</h3><p>否则jenkins所在系统无法识别nodejs命令</p>
-<h3 id="最后-Build-步骤可以直接用-“Windows-batch-command”-或者-“execuate-shell”调用"><a href="#最后-Build-步骤可以直接用-“Windows-batch-command”-或者-“execuate-shell”调用" class="headerlink" title="最后 Build 步骤可以直接用 “Windows batch command” 或者 “execuate shell”调用"></a>最后 Build 步骤可以直接用 “Windows batch command” 或者 “execuate shell”调用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install &amp;&amp; npm run build</span><br></pre></td></tr></table></figure>
-<p>注意 npm 命令是安装了node包管理工具之后的命令行指令，并非是nodejs命令,否则报 syntaxerror unexpected identifier</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/page/9/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/qqsnote/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/16/">16</a><a class="extend next" rel="next" href="/qqsnote/page/11/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/page/9/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/qqsnote/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/17/">17</a><a class="extend next" rel="next" href="/qqsnote/page/11/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1937,7 +1843,7 @@ CentOS<br>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">159</span>
+                  <span class="site-state-item-count">165</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1948,7 +1854,7 @@ CentOS<br>
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>

@@ -229,6 +229,988 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/10/20/AzureExpertNotes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/10/20/AzureExpertNotes/" itemprop="url">Azure Expert Notes</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-20T09:42:13+08:00">
+                2020-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><p>There are 7 modules to learn:</p>
+<ul>
+<li>Prerequisites for Azure administrators</li>
+<li>Manage identities and governance in Azure</li>
+<li>Implement and manage storage in Azure</li>
+<li>Deploy and manage Azure compute resources</li>
+<li>Configure and manage virtual networks for Azure administrators</li>
+<li>Monitor and back up Azure Resources
+即Azure的订阅和资源，管理身份，实施和管理存储，虚拟机，虚拟网络, 监视和备份<h3 id="Azure-Policy"><a href="#Azure-Policy" class="headerlink" title="Azure Policy"></a>Azure Policy</h3>参考<a href="https://blog.csdn.net/helendemeng/article/details/108795271" target="_blank" rel="noopener">利用 Azure Policy 进行云上资源实时控制及合规监控</a><blockquote>
+<p>Azure Policy的工作原理是选择或新建一个策略或计划（计划是一组策略的集合），分配给指定范围的资源，然后定期（24小时左右）Policy会检查这些资源是否符合策略或计划，并列出不合规项。</p>
+</blockquote>
+</li>
+</ul>
+<p>Az104 Q5 使用resource policy修改虚拟网络的限制</p>
+<p>类似的： 蓝图blue print，为某个订阅制订蓝图（和策略一样，azure上由很多已定义的）
+Monitor里的Alert，为某个特定资源添加警报</p>
+<h3 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h3><ul>
+<li>可以自己提供非官方镜像用于创建虚拟机<blockquote>
+<p>It is possible to change the size of a VM after it’s been created, but the VM must be stopped first. So, it’s best to size it appropriately from the start if possible.调整vm配置需要停机</p>
+</blockquote>
+</li>
+<li>几个size：普通的（B，D..）大数据存储（L-series），图形渲染（N-series），高性能（H-series）<blockquote>
+<p>You can store data on the primary drive along with the OS(默认挂载/dev/sda,最大2018G), but a better approach is to create dedicated data disks（可以挂几万GiB）. </p>
+</blockquote>
+</li>
+<li>关于硬盘的unmanaged（以容量和IO计费）和managed（提供存储的伸缩性，提供快照和备份等）</li>
+<li><p>ssh
+创建虚拟机时可以选择生成key pair，创建完成后下载pem文件用于连接，抑或在本地生成key pair使用其中的public key创建
+连接上VM使用下述方式添加更多的public key</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 创建公钥私钥对</span><br><span class="line">ssh-keygen -t rsa -b 4098</span><br><span class="line"># 将公钥贴到虚拟机上</span><br><span class="line">ssh-copy-id -i ~/.ssh/id_rsa.pub azureuser@myserver</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>虚拟机创建完成的初始网络状态是：Outbound request are allowed. Inbound traffic is only allowed from within the virtual network.即出站任意，入站限制为允许虚拟网络内的访问</p>
+</li>
+<li>Windows虚拟机相关：远程桌面连接(RDP 3389); 网络安全组（NSG）设置入站出站规则，软件防火墙 <blockquote>
+<p>The rules are evaluated in priority-order, starting with the lowest priority rule. Deny rules always stop the evaluation. The last rule is always a Deny All rule.That means to have traffic pass through the security group you must have an allow rule or it will be blocked by the default final rule. 规则使用优先级层叠，若无允许则被底层规则(the final rule)禁止</p>
+</blockquote>
+</li>
+</ul>
+<p>虚拟机的备份(存目)</p>
+<h3 id="Networking"><a href="#Networking" class="headerlink" title="Networking"></a>Networking</h3><p>学习目标：</p>
+<ul>
+<li>概念：网络协议和网络标准。</li>
+<li>网络拓扑类型（网格，总线，星形）</li>
+<li>网络设备。</li>
+<li>网络通信原则（如 TCP/IP、DNS 和端口）。</li>
+<li><b>！以上组件在 Azure 网络上的映射和配置。</b></li>
+</ul>
+<p>Azure虚拟网络
+<img src="https://docs.microsoft.com/zh-cn/learn/modules/network-fundamentals/media/2-virtual-network.svg" alt>
+Bridge(网桥)，将网络划分为网段，在其之间过滤和推送数据包，数据流向通过MAC地址决定，可以减少不必要的网络交通以提升网络传输性能。
+HUb(指网络集线器)，充当网络上的多端口中继器，用以连接多个设备并构建网络布局，集线器将以固定的速度运行即所连接的最慢的网络设备的速度
+Switch(交换机)，是网桥和集线器的结合</p>
+<p>tip：进入命令行help可看到所有支持的命令，用tcping代替ping</p>
+<p>协议：</p>
+<ul>
+<li>邮局协议 3(Post Office Protocol 3, POP3) 用于接收邮件</li>
+<li>简单邮件传输协议 (SMTP) 使用邮件服务器发送邮件</li>
+<li>交互式邮件访问协议 (IMAP) 管理邮箱</li>
+<li>安全套接字层 (Secure Socket Layer, SSL) 标准的加密和安全性协议，提供计算机和Internet访问目标服务器或设备之间的安全的加密连接</li>
+<li>传输层安全 (Transport Layer Security, TLS) SSL的后继者</li>
+<li>安全超文本传输协议 (HTTPS) 使用SSL或TLS加密的HTTP</li>
+<li>安全外壳 (Secure Shell, SSH) </li>
+<li>Kerberos 验证协议 通过密钥加密为cs应用提供鲁棒的认证</li>
+<li>简单网络管理协议 (SNMP) 允许从网络上的设备收集数据以进行管理</li>
+<li>Internet 控制消息协议 (ICMP) 允许网络的设备发送警告或错误</li>
+</ul>
+<p>IPS模型：
+<img src="https://docs.microsoft.com/zh-cn/learn/modules/network-fundamentals/media/4-internet-protocol-suite-layers.svg" alt></p>
+<p>DNS(Domain Name System)分散式查找服务，将用户可读的域名或 URL 转换为承载站点或服务的服务器的 IP 地址。</p>
+<ul>
+<li>A SOA寻址</li>
+<li>AAAA IP寻址</li>
+<li>CNAME 域名别名</li>
+<li>NS 名称服务器 </li>
+<li>MX SMTP 电子邮件 <h4 id="网络安全"><a href="#网络安全" class="headerlink" title="网络安全"></a>网络安全</h4>学习目标</li>
+<li>C/S网络模型：请求-响应；P2P(Peer-to-Peer)；发布-订阅</li>
+<li>认证和授权</li>
+<li>网络防火墙类型</li>
+<li>监控项目</li>
+<li>在Azure上的映射</li>
+</ul>
+<p>关于认证：</p>
+<ul>
+<li>密码认证</li>
+<li>双因素(two-factor)认证:如账户密码+邮箱/手机认证</li>
+<li>token authentication</li>
+<li>生物识别认证(Biometric authentication)：如用指纹、语音或人脸识别</li>
+<li>事务认证(Transactional authentication) 通常用于提供额外的认证保护，如在工作时间范围内允许访问</li>
+<li>图灵测试(CAPTCHA)解释看到的信息,通常是模糊的文字或场景中的特征,<b>CAPTCHA可能会给存在视力障碍的用户带来困难</b></li>
+</ul>
+<p>认证协议：</p>
+<ul>
+<li>Kerberos</li>
+<li>TLS/SSL</li>
+</ul>
+<p>授权：
+私以为其概念是对已持有的认证身份标记所赋予的权限</p>
+<p>防范目标和措施：</p>
+<ul>
+<li>any user, 访问控制(access control)即对用户设置访问相应资源的权限级别</li>
+<li>恶意软件，杀软</li>
+<li>应用程序漏洞</li>
+<li>行为分析，创建安全策略识别具有潜在危险的行文</li>
+<li>邮件，识别可疑邮件和发信人</li>
+<li>入侵检测(存目)</li>
+</ul>
+<p>防火墙：</p>
+<ul>
+<li>应用程序层防火墙 如检测HTTP请求的插件或筛选器</li>
+<li>数据包筛选防火墙 如检测数据包</li>
+<li>线路级(circuit-level)防火墙 如检查TCP/UDP连接的源、目标、用户等是否符合既定规则</li>
+<li>代理服务器防火墙 以代理控制信息进出网络，因此可以监视、筛选和缓存网络上任意类型设备的internet访问</li>
+<li>stateful firewalls &amp; next-generation firewalls</li>
+</ul>
+<p>通过配置与 Azure 的“站点到站点 VPN”连接，将本地网络连接到 Azure 虚拟网络。 
+<img src="https://docs.microsoft.com/zh-cn/learn/modules/network-fundamentals-2/media/4-site-to-site-vpn.svg" alt>
+亦可通过vpn配置实现点(client)到站点的连接</p>
+<p>Notice:</p>
+<ul>
+<li>关键 Azure 服务只连接 Azure 虚拟网络，不连接公共 Internet,比如Azure SQL数据库，Azure Storage等</li>
+<li>尽可能禁用SSH/RDP 访问，应先创建点到站点 VPN 连接，然后再为远程管理启用 SSH/RDP。</li>
+</ul>
+<p>Monitor：</p>
+<ul>
+<li>SNMP 简单网络管理协议，前文已述，允许访问网络设备的信息</li>
+<li>Syslog 允许设备发送事件，用于事件日志记录</li>
+<li>Azure Monitor是网络监控解决方案，包含Log Analytics工具，用以查询、分析日志<h4 id="可用性、可用区和可用集"><a href="#可用性、可用区和可用集" class="headerlink" title="可用性、可用区和可用集"></a>可用性、可用区和可用集</h4><blockquote>
+<p>可用性是可供使用的时间段的百分比，任意时间可访问的服务即100%可用性</p>
+</blockquote>
+</li>
+</ul>
+<p>因故障、因物理故障触发的自动迁移、定期更新都有可能造成资源可用性达不到100%</p>
+<p><a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/manage-availability" target="_blank" rel="noopener">管理可用性</a>
+<a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets" target="_blank" rel="noopener">创建和部署高度可用的虚拟机</a></p>
+<blockquote>
+<p><a href="https://docs.microsoft.com/zh-cn/azure/availability-zones/az-overview" target="_blank" rel="noopener">可用性区域</a>:区域中的唯一物理位置,每个区域由一个或多个数据中心组成，这些数据中心配置了独立电源，冷却和网络。区域中可用性区域的物理隔离可以在发生数据中心故障的情况下保护应用程序和数据。 区域冗余服务可跨可用性区域复制应用程序和数据，以防范单点故障。</p>
+<ul>
+<li>更新域和容错域的组合</li>
+<li>当两个或更多个 VM 部署在一个 Azure 区域中的两个或更多个可用性区域时，可获得99.99% <a href="https://azure.microsoft.com/zh-cn/support/legal/sla/virtual-machines/v1_9/" target="_blank" rel="noopener">VM 运行时间 SLA</a>(service-level agreement, 服务级别协议)</li>
+</ul>
+</blockquote>
+<p>使用可用性区域创建vm settings–&gt;High availability–&gt;选择一个编号的区域 <a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/create-portal-availability-zone" target="_blank" rel="noopener">详细</a></p>
+<p>而可用性集是一种逻辑分组功能，将在物理层面相分离的vm连接到一起，如果运行服务器的其中之一的物理硬件有问题，可以确信服务器的其他实例保持运行，因为它们位于不同的硬件上。使用命令创建可用性集 <a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets" target="_blank" rel="noopener">详细</a></p>
+<blockquote>
+<p>Microsoft 为部署在可用性中的多实例 VM 提供 99.95% 的外部连接性服务级别协议 (SLA)。 这意味着，对于要应用的 SLA，必须在可用性集中至少部署两个 VM 实例。</p>
+</blockquote>
+<p>You plan to deploy three Azure virtual machines named VM1, VM2, and VM3. The virtual
+machines will host a web app named App1.
+You need to ensure that at least two virtual machines are available if a single Azure datacenter
+becomes unavailable.
+What should you deploy?
+A. all three virtual machines in a single Availability Zone
+B. all virtual machines in a single Availability Set
+C. each virtual machine in a separate Availability Zone
+D. each virtual machine in a separate Availability Set</p>
+<p>Answer is B.</p>
+<h3 id="订阅"><a href="#订阅" class="headerlink" title="订阅"></a>订阅</h3><h3 id="Azure-Backup"><a href="#Azure-Backup" class="headerlink" title="Azure Backup"></a>Azure Backup</h3><p>AZ104 Q7 Azure Backup执行备份并不受限于虚拟机的os，是否在运行。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/10/15/jwt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/10/15/jwt/" itemprop="url">JWT</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-15T20:20:19+08:00">
+                2020-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/协议和规范/" itemprop="url" rel="index">
+                    <span itemprop="name">协议和规范</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. </p>
+<ul>
+<li>“紧凑地、自包含地形式” 自包含即中间部分包含部分用户信息</li>
+<li>通过JSON形式作为web应用中的令牌，用于在各方之间安全地传输信息</li>
+</ul>
+</blockquote>
+<p>结构：
+以.分隔地三个部分：标头header，载荷payload，签名signature 三部分均以base64编码</p>
+<p>标头：如下的编码描述
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;alg&quot;: &quot;HS256&quot;,</span><br><span class="line">  &quot;typ&quot;: &quot;JWT&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>载荷：可以放user profile中的非敏感信息
+签名：将前两部分信息连同加密salt使用密钥加密生成签名，如
+HMACSHA256(base64UrlEncode(header)+’.’+base64UrlEncode(payload).secret)</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/10/08/dotNetCore-MemoryCache/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/10/08/dotNetCore-MemoryCache/" itemprop="url">.Net Core 缓存</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-08T16:51:04+08:00">
+                2020-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>参考 <a href="https://docs.microsoft.com/zh-cn/aspnet/core/performance/caching/memory?view=aspnetcore-3.1" target="_blank" rel="noopener">.net core 中的缓存内存</a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">using Microsoft.Extensions.Caching.Memory;</span><br><span class="line"></span><br><span class="line">public class HomeController : Controller</span><br><span class="line">&#123;</span><br><span class="line">    private IMemoryCache _cache;</span><br><span class="line"></span><br><span class="line">    public HomeController(IMemoryCache memoryCache)</span><br><span class="line">    &#123;</span><br><span class="line">        _cache = memoryCache;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>CacheKeys API
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public static class CacheKeys</span><br><span class="line">&#123;</span><br><span class="line">    public static string Entry &#123; get &#123; return &quot;_Entry&quot;; &#125; &#125;</span><br><span class="line">    public static string CallbackEntry &#123; get &#123; return &quot;_Callback&quot;; &#125; &#125;</span><br><span class="line">    public static string CallbackMessage &#123; get &#123; return &quot;_CallbackMessage&quot;; &#125; &#125;</span><br><span class="line">    public static string Parent &#123; get &#123; return &quot;_Parent&quot;; &#125; &#125;</span><br><span class="line">    public static string Child &#123; get &#123; return &quot;_Child&quot;; &#125; &#125;</span><br><span class="line">    public static string DependentMessage &#123; get &#123; return &quot;_DependentMessage&quot;; &#125; &#125;</span><br><span class="line">    public static string DependentCTS &#123; get &#123; return &quot;_DependentCTS&quot;; &#125; &#125;</span><br><span class="line">    public static string Ticks &#123; get &#123; return &quot;_Ticks&quot;; &#125; &#125;</span><br><span class="line">    public static string CancelMsg &#123; get &#123; return &quot;_CancelMsg&quot;; &#125; &#125;</span><br><span class="line">    public static string CancelTokenSource &#123; get &#123; return &quot;_CancelTokenSource&quot;; &#125; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>缓存一个时间
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">DateTime cacheTiming;</span><br><span class="line"></span><br><span class="line">// Look for cache key.</span><br><span class="line">if (!_cache.TryGetValue(CacheKeys.Entry, out cacheEntry))</span><br><span class="line">&#123;</span><br><span class="line">    cacheEntry = DateTime.Now;</span><br><span class="line"></span><br><span class="line">    // Set cache options.</span><br><span class="line">    var cacheEntryOptions = new MemoryCacheEntryOptions()</span><br><span class="line">        // Keep in cache for this time, reset time if accessed.</span><br><span class="line">        .SetSlidingExpiration(TimeSpan.FromSeconds(3));</span><br><span class="line"></span><br><span class="line">    // Save data in cache.</span><br><span class="line">    _cache.Set(CacheKeys.Entry, cacheTiming, cacheEntryOptions);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>取出缓存
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var timing = _cache.Get&lt;DateTime?&gt;(CacheKeys.Entry);</span><br></pre></td></tr></table></figure></p>
+<p>可调过期（slide expiration）时间和绝对过期（absolute expiration）时间</p>
+<ul>
+<li>可调过期：指定一个时间，TimeSpan，指定时间内有被Get缓存时间则顺延，否则过期</li>
+<li>绝对到期：指定在一个固定的时间点到期
+<a href="https://docs.microsoft.com/zh-cn/aspnet/core/performance/caching/memory?view=aspnetcore-3.1#use-setsize-size-and-sizelimit-to-limit-cache-size" target="_blank" rel="noopener">使用 SetSize、Size 和 SizeLimit 限制缓存大小</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/09/09/wasm-coreprinciples/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/09/09/wasm-coreprinciples/" itemprop="url">WebAssembly核心原理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-09T19:04:16+08:00">
+                2020-09-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="关于section"><a href="#关于section" class="headerlink" title="关于section"></a>关于section</h4><h4 id="EMSCRIPTEN-KEEPALIVE宏"><a href="#EMSCRIPTEN-KEEPALIVE宏" class="headerlink" title="EMSCRIPTEN_KEEPALIVE宏"></a>EMSCRIPTEN_KEEPALIVE宏</h4>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/09/09/wasm-fundation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/09/09/wasm-fundation/" itemprop="url">WebAssembly基础</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-09T17:16:14+08:00">
+                2020-09-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Javascript"><a href="#Javascript" class="headerlink" title="Javascript"></a>Javascript</h3><h4 id="window-requestAnimationFrame"><a href="#window-requestAnimationFrame" class="headerlink" title="window.requestAnimationFrame"></a><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame" target="_blank" rel="noopener">window.requestAnimationFrame</a></h4><p>顾名思义用于动画帧的绘制, 类似于setInterval,传入回调函数,该回调函数将会在下一次浏览器尝试重新绘制当前帧动画时被调用
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">//迭代调用以使dom持续更新</span><br><span class="line"></span><br><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">      div &#123;</span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        position: absolute;</span><br><span class="line">      &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;div&gt;&lt;/div&gt;</span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">  &lt;script&gt;</span><br><span class="line">    let start = null;</span><br><span class="line">    let element = document.querySelector(&apos;div&apos;);</span><br><span class="line"></span><br><span class="line">    const step = (timestamp) =&gt; &#123;</span><br><span class="line">      if (!start) start = timestamp;</span><br><span class="line">      let progress = timestamp - start;</span><br><span class="line">      element.style.left = Math.min(progress / 10, 200) + &apos;px&apos;;</span><br><span class="line">      if (progress &lt; 2000) &#123;</span><br><span class="line">        window.requestAnimationFrame(step);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    window.requestAnimationFrame(step);</span><br><span class="line">  &lt;/script&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Performance-API"><a href="#Performance-API" class="headerlink" title="Performance API"></a><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Performance_API/Using_the_Performance_API" target="_blank" rel="noopener">Performance API</a></h4><p>performance.now()返回当前时刻距离 “time origin” 所经过的毫秒数，以此可以计算代码执行所花时间，精度大于Date.now()</p>
+<h4 id="TypedArray"><a href="#TypedArray" class="headerlink" title="TypedArray"></a><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" target="_blank" rel="noopener">TypedArray</a></h4><p>类型化数组，其实例描述底层的二进制数据缓冲区的类数组视图。<br>
+实际上并没有TypedArray这个全局属性或者构造方法，可以认为是Int8Array，Uint32Array等对象的实例化数组的统称
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const DEFAULT_INDEX = 0;</span><br><span class="line">// Way one:</span><br><span class="line">const int8Arr = new Int8Array(10);</span><br><span class="line">int8Arr[DEFAULT_INDEX] = 16;</span><br><span class="line">console.log(int8Arr);  // Int8Array [16, 0, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">int8Arr[0]=256, int8Arr[1]=257;</span><br><span class="line">console.log(int8Arr);  // Int8Array(10) [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line"></span><br><span class="line">// Way two:</span><br><span class="line">const buffer = new ArrayBuffer(16);</span><br><span class="line">uintArray = new Uint8Array(buffer); // Uint8Array(16) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">uintArray.set([255,255,255],4)</span><br><span class="line">console.log(uintArray);  // Uint8Array(16) [0, 0, 0, 0, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0]</span><br></pre></td></tr></table></figure></p>
+<p>Way two中，ArrayBuffer 的构造函数其参数指定了该 ArrayBuffer 所能够存放的单字节数量，因此在“转换到”对应的 TypedArray 时，一定要确保 ArrayBuffer 的大小是 TypedArray 元素类型所对应字节大小的整数倍。<br>
+TypedArray.prototype.set, 方法接受两个参数，第一个参数为将要进行数据读取的 JavaScript 普通数组；第二个参数为将要存放在类型数组中的元素偏移位置。</p>
+<p>可以作为类型化数组的<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects" target="_blank" rel="noopener">内置对象</a>：</p>
+<ul>
+<li>Int8Array</li>
+<li>Uint8Array</li>
+<li>Uint8ClampedArray</li>
+<li>Int16Array</li>
+<li>Uint16Array</li>
+<li>Int32Array</li>
+<li>Uint32Array</li>
+<li>Float32Array</li>
+<li>Float64Array<h4 id="C-C"><a href="#C-C" class="headerlink" title="C/C++"></a>C/C++</h4>对于C++的函数重载，C++编译器通常使用名为 “Name Mangling” 的机制，在编译的可执行文件中区分同名函数<br>
+使用extern “C” {}用以避免“Name Mangling”处理：由于在这个特殊的结构中，C++ 编译器会强制以 C 语言的语法规则，来编译放置在这个作用域内的所有 C++ 源代码。而在 C 语言的规范中，没有“函数重载”这类特性，因此也不会对函数名进行 “Name Mangling” 的处理。<h4 id="编译优化"><a href="#编译优化" class="headerlink" title="编译优化"></a>编译优化</h4>DCE(Dead Code Elimination)<br>
+在诸如 Clang / GCC 等编译器中，我们通常可以为编译器指定一些有关编译优化的标记，以让编译器可以通过使用不同等级的优化策略来优化目标代码的生成。而诸如 -O0 / -O1 / -O2 一直到 -Os 与 -O4 等选项，便是这些优化标记中的一部分。<h4 id="原码-反码-补码"><a href="#原码-反码-补码" class="headerlink" title="原码 反码 补码"></a>原码 反码 补码</h4>原码符号位不变 逐位取反–&gt; 反码 <br>
+反码+1 –&gt; 补码<h4 id="访问控制列表"><a href="#访问控制列表" class="headerlink" title="访问控制列表"></a>访问控制列表</h4>ACL（Access Control List）<h4 id="堆栈机、寄存器机和累加器机"><a href="#堆栈机、寄存器机和累加器机" class="headerlink" title="堆栈机、寄存器机和累加器机"></a>堆栈机、寄存器机和累加器机</h4></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/09/08/dotNetCore-CI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/09/08/dotNetCore-CI/" itemprop="url">.Net Core的持续集成</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-08T16:24:39+08:00">
+                2020-09-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>显然，.Net Core开发过程中，使用Visual Studio提供的近乎完美IDE，build和deploy都非常简单，如果说是用jenkins进行持续集成，那便相当于用脚本完成更新源码–构建–部署等过程。</p>
+<h4 id="jenkins-ant"><a href="#jenkins-ant" class="headerlink" title="jenkins ant"></a>jenkins ant</h4><blockquote>
+<p>Apache Ant，是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。由Apache软件基金会所提供。默认情况下，它的buildfile(XML文件)名为build.xml。——————wiki</p>
+</blockquote>
+<p>build.xml定义了若干步骤（即target），以xml节点格式定义每个步骤的目录，执行程序，以及参数等
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; ?&gt; </span><br><span class="line">&lt;project name=&quot;Hello World&quot; default=&quot;execute&quot;&gt;</span><br><span class="line"></span><br><span class="line">	&lt;target name=&quot;init&quot;&gt;</span><br><span class="line">		&lt;mkdir dir=&quot;build/classes&quot;/&gt;</span><br><span class="line">		&lt;mkdir dir=&quot;dist&quot;/&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line">	&lt;target name=&quot;compile&quot; depends=&quot;init&quot;&gt;</span><br><span class="line">		&lt;javac srcdir=&quot;src&quot; destdir=&quot;build/classes&quot;/&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name=&quot;compress&quot; depends=&quot;compile&quot;&gt;</span><br><span class="line">	        &lt;jar destfile=&quot;dist/HelloWorld.jar&quot; basedir=&quot;build/classes&quot;  /&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line"></span><br><span class="line">	&lt;target name=&quot;execute&quot; depends=&quot;compile&quot;&gt;</span><br><span class="line">		&lt;java classname=&quot;HelloWorld&quot; classpath=&quot;build/classes&quot;/&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在Jenkins中可以配置使用Apache Ant，在构建时便可以使用build.xml来管理步骤
+<img src="https://tvax4.sinaimg.cn/large/a60edd42ly1gijd2ewcpyj20wz0lo3zk.jpg" alt="JenkinsAnt">
+源码目录build/build.xml:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;project name=&quot;PartnerPortal&quot; default=&quot;PartnerPortal&quot; basedir=&quot;.&quot;&gt;</span><br><span class="line">	&lt;description&gt;</span><br><span class="line">	PartnerPortal Daily Build File.</span><br><span class="line">	&lt;/description&gt;</span><br><span class="line"></span><br><span class="line">	&lt;property file=&quot;build.properties&quot;/&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name=&quot;build_partner_portal&quot; description=&quot;Build CS ScanFlow with Microsoft Visual Studio&quot;&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;      build CSD PP x64         &quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;MSVC    : $&#123;msbuild.exe&#125;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;root    : $&#123;root_dir&#125;&quot;/&gt;</span><br><span class="line">		&lt;exec dir=&quot;.&quot; executable=&quot;restore_dotnet.bat&quot; failonerror=&quot;true&quot; /&gt;</span><br><span class="line">		&lt;exec dir=&quot;.&quot; executable=&quot;$&#123;msbuild.exe&#125;&quot; failonerror=&quot;true&quot;&gt;</span><br><span class="line">			&lt;arg line=&quot;../CSD.PartnerPortal.sln /property:Configuration=Release&quot;/&gt;</span><br><span class="line">		&lt;/exec&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name=&quot;restore_envirement&quot; description=&quot;restore dotnet&quot;&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;      restore dotnet         &quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;exec dir=&quot;.&quot; executable=&quot;restore_dotnet.bat&quot; failonerror=&quot;true&quot; /&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name=&quot;publish_to_server&quot; description=&quot;publish to server&quot;&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;      publish  start       &quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;exec dir=&quot;.&quot; executable=&quot;publish.bat&quot; failonerror=&quot;true&quot; /&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line"></span><br><span class="line">	&lt;target name =&quot;PartnerPortal&quot; description=&quot;Build solution&quot;&gt;</span><br><span class="line">		&lt;antcall target=&quot;restore_envirement&quot; /&gt;</span><br><span class="line">		&lt;antcall target=&quot;build_partner_portal&quot; /&gt;</span><br><span class="line">		&lt;antcall target=&quot;publish_to_server&quot; /&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure></p>
+<p>build/restore_dotnet.bat:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet restore ../CSD.PartnerPortal.sln</span><br></pre></td></tr></table></figure></p>
+<p>build/publish.bat:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet publish --no-build -c Release &quot;..\CSD.PartnerPortal.csproj&quot; /p:PublishProfile=&quot;..\Properties\PUblishProfiles\CSDPPci - Web Deploy.pubxml&quot; /p:Password=xxxxxxxxxxxxxxxxxxxxxxxxxxx</span><br></pre></td></tr></table></figure></p>
+<p>项目的Properties目录下的 .pubxml配置：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;Project ToolsVersion=&quot;4.0&quot; xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&gt;</span><br><span class="line">  &lt;PropertyGroup&gt;</span><br><span class="line">    &lt;WebPublishMethod&gt;MSDeploy&lt;/WebPublishMethod&gt;</span><br><span class="line">    &lt;ResourceId&gt;/subscriptions/subscriptionid01/resourceGroups/resourcegroupname01/providers/Microsoft.Web/sites/CSDPPci&lt;/ResourceId&gt;</span><br><span class="line">    &lt;ResourceGroup&gt;resourcegroupname01&lt;/ResourceGroup&gt;</span><br><span class="line">    &lt;PublishProvider&gt;AzureWebSite&lt;/PublishProvider&gt;</span><br><span class="line">    &lt;LastUsedBuildConfiguration&gt;Release&lt;/LastUsedBuildConfiguration&gt;</span><br><span class="line">    &lt;LastUsedPlatform&gt;Any CPU&lt;/LastUsedPlatform&gt;</span><br><span class="line">    &lt;SiteUrlToLaunchAfterPublish&gt;http://csdppci.azurewebsites.net&lt;/SiteUrlToLaunchAfterPublish&gt;</span><br><span class="line">    &lt;LaunchSiteAfterPublish&gt;True&lt;/LaunchSiteAfterPublish&gt;</span><br><span class="line">    &lt;ExcludeApp_Data&gt;False&lt;/ExcludeApp_Data&gt;</span><br><span class="line">    &lt;ProjectGuid&gt;2df39477-f1f3-4522-9ca7-d0eefb5b16b7&lt;/ProjectGuid&gt;</span><br><span class="line">    &lt;MSDeployServiceURL&gt;csdppci.scm.azurewebsites.net:443&lt;/MSDeployServiceURL&gt;</span><br><span class="line">    &lt;DeployIisAppPath&gt;CSDPPci&lt;/DeployIisAppPath&gt;</span><br><span class="line">    &lt;RemoteSitePhysicalPath /&gt;</span><br><span class="line">    &lt;SkipExtraFilesOnServer&gt;True&lt;/SkipExtraFilesOnServer&gt;</span><br><span class="line">    &lt;MSDeployPublishMethod&gt;WMSVC&lt;/MSDeployPublishMethod&gt;</span><br><span class="line">    &lt;EnableMSDeployBackup&gt;True&lt;/EnableMSDeployBackup&gt;</span><br><span class="line">    &lt;UserName&gt;$CSDPPci&lt;/UserName&gt;</span><br><span class="line">    &lt;_SavePWD&gt;True&lt;/_SavePWD&gt;</span><br><span class="line">    &lt;_DestinationType&gt;AzureWebSite&lt;/_DestinationType&gt;</span><br><span class="line">    &lt;InstallAspNetCoreSiteExtension&gt;False&lt;/InstallAspNetCoreSiteExtension&gt;</span><br><span class="line">  &lt;/PropertyGroup&gt;</span><br><span class="line">&lt;/Project&gt;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/09/07/Diagrams/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -767,826 +1749,11 @@ ClientApp
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/08/25/ddd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/08/25/ddd/" itemprop="url">领域驱动设计</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-25T16:17:18+08:00">
-                2020-08-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>领域驱动设计(Domain-Driven Design, DDD), 对于复杂的系统的开发, 从需求梳理到编码实现,将涉及的专业知识转换成模型、逻辑是必不可少的环节，这些信息和知识会汇集到若干核心的“领域”，接下来的设计重心会落在核心领域范畴内，确定域界地沟通方式，迭代地在域内完成实现，而不似单纯地服务端的功能堆叠。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/08/18/webassembly/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/08/18/webassembly/" itemprop="url">webassembly</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-18T09:29:00+08:00">
-                2020-08-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>应该首先从<a href="http://webassembly.org.cn/getting-started/developers-guide/" target="_blank" rel="noopener">官方网站</a>获取知识</p>
-<p>webassembly知识储备或许会涵盖“编译原理”，Rust，v8开发，</p>
-<blockquote>
-<p>WebAssembly或称wasm是一个实验性的低端编程语言，应用于浏览器内的客户端。WebAssembly是便携式的抽象语法树，被设计来提供比JavaScript更快速的编译及运行。WebAssembly将让开发者能运用自己熟悉的编程语言编译，再藉虚拟机引擎在浏览器内运行。 —维基百科</p>
-</blockquote>
-<p>背景参考<a href="https://zhuanlan.zhihu.com/p/102692865" target="_blank" rel="noopener">《一个白学家眼里的 WebAssembly》</a></p>
-<p>曾几何时，有“一切可以由js实现的，终将用js实现”，而webassembly技术为编译型语言（c/c++,jave,c#等）抢夺浏览器战场打开了传送门。<br>
-优势：</p>
-<ul>
-<li>运行效率高 如应用于文件上传中的扫描<sup><a href="https://www.zhihu.com/question/265700379/answer/951118579" target="_blank" rel="noopener">注1</a></sup></li>
-<li>保密性好 见Google reCAPTCHA</li>
-</ul>
-<p>课外：为了提高浏览器性能，曾出现过从 NaCl、PNaCl 到 ASM.js，这些技术作为wasm的前辈，有以下特点————(于航《WebAssembly入门》)</p>
-<ol>
-<li>源码中都使用了类型明确的变量；</li>
-<li>应用都拥有独立的运行时环境，并且与原有的 JavaScript 运行时环境分离；</li>
-<li>支持将原有的 C/C++ 应用通过某种方式转换到基于这些技术的实现，并可以直接运行在 Web 浏览器中。</li>
-</ol>
-<p>现状是，四大厂（Mozilla，Google，Microsoft，Apple）共同倾力开发, WebAssembly 技术已成为 W3C 的标准, 其MVP版本(Minimum Viable Product)被主流浏览器支持</p>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/WebAssembly" target="_blank" rel="noopener">Webassembly MDN</a></p>
-<p>工具链<a href="https://github.com/emscripten-core/emscripten" target="_blank" rel="noopener">Emscripten</a>,Rust, AssemblyScript</p>
-<blockquote>
-<p>In case of conflict, consider users over authors over implementors over specifiers over theoretical purity.</p>
-</blockquote>
-<h4 id="helloworld-wasm"><a href="#helloworld-wasm" class="headerlink" title="helloworld.wasm"></a>helloworld.wasm</h4><p>准备一个新的开发环境：
-启动一个ubuntu的docker
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull ubuntu</span><br><span class="line">sudo docker run -it -u root --name labdocker -v labdocker_home:/var/labdocker_home ubuntu bash</span><br></pre></td></tr></table></figure></p>
-<p>上面的语句映射的是docker中的/var/labdocker_home和宿主的/var/lib/docker/volumes/labdocker_home/_data wtf???
-给‘空’的ubuntu安装必要工具
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install -y nodejs npm git</span><br></pre></td></tr></table></figure></p>
-<p>编译工具链依赖
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install -y cmake python3.8</span><br></pre></td></tr></table></figure></p>
-<p>安装emsdk
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/emscripten-core/emsdk.git</span><br><span class="line">cd emsdk</span><br><span class="line">git pull</span><br><span class="line">./emsdk install latest // 这一步依赖python</span><br><span class="line">./emsdk activate latest </span><br><span class="line">source ./emsdk_env.sh // 定义环境变量</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>You always have to source ./emsdk_env.sh first in a new terminal session</p>
-</blockquote>
-<p>输入emcc -v查看信息
-<img src="https://tvax3.sinaimg.cn/large/a60edd42gy1gidk1ak7cyj20kg05aq50.jpg" alt="emcc">
-看起来比较正常，说明工具安装成功</p>
-<p><img src="https://tvax4.sinaimg.cn/large/a60edd42gy1gidgl4nx6yj20ka0c2n1n.jpg" alt="emsdk setup"></p>
-<p>另，其实安装emsdk不是必须的，docker hub中有现成的
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull emscripten/emsdk</span><br><span class="line">docker run --rm -v $(pwd):/src -u $(id -u):$(id -g) \</span><br><span class="line">  emscripten/emsdk emcc helloworld.cpp -o helloworld.js</span><br></pre></td></tr></table></figure></p>
-<p>创建一个c项目
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir /home/Workspace/hello</span><br><span class="line">cd /home/Workspace/hello</span><br><span class="line">echo &apos;&apos; &gt; hello.c</span><br></pre></td></tr></table></figure></p>
-<p>回忆起c的hello world
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">int main(int argc, char** argv)&#123;</span><br><span class="line">  printf(&quot;hello hello~/n&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>走你
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emcc hello.c -s WASM=1 -o hello.html</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>参数-s WASM=1 要求生成.wasm否则编译成asm.js</li>
-<li>-o hello.html Emscripten 生成一个我们所写程序的HTML页面，并带有 wasm 和 JavaScript 文件
-编译生成hello.wasm hello.js hello.html 可以用emrun运行这个html(直接用浏览器打开会认为读取file://文件违反policy) 因为docker没有映射端口，拷出来用http-server运行，是这样婶的：
-<img src="https://tva3.sinaimg.cn/large/a60edd42ly1gj59qkbh1mj20qo0i2wf9.jpg" alt="emscript_helloworld"><h4 id="FFmpeg-js-的实现"><a href="#FFmpeg-js-的实现" class="headerlink" title="FFmpeg.js 的实现"></a>FFmpeg.js 的实现</h4>原文：<a href="https://itnext.io/build-ffmpeg-webassembly-version-ffmpeg-js-part-1-preparation-ed12bf4c8fac" target="_blank" rel="noopener">Build FFmpeg WebAssembly version (= ffmpeg.wasm)</a> 此链接国内网络或无法访问，可参考国内博客的类似文章，keyword:”webassembyly” + “ffmpeg”</li>
-</ul>
-<p>关于ffmpeg,<a href="/qqsnote/2019/04/19/video-streaming/" title="video和视频流 % }那篇曾用其进行视频的转码和输出流。<br></p> <blockquote> <p>FFmpeg 是一个开放源代码的自由软件，可以运行音频和视频多种格式的录影、转换、流功能，包含了libavcodec(用于多个项目中音频和视频的解码器库)，以及libavformat(音频与视频格式转换库)。————维基百科 clone FFmpeg 源码 <figure class=highlight plain><table><tr><td class=gutter><pre><span class=line>1</span><br></pre></td><td class=code><pre><span class=line>git clone https://github.com/FFmpeg/FFmpeg</span><br></pre></td></tr></table></figure></p> </blockquote> <p>源码根路径INSTALL.md为构建/安装说明 <figure class=highlight plain><table><tr><td class=gutter><pre><span class=line>1</span><br><span class=line>2</span><br></pre></td><td class=code><pre><span class=line>./configure</span><br><span class=line>make &amp; make install</span><br></pre></td></tr></table></figure></p> <p>在windows上开发使用cygwin集成linux开发环境（本不应绕此远路），运行cygwin.setup安装程序安装以下库 <figure class=highlight plain><table><tr><td class=gutter><pre><span class=line>1</span><br><span class=line>2</span><br><span class=line>3</span><br><span class=line>4</span><br></pre></td><td class=code><pre><span class=line>gcc-core</span><br><span class=line>mingw-gcc-core</span><br><span class=line>binutils</span><br><span class=line>gdb</span><br></pre></td></tr></table></figure></p> <p>执行configure加以下参数 <figure class=highlight plain><table><tr><td class=gutter><pre><span class=line>1</span><br></pre></td><td class=code><pre><span class=line>bash ./configure --enable-cross-compile --disable-x86asm</span><br></pre></td></tr></table></figure></p> <p>configure大约需要执行十几分钟（或更久，取决于cpu加网速）</p> <blockquote> <p>make issue: ./libavutil/mem.h:342:1: warning: ‘alloc_size’ attribute ignored on a function returning ‘int’ [-Wattributes] 342 | av_alloc_size(2, 3) int av_reallocp_array(void <em>ptr, size_t nmemb, size_t size); | ^<del>~</del><del>~</del>~~ make: **</em> [ffbuild/common.mak:60: libavformat/mov_esds.o] Interrupt</p> </blockquote> <p>旧版本函数参数不一致导致的问题，已被修复，见<a href=https://patchwork.ffmpeg.org/project/ffmpeg/patch/20181124210202.52207-1-mark.hsj@gmail.com/>[FFmpeg-devel] avutil/mem: Fix invalid use of av_alloc_size</a><br></p> <p>——————two weeks later————————<br> <figure class=highlight plain><table><tr><td class=gutter><pre><span class=line>1</span><br><span class=line>2</span><br><span class=line>3</span><br><span class=line>4</span><br><span class=line>5</span><br></pre></td><td class=code><pre><span class=line>git clone https://github.com/FFmpeg/FFmpeg</span><br><span class=line>cd FFmpeg</span><br><span class=line>.configure - --disable-x86asm // 这一步是根据configure生成MakeFile</span><br><span class=line>make // 编译</span><br><span class=line>make install // 将编译产出复制到(安装)到linux的相应位置</span><br></pre></td></tr></table></figure></p> <p>测试FFmpeg可以尝试在终端使用媒体编辑功能 <figure class=highlight plain><table><tr><td class=gutter><pre><span class=line>1</span><br><span class=line>2</span><br><span class=line>3</span><br></pre></td><td class=code><pre><span class=line>ffmpeg --help</span><br><span class=line>ffmpeg -i test.mov -strict -2 -vf crop=720:405:0:451 out.mp4</span><br><span class=line>// 从test.mov中裁剪720*405大小区域，裁剪偏移（0，451）输出为out.mp4</span><br></pre></td></tr></table></figure></p> <p>我们目的是要生成.wasm放到浏览器中,这里用到Emscripten<br></p> <blockquote> <p>Emscripten compiles C and C++ to WebAssembly using LLVM and Binaryen. Emscripten output can run on the Web, in Node.js, and in wasm runtimes. ——— <a href=https://github.com/emscripten-core/emscripten#readme>《Emscripten ReadMe》</a></p> </blockquote> <p>回到make这步的输出项中： <img src=https://tva1.sinaimg.cn/large/a60edd42gy1gidep9pbn7j20kg07y410.jpg alt=ffmegoutput> 这个泛着绿光的ffmpeg就是Binaryen（二进制文件） <a href=https://zh.wikipedia.org/wiki/LLVM>LLVM</a>(low level virtual machine)不限于字面意思的编译环境 关于emcc<br> <img src=https://emcc.zcopy.site/_images/EmscriptenToolchain.png alt=></p> <ul> <li>Emcc 使用 Clang 和 LLVM 编译生成 Wasm或者asm.js</li> <li>Emscripten SDK (emsdk) 配置 .emscriten, 用于管理多份SDK和工具，指定当前正在使用的编译代码(Active Tool/SDK)。</li> </ul> <p>工具链依赖 <figure class=highlight plain><table><tr><td class=gutter><pre><span class=line>1</span><br></pre></td><td class=code><pre><span class=line>apt-get install -y cmake python3.8</span><br></pre></td></tr></table></figure></p> <p>安装emsdk <figure class=highlight plain><table><tr><td class=gutter><pre><span class=line>1</span><br><span class=line>2</span><br><span class=line>3</span><br><span class=line>4</span><br><span class=line>5</span><br><span class=line>6</span><br></pre></td><td class=code><pre><span class=line>git clone https://github.com/emscripten-core/emsdk.git</span><br><span class=line>cd emsdk</span><br><span class=line>git pull</span><br><span class=line>./emsdk install latest // 这一步依赖python</span><br><span class=line>./emsdk activate latest </span><br><span class=line>source ./emsdk_env.sh // 定义环境变量</span><br></pre></td></tr></table></figure></p> <blockquote> <p>You always have to source ./emsdk_env.sh first in a new terminal session</p> </blockquote> <p>输入emcc -v查看信息 <img src=https://tvax3.sinaimg.cn/large/a60edd42gy1gidk1ak7cyj20kg05aq50.jpg alt=emcc> 看起来比较正常，说明工具安装成功</p> <p><img src=https://tvax4.sinaimg.cn/large/a60edd42gy1gidgl4nx6yj20ka0c2n1n.jpg alt=emsdk setup></p> <p>另，其实安装emsdk不是必须的，docker hub中有现成的 <figure class=highlight plain><table><tr><td class=gutter><pre><span class=line>1</span><br><span class=line>2</span><br><span class=line>3</span><br></pre></td><td class=code><pre><span class=line>docker pull emscripten/emsdk</span><br><span class=line>docker run --rm -v $(pwd):/src -u $(id -u):$(id -g) \</span><br><span class=line> emscripten/emsdk emcc helloworld.cpp -o helloworld.js</span><br></pre></td></tr></table></figure></p> <p>将FFmpeg源码编译成LLVM二进制码, 相比之前的configure &amp;&amp; make这里不仅要使用emconfigure 命令，而且要设置下述的若干参数，于是做一个build .sh: <figure class=highlight plain><table><tr><td class=gutter><pre><span class=line>1</span><br><span class=line>2</span><br><span class=line>3</span><br><span class=line>4</span><br><span class=line>5</span><br><span class=line>6</span><br><span class=line>7</span><br><span class=line>8</span><br><span class=line>9</span><br><span class=line>10</span><br><span class=line>11</span><br><span class=line>12</span><br><span class=line>13</span><br><span class=line>14</span><br><span class=line>15</span><br><span class=line>16</span><br><span class=line>17</span><br><span class=line>18</span><br><span class=line>19</span><br><span class=line>20</span><br><span class=line>21</span><br><span class=line>22</span><br><span class=line>23</span><br><span class=line>24</span><br><span class=line>25</span><br><span class=line>26</span><br><span class=line>27</span><br><span class=line>28</span><br><span class=line>29</span><br><span class=line>30</span><br><span class=line>31</span><br><span class=line>32</span><br><span class=line>33</span><br><span class=line>34</span><br><span class=line>35</span><br><span class=line>36</span><br><span class=line>37</span><br><span class=line>38</span><br><span class=line>39</span><br><span class=line>40</span><br><span class=line>41</span><br><span class=line>42</span><br><span class=line>43</span><br><span class=line>44</span><br><span class=line>45</span><br><span class=line>46</span><br><span class=line>47</span><br></pre></td><td class=code><pre><span class=line>#!/bin/bash -x</span><br><span class=line></span><br><span class=line># verify Emscripten version</span><br><span class=line>emcc -v</span><br><span class=line></span><br><span class=line># configure FFMpeg with Emscripten</span><br><span class=line>CFLAGS=&quot;-s USE_PTHREADS&quot;</span><br><span class=line>LDFLAGS=&quot;$CFLAGS -s INITIAL_MEMORY=33554432&quot; # 33554432 bytes = 32 MB</span><br><span class=line>CONFIG_ARGS=(</span><br><span class=line> --target-os=none # use none to prevent any os specific configurations</span><br><span class=line> --arch=x86_32 # use x86_32 to achieve minimal architectural optimization</span><br><span class=line> --enable-cross-compile # enable cross compile</span><br><span class=line> --disable-x86asm # disable x86 asm</span><br><span class=line> --disable-inline-asm # disable inline asm</span><br><span class=line> --disable-stripping # disable stripping</span><br><span class=line> --disable-programs # disable programs build (incl. ffplay, ffprobe &amp; ffmpeg)</span><br><span class=line> --disable-doc # disable doc</span><br><span class=line> --extra-cflags=&quot;$CFLAGS&quot;</span><br><span class=line> --extra-cxxflags=&quot;$CFLAGS&quot;</span><br><span class=line> --extra-ldflags=&quot;$LDFLAGS&quot;</span><br><span class=line> --nm=&quot;llvm-nm -g&quot;</span><br><span class=line> --ar=emar</span><br><span class=line> --as=llvm-as</span><br><span class=line> --ranlib=llvm-ranlib</span><br><span class=line> --cc=emcc</span><br><span class=line> --cxx=em++</span><br><span class=line> --objcc=emcc</span><br><span class=line> --dep-cc=emcc</span><br><span class=line>)</span><br><span class=line>emconfigure ./configure &quot;$&#123;CONFIG_ARGS[@]&#125;&quot;</span><br><span class=line></span><br><span class=line># build dependencies</span><br><span class=line>emmake make -j4</span><br><span class=line></span><br><span class=line># build ffmpeg.wasm</span><br><span class=line>mkdir -p wasm/dist</span><br><span class=line>ARGS=(</span><br><span class=line> -I. -I./fftools</span><br><span class=line> -Llibavcodec -Llibavdevice -Llibavfilter -Llibavformat -Llibavresample -Llibavutil -Llibpostproc -Llibswscale -Llibswresample</span><br><span class=line> -Qunused-arguments</span><br><span class=line> -o wasm/dist/ffmpeg.js fftools/ffmpeg_opt.c fftools/ffmpeg_filter.c fftools/ffmpeg_hw.c fftools/cmdutils.c fftools/ffmpeg.c</span><br><span class=line> -lavdevice -lavfilter -lavformat -lavcodec -lswresample -lswscale -lavutil -lm</span><br><span class=line> -s USE_SDL=2 # use SDL2</span><br><span class=line> -s USE_PTHREADS=1 # enable pthreads support</span><br><span class=line> -s INITIAL_MEMORY=33554432 # 33554432 bytes = 32 MB</span><br><span class=line>)</span><br><span class=line>emcc &quot;$&#123;ARGS[@]&#125;&quot;</span><br></pre></td></tr></table></figure></p> <h4 id=EMCC-DEBUG><a href=#EMCC-DEBUG class=headerlink title=EMCC_DEBUG></a>EMCC_DEBUG</h4><p>设置EMCC_DEBUG变量使用调试模式编译wasm <figure class=highlight plain><table><tr><td class=gutter><pre><span class=line>1</span><br><span class=line>2</span><br><span class=line>3</span><br><span class=line>4</span><br><span class=line>5</span><br></pre></td><td class=code><pre><span class=line>EMCC_DEBUG=1 emcc dip.cc </span><br><span class=line> -s WASM=1 </span><br><span class=line> -O3 </span><br><span class=line> --no-entry </span><br><span class=line> -o dip.wasm</span><br></pre></td></tr></table></figure></p>">video和视频流 % }那篇曾用其进行视频的转码和输出流。<br></a></p> <blockquote> <p>FFmpeg 是一个开放源代码的自由软件，可以运行音频和视频多种格式的录影、转换、流功能，包含了libavcodec(用于多个项目中音频和视频的解码器库)，以及libavformat(音频与视频格式转换库)。————维基百科 clone FFmpeg 源码 <figure class="highlight" plain><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/FFmpeg/FFmpeg</span><br></pre></td></tr></table></figure></p> </blockquote> <p>源码根路径INSTALL.md为构建/安装说明 <figure class="highlight" plain><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line">make &amp; make install</span><br></pre></td></tr></table></figure></p> <p>在windows上开发使用cygwin集成linux开发环境（本不应绕此远路），运行cygwin.setup安装程序安装以下库 <figure class="highlight" plain><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc-core</span><br><span class="line">mingw-gcc-core</span><br><span class="line">binutils</span><br><span class="line">gdb</span><br></pre></td></tr></table></figure></p> <p>执行configure加以下参数 <figure class="highlight" plain><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash ./configure --enable-cross-compile --disable-x86asm</span><br></pre></td></tr></table></figure></p> <p>configure大约需要执行十几分钟（或更久，取决于cpu加网速）</p> <blockquote> <p>make issue: ./libavutil/mem.h:342:1: warning: ‘alloc_size’ attribute ignored on a function returning ‘int’ [-Wattributes] 342 | av_alloc_size(2, 3) int av_reallocp_array(void <em>ptr, size_t nmemb, size_t size); | ^<del>~</del><del>~</del>~~ make: **</em> [ffbuild/common.mak:60: libavformat/mov_esds.o] Interrupt</p> </blockquote> <p>旧版本函数参数不一致导致的问题，已被修复，见<a href="https://patchwork.ffmpeg.org/project/ffmpeg/patch/20181124210202.52207-1-mark.hsj@gmail.com/" target="_blank" rel="noopener">[FFmpeg-devel] avutil/mem: Fix invalid use of av_alloc_size</a><br></p> <p>——————two weeks later————————<br> <figure class="highlight" plain><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/FFmpeg/FFmpeg</span><br><span class="line">cd FFmpeg</span><br><span class="line">.configure - --disable-x86asm // 这一步是根据configure生成MakeFile</span><br><span class="line">make // 编译</span><br><span class="line">make install // 将编译产出复制到(安装)到linux的相应位置</span><br></pre></td></tr></table></figure></p> <p>测试FFmpeg可以尝试在终端使用媒体编辑功能 <figure class="highlight" plain><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg --help</span><br><span class="line">ffmpeg -i test.mov -strict -2 -vf crop=720:405:0:451 out.mp4</span><br><span class="line">// 从test.mov中裁剪720*405大小区域，裁剪偏移（0，451）输出为out.mp4</span><br></pre></td></tr></table></figure></p> <p>我们目的是要生成.wasm放到浏览器中,这里用到Emscripten<br></p> <blockquote> <p>Emscripten compiles C and C++ to WebAssembly using LLVM and Binaryen. Emscripten output can run on the Web, in Node.js, and in wasm runtimes. ——— <a href="https://github.com/emscripten-core/emscripten#readme" target="_blank" rel="noopener">《Emscripten ReadMe》</a></p> </blockquote> <p>回到make这步的输出项中： <img src="https://tva1.sinaimg.cn/large/a60edd42gy1gidep9pbn7j20kg07y410.jpg" alt="ffmegoutput"> 这个泛着绿光的ffmpeg就是Binaryen（二进制文件） <a href="https://zh.wikipedia.org/wiki/LLVM" target="_blank" rel="noopener">LLVM</a>(low level virtual machine)不限于字面意思的编译环境 关于emcc<br> <img src="https://emcc.zcopy.site/_images/EmscriptenToolchain.png" alt></p> <ul> <li>Emcc 使用 Clang 和 LLVM 编译生成 Wasm或者asm.js</li> <li>Emscripten SDK (emsdk) 配置 .emscriten, 用于管理多份SDK和工具，指定当前正在使用的编译代码(Active Tool/SDK)。</li> </ul> <p>工具链依赖 <figure class="highlight" plain><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install -y cmake python3.8</span><br></pre></td></tr></table></figure></p> <p>安装emsdk <figure class="highlight" plain><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/emscripten-core/emsdk.git</span><br><span class="line">cd emsdk</span><br><span class="line">git pull</span><br><span class="line">./emsdk install latest // 这一步依赖python</span><br><span class="line">./emsdk activate latest </span><br><span class="line">source ./emsdk_env.sh // 定义环境变量</span><br></pre></td></tr></table></figure></p> <blockquote> <p>You always have to source ./emsdk_env.sh first in a new terminal session</p> </blockquote> <p>输入emcc -v查看信息 <img src="https://tvax3.sinaimg.cn/large/a60edd42gy1gidk1ak7cyj20kg05aq50.jpg" alt="emcc"> 看起来比较正常，说明工具安装成功</p> <p><img src="https://tvax4.sinaimg.cn/large/a60edd42gy1gidgl4nx6yj20ka0c2n1n.jpg" alt="emsdk" setup></p> <p>另，其实安装emsdk不是必须的，docker hub中有现成的 <figure class="highlight" plain><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull emscripten/emsdk</span><br><span class="line">docker run --rm -v $(pwd):/src -u $(id -u):$(id -g) \</span><br><span class="line"> emscripten/emsdk emcc helloworld.cpp -o helloworld.js</span><br></pre></td></tr></table></figure></p> <p>将FFmpeg源码编译成LLVM二进制码, 相比之前的configure &amp;&amp; make这里不仅要使用emconfigure 命令，而且要设置下述的若干参数，于是做一个build .sh: <figure class="highlight" plain><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash -x</span><br><span class="line"></span><br><span class="line"># verify Emscripten version</span><br><span class="line">emcc -v</span><br><span class="line"></span><br><span class="line"># configure FFMpeg with Emscripten</span><br><span class="line">CFLAGS=&quot;-s USE_PTHREADS&quot;</span><br><span class="line">LDFLAGS=&quot;$CFLAGS -s INITIAL_MEMORY=33554432&quot; # 33554432 bytes = 32 MB</span><br><span class="line">CONFIG_ARGS=(</span><br><span class="line"> --target-os=none # use none to prevent any os specific configurations</span><br><span class="line"> --arch=x86_32 # use x86_32 to achieve minimal architectural optimization</span><br><span class="line"> --enable-cross-compile # enable cross compile</span><br><span class="line"> --disable-x86asm # disable x86 asm</span><br><span class="line"> --disable-inline-asm # disable inline asm</span><br><span class="line"> --disable-stripping # disable stripping</span><br><span class="line"> --disable-programs # disable programs build (incl. ffplay, ffprobe &amp; ffmpeg)</span><br><span class="line"> --disable-doc # disable doc</span><br><span class="line"> --extra-cflags=&quot;$CFLAGS&quot;</span><br><span class="line"> --extra-cxxflags=&quot;$CFLAGS&quot;</span><br><span class="line"> --extra-ldflags=&quot;$LDFLAGS&quot;</span><br><span class="line"> --nm=&quot;llvm-nm -g&quot;</span><br><span class="line"> --ar=emar</span><br><span class="line"> --as=llvm-as</span><br><span class="line"> --ranlib=llvm-ranlib</span><br><span class="line"> --cc=emcc</span><br><span class="line"> --cxx=em++</span><br><span class="line"> --objcc=emcc</span><br><span class="line"> --dep-cc=emcc</span><br><span class="line">)</span><br><span class="line">emconfigure ./configure &quot;$&#123;CONFIG_ARGS[@]&#125;&quot;</span><br><span class="line"></span><br><span class="line"># build dependencies</span><br><span class="line">emmake make -j4</span><br><span class="line"></span><br><span class="line"># build ffmpeg.wasm</span><br><span class="line">mkdir -p wasm/dist</span><br><span class="line">ARGS=(</span><br><span class="line"> -I. -I./fftools</span><br><span class="line"> -Llibavcodec -Llibavdevice -Llibavfilter -Llibavformat -Llibavresample -Llibavutil -Llibpostproc -Llibswscale -Llibswresample</span><br><span class="line"> -Qunused-arguments</span><br><span class="line"> -o wasm/dist/ffmpeg.js fftools/ffmpeg_opt.c fftools/ffmpeg_filter.c fftools/ffmpeg_hw.c fftools/cmdutils.c fftools/ffmpeg.c</span><br><span class="line"> -lavdevice -lavfilter -lavformat -lavcodec -lswresample -lswscale -lavutil -lm</span><br><span class="line"> -s USE_SDL=2 # use SDL2</span><br><span class="line"> -s USE_PTHREADS=1 # enable pthreads support</span><br><span class="line"> -s INITIAL_MEMORY=33554432 # 33554432 bytes = 32 MB</span><br><span class="line">)</span><br><span class="line">emcc &quot;$&#123;ARGS[@]&#125;&quot;</span><br></pre></td></tr></table></figure></p> <h4 id="EMCC-DEBUG"><a href="#EMCC-DEBUG" class="headerlink" title="EMCC_DEBUG"></a>EMCC_DEBUG</h4><p>设置EMCC_DEBUG变量使用调试模式编译wasm <figure class="highlight" plain><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">EMCC_DEBUG=1 emcc dip.cc </span><br><span class="line"> -s WASM=1 </span><br><span class="line"> -O3 </span><br><span class="line"> --no-entry </span><br><span class="line"> -o dip.wasm</span><br></pre></td></tr></table></figure></p>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/08/04/vtk/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/08/04/vtk/" itemprop="url">vtk</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-04T10:03:13+08:00">
-                2020-08-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>The Rendering Engine
-mapper</p>
-<h4 id="vtkActor"><a href="#vtkActor" class="headerlink" title="vtkActor"></a>vtkActor</h4><p>派生自vtkProp类，渲染场景中数据的可视化表达是通过vtkProp的子类负责的。<del>比如，本例要渲染一个柱体，柱体的数据类型是vtkPolyData，</del>数据要在场景中渲染时，不是直接把数据加入渲染场景就可以，待渲染的数据是以vtkProp对象存在于渲染场景中。</p>
-<p>三维空间中渲染对象最常用的vtkProp子类是vtkActor(表达场景中的几何数据)和vtkVolume(表达场景中的体数据)；二维空间中的数据则是用vtkActor2D表达。</p>
-<p>vtkProp子类负责确定渲染场景中对象的位置、大小和方向信息。Prop依赖于两个对象(Prop一词来源于戏剧里的“道具”，在VTK里表示的是渲染场景中可以看得到的对象。)，一个是Mapper(vtkMapper)对象，负责存放数据和渲染信息，另一个是属性(vtkProperty)对象，负责控制颜色、不透明度等参数。</p>
-<p>VTK中定义了大量(超过50个)的Prop类，如vtkImageActor(负责图像显示)和vtkPieChartActor(用于创建数组数据的饼图可视化表达)。其中的一些Prop内部直接包括了控制显示的参数和待渲染数据的索引，因此并不需要额外的Property和Mapper对象。vtkActor的子类vtkFollower可以自动的更新方向信息以保持始终面向一个特定的相机。这样无论怎样旋转，三维场景中的广告板(Billboards)或者文本都是可见的。vtkActor的子类vtkLODActor可以自动改变自身的几何表达来实现需要达到的交互帧率。vtkProp3D的子类vtkLODProp3D则是通过从许多Mapper(可以是体数据的Mapper和几何数据的Mapper集合)中进行选择来实现交互。vtkAssembly建立Actor的等级结构以便在整个结构平移、旋转或者缩放时能够更合理的控制变换。</p>
-<p>vtkActor::SetMapper()——设置生成几何图元的Mapper。即连接一个Actor到可视化pipeline的末端(可视化pipeline的末端就是Mapper)。</p>
-<h4 id="vtkMapper"><a href="#vtkMapper" class="headerlink" title="vtkMapper"></a>vtkMapper</h4><p>将输入的数据转换为几何图元(点、线、多边形)进行渲染。</p>
-<h4 id="vtkRenderWindow"><a href="#vtkRenderWindow" class="headerlink" title="vtkRenderWindow"></a>vtkRenderWindow</h4><p>连接操作系统与VTK渲染引擎</p>
-<h4 id="vtkRenderer"><a href="#vtkRenderer" class="headerlink" title="vtkRenderer"></a>vtkRenderer</h4><p>负责管理场景的渲染过程。组成场景的所有对象包括Prop，照相机(Camera)和光照(Light)都被集中在一个vtkRenderer对象中。父类vtkViewport。一个vtkRenderWindow中可以有多个vtkRenderer对象，而这些vtkRenderer可以渲染在窗口中不同的矩形区域中(即视口)，或者覆盖整个窗口区域。</p>
-<ul>
-<li>vtkRenderer::AddActor()</li>
-<li><p>vtkRenderer::SetBackground()</p>
-<h4 id="Interactor"><a href="#Interactor" class="headerlink" title="Interactor"></a>Interactor</h4><p>提供平台独立的响应鼠标、键盘和时钟事件的交互机制，通过VTK的Command/Observer设计模式将监听到的特定平台的鼠标、键盘和时钟事件交由vtkInteractorObserver或其子类，如vtkInteractorStyle进行处理。vtkInteractorStyle等监听这些消息并进行处理以完成旋转、拉伸和放缩等运动控制。vtkRenderWindowInteractor自动建立一个默认的3D场景交互器样式(Interactor Style)：vtkInteractorStyleSwitch，当然你也可以选择其他的交互器样式，或者是创建自己的交互器样式。在本例中，我们就是选择了其他的交互器样式来替代默认的：vtkInteractorStyleTrackballCamera</p>
-</li>
-<li><p>vtkRenderWindowInteractor::SetRenderWindow()——设置渲染窗口，消息是通过渲染窗口捕获到的，所以必须要给交互器对象设置渲染窗口。</p>
-</li>
-<li><p>vtkRenderWindowInteractor::SetInteractorStyle()——定义交互器样式，默认的交互样式为vtkInteractorStyleSwitch。</p>
-</li>
-<li><p>vtkRenderWindowInteractor::Initialize() ——为处理窗口事件做准备，交互器工作之前必须先调用这个方法进行初始化。</p>
-</li>
-<li><p>vtkRenderWindowInteractor::Start() ——开始进入事件响应循环，交互器处于等待状态，等待用户交互事件的发生。进入事件响应循环之前必须先调用Initialize()方法。</p>
-</li>
-</ul>
-<h4 id="vtkInteractorStyleTrackballCamera"><a href="#vtkInteractorStyleTrackballCamera" class="headerlink" title="vtkInteractorStyleTrackballCamera"></a>vtkInteractorStyleTrackballCamera</h4><p>交互器样式的一种，该样式下，用户是通过控制相机对物体作旋转、放大、缩小等操作。</p>
-<p><img src="https://tvax2.sinaimg.cn/large/a60edd42gy1ghelso7vv1j20gz08paaw.jpg" alt="vtk scope"></p>
-<h4 id="pipeline"><a href="#pipeline" class="headerlink" title="pipeline"></a>pipeline</h4><h4 id="官方-paraview"><a href="#官方-paraview" class="headerlink" title="官方 paraview"></a>官方 paraview</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/07/30/Redux/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/07/30/Redux/" itemprop="url">Redux</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-30T10:52:25+08:00">
-                2020-07-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/07/27/CSharp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/07/27/CSharp/" itemprop="url">C#</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-27T10:45:30+08:00">
-                2020-07-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="decimal"><a href="#decimal" class="headerlink" title="decimal"></a>decimal</h4><p>因为float计算时有精度损耗，而且产生损耗时在程序中并不提示，于是创建decimal类型，付出额外的性能，进行高精度计算
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">decimal d=1.23M</span><br></pre></td></tr></table></figure></p>
-<h4 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foreach (Object item in items)&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="IEnumerable-Select"><a href="#IEnumerable-Select" class="headerlink" title="IEnumerable.Select"></a>IEnumerable<t>.Select</t></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vm.children = parentList.Select(parentItem =&gt; parentItem.Child).ToList();</span><br></pre></td></tr></table></figure>
-<h4 id="委托Delegate"><a href="#委托Delegate" class="headerlink" title="委托Delegate"></a>委托Delegate</h4><blockquote>
-<p>C# 中的委托（Delegate）类似于 C 或 C++ 中函数的指针, 是一种引用类型变量</p>
-</blockquote>
-<h4 id="初始化Object"><a href="#初始化Object" class="headerlink" title="初始化Object"></a>初始化Object</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">result = await _context.OurBrand</span><br><span class="line">        .Where(brand =&gt; brand.name != &quot;QQsIndustry&quot;)</span><br><span class="line">        .Select(brand=&gt;new JObject&#123;&#123;&quot;name&quot;, brand.name&#125;, &#123;&quot;logo&quot;, brand.logo&#125;&#125;)</span><br><span class="line">        .ToListAsync();</span><br></pre></td></tr></table></figure>
-<h4 id="正则表达式极其校验"><a href="#正则表达式极其校验" class="headerlink" title="正则表达式极其校验"></a>正则表达式极其校验</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">string pattern = @&quot;^[A-Z]&#123;4&#125;[AB0-9][0-9]&#123;3&#125;$&quot;;</span><br><span class="line">flag = Regex.IsMatch(sn, pattern)</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/07/27/dotNetCore-Middleware/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/07/27/dotNetCore-Middleware/" itemprop="url">.Net Core 中间件</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-27T10:14:04+08:00">
-                2020-07-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>这里地中间件概念和express.js中的是一致的,</p>
-<p>下面栗子的代码来源： <a href="https://juejin.im/entry/5b39c743e51d4558a21fad54" target="_blank" rel="noopener">Net Core中间件封装原理示例demo解析</a>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public static class RequestIpExtensions</span><br><span class="line">&#123;</span><br><span class="line">    public static IApplicationBuilder UseRequestIp(this IApplicationBuilder builder)</span><br><span class="line">    &#123;</span><br><span class="line">        return builder.UseMiddleware&lt;RequestIPMiddleware&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>each middleware extension method is exposed on IApplicationBuilder through the Microsoft.AspNetCore.Builder namespace. 通过IApplicationBuilder接口方法引入中间件，IApplicationBuilder由Microsoft.AspNetCore.Builder命名空间提供</p>
-</blockquote>
-<p>中间件的具体实现
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class RequestIPMiddleware</span><br><span class="line">&#123;</span><br><span class="line">    private readonly RequestDelegate _next;</span><br><span class="line">    private readonly ILogger _logger;</span><br><span class="line"></span><br><span class="line">    public RequestIPMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)</span><br><span class="line">    &#123;</span><br><span class="line">        _next = next;</span><br><span class="line">        _logger = loggerFactory.CreateLogger&lt;RequestIPMiddleware&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public async Task Invoke(HttpContext context)</span><br><span class="line">    &#123;</span><br><span class="line">        _logger.LogInformation(&quot;User Ip: &quot; + context.Connection.RemoteIpAddress.ToString());</span><br><span class="line">        await _next.Invoke(context);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>使用中间<br>
-Startup.cs
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void Configure(IApplicationBuilder app, IHostingEnvironment env)</span><br><span class="line">&#123;</span><br><span class="line">    ....</span><br><span class="line">    app.UseRequestIp();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="page-number current">2</span><a class="page-number" href="/qqsnote/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/16/">16</a><a class="extend next" rel="next" href="/qqsnote/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="page-number current">2</span><a class="page-number" href="/qqsnote/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/17/">17</a><a class="extend next" rel="next" href="/qqsnote/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1632,7 +1799,7 @@ Startup.cs
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">159</span>
+                  <span class="site-state-item-count">165</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1643,7 +1810,7 @@ Startup.cs
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>

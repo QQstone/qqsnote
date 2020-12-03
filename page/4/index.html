@@ -229,6 +229,1043 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/07/17/AZ900/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/07/17/AZ900/" itemprop="url">AZ900</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-17T10:30:43+08:00">
+                2020-07-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>订阅  付费边界 访问管理策略的边界
+影响成本的因素：资源类型 服务 位置
+pricing carculator 产品定价计算器和总拥有成本计算器
+降低成本：</p>
+<ul>
+<li>执行成本分析</li>
+<li>使用Azure顾问监视使用情况</li>
+<li>使用支出限制</li>
+<li>使用Azure预订 提前付款产品</li>
+<li>选择低成本地点和地区</li>
+<li>使用标签标识成本所有者
+cost manage工具
+改进应用程序SLA 承诺的性能目标 如某级别月累计停机时间不超过xxx</li>
+</ul>
+<h4 id="云计算概览"><a href="#云计算概览" class="headerlink" title="云计算概览"></a>云计算概览</h4><p><img src="https://docs.microsoft.com/zh-cn/learn/modules/principles-cloud-computing/media/2-vm-vs-container-vs-serverless.png" alt></p>
+<blockquote>
+<p>自称：经济高效、可缩放、具有弹性、始终保持最新状态、可靠且安全</p>
+</blockquote>
+<ul>
+<li>资本支出 (Capital Expenditure, CapEx)实体基础设施投入费用, 如服务器、存储、网络、备份、灾后重建、技术人员</li>
+<li>运营支出 (Operational Expenditure, OpEx) 服务/产品使用费用<br> </li>
+</ul>
+<blockquote>
+<p>issue: 测试从Azure Serveice 到 remote DB server的network connections
+背景：老板要将正在开发的项目放到公网可以访问的服务器上以用来演示，迁移数据库到云端是费事且有额外成本的。</p>
+</blockquote>
+<pre><code>日前的实践找到了控制台的解决方法 创建App Service后其管理面板上Development Tools--SSH，其进入后是linux终端，路径在wwwroot下，常用网络连接工具见{% post-link LinuxTools Linux命令行工具 %} curl命令可用
+</code></pre><h4 id="benefit"><a href="#benefit" class="headerlink" title="benefit"></a>benefit</h4><p>The public cloud is a shared entity whereby multiple corporations each use a portion of the resources in the cloud. It is the benefit of using a public cloud service for the servers over an on-premises network</p>
+<h4 id="混合云（Hybrid-Cloud）"><a href="#混合云（Hybrid-Cloud）" class="headerlink" title="混合云（Hybrid Cloud）"></a>混合云（Hybrid Cloud）</h4><p>公有云的缺点：使用公有云可能无法满足特定的安全要求；公有云可能无法满足政府政策、行业标准或法律要求；不拥有硬件或服务，也无法按照你的意愿管理它们；可能很难满足独特的业务需求，例如必须维护旧版应用程序</p>
+<p>私有云服务和公有云服务的结合，即要架设开放的商用应用，又对部分资源存在硬件或自主管理方面的要求，宜选择私有云<br>
+例题：Suppose you have two types of applications: legacy applications that require specialized mainframe hardware and newer applications that can run on commodity hardware. Which cloud deployment model would be best for you?<br>
+A. Public cloud
+B. Private cloud
+C. Hybrid cloud</p>
+<p>保留预置的(on-premise)服务器，并且扩展需求，宜选择混合云，即保留原服务器以消除迁移成本，且用公有平台（或其他资源）进行方便的扩展</p>
+<p>例题：You have an on-premises network that contains 100 servers.
+You need to recommend a solution that provides additional resources to your users. The solution must minimize capital and operational expenditure costs.<br>
+A. a complete migration to the public cloud
+B. an additional data center
+C. a private cloud
+D. a hybrid cloud  </p>
+<p>极具<a href="https://www.examtopics.com/discussions/microsoft/view/5732-exam-az-900-topic-1-question-5-discussion/" target="_blank" rel="noopener">争议</a>的一道判断题：An organization that hosts its infrastructure in a private cloud can decommission its data center.<br>
+答案是False. 希望不要在考场上遇到这么坑爹的表述，题干问如果organization在私有云上架设自己的设施，那他自己数据中心是不可或缺的还是可以decommission（拆除），其想表达的是如果你用公有云或者混合云，就没有必要自己经营数据中心了。</p>
+<h4 id="IaaS-PaaS-SaaS"><a href="#IaaS-PaaS-SaaS" class="headerlink" title="IaaS PaaS SaaS"></a>IaaS PaaS SaaS</h4><p>Infrastructure as a service (IaaS) is an instant computing infrastructure, provisioned and managed over the internet. It’s one of the four types of cloud services, along with software as a service (SaaS), platform as a service (PaaS), and serverless.
+<img src="https://tvax1.sinaimg.cn/large/a60edd42gy1giulu4by1nj219h0fnabt.jpg" alt="IaaS">
+IaaS 通常用于以下场景：迁移工作负载；测试和开发；存储、备份和恢复。
+Caution！ 虚拟机是IaaS</p>
+<p>例题：Your company plans to migrate all its data and resources to Azure.
+The company’s migration plan states that only platform as a service (PaaS) solutions must be used in Azure.
+You need to deploy an Azure environment that supports the planned migration.
+Solution: You create an Azure App Service and Azure SQL databases.</p>
+<p>A: Correct. Azure SQL databases 也属于 PaaS，区别于在虚拟机中安装的SQL Server（IaaS）</p>
+<p>例题：Your company plans to migrate all its data and resources to Azure.
+The company’s migration plan states that only Platform as a Service (PaaS) solutions must be used in Azure.
+You need to deploy an Azure environment that meets the company migration plan.
+Solution: You create an Azure App Service and Azure Storage accounts. </p>
+<p>A: False. Azure Storage accounts is IaaS</p>
+<p><a href="https://docs.microsoft.com/en-us/azure/cosmos-db/introduction" target="_blank" rel="noopener">Cosmos DB</a> is PaaS</p>
+<h4 id="区域、中心"><a href="#区域、中心" class="headerlink" title="区域、中心"></a>区域、中心</h4><p>Q:Deploying an app can be done directly to what level of physical granularity(尺度)? A:Region</p>
+<p>You need to ensure that the services running on the virtual machines are available if a  single data center fails.
+Solution: You deploy the virtual machines to two or more regions.
+or You deploy the virtual machines to two or more availability zones</p>
+<p>区域间数据传输根据带宽收费</p>
+<blockquote>
+<p>Azure availability zone can be used to protect access to Azure services from an Azure data center failure</p>
+</blockquote>
+<h4 id="计价"><a href="#计价" class="headerlink" title="计价"></a>计价</h4><p>例题：If you create two Azure virtual machines that use the B2S size, each virtual machine will always generate the same monthly costs.（False）</p>
+<p>Two virtual machines using the same size could have different disk configurations. Therefore, the monthly
+costs could be different.</p>
+<p>“pay-as-you-go”<br>
+When planning to migrate a public website to Azure, you must plan to pay monthly usage costs. .</p>
+<p>“elasticity”<br>
+<a href="https://azure.microsoft.com/zh-cn/overview/what-is-elastic-computing/" target="_blank" rel="noopener">弹性计算</a>, 系统监控工具控制，无需中断操作即可使分配的资源量与实际所需资源量相匹配。通过云灵活性，公司可避免就未用容量或闲置资源付费，且不必担心投入资金购买或维护额外的资源和设备。</p>
+<h4 id="订阅"><a href="#订阅" class="headerlink" title="订阅"></a>订阅</h4><blockquote>
+<p>An Azure AD tenant can have multiple subscriptions but an Azure subscription can only be associated with one Azure AD tenant.
+见<a href="https://docs.microsoft.com/zh-cn/azure/active-directory/fundamentals/active-directory-how-subscriptions-associated-directory" target="_blank" rel="noopener">将 Azure 订阅关联或添加到 Azure Active Directory 租户</a></p>
+</blockquote>
+<p><img src="https://docs.microsoft.com/zh-cn/azure/azure-resource-manager/management/media/overview/scope-levels.png" alt></p>
+<h4 id="资源组"><a href="#资源组" class="headerlink" title="资源组"></a>资源组</h4><blockquote>
+<p>A resource can interact with resources in other resource groups</p>
+</blockquote>
+<blockquote>
+<p>Deleting the resource group will remove the resource group as well as all the resources in that resource group. </p>
+</blockquote>
+<blockquote>
+<p>Resources from multiple different regions can be placed in a resource group.</p>
+<ul>
+<li>资源组中的所有资源应该具有相同的生命周期。 一起部署、更新和删除这些资源。 </li>
+<li>每个资源只能存在于一个资源组中。可以将资源从一个资源组移到另一个组</li>
+<li>资源组中的资源可以位于与资源组不同的区域。 </li>
+</ul>
+</blockquote>
+<p>锁定资源以防止意外：
+CanNotDelete和ReadOnly, 资源可以存在多个删除锁，自动继承上层锁。</p>
+<p><b>Azure virtual machines</b> should you use from the Azure portal to view service failure notifications that can
+affect the availability of VM1(your virtual machine)?</p>
+<p>例题：You need to view a list of planned maintenance events that can affect the availability of an Azure subscription.</p>
+<p>On the <b>Help and Support</b> blade, there is a Service Health option. If you click Service Health, a new blade opens. The Service Health blade contains the Planned Maintenance link which opens a blade where you can view a list of planned maintenance events that can affect the availability of an Azure subscription.</p>
+<h4 id="Azure服务"><a href="#Azure服务" class="headerlink" title="Azure服务"></a>Azure服务</h4><p>An integrated solution for the deployment of code - <b>Azure DevOps</b>
+A tool that provides guidance and recommendation to improve an Azure environment - <b>zure Advisor</b>
+A simplified tool to build intelligent Artificial Intelligence (AI) applications - <b>Azure Cognitive services</b>
+Monitors web applications - <b>Azure Application Insights</b></p>
+<h4 id="规模集（scale-set）"><a href="#规模集（scale-set）" class="headerlink" title="规模集（scale set）"></a>规模集（scale set）</h4><p>如用于创建并管理一组负载均衡的 VM，根据需求或定义的计划自动增减 VM 实例的数目，为应用程序提供搞可用性</p>
+<h4 id="DevTest-Lab"><a href="#DevTest-Lab" class="headerlink" title="DevTest Lab"></a>DevTest Lab</h4><p>开发测试实验室，利用基架/模板快速创建环境</p>
+<h4 id="存储账户"><a href="#存储账户" class="headerlink" title="存储账户"></a>存储账户</h4><blockquote>
+<p>Data that is copied to Azure Storage account is maintained automatically in at least three copies.</p>
+</blockquote>
+<p>存储账户的数据冗余选项有4个 每种都以不同的措施复制三次 见<a href="https://docs.microsoft.com/zh-cn/azure/storage/common/storage-account-overview" target="_blank" rel="noopener">存储帐户概述</a></p>
+<h4 id="Cloud-shell"><a href="#Cloud-shell" class="headerlink" title="Cloud shell"></a>Cloud shell</h4><p>Cloud shell就是页面上那个命令行工具，从中可以运行PowerShell命令或Bash命令</p>
+<p>另install azure cli then it can be used in Command Prompt or Windows PowerShell </p>
+<p>例题：An Azure administrator plans to run a PowerShell script that creates Azure resources. You need to recommend which computer configuration to use to run the script.
+Solution: Run the script from a computer that runs Linux and has the Azure CLI tools installed.
+Does this meet the goal?</p>
+<p>answer：A PowerShell script is a file that contains PowerShell cmdlets and code. A PowerShell script needs to be run in PowerShell.
+PowerShell can now be installed on Linux. However, the question states that the computer has Azure CLI tools, not PowerShell installed. Therefore, this solution does not meet the goal.</p>
+<p>PowerShell已经是跨平台应用</p>
+<p>Azure命令行没有ping，而使用tcpping</p>
+<h4 id="Data-Lake"><a href="#Data-Lake" class="headerlink" title="Data Lake"></a>Data Lake</h4><p>例题：You plan to store 20 TB of data in Azure. The data will be accessed infrequently and visualized by using Microsoft Power BI. 
+You need to recommend a storage solution for the data.
+A. Azure Data Lake
+B. Azure Cosmos DB
+C. Azure SQL Data Warehouse
+D. Azure SQL Database
+E. Azure Database for PostgreSQL </p>
+<p>answer is AC，<a href="https://azure.microsoft.com/zh-cn/solutions/data-lake/" target="_blank" rel="noopener">Azure Data Lake</a></p>
+<h4 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h4><p> <a href="https://docs.microsoft.com/zh-cn/azure/vpn-gateway/vpn-gateway-howto-site-to-site-resource-manager-portal" target="_blank" rel="noopener">Local Network Gateway 创建从azure到本地网关的连接</a> </p>
+<p>You have an Azure environment that contains 10 virtual networks and 100 virtual machines.
+You need to limit the amount of inbound traffic to all the Azure virtual networks.
+What should you create?
+A. one application security group (ASG)
+B. 10 virtual network gateways
+C. 10 Azure ExpressRoute circuits
+D. one Azure firewall </p>
+<p>answer is D</p>
+<h4 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h4><p>2020.9.26勉强通过 准备AZ-303 + AZ-304 即成为Azure Solutions Architect Expert</p>
+<blockquote>
+<p>It certainly wouldn’t hurt you to have your <a href="https://docs.microsoft.com/en-us/learn/certifications/exams/az-104" target="_blank" rel="noopener">Microsoft Azure Administrator</a> in the bag before attempting to take down this colossal certification and its dual architecture-focused exams. ——–<a href="https://acloudguru.com/blog/engineering/which-azure-certification-is-right-for-me" target="_blank" rel="noopener">《Which Azure certification is right for me?》</a></p>
+</blockquote>
+<p>即建议通过AZ-104获得Azure Administrator Associate认证，难度只有两星，费用是115刀</p>
+<p><a href="https://zhuanlan.zhihu.com/p/108076190" target="_blank" rel="noopener">知乎：Azure 框架设计师认证考试2020大更改</a></p>
+<blockquote>
+<p>原AZ-103将被新的AZ-104替代，原AZ-300将被新的AZ-303替代，原AZ-301将被新的AZ-304替代
+AZ-103的考试侧重点分配如下</p>
+</blockquote>
+<p>管理 Azure 订阅和资源 (15-20%)
+实施和管理存储 (15-20%)
+部署和管理虚拟机 (VM) (15-20%)
+配置和管理虚拟网络 (30-35%)
+管理身份 (15-20%)</p>
+<p>在新的AZ-104中，这些权重将会有一些修改。</p>
+<p>订阅Subscription和身份认证Identity将会合并成单独的身份认证Identity
+新增考点监控和备份（Monitor and Backup）
+新增主题： 网络程序和容器（Web apps and containers）</p>
+<p><a href="https://docs.microsoft.com/en-us/learn/certifications/exams/az-104" target="_blank" rel="noopener">Two ways to prepare</a> 见页面下方官方文档</p>
+<p>AZ-300的考试权重分配如下</p>
+<ul>
+<li>部署和配置基础设施 (25-30%)</li>
+<li>实现工作负载和安全 (20-25%)</li>
+<li>创建和部署 App (5-10%)</li>
+<li>实现认证和安全数据（5-10%）</li>
+<li>开发云和 Azure 存储 (20-25%)</li>
+</ul>
+<p>在新的<a href="https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RE4psD6" target="_blank" rel="noopener">AZ-303</a>中，这些权重将会有一些修改。</p>
+<ul>
+<li>考试中有50%的部分是关于部署和配置（Deploy and Configure）</li>
+<li>去掉了对认证和安全数据的要求</li>
+<li>去掉了对云开发：消息和自动扩展的要求</li>
+<li>新增部署数据平台的要求，包括SQL DB和Cosmos DB</li>
+<li>新增监控的要求 Monitoring</li>
+</ul>
+<p><a href="https://docs.microsoft.com/en-us/learn/certifications/exams/az-303" target="_blank" rel="noopener">Two ways to prepare</a> 见页面下方官方文档</p>
+<p>AZ-301的考试权重分配如下</p>
+<ul>
+<li>确定工作量要求 (10-15%)</li>
+<li>设计身份和安全性 (20-25%)</li>
+<li>设计数据平台解决方案 (15-20%)</li>
+<li>设计业务连续性策略(15-20%)</li>
+<li>部署、迁移和集成设计（10-15%）</li>
+<li>设计基础设施策略（15-20%）</li>
+</ul>
+<p>在新的<a href="https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RE4pCWz" target="_blank" rel="noopener">AZ-304</a>中，这些权重将会有一些修改。</p>
+<ul>
+<li>去掉获取信息和要求的部分</li>
+<li>去掉设计认证管理的部分</li>
+<li>去掉危险预防策略的部分</li>
+<li>去掉数据文档流的部分</li>
+<li>去掉数据保护策略的部分</li>
+<li>去掉数据监控策略的部分</li>
+<li>去掉存储策略的部分</li>
+<li>添加设计程序框架</li>
+</ul>
+<p><a href="https://docs.microsoft.com/en-us/learn/certifications/exams/az-304" target="_blank" rel="noopener">Two ways to prepare</a> 见页面下方官方文档</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/07/16/React-Ecosystem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/07/16/React-Ecosystem/" itemprop="url">React-Ecosystem</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-16T17:31:15+08:00">
+                2020-07-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="Next-js"><a href="#Next-js" class="headerlink" title="Next.js"></a><a href="https://github.com/vercel/next.js" target="_blank" rel="noopener">Next.js</a></h4><p>典型的网站模块和框架，封装webpack、babel, 支持按需加载和seo优化</p>
+<h4 id="Redux"><a href="#Redux" class="headerlink" title="Redux"></a>Redux</h4><p>React提供了视图层面组件化开发的模式。为实现组件之间通信和多样的交互，需要引入Redux库</p>
+<blockquote>
+<p>Redux is a predictable state container for JavaScript apps.
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install @reduxjs/toolkit</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h4 id="store，-state，-action"><a href="#store，-state，-action" class="headerlink" title="store， state， action"></a>store， state， action</h4><p>一个应用中只有一个store，是所有组件数据的容器
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import &#123; createStore &#125; from &apos;redux&apos;;</span><br><span class="line">const store = createStore(fn);</span><br><span class="line"></span><br><span class="line">const state = store.getState();</span><br></pre></td></tr></table></figure></p>
+<p>state是state在某个时间点的快照，state与view绑定</p>
+<h4 id="preact"><a href="#preact" class="headerlink" title="preact"></a>preact</h4><p>据说是使用更符合Dom规范的事件系统，直接使用浏览器原生事件系统而不是统一用onChange，从而对React的设计进行了简化<sup><a href="https://www.zhihu.com/question/65479147/answer/942582216" target="_blank" rel="noopener">注1</a></sup></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/07/10/pm2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/07/10/pm2/" itemprop="url">pm2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-10T10:25:14+08:00">
+                2020-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="directives"><a href="#directives" class="headerlink" title="directives"></a>directives</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pm2 start index.js</span><br><span class="line">pm2 stop all</span><br><span class="line">pm2 logs</span><br></pre></td></tr></table></figure>
+<h4 id="env-variables"><a href="#env-variables" class="headerlink" title="env variables"></a>env variables</h4><p>将node.js应用封装成模块ecosystem.config.js
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">module.exports = &#123;</span><br><span class="line">  apps : [</span><br><span class="line">      &#123;</span><br><span class="line">        name: &quot;myapp&quot;,</span><br><span class="line">        script: &quot;./app.js&quot;,</span><br><span class="line">        watch: true,</span><br><span class="line">        env: &#123;</span><br><span class="line">            &quot;PORT&quot;: 3000,</span><br><span class="line">            &quot;NODE_ENV&quot;: &quot;development&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        env_production: &#123;</span><br><span class="line">            &quot;PORT&quot;: 80,</span><br><span class="line">            &quot;NODE_ENV&quot;: &quot;production&quot;,</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在启动命令时使用env_后面的字符串作为标识
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pm2 start ecosystem.config.js --env production</span><br></pre></td></tr></table></figure></p>
+<h4 id="pm2-plus"><a href="#pm2-plus" class="headerlink" title="pm2 plus"></a>pm2 plus</h4><p>know more about <a href="https://app.pm2.io/" target="_blank" rel="noopener">pm2.io</a></p>
+<h4 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h4><p>键入下面的命令生成startup脚本
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pm2 startup</span><br></pre></td></tr></table></figure></p>
+<p>提示执行配置命令,如
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[PM2] To setup the Startup Script, copy/paste &gt;the following command:&quot;, </span><br><span class="line">sudo env &gt;PATH=$PATH:/usr/local/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u username --hp /home/username</span><br></pre></td></tr></table></figure></p>
+<p>按照提示执行提示的命令, 执行后终端列出已安装的服务信息</p>
+<p>Caution！升级nodejs对startup有影响
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pm2 unstartup</span><br><span class="line"></span><br><span class="line">pm2 startup</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/07/01/Azure-AD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/07/01/Azure-AD/" itemprop="url">Azure-AD</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-01T10:09:03+08:00">
+                2020-07-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="Azure-AD"><a href="#Azure-AD" class="headerlink" title="Azure AD"></a>Azure AD</h4><p>Windows2000 引入Active Directory作为identity provider和authorization database，可想而知，这个名称与其存储方式以及根据talent区分的文件结构之间的关系。随着Web应用的发展，有了云平台的Azure Active Directory，其主要功能之一仍是作为identity provider。</p>
+<p>AD和Azure AD的结合实现了以本地Windows身份通过web实现SSO认证。</p>
+<p>参考：<a href="https://jumpcloud.com/blog/is-azure-ad-an-identity-provider#cookie-accept" target="_blank" rel="noopener">《Is Azure AD an Identity Provider?》</a></p>
+<p>Azure AD在office软件甚至其他Saas（Software as a service, 软件即服务）之间无缝访问，以及多重身份验证和条件访问控制</p>
+<p>参考：<a href="https://docs.microsoft.com/zh-cn/azure/active-directory/manage-apps/what-is-application-management" target="_blank" rel="noopener">使用 Azure Active Directory 进行应用程序管理</a></p>
+<p><a href="https://www.predicagroup.com/blog/azure-ad-b2b-b2c-puzzled-out/" target="_blank" rel="noopener">Azure AD, B2B, B2C Puzzled Out – What Makes The Difference?</a></p>
+<p>B2B，对接Business和Business，使双方标识均可通过认证，主服务方持有访问权限的控制，<br>
+B2C, 面向customer 如下引述：</p>
+<blockquote>
+<p>Azure Active Directory B2C provides business-to-customer identity as a service. Your customers use their preferred social, enterprise, or local account identities to get single sign-on access to your applications and APIs.</p>
+</blockquote>
+<p>Azure Active Directory B2C 以服务的形式提供企业到客户的身份。 客户可使用其喜欢的社交、企业或本地帐户标识完成单点登录，访问应用程序和 API 。
+<img src="https://docs.azure.cn/zh-cn/active-directory-b2c/media/overview/azureadb2c-overview.png" alt="azureadb2c-overview"></p>
+<p>“贴牌式身份验证解决方案” blabla<br></p>
+<p>届时，访问DataService，跳转到如 CSDataServices.onmicrosoft.com/oauth2/v2.0/authorize?xxxx 格式的地址, 这是挂在Azure上的页面，可以做成本公司产品风格，sign in的form可以直接使用已注册（保存在Azure AD）的账号, 也可能提供了社交账号的链接，点击后跳转到社交平台登录页。
+<img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/overview/sign-in-small.png" alt="sign_in"></p>
+<p>Azure保存用户的标识，即使使用第三方的sso如公司的sso认证或社交账号，也会有将第三方凭据交换Azure标识的过程，该过程即典型的OAuth2</p>
+<p><img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/overview/scenario-singlesignon.png" alt="scenario-singlesignon"></p>
+<ul>
+<li>talent 组织或用户集合</li>
+<li>directory 存储所涉及的对象（如凭据，用户信息，配置）的物理或逻辑位置</li>
+<li>Application registration 将自己公司产品注册为Azure AD B2C的App,以使用由Azure提供的贴牌认证</li>
+<li>user flow 和 costom policy分别指基本的注册-登录-配置的流程以及自定义的策略</li>
+<li>identity providers 第三方的标识提供方 如Facebook账号或Wechat账号授权服务 </li>
+</ul>
+<p>下面以官方sample为例配置，以求使用<a href="https://github.com/Azure-Samples/active-directory-b2c-dotnet-desktop.git" target="_blank" rel="noopener">桌面客户端</a>通过Azure AD B2C的认证框架访问<a href="https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi.git" target="_blank" rel="noopener">Web Api</a></p>
+<h4 id="创建资源"><a href="#创建资源" class="headerlink" title="创建资源"></a>创建资源</h4><p>进入“创建资源”入口，搜索Azure AD B2C，选择创建–&gt;给出两个选项,选择创建新的
+<img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-tenant/portal-02-create-tenant.png" alt="micro docs">
+loading半天后提示创建成功，点击链接切换directory</p>
+<p>Directory creation was successful. Click here to navigate to your new directory: QQStudio.</p>
+<p><img src="https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjwy66qzj20ry0kc0vz.jpg" alt="directory created"></p>
+<h4 id="user-flow"><a href="#user-flow" class="headerlink" title="user flow"></a>user flow</h4><p>选择由Azure AD B2C控制的行为，一般就是登入登出，注册、注销，重置密码。<br>
+选择Sign up and sign in
+<img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-user-flows/signup-signin-type.png" alt>
+输入user flow名称<br>
+选择email作为sign up的身份验证<br>
+选择需要收集的注册信息
+<img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-user-flows/signup-signin-attributes.png" alt></p>
+<h4 id="注册Api应用程序"><a href="#注册Api应用程序" class="headerlink" title="注册Api应用程序"></a>注册Api应用程序</h4><p>将访问受控的应用(这里是Web Api)注册到Azure AD B2C，框架给予应用程序client id等标记，记下当登录成功时跳转回的地址————Redirect URI。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Display name:Demo website</span><br><span class="line">Application (client) ID:c4b27029-a5ad-4022-979d-8721101df951</span><br><span class="line">Directory (tenant) ID:9175ffa9-24b3-4fc1-806e-6d53582a7f4f</span><br><span class="line">Object ID:c5064a61-0321-4a39-9f3c-dcef0df9b99c</span><br><span class="line">Supported account types:All Microsoft  users</span><br><span class="line">Redirect URIs:1 web, 0 spa, 0 public client</span><br><span class="line">Application ID URI:Add an Application ID URI</span><br><span class="line">Managed application in local directory:Demo website</span><br></pre></td></tr></table></figure></p>
+<p>这里的Redireact URI是<a href="http://localhost:8888/auth，期望在本机运行Web" target="_blank" rel="noopener">http://localhost:8888/auth，期望在本机运行Web</a> Api应用程序，访问Api跳转到Azure Page登录，成功后进入到该地址。<br>
+进入管理–认证(Authentication),选择使用<a href="https://docs.microsoft.com/zh-cn/azure/active-directory/develop/v2-oauth2-implicit-grant-flow?WT.mc_id=Portal-Microsoft_AAD_RegisteredApps" target="_blank" rel="noopener">隐式授权流</a>(Implicit grant, 见笔记<a href="/qqsnote/2019/12/09/OAuth2/" title="OAuth2">OAuth2</a>), 并添加Redirect Uri<br>
+<img src="https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjztlsc1j21820oyadq.jpg" alt="04register_app_add_auth_url">
+进入管理–公开API(expose API),Application ID URI set 为<a href="https://qqstudio.onmicrosoft.com/api" target="_blank" rel="noopener">https://qqstudio.onmicrosoft.com/api</a> 默认是由GUID组成的<br>
+添加scope(Add a scope)
+<img src="https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjzvx048j21hc0smtch.jpg" alt="05add access scope">
+scope是控制访问权限的定义，将在后续步骤中被授权到已注册的client<br></p>
+<h4 id="配置Web-Api应用的Authorization"><a href="#配置Web-Api应用的Authorization" class="headerlink" title="配置Web Api应用的Authorization"></a>配置Web Api应用的Authorization</h4><p>使Web Api能将token拿到Azure AD B2C去校验，官方Sample中从config.js读取配置
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">const config = &#123;</span><br><span class="line">    identityMetadata: &quot;https://&quot; + b2cDomainHost + &quot;/&quot; + tenantId + &quot;/&quot; + policyName + &quot;/v2.0/.well-known/openid-configuration/&quot;,</span><br><span class="line">    clientID: clientID,</span><br><span class="line">    policyName: policyName,</span><br><span class="line">    isB2C: true,</span><br><span class="line">    validateIssuer: false,</span><br><span class="line">    loggingLevel: &apos;info&apos;,</span><br><span class="line">    loggingNoPII: false,</span><br><span class="line">    passReqToCallback: false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>express web api的认证和重定向用到了<a href="https://github.com/jaredhanson/passport" target="_blank" rel="noopener">passport</a>和<a href="https://github.com/AzureAD/passport-azure-ad#readme" target="_blank" rel="noopener">passport-azure-ad</a>两个包，后者直接带入上面的config对象做为参数
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">const express = require(&quot;express&quot;);</span><br><span class="line">const morgan = require(&quot;morgan&quot;);</span><br><span class="line">const passport = require(&quot;passport&quot;);</span><br><span class="line">const config = require(&apos;./config&apos;);</span><br><span class="line">const BearerStrategy = require(&apos;passport-azure-ad&apos;).BearerStrategy;</span><br><span class="line"></span><br><span class="line">const bearerStrategy = new BearerStrategy(config,</span><br><span class="line">    function (token, done) &#123;</span><br><span class="line">        // Send user info using the second argument</span><br><span class="line">        done(null, &#123;&#125;, token);</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">const app = express();</span><br><span class="line"></span><br><span class="line">app.use(morgan(&apos;dev&apos;));</span><br><span class="line">app.use(passport.initialize());</span><br><span class="line"></span><br><span class="line">passport.use(bearerStrategy);</span><br><span class="line"></span><br><span class="line">//enable CORS</span><br><span class="line">app.use((req, res, next) =&gt; &#123;</span><br><span class="line">    res.header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);</span><br><span class="line">    res.header(&quot;Access-Control-Allow-Headers&quot;, &quot;Authorization, Origin, X-Requested-With, Content-Type, Accept&quot;);</span><br><span class="line">    next();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">// API endpoint</span><br><span class="line">app.get(&quot;/hello&quot;,</span><br><span class="line">    passport.authenticate(&apos;oauth-bearer&apos;, &#123;session: false&#125;),</span><br><span class="line">    (req, res) =&gt; &#123;</span><br><span class="line">        console.log(&apos;User info: &apos;, req.user);</span><br><span class="line">        console.log(&apos;Validated claims: &apos;, req.authInfo);</span><br><span class="line">        </span><br><span class="line">        if (&apos;scp&apos; in req.authInfo &amp;&amp; req.authInfo[&apos;scp&apos;].split(&quot; &quot;).indexOf(&quot;demo.read&quot;) &gt;= 0) &#123;</span><br><span class="line">            // Service relies on the name claim.  </span><br><span class="line">            res.status(200).json(&#123;&apos;name&apos;: req.authInfo[&apos;name&apos;]&#125;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            console.log(&quot;Invalid Scope, 403&quot;);</span><br><span class="line">            res.status(403).json(&#123;&apos;error&apos;: &apos;insufficient_scope&apos;&#125;); </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">const port = process.env.PORT || 5000;</span><br><span class="line"></span><br><span class="line">app.listen(port, () =&gt; &#123;</span><br><span class="line">    console.log(&quot;Listening on port &quot; + port);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="注册客户端程序"><a href="#注册客户端程序" class="headerlink" title="注册客户端程序"></a>注册客户端程序</h4><p>将官网sample的wpf client注册到Azure AD B2C<br>
+创建完成后添加Api权限，或者说授权scope：管理–API权限(API Permission)–Add a permission–My APIs,选择已注册的Web API应用
+<img src="https://tvax1.sinaimg.cn/large/a60edd42gy1ggqjzx4r8ij21hc0smadq.jpg" alt="06 add client api permissions">
+勾选Permissions，即上文中的scopes
+<img src="https://tvax4.sinaimg.cn/large/a60edd42gy1ggqjzyald0j21hc0smgqd.jpg" alt="07 select permissions">
+授权client使用scope：管理–API权限(API Permission)–Grant admin consent for xxxx(telent Name)–click Yes<br>
+QQs跟随sample的步骤遗漏了下面这一步————添加重定向地址————导致在配置客户端时Redirect Uri不知道填什么<br>
+管理–Authentication–Add a platform–Mobile and desktop applications 然后可以看到根据当前talent的user flow生成的登录页模板 勾选<a href="https://qqstudio.b2clogin.com/oauth2/nativeclient" target="_blank" rel="noopener">https://qqstudio.b2clogin.com/oauth2/nativeclient</a>
+<img src="https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjzzhlnwj21hc0sm79k.jpg" alt="08 client redirect to login page"></p>
+<h4 id="配置客户端以访问已授权的Api"><a href="#配置客户端以访问已授权的Api" class="headerlink" title="配置客户端以访问已授权的Api"></a>配置客户端以访问已授权的Api</h4><p>sample client是个WPF应用，引入了Microsoft.Identity.Client这个包来进行token校验
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">// Copyright (c) Microsoft Corporation. All rights reserved.</span><br><span class="line">// Licensed under the MIT License.</span><br><span class="line"></span><br><span class="line">using System.IO;</span><br><span class="line">using System.Text;</span><br><span class="line">using System.Windows;</span><br><span class="line">using Microsoft.Identity.Client;</span><br><span class="line"></span><br><span class="line">namespace active_directory_b2c_wpf</span><br><span class="line">&#123;</span><br><span class="line">    public partial class App : Application</span><br><span class="line">    &#123;</span><br><span class="line">        private static readonly string Tenant = &quot;61874450-1725-44bb-bb8e-314575861ad6&quot;;</span><br><span class="line">        private static readonly string AzureAdB2CHostname = &quot;https://qqstudio.b2clogin.com/oauth2/nativeclient&quot;;</span><br><span class="line">        private static readonly string ClientId = &quot;8e039329-171a-4484-8151-4e67bf561218&quot;;</span><br><span class="line">        private static readonly string RedirectUri = &quot;https://fabrikamb2c.b2clogin.com/oauth2/nativeclient&quot;; // 这个是Azure给桌面客户端的登录页</span><br><span class="line">        public static string PolicySignUpSignIn = &quot;B2C_1_basic_sign_up_and_sign_in&quot;;</span><br><span class="line"></span><br><span class="line">        public static string[] ApiScopes = &#123; &quot;https://qqstudio.onmicrosoft.com/api/demo.read&quot;, &quot;https://qqstudio.onmicrosoft.com/api/demo.write&quot; &#125;;</span><br><span class="line">        public static string ApiEndpoint = &quot;https://fabrikamb2chello.azurewebsites.net/hello&quot;;</span><br><span class="line">        private static string AuthorityBase = $&quot;https://&#123;AzureAdB2CHostname&#125;/tfp/&#123;Tenant&#125;/&quot;;</span><br><span class="line">        public static string AuthoritySignUpSignIn = $&quot;&#123;AuthorityBase&#125;&#123;PolicySignUpSignIn&#125;&quot;;</span><br><span class="line"></span><br><span class="line">        public static IPublicClientApplication PublicClientApp &#123; get; private set; &#125;</span><br><span class="line"></span><br><span class="line">        static App()</span><br><span class="line">        &#123;</span><br><span class="line">            PublicClientApp = PublicClientApplicationBuilder.Create(ClientId)</span><br><span class="line">            .WithB2CAuthority(AuthoritySignUpSignIn)</span><br><span class="line">            .WithRedirectUri(RedirectUri)</span><br><span class="line">            .WithLogging(Log, LogLevel.Info, false) // don&apos;t log PII details on a regular basis</span><br><span class="line">            .Build();</span><br><span class="line"></span><br><span class="line">            TokenCacheHelper.Bind(PublicClientApp.UserTokenCache);</span><br><span class="line">        &#125;</span><br><span class="line">        private static void Log(LogLevel level, string message, bool containsPii)</span><br><span class="line">        &#123;</span><br><span class="line">            string logs = ($&quot;&#123;level&#125; &#123;message&#125;&quot;);</span><br><span class="line">            StringBuilder sb = new StringBuilder();</span><br><span class="line">            sb.Append(logs);</span><br><span class="line">            File.AppendAllText(System.Reflection.Assembly.GetExecutingAssembly().Location + &quot;.msalLogs.txt&quot;, sb.ToString());</span><br><span class="line">            sb.Clear();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="关于校验和跳转的包的实现的推测"><a href="#关于校验和跳转的包的实现的推测" class="headerlink" title="关于校验和跳转的包的实现的推测"></a>关于校验和跳转的包的实现的推测</h4><ul>
+<li>客户端访问api，Http/Https Request</li>
+<li>客户端Request使用Jwt Bearer Authentication 传递token
+<img src="https://tvax4.sinaimg.cn/large/a60edd42gy1ghejipxhdkj213f0cmjru.jpg" alt="10 bearer auth"></li>
+<li>服务端接收到的request中token缺少或过期，返回401</li>
+<li>客户端收到401打开Azure Sign in Page，附带重定向回api end point 的url</li>
+<li>Azure AD 框架进行认证</li>
+<li>Azure AD 框架查询并授权 颁发相应的token</li>
+<li>客户端接收到token并缓存<h4 id="使用Azure-AD-作为identity-provider（存目）"><a href="#使用Azure-AD-作为identity-provider（存目）" class="headerlink" title="使用Azure AD 作为identity provider（存目）"></a>使用Azure AD 作为identity provider（存目）</h4>以实现一键(使用AD凭据)登录<h4 id="对接wechat-作为identity-provider（存目）"><a href="#对接wechat-作为identity-provider（存目）" class="headerlink" title="对接wechat 作为identity provider（存目）"></a>对接wechat 作为identity provider（存目）</h4></li>
+</ul>
+<h4 id="关于系统角色定义"><a href="#关于系统角色定义" class="headerlink" title="关于系统角色定义"></a>关于系统角色定义</h4><p>多个系统使用Azure AD B2C，各个系统地权限角色是否要在Azure方维护呢？是否是在expose API时定义scope呢？<br>
+私以为并不是，鉴于<a href="/qqsnote/2019/12/09/OAuth2/" title="OAuth">OAuth</a>一篇中所述，资源服务器保留私钥对access token进行校验，甚至可以从中解析出当前用户key，过期时间等信息，籍此完全可以查询本系统定义地权限角色，而无须频繁访问SSO。</p>
+<h4 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q&amp;A"></a>Q&amp;A</h4><blockquote>
+<p>issue: The application associated with client id has no registered redirect URIs.</p>
+</blockquote>
+<p>按说在App Registry中配置 Redirect URI是optional的，曾遇到此问题是没有勾选隐式授权（Authentication–&gt;Implicit grant）</p>
+<blockquote>
+<p>一定需要注册Redirect URI吗，可以在跳转到登录页时作为query parameter传递吗？</p>
+</blockquote>
+<blockquote>
+<p>Silent Sign In Workflow</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/06/29/React/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/06/29/React/" itemprop="url">React</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-29T16:18:41+08:00">
+                2020-06-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="JSX模板"><a href="#JSX模板" class="headerlink" title="JSX模板"></a>JSX模板</h4><p>以.jsx为后缀的标记文件，用以书写混合js逻辑的dom模板
+example.jsx, jsx文件经Babel编译为js运行
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const JSX = (</span><br><span class="line">  &lt;div className=&quot;myDiv&quot;&gt;</span><br><span class="line">    &lt;h1&gt;Hello World&lt;/h1&gt;</span><br><span class="line">    &lt;p&gt;Lets render this to the DOM&lt;/p&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">);</span><br><span class="line">ReactDOM.render(JSX,document.getElementById(&quot;challenge-node&quot;))</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>用{}包含js代码，包括变量和相应方法</li>
+<li>用className绑定class样式<h4 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h4>use the syntax {/<em> </em>/}<h4 id="ES6语法"><a href="#ES6语法" class="headerlink" title="ES6语法"></a>ES6语法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Component &#125; from &apos;react&apos;</span><br><span class="line"></span><br><span class="line">class App extends Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;h1&gt;Here is Entry&lt;/h1&gt;</span><br><span class="line">        &#123;/* 子组件 */&#125;</span><br><span class="line">        &lt;ChildComponent /&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">const ChildComponent = () =&gt; &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;p&gt;I am the child&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;App /&gt;, document.getElementById(&quot;app&quot;))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="子组件传参"><a href="#子组件传参" class="headerlink" title="子组件传参"></a>子组件传参</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">const CurrentDate = (props) =&gt; &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;p&gt;The current date is: &#123;props.date&#125;&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line">const Data = ()=&gt;&#123;</span><br><span class="line">  return new Date().toLocaleString();</span><br><span class="line">&#125;</span><br><span class="line">class Calendar extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;h3&gt;What date is it?&lt;/h3&gt;</span><br><span class="line">        &lt;CurrentDate date=&#123;Date()&#125;/&gt;</span><br><span class="line">        &lt;p&gt;&#123;this.props.name&#125;&lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>使用函数表达式不需要this指针而class定义是要的</p>
+<p>另外设置默认参数：ComponentA.defaultProps = {name:’New Component’}</p>
+<h4 id="参数校验"><a href="#参数校验" class="headerlink" title="参数校验"></a>参数校验</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line">MyComponent.propTypes = &#123;</span><br><span class="line">  // 你可以将属性声明为 JS 原生类型，默认情况下</span><br><span class="line">  // 这些属性都是可选的。</span><br><span class="line">  optionalArray: PropTypes.array,</span><br><span class="line">  optionalBool: PropTypes.bool,</span><br><span class="line">  optionalFunc: PropTypes.func,</span><br><span class="line">  optionalNumber: PropTypes.number,</span><br><span class="line">  optionalObject: PropTypes.object,</span><br><span class="line">  optionalString: PropTypes.string,</span><br><span class="line">  optionalSymbol: PropTypes.symbol,</span><br><span class="line"></span><br><span class="line">  // 任何可被渲染的元素（包括数字、字符串、元素或数组）</span><br><span class="line">  // (或 Fragment) 也包含这些类型。</span><br><span class="line">  optionalNode: PropTypes.node,</span><br><span class="line"></span><br><span class="line">  // 一个 React 元素。</span><br><span class="line">  optionalElement: PropTypes.element,</span><br><span class="line"></span><br><span class="line">  // 一个 React 元素类型（即，MyComponent）。</span><br><span class="line">  optionalElementType: PropTypes.elementType,</span><br><span class="line"></span><br><span class="line">  // 你也可以声明 prop 为类的实例，这里使用</span><br><span class="line">  // JS 的 instanceof 操作符。</span><br><span class="line">  optionalMessage: PropTypes.instanceOf(Message),</span><br><span class="line"></span><br><span class="line">  // 你可以让你的 prop 只能是特定的值，指定它为</span><br><span class="line">  // 枚举类型。</span><br><span class="line">  optionalEnum: PropTypes.oneOf([&apos;News&apos;, &apos;Photos&apos;]),</span><br><span class="line"></span><br><span class="line">  // 一个对象可以是几种类型中的任意一个类型</span><br><span class="line">  optionalUnion: PropTypes.oneOfType([</span><br><span class="line">    PropTypes.string,</span><br><span class="line">    PropTypes.number,</span><br><span class="line">    PropTypes.instanceOf(Message)</span><br><span class="line">  ]),</span><br><span class="line"></span><br><span class="line">  // 可以指定一个数组由某一类型的元素组成</span><br><span class="line">  optionalArrayOf: PropTypes.arrayOf(PropTypes.number),</span><br><span class="line"></span><br><span class="line">  // 可以指定一个对象由某一类型的值组成</span><br><span class="line">  optionalObjectOf: PropTypes.objectOf(PropTypes.number),</span><br><span class="line"></span><br><span class="line">  // 可以指定一个对象由特定的类型值组成</span><br><span class="line">  optionalObjectWithShape: PropTypes.shape(&#123;</span><br><span class="line">    color: PropTypes.string,</span><br><span class="line">    fontSize: PropTypes.number</span><br><span class="line">  &#125;),</span><br><span class="line">  </span><br><span class="line">  // An object with warnings on extra properties</span><br><span class="line">  optionalObjectWithStrictShape: PropTypes.exact(&#123;</span><br><span class="line">    name: PropTypes.string,</span><br><span class="line">    quantity: PropTypes.number</span><br><span class="line">  &#125;),   </span><br><span class="line"></span><br><span class="line">  // 你可以在任何 PropTypes 属性后面加上 `isRequired` ，确保</span><br><span class="line">  // 这个 prop 没有被提供时，会打印警告信息。</span><br><span class="line">  requiredFunc: PropTypes.func.isRequired,</span><br><span class="line"></span><br><span class="line">  // 任意类型的数据</span><br><span class="line">  requiredAny: PropTypes.any.isRequired,</span><br><span class="line"></span><br><span class="line">  // 你可以指定一个自定义验证器。它在验证失败时应返回一个 Error 对象。</span><br><span class="line">  // 请不要使用 `console.warn` 或抛出异常，因为这在 `onOfType` 中不会起作用。</span><br><span class="line">  customProp: function(props, propName, componentName) &#123;</span><br><span class="line">    if (!/matchme/.test(props[propName])) &#123;</span><br><span class="line">      return new Error(</span><br><span class="line">        &apos;Invalid prop `&apos; + propName + &apos;` supplied to&apos; +</span><br><span class="line">        &apos; `&apos; + componentName + &apos;`. Validation failed.&apos;</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  // 你也可以提供一个自定义的 `arrayOf` 或 `objectOf` 验证器。</span><br><span class="line">  // 它应该在验证失败时返回一个 Error 对象。</span><br><span class="line">  // 验证器将验证数组或对象中的每个值。验证器的前两个参数</span><br><span class="line">  // 第一个是数组或对象本身</span><br><span class="line">  // 第二个是他们当前的键。</span><br><span class="line">  customArrayProp: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) &#123;</span><br><span class="line">    if (!/matchme/.test(propValue[key])) &#123;</span><br><span class="line">      return new Error(</span><br><span class="line">        &apos;Invalid prop `&apos; + propFullName + &apos;` supplied to&apos; +</span><br><span class="line">        &apos; `&apos; + componentName + &apos;`. Validation failed.&apos;</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><a href="https://zh-hans.reactjs.org/docs/typechecking-with-proptypes.html#requiring-single-child" target="_blank" rel="noopener">使用 PropTypes 进行类型检查</a></p>
+<h4 id="state及组件生命周期"><a href="#state及组件生命周期" class="headerlink" title="state及组件生命周期"></a>state及组件生命周期</h4><p>props是传入参数，而state是组件内部表征状态的对象，往往在构造函数中，根据props初始化state
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">class Clock extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">    // 初始化date为当前时间</span><br><span class="line">    this.state = &#123;date: new Date()&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  /* 加载 */</span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    // 1s后开始跳</span><br><span class="line">    this.timerID = setInterval(</span><br><span class="line">      () =&gt; this.tick(),</span><br><span class="line">      1000</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  /* 卸载 */</span><br><span class="line">  componentWillUnmount() &#123;</span><br><span class="line">    clearInterval(this.timerID);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;h1&gt;Hello, world!&lt;/h1&gt;</span><br><span class="line">        &lt;h2&gt;It is &#123;this.state.date.toLocaleTimeString()&#125;.&lt;/h2&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="bind-‘this’"><a href="#bind-‘this’" class="headerlink" title="bind ‘this’"></a>bind ‘this’</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">class MyComponent extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">    this.state = &#123;</span><br><span class="line">      text: &quot;Hello&quot;</span><br><span class="line">    &#125;;</span><br><span class="line">    this.handleClick = this.handleClick.bind(this);</span><br><span class="line">  &#125;</span><br><span class="line">  handleClick() &#123;</span><br><span class="line">    this.setState(&#123;</span><br><span class="line">      text: &quot;You clicked!&quot;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;button onClick=&#123;this.handleClick&#125;&gt;Click Me&lt;/button&gt;</span><br><span class="line">        &lt;h1&gt;&#123;this.state.text&#125;&lt;/h1&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="条件渲染"><a href="#条件渲染" class="headerlink" title="条件渲染"></a>条件渲染</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">  const isLoggedIn = this.state.isLoggedIn;</span><br><span class="line">  let button;</span><br><span class="line">  if (isLoggedIn) &#123;</span><br><span class="line">    button = &lt;LogoutButton onClick=&#123;this.handleLogoutClick&#125; /&gt;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    button = &lt;LoginButton onClick=&#123;this.handleLoginClick&#125; /&gt;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;Greeting isLoggedIn=&#123;isLoggedIn&#125; /&gt;</span><br><span class="line">      &#123;button&#125;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与运算&amp;&amp;
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;flag &amp;&amp; &lt;toggleComponent /&gt;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>三目运算
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">  const isLoggedIn = this.state.isLoggedIn;</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;Greeting isLoggedIn=&#123;isLoggedIn&#125; /&gt;</span><br><span class="line">      &#123;isLoggedIn?&lt;LogoutButton onClick=&#123;this.handleLogoutClick&#125; /&gt;:&lt;LoginButton onClick=&#123;this.handleLoginClick&#125; /&gt;&#125;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="ReactDOMServer"><a href="#ReactDOMServer" class="headerlink" title="ReactDOMServer"></a>ReactDOMServer</h4><h4 id="Create-React-App"><a href="#Create-React-App" class="headerlink" title="Create React App"></a>Create React App</h4><p>这是一个package <a href="https://www.npmjs.com/package/create-react-app" target="_blank" rel="noopener">create-react-app</a>, 如angular-cli，和vue-cli中包含的命令工具，用以创建基于React的完整应用。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">my-app/</span><br><span class="line">  node_modules/</span><br><span class="line">  public/</span><br><span class="line">    index.html</span><br><span class="line">    favicon.ico</span><br><span class="line">  src/</span><br><span class="line">    App.css</span><br><span class="line">    App.js</span><br><span class="line">    App.test.js</span><br><span class="line">    index.css</span><br><span class="line">    index.js</span><br><span class="line">    logo.svg</span><br><span class="line">  README.md</span><br><span class="line">  package.json</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/06/24/ef-migration/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/06/24/ef-migration/" itemprop="url">Entity Framework Migration</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-24T12:36:53+08:00">
+                2020-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/" target="_blank" rel="noopener">tourial</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/06/15/entityframework/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -386,6 +1423,14 @@ package: </p>
 <p>查询linq
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public async Task&lt;List&lt;Group&gt;&gt; GetChildrenByGroupIDAsync(Guid groupID)</span><br><span class="line">&#123;</span><br><span class="line">    Group self = await _context.Groups.FindAsync(groupID);</span><br><span class="line">    List&lt;Group&gt; groups = await _context.Groups</span><br><span class="line">        .Where(g =&gt; g.GroupLevel.IsDescendantOf(self.GroupLevel))</span><br><span class="line">        .ToListAsync();</span><br><span class="line"></span><br><span class="line">    return groups; //.FindAll(g =&gt; g.ID != groupID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>其他查询见文章<a href="/qqsnote/2020/06/15/sqlserver/" title="SQLServer">SQLServer</a></p>
+<h4 id="Transient-Error"><a href="#Transient-Error" class="headerlink" title="Transient Error"></a>Transient Error</h4><blockquote>
+<p>Exception: An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding ‘EnableRetryOnFailure()’ to the ‘UseSqlServer’ call.</p>
+</blockquote>
+<p>见<a href="https://stackoverflow.com/questions/54186894/getting-transient-errors-when-making-calls-against-azure-sql-database-from-azure" target="_blank" rel="noopener">StackOverflow: Getting transient errors when making calls against Azure SQL Database from Azure Function</a></p>
+<p>数据库系统偶现Transient Error，这种暂时性错误的根本原因（underlying cause）很快就能自行解决，且在错误抛出时，.net程序会抛出上述的SqlException，为了处理这些错误，可应用程序代码中实现重试逻辑，而不是以应用程序错误的形式呈现给用户。
+在Startup.cs,配置启用RetryOnFailure
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    services.AddDbContext&lt;DataContext&gt;(options =&gt;</span><br><span class="line">        options.UseSqlServer(Configuration.GetConnectionString(&quot;DataContext&quot;), conf=&gt;</span><br><span class="line">            &#123;</span><br><span class="line">                conf.EnableRetryOnFailure();</span><br><span class="line">            &#125;</span><br><span class="line">        ));</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是这里有个bug <a href="https://github.com/efcore/EFCore.SqlServer.HierarchyId/issues/24" target="_blank" rel="noopener">System.ArgumentException thrown when EnableRetryOnFailure is used.</a></p>
 
           
         
@@ -556,6 +1601,7 @@ package: </p>
 <li>配置防火墙略<br></li>
 </ol>
 <h4 id="调用存储过程"><a href="#调用存储过程" class="headerlink" title="调用存储过程"></a>调用存储过程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXEC storedProcedure1 @param=&apos;01&apos;</span><br></pre></td></tr></table></figure>
+<h4 id="约束Constraint"><a href="#约束Constraint" class="headerlink" title="约束Constraint"></a>约束Constraint</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE [dbo].[Group](</span><br><span class="line">	[ID] [uniqueidentifier] NOT NULL,</span><br><span class="line">	[CreateTime] [datetime2](7) NULL,</span><br><span class="line">	[Name] [nvarchar](80) NULL,</span><br><span class="line">	[Valid] [bit] NOT NULL,</span><br><span class="line">	[UpdateTime] [datetime2](7) NULL,</span><br><span class="line">	[Comment] [nvarchar](500) NULL,</span><br><span class="line">    CONSTRAINT [AK_Group_Name] UNIQUE ([Name])</span><br><span class="line">) ON [PRIMARY]</span><br></pre></td></tr></table></figure>
 <h4 id="关于大小写"><a href="#关于大小写" class="headerlink" title="关于大小写"></a>关于大小写</h4><p>据说sqlserver 安装过程中有是否区分大小写的选项，默认情况下无论表名、列名、字段、参数都不区分大小写，更过分的是查询条件的值也不区分————where name=’abc’和where name=’AbC’是一样的结果。如果要区分查询条件的大小写，中文网络上建议如下例子，追加条件
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table1 where name=&apos;abc&apos; collate Chinese_PRC_CS_AI_WS</span><br></pre></td></tr></table></figure></p>
 <p>Chinese_PRC_CS_AI_WS实际表示中国大陆UNICODE字符集规则（Chinese PRC），区分大小写（Case Sensitive，CS），不区分重音（Accent Insensitive，AI），区分宽度（Width Sensitive，WS，半角/全角字符受此条件影响）<br>
@@ -914,950 +1960,11 @@ Oracle的递归查询语法:
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/06/05/fastDFS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/06/05/fastDFS/" itemprop="url">FastDFS</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-05T16:36:14+08:00">
-                2020-06-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>FastDFS是国人大神开发的用于小文件（&lt;500Mb）存储的分布式文件管理系统</p>
-</blockquote>
-<p><a href="https://github.com/happyfish100/fastdfs" target="_blank" rel="noopener">Github: happyfish100/fastdfs</a></p>
-<p>戳–&gt;<a href="https://github.com/happyfish100/fastdfs/wiki" target="_blank" rel="noopener">详细配置步骤</a>，超级详细，傻瓜式，环境是Centos。对于ubuntu，安装编译环境的方式会有不同</p>
-<h4 id="centos编译环境"><a href="#centos编译环境" class="headerlink" title="centos编译环境"></a>centos编译环境</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install git gcc gcc-c++ make automake autoconf libtool pcre pcre-devel zlib zlib-devel openssl-devel wget vi -y</span><br></pre></td></tr></table></figure>
-<h4 id="ubuntu编译环境"><a href="#ubuntu编译环境" class="headerlink" title="ubuntu编译环境"></a>ubuntu编译环境</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install git gcc g++ make automake autoconf libtool libpcre3 libpcre3-dev zlib1g zlib1g-dev  libssl-dev wget vi</span><br></pre></td></tr></table></figure>
-<h4 id="tracker和storage"><a href="#tracker和storage" class="headerlink" title="tracker和storage"></a>tracker和storage</h4><p><img src="https://tvax4.sinaimg.cn/large/a60edd42gy1gfip5ah0saj20f70dln0y.jpg" alt="fdfs">
-如配置步骤所述，fdfs安装好后有tracker配置文件和storage配置文件，前者配置tracker用于上传下载的调度，后者配置storage作为文件存储。<br>
-tracher监听storage的状态同步消息，使当client上传或下载时，提供可用的storage路径<br>
-storage可以配置为group，相同group的文件会相互拷贝（这个是需要一定时间的，在集群方案中需要考虑）<br></p>
-<p>上传文件<br>
-<img src="https://tva1.sinaimg.cn/large/a60edd42gy1gfirk6itslj20td0ey75n.jpg" alt="上传">
-为使业务应用服务器实现上传fDFS，应实现client功能，即</p>
-<ul>
-<li>请求tracker 获取可用storage的 ip port等</li>
-<li>调用相应的storage接口上传文件，接受返回的file_id信息</li>
-</ul>
-<p>下载文件<br></p>
-<p><img src="https://tvax1.sinaimg.cn/large/a60edd42gy1gfirmkezk3j20mw0akjug.jpg" alt="下载">
-如图，client实现下载，需</p>
-<ul>
-<li>请求tracker 获拉取下载的storage的 ip port等</li>
-<li>调用相应的storage接口下载文件</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/06/03/NSIS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/06/03/NSIS/" itemprop="url">NSIS 基础</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-03T10:49:20+08:00">
-                2020-06-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="变量和常量"><a href="#变量和常量" class="headerlink" title="变量和常量"></a>变量和常量</h4><p>a. 用var关键字来定义变量，使用$来引用变量。</p>
-<p>b. 寄存器变量 \$0~\$9,\$R0~\$R9</p>
-<p>c. 系统预置变量</p>
-<ul>
-<li>\$INSTDIR
-用户定义的解压路径。</li>
-<li>\$PROGRAMFILES
-程序文件目录(通常为 C:\Program Files 但是运行时会检测)。</li>
-<li>\$COMMONFILES
-公用文件目录。这是应用程序共享组件的目录(通常为 C:\Program Files\Common Files 但是运行时会检测)。</li>
-<li>\$DESKTOP
-Windows 桌面目录(通常为 C:\windows\desktop 但是运行时会检测)。该常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
-<li>\$EXEDIR
-安装程序运行时的位置。(从技术上来说你可以修改改变量，但并不是一个好方法)。</li>
-<li>\${NSISDIR}
-包含 NSIS 安装目录的一个标记。在编译时会检测到。常用于在你想调用一个在 NSIS 目录下的资源时，例如：图标、界面……</li>
-<li>\$WINDIR
-Windows 目录(通常为 C:\windows 或 C:\winnt 但在运行时会检测)</li>
-<li>\$SYSDIR
-Windows 系统目录(通常为 C:\windows\system 或 C:\winnt\system32 但在运行时会检测)</li>
-<li>\$TEMP
-系统临时目录(通常为 C:\windows\temp 但在运行时会检测)</li>
-<li>\$STARTMENU
-开始菜单目录(常用于添加一个开始菜单项，使用 CreateShortCut)。该常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
-<li>\$SMPROGRAMS
-开始菜单程序目录(当你想定位 + \$STARTMENU\程序 时可以使用它)。该常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
-<li>\$SMSTARTUP
-开始菜单程序/启动 目录。该常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
-<li>\$QUICKLAUNCH
-在 IE4 活动桌面及以上的快速启动目录。如果快速启动不可用，仅仅返回和 + \$TEMP 一样。</li>
-<li>\$DOCUMENTS
-文档目录。一个当前用户典型的路径形如 C:\Documents and Settings\Foo\My Documents。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
-该常量在 Windows 95 且 Internet Explorer 4 没有安装时无效。</li>
-<li>\$SENDTO
-该目录包含了“发送到”菜单快捷项。</li>
-<li>\$RECENT
-该目录包含了指向用户最近文档的快捷方式。</li>
-<li>\$FAVORITES
-该目录包含了指向用户网络收藏夹、文档等的快捷方式。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
-该常量在 Windows 95 且 Internet Explorer 4 没有安装时无效。</li>
-<li>\$MUSIC
-用户的音乐文件目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
-该常量仅在 Windows XP、ME 及以上才有效。</li>
-<li>\$PICTURES
-用户的图片目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
-该常量仅在 Windows 2000、XP、ME 及以上才有效。</li>
-<li>\$VIDEOS
-用户的视频文件目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
-该常量仅在 Windows XP、ME 及以上才有效。</li>
-<li>\$NETHOOD
-该目录包含了可能存在于我的网络位置、网上邻居文件夹的链接对象。
-该常量在 Windows 95 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
-<li>\$FONTS
-系统字体目录。</li>
-<li>\$TEMPLATES
-文档模板目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。</li>
-<li>\$APPDATA
-应用程序数据目录。当前用户路径的检测需要 Internet Explorer 4 及以上。所有用户路径的检测需要 Internet Explorer 5 及以上。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
-该常量在 Windows 95 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
-<li>\$PRINTHOOD
-该目录包含了可能存在于打印机文件夹的链接对象。
-该常量在 Windows 95 和 Windows 98 上无效。</li>
-<li>\$INTERNET_CACHE
-Internet Explorer 的临时文件目录。
-该常量在 Windows 95 和 Windows NT 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
-<li>\$COOKIES
-Internet Explorer 的 Cookies 目录。
-该常量在 Windows 95 和 Windows NT 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
-<li>\$HISTORY
-Internet Explorer 的历史记录目录。
-该常量在 Windows 95 和 Windows NT 且 Internet Explorer 4 和活动桌面没有安装时无效。</li>
-<li>\$PROFILE
-用户的个人配置目录。一个典型的路径如 C:\Documents and Settings\Foo。
-该常量在 Windows 2000 及以上有效。</li>
-<li>\$ADMINTOOLS
-一个保存管理工具的目录。这个常量的内容(所有用户或当前用户)取决于 SetShellVarContext 设置。默认为当前用户。
-该常量在 Windows 2000、ME 及以上有效。</li>
-<li>\$RESOURCES
-该资源目录保存了主题和其他 Windows 资源(通常为 C:\Windows\Resources 但在运行时会检测)。
-该常量在 Windows XP 及以上有效。</li>
-<li>\$RESOURCES_LOCALIZED
-该本地的资源目录保存了主题和其他 Windows 资源(通常为 C:\Windows\Resources\1033 但在运行时会检测)。
-该常量在 Windows XP 及以上有效。</li>
-<li>\$CDBURN_AREA
-一个在烧录 CD 时储存文件的目录。.
-该常量在 Windows XP 及以上有效。</li>
-<li>\$HWNDPARENT
-父窗口的十进制 HWND。</li>
-<li>\$PLUGINSDIR
-该路径是一个临时目录，当第一次使用一个插件或一个调用 InitPluginsDir 时被创建。该文件夹当解压包退出时会被自动删除。这个文件夹的用意是用来保存给 InstallOptions 使用的 INI 文件、启动画面位图或其他插件运行需要的文件。</li>
-</ul>
-<h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><p>NSIS函数本身没有输出输出，但是可以访问变量和堆栈<br>
-使用Pop Push实现输入输出
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Function LCIDtoTAG </span><br><span class="line">    $&#123;case&#125; &quot;1036&quot;</span><br><span class="line">    Push &quot;fr_FR&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;case&#125; &quot;1049&quot;</span><br><span class="line">    Push &quot;ru_RU&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;case&#125; &quot;1041&quot;</span><br><span class="line">    Push &quot;ja_JP&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;case&#125; &quot;2052&quot;</span><br><span class="line">    Push &quot;zh_CN&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;default&#125;</span><br><span class="line">    Push &quot;en_US&quot;</span><br><span class="line">    $&#123;break&#125;</span><br><span class="line">    $&#123;endswitch&#125;</span><br><span class="line">FunctionEnd</span><br><span class="line">Section</span><br><span class="line">    Call LCIDtoTAG</span><br><span class="line">    Pop $0</span><br><span class="line">SectionEnd</span><br></pre></td></tr></table></figure></p>
-<h4 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">StrCmp $1 &quot;&quot; +1 +2</span><br><span class="line">DetailPrint &quot;parameter is empty&quot;</span><br><span class="line"></span><br><span class="line">DetailPrint &quot;parameter is not empty&quot;</span><br></pre></td></tr></table></figure>
-<p>+n是从该语句向下偏移的“指针”，空行过滤掉不计入偏移量</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/06/01/NSIS-plugin/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/06/01/NSIS-plugin/" itemprop="url">NSIS插件</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-01T12:52:11+08:00">
-                2020-06-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>–&gt; NSIS收录插件 <a href="https://nsis.sourceforge.io/Category:Plugins" target="_blank" rel="noopener">https://nsis.sourceforge.io/Category:Plugins</a></p>
-<p>–&gt; 插件本体是托管dll文件，区分unicode编码和ansi编码</p>
-<p>–&gt; NSIS默认检索在NSIS代码目录下的Plugins文件夹，作为插件路径，或可使用标识符!addplugindir 指定其他目录</p>
-<p>一个栗子
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">!ifndef TARGETDIR</span><br><span class="line">!ifdef NSIS_UNICODE</span><br><span class="line">!define TARGETDIR &quot;..\binU&quot;</span><br><span class="line">!else</span><br><span class="line">!define TARGETDIR &quot;..\bin&quot;</span><br><span class="line">!endif</span><br><span class="line">!endif</span><br><span class="line"></span><br><span class="line">!addplugindir &quot;$&#123;TARGETDIR&#125;&quot;</span><br></pre></td></tr></table></figure></p>
-<p>曾将!ifdef误解为if not define，NSIS用！xxx做关键字真的是坑。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/05/21/Ngx-translate/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/05/21/Ngx-translate/" itemprop="url">Ngx-translate</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-21T16:18:45+08:00">
-                2020-05-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
-                    <span itemprop="name">前端技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p><a href="https://github.com/ngx-translate/core" target="_blank" rel="noopener">NGX-Translate</a> is an internationalization library for Angular. NGX-Translate is also extremely modular. It is written in a way that makes it really easy to replace any part with a custom implementation in case the existing one doesn’t fit your needs.</p>
-</blockquote>
-<blockquote>
-<p><a href="https://github.com/ngx-translate/core/issues/495#issuecomment-291158036" target="_blank" rel="noopener">Why ngx-translate exists if we already have built-in Angular i18n</a></p>
-</blockquote>
-<h4 id="关于载入翻译文件"><a href="#关于载入翻译文件" class="headerlink" title="关于载入翻译文件"></a>关于载入翻译文件</h4><ul>
-<li><a href="https://github.com/ngx-translate/http-loader" target="_blank" rel="noopener">Http Loader</a>: load json translation files with http</li>
-<li><a href="https://gist.github.com/ocombe/593d21598d988bf6a8609ba5fc00b67e" target="_blank" rel="noopener">Angular Universal Loader</a>: load json translation files with fs instead of http</li>
-<li><a href="https://github.com/biesbjerg/ng2-translate-po-loader" target="_blank" rel="noopener">Po Loader</a>: load .po files with http</li>
-</ul>
-<h4 id="集成步骤"><a href="#集成步骤" class="headerlink" title="集成步骤"></a>集成步骤</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install @ngx-translate/core @ngx-translate/http-loader --save</span><br></pre></td></tr></table></figure>
-<p>在模块中引入
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import &#123;TranslateModule&#125; from &apos;@ngx-translate/core&apos;;</span><br><span class="line"></span><br><span class="line">export function createTranslateLoader(http: HttpClient) &#123;</span><br><span class="line">  return new TranslateHttpLoader(http, &apos;./assets/i18n/&apos;, &apos;.json&apos;);</span><br><span class="line">&#125;</span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [</span><br><span class="line">        BrowserModule,</span><br><span class="line">        HttpClientModule,</span><br><span class="line">        TranslateModule.forRoot(&#123;</span><br><span class="line">            loader: &#123;</span><br><span class="line">            provide: TranslateLoader,</span><br><span class="line">            useFactory: createTranslateLoader,</span><br><span class="line">            deps: [HttpClient]</span><br><span class="line">      &#125;,</span><br><span class="line">      defaultLanguage: &apos;en&apos;</span><br><span class="line">        &#125;)</span><br><span class="line">    ],</span><br><span class="line">    bootstrap: [AppComponent]</span><br><span class="line">&#125;)</span><br><span class="line">export class AppModule &#123; &#125;</span><br></pre></td></tr></table></figure></p>
-<p>组件注入及初始化
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">export class AppComponent &#123;</span><br><span class="line">    constructor(translate: TranslateService) &#123;</span><br><span class="line">        // this language will be used as a fallback when a translation isn&apos;t found in the current language</span><br><span class="line">        translate.setDefaultLang(&apos;en&apos;);</span><br><span class="line">         // the lang to use, if the lang isn&apos;t available, it will use the current loader to get them</span><br><span class="line">        translate.use(&apos;en&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在模板中使用管道标记待翻译标记
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123;&quot;sayHi&quot; | translate&#125;&#125;&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;p&gt;&#123;&#123;&apos;sayHiWithParameter&apos; | translate:userObj&#125;&#125;&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;p&gt;&#123;&#123; &apos;ROLES.&apos; + role | uppercase | translate &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure></p>
-<p>翻译文件，对于HTTP Loader是以Locale_ID命名的Json
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">src</span><br><span class="line">├───assets</span><br><span class="line">│   ├───i18n</span><br><span class="line">│   │       en.json</span><br><span class="line">│   │       fr.json</span><br><span class="line">│   │       zh.json</span><br></pre></td></tr></table></figure></p>
-<p>翻译格式
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;introductionHeader&quot;:&quot;你好&quot;,</span><br><span class="line">    &quot;ROLE&quot;:&#123;</span><br><span class="line">        &quot;ADMIN&quot;: &quot;管理员&quot;，</span><br><span class="line">        &quot;USER&quot;: &quot;用户&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;sayHiWithParameter&quot;:&quot;你好，&#123;&#123;pride&#125;&#125;的&#123;&#123;lastname&#125;&#125;&#125;先生&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在ts代码中引用翻译
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">translate.get(&apos;HELLO&apos;, &#123;value: &apos;world&apos;&#125;).subscribe((res: string) =&gt; &#123;</span><br><span class="line">    console.log(res);</span><br><span class="line">    //=&gt; &apos;hello world&apos;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>使用 PO Loader<br>
-官方提供给的 @biesbjerg/ngx-translate-po-http-loader，很遗憾，并不好使，或许是因为新版本的gettext-parser将msgctxt（信息上下文）作为一级父节点，而ngx-translate-po-http-loader一直没有更新使支持msgctxt<br>
-部分zh_CN.po文件:
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">msgid &quot;&quot;</span><br><span class="line">msgstr &quot;&quot;</span><br><span class="line">&quot;MIME-Version: 1.0\n&quot;</span><br><span class="line">&quot;Content-Type: text/plain; charset=UTF-8\n&quot;</span><br><span class="line">&quot;Content-Transfer-Encoding: 8bit\n&quot;</span><br><span class="line">&quot;Plural-Forms: nplurals=1; plural=0;\n&quot;</span><br><span class="line">&quot;X-Language: zh_CN\n&quot;</span><br><span class="line">&quot;X-Qt-Contexts: true\n&quot;</span><br><span class="line"></span><br><span class="line">#: ../scanflow/res/qml/Dialog/AboutDialog.qml:25</span><br><span class="line">msgctxt &quot;AboutDialog|&quot;</span><br><span class="line">msgid &quot;About&quot;</span><br><span class="line">msgstr &quot;关于&quot;</span><br><span class="line"></span><br><span class="line">#: ../scanflow/res/qml/Dialog/AboutDialog.qml:52</span><br><span class="line">msgctxt &quot;AboutDialog|&quot;</span><br><span class="line">msgid &quot;Product Version&quot;</span><br><span class="line">msgstr &quot;产品版本&quot;</span><br></pre></td></tr></table></figure></p>
-<p>通过上文“翻译格式”可知，ngx-translate允许多级属性mapping，如
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;h1&gt;&#123;&#123; &quot;AboutDialog|.About&quot; |translate&#125;&#125;&lt;/h1&gt;</span><br></pre></td></tr></table></figure></p>
-<p>另外，gettext-parser会将分段的msgid和msgstr进行合并，即
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">msgctxt &quot;ErrorMessage|&quot;</span><br><span class="line">msgid &quot;&quot;</span><br><span class="line">&quot;Application preferences have been damaged. Reinstall the application to &quot;</span><br><span class="line">&quot;solve the problem.&quot;</span><br><span class="line">msgstr &quot;&quot;</span><br><span class="line">&quot;Předvolby aplikace byly poškozeny. Problém vyřešíte opětovnou instalací &quot;</span><br><span class="line">&quot;aplikace.&quot;</span><br><span class="line">====&gt;</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    &quot;ErrorMessage|&quot;:&#123;</span><br><span class="line">        msgctxt:&quot;ErrorMessage|&quot;,</span><br><span class="line">        msgid:&quot;Application preferences have been damaged. Reinstall the application to solve the problem.&quot;,</span><br><span class="line">        msgstr:[&quot;Předvolby aplikace byly poškozeny. Problém vyřešíte opětovnou instalací aplikace.&quot;]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>原理见@ngx-translate/core/fesm2015/ngx-translate-core.js
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">getValue(target, key) &#123;</span><br><span class="line">    /** @type &#123;?&#125; */</span><br><span class="line">    let keys = typeof key === &apos;string&apos; ? key.split(&apos;.&apos;) : [key];</span><br><span class="line">    key = &apos;&apos;;</span><br><span class="line">    do &#123;</span><br><span class="line">        key += keys.shift();</span><br><span class="line">        if (isDefined(target) &amp;&amp; isDefined(target[key]) &amp;&amp; (typeof target[key] === &apos;object&apos; || !keys.length)) &#123;</span><br><span class="line">            target = target[key];</span><br><span class="line">            key = &apos;&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (!keys.length) &#123;</span><br><span class="line">            target = undefined;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            key += &apos;.&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; while (keys.length);</span><br><span class="line">    return target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>结合ngx-translate解析翻译时的逻辑，在实现PO Loader的getTranslation方法（关于自定义loader的继承和实现，ngx-translate有指引 -&gt; <a href="https://github.com/ngx-translate/core#write--use-your-own-loader" target="_blank" rel="noopener">link</a>）时，应将msgctxt，msgid转为父子属性形式
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">public getTranslation(lang: string): Observable&lt;any&gt; &#123;</span><br><span class="line">    return this._http</span><br><span class="line">        .get(`$&#123;this._prefix&#125;/$&#123;lang&#125;$&#123;this._suffix&#125;`, &#123; responseType: &apos;text&apos; &#125;)</span><br><span class="line">        .pipe(</span><br><span class="line">            map((contents: string) =&gt; this.parse(contents)));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">* Parse po file</span><br><span class="line">* @param contents</span><br><span class="line">* @returns &#123;any&#125;</span><br><span class="line">*/</span><br><span class="line">public parse(contents: string): any &#123;</span><br><span class="line">    let translations: &#123; [key: string]: object | string &#125; = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    const po = gettext.po.parse(contents, &apos;utf-8&apos;);</span><br><span class="line">    if (!po.translations.hasOwnProperty(this.domain)) &#123;</span><br><span class="line">        return translations;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Object.keys(po.translations)</span><br><span class="line">        .forEach(domain =&gt; &#123;</span><br><span class="line">            if (domain.length === 0) &#123; return; &#125;</span><br><span class="line">            if (po.translations[domain].msgstr) &#123; // there is no msgctxt</span><br><span class="line">                translations[domain] = po.translations[domain].msgstr;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // context</span><br><span class="line">                translations[domain] = &#123;&#125;;</span><br><span class="line">                Object.keys(po.translations[domain]).forEach(key =&gt; &#123;</span><br><span class="line">                    let translation: string | Array&lt;string&gt; = po.translations[domain][key].msgstr.pop();</span><br><span class="line">                    if (translation instanceof Array &amp;&amp; translation.length &gt; 0) &#123;</span><br><span class="line">                        translation = translation[0];</span><br><span class="line">                    &#125;</span><br><span class="line">                    if (key.length &gt; 0 &amp;&amp; translation.length &gt; 0) &#123;</span><br><span class="line">                        translations[domain][key] = translation;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    return translations;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>引入自己的 loader module
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import &#123; TranslatePoHttpLoader &#125; from &apos;./edited-po-loader&apos;;</span><br><span class="line">export function createTranslateLoader(http: HttpClient) &#123;</span><br><span class="line">	return new TranslatePoHttpLoader(http, &apos;assets/i18n&apos;, &apos;.po&apos;);</span><br></pre></td></tr></table></figure></p>
-<p>缺失的翻译 handle missing translations
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import &#123;MissingTranslationHandler, MissingTranslationHandlerParams&#125; from &apos;@ngx-translate/core&apos;;</span><br><span class="line"></span><br><span class="line">export class MyMissingTranslationHandler implements MissingTranslationHandler &#123;</span><br><span class="line">    handle(params: MissingTranslationHandlerParams) &#123;</span><br><span class="line">        return &apos;some value&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [</span><br><span class="line">        BrowserModule,</span><br><span class="line">        TranslateModule.forRoot(&#123;</span><br><span class="line">            missingTranslationHandler: &#123;provide: MissingTranslationHandler, useClass: MyMissingTranslationHandler&#125;,</span><br><span class="line">            useDefaultLang: false</span><br><span class="line">        &#125;)</span><br><span class="line">    ],</span><br><span class="line">    providers: [</span><br><span class="line"></span><br><span class="line">    ],</span><br><span class="line">    bootstrap: [AppComponent]</span><br><span class="line">&#125;)</span><br><span class="line">export class AppModule &#123; &#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="plural-and-select"><a href="#plural-and-select" class="headerlink" title="plural and select"></a>plural and select</h4><p>这个库没有相应的api与i18n的 plural / select 模式相对应，对于这些场景需要使用ngIf或ngSwitch指令实现</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/05/21/AngularAOTandJIT/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/05/21/AngularAOTandJIT/" itemprop="url">AngularAOTandJIT</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-21T10:29:17+08:00">
-                2020-05-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
-                    <span itemprop="name">前端技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>ng build, ng serve是JIT， ng build –aot, ng build –prod, ng serve –aot是AOT</p>
-</blockquote>
-<p>aot会根据angular.json 的配置生成到/dist之类的目录</p>
-<blockquote>
-<p>Angular v9 默认 AOT</p>
-</blockquote>
-<h4 id="The-difference-between-AOT-and-JIT"><a href="#The-difference-between-AOT-and-JIT" class="headerlink" title="The difference between AOT and JIT"></a>The difference between AOT and JIT</h4><blockquote>
-<p>The Angular ahead-of-time (AOT) compiler converts Angular HTML and TypeScript code into efficient JavaScript code during the build phase, before the browser downloads and runs that code. This is the best compilation mode for production environments, with decreased load time and increased performance compared to just-in-time (JIT) compilation.AOT 编译器在浏览器下载并运行之前，将Angular HTML、 ts代码转为es5代码，是生产环境的最佳实践，相比JIT更能缩短加载时间并提高性能</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/05/19/DAC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/05/19/DAC/" itemprop="url">DAC</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-19T14:09:02+08:00">
-                2020-05-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>数据层应用程序 (DAC) 是一个逻辑数据库管理实体，用于定义与用户数据库关联的所有 SQL Server 对象，如表、视图和实例对象（包括登录名）。 DAC 是 SQL Server 数据库部署的一个自包含单元，它使数据层开发人员和数据库管理员能够将 SQL Server 对象打包到一个名为“DAC 包”（也称作 DACPAC）的可移植项目中。</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/qqsnote/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/16/">16</a><a class="extend next" rel="next" href="/qqsnote/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/qqsnote/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/17/">17</a><a class="extend next" rel="next" href="/qqsnote/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1903,7 +2010,7 @@ Internet Explorer 的历史记录目录。
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">159</span>
+                  <span class="site-state-item-count">165</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1914,7 +2021,7 @@ Internet Explorer 的历史记录目录。
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>

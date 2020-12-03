@@ -229,6 +229,845 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/05/07/webpack/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/05/07/webpack/" itemprop="url">webpack</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-07T18:53:49+08:00">
+                2020-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>打包，模块化
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i webpack webpack-cli</span><br></pre></td></tr></table></figure></p>
+<p>webpack.config.js
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">const path = require(&apos;path&apos;)</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">    mode:&apos;development&apos;,</span><br><span class="line">    entry:&apos;./src/index.js&apos;,</span><br><span class="line">    output:&#123;</span><br><span class="line">        filename:&apos;bundle.js&apos;,</span><br><span class="line">        path:path.resolve(__dirname, &apos;dist&apos;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx webpack --config webpack.config.js</span><br></pre></td></tr></table></figure>
+<h4 id="source-map-devtool-plugin"><a href="#source-map-devtool-plugin" class="headerlink" title="source map devtool plugin"></a>source map devtool plugin</h4><p>源码映射以便随浏览器运行进行调试，参考 <a href="https://webpack.js.org/plugins/source-map-dev-tool-plugin/#root" target="_blank" rel="noopener">SourceMapDevToolPlugin</a></p>
+<h4 id="webpack-bundle-analyzer"><a href="#webpack-bundle-analyzer" class="headerlink" title="webpack-bundle-analyzer"></a>webpack-bundle-analyzer</h4><p>模块打包结构分析插件,参考<a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener">webpack官方–webpack-bundle-analyzer
+</a></p>
+<p>安装
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm intall --save-dev webpack-bundle-analyzer</span><br></pre></td></tr></table></figure></p>
+<p>在Angular项目中使用
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ng build --prod --stats-json</span><br><span class="line">npx webpack-bundle-analyzer dist/stats.json</span><br></pre></td></tr></table></figure></p>
+<p>在自定义项目中, 添加plugin
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">// webpack.config.js 文件</span><br><span class="line"></span><br><span class="line">const BundleAnalyzerPlugin = require(&apos;webpack-bundle-analyzer&apos;).BundleAnalyzerPlugin</span><br><span class="line">module.exports=&#123;</span><br><span class="line">  plugins: [</span><br><span class="line">    new BundleAnalyzerPlugin()  // 使用默认配置</span><br><span class="line">    // 默认配置的具体配置项</span><br><span class="line">    // new BundleAnalyzerPlugin(&#123;</span><br><span class="line">    //   analyzerMode: &apos;server&apos;,</span><br><span class="line">    //   analyzerHost: &apos;127.0.0.1&apos;,</span><br><span class="line">    //   analyzerPort: &apos;8888&apos;,</span><br><span class="line">    //   reportFilename: &apos;report.html&apos;,</span><br><span class="line">    //   defaultSizes: &apos;parsed&apos;,</span><br><span class="line">    //   openAnalyzer: true,</span><br><span class="line">    //   generateStatsFile: false,</span><br><span class="line">    //   statsFilename: &apos;stats.json&apos;,</span><br><span class="line">    //   statsOptions: null,</span><br><span class="line">    //   excludeAssets: null,</span><br><span class="line">    //   logLevel: info</span><br><span class="line">    // &#125;)</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://tva1.sinaimg.cn/large/a60edd42gy1gij0uq9lyqj21fx0py7ft.jpg" alt="link-app-bundle-analyze">
+scan-link, react+vtk.js+materialUI的项目</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/05/06/QuickApp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/05/06/QuickApp/" itemprop="url">QuickApp</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-06T13:38:35+08:00">
+                2020-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/27/npm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/04/27/npm/" itemprop="url">npm</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-27T15:23:24+08:00">
+                2020-04-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="npm-ls"><a href="#npm-ls" class="headerlink" title="npm ls"></a>npm ls</h4><h4 id="npm-prune-清理无关package"><a href="#npm-prune-清理无关package" class="headerlink" title="npm prune 清理无关package"></a>npm prune 清理无关package</h4><h4 id="npm-i-–prefix"><a href="#npm-i-–prefix" class="headerlink" title="npm i –prefix"></a>npm i –prefix</h4><h4 id="issue-npm-ERR-Error-EPERM-operation-not-permitted-rename"><a href="#issue-npm-ERR-Error-EPERM-operation-not-permitted-rename" class="headerlink" title="issue: npm ERR! Error: EPERM: operation not permitted, rename"></a>issue: npm ERR! Error: EPERM: operation not permitted, rename</h4><p>use ‘npm cache clean’
+<a href="https://github.com/npm/npm/issues/10826" target="_blank" rel="noopener">npm install fails on Windows: “Error: EPERM: operation not permitted, rename” #10826</a></p>
+<blockquote>
+<p><a href="https://github.com/expo/create-react-native-app/issues/191#issuecomment-304073970" target="_blank" rel="noopener">疑杀毒软件问题</a></p>
+</blockquote>
+<h4 id="npx"><a href="#npx" class="headerlink" title="npx"></a>npx</h4><p>npx是npm的命令，创建React App时使用了如下命令
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx create-react-app my-app</span><br></pre></td></tr></table></figure></p>
+<p>npm 用于包管理（安装、卸载、调用已安装的包blabla），npx在此基础上提高使用包的体验，实际上，调用上述命令时，npm依次查找create-react-app的依赖，无法找到则从网络安装，随后调用创建项目，并在包命令执行结束后删除。</p>
+<h4 id="npm-link"><a href="#npm-link" class="headerlink" title="npm link"></a>npm link</h4><h4 id="用软链接共享node-modules"><a href="#用软链接共享node-modules" class="headerlink" title="用软链接共享node_modules"></a>用软链接共享node_modules</h4><p>须知node_modules使用Portable的方式管理依赖，规避了依赖树上的版本冲突，见 <a href="https://www.zhihu.com/question/55089754/answer/145129917" target="_blank" rel="noopener">知乎：每个项目文件夹下都需要有node_modules吗？</a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mklink /d D:\project\B\node_modules D:\project\A\node_modules</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/26/AngularAboutTest/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/04/26/AngularAboutTest/" itemprop="url">Angular About Test</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-26T13:08:50+08:00">
+                2020-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Angular CLI 会下载并安装试用 Jasmine 测试框架 测试 Angular 应用<br>
+X.spec.ts文件用于Jasmine做单元测试</p>
+<h4 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h4><blockquote>
+<p>单元测试（英語：Unit Testing）又称为模块测试，是针对程序模块（软件设计的最小单位）来进行正确性检验的测试工作。 程序单元是应用的最小可测试部件。 在过程化编程中，一个单元就是单个程序、函数、过程等；对于面向对象编程，最小单元就是方法，包括基类（超类）、抽象类、或者派生类（子类）中的方法。</p>
+</blockquote>
+<h4 id="Karma"><a href="#Karma" class="headerlink" title="Karma"></a>Karma</h4><p>Karma, 业（佛教观念，个人因果的集合）Karma是测试JavaScript代码而生的自动化测试管理工具，可监控文件的变化，自动执行测试。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;karma&quot;: &quot;^5.0.2&quot;,</span><br><span class="line">&quot;karma-chrome-launcher&quot;: &quot;~3.1.0&quot;,</span><br><span class="line">&quot;karma-coverage-istanbul-reporter&quot;: &quot;~2.1.0&quot;,</span><br><span class="line">&quot;karma-jasmine&quot;: &quot;~2.0.1&quot;,</span><br><span class="line">&quot;karma-jasmine-html-reporter&quot;: &quot;^1.4.2&quot;,</span><br></pre></td></tr></table></figure></p>
+<h4 id="Jasmine-（Jasminum-茉莉）"><a href="#Jasmine-（Jasminum-茉莉）" class="headerlink" title="Jasmine （Jasminum 茉莉）"></a>Jasmine （Jasminum 茉莉）</h4><p>download ZIP
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">├───lib</span><br><span class="line">│   └───jasmine-3.4.0</span><br><span class="line">│           boot.js</span><br><span class="line">│           jasmine-html.js</span><br><span class="line">│           jasmine.css</span><br><span class="line">│           jasmine.js</span><br><span class="line">│           jasmine_favicon.png</span><br><span class="line">├───spec</span><br><span class="line">│       PlayerSpec.js</span><br><span class="line">│       SpecHelper.js</span><br><span class="line">└───src</span><br><span class="line">        Player.js</span><br><span class="line">        Song.js</span><br></pre></td></tr></table></figure></p>
+<p>spec + src文件夹是栗子
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">describe(&quot;Player&quot;, function() &#123;</span><br><span class="line">  var player;</span><br><span class="line">  var song;</span><br><span class="line"></span><br><span class="line">  beforeEach(function() &#123;</span><br><span class="line">    player = new Player();</span><br><span class="line">    song = new Song();</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  it(&quot;should be able to play a Song&quot;, function() &#123;</span><br><span class="line">    player.play(song);</span><br><span class="line">    expect(player.currentlyPlayingSong).toEqual(song);</span><br><span class="line"></span><br><span class="line">    //demonstrates use of custom matcher</span><br><span class="line">    expect(player).toBePlaying(song);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  describe(&quot;when song has been paused&quot;, function() &#123;</span><br><span class="line">    beforeEach(function() &#123;</span><br><span class="line">      player.play(song);</span><br><span class="line">      player.pause();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    it(&quot;should indicate that the song is currently paused&quot;, function() &#123;</span><br><span class="line">      expect(player.isPlaying).toBeFalsy();</span><br><span class="line"></span><br><span class="line">      // demonstrates use of &apos;not&apos; with a custom matcher</span><br><span class="line">      expect(player).not.toBePlaying(song);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    it(&quot;should be possible to resume&quot;, function() &#123;</span><br><span class="line">      player.resume();</span><br><span class="line">      expect(player.isPlaying).toBeTruthy();</span><br><span class="line">      expect(player.currentlyPlayingSong).toEqual(song);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  // demonstrates use of spies to intercept and test method calls</span><br><span class="line">  it(&quot;tells the current song if the user has made it a favorite&quot;, function() &#123;</span><br><span class="line">    spyOn(song, &apos;persistFavoriteStatus&apos;);</span><br><span class="line"></span><br><span class="line">    player.play(song);</span><br><span class="line">    player.makeFavorite();</span><br><span class="line"></span><br><span class="line">    expect(song.persistFavoriteStatus).toHaveBeenCalledWith(true);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  //demonstrates use of expected exceptions</span><br><span class="line">  describe(&quot;#resume&quot;, function() &#123;</span><br><span class="line">    it(&quot;should throw an exception if song is already playing&quot;, function() &#123;</span><br><span class="line">      player.play(song);</span><br><span class="line"></span><br><span class="line">      expect(function() &#123;</span><br><span class="line">        player.resume();</span><br><span class="line">      &#125;).toThrowError(&quot;song is already playing&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>init with Node.js
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev jasmine</span><br><span class="line">npx jasmine init</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/26/AngularSSR/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/04/26/AngularSSR/" itemprop="url">Angular 服务端渲染</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-26T13:05:15+08:00">
+                2020-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://angular.cn/guide/universal#universal-tutorial" target="_blank" rel="noopener">服务端渲染（Server Side Render, SSR）</a></p>
+<ul>
+<li><p>通过搜索引擎优化(SEO)来帮助网络爬虫。</p>
+<p>  根据之前写简单爬虫的经历，以模仿使用者浏览静态页面并匹配目标内容为原理的爬虫，难以识别模块化的angular页面资源，SSR方式可以让每个 URL 返回的都是一个完全渲染好的页面。</p>
+</li>
+<li><p>迅速显示出第一个支持首次内容绘制(FCP)的页面</p>
+<p>  据说如果页面加载超过了三秒钟，那么 <a href="https://www.doubleclickbygoogle.com/articles/mobile-speed-matters/" target="_blank" rel="noopener">53% 的移动网站会被放弃</a><br>
+  着陆页（landing pages），看起来就和完整的应用一样。 这些着陆页是纯 HTML，并且即使 JavaScript 被禁用了也能显示。 这些页面不会处理浏览器事件，不过它们可以用 <a href="guide/router#router-link">routerLink</a> 在这个网站中导航。</p>
+</li>
+<li><p>提升在手机和低功耗设备上的性能</p>
+<p>  在执行JavaScript存在困难的设备上，可以显示出静态页面，而不是直接crush。。。大概是有机会说“抱歉，blabla”</p>
+</li>
+</ul>
+<h4 id="nguniversal-express-engine-模板"><a href="#nguniversal-express-engine-模板" class="headerlink" title="@nguniversal/express-engine 模板"></a>@nguniversal/express-engine 模板</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm add @nguniversal/express-engine --clientProject QQsNgApp</span><br></pre></td></tr></table></figure>
+<p>于是原angular项目变为anguar应用与express server混合项目
+新增
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./server.ts</span><br><span class="line">./tsconfig.server.json</span><br><span class="line">./webpack.server.config.js</span><br><span class="line">./src/main.server.ts</span><br><span class="line">./src/app/app.server.module.ts</span><br></pre></td></tr></table></figure></p>
+<p>篡改
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">angular.json:</span><br><span class="line">+ products.QQsNgApp.architect.serve=&#123;...&#125;</span><br><span class="line"></span><br><span class="line">main.ts:</span><br><span class="line">document.addEventListener(&apos;DOMContentLoaded&apos;, () =&gt; &#123;</span><br><span class="line">    bootstrap();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">package.json:</span><br><span class="line">scripts: </span><br><span class="line">+ &quot;compile:server&quot;: &quot;webpack --config webpack.server.config.js --progress --colors&quot;,</span><br><span class="line">+ &quot;serve:ssr&quot;: &quot;node dist/server&quot;,</span><br><span class="line">+ &quot;build:ssr&quot;: &quot;npm run build:client-and-server-bundles &amp;&amp; npm run compile:server&quot;,</span><br><span class="line">+ &quot;build:client-and-server-bundles&quot;: &quot;ng build --prod &amp;&amp; ng run csd-ams-front:server:production --bundleDependencies all&quot;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>服务端渲染无法调用windows对象，继而document, localstorage等对象会报undefined</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/26/TypeScript-JsonMapping/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/04/26/TypeScript-JsonMapping/" itemprop="url">TypeScript_JsonMapping</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-26T13:01:33+08:00">
+                2020-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/21/electron-issues/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -882,788 +1721,11 @@ prevent that. A simple implementation would be:</p>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/09/GitFlow/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/04/09/GitFlow/" itemprop="url">GitFlow</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-09T09:52:34+08:00">
-                2020-04-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="Branch"><a href="#Branch" class="headerlink" title="Branch"></a>Branch</h4><ul>
-<li>master</li>
-<li>dev</li>
-<li>feature/xxxx</li>
-<li>hotfix/1.x.x<h4 id="Tag"><a href="#Tag" class="headerlink" title="Tag"></a>Tag</h4></li>
-</ul>
-<p>hotfix 合并到master 以及 dev
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br><span class="line">git merge --no-ff hotfix/1.x.x</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/09/jenkins-parameterize/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/04/09/jenkins-parameterize/" itemprop="url">jenkins参数化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-09T09:36:17+08:00">
-                2020-04-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>使用Git Parameter简化GitFlow工作方式的持续集成<br></p>
-<ul>
-<li>安装Git Parameter Plugin</li>
-<li>设置 Jenkins Job ‘this project is parameterized’</li>
-<li>设置变量BRANCH_NAME，变量类型为Branch or Tag, 默认为master</li>
-<li>设置 Source Code Management - Branches to build 为 $BRANCH_NAME</li>
-</ul>
-<p>完成后可使用该项目的build with Parameters功能，即选择特定分支进行构建</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/07/CAS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/04/07/CAS/" itemprop="url">CAS</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-07T09:37:30+08:00">
-                2020-04-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/07/Git/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/04/07/Git/" itemprop="url">Git</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-07T09:37:30+08:00">
-                2020-04-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>常规
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.email &quot;QQs@xxxx.xxx&quot;</span><br><span class="line">git config --global user.name &quot;QQs&quot;</span><br><span class="line">git init</span><br><span class="line">git remote add origin git@xxxx.xxx:projectX.git</span><br><span class="line">// 添加远程主机命名为origin</span><br><span class="line">git pull origin master:local</span><br><span class="line">// 拉取origin上的master分支 命名为local</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;blablabla&quot;</span><br><span class="line">git push origin master</span><br><span class="line">// 将修改推送到origin上的master分支上</span><br></pre></td></tr></table></figure></p>
-<h4 id="忽略本地修改拉取远程分支"><a href="#忽略本地修改拉取远程分支" class="headerlink" title="忽略本地修改拉取远程分支"></a>忽略本地修改拉取远程分支</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch --all</span><br><span class="line">git reset --hard origin/master</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>可以认为git pull是git fetch和git merge两个步骤的结合<br>
-git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;<br>
-//取回远程主机某个分支的更新，再与本地的指定分支合并。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin master:temp </span><br><span class="line">//在本地新建一个temp分支，并将远程origin仓库的master分支代码下载到本地temp分支</span><br><span class="line">git diff tmp </span><br><span class="line">//来比较本地代码与刚刚从远程下载下来的代码的区别</span><br><span class="line">git merge tmp</span><br><span class="line">//合并temp分支到本地的master分支</span><br><span class="line">git branch -d temp</span><br><span class="line">//删除temp分支</span><br></pre></td></tr></table></figure>
-<p>回退
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard cd8462xxxx</span><br></pre></td></tr></table></figure></p>
-<p>即将HEAD游标指向到之前的一次commit</p>
-<h4 id="部分检出"><a href="#部分检出" class="headerlink" title="部分检出"></a>部分检出</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config core.sparsecheckout true</span><br><span class="line">echo /db/* &gt;&gt; .git/info/sparse-checkout</span><br></pre></td></tr></table></figure>
-<h4 id="reset-revert-以及-rebase"><a href="#reset-revert-以及-rebase" class="headerlink" title="reset revert 以及 rebase"></a>reset revert 以及 rebase</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git reset --soft &lt;commit&gt; // 重置到&lt;commit&gt;版本，修改内容放入缓存区（unstage）</span><br><span class="line">git reset --hard &lt;commit&gt; // 重置到&lt;commit&gt;版本，修改内容永久删除</span><br><span class="line"></span><br><span class="line">git revert &lt;commit-last&gt; .. &lt;commit-somewhere&gt; // 提交一个记录来撤销所罗列出的&lt;commit&gt;</span><br><span class="line"></span><br><span class="line">git rebase -i &lt;start-commit&gt; &lt;end-commit&gt; //(start-commit, end-commit] 前开后闭区间，合并到当前分支，默认 end-commit 为当前 HEAD</span><br></pre></td></tr></table></figure>
-<h4 id="repository-迁移"><a href="#repository-迁移" class="headerlink" title="repository 迁移"></a>repository 迁移</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone --bare git@old-repo.git </span><br><span class="line">cd old-repo</span><br><span class="line">git remote add bitbucket git@bitbucket-repo.git</span><br><span class="line">git push --all bitbucket</span><br><span class="line">git push --tags bitbucket</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/04/03/form-data/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/04/03/form-data/" itemprop="url">form-data 以及 basic auth</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-03T12:47:08+08:00">
-                2020-04-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Postman
-<img src="https://tvax4.sinaimg.cn/large/a60edd42gy1gdghu6ikgmj210109x0tb.jpg" alt="postform-data-auth">
-<img src="https://tvax2.sinaimg.cn/large/a60edd42gy1gdghv8sf7zj210309gdgd.jpg" alt="postform-data">
-Node.js Server
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">const express = require(&apos;express&apos;);</span><br><span class="line">const app = express();</span><br><span class="line">var multer = require(&apos;multer&apos;);</span><br><span class="line">var upload = multer();</span><br><span class="line"></span><br><span class="line">// Parse URL-encoded bodies (as sent by HTML forms)</span><br><span class="line">app.use(express.urlencoded());</span><br><span class="line"></span><br><span class="line">// for parsing multipart/form-data</span><br><span class="line">app.use(upload.array()); </span><br><span class="line">app.use(express.static(&apos;public&apos;));</span><br><span class="line">app.post(&apos;/&apos;, function(request, response)&#123;</span><br><span class="line">    console.log(request.body);</span><br><span class="line">    response.json(&#123;res:&apos;ok&apos;,data:request.body&#125;)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">const listener = app.listen(process.env.PORT || 3000, function () &#123;</span><br><span class="line">console.log(&apos;Your app is listening on port &apos; + listener.address().port);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>Node.js client
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">const http = require(&apos;http&apos;)</span><br><span class="line">const FormData = require(&apos;form-data&apos;)</span><br><span class="line"></span><br><span class="line">function btoa(str) &#123;</span><br><span class="line">    return Buffer.from(str).toString(&apos;base64&apos;)</span><br><span class="line">&#125;</span><br><span class="line">const formData = new FormData();</span><br><span class="line">formData.append(&apos;username&apos;, &apos;QQs&apos;);</span><br><span class="line">formData.append(&apos;password&apos;, btoa(&apos;*****&apos;));</span><br><span class="line">const authorizationData = &apos;Basic &apos; + btoa(&apos;authorizationID:authorizationPassword&apos;);</span><br><span class="line">const options = &#123;</span><br><span class="line">    hostname: &apos;localhost&apos;,</span><br><span class="line">    port: 3000,</span><br><span class="line">    path: &apos;&apos;,</span><br><span class="line">    method: &apos;POST&apos;,</span><br><span class="line">    headers: formData.getHeaders(),</span><br><span class="line">    auth: authorizationData</span><br><span class="line">&#125;;</span><br><span class="line">const req = http.request(options, (res) =&gt; &#123;</span><br><span class="line">    res.setEncoding(&apos;utf8&apos;);</span><br><span class="line">    res.on(&apos;data&apos;, (chunk) =&gt; &#123;</span><br><span class="line">        console.log(`BODY: $&#123;chunk&#125;`);</span><br><span class="line">    &#125;);</span><br><span class="line">    res.on(&apos;end&apos;, () =&gt; &#123;</span><br><span class="line">        console.log(&apos;No more data in response.&apos;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">req.on(&apos;error&apos;, (e) =&gt; &#123;</span><br><span class="line">    console.error(`problem with request: $&#123;e.message&#125;`);</span><br><span class="line">&#125;);</span><br><span class="line">formData.pipe(req);</span><br></pre></td></tr></table></figure></p>
-<p>Angular httpclient
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const formData = new FormData();</span><br><span class="line">formData.append(&apos;username&apos;, &apos;QQs&apos;);</span><br><span class="line">formData.append(&apos;password&apos;, btoa(&apos;*****&apos;));</span><br><span class="line">const postUrl = &apos;http://loacalhost:3000/&apos;;</span><br><span class="line">const authorizationData = &apos;Basic &apos; + btoa(&apos;authorizationID:authorizationPassword&apos;);</span><br><span class="line">const headers = new HttpHeaders(&#123;</span><br><span class="line">    &apos;Authorization&apos;: authorizationData</span><br><span class="line">&#125;);</span><br><span class="line">return this.http.post(postUrl, postData, &#123; headers: headers &#125;).pipe(</span><br><span class="line">    map(response =&gt; &#123;</span><br><span class="line"></span><br><span class="line">    &#125;)</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<p>html form
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;form action=&quot;http://authorizationID:authorizationPassword@localhost:3000/&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; name=&quot;username&quot; id=&quot;username&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; name=&quot;password&quot; id=&quot;password&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;submit&quot; value=&quot;Post&quot;&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/03/31/electron-lifecycle/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/03/31/electron-lifecycle/" itemprop="url">Electron 生命周期</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-31T14:46:26+08:00">
-                2020-03-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/qqsnote/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/16/">16</a><a class="extend next" rel="next" href="/qqsnote/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/qqsnote/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/17/">17</a><a class="extend next" rel="next" href="/qqsnote/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1709,7 +1771,7 @@ Node.js Server
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">159</span>
+                  <span class="site-state-item-count">165</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1720,7 +1782,7 @@ Node.js Server
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>

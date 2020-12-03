@@ -229,6 +229,957 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/04/20/Linux-rename-networkdevice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/04/20/Linux-rename-networkdevice/" itemprop="url">Linux网卡重命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-20T17:45:19+08:00">
+                2019-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>查看RedHat版本
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/redhat-release</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install nginx</span><br></pre></td></tr></table></figure>
+<p>error:cannot find a valid baseurl</p>
+<p>ping
+connect:network is unreachable</p>
+<p>ls /etc/sysconfig/network-scripts/</p>
+<p>ifcfg-enp0s3 ifcfg-lo ….
+其中ifcfg-lo是localhost配置
+将第一个配置文件重命名
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv ifcfg-enp0s3 ifcfg-eth0</span><br></pre></td></tr></table></figure></p>
+<p>查看网卡
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip add</span><br></pre></td></tr></table></figure></p>
+<p>显示了lo和enp0s3
+修改默认网卡设置
+编辑/etc/default/grub文件，在GRUB_CMD_LINE_LINUX=””项中，插入”net.ifnames=0 biosdevname=0”
+修改ip配置
+注意
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DEVICE=eth0</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ONBOOT=no //设置开机启动网卡，将值修改为“yes”</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BOOTPROTO=static //默认为no，修改为static</span><br></pre></td></tr></table></figure>
+<p>重启
+service network restart</p>
+<p>reboot</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/04/19/video-streaming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/04/19/video-streaming/" itemprop="url">video和视频流</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-19T21:29:16+08:00">
+                2019-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="直播原理"><a href="#直播原理" class="headerlink" title="直播原理"></a>直播原理</h3><h3 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h3><h3 id="H5-video标签"><a href="#H5-video标签" class="headerlink" title="H5 video标签"></a>H5 video标签</h3><h3 id="直播流的制作"><a href="#直播流的制作" class="headerlink" title="直播流的制作"></a>直播流的制作</h3><h3 id="Nginx-ffmpeg"><a href="#Nginx-ffmpeg" class="headerlink" title="Nginx+ffmpeg"></a>Nginx+ffmpeg</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><h3 id="下载RTMP模块并重编译nginx"><a href="#下载RTMP模块并重编译nginx" class="headerlink" title="下载RTMP模块并重编译nginx"></a>下载RTMP模块并重编译nginx</h3><p>官方源代码<a href="https://github.com/arut/nginx-rtmp-module.git" target="_blank" rel="noopener">https://github.com/arut/nginx-rtmp-module.git</a></p>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/local/nginx --add-module=~/nginx-rtmp-module --with-http_ssl_module</span><br></pre></td></tr></table></figure>
+<h4 id="编译并安装"><a href="#编译并安装" class="headerlink" title="编译并安装"></a>编译并安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<h4 id="nginx-reload后报“open-“-usr-local-nginx-logs-nginx-pid”-failed”-执行下面的命令，指定nginx的configure路径"><a href="#nginx-reload后报“open-“-usr-local-nginx-logs-nginx-pid”-failed”-执行下面的命令，指定nginx的configure路径" class="headerlink" title="nginx reload后报“open() “/usr/local/nginx/logs/nginx.pid” failed”,执行下面的命令，指定nginx的configure路径"></a>nginx reload后报“open() “/usr/local/nginx/logs/nginx.pid” failed”,执行下面的命令，指定nginx的configure路径</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./nginx -c /usr/local/nginx/conf/nginx.conf</span><br></pre></td></tr></table></figure>
+<h4 id="编译通过nginx可访问，还没完，配置nginx-conf，在末尾添加rtmp模块配置："><a href="#编译通过nginx可访问，还没完，配置nginx-conf，在末尾添加rtmp模块配置：" class="headerlink" title="编译通过nginx可访问，还没完，配置nginx.conf，在末尾添加rtmp模块配置："></a>编译通过nginx可访问，还没完，配置nginx.conf，在末尾添加rtmp模块配置：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">rtmp&#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 1935;</span><br><span class="line">        chunk_size 4000;</span><br><span class="line"></span><br><span class="line">        # RTMP 直播流配置</span><br><span class="line">        application rtmplive &#123;</span><br><span class="line">            live on;</span><br><span class="line">            max_connections 1024;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # hls 直播流配置</span><br><span class="line">        application hls&#123;</span><br><span class="line">            live on;</span><br><span class="line">            hls on;</span><br><span class="line">            hls_path /usr/local/userdata/live;</span><br><span class="line">            hls_fragment 5s;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>hls_path是分割文件存储路径</p>
+<p>在http模块中添加服务路径
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        location /hls&#123;</span><br><span class="line">            types&#123;</span><br><span class="line">                application/vnd.apple.mpegurl m3u8;</span><br><span class="line">                video/mp2t ts;</span><br><span class="line">            &#125;</span><br><span class="line">            root /usr/local/userdata/live;</span><br><span class="line">            add_header Cache-Control no-cache</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装流媒体文件转换工具ffmpeg"><a href="#安装流媒体文件转换工具ffmpeg" class="headerlink" title="安装流媒体文件转换工具ffmpeg"></a>安装流媒体文件转换工具ffmpeg</h2><p>官方release：<a href="http://www.ffmpeg.org/download.html#releases" target="_blank" rel="noopener">http://www.ffmpeg.org/download.html#releases</a>
+解压
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar jxvf ffmpeg-4.1.3.tar.bz2</span><br></pre></td></tr></table></figure></p>
+<p>执行configure报“yasm/nasm not found or too old. Use –disable-x86asm for a crippled build”,ffmpeg默认的编译器未安装，需使用–disable-x86asm</p>
+<p>将本地视频文件通过nginx推流</p>
+<p>本地视频文件kon.mp4</p>
+<h3 id="推送RTMP流"><a href="#推送RTMP流" class="headerlink" title="推送RTMP流"></a>推送RTMP流</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -re -i test.mp4 -vcodec libx264 -acodec acc -f flv rtmp://127.0.0.1:1935/rtmplive/rtmp</span><br></pre></td></tr></table></figure>
+<h3 id="推送HLS流"><a href="#推送HLS流" class="headerlink" title="推送HLS流"></a>推送HLS流</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -re -i test.mp4 -vcodec libx264 -acodec acc -f flv rtmp://127.0.0.1:1935/hls/stream</span><br></pre></td></tr></table></figure>
+<h2 id="这里有一个关于编码器的坑"><a href="#这里有一个关于编码器的坑" class="headerlink" title="这里有一个关于编码器的坑"></a>这里有一个关于编码器的坑</h2><blockquote>
+<p>vcodec acodec 分别指明了视频、音频的编码器，其实这里可以用copy也就是不需要转码，从官方GitHub下载安装的ffmpeg是没有libx264的编码器的，故而在执行上述推流命令时报unkown encoder libx264</p>
+</blockquote>
+<blockquote>
+<p>而通用的h.264视频编码器是叫x264：<a href="https://www.videolan.org/developers/x264.html" target="_blank" rel="noopener">https://www.videolan.org/developers/x264.html</a></p>
+</blockquote>
+<p>安装x264需要将类库提供给外部应用程序(如ffmpeg)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure –enable-shared </span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
+<p>配置编译的时候最好有–prefix指明安装路径，否则一般默认到/usr/local/lib路径下
+需要将/usr/local/lib路径加入共享库配置文件/etc/ld.so.conf中
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;/usr/local/lib&quot; &gt;&gt; /etc/ld.so.conf</span><br><span class="line"></span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure></p>
+<p>编译安装含外部解码器的FFmpeg
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure --enable-static --enable-gpl --enable-libx264 --extra-cflags=-I/usr/local/include --extra-ldflags=-L/usr/local/lib</span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/04/10/redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/04/10/redis/" itemprop="url">redis</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-10T13:18:18+08:00">
+                2019-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>(略)</p>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">keys *</span><br><span class="line">redis-cli </span><br><span class="line">set key value</span><br><span class="line">get key</span><br><span class="line">del key</span><br><span class="line">hget key fieldname</span><br><span class="line">hget all</span><br><span class="line">flushall</span><br></pre></td></tr></table></figure>
+<h3 id="redis作为认证token数据库"><a href="#redis作为认证token数据库" class="headerlink" title="redis作为认证token数据库"></a>redis作为认证token数据库</h3><p>ticket=(accountid, token)</p>
+<h3 id="centos安装Redis"><a href="#centos安装Redis" class="headerlink" title="centos安装Redis"></a>centos安装Redis</h3><p>参考：<a href="https://blog.csdn.net/Mrqiang9001/article/details/80295261" target="_blank" rel="noopener">Linux 平台将 Redis 设置为服务并开机自启动
+</a></p>
+<p>服务部署好之后，若无法远程访问</p>
+<p>首先检查防火墙设置
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl status firewalld # 查看防火墙状态</span><br><span class="line">firewall-cmd --zone= public --query-port=6379/tcp # 查询防火墙端口状态</span><br><span class="line">firewall-cmd --zone=public --add-port=6379/tcp --permanent # 永久开发端口及协议</span><br></pre></td></tr></table></figure></p>
+<p>确认是否绑定服务主机ip 参考 <a href="https://www.jianshu.com/p/c64839414623" target="_blank" rel="noopener">处理CentOS 7.2 x64端口不通的问题</a></p>
+<h4 id="远程访问"><a href="#远程访问" class="headerlink" title="远程访问"></a>远程访问</h4><p>修改/etc/redis/redis.conf
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 注释掉或将其改为服务器静态ip</span><br><span class="line"># bind 127.0.0.1 ::1</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>DENIED Redis is running in protected mode because protected mode is enabled, no bind address was specified, no authentication password is requested to clients…..</p>
+</blockquote>
+<p>受保护的模式,改为no
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protected-mode no</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/04/10/JMS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/04/10/JMS/" itemprop="url">JMS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-10T13:17:08+08:00">
+                2019-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/03/27/AngularCustomizeControl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/03/27/AngularCustomizeControl/" itemprop="url">Angular自定义控件</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-27T19:18:17+08:00">
+                2019-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="ControlValueAccessor接口"><a href="#ControlValueAccessor接口" class="headerlink" title="ControlValueAccessor接口"></a>ControlValueAccessor接口</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// angular2/packages/forms/src/directives/control_value_accessor.ts </span><br><span class="line">export interface ControlValueAccessor &#123;</span><br><span class="line">  writeValue(obj: any): void;</span><br><span class="line">  registerOnChange(fn: any): void;</span><br><span class="line">  registerOnTouched(fn: any): void;</span><br><span class="line">  setDisabledState?(isDisabled: boolean): void;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>writeValue(obj: any)：该方法用于将模型中的新值写入视图或 DOM 属性中。</p>
+</li>
+<li><p>registerOnChange(fn: any)：设置当控件接收到 change 事件后，调用的函数</p>
+</li>
+<li>registerOnTouched(fn: any)：设置当控件接收到 touched 事件后，调用的函数</li>
+<li>setDisabledState?(isDisabled: boolean)：当控件状态变成 DISABLED 或从 DISABLED 状态变化成 ENABLE 状态时，会调用该函数。该函数会根据参数值，启用或禁用指定的 DOM 元素。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/03/27/AngularComponentCommunicate/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/03/27/AngularComponentCommunicate/" itemprop="url">Angular组件交互</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-27T18:44:26+08:00">
+                2019-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;app-voter *ngFor=&quot;let voter of voters&quot;</span><br><span class="line">      [name]=&quot;voter&quot;</span><br><span class="line">      (voted)=&quot;onVoted($event)&quot;&gt;</span><br><span class="line">&lt;/app-voter&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Input"><a href="#Input" class="headerlink" title="@Input()"></a>@Input()</h3><blockquote>
+<p>@Input()可以带set、get属性</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Component, Input &#125; from &apos;@angular/core&apos;;</span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;app-voter&apos;,</span><br><span class="line">  template: &apos;&lt;h3&gt;&quot;&#123;&#123;name&#125;&#125;&quot;&lt;/h3&gt;&apos;</span><br><span class="line">&#125;)</span><br><span class="line">export class VoterComponent &#123;</span><br><span class="line">  private _name = &apos;&apos;;</span><br><span class="line"></span><br><span class="line">  @Input()</span><br><span class="line">  set name(name: string) &#123;</span><br><span class="line">    this._name = (name &amp;&amp; name.trim()) || &apos;&lt;no name set&gt;&apos;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  get name(): string &#123; return this._name; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在set、get时进行格式化等操作。</p>
+<blockquote>
+<p>ngOnChanges()生命周期钩子是专门用来监听@Input入参的，非传入参数不会触发ngOnChanges()方法</p>
+</blockquote>
+<h3 id="Output"><a href="#Output" class="headerlink" title="@Output()"></a>@Output()</h3><p>子组件发射事件
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Output() voted = new EventEmitter&lt;boolean&gt;();</span><br><span class="line"></span><br><span class="line">vote(agreed: boolean) &#123;</span><br><span class="line">    this.voted.emit(agreed);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="模板标记子组件"><a href="#模板标记子组件" class="headerlink" title="模板标记子组件"></a>模板标记子组件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;h3&gt;Countdown to Liftoff (via local variable)&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">&lt;button (click)=&quot;timer.start()&quot;&gt;Start&lt;/button&gt;</span><br><span class="line">&lt;button (click)=&quot;timer.stop()&quot;&gt;Stop&lt;/button&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;seconds&quot;&gt;&#123;&#123;timer.seconds&#125;&#125;&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;app-countdown-timer #timer&gt;&lt;/app-countdown-timer&gt;</span><br></pre></td></tr></table></figure>
+<p>#timer 作为父组件的变量，标记在子组件标签中，用以代表子组件，即可使父组件获取子组件的引用，进而可以调用子组件公用方法</p>
+<p>该方法有局限性在于，父组件-子组件的连接必须全部在父组件的模板中进行。父组件本身的代码对子组件没有访问权。</p>
+<h3 id="ViewChild"><a href="#ViewChild" class="headerlink" title="@ViewChild()"></a>@ViewChild()</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@ViewChild(CountdownTimerComponent)</span><br><span class="line">private timerComponent: CountdownTimerComponent;</span><br></pre></td></tr></table></figure>
+<p>使用@ViewChild()装饰器将CountdownTimerComponent实例注入到本组件，记为私有变量timerComponent</p>
+<ul>
+<li><p>特别注意
+被注入的组件只有在 Angular 显示了父组件视图之后才能访问
+下面的语法很关键</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ngAfterViewInit() &#123;</span><br><span class="line">    // wait a tick first to avoid one-time devMode</span><br><span class="line">    // unidirectional-data-flow-violation error</span><br><span class="line">    setTimeout(() =&gt;  this.timerComponent.init(), 0);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>父组件要及时调用子组件方法进行初始化，须实现AfterViewInit生命周期钩子，且用定时器异步操作。
+否则报异常</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExpressionChangedAfterItHasBeenCheckedError</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="引入第三者通信"><a href="#引入第三者通信" class="headerlink" title="引入第三者通信"></a>引入第三者通信</h3><p>这类方法包括注入服务，借助相同父组件以及借助发布订阅可观察对象等，此处略。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/01/29/scss/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -340,11 +1291,22 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.button-green&#123;</span><br><span class="line">    @include button;</span><br><span class="line">    back-ground:green</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h5 id="extend"><a href="#extend" class="headerlink" title="@extend"></a>@extend</h5><p>引用已定义的样式
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.button-green-mini&#123;</span><br><span class="line">    @extend .button-green;</span><br><span class="line">    width:2em</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h5 id="循环语句创建样式"><a href="#循环语句创建样式" class="headerlink" title="循环语句创建样式"></a>循环语句创建样式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$lvlcolors:(</span><br><span class="line">    1:$color-danger</span><br><span class="line">    2:$color-orange</span><br><span class="line">    3:$color-warning</span><br><span class="line">    4:$color-blue</span><br><span class="line">)</span><br><span class="line">for $lvl from 1 through 4&#123;</span><br><span class="line">    .lvl#&#123;$lvl&#125; &#123;background: map-get($lvlcolors, $lvl)&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="循环语句创建样式"><a href="#循环语句创建样式" class="headerlink" title="循环语句创建样式"></a>循环语句创建样式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$lvlcolors:(</span><br><span class="line">    1:$color-danger</span><br><span class="line">    2:$color-orange</span><br><span class="line">    3:$color-warning</span><br><span class="line">    4:$color-blue</span><br><span class="line">)</span><br><span class="line">@for $lvl from 1 through 4&#123;</span><br><span class="line">    .lvl#&#123;$lvl&#125; &#123;background: map-get($lvlcolors, $lvl)&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>each：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$icons: (&quot;eye&quot;: &quot;\f112&quot;, &quot;start&quot;: &quot;\f12e&quot;, &quot;stop&quot;: &quot;\f12f&quot;);</span><br><span class="line"></span><br><span class="line">@each $name, $glyph in $icons &#123;</span><br><span class="line">  .icon-#&#123;$name&#125;:before &#123;</span><br><span class="line">    display: inline-block;</span><br><span class="line">    font-family: &quot;Icon Font&quot;;</span><br><span class="line">    content: $glyph;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>issue: scss variables are not working in calc
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.main &#123;</span><br><span class="line">	width: 100%;</span><br><span class="line">	height: calc(100% - #&#123;$header-height&#125;);</span><br><span class="line">	background: #313030;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 </blockquote>
+<h4 id="拼接url"><a href="#拼接url" class="headerlink" title="拼接url"></a>拼接url</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$sites: (&quot;twitter.com&quot;, &quot;facebook.com&quot;, &quot;linkedin.com&quot;);</span><br><span class="line"></span><br><span class="line">@each $site in $sites &#123;</span><br><span class="line">  a[href*=&quot;#&#123;$site&#125;&quot;] &#123;</span><br><span class="line">    background-image: url(&quot;/images/&quot; + $site + &quot;.png&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总结一下就是#{}这个符号用于将变量拼接在css选择器上，包括class名，属性名等，在样式的值中，字符串与变量的拼接可以直接用“+”连接</p>
+<h4 id="issues"><a href="#issues" class="headerlink" title="issues"></a>issues</h4><p>jenkins build fail
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i -g node-sass</span><br></pre></td></tr></table></figure></p>
+<p>以下理解未必完全正确，但包含了若干方面的可能因素，可日后进一步探究（QQs：不太会探究）：jenkins 在打包angular过程中为webpack的sass-loader安装所需包node-sass，但是缺少node-gyp，python等工具链的调用权限，因而build失败，至于npm install为什么会build，electron编译过程中也遇到过，编译对象是package中调用的c++库。对此的解决方案之一是在jenkins所在的物理机上全局安装node-sass，当下的默认版本是5.0.0，曾尝试在项目package.json中将node-sass更新为5.0.0，然而angular9中的sass-loader似乎是支持node-sass^4.0.0，因此出现“Node Sass version 5.0.0 is incompatible with ^4.0.0”的报错，应在全局重装npm i -g node-sass@4</p>
+<p>参考
+<a href="https://github.com/sass/node-sass/blob/master/TROUBLESHOOTING.md#running-with-sudo-or-as-root" target="_blank" rel="noopener">node-sass troubleshooting#Running with sudo or as root</a>
+<a href="https://stackoverflow.com/questions/64625050/error-node-sass-version-5-0-0-is-incompatible-with-4-0-0" target="_blank" rel="noopener">stackoverflow:Error: Node Sass version 5.0.0 is incompatible with ^4.0.0</a>
+<a href="https://github.com/sass/node-sass/issues/941" target="_blank" rel="noopener">node-sass issues#941</a></p>
 
           
         
@@ -820,1131 +1782,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/01/03/AngularJS-Directives/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/01/03/AngularJS-Directives/" itemprop="url">AngularJS Directives</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-03T14:49:58+08:00">
-                2019-01-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
-                    <span itemprop="name">前端技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/01/03/ComplexAlgorithm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/01/03/ComplexAlgorithm/" itemprop="url">复杂算法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-03T10:04:49+08:00">
-                2019-01-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="P类问题-Polynomial-Problem"><a href="#P类问题-Polynomial-Problem" class="headerlink" title="P类问题(Polynomial Problem)"></a>P类问题(Polynomial Problem)</h4><p>简单的认为，P问题就是可以在多项式时间被图灵机判定的语言类。这里又涉及到图灵机，那么我们可以简单的认为，如果一个算法可以在多项式时间内求解，那么就可以认为它是P类问题。这样你就会感觉好多算法都是P类问题，对！没错！如何证明一个问题是否是P类问题呢？只要它满足以下两个条（证明它在多项式时间内完成）</p>
-<ol>
-<li>运行步骤数要有多项式上届时间</li>
-<li>每一步都要保证它可以由合理的确定模型在多项式时间内完成，其实就是每一步的求解过程也是多项式时间</li>
-</ol>
-<p>这样步骤是多项式时间的，而每一步也是多项式时间，整合起来整个算法还是多项式时间的。</p>
-<h4 id="NP类问题-Non-deterministic-Polynomial-Problem"><a href="#NP类问题-Non-deterministic-Polynomial-Problem" class="headerlink" title="NP类问题(Non-deterministic Polynomial Problem)"></a>NP类问题(Non-deterministic Polynomial Problem)</h4><p>NP问题指的是，这个算法可以在多项式时间内可验证，什么意思呢？我们知道对于P类问题，可以在多项式时间内求解出来，但是NP问题不行。可以这样理解，NP虽然不能在多项式时间内被求解，但是如果给出这个问题的某个解，那么我们可以在多项式时间内验证这个解是不是这个问题的解。
-P是属于NP的，但是NP是否等于P是著名的千禧年七大难题之一 <del>(有人说证明NP=P，相当于论证，世间万事皆有捷径)</del></p>
-<h4 id="NPC-Non-deterministic-Polynomial-Complete-Problem"><a href="#NPC-Non-deterministic-Polynomial-Complete-Problem" class="headerlink" title="NPC(Non-deterministic Polynomial Complete Problem)"></a>NPC(Non-deterministic Polynomial Complete Problem)</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/12/31/jsDate/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2018/12/31/jsDate/" itemprop="url">Date</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-31T17:16:02+08:00">
-                2018-12-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <table>
-<thead>
-<tr>
-<th>方法</th>
-<th style="text-align:left">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Date()</td>
-<td style="text-align:left">返回当日的日期和时间。</td>
-</tr>
-<tr>
-<td>getDate()</td>
-<td style="text-align:left">从 Date 对象返回一个月中的某一天 (1 ~ 31)。</td>
-</tr>
-<tr>
-<td>getDay()</td>
-<td style="text-align:left">从 Date 对象返回一周中的某一天 (0 ~ 6)。</td>
-</tr>
-<tr>
-<td>getMonth()</td>
-<td style="text-align:left">从 Date 对象返回月份 (0 ~ 11)。</td>
-</tr>
-<tr>
-<td>getFullYear()</td>
-<td style="text-align:left">从 Date 对象以四位数字返回年份。</td>
-</tr>
-<tr>
-<td>getHours()</td>
-<td style="text-align:left">返回 Date 对象的小时 (0 ~ 23)。</td>
-</tr>
-<tr>
-<td>getMinutes()</td>
-<td style="text-align:left">返回 Date 对象的分钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>getSeconds()</td>
-<td style="text-align:left">返回 Date 对象的秒数 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>getMilliseconds()</td>
-<td style="text-align:left">返回 Date 对象的毫秒(0 ~ 999)。</td>
-</tr>
-<tr>
-<td>getTime()</td>
-<td style="text-align:left">返回 1970 年 1 月 1 日至今的毫秒数。</td>
-</tr>
-<tr>
-<td>getTimezoneOffset()</td>
-<td style="text-align:left">返回本地时间与格林威治标准时间 (GMT) 的分钟差。</td>
-</tr>
-<tr>
-<td>getUTCDate()</td>
-<td style="text-align:left">根据世界时从 Date 对象返回月中的一天 (1 ~ 31)。</td>
-</tr>
-<tr>
-<td>getUTCDay()</td>
-<td style="text-align:left">根据世界时从 Date 对象返回周中的一天 (0 ~ 6)。</td>
-</tr>
-<tr>
-<td>getUTCMonth()</td>
-<td style="text-align:left">根据世界时从 Date 对象返回月份 (0 ~ 11)。</td>
-</tr>
-<tr>
-<td>getUTCFullYear()</td>
-<td style="text-align:left">根据世界时从 Date 对象返回四位数的年份。</td>
-</tr>
-<tr>
-<td>getUTCHours()</td>
-<td style="text-align:left">根据世界时返回 Date 对象的小时 (0 ~ 23)。</td>
-</tr>
-<tr>
-<td>getUTCMinutes()</td>
-<td style="text-align:left">根据世界时返回 Date 对象的分钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>getUTCSeconds()</td>
-<td style="text-align:left">根据世界时返回 Date 对象的秒钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>getUTCMilliseconds()</td>
-<td style="text-align:left">根据世界时返回 Date 对象的毫秒(0 ~ 999)。</td>
-</tr>
-<tr>
-<td>parse()</td>
-<td style="text-align:left">返回1970年1月1日午夜到指定日期（字符串）的毫秒数。</td>
-</tr>
-<tr>
-<td>setDate()</td>
-<td style="text-align:left">设置 Date 对象中月的某一天 (1 ~ 31)。</td>
-</tr>
-<tr>
-<td>setMonth()</td>
-<td style="text-align:left">设置 Date 对象中月份 (0 ~ 11)。</td>
-</tr>
-<tr>
-<td>setFullYear()</td>
-<td style="text-align:left">设置 Date 对象中的年份（四位数字）。</td>
-</tr>
-<tr>
-<td>setYear()</td>
-<td style="text-align:left">请使用 setFullYear() 方法代替。</td>
-</tr>
-<tr>
-<td>setHours()</td>
-<td style="text-align:left">设置 Date 对象中的小时 (0 ~ 23)。</td>
-</tr>
-<tr>
-<td>setMinutes()</td>
-<td style="text-align:left">设置 Date 对象中的分钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>setSeconds()</td>
-<td style="text-align:left">设置 Date 对象中的秒钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>setMilliseconds()</td>
-<td style="text-align:left">设置 Date 对象中的毫秒 (0 ~ 999)。</td>
-</tr>
-<tr>
-<td>setTime()</td>
-<td style="text-align:left">以毫秒设置 Date 对象。</td>
-</tr>
-<tr>
-<td>setUTCDate()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中月份的一天 (1 ~ 31)。</td>
-</tr>
-<tr>
-<td>setUTCMonth()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中的月份 (0 ~ 11)。</td>
-</tr>
-<tr>
-<td>setUTCFullYear()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中的年份（四位数字）。</td>
-</tr>
-<tr>
-<td>setUTCHours()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中的小时 (0 ~ 23)。</td>
-</tr>
-<tr>
-<td>setUTCMinutes()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中的分钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>setUTCSeconds()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中的秒钟 (0 ~ 59)。</td>
-</tr>
-<tr>
-<td>setUTCMilliseconds()</td>
-<td style="text-align:left">根据世界时设置 Date 对象中的毫秒 (0 ~ 999)。</td>
-</tr>
-<tr>
-<td>toSource()</td>
-<td style="text-align:left">返回该对象的源代码。</td>
-</tr>
-<tr>
-<td>toString()</td>
-<td style="text-align:left">把 Date 对象转换为字符串。</td>
-</tr>
-<tr>
-<td>toTimeString()</td>
-<td style="text-align:left">把 Date 对象的时间部分转换为字符串。</td>
-</tr>
-<tr>
-<td>toDateString()</td>
-<td style="text-align:left">把 Date 对象的日期部分转换为字符串。</td>
-</tr>
-<tr>
-<td>toGMTString()</td>
-<td style="text-align:left">请使用 toUTCString() 方法代替。</td>
-</tr>
-<tr>
-<td>toUTCString()</td>
-<td style="text-align:left">根据世界时，把 Date 对象转换为字符串。</td>
-</tr>
-<tr>
-<td>toLocaleString()</td>
-<td style="text-align:left">根据本地时间格式，把 Date 对象转换为字符串。</td>
-</tr>
-<tr>
-<td>toLocaleTimeString()</td>
-<td style="text-align:left">根据本地时间格式，把 Date 对象的时间部分转换为字符串。</td>
-</tr>
-<tr>
-<td>toLocaleDateString()</td>
-<td style="text-align:left">根据本地时间格式，把 Date 对象的日期部分转换为字符串。</td>
-</tr>
-<tr>
-<td>UTC()</td>
-<td style="text-align:left">根据世界时返回 1970 年 1 月 1 日 到指定日期的毫秒数。</td>
-</tr>
-<tr>
-<td>valueOf()</td>
-<td style="text-align:left">返回 Date 对象的原始值。</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Date.property.format=function(format)&#123;</span><br><span class="line">    // eg: format=&quot;yyyy-MM-dd hh:mm:ssS&quot;</span><br><span class="line">    var o = &#123;</span><br><span class="line">        &quot;M+&quot;: this.getMonth() + 1,</span><br><span class="line">        &quot;d+&quot;: this.getDate(),</span><br><span class="line">        &quot;h+&quot;: this.getHours(),</span><br><span class="line">        &quot;m+&quot;: this.getMinutes(),</span><br><span class="line">        &quot;s+&quot;: this.getSeconds(),</span><br><span class="line">        &quot;q+&quot;: Math.floor((this.getMonth() + 3)/3), //quarter</span><br><span class="line">        &quot;S&quot;: this.getMilliseconds()</span><br><span class="line">    &#125;;</span><br><span class="line">    if(/(y+)/.test(format))&#123;</span><br><span class="line">        format = format.replace(RegExp.$1,(this.getFullYear) + &quot;&quot;).substr(4 - RegExp.$1.length)</span><br><span class="line">    &#125;</span><br><span class="line">    for(var k in o)&#123;</span><br><span class="line">        if(new RegExp(&quot;(&quot; + k + &quot;)&quot;).test(format))&#123;</span><br><span class="line">            format = format.replace(RegExp.$1, RegExp.$1.length == 1?o[k]:(&quot;00&quot; + o[k]).substr((&quot;&quot; + o[k]).length));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return format;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/12/27/jsScopeChain/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2018/12/27/jsScopeChain/" itemprop="url">作用域链</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-27T14:55:44+08:00">
-                2018-12-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><ul>
-<li>作用域<br></li>
-<li>词法作用域<br></li>
-<li>函数级作用域和块级作用域</li>
-<li>作用域提升</li>
-<li>作用域闭包<h4 id="题目1"><a href="#题目1" class="headerlink" title="题目1"></a>题目1</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function t1()&#123;</span><br><span class="line">    console.log(str1);</span><br><span class="line">    console.log(str2);</span><br><span class="line"></span><br><span class="line">    var str1=&quot;xx1&quot;;</span><br><span class="line">    str2=&quot;xx2&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>调用t1();输出
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">undefined</span><br><span class="line">Uncaught ReferenceError: str2 is not defined</span><br></pre></td></tr></table></figure></p>
-<p>关键字var提示js编译器词法分析对变量进行声明，没有该关键字，分析认为是单纯赋值操作；执行时自上而下，输出str1时未赋值，其值为undefined，而str2为未声明。</p>
-<h4 id="题目2"><a href="#题目2" class="headerlink" title="题目2"></a>题目2</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var i=10;</span><br><span class="line">function t2()&#123;</span><br><span class="line">    i=20;</span><br><span class="line">    for(var i=0;i&lt;6;i++)&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    console.log(this.i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>调用t2()输出10。
-this指向window对象</p>
-<h4 id="题目3"><a href="#题目3" class="headerlink" title="题目3"></a>题目3</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/12/25/jsprototype/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2018/12/25/jsprototype/" itemprop="url">原型和面向对象</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-25T11:00:42+08:00">
-                2018-12-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="创建对象"><a href="#创建对象" class="headerlink" title="创建对象"></a>创建对象</h3><h4 id="1-工厂方式"><a href="#1-工厂方式" class="headerlink" title="1 工厂方式"></a>1 工厂方式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function createPerson(name, age, job)&#123; </span><br><span class="line">    var o = new Object(); o.name = name; o.age = age; o.job = job;</span><br><span class="line">    o.sayName = function()&#123; </span><br><span class="line">        alert(this.name);</span><br><span class="line">        &#125;;</span><br><span class="line">    return o; </span><br><span class="line">&#125;</span><br><span class="line">var person1 = createPerson(&quot;Nicholas&quot;, 29&quot;Software Engineer&quot;);</span><br><span class="line">var person2 = createPerson(&quot;Greg&quot;, 27, &quot;Doctor&quot;);</span><br></pre></td></tr></table></figure>
-<p>工厂模式虽然解决了创建 多个相似对象的问题，但却没有解决对象识别的问题（即怎样知道一个对象的类型）</p>
-<h4 id="2构造方法"><a href="#2构造方法" class="headerlink" title="2构造方法"></a>2构造方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function Person(name, age, job)&#123; </span><br><span class="line">    this.name = name; this.age = age; </span><br><span class="line">    this.job = job;</span><br><span class="line">    this.sayName = function()&#123; alert(this.name);&#125;; </span><br><span class="line">&#125;</span><br><span class="line">var person1 = new Person(&quot;Nicholas&quot;, 29, &quot;Software Engineer&quot;);</span><br><span class="line">var person2 = new Person(&quot;Greg&quot;, 27, &quot;Doctor&quot;);</span><br></pre></td></tr></table></figure>
-<p>构造的对象属于同一类型
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">alert(person1.constructor == Person); //true </span><br><span class="line">alert(person2.constructor == Person); //true</span><br><span class="line"></span><br><span class="line">alert(person1 instanceof Object); //true </span><br><span class="line">alert(person1 instanceof Person); //true </span><br><span class="line">alert(person2 instanceof Object); //true</span><br><span class="line">alert(person2 instanceof Person); //true</span><br></pre></td></tr></table></figure></p>
-<p>其实有这么一个问题：不同实例上的同名函数是不相等的
-即person1.sayName == person2.sayName为false</p>
-<h4 id="3原型方式"><a href="#3原型方式" class="headerlink" title="3原型方式"></a>3原型方式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function Person()&#123; &#125;</span><br><span class="line">Person.prototype.name = &quot;Nicholas&quot;; </span><br><span class="line">Person.prototype.age = 29;</span><br><span class="line">Person.prototype.job = &quot;Software Engineer&quot;; </span><br><span class="line">Person.prototype.sayName = function()&#123; alert(this.name);&#125;;</span><br><span class="line">var person1 = new Person(); </span><br><span class="line">person1.sayName();</span><br><span class="line">var person2 = new Person(); </span><br><span class="line">person2.sayName();</span><br></pre></td></tr></table></figure>
-<p>所有对象可以通过引用Person.prototype属性，从而实现共享属性和方法</p>
-<h3 id="原型对象，对象属性和原型属性"><a href="#原型对象，对象属性和原型属性" class="headerlink" title="原型对象，对象属性和原型属性"></a>原型对象，对象属性和原型属性</h3><p>无论什么时候，<u>只要创建了一个新函数（如上文Person），就会根据一组特定的规则为该函数创建一个<strong>原型对象</strong>prototype</u>，在默认情况下，<u>所有原型对象都会自动获得一个 constructor，该构造方法指向 prototype 属性所在函数（即Person.prototype.constructor=Person）</u>。<u>通过这个构造函数，我们还可继续为原型对象添加其他属性和方法</u>。创建了自定义的构造函数之后，其原型对象默认只会取得 constructor 属性；至于其他方法，则都是从 Object 继承而来的。当调用构造函数创建一个新实例后，该实例的内部将包含一个指针（__proto__,注，ECMA-262第5版中管这个指针叫[[Prototype]]。虽然在脚本中没有标准的方式访问[[Prototype]]，但 Firefox、Safari 和 Chrome 在每个对象上都支持属性 <strong>proto </strong>；<del>而在其他实现中，这个属性对脚本则是完全不可见的</del>），指向构造函数的原型对象（即person1.__proto__=Person.prototype）。</p>
-<p><div align="center"><img src="https://upload-images.jianshu.io/upload_images/3140250-a75fde4f80938b58.PNG" alt="prototype" title="prototype"></div>
-在无法访问[[Prototype]]的情形下（QQs尚未接触到不支持__proto__的环境），可以通过 isPrototypeOf()方法来确定对象之间是否存在这种关系，有Person.prototype.isPrototypeOf(person1)返回true,另ES5提供Object.getPrototypeOf，有Object.getPrototypeOf(person1) == Person.prototype为true。</p>
-<p>代码读取某个对象的某个属性时，都会执行一次搜索，目标是具有给定名字的属性。搜索首先 从对象实例本身开始。如果在实例中找到了具有给定名字的属性，则返回该属性的值；如果没有找到， 则继续搜索指针指向的原型对象，在原型对象中查找具有给定名字的属性。如果在原型对象中找到了这 个属性，则返回该属性的值。也就是说，在我们调用 person1.sayName()的时候，会先后执行两次搜 索。首先，解析器会问：“实例 person1 有 sayName 属性吗？”答：“没有。”然后，它继续搜索，再 问：“person1 的原型有 sayName 属性吗？”答：“有。”于是，它就读取那个保存在原型对象中的函数。</p>
-<p>可以通过对象实例访问保存在原型中的值，但却不能通过对象实例重写原型中的值。如果我们 在实例中添加了一个属性，而该属性与实例原型中的一个属性同名，那我们就在实例中创建该属性，该属性将会屏蔽原型中的那个属性。而delete对象实例的这个属性，会重新暴露原型对象的属性
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Person.prototype.name = &quot;Nicholas&quot;;</span><br><span class="line">var person1 = new Person(); </span><br><span class="line">person1.name = &quot;Greg&quot;; </span><br><span class="line">alert(person1.name); //&quot;Greg&quot;——来自实例 </span><br><span class="line">delete person1.name; </span><br><span class="line">alert(person1.name);//&quot;Nicholas&quot;——来自原型</span><br></pre></td></tr></table></figure></p>
-<p>使用hasOwnProperty()方法可以检测一个属性是存在于实例中(true)，还是存在于原型中(false)。
-检测属性（无论实例属性或是原型属性）是否存在可以用in，即”name” in person1返回true。</p>
-<p>从in说到for in，遍历所有能够通过对象访问的、可枚举的（enumerated）属性，其中 既包括存在于实例中的属性，也包括存在于原型中的属性。<br>
-“可枚举”相当于”可以出现在对象属性的遍历中”，在数组上使用for in遍历，不仅会包含所有数值索引，还会包含所有可枚举属性，。最好只在对象上应用 for in 循环，如果要遍历数组就使用传统的 for 循环来遍历数值索引<br>
-Object.propertyIsEnumerable()方法可以检查给定属性名是否直接存在于实例中且enumerable = true
-不可枚举属性，即将 [[Enumerable]]标记为 false 的属性，而屏蔽不可枚举属性的实例属性也会遍历到。
-Object.keys()返回所有可枚举属性的字符串数组。
-Object.getOwnPropertyNames()返回所有属性的数组，无论是否可以枚举</p>
-<h3 id="更多创建对象姿势"><a href="#更多创建对象姿势" class="headerlink" title="更多创建对象姿势"></a>更多创建对象姿势</h3><h4 id="动态原型模式"><a href="#动态原型模式" class="headerlink" title="动态原型模式"></a>动态原型模式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function Person(name, age, job)&#123; //属性</span><br><span class="line">    this.name = name; this.age = age;</span><br><span class="line">    this.job = job;</span><br><span class="line">    if (typeof this.sayName != &quot;function&quot;)&#123;    </span><br><span class="line">        Person.prototype.sayName = function()&#123; </span><br><span class="line">            alert(this.name);</span><br><span class="line">        &#125;; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>原型对象方法sayName在第一次调用构造方法Person时执行。</p>
-<h4 id="寄生构造方法模式"><a href="#寄生构造方法模式" class="headerlink" title="寄生构造方法模式"></a>寄生构造方法模式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function Person(name, age, job)&#123; </span><br><span class="line">    var o = new Object(); </span><br><span class="line">    o.name = name; </span><br><span class="line">    o.age = age; </span><br><span class="line">    o.job = job;</span><br><span class="line">    o.sayName = function()&#123; </span><br><span class="line">        alert(this.name);</span><br><span class="line">    &#125;; </span><br><span class="line">    return o; </span><br><span class="line">&#125;</span><br><span class="line">var friend = new Person(&quot;Nicholas&quot;, 29, &quot;Software Engineer&quot;);</span><br></pre></td></tr></table></figure>
-<p>注意这种方式不能依赖 instanceof 操作符来确定对象类型</p>
-<h4 id="稳妥构造函数模式"><a href="#稳妥构造函数模式" class="headerlink" title="稳妥构造函数模式"></a>稳妥构造函数模式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function Person(name, age, job)&#123; //创建要返回的对象</span><br><span class="line">    var o = new Object();</span><br><span class="line">    //可以在这里定义私有变量和函数 </span><br><span class="line">    //添加方法</span><br><span class="line">    o.sayName = function()&#123; </span><br><span class="line">        alert(name);</span><br><span class="line">    &#125;;</span><br><span class="line">    //返回对象 </span><br><span class="line">    return o;</span><br><span class="line">&#125;</span><br><span class="line">var friend = Person(&quot;Nicholas&quot;, 29, &quot;Software Engineer&quot;); friend.sayName(); //&quot;Nicholas&quot;</span><br></pre></td></tr></table></figure>
-<p>对象实例只能调用闭包内函数以返回name，而无法直接访问任何属性</p>
-<h3 id="原型链和继承"><a href="#原型链和继承" class="headerlink" title="原型链和继承"></a>原型链和继承</h3><h4 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h4><p>假如另一个原型又是另一个类型的实例，那么上述关系依然成立，如此层层递进，就构成了实例与原型的链条。这就是所谓原型链的基本概念。
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function SuperType()&#123; </span><br><span class="line">    this.property = true;</span><br><span class="line">&#125;</span><br><span class="line">SuperType.prototype.getSuperValue = function()&#123; </span><br><span class="line">    return this.property;</span><br><span class="line">&#125;;</span><br><span class="line">function SubType()&#123; &#125;</span><br><span class="line">SubType.prototype = new SuperType();//继承了 SuperType </span><br><span class="line">SubType.prototype.getSubValue = function ()&#123; </span><br><span class="line">    return this.subproperty;</span><br><span class="line">&#125;;</span><br><span class="line">var instance = new SubType(); </span><br><span class="line">alert(instance.getSuperValue());//true</span><br></pre></td></tr></table></figure></p>
-<p>SubType 继承了 SuperType。实现的本质是重写原型对象，代之以一个新类型的实例。换句话说，原来存在于基类型的实例中的所有属性和方法，现在也存在于衍生类原型对象中了。
-注意，所有引用类型的对象都继承了Object，这个继承也是通过原型链实现的。</p>
-<p><div align="center"><img src="https://upload-images.jianshu.io/upload_images/3140250-998e96f2cdff75a3.PNG" alt="inherit" title="inherit"></div>
-两个问题缺点：父类包含的引用类型属性，随实例共享到子类的所有实例，这可能并不是我们期望的；子类原型引用的是父类实例，不能向超类型的构造函数中传递参数（在ES6中可以在子类constructor中通过超类型super调用父类方法）。
-子类原型对象的constructor指向父类构造方法</p>
-<h4 id="借用构造方法constructor-stealing"><a href="#借用构造方法constructor-stealing" class="headerlink" title="借用构造方法constructor stealing"></a>借用构造方法constructor stealing</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">function SuperType()&#123; </span><br><span class="line">    this.colors = [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;]; </span><br><span class="line">&#125;</span><br><span class="line">function SubType()&#123; </span><br><span class="line">    //继承了 SuperType </span><br><span class="line">    SuperType.call(this);</span><br><span class="line">&#125;</span><br><span class="line">var instance1 = new SubType(); </span><br><span class="line">instance1.colors.push(&quot;black&quot;); </span><br><span class="line">alert(instance1.colors);//&quot;red,blue,green,black&quot;</span><br><span class="line">var instance2 = new SubType(); </span><br><span class="line">alert(instance2.colors);//&quot;red,blue,green&quot;</span><br></pre></td></tr></table></figure>
-<p>传参
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function SuperType(name)&#123; </span><br><span class="line">    this.name = name;</span><br><span class="line">&#125;</span><br><span class="line">function SubType()&#123; </span><br><span class="line">    SuperType.call(this, &quot;Nicholas&quot;);//调用SuperType构造方法</span><br><span class="line">    this.age = 29; //实例属性 </span><br><span class="line">&#125;</span><br><span class="line">var instance = new SubType(); </span><br><span class="line">alert(instance.name); //&quot;Nicholas&quot;;</span><br><span class="line">alert(instance.age);//29</span><br></pre></td></tr></table></figure></p>
-<p>无法避免构造函数模式存在的问题——方法都在构造函数中定 义，因此函数复用就无从谈起了。而且，在超类型的原型中定义的方法，对子类型而言也是不可见的，结果所有类型都只能使用构造函数模式。考虑到这些问题，借用构造函数的技术也是很少单独使用的。</p>
-<h4 id="组合构造"><a href="#组合构造" class="headerlink" title="组合构造"></a>组合构造</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">function SuperType(name)&#123; </span><br><span class="line">    this.colors = [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;]; </span><br><span class="line">    this.name=name;</span><br><span class="line">&#125;</span><br><span class="line">SuperType.prototype.sayName=function()&#123;alert(this.name)&#125;;</span><br><span class="line"></span><br><span class="line">function SubType(name,age)&#123; </span><br><span class="line">    //继承了 SuperType </span><br><span class="line">    SuperType.call(this,name);</span><br><span class="line">    this.age=age;</span><br><span class="line">&#125;</span><br><span class="line">SubType.prototype=new SuperType();</span><br><span class="line">SubType.prototype.constructor=SubType;// 注@</span><br><span class="line">SubType.prototype.sayAge=function()&#123;alert(this.age)&#125;;</span><br><span class="line"></span><br><span class="line">var instance1 = new SubType(); </span><br><span class="line">instance1.colors.push(&quot;black&quot;); </span><br><span class="line">alert(instance1.colors);//&quot;red,blue,green,black&quot;</span><br><span class="line">var instance2 = new SubType(); </span><br><span class="line">alert(instance2.colors);//&quot;red,blue,green&quot;</span><br></pre></td></tr></table></figure>
-<p>在注@这一行，将原型对象的构造方法指向到SubType，因为之前该对象根据继承关系图示，作为SuperType实例，其[[prototype]]指向SuperType.prototype，故而SubType.prototype.constructor原先为SuperType方法。</p>
-<p>组合继承避免了原型链和借用构造函数的缺陷，融合了它们的优点，成为 JavaScript 中最常用的继承模式。而且，instanceof 和 isPrototypeOf()也能够用于识别基于组合继承创建的对象。</p>
-<h4 id="原型式继承"><a href="#原型式继承" class="headerlink" title="原型式继承"></a>原型式继承</h4><p>浅复制方法
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function object(o)&#123; </span><br><span class="line">    function F()&#123;&#125;</span><br><span class="line">    F.prototype = o; </span><br><span class="line">    return new F();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>关于ES5 Object.create();</p>
-<p>操作符instanceOf
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function instance_of(L, R) &#123;//L 表示左表达式，R 表示右表达式</span><br><span class="line"> var O = R.prototype;// 取 R 的显示原型</span><br><span class="line"> L = L.__proto__;// 取 L 的隐式原型</span><br><span class="line"> while (true) &#123; </span><br><span class="line">   if (L === null) </span><br><span class="line">     return false; </span><br><span class="line">   if (O === L)// 这里重点：当 O 严格等于 L 时，返回 true </span><br><span class="line">     return true; </span><br><span class="line">   L = L.__proto__; </span><br><span class="line"> &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2018/12/20/LazyFunction/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2018/12/20/LazyFunction/" itemprop="url">惰性函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-20T09:00:18+08:00">
-                2018-12-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>编写方法时，考虑到不同的业务需求（如首次加载配置项js片段，甚至是为了兼容不同内核浏览器）需要用多个if语句加以区分，这将使每次调用都回进行判断，然而往往在具体的情景下是不必要的，比如已经以chrome载入了该页面。
-一种思路是覆盖方法定义
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function addEvent (type, element, fun) &#123;</span><br><span class="line">    if (element.addEventListener) &#123;</span><br><span class="line">        addEvent = function (type, element, fun) &#123;</span><br><span class="line">            element.addEventListener(type, fun, false);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else if(element.attachEvent)&#123;</span><br><span class="line">        addEvent = function (type, element, fun) &#123;</span><br><span class="line">            element.attachEvent(&apos;on&apos; + type, fun);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else&#123;</span><br><span class="line">        addEvent = function (type, element, fun) &#123;</span><br><span class="line">            element[&apos;on&apos; + type] = fun;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return addEvent(type, element, fun);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>另一种思想是将函数定义引用一个自执行匿名函数
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">var addEvent = (function () &#123;</span><br><span class="line">    if (document.addEventListener) &#123;</span><br><span class="line">        return function (type, element, fun) &#123;</span><br><span class="line">            element.addEventListener(type, fun, false);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else if (document.attachEvent) &#123;</span><br><span class="line">        return function (type, element, fun) &#123;</span><br><span class="line">            element.attachEvent(&apos;on&apos; + type, fun);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        return function (type, element, fun) &#123;</span><br><span class="line">            element[&apos;on&apos; + type] = fun;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></p>
-<p>第二种方式不会给第一次调用增加额外开销，而是在定义时进行了判断</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/page/14/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/qqsnote/page/16/">16</a><a class="extend next" rel="next" href="/qqsnote/page/16/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/page/14/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/qqsnote/page/16/">16</a><a class="page-number" href="/qqsnote/page/17/">17</a><a class="extend next" rel="next" href="/qqsnote/page/16/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1990,7 +1832,7 @@ Object.getOwnPropertyNames()返回所有属性的数组，无论是否可以枚�
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">159</span>
+                  <span class="site-state-item-count">165</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2001,7 +1843,7 @@ Object.getOwnPropertyNames()返回所有属性的数组，无论是否可以枚�
               
               <div class="site-state-item site-state-categories">
                 <a href="/qqsnote/categories/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
