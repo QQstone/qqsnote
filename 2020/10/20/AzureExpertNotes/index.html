@@ -90,7 +90,7 @@
 <meta property="og:image" content="https://docs.microsoft.com/zh-cn/learn/modules/network-fundamentals/media/2-virtual-network.svg">
 <meta property="og:image" content="https://docs.microsoft.com/zh-cn/learn/modules/network-fundamentals/media/4-internet-protocol-suite-layers.svg">
 <meta property="og:image" content="https://docs.microsoft.com/zh-cn/learn/modules/network-fundamentals-2/media/4-site-to-site-vpn.svg">
-<meta property="og:updated_time" content="2020-12-03T02:45:40.072Z">
+<meta property="og:updated_time" content="2020-12-09T01:35:31.568Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Azure Expert Notes">
 <meta name="twitter:description" content="OverviewThere are 7 modules to learn:  Prerequisites for Azure administrators Manage identities and governance in Azure Implement and manage storage in Azure Deploy and manage Azure compute resources">
@@ -320,7 +320,35 @@
 <p>Az104 Q5 使用resource policy修改虚拟网络的限制</p>
 <p>类似的： 蓝图blue print，为某个订阅制订蓝图（和策略一样，azure上由很多已定义的）
 Monitor里的Alert，为某个特定资源添加警报</p>
-<h3 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h3><ul>
+<h3 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h3><h4 id="可用性、可用区和可用集"><a href="#可用性、可用区和可用集" class="headerlink" title="可用性、可用区和可用集"></a>可用性、可用区和可用集</h4><blockquote>
+<p>可用性是可供使用的时间段的百分比，任意时间可访问的服务即100%可用性</p>
+</blockquote>
+<p>因故障、因物理故障触发的自动迁移、定期更新都有可能造成资源可用性达不到100%</p>
+<p><a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/manage-availability" target="_blank" rel="noopener">管理可用性</a>
+<a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets" target="_blank" rel="noopener">创建和部署高度可用的虚拟机</a></p>
+<blockquote>
+<p><a href="https://docs.microsoft.com/zh-cn/azure/availability-zones/az-overview" target="_blank" rel="noopener">可用性区域</a>:区域中的唯一物理位置,每个区域由一个或多个数据中心组成，这些数据中心配置了独立电源，冷却和网络。区域中可用性区域的物理隔离可以在发生数据中心故障的情况下保护应用程序和数据。 区域冗余服务可跨可用性区域复制应用程序和数据，以防范单点故障。</p>
+<ul>
+<li>更新域和容错域的组合</li>
+<li>当两个或更多个 VM 部署在一个 Azure 区域中的两个或更多个可用性区域时，可获得99.99% <a href="https://azure.microsoft.com/zh-cn/support/legal/sla/virtual-machines/v1_9/" target="_blank" rel="noopener">VM 运行时间 SLA</a>(service-level agreement, 服务级别协议)</li>
+</ul>
+</blockquote>
+<p>使用可用性区域创建vm settings–&gt;High availability–&gt;选择一个编号的区域 <a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/create-portal-availability-zone" target="_blank" rel="noopener">详细</a></p>
+<p>而可用性集是一种逻辑分组功能，将在物理层面相分离的vm连接到一起，如果运行服务器的其中之一的物理硬件有问题，可以确信服务器的其他实例保持运行，因为它们位于不同的硬件上。使用命令创建可用性集 <a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets" target="_blank" rel="noopener">详细</a></p>
+<blockquote>
+<p>Microsoft 为部署在可用性中的多实例 VM 提供 99.95% 的外部连接性服务级别协议 (SLA)。 这意味着，对于要应用的 SLA，必须在可用性集中至少部署两个 VM 实例。</p>
+</blockquote>
+<p>You plan to deploy three Azure virtual machines named VM1, VM2, and VM3. The virtual
+machines will host a web app named App1.
+You need to ensure that at least two virtual machines are available if a single Azure datacenter
+becomes unavailable.
+What should you deploy?
+A. all three virtual machines in a single Availability Zone
+B. all virtual machines in a single Availability Set
+C. each virtual machine in a separate Availability Zone
+D. each virtual machine in a separate Availability Set</p>
+<p>Answer is B.</p>
+<ul>
 <li>可以自己提供非官方镜像用于创建虚拟机<blockquote>
 <p>It is possible to change the size of a VM after it’s been created, but the VM must be stopped first. So, it’s best to size it appropriately from the start if possible.调整vm配置需要停机</p>
 </blockquote>
@@ -430,36 +458,17 @@ Switch(交换机)，是网桥和集线器的结合</p>
 <ul>
 <li>SNMP 简单网络管理协议，前文已述，允许访问网络设备的信息</li>
 <li>Syslog 允许设备发送事件，用于事件日志记录</li>
-<li>Azure Monitor是网络监控解决方案，包含Log Analytics工具，用以查询、分析日志<h4 id="可用性、可用区和可用集"><a href="#可用性、可用区和可用集" class="headerlink" title="可用性、可用区和可用集"></a>可用性、可用区和可用集</h4><blockquote>
-<p>可用性是可供使用的时间段的百分比，任意时间可访问的服务即100%可用性</p>
-</blockquote>
+<li>Azure Monitor是网络监控解决方案，包含Log Analytics工具，用以查询、分析日志<h3 id="PowerShell"><a href="#PowerShell" class="headerlink" title="PowerShell"></a>PowerShell</h3>学习目标</li>
+<li>使用Azure PowerShell 连接/操作 Azure资源
+Azure Portal，Azure CLI，Azure PowerShell是管理Azure资源的三种工具，相比Azure Portal页面，脚本工具因可以编写逻辑而更适合进行批量操作，以及自动化<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Import-Module Az</span><br><span class="line">Connect-AzAccount</span><br><span class="line">Get-AzResourceGroup</span><br><span class="line">... &lt;-- 这里会列出资源组</span><br><span class="line">Get-Credential</span><br><span class="line">... &lt;-- 这里设置访问虚拟机的凭据</span><br><span class="line">New-AzVM -Name &quot;testvm-eus-01&quot; -ResourceGroupName &quot;learn-940e9418-9b64-4c5b-a12c-a136ccb641da&quot; -Credential (Get-Credential) -Location &quot;East US&quot; -Image UbuntuLTS -OpenPorts 22</span><br><span class="line">$vm = (Get-AzVM -Name &quot;testvm-eus-01&quot; -ResourceGroupName learn-940e9418-9b64-4c5b-a12c-a136ccb641da)</span><br><span class="line">$vm | Get-AzPublicIpAddress</span><br><span class="line">ssh QQs@13.92.231.172 </span><br><span class="line">... &lt;-- 使用ssh连接虚拟机</span><br><span class="line">Stop-AzVM -Name $vm.Name -ResourceGroup $vm.ResourceGroupName</span><br><span class="line">Remove-AzVM -Name $vm.Name -ResourceGroup $vm.ResourceGroupName</span><br><span class="line">$vm | Remove-AzNetworkInterface –Force</span><br><span class="line">Get-AzDisk -ResourceGroupName $vm.ResourceGroupName -DiskName $vm.StorageProfile.OSDisk.Name | Remove-AzDisk -Force</span><br><span class="line">Get-AzVirtualNetwork -ResourceGroup $vm.ResourceGroupName | Remove-AzVirtualNetwork -Force</span><br><span class="line">Get-AzNetworkSecurityGroup -ResourceGroup $vm.ResourceGroupName | Remove-AzNetworkSecurityGroup -Force</span><br><span class="line">Get-AzPublicIpAddress -ResourceGroup $vm.ResourceGroupName | Remove-AzPublicIpAddress -Force</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>因故障、因物理故障触发的自动迁移、定期更新都有可能造成资源可用性达不到100%</p>
-<p><a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/manage-availability" target="_blank" rel="noopener">管理可用性</a>
-<a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets" target="_blank" rel="noopener">创建和部署高度可用的虚拟机</a></p>
-<blockquote>
-<p><a href="https://docs.microsoft.com/zh-cn/azure/availability-zones/az-overview" target="_blank" rel="noopener">可用性区域</a>:区域中的唯一物理位置,每个区域由一个或多个数据中心组成，这些数据中心配置了独立电源，冷却和网络。区域中可用性区域的物理隔离可以在发生数据中心故障的情况下保护应用程序和数据。 区域冗余服务可跨可用性区域复制应用程序和数据，以防范单点故障。</p>
-<ul>
-<li>更新域和容错域的组合</li>
-<li>当两个或更多个 VM 部署在一个 Azure 区域中的两个或更多个可用性区域时，可获得99.99% <a href="https://azure.microsoft.com/zh-cn/support/legal/sla/virtual-machines/v1_9/" target="_blank" rel="noopener">VM 运行时间 SLA</a>(service-level agreement, 服务级别协议)</li>
-</ul>
-</blockquote>
-<p>使用可用性区域创建vm settings–&gt;High availability–&gt;选择一个编号的区域 <a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/create-portal-availability-zone" target="_blank" rel="noopener">详细</a></p>
-<p>而可用性集是一种逻辑分组功能，将在物理层面相分离的vm连接到一起，如果运行服务器的其中之一的物理硬件有问题，可以确信服务器的其他实例保持运行，因为它们位于不同的硬件上。使用命令创建可用性集 <a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets" target="_blank" rel="noopener">详细</a></p>
-<blockquote>
-<p>Microsoft 为部署在可用性中的多实例 VM 提供 99.95% 的外部连接性服务级别协议 (SLA)。 这意味着，对于要应用的 SLA，必须在可用性集中至少部署两个 VM 实例。</p>
-</blockquote>
-<p>You plan to deploy three Azure virtual machines named VM1, VM2, and VM3. The virtual
-machines will host a web app named App1.
-You need to ensure that at least two virtual machines are available if a single Azure datacenter
-becomes unavailable.
-What should you deploy?
-A. all three virtual machines in a single Availability Zone
-B. all virtual machines in a single Availability Set
-C. each virtual machine in a separate Availability Zone
-D. each virtual machine in a separate Availability Set</p>
-<p>Answer is B.</p>
+<p>注意 上面停止并移除虚拟机后，其他相关资源如网络接口、托管磁盘、网络安全组、公共IP另需手动删除
+似乎应该具备编写powershell脚本的能力，<a href="https://www.zhihu.com/question/21787232/answer/63774856" target="_blank" rel="noopener">知乎：PowerShell有没有必要学？</a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">param([string]$resourceGroup) // 获取变量参数</span><br><span class="line">$adminCredential = Get-Credential -Message &quot;Enter a username and password for the VM administrator.&quot;</span><br><span class="line">For ($i = 1; $i -le 3; $i++)</span><br><span class="line">&#123;</span><br><span class="line">    $vmName = &quot;ConferenceDemo&quot; + $i</span><br><span class="line">    Write-Host &quot;Creating VM: &quot; $vmName</span><br><span class="line">    New-AzVm -ResourceGroupName $resourceGroup -Name $vmName -Credential $adminCredential -Image UbuntuLTS</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="数据和存储"><a href="#数据和存储" class="headerlink" title="数据和存储"></a>数据和存储</h3><p>数据：结构化数据、半结构化数据(也就是NoSQL数据，如Json数据，Xml数据)、非结构化数据
+事务数据库：联机事务处理(Online Transaction Processing，OLTP)系统和联机分析处理(Online Analytical Processing，OLAP)系统，通常情况下，前者服务于较大量的用户，响应更快，可用性更高，处理大量数据(handle large volumns of data)，后者用于处理大型复杂事务(handle large and complex transactions)
+建议使用Azure Cosmos DB管理NoSQL数据，使用Azue Blob Storage管理文件数据，结构化数据使用Azure SQL Database, Azure SQL Database可以认为是云端托管的sqlserver</p>
 <h3 id="订阅"><a href="#订阅" class="headerlink" title="订阅"></a>订阅</h3><h3 id="Azure-Backup"><a href="#Azure-Backup" class="headerlink" title="Azure Backup"></a>Azure Backup</h3><p>AZ104 Q7 Azure Backup执行备份并不受限于虚拟机的os，是否在运行。</p>
 
       
@@ -580,7 +589,7 @@ D. each virtual machine in a separate Availability Set</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">165</span>
+                  <span class="site-state-item-count">169</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -602,7 +611,7 @@ D. each virtual machine in a separate Availability Set</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">69</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -635,7 +644,7 @@ D. each virtual machine in a separate Availability Set</p>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Azure-Policy"><span class="nav-number">2.</span> <span class="nav-text">Azure Policy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟机"><span class="nav-number">3.</span> <span class="nav-text">虚拟机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Networking"><span class="nav-number">4.</span> <span class="nav-text">Networking</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#网络安全"><span class="nav-number">4.1.</span> <span class="nav-text">网络安全</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可用性、可用区和可用集"><span class="nav-number">4.2.</span> <span class="nav-text">可用性、可用区和可用集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#订阅"><span class="nav-number">5.</span> <span class="nav-text">订阅</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Azure-Backup"><span class="nav-number">6.</span> <span class="nav-text">Azure Backup</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Azure-Policy"><span class="nav-number">2.</span> <span class="nav-text">Azure Policy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟机"><span class="nav-number">3.</span> <span class="nav-text">虚拟机</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#可用性、可用区和可用集"><span class="nav-number">3.1.</span> <span class="nav-text">可用性、可用区和可用集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Networking"><span class="nav-number">4.</span> <span class="nav-text">Networking</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#网络安全"><span class="nav-number">4.1.</span> <span class="nav-text">网络安全</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PowerShell"><span class="nav-number">5.</span> <span class="nav-text">PowerShell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据和存储"><span class="nav-number">6.</span> <span class="nav-text">数据和存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#订阅"><span class="nav-number">7.</span> <span class="nav-text">订阅</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Azure-Backup"><span class="nav-number">8.</span> <span class="nav-text">Azure Backup</span></a></li></ol></div>
             
 
           </div>

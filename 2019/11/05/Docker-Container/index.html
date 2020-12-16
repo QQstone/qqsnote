@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="启动一个Jenkins docker1234567891011docker pull jenkinssudo mkdir /var/jenkins_homedocker run -d -u root --rm --name myjenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home --restart a">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-11-08T14:20:53.429Z">
+<meta property="og:updated_time" content="2020-12-08T07:11:11.012Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker_Container">
 <meta name="twitter:description" content="启动一个Jenkins docker1234567891011docker pull jenkinssudo mkdir /var/jenkins_homedocker run -d -u root --rm --name myjenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home --restart a">
@@ -330,13 +330,15 @@
 <li>-u root 以root权限执行 尤其对于jenkins 权限不足会影响持久化卷的访问</li>
 <li>–rm 容器退出后自动移除 实际上写这个会报与–restart always冲突</li>
 <li>–name myjenkins容器Name命名为myjenkins</li>
-<li>-p 8080:8080 -p 50000:50000 容器端口映射到宿主端口</li>
+<li>-p 8080:8080 -p 50000:50000 容器端口映射到宿主端口，前者是主机端口，后者是容器端口</li>
 <li>-v volumn设置（详见“卷和持久化数据”）</li>
 <li>–restart always重启策略</li>
 <li>jenkins 镜像</li>
 </ul>
 <p>参考
  <a href="https://www.runoob.com/docker/docker-command-manual.html" target="_blank" rel="noopener">docker run命令</a></p>
+<p>Docker提供了3种预置网络配置：桥接、主机、无网络
+端口映射适应于桥接网络，是启动容器的默认网络设置，如果是主机网络，则可以直接使用主机上的剩余端口</p>
 <h4 id="连接到容器"><a href="#连接到容器" class="headerlink" title="连接到容器"></a>连接到容器</h4><p>docker attach [containerID]</p>
 <p>docker exec -it [containerID] bash或sh</p>
 <p>前者是直接进入容器启动命令的终端，不开启新的进程，退出终端意味着容器命令被终结
@@ -390,8 +392,8 @@ docker ps列表容器
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/qqsnote/2019/10/31/DockerInstallation/" rel="next" title="DockerInstallation">
-                <i class="fa fa-chevron-left"></i> DockerInstallation
+              <a href="/qqsnote/2019/10/31/DockerInstallation/" rel="next" title="Docker入门">
+                <i class="fa fa-chevron-left"></i> Docker入门
               </a>
             
           </div>
@@ -479,7 +481,7 @@ docker ps列表容器
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">165</span>
+                  <span class="site-state-item-count">169</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -501,7 +503,7 @@ docker ps列表容器
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">69</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

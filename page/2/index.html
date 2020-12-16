@@ -229,6 +229,772 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/20/oidc-client/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/11/20/oidc-client/" itemprop="url">oidc-client package</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-20T09:56:14+08:00">
+                2020-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>包如其名，是对<a href="https://openid.net/specs/openid-connect-core-1_0.html" target="_blank" rel="noopener">openID connection</a>协议的实现</p>
+<p>包主要提供基于两个class的功能，UserManager和OidcClient。UserManager提供登录/登出，管理OIDC provider返回的用户信息（user claims），管理access token等，是oidc-client package的主要功能。OidcClient是更底层的协议实现，并被UserManager调用。</p>
+<h4 id="UserManager初始化"><a href="#UserManager初始化" class="headerlink" title="UserManager初始化"></a>UserManager初始化</h4><p>UserManager使用OIDC provider的相关配置进行初始化
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">readonly setting = &#123;</span><br><span class="line">    client_id: &quot;c5a333eb-fbbd-4643-b8fb-846e0c82ca03&quot;, // Required！</span><br><span class="line">    authority: &quot;https://qqstudio.b2clogin.cn/qqstudio.onmicrosoft.com/B2C_1_pp_userflow/v2.0/&quot;, // 即&#123;tenant&#125;/&#123;directory&#125;&#123;userflow&#125; Required！  </span><br><span class="line">    response_type: &quot;id_token token&quot;, // string, default: &apos;id_token&apos; Required！</span><br><span class="line">    scope: &quot;openid&quot; // Required！OIDC provider授权的scope</span><br><span class="line">    redirect_uri: &quot;https://localhost:44362/signin-callback.html&quot;, // 返回的token将被链在这个url后面 Required！</span><br><span class="line"></span><br><span class="line">    silent_redirect_uri: &quot;https://localhost:44362/silent-callback.html&quot;,</span><br><span class="line">    automaticSilentRenew: true</span><br><span class="line">&#125;</span><br><span class="line">var _userManager = new UserManager(settings);</span><br></pre></td></tr></table></figure></p>
+<p>其他参数见<a href="https://github.com/IdentityModel/oidc-client-js/wiki" target="_blank" rel="noopener">oidc-client wiki</a></p>
+<h4 id="跳转到登录"><a href="#跳转到登录" class="headerlink" title="跳转到登录"></a>跳转到登录</h4><p>当access_token缺失或过期，抑或由api发现失效而返回401时，可以调用UserManager的下述方法跳转到登录
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">this._userManager.signinRedirect(&#123; state: location.href, prompt: &quot;login&quot; &#125;).then(function () &#123;</span><br><span class="line">    console.log(&apos;signinRedirect done&apos;);</span><br><span class="line">&#125;).catch(function (err) &#123;</span><br><span class="line">    console.log(err);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>方法支持传键值对作为参数，这些参数将拼接在登录地址的url parameter中形如&amp;prompt=login，登录成功重定向回到app时可以取回这些参数，从而继续被登录中断的操作。</p>
+<h4 id="重定向回到App"><a href="#重定向回到App" class="headerlink" title="重定向回到App"></a>重定向回到App</h4><p>在signin-callback.html页面的初始化方法中调用userManager的signinRedirectCallback，该方法从url的parameter取出access token以及前文所述的其他登录跳转参数（这些参数可以用回调函数取出处理）
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">this._userManager.signinRedirectCallback((user: User) =&gt; &#123;</span><br><span class="line">    if (user &amp;&amp; user.state) &#123;</span><br><span class="line">    this.router.navigateByUrl(user.state).then(b =&gt; &#123;</span><br><span class="line">        console.log(&quot;navigate to url&quot;, user.state, &quot; return&quot;, b);</span><br><span class="line">    &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>实际上callback url后带的是形如&amp;state=b2983fd692b94528852297782ef93bbf的参数，推测此为指向原value的标记，原value存于localstorage</p>
+<h4 id="User"><a href="#User" class="headerlink" title="User"></a>User</h4><p>调用getUser方法取用户信息, 部分信息是从access token中解析得出，部分可能需要配置其他workflow比如profile
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">class User &#123;</span><br><span class="line">  constructor(settings: UserSettings);</span><br><span class="line"></span><br><span class="line">  /** The id_token returned from the OIDC provider */</span><br><span class="line">  id_token: string;</span><br><span class="line">  /** The session state value returned from the OIDC provider (opaque) */</span><br><span class="line">  session_state?: string;</span><br><span class="line">  /** The access token returned from the OIDC provider. */</span><br><span class="line">  access_token: string;</span><br><span class="line">  /** Refresh token returned from the OIDC provider (if requested) */</span><br><span class="line">  refresh_token?: string;</span><br><span class="line">  /** The token_type returned from the OIDC provider */</span><br><span class="line">  token_type: string;</span><br><span class="line">  /** The scope returned from the OIDC provider */</span><br><span class="line">  scope: string;</span><br><span class="line">  /** The claims represented by a combination of the id_token and the user info endpoint */</span><br><span class="line">  profile: Profile;</span><br><span class="line">  /** The expires at returned from the OIDC provider */</span><br><span class="line">  expires_at: number;</span><br><span class="line">  /** The custom state transferred in the last signin */</span><br><span class="line">  state: any;</span><br><span class="line"></span><br><span class="line">  toStorageString(): string;</span><br><span class="line">  static fromStorageString(storageString: string): User;</span><br><span class="line"></span><br><span class="line">  /** Calculated number of seconds the access token has remaining */</span><br><span class="line">  readonly expires_in: number;</span><br><span class="line">  /** Calculated value indicating if the access token is expired */</span><br><span class="line">  readonly expired: boolean;</span><br><span class="line">  /** Array representing the parsed values from the scope */</span><br><span class="line">  readonly scopes: string[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用removeUser 清除localstorage中的登录信息 非常的方便~</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/10/Microservices/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/11/10/Microservices/" itemprop="url">微服务</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-10T13:36:37+08:00">
+                2020-11-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://www.zhihu.com/question/65502802" target="_blank" rel="noopener">知乎：什么是微服务</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/04/AuthenticationPackages/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/11/04/AuthenticationPackages/" itemprop="url">AuthenticationPackages</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-04T10:34:50+08:00">
+                2020-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/03/ODATA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/11/03/ODATA/" itemprop="url">ODATA</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-03T13:22:39+08:00">
+                2020-11-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h4><ul>
+<li>$filter=name eq ‘QQstone’</li>
+<li>$filter=contains(email, ‘163.com’)
+注意单引号  <h4 id="select"><a href="#select" class="headerlink" title="select"></a>select</h4></li>
+<li>$select=name,email,type</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/02/GameTheory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/11/02/GameTheory/" itemprop="url">博弈论</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-02T14:57:11+08:00">
+                2020-11-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="零和博弈，非零和博弈"><a href="#零和博弈，非零和博弈" class="headerlink" title="零和博弈，非零和博弈"></a>零和博弈，非零和博弈</h4><p>非零和博弈表示在不同策略组合下各博弈方的得益之和是不确定的变量，故又称之为变和博弈。 如囚徒困境，中美关系，恋爱</p>
+<p>零和博弈表示所有博弈方的利益之和为零或一个常数，即一方有所得，其他方必有所失。如绝大多数竞技，竞选，炒股</p>
+<p>行业或社会环境成为存量市场，内卷是人们进行零和博弈的结果。</p>
+<blockquote>
+<p>摘自百度百科《非零和博弈》:
+烈日炎炎的一个下午，约翰·纳什教授给二十几个学生上课，教室窗外的楼下有几个工人正施工，机器的响声成了刺耳的噪音，于是纳什走到窗前狠狠地把窗户关上。马上有同学提出意见：“教授，请别关窗子，实在太热了！”而纳什教授一脸严肃地回答说：“课堂的安静比你舒不舒服重要得多！”然后转过身一边嘴里叨叨着“给你们来上课，在我看来不但耽误了你们的时间，也耽误了我的宝贵时间……”，一边在黑板上写着数学公式。
+正当教授一边自语一边在黑板上写公式之际，一位叫阿丽莎的漂亮女同学（这位女同学后来成了纳什的妻子）走到窗边打开了窗子，电影中纳什用责备的眼神看着阿丽莎：“小姐……”而阿丽莎对窗外的工人说道：“打扰一下，嗨！我们有点小小的问题，关上窗户，这里会很热；开着，却又太吵。我想能不能请你们先修别的地方，大约45分钟就好了。”正在干活的工人愉快地说：“没问题！”又回头对自己的伙伴们说：“伙计们，让我们先休息一下吧！”阿丽莎回过头来快活地看着纳什教授，纳什教授也微笑地看着阿丽莎，既像是讲课，又像是在评论她的做法似地对同学们说：“你们会发现在多变性的微积分中，往往一个难题会有多种解答。”
+而阿丽莎对“开窗难题”的解答，使得原本的一个零和博弈变成了另外一种结果：同学们既不必忍受室内的高温，教授也可以在安静的环境中讲课，结果不再是0，而成了+2。由此我们可以看到，很多看似无法调和的矛盾，其实并不一定是你死我活的僵局，那些看似零和博弈或者是负和博弈的问题，也会因为参与者的巧妙设计而转为正和博弈。</p>
+</blockquote>
+<h4 id="内卷和博弈"><a href="#内卷和博弈" class="headerlink" title="内卷和博弈"></a>内卷和博弈</h4><p>内卷是零和博弈的状态吗？
+参与者是直接地进行利益竞争吗，似乎并不是哦，内卷的起因是掌握话语权的一方——在社会生产的范畴上是资本家，在就学教育上是招生办——限制了规则，在既定的有限条件下，低阶层的参与者为了自己的收益做出与之不匹配的付出。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/10/27/Azure-ADB2C-JWT-Validation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/10/27/Azure-ADB2C-JWT-Validation/" itemprop="url">Azure-ADB2C-JWT-Validation</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-27T17:38:03+08:00">
+                2020-10-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>见 <a href="https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview#validation" target="_blank" rel="noopener">Azure官方文档token overview</a></p>
+<p>如<a href="/qqsnote/2020/10/15/jwt/" title="JWT">JWT</a>所述，JWT包含三个部分，一个标头，一个正文和一个签名。签名段可用于验证令牌的真实性，以便您的应用程序可以信任它。Azure AD B2C通过使用行业标准的非对称加密算法（例如RSA 256）对令牌进行签名。
+header包含有关用于对令牌进行签名的密钥和加密方法的信息：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        &quot;typ&quot;: &quot;JWT&quot;,</span><br><span class="line">        &quot;alg&quot;: &quot;RS256&quot;,</span><br><span class="line">        &quot;kid&quot;: &quot;GvnPApfWMdLRi8PDmisFn7bprKg&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Azure AD B2C具有一个OpenID Connect元数据EndPoint。大概长这样子:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/B2C_1_basic_sign_up_and_sign_in/v2.0/.well-known/openid-configuration</span><br></pre></td></tr></table></figure></p>
+<p>通过此EndPoint，可以get到有关Azure AD B2C的信息。此信息包括端点，令牌内容和令牌签名密钥。
+其中jwks_uri提供用于签署令牌的一组公共密钥的位置。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/b2c_1_basic_sign_up_and_sign_in/discovery/v2.0/keys</span><br></pre></td></tr></table></figure></p>
+<p>jwks_uri如上格式，建议通过get元数据文档并解析以动态获取jwks_uri，而不要写死。</p>
+<p>StackOverflow 上有个现成的
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">var configurationManager = new ConfigurationManager&lt;OpenIdConnectConfiguration&gt;(</span><br><span class="line">                                   &quot;https://testb2ctenant05.b2clogin.com/testB2CTenant05.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_test&quot;,</span><br><span class="line">                                    new OpenIdConnectConfigurationRetriever(), new HttpDocumentRetriever());</span><br><span class="line">            CancellationToken ct = default(CancellationToken);</span><br><span class="line">            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();</span><br><span class="line">            var discoveryDocument = await configurationManager.GetConfigurationAsync(ct);</span><br><span class="line">            var signingKeys = discoveryDocument.SigningKeys;</span><br><span class="line">            var validationParameters = new TokenValidationParameters</span><br><span class="line">            &#123;</span><br><span class="line">                RequireExpirationTime = true,</span><br><span class="line">                RequireSignedTokens = true,</span><br><span class="line">                ValidateIssuer = true,</span><br><span class="line">                ValidIssuer = discoveryDocument.Issuer,</span><br><span class="line">                ValidateIssuerSigningKey = true,</span><br><span class="line">                IssuerSigningKeys = signingKeys,</span><br><span class="line">                ValidateLifetime = true,</span><br><span class="line"></span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line"> var principal = new JwtSecurityTokenHandler()</span><br><span class="line">            .ValidateToken(token, validationParameters, out var rawValidatedToken);</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://stackoverflow.com/questions/59840170/validating-the-token-recieved-from-azure-ad-b2c-using-the-values-from-jwks-uri" target="_blank" rel="noopener">Jim Xu’s Answer</a></p>
+<p>用例描述：</p>
+<ul>
+<li>使用非法字符串冒充access token，异常：decode fail</li>
+<li>使用其他来源的(比如其他talent)的token，异常：unmatch siguanture</li>
+<li>使用正确token 获得principal对象 </li>
+</ul>
+<p>回顾一下，对于非对称加密，签名用私钥产生，私钥绝对隐藏且不可被反推，公开公钥，任何人可以使用公钥验证签名。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/10/20/AzureExpertNotes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -316,7 +1082,35 @@
 <p>Az104 Q5 使用resource policy修改虚拟网络的限制</p>
 <p>类似的： 蓝图blue print，为某个订阅制订蓝图（和策略一样，azure上由很多已定义的）
 Monitor里的Alert，为某个特定资源添加警报</p>
-<h3 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h3><ul>
+<h3 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h3><h4 id="可用性、可用区和可用集"><a href="#可用性、可用区和可用集" class="headerlink" title="可用性、可用区和可用集"></a>可用性、可用区和可用集</h4><blockquote>
+<p>可用性是可供使用的时间段的百分比，任意时间可访问的服务即100%可用性</p>
+</blockquote>
+<p>因故障、因物理故障触发的自动迁移、定期更新都有可能造成资源可用性达不到100%</p>
+<p><a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/manage-availability" target="_blank" rel="noopener">管理可用性</a>
+<a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets" target="_blank" rel="noopener">创建和部署高度可用的虚拟机</a></p>
+<blockquote>
+<p><a href="https://docs.microsoft.com/zh-cn/azure/availability-zones/az-overview" target="_blank" rel="noopener">可用性区域</a>:区域中的唯一物理位置,每个区域由一个或多个数据中心组成，这些数据中心配置了独立电源，冷却和网络。区域中可用性区域的物理隔离可以在发生数据中心故障的情况下保护应用程序和数据。 区域冗余服务可跨可用性区域复制应用程序和数据，以防范单点故障。</p>
+<ul>
+<li>更新域和容错域的组合</li>
+<li>当两个或更多个 VM 部署在一个 Azure 区域中的两个或更多个可用性区域时，可获得99.99% <a href="https://azure.microsoft.com/zh-cn/support/legal/sla/virtual-machines/v1_9/" target="_blank" rel="noopener">VM 运行时间 SLA</a>(service-level agreement, 服务级别协议)</li>
+</ul>
+</blockquote>
+<p>使用可用性区域创建vm settings–&gt;High availability–&gt;选择一个编号的区域 <a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/create-portal-availability-zone" target="_blank" rel="noopener">详细</a></p>
+<p>而可用性集是一种逻辑分组功能，将在物理层面相分离的vm连接到一起，如果运行服务器的其中之一的物理硬件有问题，可以确信服务器的其他实例保持运行，因为它们位于不同的硬件上。使用命令创建可用性集 <a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets" target="_blank" rel="noopener">详细</a></p>
+<blockquote>
+<p>Microsoft 为部署在可用性中的多实例 VM 提供 99.95% 的外部连接性服务级别协议 (SLA)。 这意味着，对于要应用的 SLA，必须在可用性集中至少部署两个 VM 实例。</p>
+</blockquote>
+<p>You plan to deploy three Azure virtual machines named VM1, VM2, and VM3. The virtual
+machines will host a web app named App1.
+You need to ensure that at least two virtual machines are available if a single Azure datacenter
+becomes unavailable.
+What should you deploy?
+A. all three virtual machines in a single Availability Zone
+B. all virtual machines in a single Availability Set
+C. each virtual machine in a separate Availability Zone
+D. each virtual machine in a separate Availability Set</p>
+<p>Answer is B.</p>
+<ul>
 <li>可以自己提供非官方镜像用于创建虚拟机<blockquote>
 <p>It is possible to change the size of a VM after it’s been created, but the VM must be stopped first. So, it’s best to size it appropriately from the start if possible.调整vm配置需要停机</p>
 </blockquote>
@@ -426,36 +1220,17 @@ Switch(交换机)，是网桥和集线器的结合</p>
 <ul>
 <li>SNMP 简单网络管理协议，前文已述，允许访问网络设备的信息</li>
 <li>Syslog 允许设备发送事件，用于事件日志记录</li>
-<li>Azure Monitor是网络监控解决方案，包含Log Analytics工具，用以查询、分析日志<h4 id="可用性、可用区和可用集"><a href="#可用性、可用区和可用集" class="headerlink" title="可用性、可用区和可用集"></a>可用性、可用区和可用集</h4><blockquote>
-<p>可用性是可供使用的时间段的百分比，任意时间可访问的服务即100%可用性</p>
-</blockquote>
+<li>Azure Monitor是网络监控解决方案，包含Log Analytics工具，用以查询、分析日志<h3 id="PowerShell"><a href="#PowerShell" class="headerlink" title="PowerShell"></a>PowerShell</h3>学习目标</li>
+<li>使用Azure PowerShell 连接/操作 Azure资源
+Azure Portal，Azure CLI，Azure PowerShell是管理Azure资源的三种工具，相比Azure Portal页面，脚本工具因可以编写逻辑而更适合进行批量操作，以及自动化<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Import-Module Az</span><br><span class="line">Connect-AzAccount</span><br><span class="line">Get-AzResourceGroup</span><br><span class="line">... &lt;-- 这里会列出资源组</span><br><span class="line">Get-Credential</span><br><span class="line">... &lt;-- 这里设置访问虚拟机的凭据</span><br><span class="line">New-AzVM -Name &quot;testvm-eus-01&quot; -ResourceGroupName &quot;learn-940e9418-9b64-4c5b-a12c-a136ccb641da&quot; -Credential (Get-Credential) -Location &quot;East US&quot; -Image UbuntuLTS -OpenPorts 22</span><br><span class="line">$vm = (Get-AzVM -Name &quot;testvm-eus-01&quot; -ResourceGroupName learn-940e9418-9b64-4c5b-a12c-a136ccb641da)</span><br><span class="line">$vm | Get-AzPublicIpAddress</span><br><span class="line">ssh QQs@13.92.231.172 </span><br><span class="line">... &lt;-- 使用ssh连接虚拟机</span><br><span class="line">Stop-AzVM -Name $vm.Name -ResourceGroup $vm.ResourceGroupName</span><br><span class="line">Remove-AzVM -Name $vm.Name -ResourceGroup $vm.ResourceGroupName</span><br><span class="line">$vm | Remove-AzNetworkInterface –Force</span><br><span class="line">Get-AzDisk -ResourceGroupName $vm.ResourceGroupName -DiskName $vm.StorageProfile.OSDisk.Name | Remove-AzDisk -Force</span><br><span class="line">Get-AzVirtualNetwork -ResourceGroup $vm.ResourceGroupName | Remove-AzVirtualNetwork -Force</span><br><span class="line">Get-AzNetworkSecurityGroup -ResourceGroup $vm.ResourceGroupName | Remove-AzNetworkSecurityGroup -Force</span><br><span class="line">Get-AzPublicIpAddress -ResourceGroup $vm.ResourceGroupName | Remove-AzPublicIpAddress -Force</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>因故障、因物理故障触发的自动迁移、定期更新都有可能造成资源可用性达不到100%</p>
-<p><a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/manage-availability" target="_blank" rel="noopener">管理可用性</a>
-<a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets" target="_blank" rel="noopener">创建和部署高度可用的虚拟机</a></p>
-<blockquote>
-<p><a href="https://docs.microsoft.com/zh-cn/azure/availability-zones/az-overview" target="_blank" rel="noopener">可用性区域</a>:区域中的唯一物理位置,每个区域由一个或多个数据中心组成，这些数据中心配置了独立电源，冷却和网络。区域中可用性区域的物理隔离可以在发生数据中心故障的情况下保护应用程序和数据。 区域冗余服务可跨可用性区域复制应用程序和数据，以防范单点故障。</p>
-<ul>
-<li>更新域和容错域的组合</li>
-<li>当两个或更多个 VM 部署在一个 Azure 区域中的两个或更多个可用性区域时，可获得99.99% <a href="https://azure.microsoft.com/zh-cn/support/legal/sla/virtual-machines/v1_9/" target="_blank" rel="noopener">VM 运行时间 SLA</a>(service-level agreement, 服务级别协议)</li>
-</ul>
-</blockquote>
-<p>使用可用性区域创建vm settings–&gt;High availability–&gt;选择一个编号的区域 <a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/create-portal-availability-zone" target="_blank" rel="noopener">详细</a></p>
-<p>而可用性集是一种逻辑分组功能，将在物理层面相分离的vm连接到一起，如果运行服务器的其中之一的物理硬件有问题，可以确信服务器的其他实例保持运行，因为它们位于不同的硬件上。使用命令创建可用性集 <a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets" target="_blank" rel="noopener">详细</a></p>
-<blockquote>
-<p>Microsoft 为部署在可用性中的多实例 VM 提供 99.95% 的外部连接性服务级别协议 (SLA)。 这意味着，对于要应用的 SLA，必须在可用性集中至少部署两个 VM 实例。</p>
-</blockquote>
-<p>You plan to deploy three Azure virtual machines named VM1, VM2, and VM3. The virtual
-machines will host a web app named App1.
-You need to ensure that at least two virtual machines are available if a single Azure datacenter
-becomes unavailable.
-What should you deploy?
-A. all three virtual machines in a single Availability Zone
-B. all virtual machines in a single Availability Set
-C. each virtual machine in a separate Availability Zone
-D. each virtual machine in a separate Availability Set</p>
-<p>Answer is B.</p>
+<p>注意 上面停止并移除虚拟机后，其他相关资源如网络接口、托管磁盘、网络安全组、公共IP另需手动删除
+似乎应该具备编写powershell脚本的能力，<a href="https://www.zhihu.com/question/21787232/answer/63774856" target="_blank" rel="noopener">知乎：PowerShell有没有必要学？</a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">param([string]$resourceGroup) // 获取变量参数</span><br><span class="line">$adminCredential = Get-Credential -Message &quot;Enter a username and password for the VM administrator.&quot;</span><br><span class="line">For ($i = 1; $i -le 3; $i++)</span><br><span class="line">&#123;</span><br><span class="line">    $vmName = &quot;ConferenceDemo&quot; + $i</span><br><span class="line">    Write-Host &quot;Creating VM: &quot; $vmName</span><br><span class="line">    New-AzVm -ResourceGroupName $resourceGroup -Name $vmName -Credential $adminCredential -Image UbuntuLTS</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="数据和存储"><a href="#数据和存储" class="headerlink" title="数据和存储"></a>数据和存储</h3><p>数据：结构化数据、半结构化数据(也就是NoSQL数据，如Json数据，Xml数据)、非结构化数据
+事务数据库：联机事务处理(Online Transaction Processing，OLTP)系统和联机分析处理(Online Analytical Processing，OLAP)系统，通常情况下，前者服务于较大量的用户，响应更快，可用性更高，处理大量数据(handle large volumns of data)，后者用于处理大型复杂事务(handle large and complex transactions)
+建议使用Azure Cosmos DB管理NoSQL数据，使用Azue Blob Storage管理文件数据，结构化数据使用Azure SQL Database, Azure SQL Database可以认为是云端托管的sqlserver</p>
 <h3 id="订阅"><a href="#订阅" class="headerlink" title="订阅"></a>订阅</h3><h3 id="Azure-Backup"><a href="#Azure-Backup" class="headerlink" title="Azure Backup"></a>Azure Backup</h3><p>AZ104 Q7 Azure Backup执行备份并不受限于虚拟机的os，是否在运行。</p>
 
           
@@ -899,856 +1674,6 @@ HMACSHA256(base64UrlEncode(header)+’.’+base64UrlEncode(payload).secret)</p>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/09/09/wasm-fundation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/09/09/wasm-fundation/" itemprop="url">WebAssembly基础</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-09T17:16:14+08:00">
-                2020-09-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Javascript"><a href="#Javascript" class="headerlink" title="Javascript"></a>Javascript</h3><h4 id="window-requestAnimationFrame"><a href="#window-requestAnimationFrame" class="headerlink" title="window.requestAnimationFrame"></a><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame" target="_blank" rel="noopener">window.requestAnimationFrame</a></h4><p>顾名思义用于动画帧的绘制, 类似于setInterval,传入回调函数,该回调函数将会在下一次浏览器尝试重新绘制当前帧动画时被调用
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">//迭代调用以使dom持续更新</span><br><span class="line"></span><br><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">      div &#123;</span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        position: absolute;</span><br><span class="line">      &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;div&gt;&lt;/div&gt;</span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">  &lt;script&gt;</span><br><span class="line">    let start = null;</span><br><span class="line">    let element = document.querySelector(&apos;div&apos;);</span><br><span class="line"></span><br><span class="line">    const step = (timestamp) =&gt; &#123;</span><br><span class="line">      if (!start) start = timestamp;</span><br><span class="line">      let progress = timestamp - start;</span><br><span class="line">      element.style.left = Math.min(progress / 10, 200) + &apos;px&apos;;</span><br><span class="line">      if (progress &lt; 2000) &#123;</span><br><span class="line">        window.requestAnimationFrame(step);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    window.requestAnimationFrame(step);</span><br><span class="line">  &lt;/script&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
-<h4 id="Performance-API"><a href="#Performance-API" class="headerlink" title="Performance API"></a><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Performance_API/Using_the_Performance_API" target="_blank" rel="noopener">Performance API</a></h4><p>performance.now()返回当前时刻距离 “time origin” 所经过的毫秒数，以此可以计算代码执行所花时间，精度大于Date.now()</p>
-<h4 id="TypedArray"><a href="#TypedArray" class="headerlink" title="TypedArray"></a><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" target="_blank" rel="noopener">TypedArray</a></h4><p>类型化数组，其实例描述底层的二进制数据缓冲区的类数组视图。<br>
-实际上并没有TypedArray这个全局属性或者构造方法，可以认为是Int8Array，Uint32Array等对象的实例化数组的统称
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const DEFAULT_INDEX = 0;</span><br><span class="line">// Way one:</span><br><span class="line">const int8Arr = new Int8Array(10);</span><br><span class="line">int8Arr[DEFAULT_INDEX] = 16;</span><br><span class="line">console.log(int8Arr);  // Int8Array [16, 0, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">int8Arr[0]=256, int8Arr[1]=257;</span><br><span class="line">console.log(int8Arr);  // Int8Array(10) [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line"></span><br><span class="line">// Way two:</span><br><span class="line">const buffer = new ArrayBuffer(16);</span><br><span class="line">uintArray = new Uint8Array(buffer); // Uint8Array(16) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">uintArray.set([255,255,255],4)</span><br><span class="line">console.log(uintArray);  // Uint8Array(16) [0, 0, 0, 0, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0]</span><br></pre></td></tr></table></figure></p>
-<p>Way two中，ArrayBuffer 的构造函数其参数指定了该 ArrayBuffer 所能够存放的单字节数量，因此在“转换到”对应的 TypedArray 时，一定要确保 ArrayBuffer 的大小是 TypedArray 元素类型所对应字节大小的整数倍。<br>
-TypedArray.prototype.set, 方法接受两个参数，第一个参数为将要进行数据读取的 JavaScript 普通数组；第二个参数为将要存放在类型数组中的元素偏移位置。</p>
-<p>可以作为类型化数组的<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects" target="_blank" rel="noopener">内置对象</a>：</p>
-<ul>
-<li>Int8Array</li>
-<li>Uint8Array</li>
-<li>Uint8ClampedArray</li>
-<li>Int16Array</li>
-<li>Uint16Array</li>
-<li>Int32Array</li>
-<li>Uint32Array</li>
-<li>Float32Array</li>
-<li>Float64Array<h4 id="C-C"><a href="#C-C" class="headerlink" title="C/C++"></a>C/C++</h4>对于C++的函数重载，C++编译器通常使用名为 “Name Mangling” 的机制，在编译的可执行文件中区分同名函数<br>
-使用extern “C” {}用以避免“Name Mangling”处理：由于在这个特殊的结构中，C++ 编译器会强制以 C 语言的语法规则，来编译放置在这个作用域内的所有 C++ 源代码。而在 C 语言的规范中，没有“函数重载”这类特性，因此也不会对函数名进行 “Name Mangling” 的处理。<h4 id="编译优化"><a href="#编译优化" class="headerlink" title="编译优化"></a>编译优化</h4>DCE(Dead Code Elimination)<br>
-在诸如 Clang / GCC 等编译器中，我们通常可以为编译器指定一些有关编译优化的标记，以让编译器可以通过使用不同等级的优化策略来优化目标代码的生成。而诸如 -O0 / -O1 / -O2 一直到 -Os 与 -O4 等选项，便是这些优化标记中的一部分。<h4 id="原码-反码-补码"><a href="#原码-反码-补码" class="headerlink" title="原码 反码 补码"></a>原码 反码 补码</h4>原码符号位不变 逐位取反–&gt; 反码 <br>
-反码+1 –&gt; 补码<h4 id="访问控制列表"><a href="#访问控制列表" class="headerlink" title="访问控制列表"></a>访问控制列表</h4>ACL（Access Control List）<h4 id="堆栈机、寄存器机和累加器机"><a href="#堆栈机、寄存器机和累加器机" class="headerlink" title="堆栈机、寄存器机和累加器机"></a>堆栈机、寄存器机和累加器机</h4></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/09/08/dotNetCore-CI/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/09/08/dotNetCore-CI/" itemprop="url">.Net Core的持续集成</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-08T16:24:39+08:00">
-                2020-09-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>显然，.Net Core开发过程中，使用Visual Studio提供的近乎完美IDE，build和deploy都非常简单，如果说是用jenkins进行持续集成，那便相当于用脚本完成更新源码–构建–部署等过程。</p>
-<h4 id="jenkins-ant"><a href="#jenkins-ant" class="headerlink" title="jenkins ant"></a>jenkins ant</h4><blockquote>
-<p>Apache Ant，是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。由Apache软件基金会所提供。默认情况下，它的buildfile(XML文件)名为build.xml。——————wiki</p>
-</blockquote>
-<p>build.xml定义了若干步骤（即target），以xml节点格式定义每个步骤的目录，执行程序，以及参数等
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; ?&gt; </span><br><span class="line">&lt;project name=&quot;Hello World&quot; default=&quot;execute&quot;&gt;</span><br><span class="line"></span><br><span class="line">	&lt;target name=&quot;init&quot;&gt;</span><br><span class="line">		&lt;mkdir dir=&quot;build/classes&quot;/&gt;</span><br><span class="line">		&lt;mkdir dir=&quot;dist&quot;/&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line">	&lt;target name=&quot;compile&quot; depends=&quot;init&quot;&gt;</span><br><span class="line">		&lt;javac srcdir=&quot;src&quot; destdir=&quot;build/classes&quot;/&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name=&quot;compress&quot; depends=&quot;compile&quot;&gt;</span><br><span class="line">	        &lt;jar destfile=&quot;dist/HelloWorld.jar&quot; basedir=&quot;build/classes&quot;  /&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line"></span><br><span class="line">	&lt;target name=&quot;execute&quot; depends=&quot;compile&quot;&gt;</span><br><span class="line">		&lt;java classname=&quot;HelloWorld&quot; classpath=&quot;build/classes&quot;/&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure></p>
-<p>在Jenkins中可以配置使用Apache Ant，在构建时便可以使用build.xml来管理步骤
-<img src="https://tvax4.sinaimg.cn/large/a60edd42ly1gijd2ewcpyj20wz0lo3zk.jpg" alt="JenkinsAnt">
-源码目录build/build.xml:
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;project name=&quot;PartnerPortal&quot; default=&quot;PartnerPortal&quot; basedir=&quot;.&quot;&gt;</span><br><span class="line">	&lt;description&gt;</span><br><span class="line">	PartnerPortal Daily Build File.</span><br><span class="line">	&lt;/description&gt;</span><br><span class="line"></span><br><span class="line">	&lt;property file=&quot;build.properties&quot;/&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name=&quot;build_partner_portal&quot; description=&quot;Build CS ScanFlow with Microsoft Visual Studio&quot;&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;      build CSD PP x64         &quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;MSVC    : $&#123;msbuild.exe&#125;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;root    : $&#123;root_dir&#125;&quot;/&gt;</span><br><span class="line">		&lt;exec dir=&quot;.&quot; executable=&quot;restore_dotnet.bat&quot; failonerror=&quot;true&quot; /&gt;</span><br><span class="line">		&lt;exec dir=&quot;.&quot; executable=&quot;$&#123;msbuild.exe&#125;&quot; failonerror=&quot;true&quot;&gt;</span><br><span class="line">			&lt;arg line=&quot;../CSD.PartnerPortal.sln /property:Configuration=Release&quot;/&gt;</span><br><span class="line">		&lt;/exec&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name=&quot;restore_envirement&quot; description=&quot;restore dotnet&quot;&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;      restore dotnet         &quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;exec dir=&quot;.&quot; executable=&quot;restore_dotnet.bat&quot; failonerror=&quot;true&quot; /&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name=&quot;publish_to_server&quot; description=&quot;publish to server&quot;&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;      publish  start       &quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;=======================================================&quot;/&gt;</span><br><span class="line">		&lt;echo message=&quot;&quot;/&gt;</span><br><span class="line">		&lt;exec dir=&quot;.&quot; executable=&quot;publish.bat&quot; failonerror=&quot;true&quot; /&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line"></span><br><span class="line">	&lt;target name =&quot;PartnerPortal&quot; description=&quot;Build solution&quot;&gt;</span><br><span class="line">		&lt;antcall target=&quot;restore_envirement&quot; /&gt;</span><br><span class="line">		&lt;antcall target=&quot;build_partner_portal&quot; /&gt;</span><br><span class="line">		&lt;antcall target=&quot;publish_to_server&quot; /&gt;</span><br><span class="line">	&lt;/target&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure></p>
-<p>build/restore_dotnet.bat:
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet restore ../CSD.PartnerPortal.sln</span><br></pre></td></tr></table></figure></p>
-<p>build/publish.bat:
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet publish --no-build -c Release &quot;..\CSD.PartnerPortal.csproj&quot; /p:PublishProfile=&quot;..\Properties\PUblishProfiles\CSDPPci - Web Deploy.pubxml&quot; /p:Password=xxxxxxxxxxxxxxxxxxxxxxxxxxx</span><br></pre></td></tr></table></figure></p>
-<p>项目的Properties目录下的 .pubxml配置：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;Project ToolsVersion=&quot;4.0&quot; xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&gt;</span><br><span class="line">  &lt;PropertyGroup&gt;</span><br><span class="line">    &lt;WebPublishMethod&gt;MSDeploy&lt;/WebPublishMethod&gt;</span><br><span class="line">    &lt;ResourceId&gt;/subscriptions/subscriptionid01/resourceGroups/resourcegroupname01/providers/Microsoft.Web/sites/CSDPPci&lt;/ResourceId&gt;</span><br><span class="line">    &lt;ResourceGroup&gt;resourcegroupname01&lt;/ResourceGroup&gt;</span><br><span class="line">    &lt;PublishProvider&gt;AzureWebSite&lt;/PublishProvider&gt;</span><br><span class="line">    &lt;LastUsedBuildConfiguration&gt;Release&lt;/LastUsedBuildConfiguration&gt;</span><br><span class="line">    &lt;LastUsedPlatform&gt;Any CPU&lt;/LastUsedPlatform&gt;</span><br><span class="line">    &lt;SiteUrlToLaunchAfterPublish&gt;http://csdppci.azurewebsites.net&lt;/SiteUrlToLaunchAfterPublish&gt;</span><br><span class="line">    &lt;LaunchSiteAfterPublish&gt;True&lt;/LaunchSiteAfterPublish&gt;</span><br><span class="line">    &lt;ExcludeApp_Data&gt;False&lt;/ExcludeApp_Data&gt;</span><br><span class="line">    &lt;ProjectGuid&gt;2df39477-f1f3-4522-9ca7-d0eefb5b16b7&lt;/ProjectGuid&gt;</span><br><span class="line">    &lt;MSDeployServiceURL&gt;csdppci.scm.azurewebsites.net:443&lt;/MSDeployServiceURL&gt;</span><br><span class="line">    &lt;DeployIisAppPath&gt;CSDPPci&lt;/DeployIisAppPath&gt;</span><br><span class="line">    &lt;RemoteSitePhysicalPath /&gt;</span><br><span class="line">    &lt;SkipExtraFilesOnServer&gt;True&lt;/SkipExtraFilesOnServer&gt;</span><br><span class="line">    &lt;MSDeployPublishMethod&gt;WMSVC&lt;/MSDeployPublishMethod&gt;</span><br><span class="line">    &lt;EnableMSDeployBackup&gt;True&lt;/EnableMSDeployBackup&gt;</span><br><span class="line">    &lt;UserName&gt;$CSDPPci&lt;/UserName&gt;</span><br><span class="line">    &lt;_SavePWD&gt;True&lt;/_SavePWD&gt;</span><br><span class="line">    &lt;_DestinationType&gt;AzureWebSite&lt;/_DestinationType&gt;</span><br><span class="line">    &lt;InstallAspNetCoreSiteExtension&gt;False&lt;/InstallAspNetCoreSiteExtension&gt;</span><br><span class="line">  &lt;/PropertyGroup&gt;</span><br><span class="line">&lt;/Project&gt;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/09/07/Diagrams/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/09/07/Diagrams/" itemprop="url">设计图</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-07T13:48:06+08:00">
-                2020-09-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="架构视图"><a href="#架构视图" class="headerlink" title="架构视图"></a>架构视图</h4><blockquote>
-<p>设计文档中要附有大量、各种各样的图，目的是为了与包括开发，项目，dba等角色达成更好的沟通</p>
-<ul>
-<li>逻辑视图</li>
-<li>开发视图</li>
-<li>过程视图（如泳道图）</li>
-<li>物理视图</li>
-<li>场景视图</li>
-</ul>
-</blockquote>
-<h4 id="Wireframe"><a href="#Wireframe" class="headerlink" title="Wireframe"></a>Wireframe</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/09/03/WebTest/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/09/03/WebTest/" itemprop="url">WebTest</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-03T11:14:09+08:00">
-                2020-09-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/09/03/WebAPIs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/09/03/WebAPIs/" itemprop="url">原生Web API</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-03T11:13:45+08:00">
-                2020-09-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="XMLHttpRequest"><a href="#XMLHttpRequest" class="headerlink" title="XMLHttpRequest"></a><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest" target="_blank" rel="noopener">XMLHttpRequest</a></h4><blockquote>
-<p>XMLHttpRequest 可以在不刷新页面的情况下请求特定 URL，获取数据。尽管名称如此，XMLHttpRequest 可以用于获取任何类型的数据，而不仅仅是 XML。它甚至支持 HTTP 以外的协议（包括 file:// 和 FTP），尽管可能受到更多出于安全等原因的限制。
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function reqListener () &#123;</span><br><span class="line">  console.log(this.responseText);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var oReq = new XMLHttpRequest();</span><br><span class="line">oReq.addEventListener(&quot;load&quot;, reqListener);</span><br><span class="line">oReq.open(&quot;GET&quot;, &quot;http://www.example.org/getsomething&quot;);</span><br><span class="line">oReq.responseType = &quot;json&quot;;</span><br><span class="line">oReq.send();</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>发送
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var xhr = new XMLHttpRequest;</span><br><span class="line">xhr.open(&quot;POST&quot;, url, false);</span><br><span class="line">xhr.send(data);</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/08/31/ASPandSPA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/08/31/ASPandSPA/" itemprop="url">ASP和SPA</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-31T10:58:10+08:00">
-                2020-08-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>课外：<a href="https://docs.microsoft.com/zh-cn/dotnet/architecture/modern-web-apps-azure/choose-between-traditional-web-and-single-page-apps" target="_blank" rel="noopener">关于传统web app和SPA的选择</a>
-将单页面应用植入到ASP.Net<br></p>
-<h4 id="方式一：项目模板和spa中间件："><a href="#方式一：项目模板和spa中间件：" class="headerlink" title="方式一：项目模板和spa中间件："></a>方式一：项目模板和spa中间件：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">% 安装spa template pack</span><br><span class="line">dotnet new -i Microsoft.DotNet.Web.Spa.ProjectTemplates</span><br><span class="line">% 使用模板创建项目 </span><br><span class="line">dotnet new angular -n MyDotnetNgProject</span><br></pre></td></tr></table></figure>
-<p>angular is short for template”ASP. NET Core with Angular”, -n 指定项目名称，键入dotnet new –help查看选项参数说明。
-项目大致结构
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">│   appsettings.json</span><br><span class="line">│   MyDotNetNgProject.csproj</span><br><span class="line">│   Program.cs</span><br><span class="line">│   Startup.cs</span><br><span class="line">├───ClientApp</span><br><span class="line">│   │   angular.json</span><br><span class="line">│   │   package.json</span><br><span class="line">│   │   tsconfig.json</span><br><span class="line">│   │   tslint.json</span><br><span class="line">│   ├───e2e</span><br><span class="line">│   │   └───src</span><br><span class="line">│   └───src</span><br><span class="line">│       ├───app</span><br><span class="line">│       │   ├───counter</span><br><span class="line">│       │   ├───fetch-data</span><br><span class="line">│       │   ├───home</span><br><span class="line">│       │   └───nav-menu</span><br><span class="line">│       ├───assets</span><br><span class="line">│       └───environments</span><br><span class="line">├───Controllers</span><br><span class="line">├───obj</span><br><span class="line">├───Pages</span><br><span class="line">├───Properties</span><br><span class="line">│       launchSettings.json</span><br><span class="line">└───wwwroot</span><br></pre></td></tr></table></figure></p>
-<p>整个前端项目以ClientApp目录为根目录，在ASP的Startup.Configure中调用spa中间件,如下
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">app.UseSpa(spa =&gt; &#123;</span><br><span class="line">    // To learn more about options for serving an Angular SPA from ASP.NET Core,</span><br><span class="line">    // see https://go.microsoft.com/fwlink/?linkid=864501</span><br><span class="line"></span><br><span class="line">    spa.Options.SourcePath = &quot;ClientApp&quot;;</span><br><span class="line"></span><br><span class="line">    if (env.IsDevelopment())</span><br><span class="line">    &#123;</span><br><span class="line">        spa.UseAngularCliServer(npmScript: &quot;start&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<h4 id="方式二：前端发布到wwwroot，使用静态文件和默认页"><a href="#方式二：前端发布到wwwroot，使用静态文件和默认页" class="headerlink" title="方式二：前端发布到wwwroot，使用静态文件和默认页"></a>方式二：前端发布到wwwroot，使用静态文件和默认页</h4><p>Startup.cs
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public void Configure(IApplicationBuilder app, IWebHostEnvironment env)</span><br><span class="line">&#123;</span><br><span class="line">    app.UseDefaultFiles();</span><br><span class="line">    app.UseStaticFiles();</span><br><span class="line"></span><br><span class="line">    app.UseRouting();</span><br><span class="line">    app.UseEndpoints(endpoints =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        endpoints.MapControllerRoute(</span><br><span class="line">            name: &quot;default&quot;,</span><br><span class="line">            pattern: &quot;&#123;controller=Home&#125;/&#123;action=Index&#125;/&#123;id?&#125;&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>UseDefaultFiles的搜索规则是
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">default.htm</span><br><span class="line">default.html</span><br><span class="line">index.htm</span><br><span class="line">index.html</span><br></pre></td></tr></table></figure></p>
-<p>另外可以使用DefaultFilesOptions添加自定义默认页，详见 <a href="https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/static-files?view=aspnetcore-3.1" target="_blank" rel="noopener">ASP.NET Core 中的静态文件</a></p>
-<h4 id="Trouble-Shooting"><a href="#Trouble-Shooting" class="headerlink" title="Trouble Shooting"></a>Trouble Shooting</h4><blockquote>
-<p>Issue: The Angular CLI process did not start listening for requests within the timeout period of 0 seconds.</p>
-</blockquote>
-<p>当前的angular模板是基于Angular 8.2.12(记于2020.8.28)，在迁移ng9，ng10项目时出现上述问题。</p>
-<p>见<a href="https://github.com/angular/angular-cli/issues/16961" target="_blank" rel="noopener">issue#16961</a></p>
-<p>较深入的分析<a href="https://github.com/dotnet/aspnetcore/issues/18062" target="_blank" rel="noopener">issue#18062</a></p>
-<p>workaround: edit start script
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;start&quot;: &quot;echo start &amp;&amp; ng serve  --host 0.0.0.0&quot;,</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>路由问题</p>
-</blockquote>
-<h4 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h4><p><a href="https://docs.microsoft.com/zh-cn/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-3.1" target="_blank" rel="noopener">ASP.NET Core 上的单页面应用的身份验证简介</a>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet new angular -o AspNgIndividualAuthProj -au Individual</span><br></pre></td></tr></table></figure></p>
-<p>Caution! 模板生成同时提供认证授权功能的应用，具体是使用一个叫<a href="https://www.cnblogs.com/sheng-jie/p/9430920.html" target="_blank" rel="noopener">IdentityServer</a>的框架，IdentityServer封装了提供重定向endpint，生成JWT令牌，校验令牌等功能。 通常情况下，后台服务应对接独立的SSO，下面的大部分内容对此的可参考性很有限
-ClientApp
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">│   index.html</span><br><span class="line">│   main.ts</span><br><span class="line">├───api-authorization</span><br><span class="line">│   │   api-authorization.constants.ts</span><br><span class="line">│   │   api-authorization.module.spec.ts</span><br><span class="line">│   │   api-authorization.module.ts</span><br><span class="line">│   │   authorize.guard.spec.ts</span><br><span class="line">│   │   authorize.guard.ts</span><br><span class="line">│   │   authorize.interceptor.spec.ts</span><br><span class="line">│   │   authorize.interceptor.ts</span><br><span class="line">│   │   authorize.service.spec.ts</span><br><span class="line">│   │   authorize.service.ts</span><br><span class="line">│   │</span><br><span class="line">│   ├───login-menu</span><br><span class="line">│   │       ....</span><br><span class="line">│   ├───login</span><br><span class="line">│   │       ....</span><br><span class="line">│   └───logout</span><br><span class="line">│           ....</span><br><span class="line">├───app</span><br><span class="line">│   │   app.component.html</span><br><span class="line">│   │   app.component.ts</span><br><span class="line">│   │   app.module.ts</span><br><span class="line">│   │   app.server.module.ts</span><br><span class="line">│   │</span><br><span class="line">│   ├───home</span><br><span class="line">│   │       home.component.html</span><br><span class="line">│   │       home.component.ts</span><br><span class="line">│   │</span><br><span class="line">│   └───nav-menu</span><br><span class="line">│           nav-menu.component.css</span><br><span class="line">│           nav-menu.component.html</span><br><span class="line">│           nav-menu.component.ts</span><br><span class="line">│</span><br><span class="line">└───environments</span><br><span class="line">        environment.prod.ts</span><br><span class="line">        environment.ts</span><br></pre></td></tr></table></figure></p>
-<p>相比默认的工程，增加身份认证和API授权支持，主要在api-authorization目录下</p>
-<p>login-menu可见登入、登出等路由链接
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;li class=&quot;nav-item&quot;&gt;</span><br><span class="line">    &lt;a  class=&quot;nav-link text-dark&quot; [routerLink]=&apos;[&quot;/authentication/logout&quot;]&apos; [state]=&apos;&#123; local: true &#125;&apos; title=&quot;Logout&quot;&gt;Logout&lt;/a&gt;</span><br><span class="line">&lt;/li&gt;</span><br><span class="line">&lt;li class=&quot;nav-item&quot;&gt;</span><br><span class="line">    &lt;a class=&quot;nav-link text-dark&quot; [routerLink]=&apos;[&quot;/authentication/login&quot;]&apos;&gt;Login&lt;/a&gt;</span><br><span class="line">&lt;/li&gt;</span><br></pre></td></tr></table></figure></p>
-<p>路由配置在api-authorization.module.ts：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">import &#123; ApplicationPaths &#125; from &apos;./api-authorization.constants&apos;;</span><br><span class="line">....</span><br><span class="line">@NgModule(&#123;</span><br><span class="line">  imports: [</span><br><span class="line">    CommonModule,</span><br><span class="line">    HttpClientModule,</span><br><span class="line">    RouterModule.forChild(</span><br><span class="line">      [</span><br><span class="line">        &#123; path: ApplicationPaths.Register, component: LoginComponent &#125;,</span><br><span class="line">        &#123; path: ApplicationPaths.Profile, component: LoginComponent &#125;,</span><br><span class="line">        &#123; path: ApplicationPaths.Login, component: LoginComponent &#125;,</span><br><span class="line">        &#123; path: ApplicationPaths.LoginFailed, component: LoginComponent &#125;,</span><br><span class="line">        &#123; path: ApplicationPaths.LoginCallback, component: LoginComponent &#125;,</span><br><span class="line">        &#123; path: ApplicationPaths.LogOut, component: LogoutComponent &#125;,</span><br><span class="line">        &#123; path: ApplicationPaths.LoggedOut, component: LogoutComponent &#125;,</span><br><span class="line">        &#123; path: ApplicationPaths.LogOutCallback, component: LogoutComponent &#125;</span><br><span class="line">      ]</span><br><span class="line">    )</span><br><span class="line">  ],</span><br><span class="line">....</span><br></pre></td></tr></table></figure></p>
-<p>api-authorization.constants定义的常量：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">let applicationPaths: ApplicationPathsType = &#123;</span><br><span class="line">  DefaultLoginRedirectPath: &apos;/&apos;,</span><br><span class="line">  ApiAuthorizationClientConfigurationUrl: `/_configuration/$&#123;ApplicationName&#125;`,</span><br><span class="line">  Login: `authentication/$&#123;LoginActions.Login&#125;`,</span><br><span class="line">  LoginFailed: `authentication/$&#123;LoginActions.LoginFailed&#125;`,</span><br><span class="line">  LoginCallback: `authentication/$&#123;LoginActions.LoginCallback&#125;`,</span><br><span class="line">  Register: `authentication/$&#123;LoginActions.Register&#125;`,</span><br><span class="line">  Profile: `authentication/$&#123;LoginActions.Profile&#125;`,</span><br><span class="line">  LogOut: `authentication/$&#123;LogoutActions.Logout&#125;`,</span><br><span class="line">  LoggedOut: `authentication/$&#123;LogoutActions.LoggedOut&#125;`,</span><br><span class="line">  LogOutCallback: `authentication/$&#123;LogoutActions.LogoutCallback&#125;`,</span><br><span class="line">  LoginPathComponents: [],</span><br><span class="line">  LoginFailedPathComponents: [],</span><br><span class="line">  LoginCallbackPathComponents: [],</span><br><span class="line">  RegisterPathComponents: [],</span><br><span class="line">  ProfilePathComponents: [],</span><br><span class="line">  LogOutPathComponents: [],</span><br><span class="line">  LoggedOutPathComponents: [],</span><br><span class="line">  LogOutCallbackPathComponents: [],</span><br><span class="line">  IdentityRegisterPath: &apos;/Identity/Account/Register&apos;,</span><br><span class="line">  IdentityManagePath: &apos;/Identity/Account/Manage&apos;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">applicationPaths = &#123;</span><br><span class="line">  ...applicationPaths,</span><br><span class="line">  LoginPathComponents: applicationPaths.Login.split(&apos;/&apos;),</span><br><span class="line">  LoginFailedPathComponents: applicationPaths.LoginFailed.split(&apos;/&apos;),</span><br><span class="line">  RegisterPathComponents: applicationPaths.Register.split(&apos;/&apos;),</span><br><span class="line">  ProfilePathComponents: applicationPaths.Profile.split(&apos;/&apos;),</span><br><span class="line">  LogOutPathComponents: applicationPaths.LogOut.split(&apos;/&apos;),</span><br><span class="line">  LoggedOutPathComponents: applicationPaths.LoggedOut.split(&apos;/&apos;),</span><br><span class="line">  LogOutCallbackPathComponents: applicationPaths.LogOutCallback.split(&apos;/&apos;)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>可见很多场景都路由到了Login组件。在组件初始化过程中根据path分量再加以区分，进而做重定向到SSO提供的登录页面(该页面)，在SSO登录页操作后会再重定向回到本系统，根据path后面拼接的授权码再次进入分支逻辑。。。
-关于前后端分离的SSO参考<a href="/qqsnote/2019/12/09/OAuth2/" title="OAuth2">OAuth2</a></p>
-<p>未认证情况下调用Fetch data，跳转URI：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">https://localhost:44338/Identity/Account/Login?</span><br><span class="line">ReturnUrl=/connect/authorize/callback?</span><br><span class="line">client_id=AspNgIndividualAuthProj</span><br><span class="line">&amp;redirect_uri=https%3A%2F%2Flocalhost%3A44338%2Fauthentication%2Flogin-callback</span><br><span class="line">&amp;response_type=code</span><br><span class="line">&amp;scope=AspNgIndividualAuthProjAPI%20openid%20profile</span><br><span class="line">&amp;state=2ade6708c7b64adebbe3945b2073b6d8</span><br><span class="line">&amp;code_challenge=ceSlaW_CAzXA_tuxSMZhxXWFIqf2lX0QrFToCPHg_zw</span><br><span class="line">&amp;code_challenge_method=S256</span><br><span class="line">&amp;response_mode=query</span><br></pre></td></tr></table></figure></p>
-<p>OidcConfigurationController.cs
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;</span><br><span class="line">using Microsoft.AspNetCore.Mvc;</span><br><span class="line">using Microsoft.Extensions.Logging;</span><br><span class="line"></span><br><span class="line">namespace AspNgIndividualAuthProj.Controllers</span><br><span class="line">&#123;</span><br><span class="line">    public class OidcConfigurationController : Controller</span><br><span class="line">    &#123;</span><br><span class="line">        private readonly ILogger&lt;OidcConfigurationController&gt; logger;</span><br><span class="line"></span><br><span class="line">        public OidcConfigurationController(IClientRequestParametersProvider clientRequestParametersProvider, ILogger&lt;OidcConfigurationController&gt; _logger)</span><br><span class="line">        &#123;</span><br><span class="line">            ClientRequestParametersProvider = clientRequestParametersProvider;</span><br><span class="line">            logger = _logger;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public IClientRequestParametersProvider ClientRequestParametersProvider &#123; get; &#125;</span><br><span class="line"></span><br><span class="line">        [HttpGet(&quot;_configuration/&#123;clientId&#125;&quot;)]</span><br><span class="line">        public IActionResult GetClientRequestParameters([FromRoute]string clientId)</span><br><span class="line">        &#123;</span><br><span class="line">            var parameters = ClientRequestParametersProvider.GetClientParameters(HttpContext, clientId);</span><br><span class="line">            return Ok(parameters);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>前端从接口加载有关认证授权的参数，这些参数由IdentityServer提供。IClientRequestParametersProvider接口定义GetClientRequestParameters，返回默认配置如：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;authority&quot;: &quot;https://localhost:44379&quot;,</span><br><span class="line">	&quot;client_id&quot;: &quot;AspNgIndividualAuthProj&quot;,</span><br><span class="line">	&quot;redirect_uri&quot;: &quot;https://localhost:44379/authentication/login-callback&quot;,</span><br><span class="line">	&quot;post_logout_redirect_uri&quot;: &quot;https://localhost:44379/authentication/logout-callback&quot;,</span><br><span class="line">	&quot;response_type&quot;: &quot;code&quot;,</span><br><span class="line">	&quot;scope&quot;: &quot;AspNgIndividualAuthProjAPI openid profile&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这个结构见<a href="https://github.com/IdentityModel/oidc-client-js/wiki" target="_blank" rel="noopener">oidc-client</a>（这个package还有一个angular版本的）</p>
-<ul>
-<li>authority (string): The URL of the OIDC/OAuth2 provider.</li>
-<li>client_id (string): Your client application’s identifier as registered with the OIDC/OAuth2 provider.</li>
-<li>redirect_uri (string): The redirect URI of your client application to receive a response from the OIDC/OAuth2 provider.</li>
-<li>response_type (string, default: ‘id_token’): The type of response desired from the OIDC/OAuth2 provider.</li>
-<li>scope (string, default: ‘openid’): The scope being requested from the OIDC/OAuth2 provider.</li>
-</ul>
-<p>Startup.cs
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public IConfiguration Configuration &#123; get; &#125;</span><br><span class="line">// This method gets called by the runtime. Use this method to add services to the container.</span><br><span class="line">public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    services.AddDefaultIdentity&lt;ApplicationUser&gt;(options =&gt; options.SignIn.RequireConfirmedAccount = true)</span><br><span class="line">        .AddEntityFrameworkStores&lt;ApplicationDbContext&gt;();</span><br><span class="line"></span><br><span class="line">    services.AddIdentityServer()</span><br><span class="line">        .AddApiAuthorization&lt;ApplicationUser, ApplicationDbContext&gt;();</span><br><span class="line"></span><br><span class="line">    services.AddAuthentication()</span><br><span class="line">        .AddIdentityServerJwt();</span><br><span class="line">    services.AddControllersWithViews();</span><br><span class="line">    services.AddRazorPages();</span><br><span class="line">    // In production, the Angular files will be served from this directory</span><br><span class="line">    services.AddSpaStaticFiles(configuration =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        configuration.RootPath = &quot;ClientApp/dist&quot;;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void Configure(IApplicationBuilder app, IWebHostEnvironment env)&#123;</span><br><span class="line">    ...</span><br><span class="line">    app.UseIdentityServer();</span><br><span class="line">    ... </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="MSAL-Angular-Net-Core-AD-B2C"><a href="#MSAL-Angular-Net-Core-AD-B2C" class="headerlink" title="MSAL + Angular + .Net Core + AD B2C"></a>MSAL + Angular + .Net Core + AD B2C</h4><p>Microsoft Authentication Library(微软身份认证库MSAL)</p>
-<p>微软栗子真多–&gt; <a href="https://github.com/Azure-Samples/active-directory-b2c-javascript-angular-spa" target="_blank" rel="noopener">Azure-Sample</a>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i msal @azure/msal-angular -save-dev</span><br></pre></td></tr></table></figure></p>
-<p>引入MSAL模块 @app.module
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">import &#123; Configuration &#125; from &apos;msal&apos;;</span><br><span class="line">import &#123;</span><br><span class="line">  MsalModule,</span><br><span class="line">  MsalInterceptor,</span><br><span class="line">  MSAL_CONFIG,</span><br><span class="line">  MSAL_CONFIG_ANGULAR,</span><br><span class="line">  MsalService,</span><br><span class="line">  MsalAngularConfiguration</span><br><span class="line">&#125; from &apos;@azure/msal-angular&apos;;</span><br><span class="line"></span><br><span class="line">import &#123; msalConfig, msalAngularConfig &#125; from &apos;./app-config&apos;;</span><br><span class="line">import &#123; AppRoutingModule &#125; from &apos;./app-routing.module&apos;;</span><br><span class="line">import &#123; ProfileComponent &#125; from &apos;./profile/profile.component&apos;;</span><br><span class="line"></span><br><span class="line">function MSALConfigFactory(): Configuration &#123;</span><br><span class="line">  return msalConfig;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function MSALAngularConfigFactory(): MsalAngularConfiguration &#123;</span><br><span class="line">  return msalAngularConfig;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@NgModule(&#123;</span><br><span class="line">  declarations: [</span><br><span class="line">    AppComponent,</span><br><span class="line">    HomeComponent,</span><br><span class="line">    ProfileComponent,</span><br><span class="line">  ],</span><br><span class="line">  imports: [</span><br><span class="line">    ...</span><br><span class="line">    MsalModule</span><br><span class="line">  ],</span><br><span class="line">  providers: [</span><br><span class="line">    &#123;</span><br><span class="line">      provide: HTTP_INTERCEPTORS,</span><br><span class="line">      useClass: MsalInterceptor,</span><br><span class="line">      multi: true</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      provide: MSAL_CONFIG,</span><br><span class="line">      useFactory: MSALConfigFactory</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      provide: MSAL_CONFIG_ANGULAR,</span><br><span class="line">      useFactory: MSALAngularConfigFactory</span><br><span class="line">    &#125;,</span><br><span class="line">    MsalService</span><br><span class="line">  ],</span><br><span class="line">  bootstrap: [AppComponent]</span><br><span class="line">&#125;)</span><br><span class="line">export class AppModule &#123; &#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1799,7 +1724,7 @@ ClientApp
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">165</span>
+                  <span class="site-state-item-count">169</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1821,7 +1746,7 @@ ClientApp
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">69</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

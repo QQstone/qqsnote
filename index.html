@@ -229,6 +229,859 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/12/14/Angular-Tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/12/14/Angular-Tips/" itemprop="url">Angular-Tips</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-14T15:18:21+08:00">
+                2020-12-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="ngFor-loop-with-async-pipe"><a href="#ngFor-loop-with-async-pipe" class="headerlink" title="ngFor loop with async pipe"></a>ngFor loop with async pipe</h4><p>参数订阅可观察对象的值，从而保持最新，当数据更新时，循环渲染的视图会随之更新，见<a href="https://stackoverflow.com/questions/48159438/ngfor-loop-with-async-pipe" target="_blank" rel="noopener">StackOverflow:*ngFor loop with async pipe?</a>
+完整栗子：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;users-list&apos;,</span><br><span class="line">  template: `</span><br><span class="line">      &lt;ul&gt;</span><br><span class="line">        &lt;li *ngFor=&quot;let user of users$ | async&quot;&gt;</span><br><span class="line">          &#123;&#123; user.username &#125;&#125; </span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">      &lt;/ul&gt;</span><br><span class="line">  `</span><br><span class="line">&#125;)</span><br><span class="line">export class UsersListComponent &#123;</span><br><span class="line">  users$;</span><br><span class="line"></span><br><span class="line">  constructor(private http: Http) &#123;  &#125;</span><br><span class="line"></span><br><span class="line">  ngOnInit() &#123;</span><br><span class="line">    this.users$ = this.http</span><br><span class="line">        .get(&apos;/api/users&apos;)</span><br><span class="line">        .map(res =&gt; res.json());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果需要基于返回值的其他参数，有
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*ngFor=&quot;let user of users$ | async as users; index as i&quot;</span><br></pre></td></tr></table></figure></p>
+<p>这里的users就是Array类型了
+类似的ngIf也可以用异步管道,形如*ngIf=”user\$ | async as user”，显然这里的user\$应为Observable\&lt;boolean></p>
+<h4 id="ngIf-else"><a href="#ngIf-else" class="headerlink" title="ngIf else"></a>ngIf else</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;div *ngIf=&quot;isLoggedIn(); else notLoggedIn&quot;&gt;</span><br><span class="line">    Hi, &#123;%raw%&#125;&#123;&#123; user.name &#125;&#125;!&#123;%endraw%&#125;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;ng-template #notLoggedIn&gt;</span><br><span class="line">    You&apos;re not logged in.</span><br><span class="line">&lt;/ng-template&gt;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/12/14/Angular-SPECS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/12/14/Angular-SPECS/" itemprop="url">Angular-SPECS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-14T14:54:43+08:00">
+                2020-12-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>封装一个http的provider，参考<a href="https://developer.aliyun.com/article/675404" target="_blank" rel="noopener">ionic3+angular4 HttpClient封装优化</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/12/11/Jasmine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/12/11/Jasmine/" itemprop="url">Jasmine</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-11T14:12:55+08:00">
+                2020-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>测试驱动开发(Test Driven Development, TDD)和行为驱动开发(Behavior Driven Development, BDD)
+Jasmine 通过用自然语言书写非程序员可读的测试用例扩展了测试驱动开发方法, 行为驱动开发人员使用混合了领域中统一的语言的母语语言来描述他们的代码的目的</p>
+<p>被测系统(System under test, SUT)</p>
+<blockquote>
+<p>单测不负责检查跨类或者跨系统的交互逻辑，那都是集成测试的范围</p>
+</blockquote>
+<blockquote>
+<p>单测不能受到外界环境的影响, 依赖需要用本地实现注入，或者提供一个mock(桩对象)</p>
+</blockquote>
+<blockquote>
+<p>单测需要能快速执行，有必要在每次修改代码时运行单测</p>
+</blockquote>
+<blockquote>
+<p>单测应随编码进行，补单测是没有意义的</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">├───lib</span><br><span class="line">│   └───jasmine-3.4.0</span><br><span class="line">│           boot.js</span><br><span class="line">│           jasmine-html.js</span><br><span class="line">│           jasmine.css</span><br><span class="line">│           jasmine.js</span><br><span class="line">│           jasmine_favicon.png</span><br><span class="line">├───spec</span><br><span class="line">│       PlayerSpec.js</span><br><span class="line">│       SpecHelper.js</span><br><span class="line">└───src</span><br><span class="line">        Player.js</span><br><span class="line">        Song.js</span><br></pre></td></tr></table></figure>
+<p>spec + src文件夹是栗子
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">describe(&quot;Player&quot;, function() &#123;</span><br><span class="line">  var player;</span><br><span class="line">  var song;</span><br><span class="line"></span><br><span class="line">  beforeEach(function() &#123;</span><br><span class="line">    player = new Player();</span><br><span class="line">    song = new Song();</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  it(&quot;should be able to play a Song&quot;, function() &#123;</span><br><span class="line">    player.play(song);</span><br><span class="line">    expect(player.currentlyPlayingSong).toEqual(song);</span><br><span class="line"></span><br><span class="line">    //demonstrates use of custom matcher</span><br><span class="line">    expect(player).toBePlaying(song);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  describe(&quot;when song has been paused&quot;, function() &#123;</span><br><span class="line">    beforeEach(function() &#123;</span><br><span class="line">      player.play(song);</span><br><span class="line">      player.pause();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    it(&quot;should indicate that the song is currently paused&quot;, function() &#123;</span><br><span class="line">      expect(player.isPlaying).toBeFalsy();</span><br><span class="line"></span><br><span class="line">      // demonstrates use of &apos;not&apos; with a custom matcher</span><br><span class="line">      expect(player).not.toBePlaying(song);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    it(&quot;should be possible to resume&quot;, function() &#123;</span><br><span class="line">      player.resume();</span><br><span class="line">      expect(player.isPlaying).toBeTruthy();</span><br><span class="line">      expect(player.currentlyPlayingSong).toEqual(song);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  // demonstrates use of spies to intercept and test method calls</span><br><span class="line">  it(&quot;tells the current song if the user has made it a favorite&quot;, function() &#123;</span><br><span class="line">    spyOn(song, &apos;persistFavoriteStatus&apos;);</span><br><span class="line"></span><br><span class="line">    player.play(song);</span><br><span class="line">    player.makeFavorite();</span><br><span class="line"></span><br><span class="line">    expect(song.persistFavoriteStatus).toHaveBeenCalledWith(true);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  //demonstrates use of expected exceptions</span><br><span class="line">  describe(&quot;#resume&quot;, function() &#123;</span><br><span class="line">    it(&quot;should throw an exception if song is already playing&quot;, function() &#123;</span><br><span class="line">      player.play(song);</span><br><span class="line"></span><br><span class="line">      expect(function() &#123;</span><br><span class="line">        player.resume();</span><br><span class="line">      &#125;).toThrowError(&quot;song is already playing&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>init with Node.js
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev jasmine</span><br><span class="line">npx jasmine init</span><br></pre></td></tr></table></figure></p>
+<h4 id="describe"><a href="#describe" class="headerlink" title="describe"></a>describe</h4><p>以describe分组specs,它代表一组相似的测试用例,通常有 2 个参数：字符串和方法。字符串作为特定 Suite 的名字和标题。方法是包含实现的代码。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">describe (&apos;HeroesService (with spies)&apos;, () =&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;);</span><br><span class="line">describe(&apos;HeroesService (with mocks)&apos;, () =&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="it-和-specs"><a href="#it-和-specs" class="headerlink" title="it 和 specs"></a>it 和 specs</h4><p>specs即specification(规则)，它们是一个个断言，可以是 true 或者 false。当每个 Spec 中的所有 expectations 都是 true，则通过测试。以it函数定义，与describe类似的，有 2 个参数：标题和方法。</p>
+<h4 id="expect-tobe"><a href="#expect-tobe" class="headerlink" title="expect tobe"></a>expect tobe</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">expect(true).toBe(true);</span><br><span class="line">expect(false).not.toBe(true);</span><br></pre></td></tr></table></figure>
+<h4 id="断言"><a href="#断言" class="headerlink" title="断言"></a>断言</h4><ul>
+<li>toBe 和 toEqual 前者相当于比较运算符=== 后者比较字面量的值(对于对象进行属性的比较)</li>
+<li>toMatch</li>
+<li>toBeDefined 和 toBeNull</li>
+<li>toContain</li>
+<li>toBeGreaterThan 和 toBeLessThan</li>
+<li>toBeCloseTo</li>
+<li>toThrow<h4 id="beforeEach和afterEach"><a href="#beforeEach和afterEach" class="headerlink" title="beforeEach和afterEach"></a>beforeEach和afterEach</h4>分别在每个it断言测试前/后调用<h4 id="spy"><a href="#spy" class="headerlink" title="spy"></a>spy</h4>存根(stub)和跟踪(track)任意函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">spyOn(foo, &apos;setBar&apos;);</span><br><span class="line">  foo.setBar(123);</span><br><span class="line">  foo.setBar(456, &apos;another param&apos;);</span><br><span class="line">&#125;);</span><br><span class="line">it(&quot;tracks that the spy was called&quot;, function() &#123;</span><br><span class="line">  expect(foo.setBar).toHaveBeenCalled();</span><br><span class="line">&#125;);</span><br><span class="line">it(&quot;tracks that the spy was called x times&quot;, function() &#123;</span><br><span class="line">  expect(foo.setBar).toHaveBeenCalledTimes(2);</span><br><span class="line">&#125;);</span><br><span class="line">it(&quot;tracks all the arguments of its calls&quot;, function() &#123;</span><br><span class="line">  expect(foo.setBar).toHaveBeenCalledWith(123);</span><br><span class="line">  expect(foo.setBar).toHaveBeenCalledWith(456, &apos;another param&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>spy一个foo对象上的setBar方法，分别断言该方法被调用、被调用若干次、被以某某参数调用
+很多时候用spy对应模拟对象</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/12/10/DevOps-Overview/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/12/10/DevOps-Overview/" itemprop="url">DevOps-Overview</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-10T14:44:06+08:00">
+                2020-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Azure DevOps的组成</p>
+<ul>
+<li>Azure Repos 源代码管理</li>
+<li>Azure Pipelines CI/CD服务</li>
+<li>Azure Boards 类似TP的kanban工具以及Agile tools等</li>
+<li>Azure Test Plans 测试工具，包括manual/exploratory testing 和 continuous testing</li>
+<li>Azure Artifacts 大致上就是构建自己的库(allows teams to share packages such as Maven, npm, NuGet and more from public and private sources and integrate package sharing into your CI/CD pipelines)</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/12/10/DevOps-ReleaseWorkflow/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/12/10/DevOps-ReleaseWorkflow/" itemprop="url">DevOps之基于Release的工作流</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-10T13:06:18+08:00">
+                2020-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="对于branch"><a href="#对于branch" class="headerlink" title="对于branch"></a>对于branch</h4><p>对于敏捷开发的团队，选择避免使用长期分支(long-lived branch)，以致力于短期功能和 Bug 修复分支，任何工作付出的目标都是以生成pull request将工作合并回master</p>
+<blockquote>
+<p>A long-lived branch is a Git branch that is never deleted. Some teams prefer to avoid them altogether in favor of short-lived feature and bug fix branches. For those teams, the goal of any effort is to produce a pull request that merges their work back into master. 
+对于web应用，往往不会支持或回退到起初的版本，适用于上述工作方式，但也有其他场景需要长期保留分支，如用于同时支持市场上的多个版本，release V1， release V2将持续维护</p>
+</blockquote>
+<p>来源<a href="https://docs.microsoft.com/en-us/learn/modules/release-based-workflow-github/2-what-is-release-based-workflow" target="_blank" rel="noopener">微软Docs：GitHub基于Release的工作流</a></p>
+<p>master是稳定版分支，与线上版本保持绝对一致，release是预发布分支，从develop创建出来进行测试。</p>
+<h4 id="关于release"><a href="#关于release" class="headerlink" title="关于release"></a>关于release</h4><p>语义化版本标签
+release notes(存目)</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/12/09/Azure-Networkinng/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/12/09/Azure-Networkinng/" itemprop="url">Azure-Networkinng</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-09T09:55:51+08:00">
+                2020-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>配置和管理虚拟网络占比30-35%</p>
+<h4 id="Network-Monitor"><a href="#Network-Monitor" class="headerlink" title="Network Monitor"></a>Network Monitor</h4><ul>
+<li>监视vm与endpoint(可以是其他vm)之间的通信</li>
+<li>查看vnet中的资源及其关系</li>
+<li>诊断(Diagnose)出入vm的网络流量筛选问题</li>
+<li>诊断vm网络路由问题</li>
+<li>诊断vm出站连接(outbound connections)</li>
+<li>捕获出入vm的数据包</li>
+<li>诊断vnet网关与连接的问题</li>
+<li>检查区域与internet相对延迟</li>
+<li>查看安全规则</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/30/font-icon/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -800,766 +1653,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/20/oidc-client/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/11/20/oidc-client/" itemprop="url">oidc-client package</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-20T09:56:14+08:00">
-                2020-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>包如其名，是对<a href="https://openid.net/specs/openid-connect-core-1_0.html" target="_blank" rel="noopener">openID connection</a>协议的实现</p>
-<p>包主要提供基于两个class的功能，UserManager和OidcClient。UserManager提供登录/登出，管理OIDC provider返回的用户信息（user claims），管理access token等，是oidc-client package的主要功能。OidcClient是更底层的协议实现，并被UserManager调用。</p>
-<h4 id="UserManager初始化"><a href="#UserManager初始化" class="headerlink" title="UserManager初始化"></a>UserManager初始化</h4><p>UserManager使用OIDC provider的相关配置进行初始化
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">readonly setting = &#123;</span><br><span class="line">    client_id: &quot;c5a333eb-fbbd-4643-b8fb-846e0c82ca03&quot;, // Required！</span><br><span class="line">    authority: &quot;https://qqstudio.b2clogin.cn/qqstudio.onmicrosoft.com/B2C_1_pp_userflow/v2.0/&quot;, // 即&#123;tenant&#125;/&#123;directory&#125;&#123;userflow&#125; Required！  </span><br><span class="line">    response_type: &quot;id_token token&quot;, // string, default: &apos;id_token&apos; Required！</span><br><span class="line">    scope: &quot;openid&quot; // Required！OIDC provider授权的scope</span><br><span class="line">    redirect_uri: &quot;https://localhost:44362/signin-callback.html&quot;, // 返回的token将被链在这个url后面 Required！</span><br><span class="line"></span><br><span class="line">    silent_redirect_uri: &quot;https://localhost:44362/silent-callback.html&quot;,</span><br><span class="line">    automaticSilentRenew: true</span><br><span class="line">&#125;</span><br><span class="line">var _userManager = new UserManager(settings);</span><br></pre></td></tr></table></figure></p>
-<p>其他参数见<a href="https://github.com/IdentityModel/oidc-client-js/wiki" target="_blank" rel="noopener">oidc-client wiki</a></p>
-<h4 id="跳转到登录"><a href="#跳转到登录" class="headerlink" title="跳转到登录"></a>跳转到登录</h4><p>当access_token缺失或过期，抑或由api发现失效而返回401时，可以调用UserManager的下述方法跳转到登录
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">this._userManager.signinRedirect(&#123; state: location.href, prompt: &quot;login&quot; &#125;).then(function () &#123;</span><br><span class="line">    console.log(&apos;signinRedirect done&apos;);</span><br><span class="line">&#125;).catch(function (err) &#123;</span><br><span class="line">    console.log(err);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>方法支持传键值对作为参数，这些参数将拼接在登录地址的url parameter中形如&amp;prompt=login，登录成功重定向回到app时可以取回这些参数，从而继续被登录中断的操作。</p>
-<h4 id="重定向回到App"><a href="#重定向回到App" class="headerlink" title="重定向回到App"></a>重定向回到App</h4><p>在signin-callback.html页面的初始化方法中调用userManager的signinRedirectCallback，该方法从url的parameter取出access token以及前文所述的其他登录跳转参数（这些参数可以用回调函数取出处理）
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">this._userManager.signinRedirectCallback((user: User) =&gt; &#123;</span><br><span class="line">    if (user &amp;&amp; user.state) &#123;</span><br><span class="line">    this.router.navigateByUrl(user.state).then(b =&gt; &#123;</span><br><span class="line">        console.log(&quot;navigate to url&quot;, user.state, &quot; return&quot;, b);</span><br><span class="line">    &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>实际上callback url后带的是形如&amp;state=b2983fd692b94528852297782ef93bbf的参数，推测此为指向原value的标记，原value存于localstorage</p>
-<h4 id="User"><a href="#User" class="headerlink" title="User"></a>User</h4><p>调用getUser方法取用户信息, 部分信息是从access token中解析得出，部分可能需要配置其他workflow比如profile
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">class User &#123;</span><br><span class="line">  constructor(settings: UserSettings);</span><br><span class="line"></span><br><span class="line">  /** The id_token returned from the OIDC provider */</span><br><span class="line">  id_token: string;</span><br><span class="line">  /** The session state value returned from the OIDC provider (opaque) */</span><br><span class="line">  session_state?: string;</span><br><span class="line">  /** The access token returned from the OIDC provider. */</span><br><span class="line">  access_token: string;</span><br><span class="line">  /** Refresh token returned from the OIDC provider (if requested) */</span><br><span class="line">  refresh_token?: string;</span><br><span class="line">  /** The token_type returned from the OIDC provider */</span><br><span class="line">  token_type: string;</span><br><span class="line">  /** The scope returned from the OIDC provider */</span><br><span class="line">  scope: string;</span><br><span class="line">  /** The claims represented by a combination of the id_token and the user info endpoint */</span><br><span class="line">  profile: Profile;</span><br><span class="line">  /** The expires at returned from the OIDC provider */</span><br><span class="line">  expires_at: number;</span><br><span class="line">  /** The custom state transferred in the last signin */</span><br><span class="line">  state: any;</span><br><span class="line"></span><br><span class="line">  toStorageString(): string;</span><br><span class="line">  static fromStorageString(storageString: string): User;</span><br><span class="line"></span><br><span class="line">  /** Calculated number of seconds the access token has remaining */</span><br><span class="line">  readonly expires_in: number;</span><br><span class="line">  /** Calculated value indicating if the access token is expired */</span><br><span class="line">  readonly expired: boolean;</span><br><span class="line">  /** Array representing the parsed values from the scope */</span><br><span class="line">  readonly scopes: string[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>调用removeUser 清除localstorage中的登录信息 非常的方便~</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/10/Microservices/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/11/10/Microservices/" itemprop="url">微服务</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-10T13:36:37+08:00">
-                2020-11-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://www.zhihu.com/question/65502802" target="_blank" rel="noopener">知乎：什么是微服务</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/04/AuthenticationPackages/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/11/04/AuthenticationPackages/" itemprop="url">AuthenticationPackages</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-04T10:34:50+08:00">
-                2020-11-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/03/ODATA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/11/03/ODATA/" itemprop="url">ODATA</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-03T13:22:39+08:00">
-                2020-11-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/02/GameTheory/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/11/02/GameTheory/" itemprop="url">博弈论</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-02T14:57:11+08:00">
-                2020-11-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="零和博弈，非零和博弈"><a href="#零和博弈，非零和博弈" class="headerlink" title="零和博弈，非零和博弈"></a>零和博弈，非零和博弈</h4><p>非零和博弈表示在不同策略组合下各博弈方的得益之和是不确定的变量，故又称之为变和博弈。 如囚徒困境，中美关系，恋爱</p>
-<p>零和博弈表示所有博弈方的利益之和为零或一个常数，即一方有所得，其他方必有所失。如绝大多数竞技，竞选，炒股</p>
-<p>行业或社会环境成为存量市场，内卷是人们进行零和博弈的结果。</p>
-<blockquote>
-<p>摘自百度百科《非零和博弈》:
-烈日炎炎的一个下午，约翰·纳什教授给二十几个学生上课，教室窗外的楼下有几个工人正施工，机器的响声成了刺耳的噪音，于是纳什走到窗前狠狠地把窗户关上。马上有同学提出意见：“教授，请别关窗子，实在太热了！”而纳什教授一脸严肃地回答说：“课堂的安静比你舒不舒服重要得多！”然后转过身一边嘴里叨叨着“给你们来上课，在我看来不但耽误了你们的时间，也耽误了我的宝贵时间……”，一边在黑板上写着数学公式。
-正当教授一边自语一边在黑板上写公式之际，一位叫阿丽莎的漂亮女同学（这位女同学后来成了纳什的妻子）走到窗边打开了窗子，电影中纳什用责备的眼神看着阿丽莎：“小姐……”而阿丽莎对窗外的工人说道：“打扰一下，嗨！我们有点小小的问题，关上窗户，这里会很热；开着，却又太吵。我想能不能请你们先修别的地方，大约45分钟就好了。”正在干活的工人愉快地说：“没问题！”又回头对自己的伙伴们说：“伙计们，让我们先休息一下吧！”阿丽莎回过头来快活地看着纳什教授，纳什教授也微笑地看着阿丽莎，既像是讲课，又像是在评论她的做法似地对同学们说：“你们会发现在多变性的微积分中，往往一个难题会有多种解答。”
-而阿丽莎对“开窗难题”的解答，使得原本的一个零和博弈变成了另外一种结果：同学们既不必忍受室内的高温，教授也可以在安静的环境中讲课，结果不再是0，而成了+2。由此我们可以看到，很多看似无法调和的矛盾，其实并不一定是你死我活的僵局，那些看似零和博弈或者是负和博弈的问题，也会因为参与者的巧妙设计而转为正和博弈。</p>
-</blockquote>
-<h4 id="内卷和博弈"><a href="#内卷和博弈" class="headerlink" title="内卷和博弈"></a>内卷和博弈</h4><p>内卷是零和博弈的状态吗？
-参与者是直接地进行利益竞争吗，似乎并不是哦，内卷的起因是掌握话语权的一方——在社会生产的范畴上是资本家，在就学教育上是招生办——限制了规则，在既定的有限条件下，低阶层的参与者为了自己的收益做出与之不匹配的付出。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/10/27/Azure-ADB2C-JWT-Validation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/10/27/Azure-ADB2C-JWT-Validation/" itemprop="url">Azure-ADB2C-JWT-Validation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-27T17:38:03+08:00">
-                2020-10-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>见 <a href="https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview#validation" target="_blank" rel="noopener">Azure官方文档token overview</a></p>
-<p>如<a href="/qqsnote/2020/10/15/jwt/" title="JWT">JWT</a>所述，JWT包含三个部分，一个标头，一个正文和一个签名。签名段可用于验证令牌的真实性，以便您的应用程序可以信任它。Azure AD B2C通过使用行业标准的非对称加密算法（例如RSA 256）对令牌进行签名。
-header包含有关用于对令牌进行签名的密钥和加密方法的信息：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        &quot;typ&quot;: &quot;JWT&quot;,</span><br><span class="line">        &quot;alg&quot;: &quot;RS256&quot;,</span><br><span class="line">        &quot;kid&quot;: &quot;GvnPApfWMdLRi8PDmisFn7bprKg&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>Azure AD B2C具有一个OpenID Connect元数据EndPoint。大概长这样子:
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/B2C_1_basic_sign_up_and_sign_in/v2.0/.well-known/openid-configuration</span><br></pre></td></tr></table></figure></p>
-<p>通过此EndPoint，可以get到有关Azure AD B2C的信息。此信息包括端点，令牌内容和令牌签名密钥。
-其中jwks_uri提供用于签署令牌的一组公共密钥的位置。
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/b2c_1_basic_sign_up_and_sign_in/discovery/v2.0/keys</span><br></pre></td></tr></table></figure></p>
-<p>jwks_uri如上格式，建议通过get元数据文档并解析以动态获取jwks_uri，而不要写死。</p>
-<p>StackOverflow 上有个现成的
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">var configurationManager = new ConfigurationManager&lt;OpenIdConnectConfiguration&gt;(</span><br><span class="line">                                   &quot;https://testb2ctenant05.b2clogin.com/testB2CTenant05.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_test&quot;,</span><br><span class="line">                                    new OpenIdConnectConfigurationRetriever(), new HttpDocumentRetriever());</span><br><span class="line">            CancellationToken ct = default(CancellationToken);</span><br><span class="line">            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();</span><br><span class="line">            var discoveryDocument = await configurationManager.GetConfigurationAsync(ct);</span><br><span class="line">            var signingKeys = discoveryDocument.SigningKeys;</span><br><span class="line">            var validationParameters = new TokenValidationParameters</span><br><span class="line">            &#123;</span><br><span class="line">                RequireExpirationTime = true,</span><br><span class="line">                RequireSignedTokens = true,</span><br><span class="line">                ValidateIssuer = true,</span><br><span class="line">                ValidIssuer = discoveryDocument.Issuer,</span><br><span class="line">                ValidateIssuerSigningKey = true,</span><br><span class="line">                IssuerSigningKeys = signingKeys,</span><br><span class="line">                ValidateLifetime = true,</span><br><span class="line"></span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line"> var principal = new JwtSecurityTokenHandler()</span><br><span class="line">            .ValidateToken(token, validationParameters, out var rawValidatedToken);</span><br></pre></td></tr></table></figure></p>
-<p><a href="https://stackoverflow.com/questions/59840170/validating-the-token-recieved-from-azure-ad-b2c-using-the-values-from-jwks-uri" target="_blank" rel="noopener">Jim Xu’s Answer</a></p>
-<p>用例描述：</p>
-<ul>
-<li>使用非法字符串冒充access token，异常：decode fail</li>
-<li>使用其他来源的(比如其他talent)的token，异常：unmatch siguanture</li>
-<li>使用正确token 获得principal对象 </li>
-</ul>
-<p>回顾一下，对于非对称加密，签名用私钥产生，私钥绝对隐藏且不可被反推，公开公钥，任何人可以使用公钥验证签名。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1610,7 +1703,7 @@ header包含有关用于对令牌进行签名的密钥和加密方法的信息�
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">165</span>
+                  <span class="site-state-item-count">169</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1632,7 +1725,7 @@ header包含有关用于对令牌进行签名的密钥和加密方法的信息�
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">69</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
