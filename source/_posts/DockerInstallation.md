@@ -1,11 +1,14 @@
 ---
-title: DockerInstallation
+title: Docker入门
 date: 2019-10-31 09:48:11
 tags:
 - Docker
 categories: 
 - 容器
 ---
+#### 容器
+> 容器时一种松散隔离(loosely, isolated)的环境，允许我们构建或运行软件包(software packages)。这些软件包包括源码和依赖，称为容器镜像。容器镜像是我们用于分发应用程序的单位。
+
 一般来说，下文只记录操作记录而不是详细步骤
 + ubuntu install docker
 

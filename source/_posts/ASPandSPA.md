@@ -2,6 +2,8 @@
 title: ASP和SPA
 date: 2020-08-31 10:58:10
 tags:
+- Angular
+- .Net
 ---
 课外：[关于传统web app和SPA的选择](https://docs.microsoft.com/zh-cn/dotnet/architecture/modern-web-apps-azure/choose-between-traditional-web-and-single-page-apps)
 将单页面应用植入到ASP.Net<br>
@@ -103,211 +105,6 @@ workaround: edit start script
 dotnet new angular -o AspNgIndividualAuthProj -au Individual
 ```
 Caution! 模板生成同时提供认证授权功能的应用，具体是使用一个叫[IdentityServer](https://www.cnblogs.com/sheng-jie/p/9430920.html)的框架，IdentityServer封装了提供重定向endpint，生成JWT令牌，校验令牌等功能。 通常情况下，后台服务应对接独立的SSO，下面的大部分内容对此的可参考性很有限
-ClientApp
-```
-│   index.html
-│   main.ts
-├───api-authorization
-│   │   api-authorization.constants.ts
-│   │   api-authorization.module.spec.ts
-│   │   api-authorization.module.ts
-│   │   authorize.guard.spec.ts
-│   │   authorize.guard.ts
-│   │   authorize.interceptor.spec.ts
-│   │   authorize.interceptor.ts
-│   │   authorize.service.spec.ts
-│   │   authorize.service.ts
-│   │
-│   ├───login-menu
-│   │       ....
-│   ├───login
-│   │       ....
-│   └───logout
-│           ....
-├───app
-│   │   app.component.html
-│   │   app.component.ts
-│   │   app.module.ts
-│   │   app.server.module.ts
-│   │
-│   ├───home
-│   │       home.component.html
-│   │       home.component.ts
-│   │
-│   └───nav-menu
-│           nav-menu.component.css
-│           nav-menu.component.html
-│           nav-menu.component.ts
-│
-└───environments
-        environment.prod.ts
-        environment.ts
-```
-相比默认的工程，增加身份认证和API授权支持，主要在api-authorization目录下
-
-login-menu可见登入、登出等路由链接
-```
-    <li class="nav-item">
-        <a  class="nav-link text-dark" [routerLink]='["/authentication/logout"]' [state]='{ local: true }' title="Logout">Logout</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" [routerLink]='["/authentication/login"]'>Login</a>
-    </li>
-```
-路由配置在api-authorization.module.ts：
-```
-import { ApplicationPaths } from './api-authorization.constants';
-....
-@NgModule({
-  imports: [
-    CommonModule,
-    HttpClientModule,
-    RouterModule.forChild(
-      [
-        { path: ApplicationPaths.Register, component: LoginComponent },
-        { path: ApplicationPaths.Profile, component: LoginComponent },
-        { path: ApplicationPaths.Login, component: LoginComponent },
-        { path: ApplicationPaths.LoginFailed, component: LoginComponent },
-        { path: ApplicationPaths.LoginCallback, component: LoginComponent },
-        { path: ApplicationPaths.LogOut, component: LogoutComponent },
-        { path: ApplicationPaths.LoggedOut, component: LogoutComponent },
-        { path: ApplicationPaths.LogOutCallback, component: LogoutComponent }
-      ]
-    )
-  ],
-....
-```
-api-authorization.constants定义的常量：
-```
-let applicationPaths: ApplicationPathsType = {
-  DefaultLoginRedirectPath: '/',
-  ApiAuthorizationClientConfigurationUrl: `/_configuration/${ApplicationName}`,
-  Login: `authentication/${LoginActions.Login}`,
-  LoginFailed: `authentication/${LoginActions.LoginFailed}`,
-  LoginCallback: `authentication/${LoginActions.LoginCallback}`,
-  Register: `authentication/${LoginActions.Register}`,
-  Profile: `authentication/${LoginActions.Profile}`,
-  LogOut: `authentication/${LogoutActions.Logout}`,
-  LoggedOut: `authentication/${LogoutActions.LoggedOut}`,
-  LogOutCallback: `authentication/${LogoutActions.LogoutCallback}`,
-  LoginPathComponents: [],
-  LoginFailedPathComponents: [],
-  LoginCallbackPathComponents: [],
-  RegisterPathComponents: [],
-  ProfilePathComponents: [],
-  LogOutPathComponents: [],
-  LoggedOutPathComponents: [],
-  LogOutCallbackPathComponents: [],
-  IdentityRegisterPath: '/Identity/Account/Register',
-  IdentityManagePath: '/Identity/Account/Manage'
-};
-
-applicationPaths = {
-  ...applicationPaths,
-  LoginPathComponents: applicationPaths.Login.split('/'),
-  LoginFailedPathComponents: applicationPaths.LoginFailed.split('/'),
-  RegisterPathComponents: applicationPaths.Register.split('/'),
-  ProfilePathComponents: applicationPaths.Profile.split('/'),
-  LogOutPathComponents: applicationPaths.LogOut.split('/'),
-  LoggedOutPathComponents: applicationPaths.LoggedOut.split('/'),
-  LogOutCallbackPathComponents: applicationPaths.LogOutCallback.split('/')
-};
-```
-可见很多场景都路由到了Login组件。在组件初始化过程中根据path分量再加以区分，进而做重定向到SSO提供的登录页面(该页面)，在SSO登录页操作后会再重定向回到本系统，根据path后面拼接的授权码再次进入分支逻辑。。。
-关于前后端分离的SSO参考{% post_link OAuth2 OAuth2 %}
-
-未认证情况下调用Fetch data，跳转URI：
-```
-https://localhost:44338/Identity/Account/Login?
-ReturnUrl=/connect/authorize/callback?
-client_id=AspNgIndividualAuthProj
-&redirect_uri=https%3A%2F%2Flocalhost%3A44338%2Fauthentication%2Flogin-callback
-&response_type=code
-&scope=AspNgIndividualAuthProjAPI%20openid%20profile
-&state=2ade6708c7b64adebbe3945b2073b6d8
-&code_challenge=ceSlaW_CAzXA_tuxSMZhxXWFIqf2lX0QrFToCPHg_zw
-&code_challenge_method=S256
-&response_mode=query
-```
-
-OidcConfigurationController.cs
-```
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-
-namespace AspNgIndividualAuthProj.Controllers
-{
-    public class OidcConfigurationController : Controller
-    {
-        private readonly ILogger<OidcConfigurationController> logger;
-
-        public OidcConfigurationController(IClientRequestParametersProvider clientRequestParametersProvider, ILogger<OidcConfigurationController> _logger)
-        {
-            ClientRequestParametersProvider = clientRequestParametersProvider;
-            logger = _logger;
-        }
-
-        public IClientRequestParametersProvider ClientRequestParametersProvider { get; }
-
-        [HttpGet("_configuration/{clientId}")]
-        public IActionResult GetClientRequestParameters([FromRoute]string clientId)
-        {
-            var parameters = ClientRequestParametersProvider.GetClientParameters(HttpContext, clientId);
-            return Ok(parameters);
-        }
-    }
-}
-```
-前端从接口加载有关认证授权的参数，这些参数由IdentityServer提供。IClientRequestParametersProvider接口定义GetClientRequestParameters，返回默认配置如：
-```
-{
-	"authority": "https://localhost:44379",
-	"client_id": "AspNgIndividualAuthProj",
-	"redirect_uri": "https://localhost:44379/authentication/login-callback",
-	"post_logout_redirect_uri": "https://localhost:44379/authentication/logout-callback",
-	"response_type": "code",
-	"scope": "AspNgIndividualAuthProjAPI openid profile"
-}
-```
-这个结构见[oidc-client](https://github.com/IdentityModel/oidc-client-js/wiki)（这个package还有一个angular版本的）
-+ authority (string): The URL of the OIDC/OAuth2 provider.
-+ client_id (string): Your client application's identifier as registered with the OIDC/OAuth2 provider.
-+ redirect_uri (string): The redirect URI of your client application to receive a response from the OIDC/OAuth2 provider.
-+ response_type (string, default: 'id_token'): The type of response desired from the OIDC/OAuth2 provider.
-+ scope (string, default: 'openid'): The scope being requested from the OIDC/OAuth2 provider.
-
-Startup.cs
-```
-public IConfiguration Configuration { get; }
-// This method gets called by the runtime. Use this method to add services to the container.
-public void ConfigureServices(IServiceCollection services)
-{
-    ...
-
-    services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<ApplicationDbContext>();
-
-    services.AddIdentityServer()
-        .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-
-    services.AddAuthentication()
-        .AddIdentityServerJwt();
-    services.AddControllersWithViews();
-    services.AddRazorPages();
-    // In production, the Angular files will be served from this directory
-    services.AddSpaStaticFiles(configuration =>
-    {
-        configuration.RootPath = "ClientApp/dist";
-    });
-}
-
-public void Configure(IApplicationBuilder app, IWebHostEnvironment env){
-    ...
-    app.UseIdentityServer();
-    ... 
-}
-```
 #### MSAL + Angular + .Net Core + AD B2C
 Microsoft Authentication Library(微软身份认证库MSAL)
 
@@ -370,3 +167,56 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
 })
 export class AppModule { }
 ```
+另 使用oidc-client的栗子参考{% postlink oidc-client oidc-client %}
+
+#### 关于.csproj
+参考：[理解 C# 项目 csproj 文件格式的本质和编译流程](https://blog.walterlv.com/post/understand-the-csproj.html)
+![](https://blog.walterlv.com/static/posts/2018-05-07-08-41-22.png)
++ PropertyGroup, 声明编译过程中用到的变量，如一些路径，所谓的group，为了增强可读性，而将一组变量放在一个PropertyGroup中，其他的再放一个PropertyGroup
+  ```
+  <PropertyGroup>
+    ...
+    <SpaRoot>ClientApp\</SpaRoot>
+  </PropertyGroup>
+
+  ```
++ ItemGroup, 顾名思义，存放集合的项，一个group中各项属性名相同，可以认为是类型为XX(即属性名)的一个集合，下例是第三方的package，另外也可以放其他模块所需的任意内容，用相应的属性标识出
+  ```
+  <ItemGroup>
+    <PackageReference Include="EntityFrameworkCore.SqlServer.HierarchyId" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
+  </ItemGroup>
+  ```
++ Target
+  ```
+    <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+  ```
+  上例是ASP. NET Core with Angular模板项目使用的build target，两种编译环境，而且其中还有条件语句，有点厉害

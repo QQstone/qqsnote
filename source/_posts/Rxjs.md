@@ -176,7 +176,16 @@ tap<T>(nextOrObserver?: NextObserver<T> | ErrorObserver<T> | CompletionObserver<
   complete?: () => void): MonoTypeOperatorFunction<T>
 ```
 参数可以是可观察对象或回调方法
-
+常见于附上一个log操作
+```
+getHeroes(): Observable<Hero[]> {
+  return this.http.get<Hero[]>(this.heroesUrl)
+    .pipe(
+      tap(heroes => this.log(`fetched heroes`)),
+      catchError(this.handleError('getHeroes'))
+    ) as Observable<Hero[]>;
+}
+```
 ##### BehaviorSubject
 
 >Subject 的作用是实现 Observable 的多播。由于其 Observable execution 是在多个订阅者之间共享的，所以它可以确保每个订阅者接收到的数据绝对相等。不仅使用 Subject 可以实现多播，RxJS 还提供了一些 Subject 的变体以应对不同场景，那就是：BehaviorSubject、ReplaySubject 以及 AsyncSubject。

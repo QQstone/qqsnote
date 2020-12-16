@@ -111,3 +111,7 @@ A机器ssh登录B机器无需输入密码；
 3、这样生成了一对密钥，存放在用户目录的~/.ssh下。
 将公钥考到对方机器的用户目录下，并将其复制到~/.ssh/authorized_keys中（操作命令：#cat id_dsa.pub >> ~/.ssh/authorized_keys）。
 
+#### 退出
+```
+exit
+```

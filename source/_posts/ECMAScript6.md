@@ -12,6 +12,9 @@ ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，�
 
 ### 模块化
 export require是CommonJS规范的方法,es6 引入了import，可以将模块中的对象部分引入，以减少开销，或者使用import * as objName from 引入文件所有对象
+CommonJS vs ES Modules:
+nodejs是默认使用CommonJS的，其表现可见express的服务中，如"module.exports = AssetService;"以及"var AssetService = require('./AssetService')"。而es6中用"import common from '@myRepo/core'"和"export .."
+更多了解[NodeJS Docs](https://nodejs.org/docs/latest/api/esm.html#esm_differences_between_es_modules_and_commonjs)
 > Caution: the semicolon at the end of the import is mandatory!
 ```
 /*util1.js*/

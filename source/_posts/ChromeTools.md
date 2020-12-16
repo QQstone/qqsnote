@@ -27,4 +27,5 @@ categories:
 3. Change "Online" to "Slow 3G"
 #### 页面元素断点
 第三方UI控件会动态添加元素事件，使用css的hover，focus无法触发，把光标放上去触发又无法查看code，设置element的breakpoint可以在指定元素被修改时break，无论查看js逻辑还是元素的样式变化都很方便
-![]()
+#### headless chrome 
+[知乎：Headless Chrome入门](https://zhuanlan.zhihu.com/p/29207391) 即不显示浏览器界面而在命令行运行Chrome功能，该模式主要用于自动化测试工具

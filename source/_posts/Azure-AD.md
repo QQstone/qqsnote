@@ -41,6 +41,14 @@ Azure保存用户的标识，即使使用第三方的sso如公司的sso认证或
 + identity providers 第三方的标识提供方 如Facebook账号或Wechat账号授权服务 
 
 下面以官方sample为例配置，以求使用[桌面客户端](https://github.com/Azure-Samples/active-directory-b2c-dotnet-desktop.git)通过Azure AD B2C的认证框架访问[Web Api](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi.git)
+
+#### 域服务(AD DS)和应用程序管理
+即除了B2C之外的主要功能。AD DS见{% postlink Azure-ADDS Azure域服务 %}
+AD可以用于管理Gallery App也就是微软库中的SaaS应用，也可以通过应用程序代理管理本地的应用(On-premises applications)
+What does Azure AD Application Proxy do?
+A.You use it to identify applications in your instance of Azure AD.
+B.You use it to add on-premises applications to your instance of Azure AD.
+C.You use it to add Azure AD Gallery applications to your instance of Azure AD.
 #### 创建资源
 进入“创建资源”入口，搜索Azure AD B2C，选择创建-->给出两个选项,选择创建新的
 ![micro docs](https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-tenant/portal-02-create-tenant.png)
@@ -57,6 +65,10 @@ Directory creation was successful. Click here to navigate to your new directory:
 选择email作为sign up的身份验证<br>
 选择需要收集的注册信息
 ![](https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-user-flows/signup-signin-attributes.png)
+
+关于reset password
+> 使用本地帐户的 注册或登录 用户流在体验的第一个页面上包含“忘记了密码?”链接。 单击此链接不会自动触发密码重置用户流。
+而是将错误代码 AADB2C90118 返回给应用程序。 应用程序需要通过运行一个可重置密码的特定用户流来处理此错误代码。 [Microsoft Docs：user flow 概述](https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/user-flow-overview#linking-user-flows)
 #### 注册Api应用程序
 将访问受控的应用(这里是Web Api)注册到Azure AD B2C，框架给予应用程序client id等标记，记下当登录成功时跳转回的地址————Redirect URI。
 ```

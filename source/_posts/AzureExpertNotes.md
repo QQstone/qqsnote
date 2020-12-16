@@ -23,6 +23,35 @@ Az104 Q5 使用resource policy修改虚拟网络的限制
 Monitor里的Alert，为某个特定资源添加警报
 
 ### 虚拟机
+#### 可用性、可用区和可用集
+> 可用性是可供使用的时间段的百分比，任意时间可访问的服务即100%可用性
+
+因故障、因物理故障触发的自动迁移、定期更新都有可能造成资源可用性达不到100%
+
+[管理可用性](https://docs.microsoft.com/zh-cn/azure/virtual-machines/manage-availability)
+[创建和部署高度可用的虚拟机](https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets)
+
+> [可用性区域](https://docs.microsoft.com/zh-cn/azure/availability-zones/az-overview):区域中的唯一物理位置,每个区域由一个或多个数据中心组成，这些数据中心配置了独立电源，冷却和网络。区域中可用性区域的物理隔离可以在发生数据中心故障的情况下保护应用程序和数据。 区域冗余服务可跨可用性区域复制应用程序和数据，以防范单点故障。
++ 更新域和容错域的组合
++ 当两个或更多个 VM 部署在一个 Azure 区域中的两个或更多个可用性区域时，可获得99.99% [VM 运行时间 SLA](https://azure.microsoft.com/zh-cn/support/legal/sla/virtual-machines/v1_9/)(service-level agreement, 服务级别协议)
+
+使用可用性区域创建vm settings-->High availability-->选择一个编号的区域 [详细](https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/create-portal-availability-zone)
+
+而可用性集是一种逻辑分组功能，将在物理层面相分离的vm连接到一起，如果运行服务器的其中之一的物理硬件有问题，可以确信服务器的其他实例保持运行，因为它们位于不同的硬件上。使用命令创建可用性集 [详细](https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets)
+
+> Microsoft 为部署在可用性中的多实例 VM 提供 99.95% 的外部连接性服务级别协议 (SLA)。 这意味着，对于要应用的 SLA，必须在可用性集中至少部署两个 VM 实例。
+
+You plan to deploy three Azure virtual machines named VM1, VM2, and VM3. The virtual
+machines will host a web app named App1.
+You need to ensure that at least two virtual machines are available if a single Azure datacenter
+becomes unavailable.
+What should you deploy?
+A. all three virtual machines in a single Availability Zone
+B. all virtual machines in a single Availability Set
+C. each virtual machine in a separate Availability Zone
+D. each virtual machine in a separate Availability Set
+
+Answer is B.
 + 可以自己提供非官方镜像用于创建虚拟机
 > It is possible to change the size of a VM after it's been created, but the VM must be stopped first. So, it's best to size it appropriately from the start if possible.调整vm配置需要停机
 + 几个size：普通的（B，D..）大数据存储（L-series），图形渲染（N-series），高性能（H-series）
@@ -129,35 +158,46 @@ Monitor：
 + SNMP 简单网络管理协议，前文已述，允许访问网络设备的信息
 + Syslog 允许设备发送事件，用于事件日志记录
 + Azure Monitor是网络监控解决方案，包含Log Analytics工具，用以查询、分析日志
-#### 可用性、可用区和可用集
-> 可用性是可供使用的时间段的百分比，任意时间可访问的服务即100%可用性
-
-因故障、因物理故障触发的自动迁移、定期更新都有可能造成资源可用性达不到100%
-
-[管理可用性](https://docs.microsoft.com/zh-cn/azure/virtual-machines/manage-availability)
-[创建和部署高度可用的虚拟机](https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets)
-
-> [可用性区域](https://docs.microsoft.com/zh-cn/azure/availability-zones/az-overview):区域中的唯一物理位置,每个区域由一个或多个数据中心组成，这些数据中心配置了独立电源，冷却和网络。区域中可用性区域的物理隔离可以在发生数据中心故障的情况下保护应用程序和数据。 区域冗余服务可跨可用性区域复制应用程序和数据，以防范单点故障。
-+ 更新域和容错域的组合
-+ 当两个或更多个 VM 部署在一个 Azure 区域中的两个或更多个可用性区域时，可获得99.99% [VM 运行时间 SLA](https://azure.microsoft.com/zh-cn/support/legal/sla/virtual-machines/v1_9/)(service-level agreement, 服务级别协议)
-
-使用可用性区域创建vm settings-->High availability-->选择一个编号的区域 [详细](https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/create-portal-availability-zone)
-
-而可用性集是一种逻辑分组功能，将在物理层面相分离的vm连接到一起，如果运行服务器的其中之一的物理硬件有问题，可以确信服务器的其他实例保持运行，因为它们位于不同的硬件上。使用命令创建可用性集 [详细](https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets)
-
-> Microsoft 为部署在可用性中的多实例 VM 提供 99.95% 的外部连接性服务级别协议 (SLA)。 这意味着，对于要应用的 SLA，必须在可用性集中至少部署两个 VM 实例。
-
-You plan to deploy three Azure virtual machines named VM1, VM2, and VM3. The virtual
-machines will host a web app named App1.
-You need to ensure that at least two virtual machines are available if a single Azure datacenter
-becomes unavailable.
-What should you deploy?
-A. all three virtual machines in a single Availability Zone
-B. all virtual machines in a single Availability Set
-C. each virtual machine in a separate Availability Zone
-D. each virtual machine in a separate Availability Set
-
-Answer is B.
+### PowerShell
+学习目标
++ 使用Azure PowerShell 连接/操作 Azure资源
+Azure Portal，Azure CLI，Azure PowerShell是管理Azure资源的三种工具，相比Azure Portal页面，脚本工具因可以编写逻辑而更适合进行批量操作，以及自动化
+```
+Import-Module Az
+Connect-AzAccount
+Get-AzResourceGroup
+... <-- 这里会列出资源组
+Get-Credential
+... <-- 这里设置访问虚拟机的凭据
+New-AzVM -Name "testvm-eus-01" -ResourceGroupName "learn-940e9418-9b64-4c5b-a12c-a136ccb641da" -Credential (Get-Credential) -Location "East US" -Image UbuntuLTS -OpenPorts 22
+$vm = (Get-AzVM -Name "testvm-eus-01" -ResourceGroupName learn-940e9418-9b64-4c5b-a12c-a136ccb641da)
+$vm | Get-AzPublicIpAddress
+ssh QQs@13.92.231.172 
+... <-- 使用ssh连接虚拟机
+Stop-AzVM -Name $vm.Name -ResourceGroup $vm.ResourceGroupName
+Remove-AzVM -Name $vm.Name -ResourceGroup $vm.ResourceGroupName
+$vm | Remove-AzNetworkInterface –Force
+Get-AzDisk -ResourceGroupName $vm.ResourceGroupName -DiskName $vm.StorageProfile.OSDisk.Name | Remove-AzDisk -Force
+Get-AzVirtualNetwork -ResourceGroup $vm.ResourceGroupName | Remove-AzVirtualNetwork -Force
+Get-AzNetworkSecurityGroup -ResourceGroup $vm.ResourceGroupName | Remove-AzNetworkSecurityGroup -Force
+Get-AzPublicIpAddress -ResourceGroup $vm.ResourceGroupName | Remove-AzPublicIpAddress -Force
+```
+注意 上面停止并移除虚拟机后，其他相关资源如网络接口、托管磁盘、网络安全组、公共IP另需手动删除
+似乎应该具备编写powershell脚本的能力，[知乎：PowerShell有没有必要学？](https://www.zhihu.com/question/21787232/answer/63774856)
+```
+param([string]$resourceGroup) // 获取变量参数
+$adminCredential = Get-Credential -Message "Enter a username and password for the VM administrator."
+For ($i = 1; $i -le 3; $i++)
+{
+    $vmName = "ConferenceDemo" + $i
+    Write-Host "Creating VM: " $vmName
+    New-AzVm -ResourceGroupName $resourceGroup -Name $vmName -Credential $adminCredential -Image UbuntuLTS
+}
+```
+### 数据和存储
+数据：结构化数据、半结构化数据(也就是NoSQL数据，如Json数据，Xml数据)、非结构化数据
+事务数据库：联机事务处理(Online Transaction Processing，OLTP)系统和联机分析处理(Online Analytical Processing，OLAP)系统，通常情况下，前者服务于较大量的用户，响应更快，可用性更高，处理大量数据(handle large volumns of data)，后者用于处理大型复杂事务(handle large and complex transactions)
+建议使用Azure Cosmos DB管理NoSQL数据，使用Azue Blob Storage管理文件数据，结构化数据使用Azure SQL Database, Azure SQL Database可以认为是云端托管的sqlserver
 
 ### 订阅
 
