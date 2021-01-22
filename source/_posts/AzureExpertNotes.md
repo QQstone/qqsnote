@@ -13,6 +13,7 @@ There are 7 modules to learn:
 + Configure and manage virtual networks for Azure administrators
 + Monitor and back up Azure Resources
 即Azure的订阅和资源，管理身份，实施和管理存储，虚拟机，虚拟网络, 监视和备份
+https://docs.microsoft.com/en-us/learn/certifications/exams/az-104
 ### Azure Policy
 参考[利用 Azure Policy 进行云上资源实时控制及合规监控](https://blog.csdn.net/helendemeng/article/details/108795271)
 > Azure Policy的工作原理是选择或新建一个策略或计划（计划是一组策略的集合），分配给指定范围的资源，然后定期（24小时左右）Policy会检查这些资源是否符合策略或计划，并列出不合规项。
@@ -194,12 +195,34 @@ For ($i = 1; $i -le 3; $i++)
     New-AzVm -ResourceGroupName $resourceGroup -Name $vmName -Credential $adminCredential -Image UbuntuLTS
 }
 ```
+
+Q: Admin1 attempts to deploy an Azure Marketplace resource by using an Azure Resource Manager template. Admin1 deploys the template by using Azure PowerShell and receives the following error message: "User failed validation to purchase resources. Error message: "Legal terms have not been accepted for this item on this subscription. To accept legal terms, please go to the Azure portal (http:// go.microsoft.com/fwlink/?LinkId=534873) and configure programmatic deployment
+for the Marketplace item or create it there for the first time."
+You need to ensure that Admin1 can deploy the Marketplace resource successfully.
+What should you do?
+Answer is: From Azure PowerShell, run the Set-AzMarketplaceTerms cmdlet
+
 ### 数据和存储
 数据：结构化数据、半结构化数据(也就是NoSQL数据，如Json数据，Xml数据)、非结构化数据
 事务数据库：联机事务处理(Online Transaction Processing，OLTP)系统和联机分析处理(Online Analytical Processing，OLAP)系统，通常情况下，前者服务于较大量的用户，响应更快，可用性更高，处理大量数据(handle large volumns of data)，后者用于处理大型复杂事务(handle large and complex transactions)
 建议使用Azure Cosmos DB管理NoSQL数据，使用Azue Blob Storage管理文件数据，结构化数据使用Azure SQL Database, Azure SQL Database可以认为是云端托管的sqlserver
 
 ### 订阅
-
+AZ104 Q9 Only a global administrator can add users to this tenant.
+跨订阅移动资源，虚拟机、存储、虚拟网络、托管磁盘(managed disk)、Recovery Service均可移动 [Microsoft Docs:跨订阅移动方案](https://docs.microsoft.com/zh-cn/microsoft-365/solutions/microsoft-365-groups-expiration-policy?view=o365-worldwide)
 ### Azure Backup
-AZ104 Q7 Azure Backup执行备份并不受限于虚拟机的os，是否在运行。
+AZ104 Q7 Azure Backup 执行备份并不受限于虚拟机的os，是否在运行。
+AZ104 Q8 Azure Recovery Vault 如果数据源位于多个区域中，请为每个区域创建恢复服务保管库
+
+### unachieved
+You have a Microsoft 365 tenant and an Azure Active Directory (Azure AD) tenant named
+contoso.com. 
+You plan to grant three users named User1, User2, and User3 access to a temporary Microsoft SharePoint document library named Library1. You need to create groups for the users. The solution must ensure that the groups are deleted automatically after 180 days.
+Which two groups should you create? Each correct answer presents a complete solution.
+A. an Office 365 group that uses the Assigned membership type
+B. a Security group that uses the Assigned membership type
+C. an Office 365 group that uses the Dynamic User membership type
+D. a Security group that uses the Dynamic User membership type
+E. a Security group that uses the Dynamic Device membership type
+
+hint:[Microsoft 365 组过期策略](https://docs.microsoft.com/zh-cn/microsoft-365/solutions/microsoft-365-groups-expiration-policy?view=o365-worldwide) answer is AC

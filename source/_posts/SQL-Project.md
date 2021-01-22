@@ -68,3 +68,10 @@ Scripts目录下的sql文件属性中，默认Build Action = Build导致编译�
 msbuild.exe /t:Build "MyDB.sqlproj"
 msbuild.exe /t:Publish /p:SqlPublishProfilePath="MyDB.publish.staging.xml" "MyDB.sqlproj"
 ```
+#### DevOps issues
++ 实现一键部署
++ 实现集成过程可配置
++ 自动化脚本提交到版本控制库
++ 利用版本控制回退数据库
++ 应用的更新的集成使用最新的数据库
++ pipeline执行测试

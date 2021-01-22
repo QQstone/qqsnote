@@ -167,7 +167,7 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
 })
 export class AppModule { }
 ```
-另 使用oidc-client的栗子参考{% postlink oidc-client oidc-client %}
+另 使用oidc-client的栗子参考{% post_link oidc-client oidc-client %}
 
 #### 关于.csproj
 参考：[理解 C# 项目 csproj 文件格式的本质和编译流程](https://blog.walterlv.com/post/understand-the-csproj.html)

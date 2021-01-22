@@ -4,6 +4,7 @@ date: 2020-11-24 14:34:36
 tags:
 - Azure
 ---
+Caution！ 这个东西非常昂贵 不要在自己的Azure上学习实践！
 #### Azure AD DS
 域名（domain name），是命名空间，域名用于在网络传输中标识资源的电子方位。
 > Azure Active Directory 域服务 (AD DS) 提供托管域服务，如域加入（domain join）,group policy,轻量目录访问协议(lightweight directory access protocol,LDAP)等。无须在云端手动部署和管理domain controllers即可使用上述服务

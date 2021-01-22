@@ -263,6 +263,8 @@ render() {
   );
 }
 ```
+#### onRef
+子组件实例化回调函数，用以获取子组件对象
 #### ReactDOMServer
 
 #### Create React App

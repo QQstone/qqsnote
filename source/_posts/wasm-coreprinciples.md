@@ -6,3 +6,6 @@ tags:
 #### 关于section
 
 #### EMSCRIPTEN_KEEPALIVE宏
+
+#### enscripten embind
+C++暴露接口的一种方式

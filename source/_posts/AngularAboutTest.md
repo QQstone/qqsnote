@@ -11,10 +11,18 @@ categories:
 加参数--fix可自动修复绝大多数的检查错误
 
 Unfortunately，tslint已于2019宣布停止维护，并迁移至typescript-eslint，见[TSLint in 2019](https://medium.com/palantir/tslint-in-2019-1a144c2317a9)
-关于从TSLint到typescript-eslint，参考[Migrate the repo to ESLint](https://github.com/typescript-eslint/tslint-to-eslint-config)
-对于Angular，有[angular-eslint plugin](https://github.com/angular-eslint/angular-eslint)支持ng10及以上版本
-Angular CLI 会下载并安装试用 Jasmine 测试框架 测试 Angular 应用<br>
-X.spec.ts文件用于Jasmine做单元测试
+关于从TSLint到typescript-eslint，参考[Migrate the repo to ESLint](https://github.com/typescript-eslint/tslint-to-eslint-config), 实际上只需
+```
+npx tslint-to-eslint-config
+```
+对于Angular，关于迁移，Angular团队提出了关于性能以及与现有工具链一致性的要求，见[issue#13732](https://github.com/angular/angular-cli/issues/13732#issuecomment-575796158), 目前有[angular-eslint plugin](https://github.com/angular-eslint/angular-eslint)支持10.1及以上版本，以实现从tslint到eslint的迁移
+```
+##Step 1 - Add relevant dependencies
+ng add @angular-eslint/schematics
+##Step 2 - Run the convert-tslint-to-eslint schematic on a project
+ng g @angular-eslint/schematics:convert-tslint-to-eslint {{YOUR_PROJECT_NAME_GOES_HERE}}
+##Step 3 - Remove root TSLint configuration and use only ESLint
+```
 #### Karma 
 Karma, 业（佛教观念，个人因果的集合）Karma是测试JavaScript代码而生的自动化测试管理工具，可监控文件的变化，自动执行测试。
 ```
@@ -25,7 +33,9 @@ Karma, 业（佛教观念，个人因果的集合）Karma是测试JavaScript代�
     "karma-jasmine-html-reporter": "^1.4.2",
 ```
 #### Jasmine （Jasminum 茉莉）
-见{% postlink Jasmine Jasmine %}
+Angular CLI 会下载并安装试用 Jasmine 测试框架 测试 Angular 应用<br>
+X.spec.ts文件用于Jasmine做单元测试
+见{% post_link Jasmine Jasmine %}
 #### 单元测试
 > 单元测试（英語：Unit Testing）又称为模块测试，是针对程序模块（软件设计的最小单位）来进行正确性检验的测试工作。 程序单元是应用的最小可测试部件。 在过程化编程中，一个单元就是单个程序、函数、过程等；对于面向对象编程，最小单元就是方法，包括基类（超类）、抽象类、或者派生类（子类）中的方法。
 > 

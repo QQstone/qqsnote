@@ -6,7 +6,7 @@ tags:
 ---
 
 #### Azure AD
-Windows2000 引入Active Directory作为identity provider和authorization database，可想而知，这个名称与其存储方式以及根据talent区分的文件结构之间的关系。随着Web应用的发展，有了云平台的Azure Active Directory，其主要功能之一仍是作为identity provider。
+Windows2000 引入Active Directory作为identity provider和authorization database，<del>可想而知，这个名称与其存储方式以及根据talent区分的文件结构之间的关系。</del>随着Web应用的发展，有了云平台的Azure Active Directory，其主要功能之一仍是作为identity provider。
 
 AD和Azure AD的结合实现了以本地Windows身份通过web实现SSO认证。
 
@@ -27,7 +27,7 @@ Azure Active Directory B2C 以服务的形式提供企业到客户的身份。 �
 
 “贴牌式身份验证解决方案” blabla<br>
 
-届时，访问DataService，跳转到如 CSDataServices.onmicrosoft.com/oauth2/v2.0/authorize?xxxx 格式的地址, 这是挂在Azure上的页面，可以做成本公司产品风格，sign in的form可以直接使用已注册（保存在Azure AD）的账号, 也可能提供了社交账号的链接，点击后跳转到社交平台登录页。
+届时，访问DataService，跳转到如 CSDataServices.onmicrosoft.com/oauth2/v2.0/authorize?xxxx 格式的地址, 这是挂在Azure上的页面，可以做成本公司产品风格(见本文章节自定义登录页)，sign in的form可以直接使用已注册（保存在Azure AD）的账号, 也可能提供了社交账号的链接，点击后跳转到社交平台登录页。
 ![sign_in](https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/overview/sign-in-small.png)
 
 Azure保存用户的标识，即使使用第三方的sso如公司的sso认证或社交账号，也会有将第三方凭据交换Azure标识的过程，该过程即典型的OAuth2
@@ -43,7 +43,7 @@ Azure保存用户的标识，即使使用第三方的sso如公司的sso认证或
 下面以官方sample为例配置，以求使用[桌面客户端](https://github.com/Azure-Samples/active-directory-b2c-dotnet-desktop.git)通过Azure AD B2C的认证框架访问[Web Api](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi.git)
 
 #### 域服务(AD DS)和应用程序管理
-即除了B2C之外的主要功能。AD DS见{% postlink Azure-ADDS Azure域服务 %}
+即除了B2C之外的主要功能。AD DS见{% post_link Azure-ADDS Azure域服务 %}
 AD可以用于管理Gallery App也就是微软库中的SaaS应用，也可以通过应用程序代理管理本地的应用(On-premises applications)
 What does Azure AD Application Proxy do?
 A.You use it to identify applications in your instance of Azure AD.
@@ -70,7 +70,7 @@ Directory creation was successful. Click here to navigate to your new directory:
 > 使用本地帐户的 注册或登录 用户流在体验的第一个页面上包含“忘记了密码?”链接。 单击此链接不会自动触发密码重置用户流。
 而是将错误代码 AADB2C90118 返回给应用程序。 应用程序需要通过运行一个可重置密码的特定用户流来处理此错误代码。 [Microsoft Docs：user flow 概述](https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/user-flow-overview#linking-user-flows)
 #### 注册Api应用程序
-将访问受控的应用(这里是Web Api)注册到Azure AD B2C，框架给予应用程序client id等标记，记下当登录成功时跳转回的地址————Redirect URI。
+将访问受控的应用(这里是Web Api)注册到Azure AD B2C，框架给予应用程序client id等标记，记下当登录成功时跳转回的地址————Redirect URI(关于Redirect URI的限制见本文Q&A部分)。
 ```
 Display name:Demo website
 Application (client) ID:c4b27029-a5ad-4022-979d-8721101df951
@@ -81,7 +81,7 @@ Redirect URIs:1 web, 0 spa, 0 public client
 Application ID URI:Add an Application ID URI
 Managed application in local directory:Demo website
 ```
-这里的Redireact URI是http://localhost:8888/auth，期望在本机运行Web Api应用程序，访问Api跳转到Azure Page登录，成功后进入到该地址。<br>
+这里的Redireact URI是http://localhost:8888/auth，期望在本机运行桌面客户端程序，访问Api跳转到Azure Page登录，成功后进入到该地址。<br>
 进入管理--认证(Authentication),选择使用[隐式授权流](https://docs.microsoft.com/zh-cn/azure/active-directory/develop/v2-oauth2-implicit-grant-flow?WT.mc_id=Portal-Microsoft_AAD_RegisteredApps)(Implicit grant, 见笔记{% post_link OAuth2 OAuth2 %}), 并添加Redirect Uri<br>
 ![04register_app_add_auth_url](https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjztlsc1j21820oyadq.jpg)
 进入管理--公开API(expose API),Application ID URI set 为https://qqstudio.onmicrosoft.com/api 默认是由GUID组成的<br>
@@ -214,6 +214,8 @@ namespace active_directory_b2c_wpf
     }
 }
 ```
+#### scopes
+通过scopes管理对受保护资源的权限，请求令牌时，客户端传递scope
 #### 关于校验和跳转的包的实现的推测
 + 客户端访问api，Http/Https Request
 + 客户端Request使用Jwt Bearer Authentication 传递token
@@ -237,4 +239,12 @@ namespace active_directory_b2c_wpf
 
 > 一定需要注册Redirect URI吗，可以在跳转到登录页时作为query parameter传递吗？
 
+一定要注册, 似乎是出于复杂的安全性的考虑 见[StackOverflow:Why is Redirect URL Fully Qualified in Azure AD B2C?
+](https://stackoverflow.com/questions/47520604/why-is-redirect-url-fully-qualified-in-azure-ad-b2c)
+跳转到登录页时确实会传递Redirect_URI参数，否则会报redirect_uri_mismatch的Error且不会传回access token
+[Redirect Uri 的限制](https://docs.microsoft.com/zh-cn/azure/active-directory/develop/reply-url)要求作为跳转参数的Redirect_URI，与注册在ADB2C上的若干Redirect URIs之一完全匹配，除了localhost(匹配时自动忽略端口)。
+官方文档还提到了state参数，跳转参数state将在登录成功后链在Redirect URI后面，可以用来恢复跳转登录前的浏览状态
+
 > Silent Sign In Workflow
+
+#### 自定义登录页

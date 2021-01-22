@@ -10,7 +10,46 @@ categories:
 
 #### 3d效果-prespective, xyz
 [Css 3D](https://3dtransforms.desandro.com/)
-
+#### 动画
+```
+transform: rotate(180deg);
+transition: transform 0.5s;
+```
+HTM + CSS 实现点击旋转
+```
+<html>
+  ...
+  <input type="button" class="csd-icon icon-refresh">
+</html>
+```
+目标元素要改为input，因为要用到focus伪类
+```
+.csd-icon.icon-refresh {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  cursor: pointer;
+  position: absolute;
+  border:hidden;
+  background: url("data:image/svg+xml," + map-get($icon,refresh) + "") no-repeat top left;
+  right: 0;
+  &:focus{
+    outline: none;
+    animation: rotatefresh 1s;
+  }
+  &:active{
+    animation: none;  
+    //background: '#eee';
+  }
+  @keyframes rotatefresh {
+    from { transform: rotate(0deg) }
+    to {
+        transform: rotate(180deg);
+        transition: all 0.6s;
+    }
+  }
+}
+```
 #### 减少异步
 使用形如background: url('../../icon.svg')的样式无疑在渲染页面时又添加了异步调用，页面会出现从图片空缺到图片加载的'跳变'，
 如果是img:src可以直接把svg代码贴在页面上，优点是图像作为页面代码的一部分一次性从服务端获取，缺点是布局代码会被推至很下面，且svg代码的可读性比较差。

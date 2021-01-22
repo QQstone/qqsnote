@@ -40,6 +40,14 @@ categories:
 
 #### IPC
 IPC 代表 Inter-Process Communication进程间通信。Electron 使用 IPC 来在main主进程和renderer渲染进程之间传递 JSON 信息。
+main
+```
+
+```
+render
+```
+
+```
 #### 资源打包关于asar vbscript
 asar 是一种将多个文件合并成一个文件的类 tar 风格的归档格式。 Electron 可以无需解压整个文件，即可从其中读取任意文件内容。
 
