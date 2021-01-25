@@ -88,7 +88,7 @@
 <meta property="og:description" content="SSDT Project SQL Server Data Tools (SSDT) 通过引入跨 Visual Studio 内所有数据库开发阶段的无所不在的声明性模型，为数据库开发带来变革。创建一个数据库项目进行脱机的数据库开发（不直接对数据库服务进行在线修改），像编辑声明定义一样创建、编辑、重命名和删除表、存储过程、类型和函数。  为Visual Studio安装SSDT的features，加载">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://docs.microsoft.com/zh-cn/sql/ssdt/media/download-sql-server-data-tools-ssdt/data-workload-2019.png">
-<meta property="og:updated_time" content="2020-11-30T08:55:49.043Z">
+<meta property="og:updated_time" content="2020-12-21T02:07:26.638Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQL Project及其持续集成">
 <meta name="twitter:description" content="SSDT Project SQL Server Data Tools (SSDT) 通过引入跨 Visual Studio 内所有数据库开发阶段的无所不在的声明性模型，为数据库开发带来变革。创建一个数据库项目进行脱机的数据库开发（不直接对数据库服务进行在线修改），像编辑声明定义一样创建、编辑、重命名和删除表、存储过程、类型和函数。  为Visual Studio安装SSDT的features，加载">
@@ -356,6 +356,15 @@
 <p>Scripts目录下的sql文件属性中，默认Build Action = Build导致编译失败，应改为Build Action = None</p>
 <p>.jfm文件，可以认为是对项目操作的备份，若未自动添加到gitignore，则可手动添加</p>
 <h4 id="用MSBuild和Jenkins实现Continuse-Integration"><a href="#用MSBuild和Jenkins实现Continuse-Integration" class="headerlink" title="用MSBuild和Jenkins实现Continuse Integration"></a>用MSBuild和Jenkins实现Continuse Integration</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">## set msbuild.exe=C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe</span><br><span class="line">msbuild.exe /t:Build &quot;MyDB.sqlproj&quot;</span><br><span class="line">msbuild.exe /t:Publish /p:SqlPublishProfilePath=&quot;MyDB.publish.staging.xml&quot; &quot;MyDB.sqlproj&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="DevOps-issues"><a href="#DevOps-issues" class="headerlink" title="DevOps issues"></a>DevOps issues</h4><ul>
+<li>实现一键部署</li>
+<li>实现集成过程可配置</li>
+<li>自动化脚本提交到版本控制库</li>
+<li>利用版本控制回退数据库</li>
+<li>应用的更新的集成使用最新的数据库</li>
+<li>pipeline执行测试</li>
+</ul>
+
       
     </div>
     
@@ -476,7 +485,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">177</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -498,7 +507,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -531,7 +540,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#SSDT-Project"><span class="nav-number">1.</span> <span class="nav-text">SSDT Project</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建visual-studio-sql-project"><span class="nav-number">2.</span> <span class="nav-text">创建visual studio sql project</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#publish"><span class="nav-number">3.</span> <span class="nav-text">publish</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Predeployment-Scripts-amp-Postdeployment-Scripts"><span class="nav-number">4.</span> <span class="nav-text">Predeployment Scripts &amp; Postdeployment Scripts</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#issues"><span class="nav-number">5.</span> <span class="nav-text">issues</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用MSBuild和Jenkins实现Continuse-Integration"><span class="nav-number">6.</span> <span class="nav-text">用MSBuild和Jenkins实现Continuse Integration</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#SSDT-Project"><span class="nav-number">1.</span> <span class="nav-text">SSDT Project</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建visual-studio-sql-project"><span class="nav-number">2.</span> <span class="nav-text">创建visual studio sql project</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#publish"><span class="nav-number">3.</span> <span class="nav-text">publish</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Predeployment-Scripts-amp-Postdeployment-Scripts"><span class="nav-number">4.</span> <span class="nav-text">Predeployment Scripts &amp; Postdeployment Scripts</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#issues"><span class="nav-number">5.</span> <span class="nav-text">issues</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用MSBuild和Jenkins实现Continuse-Integration"><span class="nav-number">6.</span> <span class="nav-text">用MSBuild和Jenkins实现Continuse Integration</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DevOps-issues"><span class="nav-number">7.</span> <span class="nav-text">DevOps issues</span></a></li></ol></div>
             
 
           </div>
@@ -551,7 +560,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

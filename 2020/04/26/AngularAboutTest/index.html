@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="lint静态代码检查(static code verify)，运行ng lint，根据项目目录下的tslint.json所配置的规则，检查诸如命名，空行，triple-equals等书写规范，在命令行输出违反规范的位置。 加参数–fix可自动修复绝大多数的检查错误 Unfortunately，tslint已于2019宣布停止维护，并迁移至typescript-eslint，见TSLint in 2">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-12-16T05:29:27.285Z">
+<meta property="og:updated_time" content="2020-12-18T09:10:07.641Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Angular About Test">
 <meta name="twitter:description" content="lint静态代码检查(static code verify)，运行ng lint，根据项目目录下的tslint.json所配置的规则，检查诸如命名，空行，triple-equals等书写规范，在命令行输出违反规范的位置。 加参数–fix可自动修复绝大多数的检查错误 Unfortunately，tslint已于2019宣布停止维护，并迁移至typescript-eslint，见TSLint in 2">
@@ -325,13 +325,15 @@
         <h4 id="lint"><a href="#lint" class="headerlink" title="lint"></a>lint</h4><p>静态代码检查(static code verify)，运行ng lint，根据项目目录下的tslint.json所配置的规则，检查诸如命名，空行，triple-equals等书写规范，在命令行输出违反规范的位置。
 加参数–fix可自动修复绝大多数的检查错误</p>
 <p>Unfortunately，tslint已于2019宣布停止维护，并迁移至typescript-eslint，见<a href="https://medium.com/palantir/tslint-in-2019-1a144c2317a9" target="_blank" rel="noopener">TSLint in 2019</a>
-关于从TSLint到typescript-eslint，参考<a href="https://github.com/typescript-eslint/tslint-to-eslint-config" target="_blank" rel="noopener">Migrate the repo to ESLint</a>
-对于Angular，有<a href="https://github.com/angular-eslint/angular-eslint" target="_blank" rel="noopener">angular-eslint plugin</a>支持ng10及以上版本
-Angular CLI 会下载并安装试用 Jasmine 测试框架 测试 Angular 应用<br>
-X.spec.ts文件用于Jasmine做单元测试</p>
+关于从TSLint到typescript-eslint，参考<a href="https://github.com/typescript-eslint/tslint-to-eslint-config" target="_blank" rel="noopener">Migrate the repo to ESLint</a>, 实际上只需
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx tslint-to-eslint-config</span><br></pre></td></tr></table></figure></p>
+<p>对于Angular，关于迁移，Angular团队提出了关于性能以及与现有工具链一致性的要求，见<a href="https://github.com/angular/angular-cli/issues/13732#issuecomment-575796158" target="_blank" rel="noopener">issue#13732</a>, 目前有<a href="https://github.com/angular-eslint/angular-eslint" target="_blank" rel="noopener">angular-eslint plugin</a>支持10.1及以上版本，以实现从tslint到eslint的迁移
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">##Step 1 - Add relevant dependencies</span><br><span class="line">ng add @angular-eslint/schematics</span><br><span class="line">##Step 2 - Run the convert-tslint-to-eslint schematic on a project</span><br><span class="line">ng g @angular-eslint/schematics:convert-tslint-to-eslint &#123;&#123;YOUR_PROJECT_NAME_GOES_HERE&#125;&#125;</span><br><span class="line">##Step 3 - Remove root TSLint configuration and use only ESLint</span><br></pre></td></tr></table></figure></p>
 <h4 id="Karma"><a href="#Karma" class="headerlink" title="Karma"></a>Karma</h4><p>Karma, 业（佛教观念，个人因果的集合）Karma是测试JavaScript代码而生的自动化测试管理工具，可监控文件的变化，自动执行测试。
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;karma&quot;: &quot;^5.0.2&quot;,</span><br><span class="line">&quot;karma-chrome-launcher&quot;: &quot;~3.1.0&quot;,</span><br><span class="line">&quot;karma-coverage-istanbul-reporter&quot;: &quot;~2.1.0&quot;,</span><br><span class="line">&quot;karma-jasmine&quot;: &quot;~2.0.1&quot;,</span><br><span class="line">&quot;karma-jasmine-html-reporter&quot;: &quot;^1.4.2&quot;,</span><br></pre></td></tr></table></figure></p>
-<h4 id="Jasmine-（Jasminum-茉莉）"><a href="#Jasmine-（Jasminum-茉莉）" class="headerlink" title="Jasmine （Jasminum 茉莉）"></a>Jasmine （Jasminum 茉莉）</h4><p>见<a href="/qqsnote/2020/12/11/Jasmine/" title="Jasmine">Jasmine</a></p>
+<h4 id="Jasmine-（Jasminum-茉莉）"><a href="#Jasmine-（Jasminum-茉莉）" class="headerlink" title="Jasmine （Jasminum 茉莉）"></a>Jasmine （Jasminum 茉莉）</h4><p>Angular CLI 会下载并安装试用 Jasmine 测试框架 测试 Angular 应用<br>
+X.spec.ts文件用于Jasmine做单元测试
+见<a href="/qqsnote/2020/12/11/Jasmine/" title="Jasmine">Jasmine</a></p>
 <h4 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h4><blockquote>
 <p>单元测试（英語：Unit Testing）又称为模块测试，是针对程序模块（软件设计的最小单位）来进行正确性检验的测试工作。 程序单元是应用的最小可测试部件。 在过程化编程中，一个单元就是单个程序、函数、过程等；对于面向对象编程，最小单元就是方法，包括基类（超类）、抽象类、或者派生类（子类）中的方法。</p>
 </blockquote>
@@ -472,7 +474,7 @@ karma.conf.js
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">177</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -494,7 +496,7 @@ karma.conf.js
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -547,7 +549,7 @@ karma.conf.js
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

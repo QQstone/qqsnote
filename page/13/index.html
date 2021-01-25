@@ -229,6 +229,1387 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/18/CSS3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/10/18/CSS3/" itemprop="url">CSS3</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-18T14:58:47+08:00">
+                2019-10-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="transparent-vs-rgba-0-0-0-0"><a href="#transparent-vs-rgba-0-0-0-0" class="headerlink" title="transparent vs rgba(0,0,0,0)"></a>transparent vs rgba(0,0,0,0)</h4><h4 id="3d效果-prespective-xyz"><a href="#3d效果-prespective-xyz" class="headerlink" title="3d效果-prespective, xyz"></a>3d效果-prespective, xyz</h4><p><a href="https://3dtransforms.desandro.com/" target="_blank" rel="noopener">Css 3D</a></p>
+<h4 id="动画"><a href="#动画" class="headerlink" title="动画"></a>动画</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">transform: rotate(180deg);</span><br><span class="line">transition: transform 0.5s;</span><br></pre></td></tr></table></figure>
+<p>HTM + CSS 实现点击旋转
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">  ...</span><br><span class="line">  &lt;input type=&quot;button&quot; class=&quot;csd-icon icon-refresh&quot;&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<p>目标元素要改为input，因为要用到focus伪类
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">.csd-icon.icon-refresh &#123;</span><br><span class="line">  width: 24px;</span><br><span class="line">  height: 24px;</span><br><span class="line">  padding: 0;</span><br><span class="line">  cursor: pointer;</span><br><span class="line">  position: absolute;</span><br><span class="line">  border:hidden;</span><br><span class="line">  background: url(&quot;data:image/svg+xml,&quot; + map-get($icon,refresh) + &quot;&quot;) no-repeat top left;</span><br><span class="line">  right: 0;</span><br><span class="line">  &amp;:focus&#123;</span><br><span class="line">    outline: none;</span><br><span class="line">    animation: rotatefresh 1s;</span><br><span class="line">  &#125;</span><br><span class="line">  &amp;:active&#123;</span><br><span class="line">    animation: none;  </span><br><span class="line">    //background: &apos;#eee&apos;;</span><br><span class="line">  &#125;</span><br><span class="line">  @keyframes rotatefresh &#123;</span><br><span class="line">    from &#123; transform: rotate(0deg) &#125;</span><br><span class="line">    to &#123;</span><br><span class="line">        transform: rotate(180deg);</span><br><span class="line">        transition: all 0.6s;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="减少异步"><a href="#减少异步" class="headerlink" title="减少异步"></a>减少异步</h4><p>使用形如background: url(‘../../icon.svg’)的样式无疑在渲染页面时又添加了异步调用，页面会出现从图片空缺到图片加载的’跳变’，
+如果是img:src可以直接把svg代码贴在页面上，优点是图像作为页面代码的一部分一次性从服务端获取，缺点是布局代码会被推至很下面，且svg代码的可读性比较差。
+另一种方式是将图片转为encodeURL贴在css中，这样使图片作为css的一部分从服务端获取
+css形如
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">background: url(&quot;data:image/svg+xml,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox...&quot;);</span><br></pre></td></tr></table></figure></p>
+<p>一个在线转换工具
+见<a href="http://www.asiteaboutnothing.net/c_decode-url.html" target="_blank" rel="noopener">URL Decoder</a>
+将源码\<svg>…\</svg>贴入，进行转码
+另用scss的预编译过程转换
+见<a href="https://github.com/davidkpiano/sass-svg" target="_blank" rel="noopener">sass-svg</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/10/15/AngularTroubleShooting/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/10/15/AngularTroubleShooting/" itemprop="url">Angular Touble Shooting</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-15T17:51:54+08:00">
+                2019-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h3><p>见知乎·<a href="https://zhuanlan.zhihu.com/p/36385830?utm_source=wechat_session&amp;utm_medium=social&amp;utm_oi=44172316770304&amp;utm_campaign=shareopn" target="_blank" rel="noopener">Angular资料获取不完全指南</a></p>
+<h3 id="异步响应方法中更新数据，视图无法及时更新"><a href="#异步响应方法中更新数据，视图无法及时更新" class="headerlink" title="异步响应方法中更新数据，视图无法及时更新"></a>异步响应方法中更新数据，视图无法及时更新</h3><blockquote>
+<p>解决方法：导入ChangeDetectRef
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import &#123; ChangeDetectorRef &#125; from &apos;@angular/core&apos;;</span><br><span class="line"></span><br><span class="line">constructor(</span><br><span class="line">    private changeDetectorRef:ChangeDetectorRef) &#123; </span><br><span class="line">        // user token updated!</span><br><span class="line">        this.userService.currentUserToken$.subscribe(res=&gt;&#123;</span><br><span class="line">            if(res)&#123;</span><br><span class="line">            this.logged = true;</span><br><span class="line">            this.email = res[&apos;UserName&apos;].value;</span><br><span class="line">            this.changeDetectorRef.detectChanges()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="httpClient的任意方法-get、post-无法发送请求"><a href="#httpClient的任意方法-get、post-无法发送请求" class="headerlink" title="httpClient的任意方法(get、post)无法发送请求"></a>httpClient的任意方法(get、post)无法发送请求</h3><blockquote>
+<p>所在模块未引入HttpClientModule</p>
+</blockquote>
+<h3 id="重复声明Directive"><a href="#重复声明Directive" class="headerlink" title="重复声明Directive"></a>重复声明Directive</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR in Type NumberInputDirective in D:/ProjectX/src/app/common/number-input.directive.ts is part of the declarations of 2 modules: blablaA and blablaB Please consider moving NumberInputDirective to a higher module that imports blablaA and blablaB. You can also create a new NgModule import that NgModule in blablaA and blablaB</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>指令是可声明对象。 它们必须在 NgModule 中声明(declarations)之后，才能用在应用中。指令应当且只能属于一个 NgModule。不要重新声明那些从其它模块中导入的指令。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import &#123; NgModule &#125; from &apos;@angular/core&apos;;</span><br><span class="line">import &#123; CommonModule &#125; from &apos;@angular/common&apos;;</span><br><span class="line">import &#123; NumberInputDirective &#125; from &apos;../common/number-input.directive&apos;;</span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [CommonModule],</span><br><span class="line">    declarations: [NumberInputDirective],</span><br><span class="line">    exports:[NumberInputDirective]</span><br><span class="line">export class SharedModule &#123;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="angular-json-“should-NOT-have-additional-properties-xxxx-”"><a href="#angular-json-“should-NOT-have-additional-properties-xxxx-”" class="headerlink" title="angular.json “should NOT have additional properties(xxxx)”"></a>angular.json “should NOT have additional properties(xxxx)”</h3><p>因框架版本问题（归根结蒂是包版本差异问题），不支持xxx属性，如angular原生国际化配置v8与v9存在配置差异，查看文档应区分文档版本</p>
+<h3 id="关于升级"><a href="#关于升级" class="headerlink" title="关于升级"></a>关于升级</h3><p>参考<a href="https://update.angular.io/" target="_blank" rel="noopener">Angular 升级指南</a></p>
+<p>另，@angular/cli和angular-cli 是两个东西，安装了后者可以使用部分ng命令，可知ng version是beta版本，ng update无效且报“does not match any file…”</p>
+<blockquote>
+<p>issue 升级到9后，渲染中止，报“Uncaught SyntaxError: Strict mode code may not include a with statement”</p>
+</blockquote>
+<p>见<a href="https://stackoverflow.com/questions/60114758/uncaught-syntaxerror-strict-mode-code-may-not-include-a-with-statement" target="_blank" rel="noopener">stackoverflow</a>回答<br>
+remove from main.ts
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export &#123; renderModule, renderModuleFactory &#125; from &apos;@angular/platform-server&apos;;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/19/electron/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/09/19/electron/" itemprop="url">Electron 入坑</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-19T19:19:55+08:00">
+                2019-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>须知，vscode是Electron应用，atom是Electron应用，GeForce Experience也是Electron应用，还有Skype。。。</p>
+</blockquote>
+<p>本质是使用chronium浏览器内核和HTML实现应用程序UI，底层业务是基于js”粘合”的，即除了require nodejs native modules之外，还可以将基于其他技术生态的组件集成进来，这里会用到webpack打包。
+得益于HTML UI开发的方便，和nodejs api的丰富，使得app 开发变得方便快捷，而且基于js实现了相当完美的跨平台，然而泻药如下：</p>
+<ul>
+<li>因为不可避免的打包浏览器内核，出品动辄100MB</li>
+<li>因为打包的是chrome家的内核，内存占用相当大</li>
+</ul>
+<p>如果是windows平台的应用需求，wpf的产品将在体积，资源占用，安全的系统访问等方面碾压electron</p>
+<p>迈步越过的坑：</p>
+<h4 id="构建项目框架"><a href="#构建项目框架" class="headerlink" title="构建项目框架"></a>构建项目框架</h4><ol start="0">
+<li>脚手架 npm i -g angular-cli electron</li>
+<li>创建Angular项目 ng new ngelectron –routing </li>
+<li>package.json </li>
+<li>主进程main.js</li>
+</ol>
+<p>以angular-electron为例，npm run start过程，<br>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;start&quot;: &quot;npm run postinstall:electron &amp;&amp; npm-run-all -p ng:serve electron:serve&quot;,</span><br><span class="line">&quot;postinstall:electron&quot;: &quot;node postinstall&quot;,</span><br><span class="line">&quot;electron:serve&quot;: &quot;wait-on http-get://localhost:4200/ &amp;&amp; npm run electron:serve-tsc &amp;&amp; electron . --serve,</span><br><span class="line">&quot;electron:serve-tsc&quot;: &quot;tsc -p tsconfig-serve.json&quot;,</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>调用postinstall (postinstall.js)修改angular的webpack target </li>
+<li>随后运行ng serve </li>
+<li>连接ng serve启动的localhost:4200</li>
+<li>调用tsc编译main.ts此时生成了main.js</li>
+<li>执行electron .<h4 id="webpack-target"><a href="#webpack-target" class="headerlink" title="webpack target"></a>webpack target</h4></li>
+</ol>
+<h4 id="IPC"><a href="#IPC" class="headerlink" title="IPC"></a>IPC</h4><p>IPC 代表 Inter-Process Communication进程间通信。Electron 使用 IPC 来在main主进程和renderer渲染进程之间传递 JSON 信息。
+main
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p>render
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h4 id="资源打包关于asar-vbscript"><a href="#资源打包关于asar-vbscript" class="headerlink" title="资源打包关于asar vbscript"></a>资源打包关于asar vbscript</h4><p>asar 是一种将多个文件合并成一个文件的类 tar 风格的归档格式。 Electron 可以无需解压整个文件，即可从其中读取任意文件内容。</p>
+<p>逻辑中视为文件夹
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const fs = require(&apos;fs&apos;)</span><br><span class="line">fs.readFileSync(&apos;/path/to/example.asar/file.txt&apos;)</span><br></pre></td></tr></table></figure></p>
+<h4 id="单例模式-单例参数更新"><a href="#单例模式-单例参数更新" class="headerlink" title="单例模式 单例参数更新"></a>单例模式 单例参数更新</h4><h4 id="外观"><a href="#外观" class="headerlink" title="外观"></a>外观</h4><p>无边透明,隐藏任务栏
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let mainWindow = new BrowserWindow(&#123; transparent: true, frame: false, skipTaskbar:true &#125;)</span><br></pre></td></tr></table></figure></p>
+<p>实践中发现透明还需另外设置
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">body&#123;</span><br><span class="line">    background:transparent</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="交互"><a href="#交互" class="headerlink" title="交互"></a>交互</h4><p>保持置顶
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">win = new BrowserWindow(&#123;</span><br><span class="line">   alwaysOnTop: true</span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>无窗口UI的拖动<br>
+设置响应鼠标拖动区域，用css标记-webkit-app-region: drag<br>
+参考官方文档: <a href="https://www.electronjs.org/docs/api/frameless-window#%E5%8F%AF%E6%8B%96%E6%8B%BD%E5%8C%BA" target="_blank" rel="noopener">frameless window 可拖拽区域</a></p>
+<p><a href="https://github.com/kapetan/electron-drag" target="_blank" rel="noopener">electron-drag</a> 方案</p>
+<h4 id="命令及参数"><a href="#命令及参数" class="headerlink" title="命令及参数"></a>命令及参数</h4><p>开发模式electron . [args]
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">args = process.argv.splice(2)</span><br></pre></td></tr></table></figure></p>
+<p>执行模式app.exe [args]
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">args = process.argv.splice(1)</span><br></pre></td></tr></table></figure></p>
+<h4 id="electron-builder"><a href="#electron-builder" class="headerlink" title="electron-builder"></a>electron-builder</h4><p>部分配置
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&quot;productName&quot;: &quot;CSCportal&quot;,</span><br><span class="line">  &quot;directories&quot;: &#123;</span><br><span class="line">    &quot;output&quot;: &quot;release/&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  // 额外打包的资源 不会打包到\resources\app.asar</span><br><span class="line">  // 以下规则将文件单独打包到\resources\addon</span><br><span class="line">  &quot;extraResources&quot;: &#123;</span><br><span class="line">    &quot;from&quot;: &quot;addon/&quot;,</span><br><span class="line">    &quot;to&quot;: &quot;addon/&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  // 额外打包配置文件到根目录</span><br><span class="line">  &quot;extraFiles&quot;:[&quot;config.xml&quot;],</span><br><span class="line">  // 打包文件的parttern表达式</span><br><span class="line">  &quot;files&quot;: [</span><br><span class="line">    &quot;**/*&quot;,</span><br><span class="line">    &quot;!package.json&quot;,</span><br><span class="line">    &quot;!src/&quot;,</span><br><span class="line">    &quot;src/app/shared/*&quot;, // 打包main调用的模块（.js）</span><br><span class="line">    &quot;!src/app/shared/*.ts&quot; // 忽略ts源文件</span><br><span class="line">  ],</span><br><span class="line">  // windows环境</span><br><span class="line">  &quot;win&quot;: &#123;</span><br><span class="line">    &quot;target&quot;: [</span><br><span class="line">      &quot;nsis&quot;, // 使用nsis工具生成安装包</span><br><span class="line">      &quot;zip&quot;   // 生成zip免安装压缩包</span><br><span class="line">    ],</span><br><span class="line">    // code sign（代码签名）</span><br><span class="line">    &quot;signingHashAlgorithms&quot;:[&quot;sha1&quot;], // sign algorithms [&apos;sha1&apos;, &apos;sha256&apos;]</span><br><span class="line">    &quot;certificateFile&quot;:&quot;build/cert/XXXXX.pfx&quot;, // 证书路径</span><br><span class="line">    &quot;certificatePassword&quot;:&quot;XXXXXXX&quot;,  // 证书密码</span><br><span class="line">    &quot;verifyUpdateCodeSignature&quot;:false, // 安装前是否验证签名可用更新（available update）</span><br><span class="line">    &quot;rfc3161TimeStampServer&quot;: &quot;http://timestamp.digicert.com&quot;, // time stamp server</span><br><span class="line">    &quot;signDlls&quot;: true //是否签名DLL</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;nsis&quot;:&#123;</span><br><span class="line">    &quot;oneClick&quot;:false, // 禁用一键安装</span><br><span class="line">    &quot;perMachine&quot;:true, // 为所有用户安装</span><br><span class="line">    &quot;allowToChangeInstallationDirectory&quot;:true, // 自定义安装路径</span><br><span class="line">    &quot;include&quot;:&quot;build/installer.nsh&quot; // 包含脚本</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;mac&quot;: &#123;&#125;,</span><br><span class="line">  &quot;linux&quot;: &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://github.com/maximegris/angular-electron/issues/460#issuecomment-608650812" target="_blank" rel="noopener">How to share costom .ts file between main.ts and Angular app</a><br>
+即将文件或目录添加到打包文件的parttern表达式中</p>
+<h4 id="nsis宏命令-installer-nsh"><a href="#nsis宏命令-installer-nsh" class="headerlink" title="nsis宏命令 installer.nsh"></a>nsis宏命令 installer.nsh</h4><p>在electron-builder.json配置中引入.nsh脚本，脚本定义了NSIS打包生命周期中插入的宏指令<br>
+可插入宏：</p>
+<ul>
+<li><p><b>customHeader</b> 
+可以配置NSIS的一些环境或运行条件，如显示详细信息框：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">!macro customHeader</span><br><span class="line">  ShowInstDetails show</span><br><span class="line">  ShowUninstDetails show</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure>
+<p>详见<a href="https://github.com/electron-userland/electron-builder/blob/c35b3150536be66a9e1c2aae75f7e8f7f610699d/packages/app-builder-lib/templates/nsis/installer.nsi" target="_blank" rel="noopener">调用源码</a></p>
+</li>
+<li><b>preInit</b><br>This macro is inserted at the beginning of the NSIS .OnInit callback</li>
+<li><b>customInit</b></li>
+<li><b>customUnInit</b></li>
+<li><b>customInstall</b>
+安装</li>
+<li><b>customUnInstall</b>
+卸载</li>
+<li><b>customRemoveFiles</b></li>
+<li><b>customInstallMode</b><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!macro customInstall</span><br><span class="line">  WriteRegStr HKLM &quot;SOFTWARE\Carestream Dental\CSCportal&quot; &quot;InstallDir&quot; $INSTDIR</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>uninstaller.nsh
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!macro customUnInstall</span><br><span class="line">    DeleteRegKey HKLM &quot;SOFTWARE\Carestream Dental\CSCportal&quot; &quot;InstallDir&quot;</span><br><span class="line">!macroend</span><br></pre></td></tr></table></figure></p>
+<p>BUILD_RESOURCES_DIR and PROJECT_DIR are defined.</p>
+<p>build is added as addincludedir (i.e. you don’t need to use BUILD_RESOURCES_DIR to include files).</p>
+<p>build/x86-unicode and build/x86-ansi are added as addplugindir.
+<span style="color:#ff0;font-weight:bold">Caution!</span> 我的angular-electron6项目中，仍然要手动载入plugin，写法同《NSIS插件》笔记中的代码</p>
+<p>File associations macro registerFileAssociations and unregisterFileAssociations are still defined.</p>
+<p>LogicLib.nsh默认已包含</p>
+<p>All other electron-builder specific flags (e.g. ONE_CLICK) are still defined.</p>
+<p>参考 <a href="https://www.electron.build/configuration/nsis" target="_blank" rel="noopener">electron-builder文档nsis部分</a> 参考NSIS相关笔记</p>
+<p><span style="color:#ff0;font-weight:bold">Caution!</span>以上文档对应最新版本electron-builder,经实践v22.7.0可以返回build异常信息，应更新并使用新版本</p>
+<h4 id="调试主进程"><a href="#调试主进程" class="headerlink" title="调试主进程"></a>调试主进程</h4><p>VScode launch.json:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;version&quot;: &quot;0.2.0&quot;,</span><br><span class="line">  &quot;configurations&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Debug Main Process&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;node&quot;,</span><br><span class="line">      &quot;request&quot;: &quot;launch&quot;,</span><br><span class="line">      &quot;cwd&quot;: &quot;$&#123;workspaceRoot&#125;&quot;,</span><br><span class="line">      &quot;runtimeExecutable&quot;: &quot;$&#123;workspaceRoot&#125;/node_modules/.bin/electron&quot;,</span><br><span class="line">      &quot;windows&quot;: &#123;</span><br><span class="line">        &quot;runtimeExecutable&quot;: &quot;$&#123;workspaceRoot&#125;/node_modules/.bin/electron.cmd&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;args&quot; : [&quot;.&quot;,&quot;--input=d:\\temp\\input.xml&quot;,&quot;--output=d:\\temp\\output.xml&quot;],</span><br><span class="line">      &quot;outputCapture&quot;: &quot;std&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此app设计为由其他客户端程序使用命令调起，传入input参数和output参数，注意调试命令的’electron .’中’.’是第一个参数。</p>
+<p>另外此app是webpack打包的angular electron应用，调试调用主程序js文件，每次更新代码后应使用postinstall进行编译。</p>
+<h4 id="自动更新服务"><a href="#自动更新服务" class="headerlink" title="自动更新服务"></a>自动更新服务</h4><p>原理似乎是这样的，首先是build，将构建好的文件publish到一个下载中心，很多工具都封装了比如GitHub和<a href="https://bintray.com/" target="_blank" rel="noopener">Bintray</a></p>
+<p>electron-builder方案</p>
+<ol>
+<li>install <a href="https://yarn.pm/electron-updater" target="_blank" rel="noopener">electron-updater</a> </li>
+<li>配置publish参数
+一般在package.json中，已分离出electron-build.json配置的在该文件中
+本章未完待补充QQs</li>
+</ol>
+<h4 id="BrowserWindow-loadURL-Issue"><a href="#BrowserWindow-loadURL-Issue" class="headerlink" title="BrowserWindow.loadURL Issue"></a>BrowserWindow.loadURL Issue</h4><h4 id="npm-ERR-code-ELIFECYCLE"><a href="#npm-ERR-code-ELIFECYCLE" class="headerlink" title="npm ERR! code ELIFECYCLE"></a>npm ERR! code ELIFECYCLE</h4><p>double free exception,重复释放资源，错误使用app.exit()出现此异常
+如
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">app.on(&apos;window-all-closed&apos;, () =&gt; &#123;</span><br><span class="line">  if (process.platform !== &apos;darwin&apos;) &#123;</span><br><span class="line">    // app.quit(); // safe!</span><br><span class="line">    app.exit(-1) // ELIFECYCLE Exception!!</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<h4 id="shell-openExternal"><a href="#shell-openExternal" class="headerlink" title="shell.openExternal"></a>shell.openExternal</h4><blockquote>
+<p>Open the given external protocol URL in the desktop’s default manner. 对于系统支持的协议，以系统默认行为打开URL</p>
+</blockquote>
+<p>windows 开始 搜索“按协议指定默认应用程序”或“Choose default apps by protocol”</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/12/webgllessons/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/09/12/webgllessons/" itemprop="url">WebGL教程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-12T14:45:02+08:00">
+                2019-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/图像处理/" itemprop="url" rel="index">
+                    <span itemprop="name">图像处理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="三维模型的平面投影————矩阵运算"><a href="#三维模型的平面投影————矩阵运算" class="headerlink" title="三维模型的平面投影————矩阵运算"></a>三维模型的平面投影————矩阵运算</h4><p><a href="https://juejin.im/entry/58fdb9b544d9040069ef2488" target="_blank" rel="noopener">图解webgl</a></p>
+<h4 id="WebGLRenderingContext"><a href="#WebGLRenderingContext" class="headerlink" title="WebGLRenderingContext"></a>WebGLRenderingContext</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const canvas = document.getElementById(&apos;webgl&apos;);</span><br><span class="line">// if webgl context isnot exist, init it </span><br><span class="line">const webgl = canvas.getContext(&apos;webgl&apos;);</span><br><span class="line"></span><br><span class="line">// Set clear color to black, fully opaque</span><br><span class="line">webgl.clearColor(0.0, 0.0, 0.0, 1.0);</span><br><span class="line">// Clear the color buffer with specified clear color</span><br><span class="line">webgl.clear(webgl.COLOR_BUFFER_BIT);</span><br></pre></td></tr></table></figure>
+<p>color 是float 0.0~1.0 映射 0~255<br>
+颜色缓冲区（COLOR_BUFFER_BIT），其他还有深度缓冲区（DEPTH_BUFFER_BIT）模板参数缓冲区（STENCIL_BUFFER_BIT）参考 <a href="www.khronos.org">官方标准</a></p>
+<h4 id="vs-fs-shader"><a href="#vs-fs-shader" class="headerlink" title="vs fs shader"></a>vs fs shader</h4><h4 id="着色器函数"><a href="#着色器函数" class="headerlink" title="着色器函数"></a>着色器函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">private initShader(gl:WebGLRenderingContext, vertexShaderSource:string, fragmentShaderSource:string) &#123;</span><br><span class="line">   //创建顶点着色器对象</span><br><span class="line">   let vertexShader = gl.createShader(gl.VERTEX_SHADER);</span><br><span class="line">   //创建片元着色器对象</span><br><span class="line">   let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);</span><br><span class="line">   //引入顶点、片元着色器源代码</span><br><span class="line">   gl.shaderSource(vertexShader, vertexShaderSource);</span><br><span class="line">   gl.shaderSource(fragmentShader, fragmentShaderSource);</span><br><span class="line">   //编译顶点、片元着色器</span><br><span class="line">   gl.compileShader(vertexShader);</span><br><span class="line">   gl.compileShader(fragmentShader);</span><br><span class="line"></span><br><span class="line">   //创建程序对象program</span><br><span class="line">   let program = gl.createProgram();</span><br><span class="line">   //附着顶点着色器和片元着色器到program</span><br><span class="line">   gl.attachShader(program, vertexShader);</span><br><span class="line">   gl.attachShader(program, fragmentShader);</span><br><span class="line">   //链接program</span><br><span class="line">   gl.linkProgram(program);</span><br><span class="line">   //使用program</span><br><span class="line">   gl.useProgram(program);</span><br><span class="line">   //返回程序program对象</span><br><span class="line">   return program;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="着色器"><a href="#着色器" class="headerlink" title="着色器"></a>着色器</h4><p>着色器是使用 OpenGL ES Shading Language(GLSL)编写的程序，它携带着绘制形状的顶点信息以及构造绘制在屏幕上像素的所需数据，换句话说，它负责记录着像素点的位置和颜色。<br>
+顶点着色器（Programmable Vertex Processor）和 片元着色器（Programmable Fragment Processor）
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">var vertexShaderSource = &apos;&apos; +</span><br><span class="line">//attribute声明vec4类型变量apos</span><br><span class="line">&apos;attribute vec4 apos;&apos; +</span><br><span class="line">&apos;void main()&#123;&apos; +</span><br><span class="line">//顶点坐标apos赋值给内置变量gl_Position</span><br><span class="line">&apos;   gl_Position =apos;&apos; +</span><br><span class="line">&apos;&#125;&apos;;</span><br><span class="line"></span><br><span class="line">//片元着色器（Programmable Fragment Processor）源码</span><br><span class="line">let fragShaderSource = &apos;&apos; +</span><br><span class="line">&apos;void main()&#123;&apos; +</span><br><span class="line">//定义片元颜色</span><br><span class="line">&apos;   gl_FragColor = vec4(1.0,0.0,0.0,1.0);&apos; +</span><br><span class="line">&apos;&#125;&apos;;</span><br><span class="line"></span><br><span class="line">//初始化着色器</span><br><span class="line">let program = this.initShader(this.gl, vertexShaderSource, fragShaderSource);</span><br><span class="line">//获取顶点着色器的位置变量apos</span><br><span class="line">var aposLocation = this.gl.getAttribLocation(program, &apos;apos&apos;);</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/11/jenkinsissues/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/09/11/jenkinsissues/" itemprop="url">jenkins issues</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-11T13:45:16+08:00">
+                2019-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="submodules"><a href="#submodules" class="headerlink" title="submodules"></a>submodules</h3><p>首先submodule就是个坑，在包含submodule的项目中通过配置.gitmodules文件与子模块仓库建立联系。</p>
+<blockquote>
+<p>配置包含submodule的项目job
+<img src="https://wx2.sinaimg.cn/large/a60edd42ly1g6vkm6ilylj21u342owww.jpg" alt="cannot load pic here"></p>
+</blockquote>
+<h3 id="退出、重启等"><a href="#退出、重启等" class="headerlink" title="退出、重启等"></a>退出、重启等</h3><p>域名+exit/restart</p>
+<h3 id="env-‘node’-No-such-file-or-directory"><a href="#env-‘node’-No-such-file-or-directory" class="headerlink" title="env: ‘node’: No such file or directory"></a>env: ‘node’: No such file or directory</h3><p>现于docker jenkins-blueocean，找到nodejs安装路径如“/var/jenkins_home/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/nodejs_v10/bin”之下的npm命令，执行个npm -v，显示相同提示。<br>
+据说是镜像bug <a href="https://issues.jenkins-ci.org/browse/JENKINS-34815?jql=status%20%3D%20Closed%20AND%20text%20~%20%22jenkins.plugins.nodejs.tools.NodeJSInstallation%22" target="_blank" rel="noopener">JENKINS-34815</a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 进入jenkins对应容器中</span><br><span class="line"># docker exec -it [对应容器id] bash</span><br><span class="line"> </span><br><span class="line"># 安装nodejs</span><br><span class="line"># apk add --no-cache nodejs</span><br><span class="line"> </span><br><span class="line"># 检查node</span><br><span class="line"># node -v</span><br></pre></td></tr></table></figure></p>
+<h3 id="构建完成后拷贝文件到目标服务器"><a href="#构建完成后拷贝文件到目标服务器" class="headerlink" title="构建完成后拷贝文件到目标服务器"></a>构建完成后拷贝文件到目标服务器</h3><p>关于插件publish over ssh
+<img src="https://tvax2.sinaimg.cn/large/a60edd42gy1gd6c791juej20ll0j80tm.jpg" alt="publish over ssh">
+配置中填的是jenkins这边的私钥，应为jenkins生成ssh key 或使用jenkins所在服务器的ssh private key
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;jenkins&quot; -f ~/.ssh/jenkins</span><br></pre></td></tr></table></figure></p>
+<p>上述命令可以生成以名字区分的ssh key，而不覆盖其他的key</p>
+<p>公钥复制到远程服务器，粘贴到~/.ssh/authorized_keys 这个文件没有就创建一个
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 700 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure></p>
+<p>为使ssh agent生效 QQs重启了远程服务器。。。
+回到jenkins配置中，完成接下来的远程服务器配置
+username是登录远程服务器的用户名，与key无关
+<img src="https://tvax1.sinaimg.cn/large/a60edd42gy1gd8bdr0hgwj21751hqgol.jpg" alt="10.196.98.60_8080_job_ams_dev_svr_ng_configure">
+Caution！ 拷贝文件时,如果包含文件夹，Source files路径通配符应写为dist/**</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/10/windowstips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/09/10/windowstips/" itemprop="url">Tips in windows</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-10T09:39:44+08:00">
+                2019-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h4><p>添加变量,set为临时，永久设置换setx
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set JAVA_HOME=&quot;C:\jre\bin&quot;</span><br></pre></td></tr></table></figure></p>
+<p>调用
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%JAVA_HOME%</span><br></pre></td></tr></table></figure></p>
+<h4 id="输出到剪切板"><a href="#输出到剪切板" class="headerlink" title="输出到剪切板"></a>输出到剪切板</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo %JAVA_HOME% | clip</span><br></pre></td></tr></table></figure>
+<h4 id="显示文件树"><a href="#显示文件树" class="headerlink" title="显示文件树"></a>显示文件树</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 显示目录</span><br><span class="line">tree</span><br><span class="line"># 递归全部目录及文件</span><br><span class="line">tree/F</span><br></pre></td></tr></table></figure>
+<h4 id="调用和输出"><a href="#调用和输出" class="headerlink" title="调用和输出"></a>调用和输出</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">command</th>
+<th style="text-align:left">comments </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">command &gt; filename</td>
+<td style="text-align:left">Redirect command output to a file</td>
+</tr>
+<tr>
+<td style="text-align:left">command &gt;&gt; filename</td>
+<td style="text-align:left">APPEND into a file</td>
+</tr>
+<tr>
+<td style="text-align:left">command &lt; filename</td>
+<td style="text-align:left">Type a text file and pass the text to command</td>
+</tr>
+<tr>
+<td style="text-align:left">commandA  \</td>
+<td style="text-align:left">commandB</td>
+<td>Pipe the output from commandA into commandB</td>
+</tr>
+<tr>
+<td style="text-align:left">commandA &amp;  commandB</td>
+<td style="text-align:left">Run commandA and then run commandB</td>
+</tr>
+<tr>
+<td style="text-align:left">commandA &amp;&amp; commandB</td>
+<td style="text-align:left">Run commandA, if it succeeds then run commandB</td>
+</tr>
+<tr>
+<td style="text-align:left">commandA \</td>
+<td style="text-align:left">\</td>
+<td>commandB</td>
+<td>Run commandA, if it fails then run commandB</td>
+</tr>
+<tr>
+<td style="text-align:left">commandA &amp;&amp; commandB \</td>
+<td style="text-align:left">\</td>
+<td>commandC</td>
+<td>If commandA succeeds run commandB, if it fails commandC</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>In most cases the Exit Code is the same as the ErrorLevel</p>
+</blockquote>
+<h4 id="刷新应用图标"><a href="#刷新应用图标" class="headerlink" title="刷新应用图标"></a>刷新应用图标</h4><p>桌面图标显示为未知文件，调用以下应用可以解决<br>
+run ie4uinit -show</p>
+<h4 id="Fix-The-Parameter-is-Incorrect-Exception"><a href="#Fix-The-Parameter-is-Incorrect-Exception" class="headerlink" title="Fix The Parameter is Incorrect Exception"></a>Fix The Parameter is Incorrect Exception</h4><p>某年月日因磁盘松动，重新连接后报如图异常</p>
+<p><img src="https://tvax4.sinaimg.cn/large/a60edd42gy1gc3wq4b78fj20a304ljrj.jpg" alt></p>
+<p>命令行执行
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chkdsk /f</span><br></pre></td></tr></table></figure></p>
+<p>检索到了网络上的解决方法chkdsk /f /x /r，后面的参数会极大增加修复错误花的时间，而且/x /r 都包含了/f (fixes errors on the disk. The disk must be locked. If chkdsk cannot lock the drive, a message appears that asks you if you want to check the drive the next time you restart the computer.)</p>
+<h4 id="查找进程及其杀灭"><a href="#查找进程及其杀灭" class="headerlink" title="查找进程及其杀灭"></a>查找进程及其杀灭</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tasklist|grep cscportal</span><br><span class="line"></span><br><span class="line">taskkill /IM &quot;cscportal.exe&quot; /F</span><br></pre></td></tr></table></figure>
+<h4 id="琐碎文件的删除"><a href="#琐碎文件的删除" class="headerlink" title="琐碎文件的删除"></a>琐碎文件的删除</h4><p>win10 系统中删除文件夹，会进行文件统计，对于文件目录和源代码目录琐碎的情形，它敢给你统计几个小时，正确的删除姿势有两种
+a. 安全模式</p>
+<p>b. 命令行(分两步：删除文件；删除目录)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">del /s/f/q node_modules</span><br><span class="line">rmdir /s/q node_modules</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/09/ionic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/09/09/ionic/" itemprop="url">ionic</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-09T13:32:10+08:00">
+                2019-09-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g cordave ionic</span><br></pre></td></tr></table></figure>
+<p>说明一下ionic和cordave<br>
+ionic 是一款开源的Html5移动App开发框架,是Angular移动端解决方案,Ionic以流行的跨平台移动app开发框架phoengap为蓝本，让开发者可以通过命令行工具快速生成android、ios移动app应用。将项目打包生成移动app应用，需要用到phoengap，而cordave是phoengap的开源发行版。<br></p>
+<p>新建项目:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ionic start myApp tabs</span><br></pre></td></tr></table></figure></p>
+<p>运行项目:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cd myApp</span><br><span class="line">ionic serve</span><br><span class="line"></span><br><span class="line">// 打包成单页面项目运行在微信/web浏览器:</span><br><span class="line"></span><br><span class="line">$ ionic build</span><br><span class="line"></span><br><span class="line">// 打包成混合app项目:</span><br><span class="line"></span><br><span class="line">$ ionic build</span><br><span class="line">$ ionic cordova platform add ios</span><br><span class="line">$ ionic cordova run android // Run an Ionic project on a connected device</span><br></pre></td></tr></table></figure></p>
+<p>使用cordova构建移动app 还有额外开发环境要求，如<a href="https://developer.android.com/studio#downloads" target="_blank" rel="noopener">Android SDK tools</a> 
+Java</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/03/BasicPHP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2019/09/03/BasicPHP/" itemprop="url">BasicPHP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-03T14:24:19+08:00">
+                2019-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="Linux查看-phpinfo"><a href="#Linux查看-phpinfo" class="headerlink" title="Linux查看 phpinfo"></a>Linux查看 phpinfo</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -i</span><br></pre></td></tr></table></figure>
+<p>或者
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r &quot;phpinfo();&quot;</span><br></pre></td></tr></table></figure></p>
+<h4 id="system"><a href="#system" class="headerlink" title="system"></a>system</h4><p>执行外部程序
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$last_time = system(&quot;ls&quot;, $retVal)</span><br></pre></td></tr></table></figure></p>
+<p>返回值和返会状态。 
+$retVal 可选参数， 记录命令执行后的返回状态。<br>
+system 返回值，输出命令输出的最后一行</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/09/02/openGL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -530,1324 +1911,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/29/BasicPython-Module/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/08/29/BasicPython-Module/" itemprop="url">Python基础——模块</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-29T19:55:54+08:00">
-                2019-08-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>模块是天然的单例模式</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/29/BasicPython-innerFunc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/08/29/BasicPython-innerFunc/" itemprop="url">Python基础——内置函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-29T19:53:43+08:00">
-                2019-08-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/29/BasicPython-0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/08/29/BasicPython-0/" itemprop="url">Python 编程基础</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-29T19:15:33+08:00">
-                2019-08-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>目前是python3.5</p>
-<blockquote>
-<p>print() 和 n=input()</p>
-</blockquote>
-<blockquote>
-<p>单行注释# 多行’’’</p>
-</blockquote>
-<blockquote>
-<p>编码声明
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<blockquote>
-<p>缩进<br></p>
-</blockquote>
-<p>Python没有分割代码块符号，以缩进以及冒号:区分层次，一般以4个空格为基本缩进单位。</p>
-<blockquote>
-<p>命名规范</p>
-<ul>
-<li>模块名：全部小写 + 下划线_</li>
-<li>包名：全部小写，不推荐使用下划线</li>
-<li>类名：Pascal风格（首字母大写）</li>
-<li>模块内部类型：_ + Pascal风格<br>
-使用单下划线_开头的变量和函数是受保护的，在使用from xxx import * 时不会被导入；使用双下划线__开头的变量或方法是类私有的</li>
-<li>函数、类的属性和方法：同模块命名</li>
-<li>常量：全部大写</li>
-</ul>
-</blockquote>
-<blockquote>
-<p>字符串类型’’和””和’’’’’’<br></p>
-</blockquote>
-<p>使用’’’表示多行字符,使用r’’屏蔽转义</p>
-<blockquote>
-<p>列表和元组</p>
-</blockquote>
-<blockquote>
-<p>字符串操作</p>
-</blockquote>
-<blockquote>
-<p>global关键字</p>
-</blockquote>
-<p>在python中，变量不需要先声明，直接使用即可，那我们怎么知道用的是局部变量还是全局变量呢？
-首先：python使用的变量，在默认情况下一定是用局部变量。
-其次：python如果想使用作用域之外的全局变量，则需要加global前缀。</p>
-<h4 id="关于python2-7和python3-5的一万种冲突方式"><a href="#关于python2-7和python3-5的一万种冲突方式" class="headerlink" title="关于python2.7和python3.5的一万种冲突方式"></a>关于python2.7和python3.5的一万种冲突方式</h4><p>目前的很多情况下，linux的软件管理工具仍然会将python2.7作为默认安装版本，然后在某个时刻你会看到
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error: xxxx requires python 3.5 or above</span><br></pre></td></tr></table></figure></p>
-<p>于是你再安装一个python3，然而python -V依然是2.7<br>
-于是乎卸载python<br>
-做link: alias python=python3 均是徒劳</p>
-<p>最后
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install python-is-python3</span><br></pre></td></tr></table></figure></p>
-<p>唉，行吧。。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/19/DICOM/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/08/19/DICOM/" itemprop="url">DICOM</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-19T17:09:38+08:00">
-                2019-08-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/图像处理/" itemprop="url" rel="index">
-                    <span itemprop="name">图像处理</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>参考CSDN zssure 文集。</p>
-<blockquote>
-<p>将DICOM协议当做是专属于医疗领域的“HTTP”传输协议，常见的HTTP协议是通过上表中的各种服务来实现浏览器与服务器之间HTML格式数据的传输；DICOM协议是通过上表中的各种服务实现了医疗设备与数据中心之间DCM格式数据的传输。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">对比</th>
-<th style="text-align:left">HTTP</th>
-<th style="text-align:left">DICOM</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">OSI层</td>
-<td style="text-align:left">应用层</td>
-<td style="text-align:left">应用层</td>
-</tr>
-<tr>
-<td style="text-align:center">数据</td>
-<td style="text-align:left">HTML文件</td>
-<td style="text-align:left">.DCM文件</td>
-</tr>
-<tr>
-<td style="text-align:center">服务</td>
-<td style="text-align:left">GET、POST、HEAD、PUT、DELETE、TRACE、CONNECT、OPTIONS</td>
-<td style="text-align:left">C-ECHO、C-FIND、C-STORE、C-MOVE、C-GET、N-GET、N-SET、N-ACTION、N-CREATE、N-DELETE、N-EVENT-REPORT</td>
-</tr>
-<tr>
-<td style="text-align:center">应用</td>
-<td style="text-align:left">互联网B/S模式，也可以用于C/S模式</td>
-<td style="text-align:left">C/S模式，也可以用于WADO(B/S模式)</td>
-</tr>
-</tbody>
-</table>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/19/SQLndNoSQL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/08/19/SQLndNoSQL/" itemprop="url">关系型数据库和非关系型数据库</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-19T14:11:51+08:00">
-                2019-08-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="非关系型数据库"><a href="#非关系型数据库" class="headerlink" title="非关系型数据库"></a>非关系型数据库</h3><p>来自Mongodb开发者的话，出自<a href="https://www.zhihu.com/question/20059632" title="MongoDB 等 NoSQL 与关系型数据库相比，有什么优缺点及适用场景？" target="_blank" rel="noopener">知乎</a><br></p>
-<blockquote>
-<p>「让开发者更高效」概括了 MongoDB 相较于关系型数据库带来的全部价值。这要放在最近十年整个行业的大背景下理解。软件行业的工资水平是出了名得高。这意味着软件开发的成本中，人力成本已经超越了硬件成本，成为成本里的大头。曾经长周期、瀑布式的开发流程被强调快速迭代的开发流程所替代。所有这些，加上你经常听说的热词，比如敏捷开发，微服务，DevOps，都指向「让开发者更高效」。这一背景下，基于关系表的关系型的数据模式也被灵活的非关系型数据模式替代。<br></p>
-</blockquote>
-<h4 id="使用文档模型"><a href="#使用文档模型" class="headerlink" title="使用文档模型"></a>使用文档模型</h4><p>文档模型与面向对象的数据表达方式更相似更自然。与关系型数据库中表结构不同，文档中可任意嵌入数组和子文档，就像程序中的数组和成员变量一样。这是关系型数据库三范式不允许的。但实际中我们经常看到一对多和一对一的数据。比如，一篇博客文章的 Tag 列表作为文章的一部分非常直观，而把 Tag 与文章的从属关系单独建立一张关系表就不那么自然。再比如，一个订单下面的收货地址，包括省、市、区、街道和门牌，作为一个子文档，与订单的信用卡地址很容易区分开。更方便的是，嵌入的数组和子文档之上可以直接建立索引，比如我可以很快找到所有 Tag 包含 MongoDB 的文章。<br></p>
-<h4 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h4><p>在关系数据库中，为了满足一个查询，多个表的数据都要参与 Join，每一个表都对应着磁盘的一次读取。这和数据放在一个地方，一次读完，当然完全不同。更简单的数据访问模式也让开发者更容易理解数据库的性能表现，尤其是当涉及到索引时。</p>
-<h4 id="灵活"><a href="#灵活" class="headerlink" title="灵活"></a>灵活</h4><p>关系数据库，常见的运维问题是给已有数据加一个新的属性，从数据表到应用数据层都要改。尽管有些工具可以把它自动化，这仍然是一个复杂的工作，尤其是更新产品线上数据库的时候。MongoDB 没有定义 Schema（模式）的话，就不需要改动数据库，只需要在应用层做必要的改动。<br>
-另一个问题是，纯粹业务需要的自定义属性，如不同商品的各种特性，我能理解的是在商品筛选的时候，这些特性可能临时成为区分用的指标，产品这个表应该怎么设计？最简单的方案，是把每个可能的属性都变成单独一列，当然这个方案不能扩展。另一个例子，一个通讯录允许用户随意添加新的联系方式，你有 Facebook，他有 Twitter。一种方案是在程序里把所有自定义属性序列化，比如用 JSON 放到同一字段里。另一种方案，叫做 Entity-attribute-value Model，把自定义属性和他们的数据类型，进一步抽象，增加关系表来表现。这时，相比这些复杂方案，MongoDB 没有 Schema 的优点就显现出来了。</p>
-<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>数据一台机器放不下了，就需要 sharding（分片）把它放到几台机器上去。分片是 MongoDB 多年以来的原生功能，与 MongoDB 其他功能高效整合。例如，分片集群中一个复杂的聚合查询会自动地根据 Shard Key（片键）分配到多个结点上运行，尽可能将计算任务下推到数据结点上，最后在一个结点上聚合所有结点的结果。分片还可以在各个结点间自动迁移数据，均衡其数据量。<br>
-为了升级数据库容量，相较于关系型数据库分库分表需要同时改动应用和数据库，MongoDB分片的运维也简单很多，能够做到对应用透明。<br>
-我们希望即使机器硬件有问题，数据也不要丢，服务不受影响。分片后机器更多，任一机器出问题的概率也就更高。Replication 复制解决了这个问题。它把同一份数据实时地复制到多个结点，自动地在其中切换。MongoDB 的商业客户中，不论规模大小，使用复制集已经成了一个标准，因为数据丢失的代价远大于冗余机器的成本。</p>
-<h3 id="关系型数据库"><a href="#关系型数据库" class="headerlink" title="关系型数据库"></a>关系型数据库</h3><h4 id="第一范式"><a href="#第一范式" class="headerlink" title="第一范式"></a>第一范式</h4><p>实体中的某个属性不能有多个值或者不能有重复的属性。即要求数据库表的无重复列，同一列不能有多个值。<br>
-如果出现重复的属性，就可能需要定义一个新的实体，新的实体由重复的多个属性构成，新实体与原实体之间为一对多关系</p>
-<h4 id="第二范式"><a href="#第二范式" class="headerlink" title="第二范式"></a>第二范式</h4><p>非主属性完全依赖于主关键字。
-经典的例子是考察一个学生在某门课程中的信息，以（学号，课程）为主关键字的话，考察成绩、教室、教师、上课时间等都没有问题，考察教材时，因为教材应该仅依赖课程，考察学生信息（姓名、性别、专业），因为学生信息只依赖学生。这里存在违反第二范式的隐患。<br>
-上述表大致为
-serialNo|姓名|专业|上课时间|上课地点|任课教授|资料|成绩
- :——|:–:|:–:|:–:|:–:|:–:|:–:|:–:
- 120022001|王丫蛋|声乐|周三|12教102|Professor Steven|人教版|90
- 120022201|李铁锤|机械|周四|11教412|Professor Johnson|人教版|75
- 360022201|李铁锤|机械|周五|12教308|Professor Hassan|人教版|75
- 首先，调整部分依赖的字段会很麻烦：因考研大纲修改，开课改用外研社教材。需修改大量记录，李铁锤改名李婉如，修改大量记录，即<strong>数据冗余</strong><br>
- 其次，学校新设电子竞技课程，指定了教材，尚未有学生选课，数据是写不进去的，即<strong>插入异常</strong><br>
- 然后，哪天这门课程被教育部指定有悖社会主义核心价值体系，学校偷偷删除了所有选课记录，此时导致表中的学生信息大量遗失，即<strong>删除异常</strong>
- 因此应有课程-教材关系表 学号-学生信息关系表</p>
-<h4 id="第三范式"><a href="#第三范式" class="headerlink" title="第三范式"></a>第三范式</h4><p>符合第二范式的关系模式（具备必要的关系表）中，不应出现依赖于非主属性的属性<br>
-例如，存在一个部门信息表，其中每个部门有部门编号（dept_id）、部门名称、部门简介等信息。那么在的员工信息表中列出部门编号后就不能再将部门名称、部门简介等与部门有关的信息再加入员工信息表中。即消除了传递依赖</p>
-<h4 id="BCNF"><a href="#BCNF" class="headerlink" title="BCNF"></a>BCNF</h4><p>根据候选键关系进一步消除传递依赖（没看懂）</p>
-<h4 id="第四范式"><a href="#第四范式" class="headerlink" title="第四范式"></a>第四范式</h4><p>满足BCNF，属性不应含有多值，如联系方式相关字段的设计</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/16/BasicDataVisualization/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/08/16/BasicDataVisualization/" itemprop="url">数据可视化入门</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-16T14:23:37+08:00">
-                2019-08-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
-                    <span itemprop="name">前端技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="D3-js-和-Echart"><a href="#D3-js-和-Echart" class="headerlink" title="D3.js 和 Echart"></a>D3.js 和 Echart</h4><p>原文：<a href="https://juejin.im/post/5cd65a41e51d456e89634ad3" title="掘金文章" target="_blank" rel="noopener">D3.js与echart.js的应用场景</a><br></p>
-<blockquote>
-<p>echarts和D3都是常用的数据可视化库，实现了能应用于各场景的图表等插件，两者之间的不同之处就在于echarts是使用canvas来绘制图形的，而D3是通过Svg来绘制图形的。svg可以操作dom支持事件处理器，想要实现某个操作，直接调用相关的方法实现效果就行，svg操作存在链式语法，与jQuery的链式调用差不多，简单易读。canvas不支持事件处理器所以只能展示数据，而不能修改。</p>
-</blockquote>
-<ul>
-<li>D3使用svg绘制图形，echarts使用canvas绘制图形</li>
-<li>D3兼容IE9及以上主流浏览器，echarts兼容IE6及以上主流浏览器</li>
-<li>D3使用灵活，学习成本大，echarts封装好的，使用简单，不够灵活</li>
-</ul>
-<p>因为D3支持事件处理器可以操作dom，所以如果在项目开发中如果有较多用户交互的场景，可以使用D3.如果项目中一般没有用户交互的场景，我们只需要将图表展示给用户看，而不需要更改，可以使用echarts。因为D3它展示的每一个数据都是一个标签，所以当数据发生改变的时候图表会重新渲染，会不停的操作dom，这对性能的消耗是非常大的（存疑，对于同样需要交互的需求，究竟是D3因为绑定了数据的dom频繁渲染消耗大，还是任意修改都需要重绘整个canvas的Echart消耗大呢?）。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/13/jsGetterSetter/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/08/13/jsGetterSetter/" itemprop="url">JavaScript getter setter</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-13T17:09:59+08:00">
-                2019-08-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/编程语言/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="“修改默认操作”"><a href="#“修改默认操作”" class="headerlink" title="“修改默认操作”"></a>“修改默认操作”</h4><p>面试题：<br>
-对于对象o有N个属性，不修改下面代码，编写一段程序获取到对象o的所有属性。
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var foo = (function()&#123;</span><br><span class="line">    var o = &#123;</span><br><span class="line">       a: 1,</span><br><span class="line">       b: 2,</span><br><span class="line">       /**更多属性**/</span><br><span class="line">    &#125;;</span><br><span class="line">    return function(key) &#123;</span><br><span class="line">        return o[key];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></p>
-<p>对象o只是函数作用域中的一个局部变量，而对外提供的唯一接口foo(key)可以获取到对象o单独的某个key对应的value，如：foo(‘a’)返回1。但是这里要求获取一个未知属性个数对象o的所有属性。</p>
-<blockquote>
-<p>在 ES5 中可以使用 getter 和 setter 部分改写默认操作，但是只能应用在单个属性上，无法应用在整个对象上。getter是一个隐藏函数，会在获取属性值时调用。setter也是一个隐藏函数，会在设置属性值时调用。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">var test = &#123;</span><br><span class="line">    get o()&#123;</span><br><span class="line">        console.log(&apos;监听到正在获取属性o的值&apos;);</span><br><span class="line">        return this._o;</span><br><span class="line">    &#125;,</span><br><span class="line">    set o(v)&#123;</span><br><span class="line">        console.log(&apos;监听到正在设置属性o的值为：&apos; + v);</span><br><span class="line">        this._o = v;</span><br><span class="line">        return this._o;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test.o = 14; // 监听到正在设置属性o的值为：14</span><br><span class="line">console.log(test.o); // 监听到正在获取属性o的值</span><br></pre></td></tr></table></figure>
-<h4 id="答题提示：添加一个属性，并且借助修改其默认get方法暴露this-（闭包应用）"><a href="#答题提示：添加一个属性，并且借助修改其默认get方法暴露this-（闭包应用）" class="headerlink" title="答题提示：添加一个属性，并且借助修改其默认get方法暴露this （闭包应用）"></a>答题提示：添加一个属性，并且借助修改其默认get方法暴露this （闭包应用）</h4><p>答案：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Object.defineProperty(Object.prototype, &apos;self&apos;, &#123;</span><br><span class="line">    get() &#123;</span><br><span class="line">        return this;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">var o = foo(&apos;self&apos;);</span><br><span class="line">console.log(Object.keys(o)); // [&apos;a&apos;, &apos;b&apos;]</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>评论：因为o上的属性有若干个，你不确定o上是否存在属性名为self的的属性，如果存在，你就获取不到原型上的self了，所以最好使用Symbol。
-改进：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var key = Symbol();</span><br><span class="line">Object.defineProperty(Object.prototype, key, &#123;</span><br><span class="line">    get() &#123;</span><br><span class="line">        return this;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">var o = foo(key);</span><br><span class="line">console.log(Object.keys(o)); // [&apos;a&apos;, &apos;b&apos;]</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<h4 id="触发其他操作"><a href="#触发其他操作" class="headerlink" title="触发其他操作"></a>触发其他操作</h4><p>搞一个方块，移动10像素
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var box =document.createElement(&quot;div&quot;);</span><br><span class="line">box.setAttribute(&quot;id&quot;,&quot;box&quot;);</span><br><span class="line">box.setAttribute(&quot;style&quot;,&quot;width:30px;height:30px;background:red;&quot;);</span><br><span class="line"></span><br><span class="line">var transformText = &apos;translateX(&apos; + 10 + &apos;px)&apos;;</span><br><span class="line">box.style.transform = transformText;</span><br></pre></td></tr></table></figure></p>
-<p>封装让方块移动的操作 当然可以这样
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function moveBox(distance)&#123;</span><br><span class="line">    box.style.transform = &apos;translateX(&apos; + distance + &apos;px)&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>其实也可以这样
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Object.defineProperty(box, &apos;move&apos;, &#123;</span><br><span class="line">    set: function(value) &#123;</span><br><span class="line">        var transformText = &apos;translateX(&apos; + value + &apos;px)&apos;;</span><br><span class="line">        box.style.webkitTransform = transformText;</span><br><span class="line">        box.style.transform = transformText;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line">//调用</span><br><span class="line">box.move = 100;</span><br></pre></td></tr></table></figure></p>
-<h4 id="熔断逻辑"><a href="#熔断逻辑" class="headerlink" title="熔断逻辑"></a>熔断逻辑</h4><p>Express.js 版本弃用一些旧版本的中间件，为了让用户能够更好地发现，有下面这段代码，通过修改get属性方法，让用户调用废弃属性时抛错并带上自定义的错误信息。
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &apos;json&apos;,</span><br><span class="line">  &apos;urlencoded&apos;,</span><br><span class="line">  &apos;bodyParser&apos;,</span><br><span class="line">  /* 此处省略很多包名 **/</span><br><span class="line">].forEach(function (name) &#123;</span><br><span class="line">  Object.defineProperty(exports, name, &#123;</span><br><span class="line">    get: function () &#123;</span><br><span class="line">      throw new Error(&apos;Most middleware (like &apos; + name + &apos;) is no longer bundled with Express and must be installed separately. Please see https://github.com/senchalabs/connect#middleware.&apos;);</span><br><span class="line">    &#125;,</span><br><span class="line">    configurable: true</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>参考原文：<a href="https://zhuanlan.zhihu.com/p/25672454" target="_blank" rel="noopener">关于Object的getter和setter</a> &#160;&#160;<a href="https://imweb.io/topic/56d40adc0848801a4ba198ce" target="_blank" rel="noopener">不会Object.defineProperty你就out了</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2019/08/12/deepcopy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2019/08/12/deepcopy/" itemprop="url">深拷贝</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-12T13:07:50+08:00">
-                2019-08-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
-                    <span itemprop="name">前端技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>之前只知道
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">JSON.parse(JSON.stringify(obj))</span><br></pre></td></tr></table></figure></p>
-<p>简单实用，可以应付一般对象的场景，其实，这种方式还是有缺陷的————抛弃了原型及构造方法（原类型变成Object），另外JSON序列化会忽略违法安全原则的类型，如undefined、function、symbol（ES6+）、RegExp对象，以及循环引用无法复制,
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ajson = &#123;a:undefined,b:function()&#123;return 1;&#125;&#125; //&#123;a: undefined, b: ƒ&#125;</span><br><span class="line">bjson = JSON.parse(JSON.stringify(ajson))     //&#123;&#125;</span><br></pre></td></tr></table></figure></p>
-<p>深拷贝是各种库都会涉及的工具，也是面试老生常谈的问题<br></p>
-<h4 id="jQuery"><a href="#jQuery" class="headerlink" title="jQuery"></a>jQuery</h4><p>jQuery提供了拷贝DOM对象的clone()方法
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">clone: function( dataAndEvents, deepDataAndEvents ) &#123;</span><br><span class="line">    dataAndEvents = dataAndEvents == null ? false : dataAndEvents;</span><br><span class="line">    deepDataAndEvents = deepDataAndEvents == null ? dataAndEvents : deepDataAndEvents;</span><br><span class="line"></span><br><span class="line">    return this.map( function() &#123;</span><br><span class="line">        return jQuery.clone( this, dataAndEvents, deepDataAndEvents );</span><br><span class="line">    &#125; );</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></p>
-<p>.clone( [withDataAndEvents ] [, deepWithDataAndEvents ] )<br>
-withDataAndEvents Type：Boolean(default: false)<br>
-deepWithDataAndEvents Type: Boolean(default: value of withDataAndEvents)
-<br>
-通过调用extend()实现深拷贝：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var x=&#123;a:1, b: &#123; f: &#123; g: 1 &#125; &#125;, c: [ 1, 2, 3 ]&#125;;</span><br><span class="line">var y = $.extend(true, &#123;&#125;, x);</span><br></pre></td></tr></table></figure></p>
-<p>合并对象方法，将第三个及之后的参数对象的各属性合并到target：<br>
-jQuery.extend( [deep ], target, object1[, objectN ] )<br>
-deep = true 则以深拷贝处理 无此参数相当于false</p>
-<h4 id="lodash"><a href="#lodash" class="headerlink" title="lodash"></a>lodash</h4><p>一个JavaScript工具库,lodash提供_.cloneDeep()方法，该方法用了大量代码实现对ES6新标准对象的支持。</p>
-<h4 id="原型拷贝方式"><a href="#原型拷贝方式" class="headerlink" title="原型拷贝方式"></a>原型拷贝方式</h4><p>作者: <a href="https://github.com/zry656565" target="_blank" rel="noopener">Jerry Zhou</a> 原文:
-<a href="https://jerryzou.com/posts/dive-into-deep-clone-in-javascript/" target="_blank" rel="noopener">深入剖析 JavaScript 的深复制</a><br>
-该方法对各种类型进行了细致的分类处理，并且考虑到了存在环形引用关系，以及保留对象所属自定义类型<br>
-定义defineMethod，用于向各种类型的原型上面添加自定义方法<br>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/* </span><br><span class="line"> * protoArray需修改的原型的集合</span><br><span class="line"> * nameToFunc自定义方法的map</span><br><span class="line"> */</span><br><span class="line">function defineMethods(protoArray, nameToFunc) &#123;</span><br><span class="line">    protoArray.forEach(function(proto) &#123;</span><br><span class="line">        var names = Object.keys(nameToFunc),</span><br><span class="line">            i = 0;</span><br><span class="line"></span><br><span class="line">        for (; i &lt; names.length; i++) &#123;</span><br><span class="line">            Object.defineProperty(proto, names[i], &#123;</span><br><span class="line">                enumerable: false,</span><br><span class="line">                configurable: true,</span><br><span class="line">                writable: true,</span><br><span class="line">                value: nameToFunc[names[i]]</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>关于Object.defineProperty()存目</p>
-<p>首先对于Number, Boolean 和 String
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">defineMethods([</span><br><span class="line">    Number.prototype,</span><br><span class="line">    Boolean.prototype,</span><br><span class="line">    String.prototype</span><br><span class="line">], &#123;</span><br><span class="line">    &apos;$clone&apos;: function() &#123; return this.valueOf(); &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>私以为，按照作者的理念此处应该返回对象（String，Number，Boolean），然而valueOf()出来的都是值类型（string，number，bool），如果返回对象，需要分开写比如 function() { return new String(this.valueOf()) 像他处理Date类型一样
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">defineMethods([ Date.prototype ], &#123;</span><br><span class="line">        &apos;$clone&apos;: function() &#123; return new Date(this.valueOf()); &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure></p>
-<p>重点在于Object 和 Array 对象，需要递归深拷贝
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">defineMethods([ Array.prototype, Object.prototype ], &#123;</span><br><span class="line">    &apos;$clone&apos;: function (srcStack, dstStack) &#123;</span><br><span class="line">        var obj = Object.create(Object.getPrototypeOf(this)),</span><br><span class="line">            keys = Object.keys(this),</span><br><span class="line">            index,</span><br><span class="line">            prop;</span><br><span class="line"></span><br><span class="line">        srcStack = srcStack || [];</span><br><span class="line">        dstStack = dstStack || [];</span><br><span class="line">        srcStack.push(this);</span><br><span class="line">        dstStack.push(obj);</span><br><span class="line"></span><br><span class="line">        for (var i = 0; i &lt; keys.length; i++) &#123;</span><br><span class="line">            prop = this[keys[i]];</span><br><span class="line">            if (prop === null || prop === undefined) &#123;</span><br><span class="line">                obj[keys[i]] = prop;</span><br><span class="line">            &#125;else if()</span><br><span class="line">            </span><br><span class="line">            </span><br><span class="line">             if (!prop instanceOf Function) &#123;</span><br><span class="line">                if (prop.constructor.name===&apos;Object&apos;) &#123;</span><br><span class="line">                    index = srcStack.lastIndexOf(prop);</span><br><span class="line">                    if (index &gt; 0) &#123;</span><br><span class="line">                        obj[keys[i]] = dstStack[index];</span><br><span class="line">                        continue;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                obj[keys[i]] = prop.$clone(srcStack, dstStack);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return obj;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
-<p>注意 原生的js中没有一个可靠的方法确定对象的类型，人家本来就是这样的精神————‘弱类型’，typeof 和 instanceof 都会混淆各种类型，而上面的constructor.name返回构造方法名称，而未必就是类名，因此也是不严谨的，原文作者为每种类型定义了$isFunction、$isPlainObject等属性方法来区分类型<br>
-此外$clone()还需处理RegExp对象 Function等
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">defineMethods([ RegExp.prototype ], &#123;</span><br><span class="line">    &apos;$clone&apos;: function () &#123;</span><br><span class="line">        var pattern = this.valueOf();</span><br><span class="line">        var flags = &apos;&apos;;</span><br><span class="line">        flags += pattern.global ? &apos;g&apos; : &apos;&apos;;</span><br><span class="line">        flags += pattern.ignoreCase ? &apos;i&apos; : &apos;&apos;;</span><br><span class="line">        flags += pattern.multiline ? &apos;m&apos; : &apos;&apos;;</span><br><span class="line">        return new RegExp(pattern.source, flags);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<h4 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h4><p>实现一个完美的深拷贝方法是很繁琐复杂甚至是没有必要的，有些轮子是必要的，而在生产实践中，不说因地制宜，实现方式的复杂度是必须考量的。探究比较深拷贝方法的优劣，其实是对原型，类型等概念的深刻理解的比较好的实践。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/qqsnote/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/17/">17</a><a class="extend next" rel="next" href="/qqsnote/page/14/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/qqsnote/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/18/">18</a><a class="extend next" rel="next" href="/qqsnote/page/14/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1893,7 +1961,7 @@ deep = true 则以深拷贝处理 无此参数相当于false</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">177</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1915,7 +1983,7 @@ deep = true 则以深拷贝处理 无此参数相当于false</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -1952,7 +2020,7 @@ deep = true 则以深拷贝处理 无此参数相当于false</p>
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

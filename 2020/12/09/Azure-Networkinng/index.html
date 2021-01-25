@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="配置和管理虚拟网络占比30-35% Network Monitor 监视vm与endpoint(可以是其他vm)之间的通信 查看vnet中的资源及其关系 诊断(Diagnose)出入vm的网络流量筛选问题 诊断vm网络路由问题 诊断vm出站连接(outbound connections) 捕获出入vm的数据包 诊断vnet网关与连接的问题 检查区域与internet相对延迟 查看安全规则">
+<meta name="description" content="配置和管理虚拟网络占比30-35% 目标导向：  学习创建虚拟网络 创建虚拟VPN网关 认识使用ExpressRouter虚拟网络功能: 隔离和分割(Isolation &amp;amp; segmentation) 网络通信、资源间通信、与本地网络(on-premises)通信 连接虚拟网络 路由|筛选|连接网络流量(route|filter network traffic)  VPN(virtual">
 <meta name="keywords" content="Azure">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Azure-Networkinng">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/12/09/Azure-Networkinng/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="配置和管理虚拟网络占比30-35% Network Monitor 监视vm与endpoint(可以是其他vm)之间的通信 查看vnet中的资源及其关系 诊断(Diagnose)出入vm的网络流量筛选问题 诊断vm网络路由问题 诊断vm出站连接(outbound connections) 捕获出入vm的数据包 诊断vnet网关与连接的问题 检查区域与internet相对延迟 查看安全规则">
+<meta property="og:description" content="配置和管理虚拟网络占比30-35% 目标导向：  学习创建虚拟网络 创建虚拟VPN网关 认识使用ExpressRouter虚拟网络功能: 隔离和分割(Isolation &amp;amp; segmentation) 网络通信、资源间通信、与本地网络(on-premises)通信 连接虚拟网络 路由|筛选|连接网络流量(route|filter network traffic)  VPN(virtual">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-12-09T04:41:31.457Z">
+<meta property="og:updated_time" content="2021-01-14T09:52:53.770Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Azure-Networkinng">
-<meta name="twitter:description" content="配置和管理虚拟网络占比30-35% Network Monitor 监视vm与endpoint(可以是其他vm)之间的通信 查看vnet中的资源及其关系 诊断(Diagnose)出入vm的网络流量筛选问题 诊断vm网络路由问题 诊断vm出站连接(outbound connections) 捕获出入vm的数据包 诊断vnet网关与连接的问题 检查区域与internet相对延迟 查看安全规则">
+<meta name="twitter:description" content="配置和管理虚拟网络占比30-35% 目标导向：  学习创建虚拟网络 创建虚拟VPN网关 认识使用ExpressRouter虚拟网络功能: 隔离和分割(Isolation &amp;amp; segmentation) 网络通信、资源间通信、与本地网络(on-premises)通信 连接虚拟网络 路由|筛选|连接网络流量(route|filter network traffic)  VPN(virtual">
 
 
 
@@ -300,8 +300,22 @@
       
 
       
-        <p>配置和管理虚拟网络占比30-35%</p>
-<h4 id="Network-Monitor"><a href="#Network-Monitor" class="headerlink" title="Network Monitor"></a>Network Monitor</h4><ul>
+        <p>配置和管理虚拟网络占比30-35%
+目标导向：</p>
+<ul>
+<li>学习创建虚拟网络</li>
+<li>创建虚拟VPN网关</li>
+<li>认识使用ExpressRouter<h4 id="虚拟网络"><a href="#虚拟网络" class="headerlink" title="虚拟网络"></a>虚拟网络</h4>功能:</li>
+<li>隔离和分割(Isolation &amp; segmentation)</li>
+<li>网络通信、资源间通信、与本地网络(on-premises)通信</li>
+<li>连接虚拟网络</li>
+<li>路由|筛选|连接网络流量(route|filter network traffic)</li>
+</ul>
+<p>VPN(virtual private networks):</p>
+<ul>
+<li>Point-to-site</li>
+<li>Site-to-site</li>
+<li>Azure ExpressRoute<h4 id="Network-Monitor"><a href="#Network-Monitor" class="headerlink" title="Network Monitor"></a>Network Monitor</h4></li>
 <li>监视vm与endpoint(可以是其他vm)之间的通信</li>
 <li>查看vnet中的资源及其关系</li>
 <li>诊断(Diagnose)出入vm的网络流量筛选问题</li>
@@ -310,8 +324,15 @@
 <li>捕获出入vm的数据包</li>
 <li>诊断vnet网关与连接的问题</li>
 <li>检查区域与internet相对延迟</li>
-<li>查看安全规则</li>
+<li>查看安全规则<h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4>IP地址空间：举个栗子地址空间192.168.1.0/24，子网掩码255.255.255.248。子网掩码用来指明某个IP地址哪些位是网络位，哪些是主机位，同网络位IP之间的通信不需要通过网关，主机位数值就是有多少主机。IP总共32位，‘/24’是指前24位都是网络位，主机坐在的网络，248即11111000，这个网络有可以有 2<sup>5</sup> 即32个子网，每个子网可分配地址为 2<sup>3</sup> - 2（减去广播地址和网络地址），为6个<h4 id="虚拟机通过虚拟网络通信的实践"><a href="#虚拟机通过虚拟网络通信的实践" class="headerlink" title="虚拟机通过虚拟网络通信的实践"></a>虚拟机通过虚拟网络通信的实践</h4>创建虚拟网络,名为default<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$Subnet=New-AzVirtualNetworkSubnetConfig -Name default -AddressPrefix 10.0.0.0/24</span><br><span class="line">New-AzVirtualNetwork -Name myVnet -ResourceGroupName vm-networks -Location $Location -AddressPrefix 10.0.0.0/16 -Subnet $Subnet</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
+<p>使用powershell创建两个Azure VM
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">New-AzVm `</span><br><span class="line"> -ResourceGroupName &quot;vm-networks&quot; `</span><br><span class="line"> -Name &quot;testvm1&quot; `</span><br><span class="line"> -VirtualNetworkName &quot;myVnet&quot; `</span><br><span class="line"> -SubnetName &quot;default&quot; `</span><br><span class="line"> -image &quot;Win2016Datacenter&quot; `</span><br><span class="line"> -Size &quot;Standard_DS2_v2&quot;</span><br></pre></td></tr></table></figure></p>
+<p>*取消其中一台的公共IP
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$nic = Get-AzNetworkInterface -Name testvm2 -ResourceGroup vm-networks</span><br><span class="line">$nic.IpConfigurations.publicipaddress.id = $null</span><br><span class="line">Set-AzNetworkInterface -NetworkInterface $nic</span><br></pre></td></tr></table></figure></p>
+<p>使用PublicIP远程VM1，在VM1使用计算机名访问同一虚拟网络的VM2</p>
+<h4 id="VPN网关"><a href="#VPN网关" class="headerlink" title="VPN网关"></a>VPN网关</h4><p>Azure虚拟网关为‘从本地到Azure’的传入连接提供一个endpoint，VPN网关是一种虚拟网关类型，可以作为加密的endpoint，在Azure的实践中，VPN网关用以在不同区域之间安全地链接虚拟机和服务</p>
 
       
     </div>
@@ -431,7 +452,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">177</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -453,7 +474,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -486,7 +507,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Network-Monitor"><span class="nav-number">1.</span> <span class="nav-text">Network Monitor</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#虚拟网络"><span class="nav-number">1.</span> <span class="nav-text">虚拟网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Network-Monitor"><span class="nav-number">2.</span> <span class="nav-text">Network Monitor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#概念"><span class="nav-number">3.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#虚拟机通过虚拟网络通信的实践"><span class="nav-number">4.</span> <span class="nav-text">虚拟机通过虚拟网络通信的实践</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VPN网关"><span class="nav-number">5.</span> <span class="nav-text">VPN网关</span></a></li></ol></div>
             
 
           </div>
@@ -506,7 +527,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

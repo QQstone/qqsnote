@@ -79,14 +79,17 @@
 
 
 
+<meta name="description" content="oidc-client见oidc-client Passport.jsPassport.js是Express.js的中间件， Azure Samples中的node.js API active-directory-b2c-javascript-nodejs-webapi使用了这个包 12345678910111213141516171819202122232425262728const passp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AuthenticationPackages">
+<meta property="og:title" content="Authentication Packages">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/11/04/AuthenticationPackages/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="oidc-client见oidc-client Passport.jsPassport.js是Express.js的中间件， Azure Samples中的node.js API active-directory-b2c-javascript-nodejs-webapi使用了这个包 12345678910111213141516171819202122232425262728const passp">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-11-04T02:34:50.226Z">
+<meta property="og:updated_time" content="2021-01-20T07:46:32.022Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="AuthenticationPackages">
+<meta name="twitter:title" content="Authentication Packages">
+<meta name="twitter:description" content="oidc-client见oidc-client Passport.jsPassport.js是Express.js的中间件， Azure Samples中的node.js API active-directory-b2c-javascript-nodejs-webapi使用了这个包 12345678910111213141516171819202122232425262728const passp">
 
 
 
@@ -122,7 +125,7 @@
 
 
 
-  <title>AuthenticationPackages | QQs'Note</title>
+  <title>Authentication Packages | QQs'Note</title>
   
 
 
@@ -246,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">AuthenticationPackages</h1>
+          <h1 class="post-title" itemprop="name headline">Authentication Packages</h1>
         
 
         <div class="post-meta">
@@ -296,7 +299,16 @@
       
 
       
-        
+        <h4 id="oidc-client"><a href="#oidc-client" class="headerlink" title="oidc-client"></a>oidc-client</h4><p>见<a href="/qqsnote/2020/11/20/oidc-client/" title="oidc-client">oidc-client</a></p>
+<h4 id="Passport-js"><a href="#Passport-js" class="headerlink" title="Passport.js"></a>Passport.js</h4><p><a href="https://github.com/jaredhanson/passport" target="_blank" rel="noopener">Passport.js</a>是Express.js的中间件，
+Azure Samples中的node.js API <a href="https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi" target="_blank" rel="noopener">active-directory-b2c-javascript-nodejs-webapi</a>使用了这个包
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">const passport = require(&quot;passport&quot;);</span><br><span class="line">const BearerStrategy = require(&apos;passport-azure-ad&apos;).BearerStrategy;</span><br><span class="line">const bearerStrategy = new BearerStrategy(config,</span><br><span class="line">    function (token, done) &#123;</span><br><span class="line">        // Send user info using the second argument</span><br><span class="line">        done(null, &#123;&#125;, token);</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line">const app = express();</span><br><span class="line">app.use(passport.initialize());</span><br><span class="line">passport.use(bearerStrategy);</span><br><span class="line"></span><br><span class="line">// API endpoint</span><br><span class="line">app.get(&quot;/hello&quot;,</span><br><span class="line">    passport.authenticate(&apos;oauth-bearer&apos;, &#123;session: false&#125;),</span><br><span class="line">    (req, res) =&gt; &#123;</span><br><span class="line">        console.log(&apos;User info: &apos;, req.user);</span><br><span class="line">        console.log(&apos;Validated claims: &apos;, req.authInfo);</span><br><span class="line">        </span><br><span class="line">        if (&apos;scp&apos; in req.authInfo &amp;&amp; req.authInfo[&apos;scp&apos;].split(&quot; &quot;).indexOf(&quot;demo.read&quot;) &gt;= 0) &#123;</span><br><span class="line">            // Service relies on the name claim.  </span><br><span class="line">            res.status(200).json(&#123;&apos;name&apos;: req.authInfo[&apos;name&apos;]&#125;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            console.log(&quot;Invalid Scope, 403&quot;);</span><br><span class="line">            res.status(403).json(&#123;&apos;error&apos;: &apos;insufficient_scope&apos;&#125;); </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<p>栗子中该中间件将认证失败的请求拦截住并返回401， 省略了web api授权失败时的重定向配置，私以为可以配置signin重定向，使得可以从浏览器访问api</p>
+<h4 id="MSAL"><a href="#MSAL" class="headerlink" title="MSAL"></a>MSAL</h4><p>Microsoft Authentication Library(微软身份认证库MSAL)，在<a href="/qqsnote/2020/08/31/ASPandSPA/" title="ASP和SPA">ASP和SPA</a>一文中有引用。</p>
+<blockquote>
+<p>The Microsoft Authentication Library for JavaScript enables client-side JavaScript web applications, running in a web browser, to authenticate users using Azure AD. MSAL.js用以浏览器中运行的js web 使用Azure AD认证</p>
+</blockquote>
+
       
     </div>
     
@@ -384,8 +396,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -400,7 +421,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">177</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -422,7 +443,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -446,6 +467,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#oidc-client"><span class="nav-number">1.</span> <span class="nav-text">oidc-client</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Passport-js"><span class="nav-number">2.</span> <span class="nav-text">Passport.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MSAL"><span class="nav-number">3.</span> <span class="nav-text">MSAL</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -459,7 +496,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

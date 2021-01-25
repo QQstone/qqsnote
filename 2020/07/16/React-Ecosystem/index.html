@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="Next.js典型的网站模块和框架，封装webpack、babel, 支持按需加载和seo优化 ReduxReact提供了视图层面组件化开发的模式。为实现组件之间通信和多样的交互，需要引入Redux库  Redux is a predictable state container for JavaScript apps. 1npm install @reduxjs/toolkit  store，">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-07-30T05:13:10.091Z">
+<meta property="og:updated_time" content="2021-01-22T06:01:36.160Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React-Ecosystem">
 <meta name="twitter:description" content="Next.js典型的网站模块和框架，封装webpack、babel, 支持按需加载和seo优化 ReduxReact提供了视图层面组件化开发的模式。为实现组件之间通信和多样的交互，需要引入Redux库  Redux is a predictable state container for JavaScript apps. 1npm install @reduxjs/toolkit  store，">
@@ -310,6 +310,18 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import &#123; createStore &#125; from &apos;redux&apos;;</span><br><span class="line">const store = createStore(fn);</span><br><span class="line"></span><br><span class="line">const state = store.getState();</span><br></pre></td></tr></table></figure></p>
 <p>state是state在某个时间点的快照，state与view绑定</p>
 <h4 id="preact"><a href="#preact" class="headerlink" title="preact"></a>preact</h4><p>据说是使用更符合Dom规范的事件系统，直接使用浏览器原生事件系统而不是统一用onChange，从而对React的设计进行了简化<sup><a href="https://www.zhihu.com/question/65479147/answer/942582216" target="_blank" rel="noopener">注1</a></sup></p>
+<h4 id="craco"><a href="#craco" class="headerlink" title="craco"></a>craco</h4><p><a href="https://github.com/gsoft-inc/craco" target="_blank" rel="noopener">craco</a>,当下流行的对React项目进行自定义配置的社区解决方案，<a href="https://ant.design/docs/react/use-with-create-react-app-cn#%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE" target="_blank" rel="noopener">AntDesign4</a>官方亦有在使用
+<a href="https://cloud.tencent.com/developer/article/1749704" target="_blank" rel="noopener">更骚的create-react-app开发环境配置craco</a>
+从create-react-app开始配置(关于create-react-app见<a href="/qqsnote/2020/06/29/React/" title="React">React</a>)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npx create-react-app my-project</span><br><span class="line">yarn add antd @craco/craco craco-less @babel/plugin-proposal-decorators babel-plugin-import -D</span><br></pre></td></tr></table></figure></p>
+<p>package.json scripts将命令替换为craco
+<del>&nbsp;&nbsp;”start”: “react-scripts start”,
+&nbsp;&nbsp;”build”: “react-scripts build”,
+&nbsp;&nbsp;”test”: “react-scripts test”,
+&nbsp;&nbsp;”eject”: “react-scripts eject”</del>
+&nbsp;&nbsp;”start”: “craco start”,
+&nbsp;&nbsp;”build”: “craco build”,
+&nbsp;&nbsp;”test”: “craco test”</p>
 
       
     </div>
@@ -429,7 +441,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">177</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -451,7 +463,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -484,7 +496,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Next-js"><span class="nav-number">1.</span> <span class="nav-text">Next.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redux"><span class="nav-number">2.</span> <span class="nav-text">Redux</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#store，-state，-action"><span class="nav-number">3.</span> <span class="nav-text">store， state， action</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#preact"><span class="nav-number">4.</span> <span class="nav-text">preact</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Next-js"><span class="nav-number">1.</span> <span class="nav-text">Next.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redux"><span class="nav-number">2.</span> <span class="nav-text">Redux</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#store，-state，-action"><span class="nav-number">3.</span> <span class="nav-text">store， state， action</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#preact"><span class="nav-number">4.</span> <span class="nav-text">preact</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#craco"><span class="nav-number">5.</span> <span class="nav-text">craco</span></a></li></ol></div>
             
 
           </div>
@@ -504,7 +516,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

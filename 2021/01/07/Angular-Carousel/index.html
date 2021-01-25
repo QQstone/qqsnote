@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/qqsnote/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/qqsnote/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/qqsnote/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Angular,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788import &amp;#123; Component, ContentC">
+<meta name="keywords" content="Angular">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Angular-Carousel">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2021/01/07/Angular-Carousel/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788import &amp;#123; Component, ContentC">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2021-01-08T07:24:33.332Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Angular-Carousel">
+<meta name="twitter:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788import &amp;#123; Component, ContentC">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/qqsnote/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://qqstone.github.io/qqsnote/2021/01/07/Angular-Carousel/">
+
+
+
+
+
+  <title>Angular-Carousel | QQs'Note</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/qqsnote/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">QQs'Note</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/qqsnote/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/qqsnote/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2021/01/07/Angular-Carousel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Angular-Carousel</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-07T12:39:28+08:00">
+                2021-01-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Component, ContentChild, Input, TemplateRef &#125; from &quot;@angular/core&quot;;</span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector:&apos;app-partner-carousel&apos;,</span><br><span class="line">    template:`</span><br><span class="line">    &lt;div class=&quot;carousel&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;btn-pre&quot; (click)=&quot;carouselMove(&apos;LEFT&apos;)&quot; [hidden]=&quot;carouselIndex===0&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;slick-window&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;slick-container&quot; *ngIf=&quot;data.length&gt;0&quot; [ngStyle]=&quot;carouselAnimotion&quot;&gt;</span><br><span class="line">          &lt;span *ngFor=&quot;let dataItem of data&quot;&gt;</span><br><span class="line">            &lt;ng-container</span><br><span class="line">            *ngIf=&quot;dataItemTemplateRef&quot;</span><br><span class="line">            [ngTemplateOutlet]=&quot;dataItemTemplateRef&quot;</span><br><span class="line">            [ngTemplateOutletContext]=&quot;&#123;$implicit:dataItem&#125;&quot;&gt;&lt;/ng-container&gt;</span><br><span class="line">          &lt;/span&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;btn-next&quot; (click)=&quot;carouselMove(&apos;RIGHT&apos;)&quot; [hidden]=&quot;carouselIndex&gt;=data.length-3&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    `,</span><br><span class="line">    styles:[`.carousel&#123;display:flex&#125;`,</span><br><span class="line">    `.slick-window &#123;</span><br><span class="line">      position: relative;</span><br><span class="line">      width: 690px;</span><br><span class="line">      overflow: hidden;</span><br><span class="line">      transform: translateZ(0);</span><br><span class="line">    &#125;`,</span><br><span class="line">    `.slick-container&#123;</span><br><span class="line">      transform: translate3d(0px, 0px, 0px);</span><br><span class="line">      transition: 0.6s ease-in-out;</span><br><span class="line">      // width: 1500px;</span><br><span class="line">      position: relative;</span><br><span class="line">      line-height: inherit;</span><br><span class="line">      margin-right: 45px;</span><br><span class="line">      overflow-y: hidden;</span><br><span class="line">    &#125;`,</span><br><span class="line">    `.slick-container&gt;span&#123;display:inline-block&#125;`,</span><br><span class="line">    `.btn-pre, .btn-next &#123;</span><br><span class="line">      // width: 15px;</span><br><span class="line">      cursor: pointer;</span><br><span class="line">   &#125;`,</span><br><span class="line">   `.btn-pre::before, .btn-next::before &#123;</span><br><span class="line">      content: &apos;&apos;;</span><br><span class="line">      width: 0;</span><br><span class="line">      height: 0;</span><br><span class="line">      position: absolute;</span><br><span class="line">      top: 16px;</span><br><span class="line">      border-top: 22px solid transparent;</span><br><span class="line">      border-bottom: 22px solid transparent;</span><br><span class="line">   &#125;`,</span><br><span class="line">   `.btn-pre::before &#123;</span><br><span class="line">      border-right: 15px solid #ccc;</span><br><span class="line">      border-left: 0px solid transparent;</span><br><span class="line">      left: -15px;</span><br><span class="line">   &#125;`,</span><br><span class="line">   `.btn-next::before &#123;</span><br><span class="line">      border-right: 0px solid transparent;</span><br><span class="line">      border-left: 15px solid #ccc;</span><br><span class="line">   &#125;`]</span><br><span class="line">&#125;)</span><br><span class="line">export class PartnerCarouselComponent&#123;</span><br><span class="line">  readonly slickWidth = 230;</span><br><span class="line">  carouselAnimotion:any = &#123;&#125;;</span><br><span class="line">  private _data:Array&lt;any&gt; = [];</span><br><span class="line">  @Input() </span><br><span class="line">    set data(value:Array&lt;any&gt;)&#123;</span><br><span class="line">      this.carouselAnimotion.width = `$&#123;this.slickWidth * value.length&#125;px`;</span><br><span class="line">      this._data = value;</span><br><span class="line">    &#125;</span><br><span class="line">    get data()&#123;</span><br><span class="line">      return this._data;</span><br><span class="line">    &#125;</span><br><span class="line">    @ContentChild(&apos;dataItem&apos;, &#123;static:false&#125;) dataItemTemplateRef:TemplateRef&lt;any&gt;;</span><br><span class="line">    carouselIndex:number = 0;</span><br><span class="line">    constructor()&#123;&#125;</span><br><span class="line"></span><br><span class="line">    carouselMove(orient: string) &#123;</span><br><span class="line">        let distance = 0;</span><br><span class="line">        if (orient === &apos;LEFT&apos;) &#123;</span><br><span class="line">          this.carouselIndex = this.carouselIndex &gt; 3 ? this.carouselIndex -= 3 : 0</span><br><span class="line">        &#125;</span><br><span class="line">        if (orient === &apos;RIGHT&apos;) &#123;</span><br><span class="line">          this.carouselIndex = this.carouselIndex &lt; this._data.length - 5 ? this.carouselIndex += 3 : this._data.length - 3;</span><br><span class="line">        &#125;</span><br><span class="line">        distance = this.slickWidth * this.carouselIndex;</span><br><span class="line">        this.carouselAnimotion.transform = `translate3d(-$&#123;distance&#125;px, 0px, 0px)`;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="滑动原理"><a href="#滑动原理" class="headerlink" title="滑动原理"></a>滑动原理</h4><p>position: relative和transform: translateZ(0)将‘窗口’定位，其子元素是宽度超过屏幕宽度的所有滑块的集合，这个超长的‘胶片’用translate3d控制移动，使其某一格可以暴露在窗口中
+移动的动画效果为 transition: 0.6s ease-in-out</p>
+<h4 id="循环体套用父元素模板"><a href="#循环体套用父元素模板" class="headerlink" title="循环体套用父元素模板"></a>循环体套用父元素模板</h4><p>子组件(Carousel)中，为每个item套用其宿主定义的template，这里用到了NgContainer和TemplateRef，NgContainer使组件可以内嵌视图模板，内嵌的内容（ng-template）用ViewChild读取，此处声明为dataItemTemplateRef，使用NgTemplateOutlet指令将dataItemTemplateRef插入到ng-content位置，同时可以用ngTemplateOutletContext指令为内嵌视图附加一个上下文对象，显然就是为传递循环体的item打造的。
+使用#id指定要插入到ng-container的template
+<a href="https://angular.cn/api/common/NgTemplateOutlet#example" target="_blank" rel="noopener">官方示例</a>:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;ng-container *ngTemplateOutlet=&quot;greet&quot;&gt;&lt;/ng-container&gt;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line">&lt;ng-container *ngTemplateOutlet=&quot;eng; context: myContext&quot;&gt;&lt;/ng-container&gt;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line">&lt;ng-container *ngTemplateOutlet=&quot;svk; context: myContext&quot;&gt;&lt;/ng-container&gt;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line"></span><br><span class="line">&lt;ng-template #greet&gt;&lt;span&gt;Hello&lt;/span&gt;&lt;/ng-template&gt;</span><br><span class="line">&lt;ng-template #eng let-name&gt;&lt;span&gt;Hello &#123;&#123;name&#125;&#125;!&lt;/span&gt;&lt;/ng-template&gt;</span><br><span class="line">&lt;ng-template #svk let-person=&quot;localSk&quot;&gt;&lt;span&gt;Ahoj &#123;&#123;person&#125;&#125;!&lt;/span&gt;&lt;/ng-template&gt;</span><br></pre></td></tr></table></figure></p>
+<p>其中 myContext = {$implicit: ‘World’, localSk: ‘Svet’};模板中用let-绑定上下文, $implicit(implicit 隐式的)指默认值，也就是例如let-keyXX=”parameterXX”的语法在缺省=”parameterXX”的表达下的值</p>
+<h4 id="响应式解决方案"><a href="#响应式解决方案" class="headerlink" title="响应式解决方案"></a>响应式解决方案</h4><p>npm install @angular/sdk
+注意该package大版本跟随Angular版本
+<a href="https://material.angular.io/cdk/layout/overview" target="_blank" rel="noopener">Angular CDK Layout</a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">constructor(private breakpointObserver: BreakpointObserver) &#123;</span><br><span class="line">    this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).subscribe(result =&gt; &#123;</span><br><span class="line">      if (result.matches) &#123;</span><br><span class="line">        // max-width: 959px</span><br><span class="line">        this.windowWidth = &#123; width: `$&#123;this.slickWidth&#125;px` &#125;;</span><br><span class="line">        this.interval = 1;</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        this.windowWidth = &#123; width: `$&#123;this.slickWidth * 3&#125;px` &#125;;</span><br><span class="line">        this.interval = 3;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/qqsnote/tags/Angular/" rel="tag"># Angular</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/qqsnote/2021/01/04/Azure-SQLDB/" rel="next" title="Azure-SQLDB">
+                <i class="fa fa-chevron-left"></i> Azure-SQLDB
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/qqsnote/2021/01/08/ResponsiveWebDesign/" rel="prev" title="响应式设计">
+                响应式设计 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">QQs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/qqsnote/archives/">
+              
+                  <span class="site-state-item-count">177</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/qqsnote/categories/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/qqsnote/tags/index.html">
+                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#滑动原理"><span class="nav-number">1.</span> <span class="nav-text">滑动原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#循环体套用父元素模板"><span class="nav-number">2.</span> <span class="nav-text">循环体套用父元素模板</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#响应式解决方案"><span class="nav-number">3.</span> <span class="nav-text">响应式解决方案</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/qqsnote/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/qqsnote/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/qqsnote/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/qqsnote/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/qqsnote/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/qqsnote/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="app.quit未完全结束进程  在exe执行中未现问题  Cannot find module ‘./src/….’ Github Issue 将文件pattern添加到electron-builder的打包规则中  另外，require import的路径均不区分大小写，configure.ts被活生生编译并打包为Configure.js以及Configure.map.js  import编">
+<meta name="description" content="停止和退出 app.quit未完全结束进程  在exe执行中未现问题  Cannot find module ‘./src/….’ Github Issue 将文件pattern添加到electron-builder的打包规则中  另外，require import的路径均不区分大小写，configure.ts被活生生编译并打包为Configure.js以及Configure.map.js  im">
 <meta name="keywords" content="Electron">
 <meta property="og:type" content="article">
 <meta property="og:title" content="electron_issues">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/04/21/electron-issues/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="app.quit未完全结束进程  在exe执行中未现问题  Cannot find module ‘./src/….’ Github Issue 将文件pattern添加到electron-builder的打包规则中  另外，require import的路径均不区分大小写，configure.ts被活生生编译并打包为Configure.js以及Configure.map.js  import编">
+<meta property="og:description" content="停止和退出 app.quit未完全结束进程  在exe执行中未现问题  Cannot find module ‘./src/….’ Github Issue 将文件pattern添加到electron-builder的打包规则中  另外，require import的路径均不区分大小写，configure.ts被活生生编译并打包为Configure.js以及Configure.map.js  im">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-05-29T06:59:01.591Z">
+<meta property="og:updated_time" content="2021-01-22T02:42:26.857Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="electron_issues">
-<meta name="twitter:description" content="app.quit未完全结束进程  在exe执行中未现问题  Cannot find module ‘./src/….’ Github Issue 将文件pattern添加到electron-builder的打包规则中  另外，require import的路径均不区分大小写，configure.ts被活生生编译并打包为Configure.js以及Configure.map.js  import编">
+<meta name="twitter:description" content="停止和退出 app.quit未完全结束进程  在exe执行中未现问题  Cannot find module ‘./src/….’ Github Issue 将文件pattern添加到electron-builder的打包规则中  另外，require import的路径均不区分大小写，configure.ts被活生生编译并打包为Configure.js以及Configure.map.js  im">
 
 
 
@@ -322,7 +322,7 @@
       
 
       
-        <blockquote>
+        <h4 id="停止和退出"><a href="#停止和退出" class="headerlink" title="停止和退出"></a>停止和退出</h4><blockquote>
 <p>app.quit未完全结束进程</p>
 </blockquote>
 <p>在exe执行中未现问题</p>
@@ -343,6 +343,19 @@ import编译成require，找不到configure</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gyp ERR! clean error</span><br><span class="line">gyp ERR! stack Error: EPERM: operation not permitted, unlink &apos;D:\projxxx\node_modules\ref\build\Release\binding.node&apos;</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <p>往往是项目文件正在使用中（正在参与其他进程的编译或执行）</p>
+<h4 id="oauth2"><a href="#oauth2" class="headerlink" title="oauth2"></a>oauth2</h4><blockquote>
+<p>早先本机应用程序使用嵌入的用户代理(嵌入的web view)进行OAuth授权请求，这种方法有很多缺点，包括主机应用程序
+能够复制用户凭据和Cookie，以及需要在每个应用程序中从头进行身份验证的用户。<a href="https://tools.ietf.org/html/rfc8252" target="_blank" rel="noopener">IETF RFC 8252</a>。
+使用浏览器被认为更加安全且容易保留认证状态
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+</span><br><span class="line">|          User Device          |</span><br><span class="line">|                               |</span><br><span class="line">| +--------------------------+  | (5) Authorization  +---------------+</span><br><span class="line">| |                          |  |     Code           |               |</span><br><span class="line">| |        Client App        |----------------------&gt;|     Token     |</span><br><span class="line">| |                          |&lt;----------------------|    Endpoint   |</span><br><span class="line">| +--------------------------+  | (6) Access Token,  |               |</span><br><span class="line">|   |             ^             |     Refresh Token  +---------------+</span><br><span class="line">|   |             |             |</span><br><span class="line">|   |             |             |</span><br><span class="line">|   | (1)         | (4)         |</span><br><span class="line">|   | Authorizat- | Authoriza-  |</span><br><span class="line">|   | ion Request | tion Code   |</span><br><span class="line">|   |             |             |</span><br><span class="line">|   |             |             |</span><br><span class="line">|   v             |             |</span><br><span class="line">| +---------------------------+ | (2) Authorization  +---------------+</span><br><span class="line">| |                           | |     Request        |               |</span><br><span class="line">| |          Browser          |---------------------&gt;| Authorization |</span><br><span class="line">| |                           |&lt;---------------------|    Endpoint   |</span><br><span class="line">| +---------------------------+ | (3) Authorization  |               |</span><br><span class="line">|                               |     Code           +---------------+</span><br><span class="line">+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>对于electron，渲染界面提供入口signin, 点击会调用默认浏览器打开登录页，authenticate通过后，重定向过程会将授权码或直接将access token返回到electron, 这个‘返回’过程可以使用<a href="https://www.electronjs.org/docs/api/protocol" target="_blank" rel="noopener">自定义协议</a>实现(QQs尚未实践), 亦可实现一个b/s的request &amp; response来完成。
+renderUI
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">signinWithADB2C()&#123;</span><br><span class="line">  const adconfig=&#123;</span><br><span class="line">    clientid:&apos;3c744214-bf78-4f92-8173-49863ae8f24b&apos;,</span><br><span class="line">    authority:&apos;https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/B2C_1_basic_sign_up_and_sign_in&apos;,</span><br><span class="line">    redirectUri:&apos;http://localhost:9990/index.html&apos;,</span><br><span class="line">    scopes:&apos;3c744214-bf78-4f92-8173-49863ae8f24b openid&apos;</span><br><span class="line">  &#125;</span><br><span class="line">  // make up / assemble authority URL</span><br><span class="line">  const authorityURL = `$&#123;adconfig.authority&#125;/oauth2/v2.0/authorize?client_id=$&#123;</span><br><span class="line">    adconfig.clientid</span><br><span class="line">  &#125;&amp;redirect_uri=$&#123;</span><br><span class="line">    encodeURI(adconfig.redirectUri)</span><br><span class="line">  &#125;&amp;scope=$&#123;</span><br><span class="line">    encodeURI(adconfig.scopes)</span><br><span class="line">  &#125;&amp;response_type=id_token%20token&amp;nonce=defaultNonce&amp;prompt=login`;</span><br><span class="line">  // call main process open URL with default browser</span><br><span class="line">  // meanwhile launch a http server</span><br><span class="line">  this.ipcService.send(&apos;openinbroweser&apos;, authorityURL);</span><br><span class="line">  this.loading = true;</span><br><span class="line">  // listen Logged in message</span><br><span class="line">  this.ipcService.on(&apos;access_token&apos;, msg =&gt; &#123;</span><br><span class="line">    // TODO process user info</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>main 主线程中launch一个http server，负责提供Redirect URI的页面，页面自执行request请求，请求亦由http server响应
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">....</span><br><span class="line">ipcMain.on(&apos;openinbroweser&apos;, (event, args) =&gt; &#123;</span><br><span class="line">  log(&apos;info&apos;, &apos;ipcmain event:openinbroweser&apos;);</span><br><span class="line">  if (args) &#123;</span><br><span class="line">    const &#123; shell &#125; = require(&apos;electron&apos;);</span><br><span class="line">    shell.openExternal(args);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    log(&apos;error&apos;, &apos;invalid website&apos;, args);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">// launch a http server</span><br><span class="line">var static = require(&apos;node-static&apos;);</span><br><span class="line">var file = new static.Server(`$&#123;__dirname&#125;/public`);</span><br><span class="line">http.createServer(function (request, response) &#123;</span><br><span class="line">  if(request.url===&apos;/index.html&apos;)&#123;</span><br><span class="line">    request.addListener(&apos;end&apos;, function () &#123;</span><br><span class="line">        file.serve(request, response)</span><br><span class="line">    &#125;).resume();</span><br><span class="line">  &#125;else&#123;</span><br><span class="line">    const reg = new RegExp(&quot;t=([^&amp;]*)&quot;);</span><br><span class="line">    const res= request.url.match(reg);</span><br><span class="line">    const token = res[1];</span><br><span class="line">    console.log(&apos;t=&apos;,token)</span><br><span class="line">    win.webContents.send(&apos;access_token&apos;,token)</span><br><span class="line">    response.write(&quot;success&quot;); //close default browser</span><br><span class="line">  &#125;</span><br><span class="line">  response.end(); //end the response</span><br><span class="line">&#125;).listen(9990)</span><br></pre></td></tr></table></figure></p>
+<p>redirect page (public/index.html)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;p&gt;serve by csportal&lt;/p&gt;</span><br><span class="line">  &lt;script&gt;</span><br><span class="line">    (() =&gt; &#123;</span><br><span class="line">      var reg = new RegExp(&quot;#access_token=([^&amp;]*)&quot;);</span><br><span class="line">      var res = location.href.match(reg);</span><br><span class="line">      var token = unescape(res[1]);</span><br><span class="line">      fetch(`http://localhost:3000?t=$&#123;token&#125;`)</span><br><span class="line">        .then(function (response) &#123;</span><br><span class="line">          return response.json();</span><br><span class="line">        &#125;)</span><br><span class="line">        .catch(error =&gt; console.error(&apos;Error:&apos;, error))</span><br><span class="line">        .then(response =&gt; &#123;console.log(&apos;Success:&apos;, response);</span><br><span class="line">        window.close();</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;)();</span><br><span class="line">  &lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -437,8 +450,17 @@ import编译成require，找不到configure</p>
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -453,7 +475,7 @@ import编译成require，找不到configure</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">177</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -475,7 +497,7 @@ import编译成require，找不到configure</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -499,6 +521,22 @@ import编译成require，找不到configure</p>
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#停止和退出"><span class="nav-number">1.</span> <span class="nav-text">停止和退出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#oauth2"><span class="nav-number">2.</span> <span class="nav-text">oauth2</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -512,7 +550,7 @@ import编译成require，找不到configure</p>
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

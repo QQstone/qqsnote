@@ -229,6 +229,1184 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/12/11/Jasmine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/12/11/Jasmine/" itemprop="url">Jasmine</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-11T14:12:55+08:00">
+                2020-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>测试驱动开发(Test Driven Development, TDD)和行为驱动开发(Behavior Driven Development, BDD)
+Jasmine 通过用自然语言书写非程序员可读的测试用例扩展了测试驱动开发方法, 行为驱动开发人员使用混合了领域中统一的语言的母语语言来描述他们的代码的目的</p>
+<p>被测系统(System under test, SUT)</p>
+<blockquote>
+<p>单测不负责检查跨类或者跨系统的交互逻辑，那都是集成测试的范围</p>
+</blockquote>
+<blockquote>
+<p>单测不能受到外界环境的影响, 依赖需要用本地实现注入，或者提供一个mock(桩对象)</p>
+</blockquote>
+<blockquote>
+<p>单测需要能快速执行，有必要在每次修改代码时运行单测</p>
+</blockquote>
+<blockquote>
+<p>单测应随编码进行，补单测是没有意义的</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">├───lib</span><br><span class="line">│   └───jasmine-3.4.0</span><br><span class="line">│           boot.js</span><br><span class="line">│           jasmine-html.js</span><br><span class="line">│           jasmine.css</span><br><span class="line">│           jasmine.js</span><br><span class="line">│           jasmine_favicon.png</span><br><span class="line">├───spec</span><br><span class="line">│       PlayerSpec.js</span><br><span class="line">│       SpecHelper.js</span><br><span class="line">└───src</span><br><span class="line">        Player.js</span><br><span class="line">        Song.js</span><br></pre></td></tr></table></figure>
+<p>spec + src文件夹是栗子
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">describe(&quot;Player&quot;, function() &#123;</span><br><span class="line">  var player;</span><br><span class="line">  var song;</span><br><span class="line"></span><br><span class="line">  beforeEach(function() &#123;</span><br><span class="line">    player = new Player();</span><br><span class="line">    song = new Song();</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  it(&quot;should be able to play a Song&quot;, function() &#123;</span><br><span class="line">    player.play(song);</span><br><span class="line">    expect(player.currentlyPlayingSong).toEqual(song);</span><br><span class="line"></span><br><span class="line">    //demonstrates use of custom matcher</span><br><span class="line">    expect(player).toBePlaying(song);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  describe(&quot;when song has been paused&quot;, function() &#123;</span><br><span class="line">    beforeEach(function() &#123;</span><br><span class="line">      player.play(song);</span><br><span class="line">      player.pause();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    it(&quot;should indicate that the song is currently paused&quot;, function() &#123;</span><br><span class="line">      expect(player.isPlaying).toBeFalsy();</span><br><span class="line"></span><br><span class="line">      // demonstrates use of &apos;not&apos; with a custom matcher</span><br><span class="line">      expect(player).not.toBePlaying(song);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    it(&quot;should be possible to resume&quot;, function() &#123;</span><br><span class="line">      player.resume();</span><br><span class="line">      expect(player.isPlaying).toBeTruthy();</span><br><span class="line">      expect(player.currentlyPlayingSong).toEqual(song);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  // demonstrates use of spies to intercept and test method calls</span><br><span class="line">  it(&quot;tells the current song if the user has made it a favorite&quot;, function() &#123;</span><br><span class="line">    spyOn(song, &apos;persistFavoriteStatus&apos;);</span><br><span class="line"></span><br><span class="line">    player.play(song);</span><br><span class="line">    player.makeFavorite();</span><br><span class="line"></span><br><span class="line">    expect(song.persistFavoriteStatus).toHaveBeenCalledWith(true);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  //demonstrates use of expected exceptions</span><br><span class="line">  describe(&quot;#resume&quot;, function() &#123;</span><br><span class="line">    it(&quot;should throw an exception if song is already playing&quot;, function() &#123;</span><br><span class="line">      player.play(song);</span><br><span class="line"></span><br><span class="line">      expect(function() &#123;</span><br><span class="line">        player.resume();</span><br><span class="line">      &#125;).toThrowError(&quot;song is already playing&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>init with Node.js
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev jasmine</span><br><span class="line">npx jasmine init</span><br></pre></td></tr></table></figure></p>
+<h4 id="describe"><a href="#describe" class="headerlink" title="describe"></a>describe</h4><p>以describe分组specs,它代表一组相似的测试用例,通常有 2 个参数：字符串和方法。字符串作为特定 Suite 的名字和标题。方法是包含实现的代码。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">describe (&apos;HeroesService (with spies)&apos;, () =&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;);</span><br><span class="line">describe(&apos;HeroesService (with mocks)&apos;, () =&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="it-和-specs"><a href="#it-和-specs" class="headerlink" title="it 和 specs"></a>it 和 specs</h4><p>specs即specification(规则)，它们是一个个断言，可以是 true 或者 false。当每个 Spec 中的所有 expectations 都是 true，则通过测试。以it函数定义，与describe类似的，有 2 个参数：标题和方法。</p>
+<h4 id="expect-tobe"><a href="#expect-tobe" class="headerlink" title="expect tobe"></a>expect tobe</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">expect(true).toBe(true);</span><br><span class="line">expect(false).not.toBe(true);</span><br></pre></td></tr></table></figure>
+<h4 id="断言"><a href="#断言" class="headerlink" title="断言"></a>断言</h4><ul>
+<li>toBe 和 toEqual 前者相当于比较运算符=== 后者比较字面量的值(对于对象进行属性的比较)</li>
+<li>toMatch</li>
+<li>toBeDefined 和 toBeNull</li>
+<li>toContain</li>
+<li>toBeGreaterThan 和 toBeLessThan</li>
+<li>toBeCloseTo</li>
+<li>toThrow<h4 id="beforeEach和afterEach"><a href="#beforeEach和afterEach" class="headerlink" title="beforeEach和afterEach"></a>beforeEach和afterEach</h4>分别在每个it断言测试前/后调用<h4 id="spy"><a href="#spy" class="headerlink" title="spy"></a>spy</h4>存根(stub)和跟踪(track)任意函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">spyOn(foo, &apos;setBar&apos;);</span><br><span class="line">  foo.setBar(123);</span><br><span class="line">  foo.setBar(456, &apos;another param&apos;);</span><br><span class="line">&#125;);</span><br><span class="line">it(&quot;tracks that the spy was called&quot;, function() &#123;</span><br><span class="line">  expect(foo.setBar).toHaveBeenCalled();</span><br><span class="line">&#125;);</span><br><span class="line">it(&quot;tracks that the spy was called x times&quot;, function() &#123;</span><br><span class="line">  expect(foo.setBar).toHaveBeenCalledTimes(2);</span><br><span class="line">&#125;);</span><br><span class="line">it(&quot;tracks all the arguments of its calls&quot;, function() &#123;</span><br><span class="line">  expect(foo.setBar).toHaveBeenCalledWith(123);</span><br><span class="line">  expect(foo.setBar).toHaveBeenCalledWith(456, &apos;another param&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>spy一个foo对象上的setBar方法，分别断言该方法被调用、被调用若干次、被以某某参数调用
+很多时候用spy对应模拟对象</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/12/10/DevOps-Overview/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/12/10/DevOps-Overview/" itemprop="url">DevOps-Overview</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-10T14:44:06+08:00">
+                2020-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Azure DevOps的组成</p>
+<ul>
+<li>Azure Repos 源代码管理</li>
+<li>Azure Pipelines CI/CD服务</li>
+<li>Azure Boards 类似TP的kanban工具以及Agile tools等</li>
+<li>Azure Test Plans 测试工具，包括manual/exploratory testing 和 continuous testing</li>
+<li>Azure Artifacts 大致上就是构建自己的库(allows teams to share packages such as Maven, npm, NuGet and more from public and private sources and integrate package sharing into your CI/CD pipelines)</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/12/10/DevOps-ReleaseWorkflow/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/12/10/DevOps-ReleaseWorkflow/" itemprop="url">DevOps之基于Release的工作流</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-10T13:06:18+08:00">
+                2020-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="对于branch"><a href="#对于branch" class="headerlink" title="对于branch"></a>对于branch</h4><p>对于敏捷开发的团队，选择避免使用长期分支(long-lived branch)，以致力于短期功能和 Bug 修复分支，任何工作付出的目标都是以生成pull request将工作合并回master</p>
+<blockquote>
+<p>A long-lived branch is a Git branch that is never deleted. Some teams prefer to avoid them altogether in favor of short-lived feature and bug fix branches. For those teams, the goal of any effort is to produce a pull request that merges their work back into master. 
+对于web应用，往往不会支持或回退到起初的版本，适用于上述工作方式，但也有其他场景需要长期保留分支，如用于同时支持市场上的多个版本，release V1， release V2将持续维护</p>
+</blockquote>
+<p>来源<a href="https://docs.microsoft.com/en-us/learn/modules/release-based-workflow-github/2-what-is-release-based-workflow" target="_blank" rel="noopener">微软Docs：GitHub基于Release的工作流</a></p>
+<p>master是稳定版分支，与线上版本保持绝对一致，release是预发布分支，从develop创建出来进行测试。</p>
+<h4 id="关于release"><a href="#关于release" class="headerlink" title="关于release"></a>关于release</h4><p>语义化版本标签
+release notes(存目)</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/12/09/Azure-Networkinng/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/12/09/Azure-Networkinng/" itemprop="url">Azure-Networkinng</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-09T09:55:51+08:00">
+                2020-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>配置和管理虚拟网络占比30-35%
+目标导向：</p>
+<ul>
+<li>学习创建虚拟网络</li>
+<li>创建虚拟VPN网关</li>
+<li>认识使用ExpressRouter<h4 id="虚拟网络"><a href="#虚拟网络" class="headerlink" title="虚拟网络"></a>虚拟网络</h4>功能:</li>
+<li>隔离和分割(Isolation &amp; segmentation)</li>
+<li>网络通信、资源间通信、与本地网络(on-premises)通信</li>
+<li>连接虚拟网络</li>
+<li>路由|筛选|连接网络流量(route|filter network traffic)</li>
+</ul>
+<p>VPN(virtual private networks):</p>
+<ul>
+<li>Point-to-site</li>
+<li>Site-to-site</li>
+<li>Azure ExpressRoute<h4 id="Network-Monitor"><a href="#Network-Monitor" class="headerlink" title="Network Monitor"></a>Network Monitor</h4></li>
+<li>监视vm与endpoint(可以是其他vm)之间的通信</li>
+<li>查看vnet中的资源及其关系</li>
+<li>诊断(Diagnose)出入vm的网络流量筛选问题</li>
+<li>诊断vm网络路由问题</li>
+<li>诊断vm出站连接(outbound connections)</li>
+<li>捕获出入vm的数据包</li>
+<li>诊断vnet网关与连接的问题</li>
+<li>检查区域与internet相对延迟</li>
+<li>查看安全规则<h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4>IP地址空间：举个栗子地址空间192.168.1.0/24，子网掩码255.255.255.248。子网掩码用来指明某个IP地址哪些位是网络位，哪些是主机位，同网络位IP之间的通信不需要通过网关，主机位数值就是有多少主机。IP总共32位，‘/24’是指前24位都是网络位，主机坐在的网络，248即11111000，这个网络有可以有 2<sup>5</sup> 即32个子网，每个子网可分配地址为 2<sup>3</sup> - 2（减去广播地址和网络地址），为6个<h4 id="虚拟机通过虚拟网络通信的实践"><a href="#虚拟机通过虚拟网络通信的实践" class="headerlink" title="虚拟机通过虚拟网络通信的实践"></a>虚拟机通过虚拟网络通信的实践</h4>创建虚拟网络,名为default<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$Subnet=New-AzVirtualNetworkSubnetConfig -Name default -AddressPrefix 10.0.0.0/24</span><br><span class="line">New-AzVirtualNetwork -Name myVnet -ResourceGroupName vm-networks -Location $Location -AddressPrefix 10.0.0.0/16 -Subnet $Subnet</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>使用powershell创建两个Azure VM
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">New-AzVm `</span><br><span class="line"> -ResourceGroupName &quot;vm-networks&quot; `</span><br><span class="line"> -Name &quot;testvm1&quot; `</span><br><span class="line"> -VirtualNetworkName &quot;myVnet&quot; `</span><br><span class="line"> -SubnetName &quot;default&quot; `</span><br><span class="line"> -image &quot;Win2016Datacenter&quot; `</span><br><span class="line"> -Size &quot;Standard_DS2_v2&quot;</span><br></pre></td></tr></table></figure></p>
+<p>*取消其中一台的公共IP
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$nic = Get-AzNetworkInterface -Name testvm2 -ResourceGroup vm-networks</span><br><span class="line">$nic.IpConfigurations.publicipaddress.id = $null</span><br><span class="line">Set-AzNetworkInterface -NetworkInterface $nic</span><br></pre></td></tr></table></figure></p>
+<p>使用PublicIP远程VM1，在VM1使用计算机名访问同一虚拟网络的VM2</p>
+<h4 id="VPN网关"><a href="#VPN网关" class="headerlink" title="VPN网关"></a>VPN网关</h4><p>Azure虚拟网关为‘从本地到Azure’的传入连接提供一个endpoint，VPN网关是一种虚拟网关类型，可以作为加密的endpoint，在Azure的实践中，VPN网关用以在不同区域之间安全地链接虚拟机和服务</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/30/font-icon/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/11/30/font-icon/" itemprop="url">font-icon</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-30T14:38:50+08:00">
+                2020-11-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/前端技术/" itemprop="url" rel="index">
+                    <span itemprop="name">前端技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="将图标转为字体格式"><a href="#将图标转为字体格式" class="headerlink" title="将图标转为字体格式"></a>将图标转为字体格式</h4><p><a href="https://icomoon.io/app/#/select" target="_blank" rel="noopener">icomoon</a></p>
+<h4 id="将图标封装到css伪类"><a href="#将图标封装到css伪类" class="headerlink" title="将图标封装到css伪类"></a>将图标封装到css伪类</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">.icon.icon-add&#123;</span><br><span class="line">	position: relative;</span><br><span class="line">    padding-left: 22px;</span><br><span class="line">    margin-left: 4px;</span><br><span class="line">	&amp;::before&#123;</span><br><span class="line">		content: &apos;&apos;;</span><br><span class="line">		position: absolute;</span><br><span class="line">		left: 0px;</span><br><span class="line">		bottom: calc(50% - 10px);</span><br><span class="line">		background: url(./assets/image/icon_add.svg) no-repeat top left;</span><br><span class="line">		width: 18px;</span><br><span class="line">		height: 18px;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/26/dotNetCore-DI-IoC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/11/26/dotNetCore-DI-IoC/" itemprop="url">.Net Core 依赖注入</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-26T14:09:54+08:00">
+                2020-11-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>通常调用一个功能，将其所属类型new出一个实例，随后调用这个对象的方法，new的过程使用具体的构造方法，后来我们将接口和实现分离，调用功能的地方用接口编码，而具体实现的方法在某处独立配置，一旦需要修改实现，不至于到处替换代码。</p>
+<p><code>ASP.Net Core</code>提供内置服务容器IServiceProvider,将服务注入到使用它的类的构造函数中。 框架负责创建依赖关系的实例，并在不再需要时将其释放。</p>
+<h4 id="注册服务"><a href="#注册服务" class="headerlink" title="注册服务"></a>注册服务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    services.AddSingleton&lt;IDateTime, SystemDateTime&gt;();</span><br><span class="line"></span><br><span class="line">    services.AddControllersWithViews();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中IDateTime是接口类，SystemDateTime是前者的实现类，<a href="https://docs.microsoft.com/zh-cn/dotnet/api/microsoft.extensions.dependencyinjection.servicecollectionserviceextensions.addsingleton?view=dotnet-plat-ext-5.0" target="_blank" rel="noopener">AddSingleton(IServiceCollection, Type)方法</a>将 serviceType 中指定类型的单一实例服务添加到指定的 IServiceCollection 中。
+以生命周期区分的三种方式还有services.AddScoped&lt;IMyDependency, MyDependency&gt;()的注册方式以及services.AddTransient&lt;IMyDependency, MyDependency&gt;()方式， 区别如下</p>
+<ul>
+<li>singleton： IoC容器将在应用程序的整个生命周期内创建和共享服务的单个实例。</li>
+<li>transient：每次您请求时，IoC容器都会创建一个指定服务类型的新实例。</li>
+<li>scope： IoC容器将为每个请求创建一次指定服务类型的实例，并将在单个请求中共享。<h4 id="构造函数注入"><a href="#构造函数注入" class="headerlink" title="构造函数注入"></a>构造函数注入</h4>调用接口时，将接口类作为构造函数参数<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class Index2Model : PageModel</span><br><span class="line">&#123;</span><br><span class="line">    private readonly IMyDependency _myDependency;</span><br><span class="line">    public Index2Model(IMyDependency myDependency)</span><br><span class="line">    &#123;</span><br><span class="line">        _myDependency = myDependency;            </span><br><span class="line">    &#125;</span><br><span class="line">    public void OnGet()</span><br><span class="line">    &#123;</span><br><span class="line">        _myDependency.WriteMessage(&quot;Index2Model.OnGet&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="FromServices-attribute注入"><a href="#FromServices-attribute注入" class="headerlink" title="FromServices attribute注入"></a>FromServices attribute注入</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public IActionResult About([FromServices] IDateTime dateTime)</span><br><span class="line">&#123;</span><br><span class="line">    return Content( $&quot;Current server time: &#123;dateTime.Now&#125;&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Controller-settings注入"><a href="#Controller-settings注入" class="headerlink" title="Controller settings注入"></a>Controller settings注入</h4><p>setttings类
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class SampleWebSettings</span><br><span class="line">&#123;</span><br><span class="line">    public string Title &#123; get; set; &#125;</span><br><span class="line">    public int Updates &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将Configuration类加入到services collection
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    services.AddSingleton&lt;IDateTime, SystemDateTime&gt;();</span><br><span class="line">    services.Configure&lt;SampleWebSettings&gt;(Configuration);</span><br><span class="line"></span><br><span class="line">    services.AddControllersWithViews();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/24/Azure-ADDS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/11/24/Azure-ADDS/" itemprop="url">Azure 域服务</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-24T14:34:36+08:00">
+                2020-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Caution！ 这个东西非常昂贵 不要在自己的Azure上学习实践！</p>
+<h4 id="Azure-AD-DS"><a href="#Azure-AD-DS" class="headerlink" title="Azure AD DS"></a>Azure AD DS</h4><p>域名（domain name），是命名空间，域名用于在网络传输中标识资源的电子方位。</p>
+<blockquote>
+<p>Azure Active Directory 域服务 (AD DS) 提供托管域服务，如域加入（domain join）,group policy,轻量目录访问协议(lightweight directory access protocol,LDAP)等。无须在云端手动部署和管理domain controllers即可使用上述服务</p>
+</blockquote>
+<h4 id="创建托管域"><a href="#创建托管域" class="headerlink" title="创建托管域"></a>创建托管域</h4><p>Azure Portal上搜索并创建Azure AD Domain Services
+<img src="https://docs.microsoft.com/zh-cn/azure/active-directory-domain-services/media/tutorial-create-instance/basics-window.png" alt>
+注意事项</p>
+<ul>
+<li>内置域名（Built-in domain name） 以 .onmicrosoft.com 为后缀的内置域名</li>
+<li>自定义域名，指定自定义域名，通常是你已拥有且可路由的域名</li>
+<li>前缀限制 15字符</li>
+<li>网络名称冲突： 托管域的 DNS 域名不能已存在于虚拟网络中。
+确认创建后便开始漫长的等待部署的过程<h4 id="后续步骤"><a href="#后续步骤" class="headerlink" title="后续步骤"></a>后续步骤</h4></li>
+<li><a href="https://docs.microsoft.com/zh-cn/azure/active-directory-domain-services/tutorial-create-instance#update-dns-settings-for-the-azure-virtual-network" target="_blank" rel="noopener">更新虚拟网络DNS</a></li>
+<li>“forest（林）”</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/23/SQL-Project/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/qqsnote/2020/11/23/SQL-Project/" itemprop="url">SQL Project及其持续集成</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-23T13:27:05+08:00">
+                2020-11-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/数据库/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="SSDT-Project"><a href="#SSDT-Project" class="headerlink" title="SSDT Project"></a>SSDT Project</h4><blockquote>
+<p>SQL Server Data Tools (SSDT) 通过引入跨 Visual Studio 内所有数据库开发阶段的无所不在的声明性模型，为数据库开发带来变革。创建一个数据库项目进行脱机的数据库开发（不直接对数据库服务进行在线修改），像编辑声明定义一样创建、编辑、重命名和删除表、存储过程、类型和函数。</p>
+</blockquote>
+<p>为Visual Studio安装SSDT的features，加载sqlproj或dtproj项目(VS2010数据库和服务器项目、数据层应用程序项目)，用所提供的方法build、publish所作的修改。
+<img src="https://docs.microsoft.com/zh-cn/sql/ssdt/media/download-sql-server-data-tools-ssdt/data-workload-2019.png" alt>
+参考<a href="https://docs.microsoft.com/zh-cn/sql/ssdt/project-oriented-offline-database-development" target="_blank" rel="noopener">Microsoft Docs:面向项目的脱机数据库开发</a></p>
+<h4 id="创建visual-studio-sql-project"><a href="#创建visual-studio-sql-project" class="headerlink" title="创建visual studio sql project"></a>创建visual studio sql project</h4><p>参考<a href="https://developer.aliyun.com/article/355897" target="_blank" rel="noopener">SQL Server 数据库项目</a></p>
+<h4 id="publish"><a href="#publish" class="headerlink" title="publish"></a>publish</h4><p>右键项目 选择Publish
+注意 Scripts目录下的脚本也会执行，因此在这里编写初始数据是可行的
+如果是初始化数据，为了防止脚本重复执行，可以按如下方式插入数据
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">DECLARE @CSDid uniqueidentifier</span><br><span class="line">SELECT @CSDid=NEWID()</span><br><span class="line">INSERT INTO [ent].[ScannerGroup]</span><br><span class="line">           ([ID]</span><br><span class="line">           ,[Name]</span><br><span class="line">           ,[ParentID]</span><br><span class="line">           ,[Type]</span><br><span class="line">           ,[BrandID]</span><br><span class="line">           ,[GroupLevel])</span><br><span class="line">     SELECT</span><br><span class="line">           @CSDid</span><br><span class="line">           ,&apos;CSD&apos;</span><br><span class="line">           ,null</span><br><span class="line">           ,10</span><br><span class="line">           ,null</span><br><span class="line">           ,HierarchyID::GetRoot()</span><br><span class="line">     WHERE NOT EXISTS (SELECT 1 FROM [ent].[ScannerGroup])</span><br><span class="line"></span><br><span class="line">INSERT INTO [ent].[PartnerAdmin]</span><br><span class="line">           ([ID]</span><br><span class="line">           ,[Email]</span><br><span class="line">           ,[GroupID]</span><br><span class="line">           ,[Name])</span><br><span class="line">     SELECT</span><br><span class="line">           NEWID()</span><br><span class="line">           ,&apos;qqqqq@qqqq.qqq&apos;</span><br><span class="line">           ,@CSDid</span><br><span class="line">           ,&apos;QQs&apos;</span><br><span class="line">     WHERE NOT EXISTS (SELECT 1 FROM [ent].[PartnerAdmin])</span><br><span class="line">GO</span><br></pre></td></tr></table></figure></p>
+<h4 id="Predeployment-Scripts-amp-Postdeployment-Scripts"><a href="#Predeployment-Scripts-amp-Postdeployment-Scripts" class="headerlink" title="Predeployment Scripts &amp; Postdeployment Scripts"></a>Predeployment Scripts &amp; Postdeployment Scripts</h4><blockquote>
+<p>Predeployment Scripts和Postdeployment Scripts分别在数据库项目生成的主要部署脚本之前和之后执行，在 Visual Studio 中，从架构比较结果更新目标时(Compare之后的Update)，将不执行Predeployment Scripts。 <br>一个项目只能有一个Predeployment Scripts和一个Postdeployment Scripts。 </p>
+</blockquote>
+<p>Scripts文件夹右键Add –&gt; Script… 选择Pre Deployment Scripts或Post Deployment Scripts</p>
+<h4 id="issues"><a href="#issues" class="headerlink" title="issues"></a>issues</h4><blockquote>
+<p>Only one statement is allowed per batch. A batch separator, such as ‘GO’, might be required between statements.</p>
+</blockquote>
+<p>Scripts目录下的sql文件属性中，默认Build Action = Build导致编译失败，应改为Build Action = None</p>
+<p>.jfm文件，可以认为是对项目操作的备份，若未自动添加到gitignore，则可手动添加</p>
+<h4 id="用MSBuild和Jenkins实现Continuse-Integration"><a href="#用MSBuild和Jenkins实现Continuse-Integration" class="headerlink" title="用MSBuild和Jenkins实现Continuse Integration"></a>用MSBuild和Jenkins实现Continuse Integration</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">## set msbuild.exe=C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe</span><br><span class="line">msbuild.exe /t:Build &quot;MyDB.sqlproj&quot;</span><br><span class="line">msbuild.exe /t:Publish /p:SqlPublishProfilePath=&quot;MyDB.publish.staging.xml&quot; &quot;MyDB.sqlproj&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="DevOps-issues"><a href="#DevOps-issues" class="headerlink" title="DevOps issues"></a>DevOps issues</h4><ul>
+<li>实现一键部署</li>
+<li>实现集成过程可配置</li>
+<li>自动化脚本提交到版本控制库</li>
+<li>利用版本控制回退数据库</li>
+<li>应用的更新的集成使用最新的数据库</li>
+<li>pipeline执行测试</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/20/oidc-client/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -434,1212 +1612,11 @@
         
           
             <p><a href="https://www.zhihu.com/question/65502802" target="_blank" rel="noopener">知乎：什么是微服务</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/04/AuthenticationPackages/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/11/04/AuthenticationPackages/" itemprop="url">AuthenticationPackages</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-04T10:34:50+08:00">
-                2020-11-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/03/ODATA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/11/03/ODATA/" itemprop="url">ODATA</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-03T13:22:39+08:00">
-                2020-11-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h4><ul>
-<li>$filter=name eq ‘QQstone’</li>
-<li>$filter=contains(email, ‘163.com’)
-注意单引号  <h4 id="select"><a href="#select" class="headerlink" title="select"></a>select</h4></li>
-<li>$select=name,email,type</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/11/02/GameTheory/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/11/02/GameTheory/" itemprop="url">博弈论</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-02T14:57:11+08:00">
-                2020-11-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="零和博弈，非零和博弈"><a href="#零和博弈，非零和博弈" class="headerlink" title="零和博弈，非零和博弈"></a>零和博弈，非零和博弈</h4><p>非零和博弈表示在不同策略组合下各博弈方的得益之和是不确定的变量，故又称之为变和博弈。 如囚徒困境，中美关系，恋爱</p>
-<p>零和博弈表示所有博弈方的利益之和为零或一个常数，即一方有所得，其他方必有所失。如绝大多数竞技，竞选，炒股</p>
-<p>行业或社会环境成为存量市场，内卷是人们进行零和博弈的结果。</p>
-<blockquote>
-<p>摘自百度百科《非零和博弈》:
-烈日炎炎的一个下午，约翰·纳什教授给二十几个学生上课，教室窗外的楼下有几个工人正施工，机器的响声成了刺耳的噪音，于是纳什走到窗前狠狠地把窗户关上。马上有同学提出意见：“教授，请别关窗子，实在太热了！”而纳什教授一脸严肃地回答说：“课堂的安静比你舒不舒服重要得多！”然后转过身一边嘴里叨叨着“给你们来上课，在我看来不但耽误了你们的时间，也耽误了我的宝贵时间……”，一边在黑板上写着数学公式。
-正当教授一边自语一边在黑板上写公式之际，一位叫阿丽莎的漂亮女同学（这位女同学后来成了纳什的妻子）走到窗边打开了窗子，电影中纳什用责备的眼神看着阿丽莎：“小姐……”而阿丽莎对窗外的工人说道：“打扰一下，嗨！我们有点小小的问题，关上窗户，这里会很热；开着，却又太吵。我想能不能请你们先修别的地方，大约45分钟就好了。”正在干活的工人愉快地说：“没问题！”又回头对自己的伙伴们说：“伙计们，让我们先休息一下吧！”阿丽莎回过头来快活地看着纳什教授，纳什教授也微笑地看着阿丽莎，既像是讲课，又像是在评论她的做法似地对同学们说：“你们会发现在多变性的微积分中，往往一个难题会有多种解答。”
-而阿丽莎对“开窗难题”的解答，使得原本的一个零和博弈变成了另外一种结果：同学们既不必忍受室内的高温，教授也可以在安静的环境中讲课，结果不再是0，而成了+2。由此我们可以看到，很多看似无法调和的矛盾，其实并不一定是你死我活的僵局，那些看似零和博弈或者是负和博弈的问题，也会因为参与者的巧妙设计而转为正和博弈。</p>
-</blockquote>
-<h4 id="内卷和博弈"><a href="#内卷和博弈" class="headerlink" title="内卷和博弈"></a>内卷和博弈</h4><p>内卷是零和博弈的状态吗？
-参与者是直接地进行利益竞争吗，似乎并不是哦，内卷的起因是掌握话语权的一方——在社会生产的范畴上是资本家，在就学教育上是招生办——限制了规则，在既定的有限条件下，低阶层的参与者为了自己的收益做出与之不匹配的付出。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/10/27/Azure-ADB2C-JWT-Validation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/10/27/Azure-ADB2C-JWT-Validation/" itemprop="url">Azure-ADB2C-JWT-Validation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-27T17:38:03+08:00">
-                2020-10-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>见 <a href="https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview#validation" target="_blank" rel="noopener">Azure官方文档token overview</a></p>
-<p>如<a href="/qqsnote/2020/10/15/jwt/" title="JWT">JWT</a>所述，JWT包含三个部分，一个标头，一个正文和一个签名。签名段可用于验证令牌的真实性，以便您的应用程序可以信任它。Azure AD B2C通过使用行业标准的非对称加密算法（例如RSA 256）对令牌进行签名。
-header包含有关用于对令牌进行签名的密钥和加密方法的信息：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        &quot;typ&quot;: &quot;JWT&quot;,</span><br><span class="line">        &quot;alg&quot;: &quot;RS256&quot;,</span><br><span class="line">        &quot;kid&quot;: &quot;GvnPApfWMdLRi8PDmisFn7bprKg&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>Azure AD B2C具有一个OpenID Connect元数据EndPoint。大概长这样子:
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/B2C_1_basic_sign_up_and_sign_in/v2.0/.well-known/openid-configuration</span><br></pre></td></tr></table></figure></p>
-<p>通过此EndPoint，可以get到有关Azure AD B2C的信息。此信息包括端点，令牌内容和令牌签名密钥。
-其中jwks_uri提供用于签署令牌的一组公共密钥的位置。
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/b2c_1_basic_sign_up_and_sign_in/discovery/v2.0/keys</span><br></pre></td></tr></table></figure></p>
-<p>jwks_uri如上格式，建议通过get元数据文档并解析以动态获取jwks_uri，而不要写死。</p>
-<p>StackOverflow 上有个现成的
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">var configurationManager = new ConfigurationManager&lt;OpenIdConnectConfiguration&gt;(</span><br><span class="line">                                   &quot;https://testb2ctenant05.b2clogin.com/testB2CTenant05.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_test&quot;,</span><br><span class="line">                                    new OpenIdConnectConfigurationRetriever(), new HttpDocumentRetriever());</span><br><span class="line">            CancellationToken ct = default(CancellationToken);</span><br><span class="line">            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();</span><br><span class="line">            var discoveryDocument = await configurationManager.GetConfigurationAsync(ct);</span><br><span class="line">            var signingKeys = discoveryDocument.SigningKeys;</span><br><span class="line">            var validationParameters = new TokenValidationParameters</span><br><span class="line">            &#123;</span><br><span class="line">                RequireExpirationTime = true,</span><br><span class="line">                RequireSignedTokens = true,</span><br><span class="line">                ValidateIssuer = true,</span><br><span class="line">                ValidIssuer = discoveryDocument.Issuer,</span><br><span class="line">                ValidateIssuerSigningKey = true,</span><br><span class="line">                IssuerSigningKeys = signingKeys,</span><br><span class="line">                ValidateLifetime = true,</span><br><span class="line"></span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line"> var principal = new JwtSecurityTokenHandler()</span><br><span class="line">            .ValidateToken(token, validationParameters, out var rawValidatedToken);</span><br></pre></td></tr></table></figure></p>
-<p><a href="https://stackoverflow.com/questions/59840170/validating-the-token-recieved-from-azure-ad-b2c-using-the-values-from-jwks-uri" target="_blank" rel="noopener">Jim Xu’s Answer</a></p>
-<p>用例描述：</p>
 <ul>
-<li>使用非法字符串冒充access token，异常：decode fail</li>
-<li>使用其他来源的(比如其他talent)的token，异常：unmatch siguanture</li>
-<li>使用正确token 获得principal对象 </li>
-</ul>
-<p>回顾一下，对于非对称加密，签名用私钥产生，私钥绝对隐藏且不可被反推，公开公钥，任何人可以使用公钥验证签名。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/10/20/AzureExpertNotes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/10/20/AzureExpertNotes/" itemprop="url">Azure Expert Notes</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-20T09:42:13+08:00">
-                2020-10-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><p>There are 7 modules to learn:</p>
-<ul>
-<li>Prerequisites for Azure administrators</li>
-<li>Manage identities and governance in Azure</li>
-<li>Implement and manage storage in Azure</li>
-<li>Deploy and manage Azure compute resources</li>
-<li>Configure and manage virtual networks for Azure administrators</li>
-<li>Monitor and back up Azure Resources
-即Azure的订阅和资源，管理身份，实施和管理存储，虚拟机，虚拟网络, 监视和备份<h3 id="Azure-Policy"><a href="#Azure-Policy" class="headerlink" title="Azure Policy"></a>Azure Policy</h3>参考<a href="https://blog.csdn.net/helendemeng/article/details/108795271" target="_blank" rel="noopener">利用 Azure Policy 进行云上资源实时控制及合规监控</a><blockquote>
-<p>Azure Policy的工作原理是选择或新建一个策略或计划（计划是一组策略的集合），分配给指定范围的资源，然后定期（24小时左右）Policy会检查这些资源是否符合策略或计划，并列出不合规项。</p>
-</blockquote>
-</li>
-</ul>
-<p>Az104 Q5 使用resource policy修改虚拟网络的限制</p>
-<p>类似的： 蓝图blue print，为某个订阅制订蓝图（和策略一样，azure上由很多已定义的）
-Monitor里的Alert，为某个特定资源添加警报</p>
-<h3 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h3><h4 id="可用性、可用区和可用集"><a href="#可用性、可用区和可用集" class="headerlink" title="可用性、可用区和可用集"></a>可用性、可用区和可用集</h4><blockquote>
-<p>可用性是可供使用的时间段的百分比，任意时间可访问的服务即100%可用性</p>
-</blockquote>
-<p>因故障、因物理故障触发的自动迁移、定期更新都有可能造成资源可用性达不到100%</p>
-<p><a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/manage-availability" target="_blank" rel="noopener">管理可用性</a>
-<a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets" target="_blank" rel="noopener">创建和部署高度可用的虚拟机</a></p>
-<blockquote>
-<p><a href="https://docs.microsoft.com/zh-cn/azure/availability-zones/az-overview" target="_blank" rel="noopener">可用性区域</a>:区域中的唯一物理位置,每个区域由一个或多个数据中心组成，这些数据中心配置了独立电源，冷却和网络。区域中可用性区域的物理隔离可以在发生数据中心故障的情况下保护应用程序和数据。 区域冗余服务可跨可用性区域复制应用程序和数据，以防范单点故障。</p>
-<ul>
-<li>更新域和容错域的组合</li>
-<li>当两个或更多个 VM 部署在一个 Azure 区域中的两个或更多个可用性区域时，可获得99.99% <a href="https://azure.microsoft.com/zh-cn/support/legal/sla/virtual-machines/v1_9/" target="_blank" rel="noopener">VM 运行时间 SLA</a>(service-level agreement, 服务级别协议)</li>
-</ul>
-</blockquote>
-<p>使用可用性区域创建vm settings–&gt;High availability–&gt;选择一个编号的区域 <a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/create-portal-availability-zone" target="_blank" rel="noopener">详细</a></p>
-<p>而可用性集是一种逻辑分组功能，将在物理层面相分离的vm连接到一起，如果运行服务器的其中之一的物理硬件有问题，可以确信服务器的其他实例保持运行，因为它们位于不同的硬件上。使用命令创建可用性集 <a href="https://docs.microsoft.com/zh-cn/azure/virtual-machines/windows/tutorial-availability-sets" target="_blank" rel="noopener">详细</a></p>
-<blockquote>
-<p>Microsoft 为部署在可用性中的多实例 VM 提供 99.95% 的外部连接性服务级别协议 (SLA)。 这意味着，对于要应用的 SLA，必须在可用性集中至少部署两个 VM 实例。</p>
-</blockquote>
-<p>You plan to deploy three Azure virtual machines named VM1, VM2, and VM3. The virtual
-machines will host a web app named App1.
-You need to ensure that at least two virtual machines are available if a single Azure datacenter
-becomes unavailable.
-What should you deploy?
-A. all three virtual machines in a single Availability Zone
-B. all virtual machines in a single Availability Set
-C. each virtual machine in a separate Availability Zone
-D. each virtual machine in a separate Availability Set</p>
-<p>Answer is B.</p>
-<ul>
-<li>可以自己提供非官方镜像用于创建虚拟机<blockquote>
-<p>It is possible to change the size of a VM after it’s been created, but the VM must be stopped first. So, it’s best to size it appropriately from the start if possible.调整vm配置需要停机</p>
-</blockquote>
-</li>
-<li>几个size：普通的（B，D..）大数据存储（L-series），图形渲染（N-series），高性能（H-series）<blockquote>
-<p>You can store data on the primary drive along with the OS(默认挂载/dev/sda,最大2018G), but a better approach is to create dedicated data disks（可以挂几万GiB）. </p>
-</blockquote>
-</li>
-<li>关于硬盘的unmanaged（以容量和IO计费）和managed（提供存储的伸缩性，提供快照和备份等）</li>
-<li><p>ssh
-创建虚拟机时可以选择生成key pair，创建完成后下载pem文件用于连接，抑或在本地生成key pair使用其中的public key创建
-连接上VM使用下述方式添加更多的public key</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 创建公钥私钥对</span><br><span class="line">ssh-keygen -t rsa -b 4098</span><br><span class="line"># 将公钥贴到虚拟机上</span><br><span class="line">ssh-copy-id -i ~/.ssh/id_rsa.pub azureuser@myserver</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>虚拟机创建完成的初始网络状态是：Outbound request are allowed. Inbound traffic is only allowed from within the virtual network.即出站任意，入站限制为允许虚拟网络内的访问</p>
-</li>
-<li>Windows虚拟机相关：远程桌面连接(RDP 3389); 网络安全组（NSG）设置入站出站规则，软件防火墙 <blockquote>
-<p>The rules are evaluated in priority-order, starting with the lowest priority rule. Deny rules always stop the evaluation. The last rule is always a Deny All rule.That means to have traffic pass through the security group you must have an allow rule or it will be blocked by the default final rule. 规则使用优先级层叠，若无允许则被底层规则(the final rule)禁止</p>
-</blockquote>
-</li>
-</ul>
-<p>虚拟机的备份(存目)</p>
-<h3 id="Networking"><a href="#Networking" class="headerlink" title="Networking"></a>Networking</h3><p>学习目标：</p>
-<ul>
-<li>概念：网络协议和网络标准。</li>
-<li>网络拓扑类型（网格，总线，星形）</li>
-<li>网络设备。</li>
-<li>网络通信原则（如 TCP/IP、DNS 和端口）。</li>
-<li><b>！以上组件在 Azure 网络上的映射和配置。</b></li>
-</ul>
-<p>Azure虚拟网络
-<img src="https://docs.microsoft.com/zh-cn/learn/modules/network-fundamentals/media/2-virtual-network.svg" alt>
-Bridge(网桥)，将网络划分为网段，在其之间过滤和推送数据包，数据流向通过MAC地址决定，可以减少不必要的网络交通以提升网络传输性能。
-HUb(指网络集线器)，充当网络上的多端口中继器，用以连接多个设备并构建网络布局，集线器将以固定的速度运行即所连接的最慢的网络设备的速度
-Switch(交换机)，是网桥和集线器的结合</p>
-<p>tip：进入命令行help可看到所有支持的命令，用tcping代替ping</p>
-<p>协议：</p>
-<ul>
-<li>邮局协议 3(Post Office Protocol 3, POP3) 用于接收邮件</li>
-<li>简单邮件传输协议 (SMTP) 使用邮件服务器发送邮件</li>
-<li>交互式邮件访问协议 (IMAP) 管理邮箱</li>
-<li>安全套接字层 (Secure Socket Layer, SSL) 标准的加密和安全性协议，提供计算机和Internet访问目标服务器或设备之间的安全的加密连接</li>
-<li>传输层安全 (Transport Layer Security, TLS) SSL的后继者</li>
-<li>安全超文本传输协议 (HTTPS) 使用SSL或TLS加密的HTTP</li>
-<li>安全外壳 (Secure Shell, SSH) </li>
-<li>Kerberos 验证协议 通过密钥加密为cs应用提供鲁棒的认证</li>
-<li>简单网络管理协议 (SNMP) 允许从网络上的设备收集数据以进行管理</li>
-<li>Internet 控制消息协议 (ICMP) 允许网络的设备发送警告或错误</li>
-</ul>
-<p>IPS模型：
-<img src="https://docs.microsoft.com/zh-cn/learn/modules/network-fundamentals/media/4-internet-protocol-suite-layers.svg" alt></p>
-<p>DNS(Domain Name System)分散式查找服务，将用户可读的域名或 URL 转换为承载站点或服务的服务器的 IP 地址。</p>
-<ul>
-<li>A SOA寻址</li>
-<li>AAAA IP寻址</li>
-<li>CNAME 域名别名</li>
-<li>NS 名称服务器 </li>
-<li>MX SMTP 电子邮件 <h4 id="网络安全"><a href="#网络安全" class="headerlink" title="网络安全"></a>网络安全</h4>学习目标</li>
-<li>C/S网络模型：请求-响应；P2P(Peer-to-Peer)；发布-订阅</li>
-<li>认证和授权</li>
-<li>网络防火墙类型</li>
-<li>监控项目</li>
-<li>在Azure上的映射</li>
-</ul>
-<p>关于认证：</p>
-<ul>
-<li>密码认证</li>
-<li>双因素(two-factor)认证:如账户密码+邮箱/手机认证</li>
-<li>token authentication</li>
-<li>生物识别认证(Biometric authentication)：如用指纹、语音或人脸识别</li>
-<li>事务认证(Transactional authentication) 通常用于提供额外的认证保护，如在工作时间范围内允许访问</li>
-<li>图灵测试(CAPTCHA)解释看到的信息,通常是模糊的文字或场景中的特征,<b>CAPTCHA可能会给存在视力障碍的用户带来困难</b></li>
-</ul>
-<p>认证协议：</p>
-<ul>
-<li>Kerberos</li>
-<li>TLS/SSL</li>
-</ul>
-<p>授权：
-私以为其概念是对已持有的认证身份标记所赋予的权限</p>
-<p>防范目标和措施：</p>
-<ul>
-<li>any user, 访问控制(access control)即对用户设置访问相应资源的权限级别</li>
-<li>恶意软件，杀软</li>
-<li>应用程序漏洞</li>
-<li>行为分析，创建安全策略识别具有潜在危险的行文</li>
-<li>邮件，识别可疑邮件和发信人</li>
-<li>入侵检测(存目)</li>
-</ul>
-<p>防火墙：</p>
-<ul>
-<li>应用程序层防火墙 如检测HTTP请求的插件或筛选器</li>
-<li>数据包筛选防火墙 如检测数据包</li>
-<li>线路级(circuit-level)防火墙 如检查TCP/UDP连接的源、目标、用户等是否符合既定规则</li>
-<li>代理服务器防火墙 以代理控制信息进出网络，因此可以监视、筛选和缓存网络上任意类型设备的internet访问</li>
-<li>stateful firewalls &amp; next-generation firewalls</li>
-</ul>
-<p>通过配置与 Azure 的“站点到站点 VPN”连接，将本地网络连接到 Azure 虚拟网络。 
-<img src="https://docs.microsoft.com/zh-cn/learn/modules/network-fundamentals-2/media/4-site-to-site-vpn.svg" alt>
-亦可通过vpn配置实现点(client)到站点的连接</p>
-<p>Notice:</p>
-<ul>
-<li>关键 Azure 服务只连接 Azure 虚拟网络，不连接公共 Internet,比如Azure SQL数据库，Azure Storage等</li>
-<li>尽可能禁用SSH/RDP 访问，应先创建点到站点 VPN 连接，然后再为远程管理启用 SSH/RDP。</li>
-</ul>
-<p>Monitor：</p>
-<ul>
-<li>SNMP 简单网络管理协议，前文已述，允许访问网络设备的信息</li>
-<li>Syslog 允许设备发送事件，用于事件日志记录</li>
-<li>Azure Monitor是网络监控解决方案，包含Log Analytics工具，用以查询、分析日志<h3 id="PowerShell"><a href="#PowerShell" class="headerlink" title="PowerShell"></a>PowerShell</h3>学习目标</li>
-<li>使用Azure PowerShell 连接/操作 Azure资源
-Azure Portal，Azure CLI，Azure PowerShell是管理Azure资源的三种工具，相比Azure Portal页面，脚本工具因可以编写逻辑而更适合进行批量操作，以及自动化<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Import-Module Az</span><br><span class="line">Connect-AzAccount</span><br><span class="line">Get-AzResourceGroup</span><br><span class="line">... &lt;-- 这里会列出资源组</span><br><span class="line">Get-Credential</span><br><span class="line">... &lt;-- 这里设置访问虚拟机的凭据</span><br><span class="line">New-AzVM -Name &quot;testvm-eus-01&quot; -ResourceGroupName &quot;learn-940e9418-9b64-4c5b-a12c-a136ccb641da&quot; -Credential (Get-Credential) -Location &quot;East US&quot; -Image UbuntuLTS -OpenPorts 22</span><br><span class="line">$vm = (Get-AzVM -Name &quot;testvm-eus-01&quot; -ResourceGroupName learn-940e9418-9b64-4c5b-a12c-a136ccb641da)</span><br><span class="line">$vm | Get-AzPublicIpAddress</span><br><span class="line">ssh QQs@13.92.231.172 </span><br><span class="line">... &lt;-- 使用ssh连接虚拟机</span><br><span class="line">Stop-AzVM -Name $vm.Name -ResourceGroup $vm.ResourceGroupName</span><br><span class="line">Remove-AzVM -Name $vm.Name -ResourceGroup $vm.ResourceGroupName</span><br><span class="line">$vm | Remove-AzNetworkInterface –Force</span><br><span class="line">Get-AzDisk -ResourceGroupName $vm.ResourceGroupName -DiskName $vm.StorageProfile.OSDisk.Name | Remove-AzDisk -Force</span><br><span class="line">Get-AzVirtualNetwork -ResourceGroup $vm.ResourceGroupName | Remove-AzVirtualNetwork -Force</span><br><span class="line">Get-AzNetworkSecurityGroup -ResourceGroup $vm.ResourceGroupName | Remove-AzNetworkSecurityGroup -Force</span><br><span class="line">Get-AzPublicIpAddress -ResourceGroup $vm.ResourceGroupName | Remove-AzPublicIpAddress -Force</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>注意 上面停止并移除虚拟机后，其他相关资源如网络接口、托管磁盘、网络安全组、公共IP另需手动删除
-似乎应该具备编写powershell脚本的能力，<a href="https://www.zhihu.com/question/21787232/answer/63774856" target="_blank" rel="noopener">知乎：PowerShell有没有必要学？</a>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">param([string]$resourceGroup) // 获取变量参数</span><br><span class="line">$adminCredential = Get-Credential -Message &quot;Enter a username and password for the VM administrator.&quot;</span><br><span class="line">For ($i = 1; $i -le 3; $i++)</span><br><span class="line">&#123;</span><br><span class="line">    $vmName = &quot;ConferenceDemo&quot; + $i</span><br><span class="line">    Write-Host &quot;Creating VM: &quot; $vmName</span><br><span class="line">    New-AzVm -ResourceGroupName $resourceGroup -Name $vmName -Credential $adminCredential -Image UbuntuLTS</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="数据和存储"><a href="#数据和存储" class="headerlink" title="数据和存储"></a>数据和存储</h3><p>数据：结构化数据、半结构化数据(也就是NoSQL数据，如Json数据，Xml数据)、非结构化数据
-事务数据库：联机事务处理(Online Transaction Processing，OLTP)系统和联机分析处理(Online Analytical Processing，OLAP)系统，通常情况下，前者服务于较大量的用户，响应更快，可用性更高，处理大量数据(handle large volumns of data)，后者用于处理大型复杂事务(handle large and complex transactions)
-建议使用Azure Cosmos DB管理NoSQL数据，使用Azue Blob Storage管理文件数据，结构化数据使用Azure SQL Database, Azure SQL Database可以认为是云端托管的sqlserver</p>
-<h3 id="订阅"><a href="#订阅" class="headerlink" title="订阅"></a>订阅</h3><h3 id="Azure-Backup"><a href="#Azure-Backup" class="headerlink" title="Azure Backup"></a>Azure Backup</h3><p>AZ104 Q7 Azure Backup执行备份并不受限于虚拟机的os，是否在运行。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/10/15/jwt/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/10/15/jwt/" itemprop="url">JWT</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-15T20:20:19+08:00">
-                2020-10-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/协议和规范/" itemprop="url" rel="index">
-                    <span itemprop="name">协议和规范</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. </p>
-<ul>
-<li>“紧凑地、自包含地形式” 自包含即中间部分包含部分用户信息</li>
-<li>通过JSON形式作为web应用中的令牌，用于在各方之间安全地传输信息</li>
-</ul>
-</blockquote>
-<p>结构：
-以.分隔地三个部分：标头header，载荷payload，签名signature 三部分均以base64编码</p>
-<p>标头：如下的编码描述
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;alg&quot;: &quot;HS256&quot;,</span><br><span class="line">  &quot;typ&quot;: &quot;JWT&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>载荷：可以放user profile中的非敏感信息
-签名：将前两部分信息连同加密salt使用密钥加密生成签名，如
-HMACSHA256(base64UrlEncode(header)+’.’+base64UrlEncode(payload).secret)</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/10/08/dotNetCore-MemoryCache/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/10/08/dotNetCore-MemoryCache/" itemprop="url">.Net Core 缓存</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-08T16:51:04+08:00">
-                2020-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>参考 <a href="https://docs.microsoft.com/zh-cn/aspnet/core/performance/caching/memory?view=aspnetcore-3.1" target="_blank" rel="noopener">.net core 中的缓存内存</a>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">using Microsoft.Extensions.Caching.Memory;</span><br><span class="line"></span><br><span class="line">public class HomeController : Controller</span><br><span class="line">&#123;</span><br><span class="line">    private IMemoryCache _cache;</span><br><span class="line"></span><br><span class="line">    public HomeController(IMemoryCache memoryCache)</span><br><span class="line">    &#123;</span><br><span class="line">        _cache = memoryCache;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>CacheKeys API
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public static class CacheKeys</span><br><span class="line">&#123;</span><br><span class="line">    public static string Entry &#123; get &#123; return &quot;_Entry&quot;; &#125; &#125;</span><br><span class="line">    public static string CallbackEntry &#123; get &#123; return &quot;_Callback&quot;; &#125; &#125;</span><br><span class="line">    public static string CallbackMessage &#123; get &#123; return &quot;_CallbackMessage&quot;; &#125; &#125;</span><br><span class="line">    public static string Parent &#123; get &#123; return &quot;_Parent&quot;; &#125; &#125;</span><br><span class="line">    public static string Child &#123; get &#123; return &quot;_Child&quot;; &#125; &#125;</span><br><span class="line">    public static string DependentMessage &#123; get &#123; return &quot;_DependentMessage&quot;; &#125; &#125;</span><br><span class="line">    public static string DependentCTS &#123; get &#123; return &quot;_DependentCTS&quot;; &#125; &#125;</span><br><span class="line">    public static string Ticks &#123; get &#123; return &quot;_Ticks&quot;; &#125; &#125;</span><br><span class="line">    public static string CancelMsg &#123; get &#123; return &quot;_CancelMsg&quot;; &#125; &#125;</span><br><span class="line">    public static string CancelTokenSource &#123; get &#123; return &quot;_CancelTokenSource&quot;; &#125; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>缓存一个时间
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">DateTime cacheTiming;</span><br><span class="line"></span><br><span class="line">// Look for cache key.</span><br><span class="line">if (!_cache.TryGetValue(CacheKeys.Entry, out cacheEntry))</span><br><span class="line">&#123;</span><br><span class="line">    cacheEntry = DateTime.Now;</span><br><span class="line"></span><br><span class="line">    // Set cache options.</span><br><span class="line">    var cacheEntryOptions = new MemoryCacheEntryOptions()</span><br><span class="line">        // Keep in cache for this time, reset time if accessed.</span><br><span class="line">        .SetSlidingExpiration(TimeSpan.FromSeconds(3));</span><br><span class="line"></span><br><span class="line">    // Save data in cache.</span><br><span class="line">    _cache.Set(CacheKeys.Entry, cacheTiming, cacheEntryOptions);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>取出缓存
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var timing = _cache.Get&lt;DateTime?&gt;(CacheKeys.Entry);</span><br></pre></td></tr></table></figure></p>
-<p>可调过期（slide expiration）时间和绝对过期（absolute expiration）时间</p>
-<ul>
-<li>可调过期：指定一个时间，TimeSpan，指定时间内有被Get缓存时间则顺延，否则过期</li>
-<li>绝对到期：指定在一个固定的时间点到期
-<a href="https://docs.microsoft.com/zh-cn/aspnet/core/performance/caching/memory?view=aspnetcore-3.1#use-setsize-size-and-sizelimit-to-limit-cache-size" target="_blank" rel="noopener">使用 SetSize、Size 和 SizeLimit 限制缓存大小</a></li>
+<li>关于前端微服务化 angular 项目的路由懒加载和多应用项目</li>
+<li>node.js 微服务实践</li>
 </ul>
 
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/qqsnote/2020/09/09/wasm-coreprinciples/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/qqsnote/2020/09/09/wasm-coreprinciples/" itemprop="url">WebAssembly核心原理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-09T19:04:16+08:00">
-                2020-09-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="关于section"><a href="#关于section" class="headerlink" title="关于section"></a>关于section</h4><h4 id="EMSCRIPTEN-KEEPALIVE宏"><a href="#EMSCRIPTEN-KEEPALIVE宏" class="headerlink" title="EMSCRIPTEN_KEEPALIVE宏"></a>EMSCRIPTEN_KEEPALIVE宏</h4>
           
         
       
@@ -1678,7 +1655,7 @@ HMACSHA256(base64UrlEncode(header)+’.’+base64UrlEncode(payload).secret)</p>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="page-number current">2</span><a class="page-number" href="/qqsnote/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/17/">17</a><a class="extend next" rel="next" href="/qqsnote/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="page-number current">2</span><a class="page-number" href="/qqsnote/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/18/">18</a><a class="extend next" rel="next" href="/qqsnote/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1724,7 +1701,7 @@ HMACSHA256(base64UrlEncode(header)+’.’+base64UrlEncode(payload).secret)</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">177</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1746,7 +1723,7 @@ HMACSHA256(base64UrlEncode(header)+’.’+base64UrlEncode(payload).secret)</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -1783,7 +1760,7 @@ HMACSHA256(base64UrlEncode(header)+’.’+base64UrlEncode(payload).secret)</p>
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

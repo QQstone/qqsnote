@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="authordescriptionlicensekeywordsdependencies 和 devdependencies npm install 命令 不加 –save 不会修改package.json npm install 命令 –save参数将package记入dependencies，–save-dev参数将package记入devdependencies 开发工具如glup，angu">
+<meta name="description" content="authordescriptionlicensekeywordsdependencies 和 devDependencies, peerDependencies, bundledDependencies, optionalDependencies npm install 命令 不加 –save 不会修改package.json npm install 命令 –save参数将package记入dep">
 <meta name="keywords" content="Node.js">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Package.json">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/07/18/PackageJSON/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="authordescriptionlicensekeywordsdependencies 和 devdependencies npm install 命令 不加 –save 不会修改package.json npm install 命令 –save参数将package记入dependencies，–save-dev参数将package记入devdependencies 开发工具如glup，angu">
+<meta property="og:description" content="authordescriptionlicensekeywordsdependencies 和 devDependencies, peerDependencies, bundledDependencies, optionalDependencies npm install 命令 不加 –save 不会修改package.json npm install 命令 –save参数将package记入dep">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-07-23T06:05:07.838Z">
+<meta property="og:updated_time" content="2021-01-19T05:07:02.179Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Package.json">
-<meta name="twitter:description" content="authordescriptionlicensekeywordsdependencies 和 devdependencies npm install 命令 不加 –save 不会修改package.json npm install 命令 –save参数将package记入dependencies，–save-dev参数将package记入devdependencies 开发工具如glup，angu">
+<meta name="twitter:description" content="authordescriptionlicensekeywordsdependencies 和 devDependencies, peerDependencies, bundledDependencies, optionalDependencies npm install 命令 不加 –save 不会修改package.json npm install 命令 –save参数将package记入dep">
 
 
 
@@ -322,17 +322,24 @@
       
 
       
-        <h4 id="author"><a href="#author" class="headerlink" title="author"></a>author</h4><h4 id="description"><a href="#description" class="headerlink" title="description"></a>description</h4><h4 id="license"><a href="#license" class="headerlink" title="license"></a>license</h4><h4 id="keywords"><a href="#keywords" class="headerlink" title="keywords"></a>keywords</h4><h4 id="dependencies-和-devdependencies"><a href="#dependencies-和-devdependencies" class="headerlink" title="dependencies 和 devdependencies"></a>dependencies 和 devdependencies</h4><ul>
+        <h4 id="author"><a href="#author" class="headerlink" title="author"></a>author</h4><h4 id="description"><a href="#description" class="headerlink" title="description"></a>description</h4><h4 id="license"><a href="#license" class="headerlink" title="license"></a>license</h4><h4 id="keywords"><a href="#keywords" class="headerlink" title="keywords"></a>keywords</h4><h4 id="dependencies-和-devDependencies-peerDependencies-bundledDependencies-optionalDependencies"><a href="#dependencies-和-devDependencies-peerDependencies-bundledDependencies-optionalDependencies" class="headerlink" title="dependencies 和 devDependencies, peerDependencies, bundledDependencies, optionalDependencies"></a>dependencies 和 devDependencies, peerDependencies, bundledDependencies, optionalDependencies</h4><ul>
 <li>npm install 命令 不加 –save 不会修改package.json</li>
 <li>npm install 命令 –save参数将package记入dependencies，–save-dev参数将package记入devdependencies</li>
 <li>开发工具如glup，angular脚手架自动安装的jasmine、karma、tslint、chai等，以致于@angular/cli自身，@angular/compiler-cli等工具，以及用于编译器做类型识别的各种@type/XXX 应该放devdependencies</li>
 <li>运行环境如Express,前端框架@angular/core以及可选包forms、animation等，弥补浏览器内核、版本等差异的腻子如core.js，应为dependencies 参考<a href="https://angular.cn/guide/npm-packages" target="_blank" rel="noopener">Angular Doc: npm packages</a></li>
-<li>封装node.js api第三方工具如操作xml、mail、excel等，是业务不可或缺的，应属</li>
-<li>重新编译electron的如node-ffi私以为其实并不会进入构建结果，应为dependencies<h4 id="语义版本控制-Semantic-Versioning"><a href="#语义版本控制-Semantic-Versioning" class="headerlink" title="语义版本控制(Semantic Versioning)"></a>语义版本控制(Semantic Versioning)</h4><blockquote>
-<p>MAJOR version when you make incompatible API changes,</p>
+<li>封装node.js api第三方工具如操作xml、mail、excel等，是业务不可或缺的，应属dependencies</li>
+<li>重新编译electron的如node-ffi私以为其实并不会进入构建结果，应为dependencies<blockquote>
+<p>当有人准备在自己的程序中下载使用你的模块时，估计他们不想下载构建你使用的外部测试或者文档框架，为此宜将这些依赖项放在devDependencies里 <a href="https://docs.npmjs.com/cli/v6/configuring-npm/package-json#peerdependencies" target="_blank" rel="noopener">npm doc</a></p>
 </blockquote>
 </li>
 </ul>
+<p>peerDependencies: peer意为同等地位的人，同龄人。peerDependencies将该模块的树形的依赖关系摊平到宿主的依赖环境中</p>
+<p>bundledDependencies: 将依赖的包与当前模块绑定在一起， 如发布一模块做如下配置，npm pack该模块将获得包含”renderized”和”super-streams”的awesome-web-framework-1.0.0.tgz，package version另需在dependencies中指定
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;awesome-web-framework&quot;,</span><br><span class="line">  &quot;version&quot;: &quot;1.0.0&quot;,</span><br><span class="line">  &quot;bundledDependencies&quot;: [</span><br><span class="line">    &quot;renderized&quot;, &quot;super-streams&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>optionalDependencies 可选的依赖，有的依赖模块依赖于特定的运行环境，因此optionalDependencies的依赖项在安装失败的情况下不会影响整个安装结果</p>
+<h4 id="语义版本控制-Semantic-Versioning"><a href="#语义版本控制-Semantic-Versioning" class="headerlink" title="语义版本控制(Semantic Versioning)"></a>语义版本控制(Semantic Versioning)</h4><blockquote>
+<p>MAJOR version when you make incompatible API changes,</p>
+</blockquote>
 <blockquote>
 <p>MINOR version when you add functionality in a backwards-compatible manner, and</p>
 </blockquote>
@@ -460,7 +467,7 @@
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">177</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -482,7 +489,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -515,7 +522,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#author"><span class="nav-number">1.</span> <span class="nav-text">author</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#description"><span class="nav-number">2.</span> <span class="nav-text">description</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#license"><span class="nav-number">3.</span> <span class="nav-text">license</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#keywords"><span class="nav-number">4.</span> <span class="nav-text">keywords</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dependencies-和-devdependencies"><span class="nav-number">5.</span> <span class="nav-text">dependencies 和 devdependencies</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#语义版本控制-Semantic-Versioning"><span class="nav-number">6.</span> <span class="nav-text">语义版本控制(Semantic Versioning)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地依赖"><span class="nav-number">7.</span> <span class="nav-text">本地依赖</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#author"><span class="nav-number">1.</span> <span class="nav-text">author</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#description"><span class="nav-number">2.</span> <span class="nav-text">description</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#license"><span class="nav-number">3.</span> <span class="nav-text">license</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#keywords"><span class="nav-number">4.</span> <span class="nav-text">keywords</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dependencies-和-devDependencies-peerDependencies-bundledDependencies-optionalDependencies"><span class="nav-number">5.</span> <span class="nav-text">dependencies 和 devDependencies, peerDependencies, bundledDependencies, optionalDependencies</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#语义版本控制-Semantic-Versioning"><span class="nav-number">6.</span> <span class="nav-text">语义版本控制(Semantic Versioning)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地依赖"><span class="nav-number">7.</span> <span class="nav-text">本地依赖</span></a></li></ol></div>
             
 
           </div>
@@ -535,7 +542,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

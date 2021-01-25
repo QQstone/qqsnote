@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="EntirtyFramework框架是一个轻量级的可扩展版本的流行实体框架数据访问技术,ORM工具(Object Relational Mapping 对象关系映射)  EF有三种使用场景，1. 从数据库生成Class(DB First)，2.由实体类生成数据库表结构(Code First)，3.  通过数据库可视化设计器设计数据库，同时生成实体类(Model First)。 实体类型12345">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-11-11T08:22:41.165Z">
+<meta property="og:updated_time" content="2021-01-22T10:35:05.379Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Entity Framework">
 <meta name="twitter:description" content="EntirtyFramework框架是一个轻量级的可扩展版本的流行实体框架数据访问技术,ORM工具(Object Relational Mapping 对象关系映射)  EF有三种使用场景，1. 从数据库生成Class(DB First)，2.由实体类生成数据库表结构(Code First)，3.  通过数据库可视化设计器设计数据库，同时生成实体类(Model First)。 实体类型12345">
@@ -394,6 +394,8 @@ package: </p>
 在Startup.cs,配置启用RetryOnFailure
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    services.AddDbContext&lt;DataContext&gt;(options =&gt;</span><br><span class="line">        options.UseSqlServer(Configuration.GetConnectionString(&quot;DataContext&quot;), conf=&gt;</span><br><span class="line">            &#123;</span><br><span class="line">                conf.EnableRetryOnFailure();</span><br><span class="line">            &#125;</span><br><span class="line">        ));</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>但是这里有个bug <a href="https://github.com/efcore/EFCore.SqlServer.HierarchyId/issues/24" target="_blank" rel="noopener">System.ArgumentException thrown when EnableRetryOnFailure is used.</a></p>
+<h4 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;customers&gt; _customers = (from a in db.customers select a).ToList();</span><br><span class="line">var _dataToWebPage = _customers.Skip(50).Take(50);</span><br></pre></td></tr></table></figure>
+<p><a href="https://stackoverflow.com/questions/10145815/c-sharp-entity-framework-pagination" target="_blank" rel="noopener">StackOverflow:C# entity framework pagination</a></p>
 
       
     </div>
@@ -513,7 +515,7 @@ package: </p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">177</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -535,7 +537,7 @@ package: </p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -568,7 +570,7 @@ package: </p>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#实体类型"><span class="nav-number">1.</span> <span class="nav-text">实体类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实体属性"><span class="nav-number">2.</span> <span class="nav-text">实体属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#键"><span class="nav-number">3.</span> <span class="nav-text">键</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#策略维护-多对多关系"><span class="nav-number">4.</span> <span class="nav-text">策略维护 多对多关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一对多"><span class="nav-number">5.</span> <span class="nav-text">一对多</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一对一"><span class="nav-number">6.</span> <span class="nav-text">一对一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关联关系"><span class="nav-number">7.</span> <span class="nav-text">关联关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关联查询"><span class="nav-number">8.</span> <span class="nav-text">关联查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关联存储"><span class="nav-number">9.</span> <span class="nav-text">关联存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CRUD"><span class="nav-number">10.</span> <span class="nav-text">CRUD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DBcontext和connectionstring"><span class="nav-number">11.</span> <span class="nav-text">DBcontext和connectionstring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重连"><span class="nav-number">12.</span> <span class="nav-text">重连</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务"><span class="nav-number">13.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lazy-load"><span class="nav-number">14.</span> <span class="nav-text">Lazy load</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Parent-Child"><span class="nav-number">15.</span> <span class="nav-text">Parent/Child</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hierarchy-Data"><span class="nav-number">16.</span> <span class="nav-text">Hierarchy Data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transient-Error"><span class="nav-number">17.</span> <span class="nav-text">Transient Error</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#实体类型"><span class="nav-number">1.</span> <span class="nav-text">实体类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实体属性"><span class="nav-number">2.</span> <span class="nav-text">实体属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#键"><span class="nav-number">3.</span> <span class="nav-text">键</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#策略维护-多对多关系"><span class="nav-number">4.</span> <span class="nav-text">策略维护 多对多关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一对多"><span class="nav-number">5.</span> <span class="nav-text">一对多</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一对一"><span class="nav-number">6.</span> <span class="nav-text">一对一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关联关系"><span class="nav-number">7.</span> <span class="nav-text">关联关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关联查询"><span class="nav-number">8.</span> <span class="nav-text">关联查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关联存储"><span class="nav-number">9.</span> <span class="nav-text">关联存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CRUD"><span class="nav-number">10.</span> <span class="nav-text">CRUD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DBcontext和connectionstring"><span class="nav-number">11.</span> <span class="nav-text">DBcontext和connectionstring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重连"><span class="nav-number">12.</span> <span class="nav-text">重连</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务"><span class="nav-number">13.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lazy-load"><span class="nav-number">14.</span> <span class="nav-text">Lazy load</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Parent-Child"><span class="nav-number">15.</span> <span class="nav-text">Parent/Child</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hierarchy-Data"><span class="nav-number">16.</span> <span class="nav-text">Hierarchy Data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transient-Error"><span class="nav-number">17.</span> <span class="nav-text">Transient Error</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分页"><span class="nav-number">18.</span> <span class="nav-text">分页</span></a></li></ol></div>
             
 
           </div>
@@ -588,7 +590,7 @@ package: </p>
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

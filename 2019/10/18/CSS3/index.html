@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="transparent vs rgba(0,0,0,0)3d效果-prespective, xyzCss 3D 减少异步使用形如background: url(‘../../icon.svg’)的样式无疑在渲染页面时又添加了异步调用，页面会出现从图片空缺到图片加载的’跳变’， 如果是img:src可以直接把svg代码贴在页面上，优点是图像作为页面代码的一部分一次性从服务端获取，缺点是布局代码会被推">
+<meta name="description" content="transparent vs rgba(0,0,0,0)3d效果-prespective, xyzCss 3D 动画12transform: rotate(180deg);transition: transform 0.5s; HTM + CSS 实现点击旋转 1234&amp;lt;html&amp;gt;  ...  &amp;lt;input type=&amp;quot;button&amp;quot; class=&amp;quot;">
 <meta name="keywords" content="CSS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CSS3">
 <meta property="og:url" content="http://qqstone.github.io/qqsnote/2019/10/18/CSS3/index.html">
 <meta property="og:site_name" content="QQs&#39;Note">
-<meta property="og:description" content="transparent vs rgba(0,0,0,0)3d效果-prespective, xyzCss 3D 减少异步使用形如background: url(‘../../icon.svg’)的样式无疑在渲染页面时又添加了异步调用，页面会出现从图片空缺到图片加载的’跳变’， 如果是img:src可以直接把svg代码贴在页面上，优点是图像作为页面代码的一部分一次性从服务端获取，缺点是布局代码会被推">
+<meta property="og:description" content="transparent vs rgba(0,0,0,0)3d效果-prespective, xyzCss 3D 动画12transform: rotate(180deg);transition: transform 0.5s; HTM + CSS 实现点击旋转 1234&amp;lt;html&amp;gt;  ...  &amp;lt;input type=&amp;quot;button&amp;quot; class=&amp;quot;">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-12-02T05:30:16.227Z">
+<meta property="og:updated_time" content="2020-12-24T01:53:35.880Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CSS3">
-<meta name="twitter:description" content="transparent vs rgba(0,0,0,0)3d效果-prespective, xyzCss 3D 减少异步使用形如background: url(‘../../icon.svg’)的样式无疑在渲染页面时又添加了异步调用，页面会出现从图片空缺到图片加载的’跳变’， 如果是img:src可以直接把svg代码贴在页面上，优点是图像作为页面代码的一部分一次性从服务端获取，缺点是布局代码会被推">
+<meta name="twitter:description" content="transparent vs rgba(0,0,0,0)3d效果-prespective, xyzCss 3D 动画12transform: rotate(180deg);transition: transform 0.5s; HTM + CSS 实现点击旋转 1234&amp;lt;html&amp;gt;  ...  &amp;lt;input type=&amp;quot;button&amp;quot; class=&amp;quot;">
 
 
 
@@ -323,6 +323,11 @@
 
       
         <h4 id="transparent-vs-rgba-0-0-0-0"><a href="#transparent-vs-rgba-0-0-0-0" class="headerlink" title="transparent vs rgba(0,0,0,0)"></a>transparent vs rgba(0,0,0,0)</h4><h4 id="3d效果-prespective-xyz"><a href="#3d效果-prespective-xyz" class="headerlink" title="3d效果-prespective, xyz"></a>3d效果-prespective, xyz</h4><p><a href="https://3dtransforms.desandro.com/" target="_blank" rel="noopener">Css 3D</a></p>
+<h4 id="动画"><a href="#动画" class="headerlink" title="动画"></a>动画</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">transform: rotate(180deg);</span><br><span class="line">transition: transform 0.5s;</span><br></pre></td></tr></table></figure>
+<p>HTM + CSS 实现点击旋转
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">  ...</span><br><span class="line">  &lt;input type=&quot;button&quot; class=&quot;csd-icon icon-refresh&quot;&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<p>目标元素要改为input，因为要用到focus伪类
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">.csd-icon.icon-refresh &#123;</span><br><span class="line">  width: 24px;</span><br><span class="line">  height: 24px;</span><br><span class="line">  padding: 0;</span><br><span class="line">  cursor: pointer;</span><br><span class="line">  position: absolute;</span><br><span class="line">  border:hidden;</span><br><span class="line">  background: url(&quot;data:image/svg+xml,&quot; + map-get($icon,refresh) + &quot;&quot;) no-repeat top left;</span><br><span class="line">  right: 0;</span><br><span class="line">  &amp;:focus&#123;</span><br><span class="line">    outline: none;</span><br><span class="line">    animation: rotatefresh 1s;</span><br><span class="line">  &#125;</span><br><span class="line">  &amp;:active&#123;</span><br><span class="line">    animation: none;  </span><br><span class="line">    //background: &apos;#eee&apos;;</span><br><span class="line">  &#125;</span><br><span class="line">  @keyframes rotatefresh &#123;</span><br><span class="line">    from &#123; transform: rotate(0deg) &#125;</span><br><span class="line">    to &#123;</span><br><span class="line">        transform: rotate(180deg);</span><br><span class="line">        transition: all 0.6s;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h4 id="减少异步"><a href="#减少异步" class="headerlink" title="减少异步"></a>减少异步</h4><p>使用形如background: url(‘../../icon.svg’)的样式无疑在渲染页面时又添加了异步调用，页面会出现从图片空缺到图片加载的’跳变’，
 如果是img:src可以直接把svg代码贴在页面上，优点是图像作为页面代码的一部分一次性从服务端获取，缺点是布局代码会被推至很下面，且svg代码的可读性比较差。
 另一种方式是将图片转为encodeURL贴在css中，这样使图片作为css的一部分从服务端获取
@@ -452,7 +457,7 @@ css形如
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">177</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -474,7 +479,7 @@ css形如
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -507,7 +512,7 @@ css形如
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#transparent-vs-rgba-0-0-0-0"><span class="nav-number">1.</span> <span class="nav-text">transparent vs rgba(0,0,0,0)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3d效果-prespective-xyz"><span class="nav-number">2.</span> <span class="nav-text">3d效果-prespective, xyz</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#减少异步"><span class="nav-number">3.</span> <span class="nav-text">减少异步</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#transparent-vs-rgba-0-0-0-0"><span class="nav-number">1.</span> <span class="nav-text">transparent vs rgba(0,0,0,0)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3d效果-prespective-xyz"><span class="nav-number">2.</span> <span class="nav-text">3d效果-prespective, xyz</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动画"><span class="nav-number">3.</span> <span class="nav-text">动画</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#减少异步"><span class="nav-number">4.</span> <span class="nav-text">减少异步</span></a></li></ol></div>
             
 
           </div>
@@ -527,7 +532,7 @@ css形如
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

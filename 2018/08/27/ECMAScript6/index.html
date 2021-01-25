@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="QQs&#39;Note">
 <meta property="og:description" content="ES6ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。 模块化export require是CommonJS规范的方法,es6 引入了import，可以将模块中的对象部分引入，以减少开销，或者使用import * as">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-12-10T04:49:41.236Z">
+<meta property="og:updated_time" content="2021-01-21T02:28:31.172Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ECMAScript">
 <meta name="twitter:description" content="ES6ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。 模块化export require是CommonJS规范的方法,es6 引入了import，可以将模块中的对象部分引入，以减少开销，或者使用import * as">
@@ -349,6 +349,8 @@ Object.assign(target, …sources)
 <h3 id="箭头函数表达式"><a href="#箭头函数表达式" class="headerlink" title="箭头函数表达式"></a>箭头函数表达式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">const squaredIntegers = arr.filter(item=&gt;&#123;</span><br><span class="line"> return Math.floor(item)===item&amp;&amp;item&gt;0 ;</span><br><span class="line">&#125;).map(item=&gt;Math.pow(item, 2))</span><br></pre></td></tr></table></figure>
 <p>箭头表达式牵扯到的一个知识点是“箭头表达式不会创建this”
 需知javascript this是区分运行环境的标记，见 <a href="https://www.ruanyifeng.com/blog/2018/06/javascript-this.html" target="_blank" rel="noopener">阮一峰 JavaScript 的 this 原理</a>，箭头表达式继承外层函数运行环境。</p>
+<p>关于省略，函数体只有一个return语句时，可省略return关键字和花括号
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">func = x =&gt; &#123; return x+1;&#125;</span><br><span class="line">func = x =&gt; (x+1)</span><br></pre></td></tr></table></figure></p>
 <h3 id="剩余参数运算符（Rest-Operator）"><a href="#剩余参数运算符（Rest-Operator）" class="headerlink" title="剩余参数运算符（Rest Operator）"></a>剩余参数运算符（Rest Operator）</h3><p>使用Rest Operator定义参数数量可变的函数，参数将存入Rest Operator指定的变量指代的数组中
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function howMany(...args) &#123;</span><br><span class="line">  return &quot;You have passed &quot; + args.length + &quot; arguments.&quot;;</span><br><span class="line">&#125;</span><br><span class="line">console.log(howMany(0, 1, 2)); // You have passed 3 arguments</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const sum = (function() &#123;</span><br><span class="line">  &quot;use strict&quot;;</span><br><span class="line">  return function sum(...args) &#123;</span><br><span class="line">    //const args = [ x, y, z ];</span><br><span class="line">    return args.reduce((a, b) =&gt; a + b, 0);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line">console.log(sum(1, 2, 3)); // 6</span><br></pre></td></tr></table></figure>
@@ -548,7 +550,7 @@ ES6中已添加了String.prototype.includes</p>
               
                 <a href="/qqsnote/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">177</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -570,7 +572,7 @@ ES6中已添加了String.prototype.includes</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/qqsnote/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -623,7 +625,7 @@ ES6中已添加了String.prototype.includes</p>
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
