@@ -171,6 +171,7 @@ MyComponent.propTypes = {
 [使用 PropTypes 进行类型检查](https://zh-hans.reactjs.org/docs/typechecking-with-proptypes.html#requiring-single-child)
 
 #### state及组件生命周期
+> 为了正确地构建组件，需要找出组件模型所需的 state 的最小表示，其他所有数据根据该state计算出。[React哲学](https://zh-hans.reactjs.org/docs/thinking-in-react.html#step-3-identify-the-minimal-but-complete-representation-of-ui-state)
 props是传入参数，而state是组件内部表征状态的对象，往往在构造函数中，根据props初始化state
 ```
 class Clock extends React.Component {
@@ -268,7 +269,7 @@ render() {
 #### ReactDOMServer
 
 #### Create React App
-这是一个package [create-react-app](https://www.npmjs.com/package/create-react-app), 如angular-cli，和vue-cli中包含的命令工具，用以创建基于React的完整应用。
+这是一个package [create-react-app](https://www.npmjs.com/package/create-react-app), 如angular-cli，和vue-cli中包含的命令工具(这里封装的命令是react-scripts, 见package.json中的scripts)，用以创建基于React的完整应用。
 ```
 my-app/
   node_modules/
@@ -285,4 +286,8 @@ my-app/
   README.md
   package.json
 
+```
+关于typescript
+```
+yarn add --dev typescript
 ```

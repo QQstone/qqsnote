@@ -454,3 +454,9 @@ public async Task<List<Group>> GetChildrenByGroupIDAsync(Guid groupID)
 }
 ```
 但是这里有个bug [System.ArgumentException thrown when EnableRetryOnFailure is used.](https://github.com/efcore/EFCore.SqlServer.HierarchyId/issues/24)
+#### 分页
+```
+List<customers> _customers = (from a in db.customers select a).ToList();
+var _dataToWebPage = _customers.Skip(50).Take(50);
+```
+[StackOverflow:C# entity framework pagination](https://stackoverflow.com/questions/10145815/c-sharp-entity-framework-pagination)

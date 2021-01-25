@@ -68,6 +68,86 @@ gyp ERR! stack Error: EPERM: operation not permitted, unlink 'D:\projxxx\node_mo
   +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 
 ```
-对于electron，渲染界面提供入口signin, 点击会调用默认浏览器打开登录页，authenticate通过后，重定向过程会将授权码或直接将access token返回到electron, 这个‘返回’过程可以使用[自定义协议](https://www.electronjs.org/docs/api/protocol)实现, 亦可实现一个b/s的request & response来完成。
+对于electron，渲染界面提供入口signin, 点击会调用默认浏览器打开登录页，authenticate通过后，重定向过程会将授权码或直接将access token返回到electron, 这个‘返回’过程可以使用[自定义协议](https://www.electronjs.org/docs/api/protocol)实现(QQs尚未实践), 亦可实现一个b/s的request & response来完成。
+renderUI
+```
+signinWithADB2C(){
+  const adconfig={
+    clientid:'3c744214-bf78-4f92-8173-49863ae8f24b',
+    authority:'https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/B2C_1_basic_sign_up_and_sign_in',
+    redirectUri:'http://localhost:9990/index.html',
+    scopes:'3c744214-bf78-4f92-8173-49863ae8f24b openid'
+  }
+  // make up / assemble authority URL
+  const authorityURL = `${adconfig.authority}/oauth2/v2.0/authorize?client_id=${
+    adconfig.clientid
+  }&redirect_uri=${
+    encodeURI(adconfig.redirectUri)
+  }&scope=${
+    encodeURI(adconfig.scopes)
+  }&response_type=id_token%20token&nonce=defaultNonce&prompt=login`;
+  // call main process open URL with default browser
+  // meanwhile launch a http server
+  this.ipcService.send('openinbroweser', authorityURL);
+  this.loading = true;
+  // listen Logged in message
+  this.ipcService.on('access_token', msg => {
+    // TODO process user info
+  });
+}
+```
+main 主线程中launch一个http server，负责提供Redirect URI的页面，页面自执行request请求，请求亦由http server响应
+```
+....
+ipcMain.on('openinbroweser', (event, args) => {
+  log('info', 'ipcmain event:openinbroweser');
+  if (args) {
+    const { shell } = require('electron');
+    shell.openExternal(args);
+  } else {
+    log('error', 'invalid website', args);
+  }
+});
 
-~参考[electron oauth with github](https://www.manos.im/blog/electron-oauth-with-github/)，文章使用[superagent](https://github.com/visionmedia/superagent)实现了一个接收token的server~
+// launch a http server
+var static = require('node-static');
+var file = new static.Server(`${__dirname}/public`);
+http.createServer(function (request, response) {
+  if(request.url==='/index.html'){
+    request.addListener('end', function () {
+        file.serve(request, response)
+    }).resume();
+  }else{
+    const reg = new RegExp("t=([^&]*)");
+    const res= request.url.match(reg);
+    const token = res[1];
+    console.log('t=',token)
+    win.webContents.send('access_token',token)
+    response.write("success"); //close default browser
+  }
+  response.end(); //end the response
+}).listen(9990)
+```
+redirect page (public/index.html)
+```
+<html>
+<body>
+  <p>serve by csportal</p>
+  <script>
+    (() => {
+      var reg = new RegExp("#access_token=([^&]*)");
+      var res = location.href.match(reg);
+      var token = unescape(res[1]);
+      fetch(`http://localhost:3000?t=${token}`)
+        .then(function (response) {
+          return response.json();
+        })
+        .catch(error => console.error('Error:', error))
+        .then(response => {console.log('Success:', response);
+        window.close();
+      });
+    })();
+  </script>
+</body>
+</html>
+```

@@ -2,6 +2,9 @@
 title: npm
 date: 2020-04-27 15:23:24
 tags:
+- npm
+categories: 
+- 工具
 ---
 #### npm ls
 

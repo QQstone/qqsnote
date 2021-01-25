@@ -25,3 +25,20 @@ state是state在某个时间点的快照，state与view绑定
 #### preact
 据说是使用更符合Dom规范的事件系统，直接使用浏览器原生事件系统而不是统一用onChange，从而对React的设计进行了简化<sup>[注1](
 https://www.zhihu.com/question/65479147/answer/942582216)</sup>
+
+#### craco
+[craco](https://github.com/gsoft-inc/craco),当下流行的对React项目进行自定义配置的社区解决方案，[AntDesign4](https://ant.design/docs/react/use-with-create-react-app-cn#%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE)官方亦有在使用
+[更骚的create-react-app开发环境配置craco](https://cloud.tencent.com/developer/article/1749704)
+从create-react-app开始配置(关于create-react-app见{% post_link React React %})
+```
+npx create-react-app my-project
+yarn add antd @craco/craco craco-less @babel/plugin-proposal-decorators babel-plugin-import -D
+```
+package.json scripts将命令替换为craco
+<del>&nbsp;&nbsp;"start": "react-scripts start",
+&nbsp;&nbsp;"build": "react-scripts build",
+&nbsp;&nbsp;"test": "react-scripts test",
+&nbsp;&nbsp;"eject": "react-scripts eject"</del>
+&nbsp;&nbsp;"start": "craco start",
+&nbsp;&nbsp;"build": "craco build",
+&nbsp;&nbsp;"test": "craco test"

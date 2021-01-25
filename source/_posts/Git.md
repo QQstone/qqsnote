@@ -19,6 +19,8 @@ git add .
 git commit -m "blablabla"
 git push origin master
 // 将修改推送到origin上的master分支上
+// clone and rename 
+git clone git@xxxxxx YourFolderName
 ```
 #### 忽略本地修改拉取远程分支
 ```
