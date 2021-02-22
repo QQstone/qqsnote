@@ -6,6 +6,7 @@ tags:
 categories: 
 - 前端技术
 ---
+[官方Doc]()
 #### 调试
 方法一 <br>
 npm install typescript<br>
@@ -242,6 +243,21 @@ function identity<T>(arg: T): T
     return arg; 
 }
 ```
+#### infer
+```
+type ParamType<T> = T extends (param: infer P) => any ? P : T;
+```
+infer表示P是待推断的参数类型，如果T
+#### never
+不会返回结果的类型，一直在while(true)的函数，或者一定会抛出异常的函数
 #### 模块
 > export 和 import
 #### namespace(存目)
+#### 从js迁移
+参考[TS Doc](https://www.tslang.cn/docs/handbook/migrating-from-javascript.html)
+#### 元组
+与数组的唯一区别是依次逐项指定了类型
+适用于特定的数据元结构，比较现实的场景如csv文件的row 
+```
+const newRow:[number,string,boolean] = [1,'老王',true]
+```

@@ -248,6 +248,7 @@ await using (var context = new BloggingContext())
 ```
 上面的代码没有显式操作外键post.blogId，但EF会自动更新，并且将所需的新实体blog插入数据库
 #### CRUD
+使用数据库上下文修改模型(包括新增和移除)，并执行SaveChanges，相当于commit
 ```
 // create
 context.Add(new Student{
@@ -282,6 +283,28 @@ context.SaveChangesAsync()
 // delete
 context.Remove(MaYun);
 context.SaveChangesAsync()
+```
+<span style="color:#f50;font-weight:bold">Caution!</span> 在对DbContext的多次操作中，如果前面一次SaveChanges出错，如Add操作违反唯一约束而失败，需要将该实体类实例从DbContext中移除(或修正)，否则出错的命令会一直在提交队列中，反复报错
+```
+try
+{
+    _context.Add(newBlog);
+    await _context.SaveChangesAsync();
+}
+catch (Microsoft.EntityFrameworkCore.DbUpdateException dbEx)
+{
+    // TODO the result description is not properly rigorous.
+    if (null != dbEx.InnerException
+        && dbEx.InnerException.Message.Contains("constraint"))
+    {
+        System.Console.WriteLine("Blog exists;");
+    }
+    else
+    {
+        // other error handle
+    }
+    _context.Remove(newBlog);
+}
 ```
 #### DBcontext和connectionstring
 startup.cs
@@ -460,3 +483,23 @@ List<customers> _customers = (from a in db.customers select a).ToList();
 var _dataToWebPage = _customers.Skip(50).Take(50);
 ```
 [StackOverflow:C# entity framework pagination](https://stackoverflow.com/questions/10145815/c-sharp-entity-framework-pagination)
+
+#### ORM注意事项
+[EF O/RM 注意事项](https://docs.microsoft.com/zh-cn/ef/core/#ef-orm-considerations)
+
+#### 日志
+startup.cs
+```
+services.AddDbContext<DataServiceContext>(options => {
+    options.UseSqlServer(Configuration.GetConnectionString("DataServiceContext"), conf => {
+        conf.UseHierarchyId();
+        conf.EnableRetryOnFailure();
+    });
+    options.LogTo(System.Console.WriteLine);
+});
+```
+[Docs:简单的日志记录](https://docs.microsoft.com/zh-cn/ef/core/logging-events-diagnostics/simple-logging)
+日志委托和日志级别：
+```
+options.LogTo(Console.WriteLine, LogLevel.Information;
+```

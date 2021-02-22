@@ -24,6 +24,11 @@ vm.children = parentList.Select(parentItem => parentItem.Child).ToList();
 
 #### 初始化Object
 ```
+result.data =new {
+        List = itemList,
+        Total = itemsTotal
+ };
+
 result = await _context.OurBrand
         .Where(brand => brand.name != "QQsIndustry")
         .Select(brand=>new JObject{{"name", brand.name}, {"logo", brand.logo}})
@@ -87,3 +92,6 @@ public async Task<MyResult> SendHttpRequestAsync(string uri, Object postData, st
 ```
 上例中的发送/接收用了流读写的方式，估计这也是所有封装Http请求的通用原理，注意catch块中对WebException的处理，这样可以看到服务端返回的所有信息，相当于用postman调用失败后看到的错误信息，比error code 或 ‘Bad Request’描述丰富
 参考: [StackOverflow: HttpWebRequest 400 Bad Request](https://stackoverflow.com/questions/692342/net-httpwebrequest-getresponse-raises-exception-when-http-status-code-400-ba), [HttpWebRequest详细用法](https://blog.csdn.net/zhruifei/article/details/78356347)
+
+#### 文件接口
+[IFormFile](https://zhuanlan.zhihu.com/p/347734073)

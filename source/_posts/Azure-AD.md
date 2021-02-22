@@ -40,8 +40,9 @@ Azure保存用户的标识，即使使用第三方的sso如公司的sso认证或
 + user flow 和 costom policy分别指基本的注册-登录-配置的流程以及自定义的策略
 + identity providers 第三方的标识提供方 如Facebook账号或Wechat账号授权服务 
 
+#### Azure ADB2C
+Active Directory 的identity是在login.microsoftonline.com注册的，登录Azure portal也是同样的唯一的账号，B2C则提供了选择多个identity provider的功能，可以使用自己注册的tenant，抑或是社交账号，注册登录入口形如https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/oauth2/v2.0/authorize
 下面以官方sample为例配置，以求使用[桌面客户端](https://github.com/Azure-Samples/active-directory-b2c-dotnet-desktop.git)通过Azure AD B2C的认证框架访问[Web Api](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi.git)
-
 #### 域服务(AD DS)和应用程序管理
 即除了B2C之外的主要功能。AD DS见{% post_link Azure-ADDS Azure域服务 %}
 AD可以用于管理Gallery App也就是微软库中的SaaS应用，也可以通过应用程序代理管理本地的应用(On-premises applications)
@@ -182,7 +183,7 @@ namespace active_directory_b2c_wpf
     {
         private static readonly string Tenant = "61874450-1725-44bb-bb8e-314575861ad6";
         private static readonly string AzureAdB2CHostname = "https://qqstudio.b2clogin.com/oauth2/nativeclient";
-        private static readonly string ClientId = "8e039329-171a-4484-8151-4e67bf561218";
+        private static readonly string ClientId = "8e039329-171a-4484-8151-4e67bf561218"; // 这里的clientId是WPF Client自己的ID
         private static readonly string RedirectUri = "https://fabrikamb2c.b2clogin.com/oauth2/nativeclient"; // 这个是Azure给桌面客户端的登录页
         public static string PolicySignUpSignIn = "B2C_1_basic_sign_up_and_sign_in";
 
@@ -228,7 +229,7 @@ namespace active_directory_b2c_wpf
 #### 使用Azure AD 作为identity provider（存目）
 以实现一键(使用AD凭据)登录
 #### 对接wechat 作为identity provider（存目）
-
+在user flow - identity provider中勾选社交账号 wechat
 #### 关于系统角色定义
 多个系统使用Azure AD B2C，各个系统地权限角色是否要在Azure方维护呢？是否是在expose API时定义scope呢？<br>
 私以为并不是，鉴于{% post_link OAuth2 OAuth %}一篇中所述，资源服务器保留私钥对access token进行校验，甚至可以从中解析出当前用户key，过期时间等信息，籍此完全可以查询本系统定义地权限角色，而无须频繁访问SSO。
@@ -248,3 +249,17 @@ namespace active_directory_b2c_wpf
 > Silent Sign In Workflow
 
 #### 自定义登录页
+#### Wechat
+首先是在[微信公众平台](https://open.weixin.qq.com/cgi-bin/applist?t=manage/list&page=0&num=20&openapptype=512&token=046ef0026c9a457aa1f8f33db6868c26e193c21d&lang=zh_CN)注册网站应用,注册过程需要填写企业/个人网站的官网和备案号，很头疼
+
+添加Wechat为AB B2C的identity provider：Azure AD B2C --> Identity providers --> WeChat(Preview) 可以看到Callback URL(填到微信公众平台上注册的网站应用的授权回调域配置中)，Name可以填WeChat，填写网站应用的id/secret
+
+添加identity provider到User flow：Azure AD B2C --> User flows --> [Your User flow] --> Identity providers 选择已添加到AD B2C的 social identity provider
+#### 多个资源
+> issue: MSAL AADB2C90146 'Openid profile' provided in request specifies more than one resource for an access token, which is not supported'
+
+[stackoverflow: use requestsilent](https://stackoverflow.com/questions/49362631/msal-aadb2c90146-openid-profile-provided-in-request-specifies-more-than-on)
+
+#### Tips
++ [Visual Studio Code 的 Azure AD B2C 扩展](https://marketplace.visualstudio.com/items?itemName=AzureADB2CTools.aadb2c)
++ [Application Insights-logs](https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/troubleshoot-with-application-insights)

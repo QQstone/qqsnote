@@ -4,6 +4,8 @@ date: 2020-03-24 12:54:34
 tags:
 ---
 > current version: 6.5.2
+#### 关于响应式编程
+[知乎：响应式编程](zhuanlan.zhihu.com/p/27678951)
 #### Observable 的发布和订阅
 ```
 // Create simple observable that emits three values

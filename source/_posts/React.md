@@ -20,6 +20,20 @@ ReactDOM.render(JSX,document.getElementById("challenge-node"))
 + 用className绑定class样式
 #### 注释
 use the syntax {/* */}
+#### 表单
+```
+render() {
+  return (
+    <form onSubmit={this.handleSubmit}>
+      <label>
+        文章:
+        <textarea value={this.state.value} onChange={this.handleChange} />
+      </label>
+      <input type="submit" value="提交" />
+    </form>
+  );
+}
+```
 #### ES6语法
 ```
 import { Component } from 'react'
@@ -171,8 +185,12 @@ MyComponent.propTypes = {
 [使用 PropTypes 进行类型检查](https://zh-hans.reactjs.org/docs/typechecking-with-proptypes.html#requiring-single-child)
 
 #### state及组件生命周期
+> props是父组件传入的只读参数，state是组件自身的动态的状态
+
 > 为了正确地构建组件，需要找出组件模型所需的 state 的最小表示，其他所有数据根据该state计算出。[React哲学](https://zh-hans.reactjs.org/docs/thinking-in-react.html#step-3-identify-the-minimal-but-complete-representation-of-ui-state)
 props是传入参数，而state是组件内部表征状态的对象，往往在构造函数中，根据props初始化state
+
+组件状态更新使用setState，函数触发组件的重新渲染
 ```
 class Clock extends React.Component {
   constructor(props) {
@@ -192,6 +210,7 @@ class Clock extends React.Component {
   componentWillUnmount() {
     clearInterval(this.timerID);
   }
+  tick=()=>{this.setState((pre)=>({date:new Date()}))}
 
   render() {
     return (
@@ -264,10 +283,26 @@ render() {
   );
 }
 ```
+#### 继承
+没有继承！
+> 在render return中组合子组件提供了清晰而安全地定制组件外观和行为的灵活方式，没有需要使用继承来构建组件层次的情况。[React Docs:组合 vs 继承](没有发现需要使用继承来构建组件层次的情况。)
 #### onRef
 子组件实例化回调函数，用以获取子组件对象
+#### Fragment
+相当于Angular的template，插入子组件不生成额外的元素(如div)，<React.Fragment></React.Fragment>可以省略为<></>
 #### ReactDOMServer
-
+```
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <div/>
+  }
+};
+ReactDOMServer.renderToString(<App />);
+```
+服务端渲染(SSR),生成dom的html字符串,实现SEO优化
 #### Create React App
 这是一个package [create-react-app](https://www.npmjs.com/package/create-react-app), 如angular-cli，和vue-cli中包含的命令工具(这里封装的命令是react-scripts, 见package.json中的scripts)，用以创建基于React的完整应用。
 ```
@@ -291,3 +326,9 @@ my-app/
 ```
 yarn add --dev typescript
 ```
+在tsconfig.json中配置typescript编译器([略](https://zh-hans.reactjs.org/docs/static-type-checking.html#configuring-the-typescript-compiler))
+
+
+使用tsx文件书写包含jsx代码的typescript代码
+
+使用tsc命令编译

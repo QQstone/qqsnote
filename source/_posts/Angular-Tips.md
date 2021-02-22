@@ -47,3 +47,42 @@ export class UsersListComponent {
     You're not logged in.
 </ng-template>
 ```
+#### 事件‘委托’
+需求是文件上传，往往隐藏input type="file"而放一个好看的入口。
+事件可以直接在HTML的native element上触发，在jQuery中
+```
+$("#fileInput").click();
+```
+原生js
+```
+document.getElementById("fileInput").click();
+```
+Angular可以使用viewChild获取元素
+```
+@ViewChild('fileInput') fileInput:ElementRef;
+constructor(private renderer:Renderer) {}
+
+showImageBrowseDlg() {
+  let event = new MouseEvent('click', {bubbles: true});
+  this.renderer.invokeElementMethod(
+      this.fileInput.nativeElement, 'dispatchEvent', [event]);
+}
+```
+[MDN:dispatchEvent](https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/dispatchEvent)
+通过dom结构定位元素
+```
+<div style="width: 128px; height: 128px; background-color: #fafafa;
+  border: 1px dashed #d9d9d9;
+  border-radius: 2px;cursor: pointer;display: flex;justify-content: center;align-items: center;"
+  (click)="showImageBrowseDlg($event)"> + 
+  <input type="file" style="display: none;" (change)="handleUpload($event)">
+</div>
+
+showImageBrowseDlg(event){
+  if(event.target.children[0]){
+      const fileinput:HTMLElement = event.target.children[0] as HTMLElement;
+      fileinput.click();
+      event.stopPropagation();
+  }
+}
+```

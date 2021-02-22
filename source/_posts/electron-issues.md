@@ -151,3 +151,5 @@ redirect page (public/index.html)
 </body>
 </html>
 ```
+Caution! 需考虑到浏览器将token传递给client的过程，都有被第三方恶意应用占用URL Scheme或者localhost端口截取Access Token的风险。在有"显式"授权流程的方式中，浏览器传递授权码，由client凭授权码换取token，同样无法杜绝第三方拦截。
+了解使用[带有PKCE(Proof Key for Code Exchange)支持的授权码模式](https://tonyxu.io/zh/posts/2018/oauth2-pkce-flow/)

@@ -11,7 +11,7 @@ categories:
 ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。
 
 ### 模块化
-export require是CommonJS规范的方法,es6 引入了import，可以将模块中的对象部分引入，以减少开销，或者使用import * as objName from 引入文件所有对象
+export require是CommonJS规范的方法,es6 引入了<b>import</b>，可以将模块中的对象部分引入，以减少开销，或者使用import * as objName from 引入文件所有对象
 CommonJS vs ES Modules:
 nodejs是默认使用CommonJS的，其表现可见express的服务中，如"module.exports = AssetService;"以及"var AssetService = require('./AssetService')"。而es6中用"import common from '@myRepo/core'"和"export .."
 更多了解[NodeJS Docs](https://nodejs.org/docs/latest/api/esm.html#esm_differences_between_es_modules_and_commonjs)
@@ -27,6 +27,17 @@ export default{
 import util1 from './util1.js'
 console.log(util1)
 ```
+动态引入
+```
+import('/modules/my-module.js')
+  .then((module) => {
+    // Do something with the module.
+  });
+// OR
+let module = await import('/modules/my-module.js');
+```
+见[MDN:import](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/import)
+据说动态import的模块在打包时会自动分割，见[React Docs: 代码分割](https://zh-hans.reactjs.org/docs/code-splitting.html#code-splitting)
 ### 关于声明
 > let 代替 var. 同一变量不能重复使用let声明, 否则报错<br>
 
@@ -235,7 +246,49 @@ Promise.prototype.catch = function(fn){
     return this.then(null,fn);
 }
 ```
+#### generator
+以function*定义的生成器，与function的区别是除了return，其执行期间可以yield‘返回’多次
+```
+function* foo(x) {
+  yield x + 1;
+  yield x + 2;
+  return x + 3;
+}
+```
+斐波那契生成器
+```
+function* fib(max) {
+  var
+      t,
+      a = 0,
+      b = 1,
+      n = 0;
+  while (n < max) {
+      yield a;
+      [a, b] = [b, a + b];
+      n ++;
+  }
+  return;
+}
+```
+fib(5)返回一个generator对象console输出形如fib {[[GeneratorStatus]]: "suspended", [[GeneratorReceiver]]: Window}
+调用generator对象的next方法迭代
+```
+var f = fib(5);
+f.next(); // {value: 0, done: false}
+f.next(); // {value: 1, done: false}
+f.next(); // {value: 1, done: false}
+f.next(); // {value: 2, done: false}
+f.next(); // {value: 3, done: false}
+f.next(); // {value: undefined, done: true}
+```
+也可以var x of fib(5)进行迭代，x即value
+generator似乎是为了状态管理而生的工具,所谓状态管理，因为其表象是一步接一步(next)来的,后面步骤的结果有可能需要依赖前面一步的状态(比如成功或失败，抑或current result)
+{% post_link await2generator 'async await是generator的语法糖' %}
 
+关于迭代器和可迭代对象
+迭代器是使用next()方法实现迭代器协议(lterator protocal)的任意对象，如Array迭代器
+可以使用for of迭代的对象即[可迭代对象](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Iterators_and_Generators#%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1)
 ## ES7
 ### Array.protorype.includes
 array.includes(x) 相当于 array.indexOf(x)<br>

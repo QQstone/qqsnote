@@ -121,12 +121,13 @@ util.inspect类似于JSON.stringify将json对象属性以{key}={value};的字符
 
 #### multer
 文件上传
+> Multer 会添加一个 body 对象 以及 file 或 files 对象 到 express 的 request 对象中。 body 对象包含表单的文本域信息，file 或 files 对象包含对象表单上传的文件信息。 [GitHub:multer](https://github.com/expressjs/multer/blob/master/doc/README-zh-cn.md)
 ```
 var _fs = require('fs') 
 var multer = require('multer')
  
-app.use(multer({dest:'/tmp'}).array('image')) // image是input [type='file'] 的name属性
-app.post('/files/upload',function(req,res){
+const upload = multer({dest:'/tmp'}) 
+app.post('/files/upload', upload.single('file'), function(req,res){ // image是input [type='file'] 的name属性 或 formdata的field名
     console.log(req.files[0])
     var des_file = __dirname + '/tmp/' +req.files[0].originalname;
     _fs.readFile(req.files[0].path, function(err, data){
@@ -146,6 +147,7 @@ app.post('/files/upload',function(req,res){
     })
 })
 ```
+Multer 接受一个 options 对象，其中最基本的是 dest 属性，这将告诉 Multer 将上传文件保存在哪。如果你省略 options 对象，这些文件将保存在内存中，永远不会写入磁盘。 关于[options](https://github.com/expressjs/multer/blob/master/doc/README-zh-cn.md#multeropts)
 #### 环境变量
 服务端口号变量控制
 ```
@@ -191,3 +193,12 @@ let options = {
 }
 app.use(express.static('public', options))
 ```
+#### application performance
+使用chrome devtool[Profile和Memory]()
+[Easy-Monitor](https://github.com/hyj1991/easy-monitor)
+[阿里Node.js性能平台]（https://cn.aliyun.com/product/nodejs）
+
+to be continued...
+
+#### Tips
+[path.resolve vs path.join](https://stackoverflow.com/questions/35048686/whats-the-difference-between-path-resolve-and-path-join)
