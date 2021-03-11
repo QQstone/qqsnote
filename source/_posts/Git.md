@@ -51,15 +51,21 @@ git reset --hard cd8462xxxx
 git config core.sparsecheckout true
 echo /db/* >> .git/info/sparse-checkout
 ```
-#### reset revert 以及 rebase
+#### reset revert
 ```
     git reset --soft <commit> // 重置到<commit>版本，修改内容放入缓存区（unstage）
     git reset --hard <commit> // 重置到<commit>版本，修改内容永久删除
 
     git revert <commit-last> .. <commit-somewhere> // 提交一个记录来撤销所罗列出的<commit>
-
-    git rebase -i <start-commit> <end-commit> //(start-commit, end-commit] 前开后闭区间，合并到当前分支，默认 end-commit 为当前 HEAD
 ```
+#### rebase
+```
+    git checkout feature/new_featueXXX
+    git rebase develop
+    // resolve merge conflict
+    git rebase --continue
+```
+    git rebase -i <start-commit> <end-commit> //(start-commit, end-commit] 前开后闭区间，合并到当前分支，默认 end-commit 为当前 HEAD
 #### repository 迁移
 ```
 git clone --bare git@old-repo.git 

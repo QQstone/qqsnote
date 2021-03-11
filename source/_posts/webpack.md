@@ -69,3 +69,8 @@ module.exports={
 ```
 ![link-app-bundle-analyze](https://tva1.sinaimg.cn/large/a60edd42gy1gij0uq9lyqj21fx0py7ft.jpg)
 scan-link, react+vtk.js+materialUI的项目
+#### loader
+[内联调用loader](https://webpack.docschina.org/concepts/loaders/#inline)
+```
+import MyIcon from '-!svg-react-loader!../../assets/image/icon.svg'
+```

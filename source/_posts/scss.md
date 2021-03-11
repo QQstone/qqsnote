@@ -111,3 +111,8 @@ npm i -g node-sass
 [node-sass troubleshooting#Running with sudo or as root](https://github.com/sass/node-sass/blob/master/TROUBLESHOOTING.md#running-with-sudo-or-as-root)
 [stackoverflow:Error: Node Sass version 5.0.0 is incompatible with ^4.0.0](https://stackoverflow.com/questions/64625050/error-node-sass-version-5-0-0-is-incompatible-with-4-0-0)
 [node-sass issues#941](https://github.com/sass/node-sass/issues/941)
+
+Cannot download “https://github.com/sass/node-sass/releases/download/v4.13.1/win32-x64-83_binding.node”
+package-lock指定了node-sass@4.13.1, 关于node-sass的[release版本](https://github.com/sass/node-sass/releases/tag/v4.13.1)没有win32-x64-83_binding.node, '-83'为node 14的支持模块，而4.13的node-sass不支持node 14，见[Node version support policy](https://www.npmjs.com/package/node-sass#node-version-support-policy). 即此问题是由于编译环境升级到node14造成的，解决方法是安装支持node14的4.14+
+
+参考[](https://stackoverflow.com/questions/66382986/npm-install-problem-cannot-download-win32-x64-83-binding-node)

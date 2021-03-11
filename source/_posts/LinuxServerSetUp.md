@@ -3,6 +3,7 @@ title: 安装Linux服务器
 date: 2019-12-29 16:22:26
 tags:
 - Linux
+- Apache
 categories: 
 - Linux
 ---
@@ -20,15 +21,60 @@ categories:
 #### 在线安装Applications
 
 #### 配置apache
-+ 复制 ams.conf 到sites-availiable
-+ a2ensite ams
-+ enable Proxy modules
+启用端口 /etc/apache2/ports.conf
+
+配置/etc/sites-availiable/yoursite.conf
+栗子：
 ```
-sudo a2enmod proxy
-sudo a2enmod proxy_http
-sudo a2enmod proxy_balancer
-sudo a2enmod lbmethod_byrequests
+<VirtualHost *:90>
+	ServerName www.example.com
+
+	DirectoryIndex index.html
+	DocumentRoot /home/qqs/Workspace/csc_simulate/
+	<Directory /home/qqs/Workspace/csc_simulate>
+		Require all granted
+	</Directory>
+	Alias /viewer /home/qqs/Workspace/cs_meshviewer/build
+	<Directory /home/qqs/Workspace/cs_meshviewer/build>
+		Require all granted
+	</Directory>
+
+	<Location /viewer>
+        	DirectoryIndex index.html
+    </Location>
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+	ProxyPreserveHost On
+	ProxyPass /download http://10.196.98.58:3000/download
+	ProxyPassReverse /download http://10.196.98.58:3000/download
+</VirtualHost>
 ```
+注意 <Directory> <Location>并不是唯一的，应根据需要定义路径的访问控制，[Difference between Directory and Location](https://serverfault.com/questions/196957/difference-between-location-and-directory-apache-directives)
+启用和禁用site
+```
+a2ensite yoursite.conf
+a2dissite yoursite.conf
+```
+
+启用和禁用模块
+```
+// 关于反向代理
+a2enmod proxy
+a2enmod proxy_http
+a2enmod proxy_balancer
+a2enmod lbmethod_byrequests
+// 关于虚拟路径
+a2enmod alias
+// 禁用：a2dismod
+```
+启用、停用和重启服务
+```
+systemctl start|stop|reload apache2
+```
+#### Issue 403 You don't have permission to access this resource.
+
 ### 令人发狂的CentOS（Selinux）
 
 #### 镜像

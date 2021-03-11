@@ -95,3 +95,43 @@ public async Task<MyResult> SendHttpRequestAsync(string uri, Object postData, st
 
 #### 文件接口
 [IFormFile](https://zhuanlan.zhihu.com/p/347734073)
+
+#### Regex
+email 地址校验前进行域名转码
+```
+try
+{
+    email = Regex.Replace(email, @"(@)(.+)$", DomainMapper,
+                        RegexOptions.None, TimeSpan.FromMilliseconds(200));
+
+    // Examines the domain part of the email and normalizes it.
+    string DomainMapper(Match match)
+    {
+        // Use IdnMapping class to convert Unicode domain names.
+        var idn = new IdnMapping();
+
+        // Pull out and process domain name (throws ArgumentException on invalid)
+        string domainName = idn.GetAscii(match.Groups[2].Value);
+
+        return match.Groups[1].Value + domainName;
+    }
+catch (RegexMatchTimeoutException e)
+{
+    return false;
+}
+catch (ArgumentException e)
+{
+    return false;
+}
+try
+{
+    return Regex.IsMatch(email,
+        @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+        RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
+}
+catch (RegexMatchTimeoutException)
+{
+    return false;
+}
+```
+[IdnMapping.GetAscii](https://docs.microsoft.com/zh-cn/dotnet/api/system.globalization.idnmapping.getascii?view=net-5.0):将包含 US-ASCII 字符范围以外的Unicode字符的域名称标签字符串编码为（U+0020 至 U+007E）内的可显示 Unicode 字符的字符串

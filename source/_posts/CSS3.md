@@ -7,7 +7,9 @@ categories:
 - 前端技术
 ---
 #### transparent vs rgba(0,0,0,0)
-
+#### css实现toggle switch
+[how to css switch](w3schools.com/howto/howto_css_switch.asp)
+tip：在html中 input:type=checkbox 天生具有bool特征 即以checked属性跟踪状态
 #### 3d效果-prespective, xyz
 [Css 3D](https://3dtransforms.desandro.com/)
 #### 动画
@@ -51,7 +53,7 @@ HTM + CSS 实现点击旋转
 }
 ```
 #### 减少异步
-使用形如background: url('../../icon.svg')的样式无疑在渲染页面时又添加了异步调用，页面会出现从图片空缺到图片加载的'跳变'，
+使用形如background: url('../../icon.svg')的样式无疑在渲染页面时又添加了异步调用，页面会出现从图片空缺到图片加载的'跳变'，可以用F12--Performance--Network：slow 3G
 如果是img:src可以直接把svg代码贴在页面上，优点是图像作为页面代码的一部分一次性从服务端获取，缺点是布局代码会被推至很下面，且svg代码的可读性比较差。
 另一种方式是将图片转为encodeURL贴在css中，这样使图片作为css的一部分从服务端获取
 css形如

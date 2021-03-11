@@ -285,7 +285,7 @@ render() {
 ```
 #### 继承
 没有继承！
-> 在render return中组合子组件提供了清晰而安全地定制组件外观和行为的灵活方式，没有需要使用继承来构建组件层次的情况。[React Docs:组合 vs 继承](没有发现需要使用继承来构建组件层次的情况。)
+> 在render return中组合子组件提供了清晰而安全地定制组件外观和行为的灵活方式，没有需要使用继承来构建组件层次的情况。[React Docs:组合 vs 继承](https://zh-hans.reactjs.org/docs/composition-vs-inheritance.html#so-what-about-inheritance)
 #### onRef
 子组件实例化回调函数，用以获取子组件对象
 #### Fragment
