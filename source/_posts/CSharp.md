@@ -15,6 +15,16 @@ foreach (Object item in items){
     ...
 }
 ```
+#### string format
+```
+String result = $"the value is {value}"
+```
+见[Mircrosoft Docs: C#字符串内插](https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/tokens/interpolated)
+
+string list 分隔
+```
+String.Join(",", list)
+```
 #### IEnumerable<T>.Select
 ```
 vm.children = parentList.Select(parentItem => parentItem.Child).ToList();

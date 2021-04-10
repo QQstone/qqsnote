@@ -63,3 +63,43 @@ remove from main.ts
 ```
 export { renderModule, renderModuleFactory } from '@angular/platform-server';
 ```
+#### css: ng-deep
+曾使用ng-inline-svg将svg模板嵌入angular模板(见{% post_link svg svg %})，插入方式使用的是其定义的指令
+```
+<div [inlineSVG]="'assets/image/icon.svg'"></div>
+```
+目的是使用类似
+```
+.nav-checked svg>path{
+    fill:red
+}
+```
+的方式实现动态图标样式
+事实上，ng-inline-svg指令将宿主元素（div）作为组件锚点，用svg模板实例化为一个独立组件，宿主元素所在组件的样式无法作用到子组件
+Angular官方文档中对于样式‘透传’有如下solution
+```
+:host ::ng-deep .nav-checked svg>path{
+    fill:red
+}
+```
+:host表示从本组件开始::ng-deep向下生效
+见[Doc：组件样式](https://angular.cn/guide/component-styles#deprecated-deep--and-ng-deep)
+
+参考[ng-inline-svg issue#14](https://github.com/arkon/ng-inline-svg/issues/14)
+
+关于deprecated，是deep与w3c的[草案](https://drafts.csswg.org/css-scoping-1/)曾用关键字冲突，然而其一Angular尚无替代方案，其二w3c已移除了相关建议，若将来协议落地，Angular亦无须重复实现这个feature(引述：[StackOverflow：What to use in place of ::ng-deep](https://stackoverflow.com/questions/47024236/what-to-use-in-place-of-ng-deep))
+
+#### Can't bind to 'ngForOf' since it isn't a known property of XXX
+疑似升级至ng11后出现，多个modules，任意组件使用指令均可能报错，解决方法是在所在子模块手动引入CommonModule
+```
+...
+import { CommonModule } from '@angular/common';
+
+
+@NgModule({
+    imports: [SharedModule, CommonModule],
+    declarations: [...],
+    providers: [],
+})
+export class ManageModule { }
+```

@@ -35,6 +35,11 @@ Jasmine 通过用自然语言书写非程序员可读的测试用例扩展了测
         Song.js
 ```
 spec + src文件夹是栗子
+
+笔记目的导向：
++ spec.ts写的啥(Jasmine 单元测试的书写语法)
++ 组件声明周期中应该存在哪些用例(如实例化，输入/输出，方法，释放)
++ 依赖项的处理
 ```
 describe("Player", function() {
   var player;
@@ -110,6 +115,23 @@ describe('HeroesService (with mocks)', () => {
     ...
 });
 ```
+#### waitForAsync TestBed
+```
+import { ComponentFixture, fakeAsync, TestBed, waitForAsync } from '@angular/core/testing';
+describe('nz-table', () => {
+  let injector: Injector;
+  beforeEach(
+    waitForAsync(() => {          // 
+      injector = TestBed.configureTestingModule({
+        imports: [BidiModule, NzTableModule],
+        declarations: [NzTestTableBasicComponent, NzTestTableScrollComponent, NzTableSpecCrashComponent, NzTestTableRtlComponent]
+      });
+      TestBed.compileComponents();
+    })
+  );
+  ...
+})
+```
 #### it 和 specs
 specs即specification(规则)，它们是一个个断言，可以是 true 或者 false。当每个 Spec 中的所有 expectations 都是 true，则通过测试。以it函数定义，与describe类似的，有 2 个参数：标题和方法。
 #### expect tobe
@@ -147,3 +169,5 @@ specs即specification(规则)，它们是一个个断言，可以是 true 或者
 ```
 spy一个foo对象上的setBar方法，分别断言该方法被调用、被调用若干次、被以某某参数调用
 很多时候用spy对应模拟对象
+
+#### 用例

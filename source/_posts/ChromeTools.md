@@ -20,6 +20,12 @@ categories:
   ```
 + 获取事件以及监听事件
 + console.time()
+  ```
+  console.time('heavy process')
+  console.timeLog('heavy process', 'step1 finished')
+  console.timeLog('heavy process', 'step2 finished')
+  console.timeEnd('heavy process')
+  ```
 + console.table(array)
 #### 使用chrome 模拟加载较慢网速
 1. F12

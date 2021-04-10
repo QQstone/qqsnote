@@ -306,6 +306,7 @@ catch (Microsoft.EntityFrameworkCore.DbUpdateException dbEx)
     _context.Remove(newBlog);
 }
 ```
+DBContext.Add成功后 若主键id使用数据库策略生成 Add成功后即可从对象中取到
 #### DBcontext和connectionstring
 startup.cs
 ```
@@ -476,7 +477,7 @@ public async Task<List<Group>> GetChildrenByGroupIDAsync(Guid groupID)
     ...
 }
 ```
-但是这里有个bug [System.ArgumentException thrown when EnableRetryOnFailure is used.](https://github.com/efcore/EFCore.SqlServer.HierarchyId/issues/24)
+<del>但是这里有个bug [System.ArgumentException thrown when EnableRetryOnFailure is used.](https://github.com/efcore/EFCore.SqlServer.HierarchyId/issues/24)</del> 该bug已在dotNet 5版本修复
 #### 分页
 ```
 List<customers> _customers = (from a in db.customers select a).ToList();
@@ -490,8 +491,8 @@ var _dataToWebPage = _customers.Skip(50).Take(50);
 #### 日志
 startup.cs
 ```
-services.AddDbContext<DataServiceContext>(options => {
-    options.UseSqlServer(Configuration.GetConnectionString("DataServiceContext"), conf => {
+services.AddDbContext<MyDBContext>(options => {
+    options.UseSqlServer(Configuration.GetConnectionString("MyDBContext"), conf => {
         conf.UseHierarchyId();
         conf.EnableRetryOnFailure();
     });
@@ -503,3 +504,97 @@ services.AddDbContext<DataServiceContext>(options => {
 ```
 options.LogTo(Console.WriteLine, LogLevel.Information;
 ```
+#### Exception：this sqltransaction has completed it is no longer usable
+```
+[HttpPost]
+[Route("api/[controller]/create")]
+public async Task<Result> Create([FromBody] QModel model){
+    ...
+    try{
+        _context.Add(model);
+        await _context.SaveChangesAsync();
+    }catch(Exception ex){
+        // ...
+    }
+}
+```
+如上一个insert数据的接口，在有限的并发条件下（也就是for循环几条请求），个别错误数据可以造成其他正常数据插入失败
+报 this sqltransaction has completed it is no longer usable 以及 zombie check等解释
+查了2天资料未能解决
+次日反思 问题或许出在多条线程同时向数据库上下文中推数据（即_context.Add）其中一个错误数据的出错，事务自动回滚，导致了其他线程中访问该事务已不可用。
+此处使用_context.AddAsync方法可以解决
+即，该问题就是个ef方法的线程安全的问题，可见[StackOverflow: AddAsync vs Add](https://stackoverflow.com/questions/47135262/addasync-vs-add-in-ef-core)
+那么我一个需求要添加user并为其分配新的group，一个事务里两个add操作怎么办呢，另起一小节：
+
+#### 一个事务多个操作的线程安全
+其实在官方文档最初的概述中，强调了DbContext的线程不安全 见[Microsoft Docs: DBContext Lifetime](https://docs.microsoft.com/zh-cn/ef/core/dbcontext-configuration/#the-dbcontext-lifetime)
+> DbContext 不是线程安全的。 不要在线程之间共享上下文。 请确保在继续使用上下文实例之前，等待所有异步调用。
+
+关于以事务作为上下文生命周期的配置, 见[StackOverflow:Configuring Dbcontext as Transient](https://stackoverflow.com/questions/41923804/configuring-dbcontext-as-transient) <span style="color:#f00;font-weight:bold">然而!</span>经实践同一接口的并发测试 仍然会出现this sqltransaction has completed it is no longer usable的异常
+依赖注入的DBContext
+在Startup的ConfigureServices中注册MyDBContext服务提供程序：
+```
+services.AddDbContext<MyDBContext>(
+    options => options.UseSqlServer(Configuration.GetConnectionString("MyDBContext"),
+                                conf => { conf.UseHierarchyId();
+                                    conf.EnableRetryOnFailure();
+                                }), ServiceLifetime.Transient);
+```
+注入DBContext:
+```
+public class GroupsController : ControllerBase
+{
+    private readonly MyDBContext _context;
+    private IGroupTreeService _groupTreeService;
+
+    public GroupsController(MyDBContext context, IGroupTreeService groupTreeService)
+    {
+        _context = context;
+        _groupTreeService = groupTreeService;
+    }
+    ...
+}
+```
+控制DBContext生命周期在函数内部
+官方Doc：[启用RetryOnFailue情形下的手动事务方式](https://docs.microsoft.com/zh-cn/ef/core/miscellaneous/connection-resiliency#execution-strategies-and-transactions)
+```
+public interface IWorker
+{
+    void DoWork(Func<MyDbContext> dbFactory);
+}
+
+public class WorkerRunner
+{
+    private readonly DbContextOptions<MyDbContext> _dbOptions;
+
+    private readonly List<IWorker> _workers;
+
+    public WorkerRunner(DbContextOptions<MyDbContext> dbOptions, List<IWorker> workers)
+    {
+        _dbOptions = dbOptions;
+        _workers = workers;
+    }
+
+    public void RunWorkers()
+    {
+        using (var context = new MyDbContext(_dbOptions))
+        {
+            using (var tran = context.Database.BeginTransaction())
+            {
+                foreach (var worker in _workers)
+                    worker.DoWork(() =>
+                    {
+                        // This won't work
+                        var db = new MyDbContext(_dbOptions);
+                        // And this one will even throw exception when used with in-memory database (during unit testing)
+                        db.Database.UseTransaction(tran.GetDbTransaction());
+                        return context;
+                    });
+
+                tran.Commit();
+            }
+        }
+    }
+}
+```
+就是new一个DBContext用， <span style="color:#ff0;font-weight:bold">Caution!</span> 经测单靠new DBContext不能阻止transaction Error

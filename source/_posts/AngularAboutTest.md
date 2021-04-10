@@ -38,7 +38,8 @@ X.spec.ts文件用于Jasmine做单元测试
 见{% post_link Jasmine Jasmine %}
 #### 单元测试
 > 单元测试（英語：Unit Testing）又称为模块测试，是针对程序模块（软件设计的最小单位）来进行正确性检验的测试工作。 程序单元是应用的最小可测试部件。 在过程化编程中，一个单元就是单个程序、函数、过程等；对于面向对象编程，最小单元就是方法，包括基类（超类）、抽象类、或者派生类（子类）中的方法。
-> 
+
+单元测试是为了测试代码逻辑，每个‘单元’在用例场景下是否能返回期望的结果，仅此而已
 [栗子](https://angular.cn/generated/live-examples/testing/specs.stackblitz.html)
 假设为UserService.ts设计单元测试，须知
 ```

@@ -32,4 +32,5 @@ Ctrl C无法终结，按Ctrl Z将进程转到后台执行，然后ps -ef查看�
 ```
 sudo nano /etc/netplan/01-xxxx.yaml
 sudo netplan apply
+# sudo netplan --debug apply
 ```

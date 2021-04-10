@@ -89,6 +89,31 @@ $icons: ("eye": "\f112", "start": "\f12e", "stop": "\f12f");
 	background: #313030;
 }
 ```
+伪类 icon
+```
+$icon:(
+  add:"%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox...",
+  edit:"%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox...",
+  delete:"%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox...",
+  refresh:"%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox..."
+)
+@each $key, $val in $icon{
+	.qqs-design-icon.icon-#{$key}{
+		position: relative;
+		padding-left: 22px;
+		margin-left: 4px;
+		&::before{
+			content: '';
+			position: absolute;
+			left: 0px;
+			bottom: calc(50% - 10px);
+			background: url("data:image/svg+xml," + $val + "") no-repeat top left;
+			width: 25px;
+			height: 25px;
+		}
+	}
+}
+```
 #### 拼接url
 ```
 $sites: ("twitter.com", "facebook.com", "linkedin.com");

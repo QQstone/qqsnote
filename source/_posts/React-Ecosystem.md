@@ -34,6 +34,8 @@ https://www.zhihu.com/question/65479147/answer/942582216)</sup>
 npx create-react-app my-project
 yarn add antd @craco/craco craco-less @babel/plugin-proposal-decorators babel-plugin-import -D
 ```
+添加craco配置 craco.conf.js，即模块化配置，根据所需的资源参考方案：https://github.com/gsoft-inc/craco/tree/master/recipes
+
 package.json scripts将命令替换为craco
 <del>&nbsp;&nbsp;"start": "react-scripts start",
 &nbsp;&nbsp;"build": "react-scripts build",
@@ -42,3 +44,97 @@ package.json scripts将命令替换为craco
 &nbsp;&nbsp;"start": "craco start",
 &nbsp;&nbsp;"build": "craco build",
 &nbsp;&nbsp;"test": "craco test"
+
+#### format.js 国际化
+```
+yarn add react-intl
+yarn add -D @formatjs/ts-transformer
+```
+> we highly recommend declaring defaultMessages inline along with their usages because of the following reasons: 建议使用声明内联的defaultMessages， 连同他们的usage，原因如下
+
+1. Messages colocated with their usages become self-managed, as their usages change/removed, so are the messages. 搭配usage的Message成为自治的 当usage更改或移除，Message亦同
+2. Messages are highly contextual. We've seen a lot of cases where developers assume a certain grammar when they write their messages. Buttons/Call-To-Actions and labels are also translated differently. Message高度关联上下文， 杜绝为message发明新语法或编规则
+3. Text styling is also dependent on the message itself. Things like truncation, capitalization... certainly affect the messages themselves. 会与样式相关
+4. Better integrations with toolchains. Most toolchains cannot verify cross-file references to validate syntax/usage. 易于工具链集成
+
+格式化语法
+```
+import * as React from 'react'
+import {IntlProvider, FormattedMessage, FormattedNumber} from 'react-intl'
+
+<IntlProvider messages={messagesInFrench} locale="fr" defaultLocale="en">
+    <p>
+    <FormattedMessage
+        id="myMessage"
+        defaultMessage="Today is {ts, date, ::yyyyMMdd}"
+        values={{ts: Date.now()}}
+    />
+    <br />
+    <FormattedNumber value={19} style="currency" currency="EUR" />
+    </p>
+</IntlProvider>
+```
+> Error: [React Intl] Could not find required 'intl' object.  IntlProvider needs to exist in the component ancestry
+
+当没有IntlProvider父组件时报上述异常
+
+提取文本映射
+```
+yarn add -D @formatjs/cli
+```
+package.json中添加脚本命令
+```
+ "extract": "formatjs extract"
+```
+执行
+```
+yarn extract 'src/**/*.ts*' --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'
+或
+npm run extract -- 'src/**/*.ts*' --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'
+```
+将待翻译的message保存为指定语言的json文件，没id的message自动编码id
+
+分发
+将翻译好的多语言lang/***.json编译为Intl使用的格式
+package.json中添加脚本命令
+```
+"compile": "formatjs compile"
+```
+执行
+```
+yarn compile lang/fr.json --ast --out-file compiled-lang/fr.json
+或
+npm run compile -- lang/fr.json --ast --out-file compiled-lang/fr.json
+```
+切换语言代码
+```
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
+import {IntlProvider} from 'react-intl'
+
+function loadLocaleData(locale: string) {
+  switch (locale) {
+    case 'fr':
+      return import('compiled-lang/fr.json')
+    default:
+      return import('compiled-lang/en.json')
+  }
+}
+
+function App(props) {
+  return (
+    <IntlProvider
+      locale={props.locale}
+      defaultLocale="en"
+      messages={props.messages}
+    >
+      <MainApp />
+    </IntlProvider>
+  )
+}
+
+async function bootstrapApplication(locale, mainDiv) {
+  const messages = await loadLocaleData(locale)
+  ReactDOM.render(<App locale={locale} messages={messages} />, mainDiv)
+}
+```

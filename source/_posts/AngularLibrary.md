@@ -6,6 +6,7 @@ tags:
 categories: 
 - 前端技术
 ---
+### 添加库
 #### add library
 ```
 ng new my-project --style less
@@ -24,3 +25,5 @@ ng g ng-alain:list list -m=user
 根据ng-alain规则生成user模块，并为其添加一个list功能(自动生成组件，配置路由等)
 
 > Caution! “download another dependencies” 并不会加入到 package.json(存疑))
+
+### 创建库

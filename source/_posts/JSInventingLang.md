@@ -9,9 +9,8 @@ categories:
 ![inventing js](https://tva1.sinaimg.cn/large/a60edd42gy1gc2rdmb6h9j20hr0k40tx.jpg)
 
 #### 关于0.1+0.2==0.3 false
-
 [0.1 + 0.2不等于0.3？为什么JavaScript有这种“骚”操作？](https://juejin.im/post/5b90e00e6fb9a05cf9080dff)
-
+关于浮点数的二进制表示，js浮点数精度(存目)
 ### JS Tips
 #### Caps lock sensitive
 ```

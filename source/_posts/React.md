@@ -332,3 +332,5 @@ yarn add --dev typescript
 使用tsx文件书写包含jsx代码的typescript代码
 
 使用tsc命令编译
+
+添加@types/react
