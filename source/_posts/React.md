@@ -90,7 +90,7 @@ class Calendar extends React.Component {
   }
 };
 ```
-使用函数表达式不需要this指针而class定义是要的
+使用函数表达式不需要this指针而class定义是要的(ES6 ()=>{}不创建this)
 
 另外设置默认参数：ComponentA.defaultProps = {name:'New Component'}
 #### 参数校验

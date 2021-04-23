@@ -440,5 +440,24 @@ flat自动移除空项
 返回匹配正则表达式的所有结果的集合
 ### 新增基本数据类型 BigInt
 js基本数据类型（值类型）已不止5种（ES6之后是六种）！ES10后一共有七种基本数据类型，分别是： String、Number、Boolean、Null、Undefined、Symbol、BigInt
+
+关于Symbol，生成唯一的值，用于不关心具体值的场景 见[知乎：JS 中的 Symbol 是什么？](https://zhuanlan.zhihu.com/p/22652486)
+#### 装饰器Decorator
+Angular常见的@Component(), @Module()等，在Ts中已有规范
+ES6 提案 尚未标准化，js decorator或无法被浏览器适用，需使用babel打包并规范化
+其实质是将定义的方法(装饰器名即函数签名)添加到紧随其后的class, function的propotype上
+```
+// 例如 mobx 中 @observer 的用法
+/**
+ * 包装 react 组件
+ * @param target
+ */
+function observer(target) {
+    target.prototype.componentWillMount = function() {
+        targetCWM && targetCWM.call(this);
+        ReactMixin.componentWillMount.call(this);
+    };
+}
+```
 #### 关注木易杨每日面试题
 [Daily Interview Question](https://github.com/Advanced-Frontend/Daily-Interview-Question)

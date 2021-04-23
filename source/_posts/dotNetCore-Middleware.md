@@ -4,7 +4,7 @@ date: 2020-07-27 10:14:04
 tags:
 - .Net
 ---
-这里地中间件概念和express.js中的是一致的,
+这里的中间件概念和express.js中的是一致的,
 
 下面栗子的代码来源： [Net Core中间件封装原理示例demo解析](https://juejin.im/entry/5b39c743e51d4558a21fad54)
 ```

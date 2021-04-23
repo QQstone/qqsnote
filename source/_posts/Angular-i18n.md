@@ -3,6 +3,7 @@ title: Angular 多语言
 date: 2020-05-11 14:07:27
 tags:
 - Angular
+- 多语言
 categories: 
 - 前端技术
 ---

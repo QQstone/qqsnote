@@ -130,3 +130,9 @@ xmlInfo.match(/(<parameter.*?\/>).*?\1/)
   filename.match(/\.(\w+)$/);
   ```
   返回match的Array,取第一项为扩展名
+
++ 查找代码中所有的描述字符串(目的是做多语言替换)
+  ```
+  (?<!from |require\(|: |console\.log\()'.+'
+  ```
+  即非空字符串且排除import from，require，以及console.log等语法

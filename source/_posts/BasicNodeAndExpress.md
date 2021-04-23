@@ -176,6 +176,11 @@ $env:PORT = 1234
 
 del env:PORT
 ```
+#### cross-env
+从package.json获取版本作为环境变量
+```
+cross-env REACT_APP_VERSION=$(node -p 'require(\"./package.json\").version')
+```
 #### 关于Node.js的系统学习
 Node.js的实现的学习才应该是你要学的Node.js本身，而不是无尽的工具和第三方库。<br>
 

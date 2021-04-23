@@ -112,7 +112,55 @@ add .vscode/launch.json
 8. void
 9. null 和 undefined
 10. never 
-#### 实现es6类型声明let 和 const
+
+关于枚举
+定义<u>一组</u>常量
+```
+enum Direction {
+    Up = "↑",
+    Down = "↓",
+    Left = "←",
+    Right = "→",
+}
+```
+类似map的用法
+```
+switch(key){
+    case Direaction.Up:
+        console.log('direction is up');
+        break;
+    ...
+}
+```
+类似interface的用法， 如 function Foo(direct: Direaction)
+
+"类型谓词"
+```
+function isFish(pet: Fish | Bird): pet is Fish {
+    return (<Fish>pet).swim !== undefined;
+}
+```
+定义类型保护函数isFish用以区分一个联合类型(Fish | Bird)的变量,依据是Fish类型存在swim属性
+其意义无非就是把下列代码
+```
+if ((<Fish>pet).swim) {
+    (<Fish>pet).swim();
+}
+else {
+    (<Bird>pet).fly();
+}
+```
+改为
+```
+if (isFish(pet)) {
+    pet.swim();
+}
+else {
+    pet.fly();
+}
+```
+多数情况下还是用 typeof 和 instanceof
+#### let 和 const 同es6
 > let const 声明的变量只在当前代码块中有效
 
 ```
@@ -247,7 +295,7 @@ function identity<T>(arg: T): T
 ```
 type ParamType<T> = T extends (param: infer P) => any ? P : T;
 ```
-infer表示P是待推断的参数类型，如果T
+infer表示P是待推断的参数类型，如T
 #### never
 不会返回结果的类型，一直在while(true)的函数，或者一定会抛出异常的函数
 #### 模块
@@ -261,3 +309,36 @@ infer表示P是待推断的参数类型，如果T
 ```
 const newRow:[number,string,boolean] = [1,'老王',true]
 ```
+#### 装饰器 Decorator
+> 装饰器是一种特殊类型的声明，它能够被附加到类声明，方法， 访问符，属性或参数上。 装饰器使用 @expression这种形式，expression求值后必须为一个函数，它会在运行时被调用，被装饰的声明信息做为参数传入。
+
+```
+import "reflect-metadata";
+
+const formatMetadataKey = Symbol("format");
+
+function format(formatString: string) {
+    return Reflect.metadata(formatMetadataKey, formatString);
+}
+
+function getFormat(target: any, propertyKey: string) {
+    return Reflect.getMetadata(formatMetadataKey, target, propertyKey);
+}
+```
+这里用到了反射
+```
+class Greeter {
+    @format("Hello, %s")
+    greeting: string;
+
+    constructor(message: string) {
+        this.greeting = message;
+    }
+    greet() {
+        let formatString = getFormat(this, "greeting");
+        return formatString.replace("%s", this.greeting);
+    }
+}
+```
+#### typescript-eslint
+见[Typescript-ESLint](github.com/typescript-eslint/typescript-eslint#typescript-eslint)
