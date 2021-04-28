@@ -94,7 +94,7 @@ emcc hello.c -s WASM=1 -o hello.html
 #### FFmpeg.js 的实现
 原文：[Build FFmpeg WebAssembly version (= ffmpeg.wasm)](https://itnext.io/build-ffmpeg-webassembly-version-ffmpeg-js-part-1-preparation-ed12bf4c8fac) 此链接国内网络或无法访问，可参考国内博客的类似文章，keyword:"webassembyly" + "ffmpeg"
 
-关于ffmpeg,{% post_link video-streaming video和视频流 % }那篇曾用其进行视频的转码和输出流。<br>
+关于ffmpeg,{% post_link video-streaming video和视频流 %}那篇曾用其进行视频的转码和输出流。<br>
 > FFmpeg 是一个开放源代码的自由软件，可以运行音频和视频多种格式的录影、转换、流功能，包含了libavcodec(用于多个项目中音频和视频的解码器库)，以及libavformat(音频与视频格式转换库)。————维基百科
 clone FFmpeg 源码
 ```

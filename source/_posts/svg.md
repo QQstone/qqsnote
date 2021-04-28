@@ -10,7 +10,7 @@ svg 可缩放矢量图形(Scalable Vector Graphics), 使用xml格式定义图形
   <circle cx="100" cy="50" r="40" stroke="black" stroke-width="2" fill="red" />
 </svg>
 ```
-嵌入html中可以作为dom操作，在{% postlink BasicDataVisualization 数据可视化入门 %}中曾提到D3数据可视化库即使用svg进行动态渲染的
+嵌入html中可以作为dom操作，在{% post_link BasicDataVisualization 数据可视化入门 %}中曾提到D3数据可视化库即使用svg进行动态渲染的
 
 对于简单的icon响应可以有
 ```
