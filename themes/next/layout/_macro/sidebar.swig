@@ -44,6 +44,16 @@
         </div>
       {%- endif %}
 
+      <div class="tag-cloud-tags">
+        {{ tagcloud({
+          min_font   : theme.tagcloud.min,
+          max_font   : theme.tagcloud.max,
+          amount     : theme.tagcloud.amount,
+          color      : true,
+          start_color: theme.tagcloud.start,
+          end_color  : '#fff'})
+        }}
+      </div>
     </div>
   </aside>
   <div id="sidebar-dimmer"></div>
