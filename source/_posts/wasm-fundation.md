@@ -43,7 +43,10 @@ tags:
 </html>
 ```
 #### [Performance API](https://developer.mozilla.org/zh-CN/docs/Web/API/Performance_API/Using_the_Performance_API) 
+performance.timing
 performance.now()返回当前时刻距离 “time origin” 所经过的毫秒数，以此可以计算代码执行所花时间，精度大于Date.now()
+#### [requestIdleCallback](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestIdleCallback)
+传入一个回调函数，在浏览器的空闲时段内调用的函数排队。这使开发者能够在主事件循环上执行后台和低优先级工作，而不会影响延迟关键事件，如动画和输入响应。
 #### [TypedArray](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) 
 类型化数组，其实例描述底层的二进制数据缓冲区的类数组视图。<br>
 实际上并没有TypedArray这个全局属性或者构造方法，可以认为是Int8Array，Uint32Array等对象的实例化数组的统称
