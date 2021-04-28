@@ -62,3 +62,25 @@ Suspendisse id sem consectetuer libero luctus adipiscing.
 ```
 console.log('code here')
 ```
+矩阵
+$$
+\left[
+ \begin{matrix}
+   x' \\
+   y' 
+  \end{matrix}
+  \right]=
+ \left[
+ \begin{matrix}
+   cosθ & -sinθ \\
+   sinθ & cosθ 
+  \end{matrix}
+  \right]·
+  \left[
+ \begin{matrix}
+   x \\
+   y 
+  \end{matrix}
+  \right]
+$$
+更多数学表示--> [CSDN: nuoyanli](https://blog.csdn.net/nuoyanli/article/details/96179976)

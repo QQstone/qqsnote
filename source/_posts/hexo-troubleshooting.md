@@ -10,3 +10,6 @@ hexo d
 > Error: spawn git ENOENT
 hexo s
 > cannot GET 
+
+#### 自定义js
+放在/themes/next/source/js/, 官网说的根路径scripts文件夹并不行
