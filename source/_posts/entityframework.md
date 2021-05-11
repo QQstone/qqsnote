@@ -3,6 +3,7 @@ title: Entity Framework
 date: 2020-06-15 16:39:32
 tags:
 - .Net
+- EntityFramework
 ---
 > EntirtyFramework框架是一个轻量级的可扩展版本的流行实体框架数据访问技术,ORM工具(Object Relational Mapping 对象关系映射)
 
@@ -222,6 +223,27 @@ public async Task<IActionResult> Details(string code)
     return View(Blog);
 }
 ```
+Inclulde 被称为 [预先加载 eager load](https://docs.microsoft.com/zh-cn/ef/core/querying/related-data/eager)
+使用ThenInclude关联多个层次
+Include可以包含过滤, 如下取得曾发表带'敏感'词标题文章的所有博客，以及相应的文章
+```
+var restrictBlogs = _context.Blogs.Include(blog => blog.Posts.Where(post => post.Title.Contains("敏感"))).ToList()
+```
+
+显式加载(explicit load)
+```
+var blog = _context.Blogs.Single(blog=>blog.Author=="QQs") // 此处关联属性Posts为null
+...
+var posts = _context.Entry(blog).Collection(blog => blog.Posts).Query().Where(post => post.Title.Contains("敏感")).ToList() // 此时blog对象的Posts属性被填充（仅过滤结果）
+```
+不返回结果posts可以直接Load
+```
+_context.Entry(blog).Collection(blog => blog.Posts).Load()
+```
+QQs：私以为这与预先加载并无多大区别
+
+延迟加载（lazy load）
+见[Microsoft Docs：相关数据的延迟加载](https://docs.microsoft.com/zh-cn/ef/core/querying/related-data/lazy)
 #### 关联存储
 [here](https://docs.microsoft.com/zh-cn/ef/core/saving/related-data)
 向导航属性（blog.Posts）中添加新实体，EF自动发现关联实体并将其插入数据库
@@ -247,6 +269,7 @@ await using (var context = new BloggingContext())
 }
 ```
 上面的代码没有显式操作外键post.blogId，但EF会自动更新，并且将所需的新实体blog插入数据库
+
 #### CRUD
 使用数据库上下文修改模型(包括新增和移除)，并执行SaveChanges，相当于commit
 ```
