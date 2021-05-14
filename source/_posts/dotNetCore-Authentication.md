@@ -7,7 +7,7 @@ tags:
 ---
 
 参考[ASP.NET Core 中的那些认证中间件及一些重要知识点](https://www.cnblogs.com/savorboard/p/aspnetcore-authentication.html)
-> 在 ASP.NET Core 中，身份验证由 IAuthenticationService 负责，而它供身份验证中间件使用。
+> 在 <span>ASP.NET</span> Core 中，身份验证由 IAuthenticationService 负责，而它供身份验证中间件使用。
 
 身份验证中间件
 

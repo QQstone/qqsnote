@@ -6,7 +6,7 @@ tags:
 ---
 通常调用一个功能，将其所属类型new出一个实例，随后调用这个对象的方法，new的过程使用具体的构造方法，后来我们将接口和实现分离，调用功能的地方用接口编码，而具体实现的方法在某处独立配置，一旦需要修改实现，不至于到处替换代码。
 
-`ASP.Net Core`提供内置服务容器IServiceProvider,将服务注入到使用它的类的构造函数中。 框架负责创建依赖关系的实例，并在不再需要时将其释放。
+<span>ASP.NET</span> Core提供内置服务容器IServiceProvider,将服务注入到使用它的类的构造函数中。 框架负责创建依赖关系的实例，并在不再需要时将其释放。
 #### 注册服务
 ```
 public void ConfigureServices(IServiceCollection services)

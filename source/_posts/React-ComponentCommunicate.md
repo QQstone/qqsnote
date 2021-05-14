@@ -127,3 +127,7 @@ export default () => {
 };
 ```
 其他hooks
+#### 关于函数式组件和Hooks
+使用Hooks代替class中的生命周期函数，是函数式组件进行逻辑复用、状态管理的方式
+> 旧的思维：“我在这个生命周期要检查props.A和state.B（props和state），如果改变的话就触发xxx副作用”。这种思维在后续修改逻辑的时候很容易漏掉检查项，造成bug。新的思维：“我的组件有xxx这个副作用，这个副作用依赖的数据是props.A和state.B”。从过去的命令式转变成了声明式编程。
+———— csr632 [《为什么 React 现在要推行函数式组件，用 class 不好吗？》下的回答](https://www.zhihu.com/question/343314784/answer/937174224)

@@ -6,6 +6,7 @@ tags:
 - .Net
 ---
 课外：[关于传统web app和SPA的选择](https://docs.microsoft.com/zh-cn/dotnet/architecture/modern-web-apps-azure/choose-between-traditional-web-and-single-page-apps)
+
 将单页面应用植入到ASP.Net<br>
 #### 方式一：项目模板和spa中间件：
 ```
@@ -14,7 +15,7 @@ dotnet new -i Microsoft.DotNet.Web.Spa.ProjectTemplates
 % 使用模板创建项目 
 dotnet new angular -n MyDotnetNgProject
 ```
-angular is short for template"ASP. NET Core with Angular", -n 指定项目名称，键入dotnet new --help查看选项参数说明。
+angular is short for template"<span>ASP.NET</span> Core with Angular", -n 指定项目名称，键入dotnet new --help查看选项参数说明。
 项目大致结构
 ```
 │   appsettings.json
@@ -219,4 +220,4 @@ export class AppModule { }
     </ItemGroup>
   </Target>
   ```
-  上例是ASP. NET Core with Angular模板项目使用的build target，两种编译环境，而且其中还有条件语句，有点厉害
+  上例是<span>ASP.NET</span> Core with Angular模板项目使用的build target，两种编译环境，而且其中还有条件语句，有点厉害

@@ -49,6 +49,7 @@ Suspendisse id sem consectetuer libero luctus adipiscing.
 ```
 {% post_link 文章文件名 显示文字 %}
 ```
+反引号\`\`取消自动超链接： `https://www.baidu.com` 但是有个高亮背景，或者用\<span>
 
 ![cannot load pic here](http://pic108.huitu.com/res/20180719/1301968_20180719100805887080_1.jpg "Light")
 

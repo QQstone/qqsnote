@@ -51,3 +51,33 @@ package.json scripts将命令替换为craco
 
 #### format.js 国际化
 见{% post_link formatjs format.js %}
+
+#### react router
+安装react-router-dom,这个package是基于react-router开发的，且实现了现成的组件如Link Switch等
+```
+ReactDOM.render(
+    <BrowserRouter>
+        <AppRoutes />
+    </BrowserRouter>,
+)
+...
+
+const AppRoutes = () => {
+    return (
+        <div>
+            <nav>
+                <ul>
+                    <li><Link to="/dashboard">Dashboard</Link></li>
+                    <li><Link to="/device">Device</Link></li>
+                    <li><Link to="/squre">Squre</Link></li>
+                </ul>
+            </nav>
+            <div>
+                <Route path="/dashboard" component={Dashboard} />
+                <Route path="/device" component={Device} />
+                <Route path="/squre" component={Squre} />
+            </div>
+        </div>
+    )
+}
+```
