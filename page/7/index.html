@@ -145,6 +145,396 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/08/04/vtk/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/08/04/vtk/" class="post-title-link" itemprop="url">vtk</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-04 10:03:13" itemprop="dateCreated datePublished" datetime="2020-08-04T10:03:13+08:00">2020-08-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-06 16:38:49" itemprop="dateModified" datetime="2020-08-06T16:38:49+08:00">2020-08-06</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>The Rendering Engine<br>mapper</p>
+<h4 id="vtkActor"><a href="#vtkActor" class="headerlink" title="vtkActor"></a>vtkActor</h4><p>派生自vtkProp类，渲染场景中数据的可视化表达是通过vtkProp的子类负责的。<del>比如，本例要渲染一个柱体，柱体的数据类型是vtkPolyData，</del>数据要在场景中渲染时，不是直接把数据加入渲染场景就可以，待渲染的数据是以vtkProp对象存在于渲染场景中。</p>
+<p>三维空间中渲染对象最常用的vtkProp子类是vtkActor(表达场景中的几何数据)和vtkVolume(表达场景中的体数据)；二维空间中的数据则是用vtkActor2D表达。</p>
+<p>vtkProp子类负责确定渲染场景中对象的位置、大小和方向信息。Prop依赖于两个对象(Prop一词来源于戏剧里的“道具”，在VTK里表示的是渲染场景中可以看得到的对象。)，一个是Mapper(vtkMapper)对象，负责存放数据和渲染信息，另一个是属性(vtkProperty)对象，负责控制颜色、不透明度等参数。</p>
+<p>VTK中定义了大量(超过50个)的Prop类，如vtkImageActor(负责图像显示)和vtkPieChartActor(用于创建数组数据的饼图可视化表达)。其中的一些Prop内部直接包括了控制显示的参数和待渲染数据的索引，因此并不需要额外的Property和Mapper对象。vtkActor的子类vtkFollower可以自动的更新方向信息以保持始终面向一个特定的相机。这样无论怎样旋转，三维场景中的广告板(Billboards)或者文本都是可见的。vtkActor的子类vtkLODActor可以自动改变自身的几何表达来实现需要达到的交互帧率。vtkProp3D的子类vtkLODProp3D则是通过从许多Mapper(可以是体数据的Mapper和几何数据的Mapper集合)中进行选择来实现交互。vtkAssembly建立Actor的等级结构以便在整个结构平移、旋转或者缩放时能够更合理的控制变换。</p>
+<p>vtkActor::SetMapper()——设置生成几何图元的Mapper。即连接一个Actor到可视化pipeline的末端(可视化pipeline的末端就是Mapper)。</p>
+<h4 id="vtkMapper"><a href="#vtkMapper" class="headerlink" title="vtkMapper"></a>vtkMapper</h4><p>将输入的数据转换为几何图元(点、线、多边形)进行渲染。</p>
+<h4 id="vtkRenderWindow"><a href="#vtkRenderWindow" class="headerlink" title="vtkRenderWindow"></a>vtkRenderWindow</h4><p>连接操作系统与VTK渲染引擎</p>
+<h4 id="vtkRenderer"><a href="#vtkRenderer" class="headerlink" title="vtkRenderer"></a>vtkRenderer</h4><p>负责管理场景的渲染过程。组成场景的所有对象包括Prop，照相机(Camera)和光照(Light)都被集中在一个vtkRenderer对象中。父类vtkViewport。一个vtkRenderWindow中可以有多个vtkRenderer对象，而这些vtkRenderer可以渲染在窗口中不同的矩形区域中(即视口)，或者覆盖整个窗口区域。</p>
+<ul>
+<li><p>vtkRenderer::AddActor()</p>
+</li>
+<li><p>vtkRenderer::SetBackground()</p>
+<h4 id="Interactor"><a href="#Interactor" class="headerlink" title="Interactor"></a>Interactor</h4><p>提供平台独立的响应鼠标、键盘和时钟事件的交互机制，通过VTK的Command/Observer设计模式将监听到的特定平台的鼠标、键盘和时钟事件交由vtkInteractorObserver或其子类，如vtkInteractorStyle进行处理。vtkInteractorStyle等监听这些消息并进行处理以完成旋转、拉伸和放缩等运动控制。vtkRenderWindowInteractor自动建立一个默认的3D场景交互器样式(Interactor Style)：vtkInteractorStyleSwitch，当然你也可以选择其他的交互器样式，或者是创建自己的交互器样式。在本例中，我们就是选择了其他的交互器样式来替代默认的：vtkInteractorStyleTrackballCamera</p>
+</li>
+<li><p>vtkRenderWindowInteractor::SetRenderWindow()——设置渲染窗口，消息是通过渲染窗口捕获到的，所以必须要给交互器对象设置渲染窗口。</p>
+</li>
+<li><p>vtkRenderWindowInteractor::SetInteractorStyle()——定义交互器样式，默认的交互样式为vtkInteractorStyleSwitch。</p>
+</li>
+<li><p>vtkRenderWindowInteractor::Initialize() ——为处理窗口事件做准备，交互器工作之前必须先调用这个方法进行初始化。</p>
+</li>
+<li><p>vtkRenderWindowInteractor::Start() ——开始进入事件响应循环，交互器处于等待状态，等待用户交互事件的发生。进入事件响应循环之前必须先调用Initialize()方法。</p>
+</li>
+</ul>
+<h4 id="vtkInteractorStyleTrackballCamera"><a href="#vtkInteractorStyleTrackballCamera" class="headerlink" title="vtkInteractorStyleTrackballCamera"></a>vtkInteractorStyleTrackballCamera</h4><p>交互器样式的一种，该样式下，用户是通过控制相机对物体作旋转、放大、缩小等操作。</p>
+<p><img src="https://tvax2.sinaimg.cn/large/a60edd42gy1ghelso7vv1j20gz08paaw.jpg" alt="vtk scope"></p>
+<h4 id="pipeline"><a href="#pipeline" class="headerlink" title="pipeline"></a>pipeline</h4><h4 id="官方-paraview"><a href="#官方-paraview" class="headerlink" title="官方 paraview"></a>官方 paraview</h4>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/30/Redux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/07/30/Redux/" class="post-title-link" itemprop="url">Redux</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-07-30 10:52:25 / Modified: 10:52:26" itemprop="dateCreated datePublished" datetime="2020-07-30T10:52:25+08:00">2020-07-30</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/27/CSharp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/07/27/CSharp/" class="post-title-link" itemprop="url">C#</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-07-27 10:45:30" itemprop="dateCreated datePublished" datetime="2020-07-27T10:45:30+08:00">2020-07-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-13 10:42:52" itemprop="dateModified" datetime="2021-07-13T10:42:52+08:00">2021-07-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="decimal"><a href="#decimal" class="headerlink" title="decimal"></a>decimal</h4><p>因为float计算时有精度损耗，而且产生损耗时在程序中并不提示，于是创建decimal类型，付出额外的性能，进行高精度计算</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">decimal d&#x3D;1.23M</span><br></pre></td></tr></table></figure>
+<h4 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foreach (Object item in items)&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="string-format"><a href="#string-format" class="headerlink" title="string format"></a>string format</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String result &#x3D; $&quot;the value is &#123;value&#125;&quot;</span><br></pre></td></tr></table></figure>
+<p>见<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/tokens/interpolated">Mircrosoft Docs: C#字符串内插</a></p>
+<p>string list 分隔</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String.Join(&quot;,&quot;, list)</span><br></pre></td></tr></table></figure>
+<h4 id="IEnumerable-Select"><a href="#IEnumerable-Select" class="headerlink" title="IEnumerable.Select"></a>IEnumerable<T>.Select</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vm.children &#x3D; parentList.Select(parentItem &#x3D;&gt; parentItem.Child).ToList();</span><br></pre></td></tr></table></figure>
+<h4 id="委托Delegate"><a href="#委托Delegate" class="headerlink" title="委托Delegate"></a>委托Delegate</h4><blockquote>
+<p>C# 中的委托（Delegate）类似于 C 或 C++ 中函数的指针, 是一种引用类型变量</p>
+</blockquote>
+<h4 id="初始化Object"><a href="#初始化Object" class="headerlink" title="初始化Object"></a>初始化Object</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">result.data &#x3D;new &#123;</span><br><span class="line">        List &#x3D; itemList,</span><br><span class="line">        Total &#x3D; itemsTotal</span><br><span class="line"> &#125;;</span><br><span class="line"></span><br><span class="line">result &#x3D; await _context.OurBrand</span><br><span class="line">        .Where(brand &#x3D;&gt; brand.name !&#x3D; &quot;QQsIndustry&quot;)</span><br><span class="line">        .Select(brand&#x3D;&gt;new JObject&#123;&#123;&quot;name&quot;, brand.name&#125;, &#123;&quot;logo&quot;, brand.logo&#125;&#125;)</span><br><span class="line">        .ToListAsync();</span><br></pre></td></tr></table></figure>
+<h4 id="正则表达式极其校验"><a href="#正则表达式极其校验" class="headerlink" title="正则表达式极其校验"></a>正则表达式极其校验</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">string pattern &#x3D; @&quot;^[A-Z]&#123;4&#125;[AB0-9][0-9]&#123;3&#125;$&quot;;</span><br><span class="line">flag &#x3D; Regex.IsMatch(sn, pattern)</span><br></pre></td></tr></table></figure>
+<h4 id="HttpWebRequest"><a href="#HttpWebRequest" class="headerlink" title="HttpWebRequest"></a>HttpWebRequest</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">public async Task&lt;MyResult&gt; SendHttpRequestAsync(string uri, Object postData, string token)&#123;</span><br><span class="line">    </span><br><span class="line">    HttpWebRequest request &#x3D; WebRequest.CreateHttp(uri); &#x2F;&#x2F; TODO deal with exception</span><br><span class="line">    </span><br><span class="line">    request.Headers.Add(&quot;Authorization&quot;, string.Format(&quot;Bearer &#123;0&#125;&quot;, token));</span><br><span class="line">    request.ContentType &#x3D; @&quot;application&#x2F;json&quot;;</span><br><span class="line">    request.Method &#x3D; @&quot;Post&quot;;</span><br><span class="line">    request.Host &#x3D; GetHost(uri);</span><br><span class="line">    request.Timeout &#x3D; 60000;</span><br><span class="line"></span><br><span class="line">    byte[] data &#x3D; Encoding.UTF8.GetBytes(JsonUtility.ObjToJson(postData));</span><br><span class="line">    request.ContentLength &#x3D; data.Length;</span><br><span class="line"></span><br><span class="line">    using (var stream &#x3D; request.GetRequestStream())</span><br><span class="line">    &#123;</span><br><span class="line">        stream.Write(data, 0, data.Length);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    try&#123;</span><br><span class="line">        using (WebResponse response &#x3D; await request.GetResponseAsync())</span><br><span class="line">        &#123;</span><br><span class="line">            using (var receiveStream &#x3D; response.GetResponseStream())</span><br><span class="line">            &#123;</span><br><span class="line">                using (var reader &#x3D; new StreamReader(receiveStream)) &#x2F;&#x2F; TODO deal with System.ArgumentNullException</span><br><span class="line">                &#123;</span><br><span class="line">                    if (reader !&#x3D; null)</span><br><span class="line">                    &#123;</span><br><span class="line">                        var responseString &#x3D; System.Web.HttpUtility.HtmlDecode(reader.ReadToEnd().Trim());</span><br><span class="line">                        return JsonUtility.JsonToObj&lt;MyResult&gt;(response);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;catch(WebException ex)&#123;</span><br><span class="line">        string message;</span><br><span class="line">        WebResponse errorResponse &#x3D; ex.Response;</span><br><span class="line">        if (errorResponse !&#x3D; null)</span><br><span class="line">        &#123;</span><br><span class="line">            using (Stream responseStream &#x3D; errorResponse.GetResponseStream())</span><br><span class="line">            &#123;</span><br><span class="line">                StreamReader reader &#x3D; new StreamReader(responseStream, Encoding.GetEncoding(&quot;utf-8&quot;));</span><br><span class="line">                message &#x3D; reader.ReadToEnd();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            throw new Exception(&quot;Unknown&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上例中的发送/接收用了流读写的方式，估计这也是所有封装Http请求的通用原理，注意catch块中对WebException的处理，这样可以看到服务端返回的所有信息，相当于用postman调用失败后看到的错误信息，比error code 或 ‘Bad Request’描述丰富<br>参考: <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/692342/net-httpwebrequest-getresponse-raises-exception-when-http-status-code-400-ba">StackOverflow: HttpWebRequest 400 Bad Request</a>, <a target="_blank" rel="noopener" href="https://blog.csdn.net/zhruifei/article/details/78356347">HttpWebRequest详细用法</a></p>
+<h4 id="文件接口"><a href="#文件接口" class="headerlink" title="文件接口"></a>文件接口</h4><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/347734073">IFormFile</a></p>
+<h4 id="Regex"><a href="#Regex" class="headerlink" title="Regex"></a>Regex</h4><p>email 地址校验前进行域名转码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">try</span><br><span class="line">&#123;</span><br><span class="line">    email &#x3D; Regex.Replace(email, @&quot;(@)(.+)$&quot;, DomainMapper,</span><br><span class="line">                        RegexOptions.None, TimeSpan.FromMilliseconds(200));</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; Examines the domain part of the email and normalizes it.</span><br><span class="line">    string DomainMapper(Match match)</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F; Use IdnMapping class to convert Unicode domain names.</span><br><span class="line">        var idn &#x3D; new IdnMapping();</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; Pull out and process domain name (throws ArgumentException on invalid)</span><br><span class="line">        string domainName &#x3D; idn.GetAscii(match.Groups[2].Value);</span><br><span class="line"></span><br><span class="line">        return match.Groups[1].Value + domainName;</span><br><span class="line">    &#125;</span><br><span class="line">catch (RegexMatchTimeoutException e)</span><br><span class="line">&#123;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br><span class="line">catch (ArgumentException e)</span><br><span class="line">&#123;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br><span class="line">try</span><br><span class="line">&#123;</span><br><span class="line">    return Regex.IsMatch(email,</span><br><span class="line">        @&quot;^[^@\s]+@[^@\s]+\.[^@\s]+$&quot;,</span><br><span class="line">        RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));</span><br><span class="line">&#125;</span><br><span class="line">catch (RegexMatchTimeoutException)</span><br><span class="line">&#123;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/dotnet/api/system.globalization.idnmapping.getascii?view=net-5.0">IdnMapping.GetAscii</a>:将包含 US-ASCII 字符范围以外的Unicode字符的域名称标签字符串编码为（U+0020 至 U+007E）内的可显示 Unicode 字符的字符串</p>
+<h4 id="sealed-class"><a href="#sealed-class" class="headerlink" title="sealed class"></a>sealed class</h4><h4 id="catch-when"><a href="#catch-when" class="headerlink" title="catch when"></a><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/keywords/when">catch when</a></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">try</span><br><span class="line">&#123;</span><br><span class="line">    await _dbContext.SaveChangesAsync();</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; Is this error due to device SerialNumber constraint violation?</span><br><span class="line">catch (SqlUniqueConstraintViolationError ex) when (ex.Message.Contains(device.SerialNumber))</span><br><span class="line">&#123;</span><br><span class="line">    throw new DataException($&quot;A device with the same serial number (&#123;device.SerialNumber&#125;) already exist.&quot;, ex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/27/dotNetCore-Middleware/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/07/27/dotNetCore-Middleware/" class="post-title-link" itemprop="url">.Net Core 中间件</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-07-27 10:14:04" itemprop="dateCreated datePublished" datetime="2020-07-27T10:14:04+08:00">2020-07-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-14 17:02:24" itemprop="dateModified" datetime="2021-04-14T17:02:24+08:00">2021-04-14</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>这里的中间件概念和express.js中的是一致的,</p>
+<p>下面栗子的代码来源： <a target="_blank" rel="noopener" href="https://juejin.im/entry/5b39c743e51d4558a21fad54">Net Core中间件封装原理示例demo解析</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public static class RequestIpExtensions</span><br><span class="line">&#123;</span><br><span class="line">    public static IApplicationBuilder UseRequestIp(this IApplicationBuilder builder)</span><br><span class="line">    &#123;</span><br><span class="line">        return builder.UseMiddleware&lt;RequestIPMiddleware&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>each middleware extension method is exposed on IApplicationBuilder through the Microsoft.AspNetCore.Builder namespace. 通过IApplicationBuilder接口方法引入中间件，IApplicationBuilder由Microsoft.AspNetCore.Builder命名空间提供</p>
+</blockquote>
+<p>中间件的具体实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class RequestIPMiddleware</span><br><span class="line">&#123;</span><br><span class="line">    private readonly RequestDelegate _next;</span><br><span class="line">    private readonly ILogger _logger;</span><br><span class="line"></span><br><span class="line">    public RequestIPMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)</span><br><span class="line">    &#123;</span><br><span class="line">        _next &#x3D; next;</span><br><span class="line">        _logger &#x3D; loggerFactory.CreateLogger&lt;RequestIPMiddleware&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public async Task Invoke(HttpContext context)</span><br><span class="line">    &#123;</span><br><span class="line">        _logger.LogInformation(&quot;User Ip: &quot; + context.Connection.RemoteIpAddress.ToString());</span><br><span class="line">        await _next.Invoke(context);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用中间<br><br>Startup.cs</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void Configure(IApplicationBuilder app, IHostingEnvironment env)</span><br><span class="line">&#123;</span><br><span class="line">    ....</span><br><span class="line">    app.UseRequestIp();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/22/WebDev-OtherStories/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/07/22/WebDev-OtherStories/" class="post-title-link" itemprop="url">WebDev_OtherStories</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-07-22 10:11:02" itemprop="dateCreated datePublished" datetime="2020-07-22T10:11:02+08:00">2020-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-28 09:49:18" itemprop="dateModified" datetime="2021-01-28T09:49:18+08:00">2021-01-28</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="js的特点"><a href="#js的特点" class="headerlink" title="js的特点"></a>js的特点</h4><blockquote>
+<p>the part that is good is not original, and the part that is original is not good.</p>
+</blockquote>
+<h4 id="关于浏览器"><a href="#关于浏览器" class="headerlink" title="关于浏览器"></a>关于浏览器</h4><p><a target="_blank" rel="noopener" href="https://juejin.im/post/5aa5cb846fb9a028e25d2fb1">从url到页面显示</a></p>
+<ul>
+<li>“user agent stylesheet”用户代理样式，浏览器默认样式，无法在开发者模式中修改</li>
+</ul>
+<h4 id="js-事件"><a href="#js-事件" class="headerlink" title="js 事件"></a>js 事件</h4><ul>
+<li>原生js并没有document.ready事件，<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000016574288">document.ready和window.onload</a></li>
+</ul>
+<h4 id="前后端分离和SPA"><a href="#前后端分离和SPA" class="headerlink" title="前后端分离和SPA"></a>前后端分离和SPA</h4><p>显然前后端分离不一定非要做成SPA，但是SPA被认为是前后端分离的最佳实践：<br>前后端分离的初衷是对后台服务的优化，即将静态资源的传输移出后台逻辑，分离后前后端之间的接口只提供数据。<br><br>SPA的出现是“复用一切可复用”的设计原则的体现，即根据交互仅对局部视图更新，其他部分复用。<br><br>也就是说，SPA和前后端分离同样是解决可复用内容（包括页面模板）的问题，如果你的产品有必要做这个问题的优化，那么前后端分离和SPA就自然而然地成为选择。</p>
+<h4 id="浏览器信息"><a href="#浏览器信息" class="headerlink" title="浏览器信息"></a>浏览器信息</h4><p>window.navigator.userAgent 参考<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/NavigatorID/userAgent">MDN Web API</a><br>输出如 “Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36”<br>Caution! 该属性可修改 无法确保准确性</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/22/WebDev-RoadMap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -598,7 +988,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-14 16:22:28" itemprop="dateModified" datetime="2021-04-14T16:22:28+08:00">2021-04-14</time>
+                <time title="Modified: 2021-06-07 09:35:05" itemprop="dateModified" datetime="2021-06-07T09:35:05+08:00">2021-06-07</time>
               </span>
 
           
@@ -624,557 +1014,12 @@
 <p>state是state在某个时间点的快照，state与view绑定</p>
 <h4 id="preact"><a href="#preact" class="headerlink" title="preact"></a>preact</h4><p>据说是使用更符合Dom规范的事件系统，直接使用浏览器原生事件系统而不是统一用onChange，从而对React的设计进行了简化<sup><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/65479147/answer/942582216">注1</a></sup></p>
 <h4 id="craco"><a href="#craco" class="headerlink" title="craco"></a>craco</h4><p><a target="_blank" rel="noopener" href="https://github.com/gsoft-inc/craco">craco</a>,当下流行的对React项目进行自定义配置的社区解决方案，<a target="_blank" rel="noopener" href="https://ant.design/docs/react/use-with-create-react-app-cn#%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE">AntDesign4</a>官方亦有在使用<br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1749704">更骚的create-react-app开发环境配置craco</a><br>从create-react-app开始配置(关于create-react-app见<a href="/qqsnote/2020/06/29/React/" title="React">React</a>)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npx create-react-app my-project</span><br><span class="line">yarn add antd @craco&#x2F;craco craco-less @babel&#x2F;plugin-proposal-decorators babel-plugin-import -D</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npx create-react-app my-project </span><br><span class="line">npx create-react-app my-project --template typescript</span><br><span class="line">yarn add antd @craco&#x2F;craco craco-less @babel&#x2F;plugin-proposal-decorators babel-plugin-import -D</span><br></pre></td></tr></table></figure>
 <p>添加craco配置 craco.conf.js，即模块化配置，根据所需的资源参考方案：<a target="_blank" rel="noopener" href="https://github.com/gsoft-inc/craco/tree/master/recipes">https://github.com/gsoft-inc/craco/tree/master/recipes</a></p>
 <p>package.json scripts将命令替换为craco<br><del>&nbsp;&nbsp;”start”: “react-scripts start”,<br>&nbsp;&nbsp;”build”: “react-scripts build”,<br>&nbsp;&nbsp;”test”: “react-scripts test”,<br>&nbsp;&nbsp;”eject”: “react-scripts eject”</del><br>&nbsp;&nbsp;”start”: “craco start”,<br>&nbsp;&nbsp;”build”: “craco build”,<br>&nbsp;&nbsp;”test”: “craco test”</p>
 <h4 id="format-js-国际化"><a href="#format-js-国际化" class="headerlink" title="format.js 国际化"></a>format.js 国际化</h4><p>见<a href="/qqsnote/2021/04/14/formatjs/" title="format.js">format.js</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/10/pm2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/07/10/pm2/" class="post-title-link" itemprop="url">pm2</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-07-10 10:25:14" itemprop="dateCreated datePublished" datetime="2020-07-10T10:25:14+08:00">2020-07-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-11-04 10:15:23" itemprop="dateModified" datetime="2020-11-04T10:15:23+08:00">2020-11-04</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="directives"><a href="#directives" class="headerlink" title="directives"></a>directives</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pm2 start index.js</span><br><span class="line">pm2 stop all</span><br><span class="line">pm2 logs</span><br></pre></td></tr></table></figure>
-<h4 id="env-variables"><a href="#env-variables" class="headerlink" title="env variables"></a>env variables</h4><p>将node.js应用封装成模块ecosystem.config.js</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">  apps : [</span><br><span class="line">      &#123;</span><br><span class="line">        name: &quot;myapp&quot;,</span><br><span class="line">        script: &quot;.&#x2F;app.js&quot;,</span><br><span class="line">        watch: true,</span><br><span class="line">        env: &#123;</span><br><span class="line">            &quot;PORT&quot;: 3000,</span><br><span class="line">            &quot;NODE_ENV&quot;: &quot;development&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        env_production: &#123;</span><br><span class="line">            &quot;PORT&quot;: 80,</span><br><span class="line">            &quot;NODE_ENV&quot;: &quot;production&quot;,</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在启动命令时使用env_后面的字符串作为标识</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pm2 start ecosystem.config.js --env production</span><br></pre></td></tr></table></figure>
-<h4 id="pm2-plus"><a href="#pm2-plus" class="headerlink" title="pm2 plus"></a>pm2 plus</h4><p>know more about <a target="_blank" rel="noopener" href="https://app.pm2.io/">pm2.io</a></p>
-<h4 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h4><p>键入下面的命令生成startup脚本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pm2 startup</span><br></pre></td></tr></table></figure>
-<p>提示执行配置命令,如</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[PM2] To setup the Startup Script, copy&#x2F;paste &gt;the following command:&quot;, </span><br><span class="line">sudo env &gt;PATH&#x3D;$PATH:&#x2F;usr&#x2F;local&#x2F;bin &#x2F;usr&#x2F;local&#x2F;lib&#x2F;node_modules&#x2F;pm2&#x2F;bin&#x2F;pm2 startup systemd -u username --hp &#x2F;home&#x2F;username</span><br></pre></td></tr></table></figure>
-<p>按照提示执行提示的命令, 执行后终端列出已安装的服务信息</p>
-<p>Caution！升级nodejs对startup有影响</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pm2 unstartup</span><br><span class="line"></span><br><span class="line">pm2 startup</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/01/Azure-AD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/07/01/Azure-AD/" class="post-title-link" itemprop="url">Azure-AD</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-07-01 10:09:03" itemprop="dateCreated datePublished" datetime="2020-07-01T10:09:03+08:00">2020-07-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-02-04 16:27:38" itemprop="dateModified" datetime="2021-02-04T16:27:38+08:00">2021-02-04</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="Azure-AD"><a href="#Azure-AD" class="headerlink" title="Azure AD"></a>Azure AD</h4><p>Windows2000 引入Active Directory作为identity provider和authorization database，<del>可想而知，这个名称与其存储方式以及根据talent区分的文件结构之间的关系。</del>随着Web应用的发展，有了云平台的Azure Active Directory，其主要功能之一仍是作为identity provider。</p>
-<p>AD和Azure AD的结合实现了以本地Windows身份通过web实现SSO认证。</p>
-<p>参考：<a target="_blank" rel="noopener" href="https://jumpcloud.com/blog/is-azure-ad-an-identity-provider#cookie-accept">《Is Azure AD an Identity Provider?》</a></p>
-<p>Azure AD在office软件甚至其他Saas（Software as a service, 软件即服务）之间无缝访问，以及多重身份验证和条件访问控制</p>
-<p>参考：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/active-directory/manage-apps/what-is-application-management">使用 Azure Active Directory 进行应用程序管理</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.predicagroup.com/blog/azure-ad-b2b-b2c-puzzled-out/">Azure AD, B2B, B2C Puzzled Out – What Makes The Difference?</a></p>
-<p>B2B，对接Business和Business，使双方标识均可通过认证，主服务方持有访问权限的控制，<br><br>B2C, 面向customer 如下引述：</p>
-<blockquote>
-<p>Azure Active Directory B2C provides business-to-customer identity as a service. Your customers use their preferred social, enterprise, or local account identities to get single sign-on access to your applications and APIs.</p>
-</blockquote>
-<p>Azure Active Directory B2C 以服务的形式提供企业到客户的身份。 客户可使用其喜欢的社交、企业或本地帐户标识完成单点登录，访问应用程序和 API 。<br><img src="https://docs.azure.cn/zh-cn/active-directory-b2c/media/overview/azureadb2c-overview.png" alt="azureadb2c-overview"></p>
-<p>“贴牌式身份验证解决方案” blabla<br></p>
-<p>届时，访问DataService，跳转到如 CSDataServices.onmicrosoft.com/oauth2/v2.0/authorize?xxxx 格式的地址, 这是挂在Azure上的页面，可以做成本公司产品风格(见本文章节自定义登录页)，sign in的form可以直接使用已注册（保存在Azure AD）的账号, 也可能提供了社交账号的链接，点击后跳转到社交平台登录页。<br><img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/overview/sign-in-small.png" alt="sign_in"></p>
-<p>Azure保存用户的标识，即使使用第三方的sso如公司的sso认证或社交账号，也会有将第三方凭据交换Azure标识的过程，该过程即典型的OAuth2</p>
-<p><img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/overview/scenario-singlesignon.png" alt="scenario-singlesignon"></p>
-<ul>
-<li>talent 组织或用户集合</li>
-<li>directory 存储所涉及的对象（如凭据，用户信息，配置）的物理或逻辑位置</li>
-<li>Application registration 将自己公司产品注册为Azure AD B2C的App,以使用由Azure提供的贴牌认证</li>
-<li>user flow 和 costom policy分别指基本的注册-登录-配置的流程以及自定义的策略</li>
-<li>identity providers 第三方的标识提供方 如Facebook账号或Wechat账号授权服务 </li>
-</ul>
-<h4 id="Azure-ADB2C"><a href="#Azure-ADB2C" class="headerlink" title="Azure ADB2C"></a>Azure ADB2C</h4><p>Active Directory 的identity是在login.microsoftonline.com注册的，登录Azure portal也是同样的唯一的账号，B2C则提供了选择多个identity provider的功能，可以使用自己注册的tenant，抑或是社交账号，注册登录入口形如<a target="_blank" rel="noopener" href="https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/oauth2/v2.0/authorize">https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/oauth2/v2.0/authorize</a><br>下面以官方sample为例配置，以求使用<a target="_blank" rel="noopener" href="https://github.com/Azure-Samples/active-directory-b2c-dotnet-desktop.git">桌面客户端</a>通过Azure AD B2C的认证框架访问<a target="_blank" rel="noopener" href="https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi.git">Web Api</a></p>
-<h4 id="域服务-AD-DS-和应用程序管理"><a href="#域服务-AD-DS-和应用程序管理" class="headerlink" title="域服务(AD DS)和应用程序管理"></a>域服务(AD DS)和应用程序管理</h4><p>即除了B2C之外的主要功能。AD DS见<a href="/qqsnote/2020/11/24/Azure-ADDS/" title="Azure域服务">Azure域服务</a><br>AD可以用于管理Gallery App也就是微软库中的SaaS应用，也可以通过应用程序代理管理本地的应用(On-premises applications)<br>What does Azure AD Application Proxy do?<br>A.You use it to identify applications in your instance of Azure AD.<br>B.You use it to add on-premises applications to your instance of Azure AD.<br>C.You use it to add Azure AD Gallery applications to your instance of Azure AD.</p>
-<h4 id="创建资源"><a href="#创建资源" class="headerlink" title="创建资源"></a>创建资源</h4><p>进入“创建资源”入口，搜索Azure AD B2C，选择创建–&gt;给出两个选项,选择创建新的<br><img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-tenant/portal-02-create-tenant.png" alt="micro docs"><br>loading半天后提示创建成功，点击链接切换directory</p>
-<p>Directory creation was successful. Click here to navigate to your new directory: QQStudio.</p>
-<p><img src="https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjwy66qzj20ry0kc0vz.jpg" alt="directory created"></p>
-<h4 id="user-flow"><a href="#user-flow" class="headerlink" title="user flow"></a>user flow</h4><p>选择由Azure AD B2C控制的行为，一般就是登入登出，注册、注销，重置密码。<br><br>选择Sign up and sign in<br><img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-user-flows/signup-signin-type.png"><br>输入user flow名称<br><br>选择email作为sign up的身份验证<br><br>选择需要收集的注册信息<br><img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-user-flows/signup-signin-attributes.png"></p>
-<p>关于reset password</p>
-<blockquote>
-<p>使用本地帐户的 注册或登录 用户流在体验的第一个页面上包含“忘记了密码?”链接。 单击此链接不会自动触发密码重置用户流。<br>而是将错误代码 AADB2C90118 返回给应用程序。 应用程序需要通过运行一个可重置密码的特定用户流来处理此错误代码。 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/user-flow-overview#linking-user-flows">Microsoft Docs：user flow 概述</a></p>
-</blockquote>
-<h4 id="注册Api应用程序"><a href="#注册Api应用程序" class="headerlink" title="注册Api应用程序"></a>注册Api应用程序</h4><p>将访问受控的应用(这里是Web Api)注册到Azure AD B2C，框架给予应用程序client id等标记，记下当登录成功时跳转回的地址————Redirect URI(关于Redirect URI的限制见本文Q&amp;A部分)。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Display name:Demo website</span><br><span class="line">Application (client) ID:c4b27029-a5ad-4022-979d-8721101df951</span><br><span class="line">Directory (tenant) ID:9175ffa9-24b3-4fc1-806e-6d53582a7f4f</span><br><span class="line">Object ID:c5064a61-0321-4a39-9f3c-dcef0df9b99c</span><br><span class="line">Supported account types:All Microsoft  users</span><br><span class="line">Redirect URIs:1 web, 0 spa, 0 public client</span><br><span class="line">Application ID URI:Add an Application ID URI</span><br><span class="line">Managed application in local directory:Demo website</span><br></pre></td></tr></table></figure>
-<p>这里的Redireact URI是<a target="_blank" rel="noopener" href="http://localhost:8888/auth%EF%BC%8C%E6%9C%9F%E6%9C%9B%E5%9C%A8%E6%9C%AC%E6%9C%BA%E8%BF%90%E8%A1%8C%E6%A1%8C%E9%9D%A2%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%A8%8B%E5%BA%8F%EF%BC%8C%E8%AE%BF%E9%97%AEApi%E8%B7%B3%E8%BD%AC%E5%88%B0Azure">http://localhost:8888/auth，期望在本机运行桌面客户端程序，访问Api跳转到Azure</a> Page登录，成功后进入到该地址。<br><br>进入管理–认证(Authentication),选择使用<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/active-directory/develop/v2-oauth2-implicit-grant-flow?WT.mc_id=Portal-Microsoft_AAD_RegisteredApps">隐式授权流</a>(Implicit grant, 见笔记<a href="/qqsnote/2019/12/09/OAuth2/" title="OAuth2">OAuth2</a>), 并添加Redirect Uri<br><br><img src="https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjztlsc1j21820oyadq.jpg" alt="04register_app_add_auth_url"><br>进入管理–公开API(expose API),Application ID URI set 为<a target="_blank" rel="noopener" href="https://qqstudio.onmicrosoft.com/api">https://qqstudio.onmicrosoft.com/api</a> 默认是由GUID组成的<br><br>添加scope(Add a scope)<br><img src="https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjzvx048j21hc0smtch.jpg" alt="05add access scope"><br>scope是控制访问权限的定义，将在后续步骤中被授权到已注册的client<br></p>
-<h4 id="配置Web-Api应用的Authorization"><a href="#配置Web-Api应用的Authorization" class="headerlink" title="配置Web Api应用的Authorization"></a>配置Web Api应用的Authorization</h4><p>使Web Api能将token拿到Azure AD B2C去校验，官方Sample中从config.js读取配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">const config &#x3D; &#123;</span><br><span class="line">    identityMetadata: &quot;https:&#x2F;&#x2F;&quot; + b2cDomainHost + &quot;&#x2F;&quot; + tenantId + &quot;&#x2F;&quot; + policyName + &quot;&#x2F;v2.0&#x2F;.well-known&#x2F;openid-configuration&#x2F;&quot;,</span><br><span class="line">    clientID: clientID,</span><br><span class="line">    policyName: policyName,</span><br><span class="line">    isB2C: true,</span><br><span class="line">    validateIssuer: false,</span><br><span class="line">    loggingLevel: &#39;info&#39;,</span><br><span class="line">    loggingNoPII: false,</span><br><span class="line">    passReqToCallback: false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>express web api的认证和重定向用到了<a target="_blank" rel="noopener" href="https://github.com/jaredhanson/passport">passport</a>和<a target="_blank" rel="noopener" href="https://github.com/AzureAD/passport-azure-ad#readme">passport-azure-ad</a>两个包，后者直接带入上面的config对象做为参数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">const express &#x3D; require(&quot;express&quot;);</span><br><span class="line">const morgan &#x3D; require(&quot;morgan&quot;);</span><br><span class="line">const passport &#x3D; require(&quot;passport&quot;);</span><br><span class="line">const config &#x3D; require(&#39;.&#x2F;config&#39;);</span><br><span class="line">const BearerStrategy &#x3D; require(&#39;passport-azure-ad&#39;).BearerStrategy;</span><br><span class="line"></span><br><span class="line">const bearerStrategy &#x3D; new BearerStrategy(config,</span><br><span class="line">    function (token, done) &#123;</span><br><span class="line">        &#x2F;&#x2F; Send user info using the second argument</span><br><span class="line">        done(null, &#123;&#125;, token);</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">const app &#x3D; express();</span><br><span class="line"></span><br><span class="line">app.use(morgan(&#39;dev&#39;));</span><br><span class="line">app.use(passport.initialize());</span><br><span class="line"></span><br><span class="line">passport.use(bearerStrategy);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;enable CORS</span><br><span class="line">app.use((req, res, next) &#x3D;&gt; &#123;</span><br><span class="line">    res.header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);</span><br><span class="line">    res.header(&quot;Access-Control-Allow-Headers&quot;, &quot;Authorization, Origin, X-Requested-With, Content-Type, Accept&quot;);</span><br><span class="line">    next();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; API endpoint</span><br><span class="line">app.get(&quot;&#x2F;hello&quot;,</span><br><span class="line">    passport.authenticate(&#39;oauth-bearer&#39;, &#123;session: false&#125;),</span><br><span class="line">    (req, res) &#x3D;&gt; &#123;</span><br><span class="line">        console.log(&#39;User info: &#39;, req.user);</span><br><span class="line">        console.log(&#39;Validated claims: &#39;, req.authInfo);</span><br><span class="line">        </span><br><span class="line">        if (&#39;scp&#39; in req.authInfo &amp;&amp; req.authInfo[&#39;scp&#39;].split(&quot; &quot;).indexOf(&quot;demo.read&quot;) &gt;&#x3D; 0) &#123;</span><br><span class="line">            &#x2F;&#x2F; Service relies on the name claim.  </span><br><span class="line">            res.status(200).json(&#123;&#39;name&#39;: req.authInfo[&#39;name&#39;]&#125;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            console.log(&quot;Invalid Scope, 403&quot;);</span><br><span class="line">            res.status(403).json(&#123;&#39;error&#39;: &#39;insufficient_scope&#39;&#125;); </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">const port &#x3D; process.env.PORT || 5000;</span><br><span class="line"></span><br><span class="line">app.listen(port, () &#x3D;&gt; &#123;</span><br><span class="line">    console.log(&quot;Listening on port &quot; + port);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h4 id="注册客户端程序"><a href="#注册客户端程序" class="headerlink" title="注册客户端程序"></a>注册客户端程序</h4><p>将官网sample的wpf client注册到Azure AD B2C<br><br>创建完成后添加Api权限，或者说授权scope：管理–API权限(API Permission)–Add a permission–My APIs,选择已注册的Web API应用<br><img src="https://tvax1.sinaimg.cn/large/a60edd42gy1ggqjzx4r8ij21hc0smadq.jpg" alt="06 add client api permissions"><br>勾选Permissions，即上文中的scopes<br><img src="https://tvax4.sinaimg.cn/large/a60edd42gy1ggqjzyald0j21hc0smgqd.jpg" alt="07 select permissions"><br>授权client使用scope：管理–API权限(API Permission)–Grant admin consent for xxxx(telent Name)–click Yes<br><br>QQs跟随sample的步骤遗漏了下面这一步————添加重定向地址————导致在配置客户端时Redirect Uri不知道填什么<br><br>管理–Authentication–Add a platform–Mobile and desktop applications 然后可以看到根据当前talent的user flow生成的登录页模板 勾选<a target="_blank" rel="noopener" href="https://qqstudio.b2clogin.com/oauth2/nativeclient">https://qqstudio.b2clogin.com/oauth2/nativeclient</a><br><img src="https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjzzhlnwj21hc0sm79k.jpg" alt="08 client redirect to login page"></p>
-<h4 id="配置客户端以访问已授权的Api"><a href="#配置客户端以访问已授权的Api" class="headerlink" title="配置客户端以访问已授权的Api"></a>配置客户端以访问已授权的Api</h4><p>sample client是个WPF应用，引入了Microsoft.Identity.Client这个包来进行token校验</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Copyright (c) Microsoft Corporation. All rights reserved.</span><br><span class="line">&#x2F;&#x2F; Licensed under the MIT License.</span><br><span class="line"></span><br><span class="line">using System.IO;</span><br><span class="line">using System.Text;</span><br><span class="line">using System.Windows;</span><br><span class="line">using Microsoft.Identity.Client;</span><br><span class="line"></span><br><span class="line">namespace active_directory_b2c_wpf</span><br><span class="line">&#123;</span><br><span class="line">    public partial class App : Application</span><br><span class="line">    &#123;</span><br><span class="line">        private static readonly string Tenant &#x3D; &quot;61874450-1725-44bb-bb8e-314575861ad6&quot;;</span><br><span class="line">        private static readonly string AzureAdB2CHostname &#x3D; &quot;https:&#x2F;&#x2F;qqstudio.b2clogin.com&#x2F;oauth2&#x2F;nativeclient&quot;;</span><br><span class="line">        private static readonly string ClientId &#x3D; &quot;8e039329-171a-4484-8151-4e67bf561218&quot;; &#x2F;&#x2F; 这里的clientId是WPF Client自己的ID</span><br><span class="line">        private static readonly string RedirectUri &#x3D; &quot;https:&#x2F;&#x2F;fabrikamb2c.b2clogin.com&#x2F;oauth2&#x2F;nativeclient&quot;; &#x2F;&#x2F; 这个是Azure给桌面客户端的登录页</span><br><span class="line">        public static string PolicySignUpSignIn &#x3D; &quot;B2C_1_basic_sign_up_and_sign_in&quot;;</span><br><span class="line"></span><br><span class="line">        public static string[] ApiScopes &#x3D; &#123; &quot;https:&#x2F;&#x2F;qqstudio.onmicrosoft.com&#x2F;api&#x2F;demo.read&quot;, &quot;https:&#x2F;&#x2F;qqstudio.onmicrosoft.com&#x2F;api&#x2F;demo.write&quot; &#125;;</span><br><span class="line">        public static string ApiEndpoint &#x3D; &quot;https:&#x2F;&#x2F;fabrikamb2chello.azurewebsites.net&#x2F;hello&quot;;</span><br><span class="line">        private static string AuthorityBase &#x3D; $&quot;https:&#x2F;&#x2F;&#123;AzureAdB2CHostname&#125;&#x2F;tfp&#x2F;&#123;Tenant&#125;&#x2F;&quot;;</span><br><span class="line">        public static string AuthoritySignUpSignIn &#x3D; $&quot;&#123;AuthorityBase&#125;&#123;PolicySignUpSignIn&#125;&quot;;</span><br><span class="line"></span><br><span class="line">        public static IPublicClientApplication PublicClientApp &#123; get; private set; &#125;</span><br><span class="line"></span><br><span class="line">        static App()</span><br><span class="line">        &#123;</span><br><span class="line">            PublicClientApp &#x3D; PublicClientApplicationBuilder.Create(ClientId)</span><br><span class="line">            .WithB2CAuthority(AuthoritySignUpSignIn)</span><br><span class="line">            .WithRedirectUri(RedirectUri)</span><br><span class="line">            .WithLogging(Log, LogLevel.Info, false) &#x2F;&#x2F; don&#39;t log PII details on a regular basis</span><br><span class="line">            .Build();</span><br><span class="line"></span><br><span class="line">            TokenCacheHelper.Bind(PublicClientApp.UserTokenCache);</span><br><span class="line">        &#125;</span><br><span class="line">        private static void Log(LogLevel level, string message, bool containsPii)</span><br><span class="line">        &#123;</span><br><span class="line">            string logs &#x3D; ($&quot;&#123;level&#125; &#123;message&#125;&quot;);</span><br><span class="line">            StringBuilder sb &#x3D; new StringBuilder();</span><br><span class="line">            sb.Append(logs);</span><br><span class="line">            File.AppendAllText(System.Reflection.Assembly.GetExecutingAssembly().Location + &quot;.msalLogs.txt&quot;, sb.ToString());</span><br><span class="line">            sb.Clear();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="scopes"><a href="#scopes" class="headerlink" title="scopes"></a>scopes</h4><p>通过scopes管理对受保护资源的权限，请求令牌时，客户端传递scope</p>
-<h4 id="关于校验和跳转的包的实现的推测"><a href="#关于校验和跳转的包的实现的推测" class="headerlink" title="关于校验和跳转的包的实现的推测"></a>关于校验和跳转的包的实现的推测</h4><ul>
-<li>客户端访问api，Http/Https Request</li>
-<li>客户端Request使用Jwt Bearer Authentication 传递token<br><img src="https://tvax4.sinaimg.cn/large/a60edd42gy1ghejipxhdkj213f0cmjru.jpg" alt="10 bearer auth"></li>
-<li>服务端接收到的request中token缺少或过期，返回401</li>
-<li>客户端收到401打开Azure Sign in Page，附带重定向回api end point 的url</li>
-<li>Azure AD 框架进行认证</li>
-<li>Azure AD 框架查询并授权 颁发相应的token</li>
-<li>客户端接收到token并缓存<h4 id="使用Azure-AD-作为identity-provider（存目）"><a href="#使用Azure-AD-作为identity-provider（存目）" class="headerlink" title="使用Azure AD 作为identity provider（存目）"></a>使用Azure AD 作为identity provider（存目）</h4>以实现一键(使用AD凭据)登录<h4 id="对接wechat-作为identity-provider（存目）"><a href="#对接wechat-作为identity-provider（存目）" class="headerlink" title="对接wechat 作为identity provider（存目）"></a>对接wechat 作为identity provider（存目）</h4>在user flow - identity provider中勾选社交账号 wechat<h4 id="关于系统角色定义"><a href="#关于系统角色定义" class="headerlink" title="关于系统角色定义"></a>关于系统角色定义</h4>多个系统使用Azure AD B2C，各个系统地权限角色是否要在Azure方维护呢？是否是在expose API时定义scope呢？<br><br>私以为并不是，鉴于<a href="/qqsnote/2019/12/09/OAuth2/" title="OAuth">OAuth</a>一篇中所述，资源服务器保留私钥对access token进行校验，甚至可以从中解析出当前用户key，过期时间等信息，籍此完全可以查询本系统定义地权限角色，而无须频繁访问SSO。<h4 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q&amp;A"></a>Q&amp;A</h4><blockquote>
-<p>issue: The application associated with client id has no registered redirect URIs.</p>
-</blockquote>
-</li>
-</ul>
-<p>按说在App Registry中配置 Redirect URI是optional的，曾遇到此问题是没有勾选隐式授权（Authentication–&gt;Implicit grant）</p>
-<blockquote>
-<p>一定需要注册Redirect URI吗，可以在跳转到登录页时作为query parameter传递吗？</p>
-</blockquote>
-<p>一定要注册, 似乎是出于复杂的安全性的考虑 见<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/47520604/why-is-redirect-url-fully-qualified-in-azure-ad-b2c">StackOverflow:Why is Redirect URL Fully Qualified in Azure AD B2C?
-</a><br>跳转到登录页时确实会传递Redirect_URI参数，否则会报redirect_uri_mismatch的Error且不会传回access token<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/active-directory/develop/reply-url">Redirect Uri 的限制</a>要求作为跳转参数的Redirect_URI，与注册在ADB2C上的若干Redirect URIs之一完全匹配，除了localhost(匹配时自动忽略端口)。<br>官方文档还提到了state参数，跳转参数state将在登录成功后链在Redirect URI后面，可以用来恢复跳转登录前的浏览状态</p>
-<blockquote>
-<p>Silent Sign In Workflow</p>
-</blockquote>
-<h4 id="自定义登录页"><a href="#自定义登录页" class="headerlink" title="自定义登录页"></a>自定义登录页</h4><h4 id="Wechat"><a href="#Wechat" class="headerlink" title="Wechat"></a>Wechat</h4><p>首先是在<a target="_blank" rel="noopener" href="https://open.weixin.qq.com/cgi-bin/applist?t=manage/list&page=0&num=20&openapptype=512&token=046ef0026c9a457aa1f8f33db6868c26e193c21d&lang=zh_CN">微信公众平台</a>注册网站应用,注册过程需要填写企业/个人网站的官网和备案号，很头疼</p>
-<p>添加Wechat为AB B2C的identity provider：Azure AD B2C –&gt; Identity providers –&gt; WeChat(Preview) 可以看到Callback URL(填到微信公众平台上注册的网站应用的授权回调域配置中)，Name可以填WeChat，填写网站应用的id/secret</p>
-<p>添加identity provider到User flow：Azure AD B2C –&gt; User flows –&gt; [Your User flow] –&gt; Identity providers 选择已添加到AD B2C的 social identity provider</p>
-<h4 id="多个资源"><a href="#多个资源" class="headerlink" title="多个资源"></a>多个资源</h4><blockquote>
-<p>issue: MSAL AADB2C90146 ‘Openid profile’ provided in request specifies more than one resource for an access token, which is not supported’</p>
-</blockquote>
-<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/49362631/msal-aadb2c90146-openid-profile-provided-in-request-specifies-more-than-on">stackoverflow: use requestsilent</a></p>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ul>
-<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=AzureADB2CTools.aadb2c">Visual Studio Code 的 Azure AD B2C 扩展</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/troubleshoot-with-application-insights">Application Insights-logs</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/06/29/React/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/06/29/React/" class="post-title-link" itemprop="url">React</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-06-29 16:18:41" itemprop="dateCreated datePublished" datetime="2020-06-29T16:18:41+08:00">2020-06-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-19 14:41:46" itemprop="dateModified" datetime="2021-04-19T14:41:46+08:00">2021-04-19</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="JSX模板"><a href="#JSX模板" class="headerlink" title="JSX模板"></a>JSX模板</h4><p>以.jsx为后缀的标记文件，用以书写混合js逻辑的dom模板<br>example.jsx, jsx文件经Babel编译为js运行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const JSX &#x3D; (</span><br><span class="line">  &lt;div className&#x3D;&quot;myDiv&quot;&gt;</span><br><span class="line">    &lt;h1&gt;Hello World&lt;&#x2F;h1&gt;</span><br><span class="line">    &lt;p&gt;Lets render this to the DOM&lt;&#x2F;p&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">);</span><br><span class="line">ReactDOM.render(JSX,document.getElementById(&quot;challenge-node&quot;))</span><br></pre></td></tr></table></figure>
-<ul>
-<li>用{}包含js代码，包括变量和相应方法</li>
-<li>用className绑定class样式<h4 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h4>use the syntax {/* */}<h4 id="表单"><a href="#表单" class="headerlink" title="表单"></a>表单</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;form onSubmit&#x3D;&#123;this.handleSubmit&#125;&gt;</span><br><span class="line">      &lt;label&gt;</span><br><span class="line">        文章:</span><br><span class="line">        &lt;textarea value&#x3D;&#123;this.state.value&#125; onChange&#x3D;&#123;this.handleChange&#125; &#x2F;&gt;</span><br><span class="line">      &lt;&#x2F;label&gt;</span><br><span class="line">      &lt;input type&#x3D;&quot;submit&quot; value&#x3D;&quot;提交&quot; &#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;form&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="ES6语法"><a href="#ES6语法" class="headerlink" title="ES6语法"></a>ES6语法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Component &#125; from &#39;react&#39;</span><br><span class="line"></span><br><span class="line">class App extends Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;h1&gt;Here is Entry&lt;&#x2F;h1&gt;</span><br><span class="line">        &#123;&#x2F;* 子组件 *&#x2F;&#125;</span><br><span class="line">        &lt;ChildComponent &#x2F;&gt;</span><br><span class="line">      &lt;&#x2F;div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">const ChildComponent &#x3D; () &#x3D;&gt; &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;p&gt;I am the child&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;App &#x2F;&gt;, document.getElementById(&quot;app&quot;)) </span><br></pre></td></tr></table></figure>
-<h4 id="子组件传参"><a href="#子组件传参" class="headerlink" title="子组件传参"></a>子组件传参</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">const CurrentDate &#x3D; (props) &#x3D;&gt; &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;p&gt;The current date is: &#123;props.date&#125;&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line">const Data &#x3D; ()&#x3D;&gt;&#123;</span><br><span class="line">  return new Date().toLocaleString();</span><br><span class="line">&#125;</span><br><span class="line">class Calendar extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;h3&gt;What date is it?&lt;&#x2F;h3&gt;</span><br><span class="line">        &lt;CurrentDate date&#x3D;&#123;Date()&#125;&#x2F;&gt;</span><br><span class="line">        &lt;p&gt;&#123;this.props.name&#125;&lt;&#x2F;p&gt;</span><br><span class="line">      &lt;&#x2F;div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-使用函数表达式不需要this指针而class定义是要的(ES6 ()=&gt;{}不创建this)</li>
-</ul>
-<p>另外设置默认参数：ComponentA.defaultProps = {name:’New Component’}</p>
-<h4 id="参数校验"><a href="#参数校验" class="headerlink" title="参数校验"></a>参数校验</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line">MyComponent.propTypes &#x3D; &#123;</span><br><span class="line">  &#x2F;&#x2F; 你可以将属性声明为 JS 原生类型，默认情况下</span><br><span class="line">  &#x2F;&#x2F; 这些属性都是可选的。</span><br><span class="line">  optionalArray: PropTypes.array,</span><br><span class="line">  optionalBool: PropTypes.bool,</span><br><span class="line">  optionalFunc: PropTypes.func,</span><br><span class="line">  optionalNumber: PropTypes.number,</span><br><span class="line">  optionalObject: PropTypes.object,</span><br><span class="line">  optionalString: PropTypes.string,</span><br><span class="line">  optionalSymbol: PropTypes.symbol,</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 任何可被渲染的元素（包括数字、字符串、元素或数组）</span><br><span class="line">  &#x2F;&#x2F; (或 Fragment) 也包含这些类型。</span><br><span class="line">  optionalNode: PropTypes.node,</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 一个 React 元素。</span><br><span class="line">  optionalElement: PropTypes.element,</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 一个 React 元素类型（即，MyComponent）。</span><br><span class="line">  optionalElementType: PropTypes.elementType,</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 你也可以声明 prop 为类的实例，这里使用</span><br><span class="line">  &#x2F;&#x2F; JS 的 instanceof 操作符。</span><br><span class="line">  optionalMessage: PropTypes.instanceOf(Message),</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 你可以让你的 prop 只能是特定的值，指定它为</span><br><span class="line">  &#x2F;&#x2F; 枚举类型。</span><br><span class="line">  optionalEnum: PropTypes.oneOf([&#39;News&#39;, &#39;Photos&#39;]),</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 一个对象可以是几种类型中的任意一个类型</span><br><span class="line">  optionalUnion: PropTypes.oneOfType([</span><br><span class="line">    PropTypes.string,</span><br><span class="line">    PropTypes.number,</span><br><span class="line">    PropTypes.instanceOf(Message)</span><br><span class="line">  ]),</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 可以指定一个数组由某一类型的元素组成</span><br><span class="line">  optionalArrayOf: PropTypes.arrayOf(PropTypes.number),</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 可以指定一个对象由某一类型的值组成</span><br><span class="line">  optionalObjectOf: PropTypes.objectOf(PropTypes.number),</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 可以指定一个对象由特定的类型值组成</span><br><span class="line">  optionalObjectWithShape: PropTypes.shape(&#123;</span><br><span class="line">    color: PropTypes.string,</span><br><span class="line">    fontSize: PropTypes.number</span><br><span class="line">  &#125;),</span><br><span class="line">  </span><br><span class="line">  &#x2F;&#x2F; An object with warnings on extra properties</span><br><span class="line">  optionalObjectWithStrictShape: PropTypes.exact(&#123;</span><br><span class="line">    name: PropTypes.string,</span><br><span class="line">    quantity: PropTypes.number</span><br><span class="line">  &#125;),   </span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 你可以在任何 PropTypes 属性后面加上 &#96;isRequired&#96; ，确保</span><br><span class="line">  &#x2F;&#x2F; 这个 prop 没有被提供时，会打印警告信息。</span><br><span class="line">  requiredFunc: PropTypes.func.isRequired,</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 任意类型的数据</span><br><span class="line">  requiredAny: PropTypes.any.isRequired,</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 你可以指定一个自定义验证器。它在验证失败时应返回一个 Error 对象。</span><br><span class="line">  &#x2F;&#x2F; 请不要使用 &#96;console.warn&#96; 或抛出异常，因为这在 &#96;onOfType&#96; 中不会起作用。</span><br><span class="line">  customProp: function(props, propName, componentName) &#123;</span><br><span class="line">    if (!&#x2F;matchme&#x2F;.test(props[propName])) &#123;</span><br><span class="line">      return new Error(</span><br><span class="line">        &#39;Invalid prop &#96;&#39; + propName + &#39;&#96; supplied to&#39; +</span><br><span class="line">        &#39; &#96;&#39; + componentName + &#39;&#96;. Validation failed.&#39;</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 你也可以提供一个自定义的 &#96;arrayOf&#96; 或 &#96;objectOf&#96; 验证器。</span><br><span class="line">  &#x2F;&#x2F; 它应该在验证失败时返回一个 Error 对象。</span><br><span class="line">  &#x2F;&#x2F; 验证器将验证数组或对象中的每个值。验证器的前两个参数</span><br><span class="line">  &#x2F;&#x2F; 第一个是数组或对象本身</span><br><span class="line">  &#x2F;&#x2F; 第二个是他们当前的键。</span><br><span class="line">  customArrayProp: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) &#123;</span><br><span class="line">    if (!&#x2F;matchme&#x2F;.test(propValue[key])) &#123;</span><br><span class="line">      return new Error(</span><br><span class="line">        &#39;Invalid prop &#96;&#39; + propFullName + &#39;&#96; supplied to&#39; +</span><br><span class="line">        &#39; &#96;&#39; + componentName + &#39;&#96;. Validation failed.&#39;</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/typechecking-with-proptypes.html#requiring-single-child">使用 PropTypes 进行类型检查</a></p>
-<h4 id="state及组件生命周期"><a href="#state及组件生命周期" class="headerlink" title="state及组件生命周期"></a>state及组件生命周期</h4><blockquote>
-<p>props是父组件传入的只读参数，state是组件自身的动态的状态</p>
-</blockquote>
-<blockquote>
-<p>为了正确地构建组件，需要找出组件模型所需的 state 的最小表示，其他所有数据根据该state计算出。<a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/thinking-in-react.html#step-3-identify-the-minimal-but-complete-representation-of-ui-state">React哲学</a><br>props是传入参数，而state是组件内部表征状态的对象，往往在构造函数中，根据props初始化state</p>
-</blockquote>
-<p>组件状态更新使用setState，函数触发组件的重新渲染</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class Clock extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">    &#x2F;&#x2F; 初始化date为当前时间</span><br><span class="line">    this.state &#x3D; &#123;date: new Date()&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  &#x2F;* 加载 *&#x2F;</span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    &#x2F;&#x2F; 1s后开始跳</span><br><span class="line">    this.timerID &#x3D; setInterval(</span><br><span class="line">      () &#x3D;&gt; this.tick(),</span><br><span class="line">      1000</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  &#x2F;* 卸载 *&#x2F;</span><br><span class="line">  componentWillUnmount() &#123;</span><br><span class="line">    clearInterval(this.timerID);</span><br><span class="line">  &#125;</span><br><span class="line">  tick&#x3D;()&#x3D;&gt;&#123;this.setState((pre)&#x3D;&gt;(&#123;date:new Date()&#125;))&#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;h1&gt;Hello, world!&lt;&#x2F;h1&gt;</span><br><span class="line">        &lt;h2&gt;It is &#123;this.state.date.toLocaleTimeString()&#125;.&lt;&#x2F;h2&gt;</span><br><span class="line">      &lt;&#x2F;div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="bind-‘this’"><a href="#bind-‘this’" class="headerlink" title="bind ‘this’"></a>bind ‘this’</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">class MyComponent extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">    this.state &#x3D; &#123;</span><br><span class="line">      text: &quot;Hello&quot;</span><br><span class="line">    &#125;;</span><br><span class="line">    this.handleClick &#x3D; this.handleClick.bind(this);</span><br><span class="line">  &#125;</span><br><span class="line">  handleClick() &#123;</span><br><span class="line">    this.setState(&#123;</span><br><span class="line">      text: &quot;You clicked!&quot;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;button onClick&#x3D;&#123;this.handleClick&#125;&gt;Click Me&lt;&#x2F;button&gt;</span><br><span class="line">        &lt;h1&gt;&#123;this.state.text&#125;&lt;&#x2F;h1&gt;</span><br><span class="line">      &lt;&#x2F;div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h4 id="条件渲染"><a href="#条件渲染" class="headerlink" title="条件渲染"></a>条件渲染</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">  const isLoggedIn &#x3D; this.state.isLoggedIn;</span><br><span class="line">  let button;</span><br><span class="line">  if (isLoggedIn) &#123;</span><br><span class="line">    button &#x3D; &lt;LogoutButton onClick&#x3D;&#123;this.handleLogoutClick&#125; &#x2F;&gt;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    button &#x3D; &lt;LoginButton onClick&#x3D;&#123;this.handleLoginClick&#125; &#x2F;&gt;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;Greeting isLoggedIn&#x3D;&#123;isLoggedIn&#125; &#x2F;&gt;</span><br><span class="line">      &#123;button&#125;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>与运算&amp;&amp;</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;flag &amp;&amp; &lt;toggleComponent &#x2F;&gt;&#125;</span><br></pre></td></tr></table></figure>
-<p>三目运算</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">  const isLoggedIn &#x3D; this.state.isLoggedIn;</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;Greeting isLoggedIn&#x3D;&#123;isLoggedIn&#125; &#x2F;&gt;</span><br><span class="line">      &#123;isLoggedIn?&lt;LogoutButton onClick&#x3D;&#123;this.handleLogoutClick&#125; &#x2F;&gt;:&lt;LoginButton onClick&#x3D;&#123;this.handleLoginClick&#125; &#x2F;&gt;&#125;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h4><p>没有继承！</p>
-<blockquote>
-<p>在render return中组合子组件提供了清晰而安全地定制组件外观和行为的灵活方式，没有需要使用继承来构建组件层次的情况。<a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/composition-vs-inheritance.html#so-what-about-inheritance">React Docs:组合 vs 继承</a></p>
-</blockquote>
-<h4 id="onRef"><a href="#onRef" class="headerlink" title="onRef"></a>onRef</h4><p>子组件实例化回调函数，用以获取子组件对象</p>
-<h4 id="Fragment"><a href="#Fragment" class="headerlink" title="Fragment"></a>Fragment</h4><p>相当于Angular的template，插入子组件不生成额外的元素(如div)，&lt;React.Fragment&gt;&lt;/React.Fragment&gt;可以省略为&lt;&gt;&lt;/&gt;</p>
-<h4 id="ReactDOMServer"><a href="#ReactDOMServer" class="headerlink" title="ReactDOMServer"></a>ReactDOMServer</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class App extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return &lt;div&#x2F;&gt;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">ReactDOMServer.renderToString(&lt;App &#x2F;&gt;);</span><br></pre></td></tr></table></figure>
-<p>服务端渲染(SSR),生成dom的html字符串,实现SEO优化</p>
-<h4 id="Create-React-App"><a href="#Create-React-App" class="headerlink" title="Create React App"></a>Create React App</h4><p>这是一个package <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/create-react-app">create-react-app</a>, 如angular-cli，和vue-cli中包含的命令工具(这里封装的命令是react-scripts, 见package.json中的scripts)，用以创建基于React的完整应用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">my-app&#x2F;</span><br><span class="line">  node_modules&#x2F;</span><br><span class="line">  public&#x2F;</span><br><span class="line">    index.html</span><br><span class="line">    favicon.ico</span><br><span class="line">  src&#x2F;</span><br><span class="line">    App.css</span><br><span class="line">    App.js</span><br><span class="line">    App.test.js</span><br><span class="line">    index.css</span><br><span class="line">    index.js</span><br><span class="line">    logo.svg</span><br><span class="line">  README.md</span><br><span class="line">  package.json</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>关于typescript</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev typescript</span><br></pre></td></tr></table></figure>
-<p>在tsconfig.json中配置typescript编译器(<a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/static-type-checking.html#configuring-the-typescript-compiler">略</a>)</p>
-<p>使用tsx文件书写包含jsx代码的typescript代码</p>
-<p>使用tsc命令编译</p>
-<p>添加@types/react</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/06/24/ef-migration/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/06/24/ef-migration/" class="post-title-link" itemprop="url">Entity Framework Migration</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2020-06-24 12:36:53 / Modified: 15:20:21" itemprop="dateCreated datePublished" datetime="2020-06-24T12:36:53+08:00">2020-06-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/">tourial</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/06/15/entityframework/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/06/15/entityframework/" class="post-title-link" itemprop="url">Entity Framework</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-06-15 16:39:32" itemprop="dateCreated datePublished" datetime="2020-06-15T16:39:32+08:00">2020-06-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 14:37:19" itemprop="dateModified" datetime="2021-03-30T14:37:19+08:00">2021-03-30</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>EntirtyFramework框架是一个轻量级的可扩展版本的流行实体框架数据访问技术,ORM工具(Object Relational Mapping 对象关系映射)</p>
-</blockquote>
-<p>EF有三种使用场景，1. 从数据库生成Class(DB First)，2.由实体类生成数据库表结构(Code First)，3.  通过数据库可视化设计器设计数据库，同时生成实体类(Model First)。</p>
-<h4 id="实体类型"><a href="#实体类型" class="headerlink" title="实体类型"></a>实体类型</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">class MyContext : DbContext</span><br><span class="line">&#123;</span><br><span class="line">    public DbSet&lt;Blog&gt; Blogs &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    protected override void OnModelCreating(ModelBuilder modelBuilder)</span><br><span class="line">    &#123;</span><br><span class="line">        modelBuilder.Entity&lt;AuditEntry&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Blog</span><br><span class="line">&#123;</span><br><span class="line">    public int BlogId &#123; get; set; &#125;</span><br><span class="line">    public string Url &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public List&lt;Post&gt; Posts &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 从模型中排除的类型</span><br><span class="line">[NotMapped]</span><br><span class="line">public class BlogMetadata</span><br><span class="line">&#123;</span><br><span class="line">    public DateTime LoadedFromDatabase &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>按照约定，每个实体类型将设置为映射到与公开实体的 DbSet 属性同名的数据库表。 如果给定实体不存在 DbSet，则使用类名称。或使用注解 [ Table(“tableName”) ]</p>
-</blockquote>
-<h4 id="实体属性"><a href="#实体属性" class="headerlink" title="实体属性"></a>实体属性</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class Blog</span><br><span class="line">&#123;</span><br><span class="line">    public int BlogId &#123; get; set; &#125;</span><br><span class="line">    public string Url &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;从模型中排除的属性</span><br><span class="line">    [NotMapped]</span><br><span class="line">    public DateTime LoadedFromDatabase &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>列注解：</p>
-<ul>
-<li>列名 [ Column(“blog_id”) ]</li>
-<li>数据类型 [Column(TypeName = “varchar(200)”)]</li>
-<li>校验  [ MaxLength(500) ] [ Required ]       </li>
-</ul>
-<h4 id="键"><a href="#键" class="headerlink" title="键"></a>键</h4><p>主键</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">protected override void OnModelCreating(ModelBuilder modelBuilder)</span><br><span class="line">&#123;</span><br><span class="line">    modelBuilder.Entity&lt;Blog&gt;()</span><br><span class="line">        .HasKey(b &#x3D;&gt; b.BlogId)</span><br><span class="line">        .HasName(&quot;PrimaryKey_BlogId&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Alternative Key</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class MyContext : DbContext</span><br><span class="line">&#123;</span><br><span class="line">    public DbSet&lt;Blog&gt; Blogs &#123; get; set; &#125;</span><br><span class="line">    public DbSet&lt;Post&gt; Posts &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    protected override void OnModelCreating(ModelBuilder modelBuilder)</span><br><span class="line">    &#123;</span><br><span class="line">        modelBuilder.Entity&lt;Post&gt;()</span><br><span class="line">            .HasOne(p &#x3D;&gt; p.Blog)</span><br><span class="line">            .WithMany(b &#x3D;&gt; b.Posts)</span><br><span class="line">            .HasForeignKey(p &#x3D;&gt; p.BlogUrl)</span><br><span class="line">            .HasPrincipalKey(b &#x3D;&gt; b.Url);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="策略维护-多对多关系"><a href="#策略维护-多对多关系" class="headerlink" title="策略维护 多对多关系"></a>策略维护 多对多关系</h4><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/modeling/relationships#other-relationship-patterns">官网Doc</a><br></p>
-<blockquote>
-<p>目前尚不支持多对多关系，没有实体类来表示联接表。 但是，您可以通过包含联接表的实体类并映射两个不同的一对多关系，来表示多对多关系。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">class MyContext : DbContext</span><br><span class="line">&#123;</span><br><span class="line">    public DbSet&lt;Post&gt; Posts &#123; get; set; &#125;</span><br><span class="line">    public DbSet&lt;Tag&gt; Tags &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    protected override void OnModelCreating(ModelBuilder modelBuilder)</span><br><span class="line">    &#123;</span><br><span class="line">        modelBuilder.Entity&lt;PostTag&gt;()</span><br><span class="line">            .HasKey(t &#x3D;&gt; new &#123; t.PostId, t.TagId &#125;);</span><br><span class="line"></span><br><span class="line">        modelBuilder.Entity&lt;PostTag&gt;()</span><br><span class="line">            .HasOne(pt &#x3D;&gt; pt.Post)</span><br><span class="line">            .WithMany(p &#x3D;&gt; p.PostTags)</span><br><span class="line">            .HasForeignKey(pt &#x3D;&gt; pt.PostId);</span><br><span class="line"></span><br><span class="line">        modelBuilder.Entity&lt;PostTag&gt;()</span><br><span class="line">            .HasOne(pt &#x3D;&gt; pt.Tag)</span><br><span class="line">            .WithMany(t &#x3D;&gt; t.PostTags)</span><br><span class="line">            .HasForeignKey(pt &#x3D;&gt; pt.TagId);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Post</span><br><span class="line">&#123;</span><br><span class="line">    public int PostId &#123; get; set; &#125;</span><br><span class="line">    public string Title &#123; get; set; &#125;</span><br><span class="line">    public string Content &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public List&lt;PostTag&gt; PostTags &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Tag</span><br><span class="line">&#123;</span><br><span class="line">    public string TagId &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public List&lt;PostTag&gt; PostTags &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class PostTag</span><br><span class="line">&#123;</span><br><span class="line">    public int PostId &#123; get; set; &#125;</span><br><span class="line">    public Post Post &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public string TagId &#123; get; set; &#125;</span><br><span class="line">    public Tag Tag &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="一对多"><a href="#一对多" class="headerlink" title="一对多"></a>一对多</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 博客</span><br><span class="line">public class Blog</span><br><span class="line">&#123;</span><br><span class="line">    public int BlogId &#123; get; set; &#125;</span><br><span class="line">    public string Url &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public List&lt;Post&gt; Posts &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 文章</span><br><span class="line">public class Post</span><br><span class="line">&#123;</span><br><span class="line">    public int PostId &#123; get; set; &#125;</span><br><span class="line">    public string Title &#123; get; set; &#125;</span><br><span class="line">    public string Content &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public int BlogId &#123; get; set; &#125;</span><br><span class="line">    public Blog Blog &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Post是依赖实体</li>
-<li>Blog是主体实体</li>
-<li>Blog.BlogId是主体键（在本例中为主密钥，而不是备用密钥）</li>
-<li>Post.BlogId为外键</li>
-<li>Post.Blog是一个引用导航属性</li>
-<li>Blog.Posts是集合导航属性</li>
-<li>Post.Blog是的反向导航属性 <h4 id="一对一"><a href="#一对一" class="headerlink" title="一对一"></a>一对一</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class Blog</span><br><span class="line">&#123;</span><br><span class="line">    public int BlogId &#123; get; set; &#125;</span><br><span class="line">    public string Url &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public BlogImage BlogImage &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class BlogImage</span><br><span class="line">&#123;</span><br><span class="line">    public int BlogImageId &#123; get; set; &#125;</span><br><span class="line">    public byte[] Image &#123; get; set; &#125;</span><br><span class="line">    public string Caption &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public int BlogId &#123; get; set; &#125;</span><br><span class="line">    public Blog Blog &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-配置关系时HasForeignKey必须指定实体类型，这一点区别于上面的书写方式<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">modelBuilder.Entity&lt;Blog&gt;()</span><br><span class="line">    .HasOne(b &#x3D;&gt; b.BlogImage)</span><br><span class="line">    .WithOne(i &#x3D;&gt; i.Blog)</span><br><span class="line">    .HasForeignKey&lt;BlogImage&gt;(b &#x3D;&gt; b.BlogForeignKey);</span><br></pre></td></tr></table></figure>
-<h4 id="关联关系"><a href="#关联关系" class="headerlink" title="关联关系"></a>关联关系</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class MyContext : DbContext</span><br><span class="line">&#123;</span><br><span class="line">    public DbSet&lt;Blog&gt; Blogs &#123; get; set; &#125;</span><br><span class="line">    public DbSet&lt;Post&gt; Posts &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    protected override void OnModelCreating(ModelBuilder modelBuilder)</span><br><span class="line">    &#123;</span><br><span class="line">        modelBuilder.Entity&lt;Post&gt;()</span><br><span class="line">            .HasOne&lt;Blog&gt;()</span><br><span class="line">            .WithMany()</span><br><span class="line">            .HasForeignKey(p &#x3D;&gt; p.BlogId);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">关联关系有Reqiuired和Optional之分，前者的情况下，对主体实体的删除会导致依赖实体被级联删除，而对于后者，默认不被配置为级联删除而将外键属性置为null</span><br></pre></td></tr></table></figure>
-<h4 id="关联查询"><a href="#关联查询" class="headerlink" title="关联查询"></a>关联查询</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public async Task&lt;IActionResult&gt; Details(string code)</span><br><span class="line">&#123;</span><br><span class="line">    if (code &#x3D;&#x3D; null)</span><br><span class="line">    &#123;</span><br><span class="line">        return NotFound();</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; Blog &lt;&gt;--- ReferenceMap ---&lt;&gt; Theme</span><br><span class="line">    var Blog &#x3D; await _context. Blogs</span><br><span class="line">                    .Include(blog &#x3D;&gt; blog.ReferenceMap)</span><br><span class="line">                    .ThenInclude(map &#x3D;&gt; map.Theme)</span><br><span class="line">                    .FirstOrDefaultAsync(m &#x3D;&gt; m.Code &#x3D;&#x3D; code);</span><br><span class="line">    if (Blog &#x3D;&#x3D; null)</span><br><span class="line">    &#123;</span><br><span class="line">        return NotFound();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return View(Blog);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="关联存储"><a href="#关联存储" class="headerlink" title="关联存储"></a>关联存储</h4><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/saving/related-data">here</a><br>向导航属性（blog.Posts）中添加新实体，EF自动发现关联实体并将其插入数据库<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">await using (var context &#x3D; new BloggingContext())</span><br><span class="line">&#123;</span><br><span class="line">    var blog &#x3D; await context.Blogs.Include(b &#x3D;&gt; b.Posts).FirstAsync();</span><br><span class="line">    var post &#x3D; new Post &#123; Title &#x3D; &quot;Intro to EF Core&quot; &#125;;</span><br><span class="line"></span><br><span class="line">    blog.Posts.Add(post);</span><br><span class="line">    await context.SaveChangesAsync();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-自动更改外键列<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">await using (var context &#x3D; new BloggingContext())</span><br><span class="line">&#123;</span><br><span class="line">    var blog &#x3D; new Blog &#123; Url &#x3D; &quot;http:&#x2F;&#x2F;blogs.msdn.com&#x2F;visualstudio&quot; &#125;;</span><br><span class="line">    var post &#x3D; await context.Posts.FirstAsync();</span><br><span class="line"></span><br><span class="line">    post.Blog &#x3D; blog;</span><br><span class="line">    await context.SaveChangesAsync();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-上面的代码没有显式操作外键post.blogId，但EF会自动更新，并且将所需的新实体blog插入数据库<h4 id="CRUD"><a href="#CRUD" class="headerlink" title="CRUD"></a>CRUD</h4>使用数据库上下文修改模型(包括新增和移除)，并执行SaveChanges，相当于commit<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; create</span><br><span class="line">context.Add(new Student&#123;</span><br><span class="line">    FirstName&#x3D;&quot;Jack&quot;,</span><br><span class="line">    SurName&#x3D;&quot;Ma&quot;</span><br><span class="line">&#125;);</span><br><span class="line">context.SaveChanges();</span><br><span class="line">&#x2F;&#x2F; select</span><br><span class="line">var MaYun &#x3D; context.Students</span><br><span class="line">            .Where(s &#x3D;&gt; s.FirstName &#x3D;&#x3D; GetName()).ToList();</span><br><span class="line">&#x2F;&#x2F; update</span><br><span class="line">MaYun.Age&#x3D;8;</span><br><span class="line">context.SaveChanges()</span><br><span class="line">&#x2F;&#x2F; delete</span><br><span class="line">context.Remove(MaYun);</span><br><span class="line">context.SaveChanges()</span><br></pre></td></tr></table></figure>
-一般在web应用中使用异步<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; create</span><br><span class="line">context.Add(new Student&#123;</span><br><span class="line">    FirstName&#x3D;&quot;Jack&quot;,</span><br><span class="line">    SurName&#x3D;&quot;Ma&quot;</span><br><span class="line">&#125;);</span><br><span class="line">context.SaveChangesAsync();</span><br><span class="line">&#x2F;&#x2F; select</span><br><span class="line">var MaYun &#x3D; context.Students</span><br><span class="line">            .Where(s &#x3D;&gt; s.FirstName &#x3D;&#x3D; GetName()).ToListAsync();</span><br><span class="line">&#x2F;&#x2F; update</span><br><span class="line">MaYun.Age&#x3D;8;</span><br><span class="line">context.SaveChangesAsync()</span><br><span class="line">&#x2F;&#x2F; delete</span><br><span class="line">context.Remove(MaYun);</span><br><span class="line">context.SaveChangesAsync()</span><br></pre></td></tr></table></figure>
-<span style="color:#f50;font-weight:bold">Caution!</span> 在对DbContext的多次操作中，如果前面一次SaveChanges出错，如Add操作违反唯一约束而失败，需要将该实体类实例从DbContext中移除(或修正)，否则出错的命令会一直在提交队列中，反复报错<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">try</span><br><span class="line">&#123;</span><br><span class="line">    _context.Add(newBlog);</span><br><span class="line">    await _context.SaveChangesAsync();</span><br><span class="line">&#125;</span><br><span class="line">catch (Microsoft.EntityFrameworkCore.DbUpdateException dbEx)</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F; TODO the result description is not properly rigorous.</span><br><span class="line">    if (null !&#x3D; dbEx.InnerException</span><br><span class="line">        &amp;&amp; dbEx.InnerException.Message.Contains(&quot;constraint&quot;))</span><br><span class="line">    &#123;</span><br><span class="line">        System.Console.WriteLine(&quot;Blog exists;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F; other error handle</span><br><span class="line">    &#125;</span><br><span class="line">    _context.Remove(newBlog);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-DBContext.Add成功后 若主键id使用数据库策略生成 Add成功后即可从对象中取到<h4 id="DBcontext和connectionstring"><a href="#DBcontext和connectionstring" class="headerlink" title="DBcontext和connectionstring"></a>DBcontext和connectionstring</h4>startup.cs<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    services.AddDbContext&lt;BloggingContext&gt;(options &#x3D;&gt;</span><br><span class="line">        options.UseSqlServer(Configuration.GetConnectionString(&quot;DBConnection&quot;)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="重连"><a href="#重连" class="headerlink" title="重连"></a>重连</h4>数据库如SQL Server的provider程序，可以识别可重试（retry）的异常类型<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    services.AddDbContext&lt;PicnicContext&gt;(</span><br><span class="line">        options &#x3D;&gt; options.UseSqlServer(</span><br><span class="line">            Configuration.GetConnectionString(&quot;DBConnection&quot;),</span><br><span class="line">            providerOptions &#x3D;&gt; providerOptions.EnableRetryOnFailure()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4>额外的，<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency">Transaction commit failure</a></li>
-</ul>
-<p>对于多项实体操作(CRUD)后SaveChanges，SaveChanges是事务性的，意味着前面所有操作成功或失败，而不会产生部分成功部分失败</p>
-<h4 id="Lazy-load"><a href="#Lazy-load" class="headerlink" title="Lazy load"></a>Lazy load</h4><p>访问导航属性（外键）时再次查询数据库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">using (var dbContext &#x3D; new CategoryEntities())</span><br><span class="line">&#123;</span><br><span class="line">    dbContext.Configuration.LazyLoadingEnabled &#x3D; true; &#x2F;&#x2F; 默认是true，针对导航属性</span><br><span class="line">        var categoryList &#x3D; dbContext.Set&lt;Category&gt;().Where(p &#x3D;&gt; p.CategoryId &#x3D;&#x3D; 3);</span><br><span class="line">        &#x2F;&#x2F; 只会在数据库里面查询Category表，不会查询ProductDetail表</span><br><span class="line">        foreach(var category in categoryList)</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(&quot;CategoryId:&quot;+category.CategoryId+ &quot;,CategoryName:&quot;+category.CategoryName);</span><br><span class="line">            &#x2F;&#x2F; 这时才会去数据库查询ProductDetail表</span><br><span class="line">            foreach (var product in category.ProductDetails)</span><br><span class="line">            &#123;</span><br><span class="line">                Console.WriteLine(&quot;ProductName:&quot;+product.ProductName);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>不再继续查询</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">using (var dbContext &#x3D; new CategoryEntities())</span><br><span class="line">&#123;</span><br><span class="line">    dbContext.Configuration.LazyLoadingEnabled &#x3D; false; &#x2F;&#x2F; 不延迟加载,不会再次查询了</span><br><span class="line">    var categoryList &#x3D; dbContext.Set&lt;Category&gt;().Where(p &#x3D;&gt; p.CategoryId &#x3D;&#x3D; 3);</span><br><span class="line">    &#x2F;&#x2F; 只会在数据库里面查询Category表，不会查询ProductDetail表</span><br><span class="line">    foreach (var category in categoryList)</span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(&quot;CategoryId:&quot; + category.CategoryId + &quot;,CategoryName:&quot; + category.CategoryName);</span><br><span class="line">        &#x2F;&#x2F; 这时不会去数据库查询了，所以用户全是空的</span><br><span class="line">        foreach (var product in category.ProductDetails)</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(&quot;ProductName:&quot; + product.ProductName);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>一次性完成查询</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 显示加载</span><br><span class="line">using (var dbContext &#x3D; new CategoryEntities())</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F; 不延迟加载，指定Include，一次性加载主表和从表的所有数据</span><br><span class="line">    var categoryList &#x3D; dbContext.Set&lt;Category&gt;().Include(&quot;ProductDetails&quot;).Where(p &#x3D;&gt; p.CategoryId &#x3D;&#x3D; 3);</span><br><span class="line">    foreach (var category in categoryList)</span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(&quot;CategoryId:&quot; + category.CategoryId + &quot;,CategoryName:&quot; + category.CategoryName);</span><br><span class="line">        &#x2F;&#x2F; 不会再查询</span><br><span class="line">        foreach (var product in category.ProductDetails)</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(&quot;ProductName:&quot; + product.ProductName);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>issue: Data is Null. This method or property cannot be called on Null values.</p>
-</blockquote>
-<p>一个很简单的出错原因是model的基本类型（非对象，不能设置为null）如int，Guid等的属性，其对应的table field为null。<br>应以int?,Guid?作为属性类型以支持null</p>
-<h4 id="Parent-Child"><a href="#Parent-Child" class="headerlink" title="Parent/Child"></a>Parent/Child</h4><p>对应于使用id，parentid组织的父子关系表，常见的组织机构树，职能头衔树等</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class Group</span><br><span class="line">&#123;</span><br><span class="line">    public Guid ID &#123; get; set; &#125;</span><br><span class="line">    public string Name &#123; get; set; &#125;</span><br><span class="line">    public Guid? ParentID &#123; get; set; &#125;</span><br><span class="line">    public Group Parent &#123; get; set; &#125;</span><br><span class="line">    </span><br><span class="line">    public ICollection&lt;Group&gt; Children &#123; get; &#125; &#x3D; new List&lt;Group&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>查询子树</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var data &#x3D; (await _context.Group.ToListAsync())</span><br><span class="line">            .Where(g &#x3D;&gt; g.ID &#x3D;&#x3D; new Guid(groupId))</span><br><span class="line">            .ToList();</span><br></pre></td></tr></table></figure>
-<h4 id="Hierarchy-Data"><a href="#Hierarchy-Data" class="headerlink" title="Hierarchy Data"></a>Hierarchy Data</h4><p>参考<a target="_blank" rel="noopener" href="https://www.meziantou.net/using-hierarchyid-with-entity-framework-core.htm">Using SQL Server HierarchyId with Entity Framework Core</a><br>package: </p>
-<ul>
-<li>Microsoft.EntityFrameworkCore.SqlServer</li>
-<li>EntityFrameworkCore.SqlServer.HierarchyId<br>数据库上下文需要配置启用HierarchyId，否则出现下述异常<blockquote>
-<p>The property is of type ‘HierarchyId’ which is not supported by current database provider. Either change the property CLR type or ignore the property using the ‘[NotMapped]’ attribute or by using ‘EntityTypeBuilder.Ignore’ in ‘OnModelCreating’.</p>
-</blockquote>
-</li>
-</ul>
-<p>在Startup.cs,配置启用HierarchyId</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    services.AddDbContext&lt;DataContext&gt;(options &#x3D;&gt;</span><br><span class="line">        options.UseSqlServer(Configuration.GetConnectionString(&quot;DataContext&quot;), conf&#x3D;&gt;</span><br><span class="line">            &#123;</span><br><span class="line">                conf.UseHierarchyId();</span><br><span class="line">            &#125;</span><br><span class="line">        ));</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>model定义</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class Group</span><br><span class="line">&#123;</span><br><span class="line">    public Guid ID &#123; get; set; &#125;</span><br><span class="line">    public string Name &#123; get; set; &#125;</span><br><span class="line">    public HierarchyId GroupLevel &#123; get; set; &#125;</span><br><span class="line">    </span><br><span class="line">    public ICollection&lt;Group&gt; Children &#123; get; &#125; &#x3D; new List&lt;Group&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>查询linq</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public async Task&lt;List&lt;Group&gt;&gt; GetChildrenByGroupIDAsync(Guid groupID)</span><br><span class="line">&#123;</span><br><span class="line">    Group self &#x3D; await _context.Groups.FindAsync(groupID);</span><br><span class="line">    List&lt;Group&gt; groups &#x3D; await _context.Groups</span><br><span class="line">        .Where(g &#x3D;&gt; g.GroupLevel.IsDescendantOf(self.GroupLevel))</span><br><span class="line">        .ToListAsync();</span><br><span class="line"></span><br><span class="line">    return groups; &#x2F;&#x2F;.FindAll(g &#x3D;&gt; g.ID !&#x3D; groupID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其他查询见文章<a href="/qqsnote/2020/06/15/sqlserver/" title="SQLServer">SQLServer</a></p>
-<h4 id="Transient-Error"><a href="#Transient-Error" class="headerlink" title="Transient Error"></a>Transient Error</h4><blockquote>
-<p>Exception: An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding ‘EnableRetryOnFailure()’ to the ‘UseSqlServer’ call.</p>
-</blockquote>
-<p>见<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/54186894/getting-transient-errors-when-making-calls-against-azure-sql-database-from-azure">StackOverflow: Getting transient errors when making calls against Azure SQL Database from Azure Function</a></p>
-<p>数据库系统偶现Transient Error，这种暂时性错误的根本原因（underlying cause）很快就能自行解决，且在错误抛出时，.net程序会抛出上述的SqlException，为了处理这些错误，可应用程序代码中实现重试逻辑，而不是以应用程序错误的形式呈现给用户。<br>在Startup.cs,配置启用RetryOnFailure</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    services.AddDbContext&lt;DataContext&gt;(options &#x3D;&gt;</span><br><span class="line">        options.UseSqlServer(Configuration.GetConnectionString(&quot;DataContext&quot;), conf&#x3D;&gt;</span><br><span class="line">            &#123;</span><br><span class="line">                conf.EnableRetryOnFailure();</span><br><span class="line">            &#125;</span><br><span class="line">        ));</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><del>但是这里有个bug <a target="_blank" rel="noopener" href="https://github.com/efcore/EFCore.SqlServer.HierarchyId/issues/24">System.ArgumentException thrown when EnableRetryOnFailure is used.</a></del> 该bug已在dotNet 5版本修复</p>
-<h4 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;customers&gt; _customers &#x3D; (from a in db.customers select a).ToList();</span><br><span class="line">var _dataToWebPage &#x3D; _customers.Skip(50).Take(50);</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/10145815/c-sharp-entity-framework-pagination">StackOverflow:C# entity framework pagination</a></p>
-<h4 id="ORM注意事项"><a href="#ORM注意事项" class="headerlink" title="ORM注意事项"></a>ORM注意事项</h4><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/#ef-orm-considerations">EF O/RM 注意事项</a></p>
-<h4 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h4><p>startup.cs</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">services.AddDbContext&lt;MyDBContext&gt;(options &#x3D;&gt; &#123;</span><br><span class="line">    options.UseSqlServer(Configuration.GetConnectionString(&quot;MyDBContext&quot;), conf &#x3D;&gt; &#123;</span><br><span class="line">        conf.UseHierarchyId();</span><br><span class="line">        conf.EnableRetryOnFailure();</span><br><span class="line">    &#125;);</span><br><span class="line">    options.LogTo(System.Console.WriteLine);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/logging-events-diagnostics/simple-logging">Docs:简单的日志记录</a><br>日志委托和日志级别：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options.LogTo(Console.WriteLine, LogLevel.Information;</span><br></pre></td></tr></table></figure>
-<h4 id="Exception：this-sqltransaction-has-completed-it-is-no-longer-usable"><a href="#Exception：this-sqltransaction-has-completed-it-is-no-longer-usable" class="headerlink" title="Exception：this sqltransaction has completed it is no longer usable"></a>Exception：this sqltransaction has completed it is no longer usable</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[HttpPost]</span><br><span class="line">[Route(&quot;api&#x2F;[controller]&#x2F;create&quot;)]</span><br><span class="line">public async Task&lt;Result&gt; Create([FromBody] QModel model)&#123;</span><br><span class="line">    ...</span><br><span class="line">    try&#123;</span><br><span class="line">        _context.Add(model);</span><br><span class="line">        await _context.SaveChangesAsync();</span><br><span class="line">    &#125;catch(Exception ex)&#123;</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如上一个insert数据的接口，在有限的并发条件下（也就是for循环几条请求），个别错误数据可以造成其他正常数据插入失败<br>报 this sqltransaction has completed it is no longer usable 以及 zombie check等解释<br>查了2天资料未能解决<br>次日反思 问题或许出在多条线程同时向数据库上下文中推数据（即_context.Add）其中一个错误数据的出错，事务自动回滚，导致了其他线程中访问该事务已不可用。<br>此处使用_context.AddAsync方法可以解决<br>即，该问题就是个ef方法的线程安全的问题，可见<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/47135262/addasync-vs-add-in-ef-core">StackOverflow: AddAsync vs Add</a><br>那么我一个需求要添加user并为其分配新的group，一个事务里两个add操作怎么办呢，另起一小节：</p>
-<h4 id="一个事务多个操作的线程安全"><a href="#一个事务多个操作的线程安全" class="headerlink" title="一个事务多个操作的线程安全"></a>一个事务多个操作的线程安全</h4><p>其实在官方文档最初的概述中，强调了DbContext的线程不安全 见<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/dbcontext-configuration/#the-dbcontext-lifetime">Microsoft Docs: DBContext Lifetime</a></p>
-<blockquote>
-<p>DbContext 不是线程安全的。 不要在线程之间共享上下文。 请确保在继续使用上下文实例之前，等待所有异步调用。</p>
-</blockquote>
-<p>关于以事务作为上下文生命周期的配置, 见<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/41923804/configuring-dbcontext-as-transient">StackOverflow:Configuring Dbcontext as Transient</a> <span style="color:#f00;font-weight:bold">然而!</span>经实践同一接口的并发测试 仍然会出现this sqltransaction has completed it is no longer usable的异常<br>依赖注入的DBContext<br>在Startup的ConfigureServices中注册MyDBContext服务提供程序：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">services.AddDbContext&lt;MyDBContext&gt;(</span><br><span class="line">    options &#x3D;&gt; options.UseSqlServer(Configuration.GetConnectionString(&quot;MyDBContext&quot;),</span><br><span class="line">                                conf &#x3D;&gt; &#123; conf.UseHierarchyId();</span><br><span class="line">                                    conf.EnableRetryOnFailure();</span><br><span class="line">                                &#125;), ServiceLifetime.Transient);</span><br></pre></td></tr></table></figure>
-<p>注入DBContext:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class GroupsController : ControllerBase</span><br><span class="line">&#123;</span><br><span class="line">    private readonly MyDBContext _context;</span><br><span class="line">    private IGroupTreeService _groupTreeService;</span><br><span class="line"></span><br><span class="line">    public GroupsController(MyDBContext context, IGroupTreeService groupTreeService)</span><br><span class="line">    &#123;</span><br><span class="line">        _context &#x3D; context;</span><br><span class="line">        _groupTreeService &#x3D; groupTreeService;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>控制DBContext生命周期在函数内部<br>官方Doc：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/miscellaneous/connection-resiliency#execution-strategies-and-transactions">启用RetryOnFailue情形下的手动事务方式</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">public interface IWorker</span><br><span class="line">&#123;</span><br><span class="line">    void DoWork(Func&lt;MyDbContext&gt; dbFactory);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class WorkerRunner</span><br><span class="line">&#123;</span><br><span class="line">    private readonly DbContextOptions&lt;MyDbContext&gt; _dbOptions;</span><br><span class="line"></span><br><span class="line">    private readonly List&lt;IWorker&gt; _workers;</span><br><span class="line"></span><br><span class="line">    public WorkerRunner(DbContextOptions&lt;MyDbContext&gt; dbOptions, List&lt;IWorker&gt; workers)</span><br><span class="line">    &#123;</span><br><span class="line">        _dbOptions &#x3D; dbOptions;</span><br><span class="line">        _workers &#x3D; workers;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void RunWorkers()</span><br><span class="line">    &#123;</span><br><span class="line">        using (var context &#x3D; new MyDbContext(_dbOptions))</span><br><span class="line">        &#123;</span><br><span class="line">            using (var tran &#x3D; context.Database.BeginTransaction())</span><br><span class="line">            &#123;</span><br><span class="line">                foreach (var worker in _workers)</span><br><span class="line">                    worker.DoWork(() &#x3D;&gt;</span><br><span class="line">                    &#123;</span><br><span class="line">                        &#x2F;&#x2F; This won&#39;t work</span><br><span class="line">                        var db &#x3D; new MyDbContext(_dbOptions);</span><br><span class="line">                        &#x2F;&#x2F; And this one will even throw exception when used with in-memory database (during unit testing)</span><br><span class="line">                        db.Database.UseTransaction(tran.GetDbTransaction());</span><br><span class="line">                        return context;</span><br><span class="line">                    &#125;);</span><br><span class="line"></span><br><span class="line">                tran.Commit();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>就是new一个DBContext用， <span style="color:#ff0;font-weight:bold">Caution!</span> 经测单靠new DBContext不能阻止transaction Error</p>
-
+<h4 id="react-router"><a href="#react-router" class="headerlink" title="react router"></a>react router</h4><p>安装react-router-dom,这个package是基于react-router开发的，且实现了现成的组件如Link Switch等</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">ReactDOM.render(</span><br><span class="line">    &lt;BrowserRouter&gt;</span><br><span class="line">        &lt;AppRoutes &#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;BrowserRouter&gt;,</span><br><span class="line">)</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">const AppRoutes &#x3D; () &#x3D;&gt; &#123;</span><br><span class="line">    return (</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;nav&gt;</span><br><span class="line">                &lt;ul&gt;</span><br><span class="line">                    &lt;li&gt;&lt;Link to&#x3D;&quot;&#x2F;dashboard&quot;&gt;Dashboard&lt;&#x2F;Link&gt;&lt;&#x2F;li&gt;</span><br><span class="line">                    &lt;li&gt;&lt;Link to&#x3D;&quot;&#x2F;device&quot;&gt;Device&lt;&#x2F;Link&gt;&lt;&#x2F;li&gt;</span><br><span class="line">                    &lt;li&gt;&lt;Link to&#x3D;&quot;&#x2F;squre&quot;&gt;Squre&lt;&#x2F;Link&gt;&lt;&#x2F;li&gt;</span><br><span class="line">                &lt;&#x2F;ul&gt;</span><br><span class="line">            &lt;&#x2F;nav&gt;</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">                &lt;Route path&#x3D;&quot;&#x2F;dashboard&quot; component&#x3D;&#123;Dashboard&#125; &#x2F;&gt;</span><br><span class="line">                &lt;Route path&#x3D;&quot;&#x2F;device&quot; component&#x3D;&#123;Device&#125; &#x2F;&gt;</span><br><span class="line">                &lt;Route path&#x3D;&quot;&#x2F;squre&quot; component&#x3D;&#123;Squre&#125; &#x2F;&gt;</span><br><span class="line">            &lt;&#x2F;div&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -1192,7 +1037,7 @@ DBContext.Add成功后 若主键id使用数据库策略生成 Add成功后即可
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/qqsnote/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/20/">20</a><a class="extend next" rel="next" href="/qqsnote/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/qqsnote/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/21/">21</a><a class="extend next" rel="next" href="/qqsnote/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1258,18 +1103,18 @@ DBContext.Add成功后 若主键id使用数据库策略生成 Add成功后即可
       <div class="site-state-item site-state-posts">
           <a href="/qqsnote/archives/">
         
-          <span class="site-state-item-count">196</span>
+          <span class="site-state-item-count">201</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/qqsnote/categories/">
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/qqsnote/tags/">
-        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-count">81</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1280,7 +1125,7 @@ DBContext.Add成功后 若主键id使用数据库策略生成 Add成功后即可
       </div>
 
       <div class="tag-cloud-tags">
-        <a href="/qqsnote/tags/Net/" style="font-size: 26px; color: #f4f4f4">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 14px; color: #d2d2d2">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 26px; color: #f4f4f4">Azure</a> <a href="/qqsnote/tags/C/" style="font-size: 16px; color: #d7d7d7">C#</a> <a href="/qqsnote/tags/CSS/" style="font-size: 20px; color: #e3e3e3">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 14px; color: #d2d2d2">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 18px; color: #ddd">Docker</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16px; color: #d7d7d7">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 14px; color: #d2d2d2">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 20px; color: #e3e3e3">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 24px; color: #eee">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 20px; color: #e3e3e3">Node.js</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/Python/" style="font-size: 22px; color: #e8e8e8">Python</a> <a href="/qqsnote/tags/React/" style="font-size: 16px; color: #d7d7d7">React</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 16px; color: #d7d7d7">SQL_Server</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 12px; color: #ccc">TypeScript</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 14px; color: #d2d2d2">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 16px; color: #d7d7d7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 14px; color: #d2d2d2">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28px; color: #f9f9f9">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 14px; color: #d2d2d2">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 12px; color: #ccc">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14px; color: #d2d2d2">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16px; color: #d7d7d7">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 12px; color: #ccc">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 14px; color: #d2d2d2">多语言</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12px; color: #ccc">性能优化</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 14px; color: #d2d2d2">数据库</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14px; color: #d2d2d2">算法</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 22px; color: #e8e8e8">认证&授权</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12px; color: #ccc">面试</a>
+        <a href="/qqsnote/tags/Net/" style="font-size: 26.4px; color: #f5f5f5">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.8px; color: #d1d1d1">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24.6px; color: #f0f0f0">Azure</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C#</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.2px; color: #e0e0e0">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 13.8px; color: #d1d1d1">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 17.4px; color: #dbdbdb">Docker</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.6px; color: #d6d6d6">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.8px; color: #d1d1d1">EntityFramework</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.8px; color: #d1d1d1">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 19.2px; color: #e0e0e0">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.8px; color: #ebebeb">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 19.2px; color: #e0e0e0">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 12px; color: #ccc">OData</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/Python/" style="font-size: 21px; color: #e6e6e6">Python</a> <a href="/qqsnote/tags/React/" style="font-size: 17.4px; color: #dbdbdb">React</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 17.4px; color: #dbdbdb">SQL_Server</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 12px; color: #ccc">TypeScript</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 13.8px; color: #d1d1d1">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 15.6px; color: #d6d6d6">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.8px; color: #d1d1d1">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.2px; color: #fafafa">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.8px; color: #d1d1d1">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 12px; color: #ccc">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 13.8px; color: #d1d1d1">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.6px; color: #d6d6d6">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 12px; color: #ccc">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.8px; color: #d1d1d1">多语言</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12px; color: #ccc">性能优化</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px; color: #ccc">数据库</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.8px; color: #d1d1d1">算法</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12px; color: #ccc">面试</a>
       </div>
     </div>
   </aside>

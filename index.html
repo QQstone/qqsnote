@@ -145,6 +145,476 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/07/13/sqlserver-trigger/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/07/13/sqlserver-trigger/" class="post-title-link" itemprop="url">SQL Server 触发器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-07-13 10:02:08" itemprop="dateCreated datePublished" datetime="2021-07-13T10:02:08+08:00">2021-07-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-15 09:48:21" itemprop="dateModified" datetime="2021-07-15T09:48:21+08:00">2021-07-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li>触发器是一类存储过程</li>
+<li>由数据表的事件(如insert update delete)触发，而不是手动调用</li>
+</ul>
+<h4 id="登录触发器"><a href="#登录触发器" class="headerlink" title="登录触发器"></a>登录触发器</h4><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/sql/relational-databases/triggers/logon-triggers?view=sql-server-ver15">官网例子</a> 场景：如果登录名login_test 已经创建了三个用户会话，触发器将拒绝该用户的登录尝试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">USE master;  </span><br><span class="line">GO  </span><br><span class="line">CREATE LOGIN login_test WITH PASSWORD &#x3D; N&#39;3KHJ6dhx(0xVYsdf&#39; MUST_CHANGE,  </span><br><span class="line">    CHECK_EXPIRATION &#x3D; ON;  </span><br><span class="line">GO  </span><br><span class="line">GRANT VIEW SERVER STATE TO login_test;  </span><br><span class="line">GO  </span><br><span class="line">CREATE TRIGGER connection_limit_trigger  </span><br><span class="line">ON ALL SERVER WITH EXECUTE AS N&#39;login_test&#39;  </span><br><span class="line">FOR LOGON  </span><br><span class="line">AS  </span><br><span class="line">BEGIN  </span><br><span class="line">IF ORIGINAL_LOGIN()&#x3D; N&#39;login_test&#39; AND  </span><br><span class="line">    (SELECT COUNT(*) FROM sys.dm_exec_sessions  </span><br><span class="line">            WHERE is_user_process &#x3D; 1 AND  </span><br><span class="line">                original_login_name &#x3D; N&#39;login_test&#39;) &gt; 3  </span><br><span class="line">    ROLLBACK;  </span><br><span class="line">END;</span><br></pre></td></tr></table></figure>
+<p>可知登录触发器在身份认证之后，建立会话之前触发<br>多个触发器的顺序，即支持指定the first和the last 见<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/sql/relational-databases/triggers/logon-triggers?view=sql-server-ver15#specifying-first-and-last-trigger">Microsoft Docs</a></p>
+<h4 id="DDL"><a href="#DDL" class="headerlink" title="DDL"></a>DDL</h4><p>data define language 数据定义语言<br>即在使用会改变数据库数据结构的语句时触发，如CREATE、ALTER、DROP、GRANT、DENY、REVOKE 或 UPDATE STATISTICS 开头的 Transact-SQL 语句<br>场景</p>
+<ul>
+<li>防止对数据库架构进行某些更改。</li>
+<li>希望数据库中发生某种情况以响应数据库架构的更改。</li>
+<li>记录数据库架构的更改或事件。<h4 id="DML"><a href="#DML" class="headerlink" title="DML"></a>DML</h4>data manipulation language (DML) 数据操作语言  INSERT、UPDATE 或 DELETE 语句<br>after 触发器<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">CREATE TRIGGER schemaA.SyncData </span><br><span class="line">   ON  schemaA.TableA</span><br><span class="line">   AFTER INSERT</span><br><span class="line">AS </span><br><span class="line">BEGIN</span><br><span class="line">	-- SET NOCOUNT ON added to prevent extra result sets from</span><br><span class="line">	-- interfering with SELECT statements.</span><br><span class="line"></span><br><span class="line">    -- Insert statements for trigger here</span><br><span class="line">	insert into schemaB.TableB(Name,TrustedId,EmailAddress,Logo,Type,Enable,RecordStatus,RecordCreated,RecordLastUpdated)</span><br><span class="line">	select name,record_pk,email,logo,&#39;1&#39;,0,0,SYSDATETIME(),SYSDATETIME() from schemaA.TableA</span><br><span class="line">	SET NOCOUNT ON;</span><br><span class="line">END</span><br><span class="line">GO</span><br></pre></td></tr></table></figure>
+instead of 触发器</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/07/10/FrontEnd-Fundation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/07/10/FrontEnd-Fundation/" class="post-title-link" itemprop="url">前端基础</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-07-10 22:08:04" itemprop="dateCreated datePublished" datetime="2021-07-10T22:08:04+08:00">2021-07-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-13 10:06:12" itemprop="dateModified" datetime="2021-07-13T10:06:12+08:00">2021-07-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li>DOCTYPE 有什么作用？怎么写？<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br></pre></td></tr></table></figure>
+html5规范的文档声明，示意浏览器以相应的标准解析文档，使支持html5规范如新的标签等</li>
+<li>列出常见的标签，并简单介绍这些标签用在什么场景？<br>canvas</li>
+<li>页面出现了乱码，是怎么回事？如何解决？<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta http-equiv&#x3D;&quot;Content-Type&quot; content&#x3D;&quot;text&#x2F;html; charset&#x3D;utf-8&quot; &#x2F;&gt; </span><br></pre></td></tr></table></figure>
+可能是即字符编码不匹配造成</li>
+<li>title 属性和 alt 属性分别有什么作用？</li>
+<li>HTML 的注释怎样写？</li>
+<li>data- 属性的作用？<br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Global_attributes/data-*">自定义数据属性data-*</a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var box &#x3D; document.getElementById(&quot;box&quot;); &#x2F;&#x2F; &lt;div id&#x3D;&quot;box&quot; data-user-name&#x3D;&quot;QQs&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">var username &#x3D; box.dataset.userName;</span><br></pre></td></tr></table></figure></li>
+<li>&lt;img&gt; 的 title 和 alt 有什么区别？</li>
+<li> Web 标准以及 W3C 标准是什么？ <a target="_blank" rel="noopener" href="https://www.runoob.com/web/web-standards.html">web标准</a></li>
+<li> HTML 全局属性（<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Global_attributes">Global Attribute</a>）有哪些？<br>id class style title name data-* contenteditable translate</li>
+<li>meta 有哪些常见的值？charset</li>
+<li>meta viewport 是做什么用的，怎么写？&lt;meta data-n-head=”ssr” name=”viewport” content=”width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover”&gt;</li>
+<li>列出常见的标签，并简单介绍这些标签用在什么场景？</li>
+<li>如何在 HTML 页面上展示 <div></div> 这几个字符？</li>
+<li>你是如何理解 HTML 语义化的？</li>
+<li>前端需要注意哪些 SEO?</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/06/11/DataBaseLock/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/06/11/DataBaseLock/" class="post-title-link" itemprop="url">DataBaseLock</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-06-11 11:00:59" itemprop="dateCreated datePublished" datetime="2021-06-11T11:00:59+08:00">2021-06-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-13 13:27:44" itemprop="dateModified" datetime="2021-07-13T13:27:44+08:00">2021-07-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/05/31/vbox/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/05/31/vbox/" class="post-title-link" itemprop="url">vbox</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-05-31 10:04:12" itemprop="dateCreated datePublished" datetime="2021-05-31T10:04:12+08:00">2021-05-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-06-15 10:38:09" itemprop="dateModified" datetime="2021-06-15T10:38:09+08:00">2021-06-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="VBoxManage"><a href="#VBoxManage" class="headerlink" title="VBoxManage"></a>VBoxManage</h4><ul>
+<li>VBoxManage list vms/runningvms</li>
+<li>VBoxManage startvm MyUbuntu</li>
+<li>VBoxManage controlvm MyUbuntu poweroff</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/05/14/graphQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/05/14/graphQL/" class="post-title-link" itemprop="url">graphQL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-14 13:45:05 / Modified: 17:40:40" itemprop="dateCreated datePublished" datetime="2021-05-14T13:45:05+08:00">2021-05-14</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="OData和GraphQL"><a href="#OData和GraphQL" class="headerlink" title="OData和GraphQL"></a>OData和GraphQL</h4><p>用了微软家的OData，就不得不再看一遍GraphQL，两者都让前端调用api获得了很大的自由度<br>相比OData的底层渗透性，GraphQL只在Http接口层做文章，实际上将底层模型封装成schema，开放给接口，这个过程更大程度上做到了安全性和前端业务的可控。</p>
+<h4 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h4><p>见官方<a target="_blank" rel="noopener" href="https://graphql.cn/code/#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%BA%93">GraphQL Doc：各种语言实现</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">var express &#x3D; require(&#39;express&#39;);</span><br><span class="line">var &#123;graphqlHTTP&#125; &#x3D; require(&#39;express-graphql&#39;);</span><br><span class="line">var &#123; buildSchema &#125; &#x3D; require(&#39;graphql&#39;);</span><br><span class="line"></span><br><span class="line">var schema &#x3D; buildSchema(&#96;</span><br><span class="line">  type Query &#123;</span><br><span class="line">    heros: [Hero]</span><br><span class="line">    battle(name:String): String</span><br><span class="line">    random: Float!</span><br><span class="line">  &#125;</span><br><span class="line">  type Hero&#123;</span><br><span class="line">    name:String</span><br><span class="line">    abilities: [String]</span><br><span class="line">&#125;</span><br><span class="line">&#96;);</span><br><span class="line"></span><br><span class="line">var root &#x3D; &#123; heros: () &#x3D;&gt; ([</span><br><span class="line">        &#123;</span><br><span class="line">            name: &#39;Luke skywalker&#39;,</span><br><span class="line">            abilities: [&#39;light sward&#39;, &#39;force&#39;]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            name: &#39;Anakin skywalker&#39;,</span><br><span class="line">            abilities: [&#39;light sward&#39;, &#39;force&#39;, &#39;dark&#39;]</span><br><span class="line">        &#125;</span><br><span class="line">    ]),</span><br><span class="line">    battle: (name) &#x3D;&gt; &#123;</span><br><span class="line">        return &#39;I am your father&#39;;</span><br><span class="line">      &#125;,</span><br><span class="line">      random: () &#x3D;&gt; &#123;</span><br><span class="line">        return Math.random();</span><br><span class="line">      &#125;</span><br><span class="line"> &#125;;</span><br><span class="line"></span><br><span class="line">var app &#x3D; express();</span><br><span class="line">app.use(&#39;&#x2F;graphql&#39;, graphqlHTTP(&#123;</span><br><span class="line">  schema: schema,</span><br><span class="line">  rootValue: root,</span><br><span class="line">  graphiql: true,</span><br><span class="line">&#125;));</span><br><span class="line">app.listen(3000, () &#x3D;&gt; console.log(&#39;Now browse to localhost:3000&#x2F;graphql&#39;));</span><br></pre></td></tr></table></figure>
+<p>关于graphqlHTTP(也就是GraphiQL客户端)的Options：<br>schema是查询涉及的类型声明， rootValue api的查询方法的集，详见下文章节</p>
+<h4 id="schema-类型声明"><a href="#schema-类型声明" class="headerlink" title="schema 类型声明"></a>schema 类型声明</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var schema &#x3D; buildSchema(&#96;</span><br><span class="line">    type Hero &#123;</span><br><span class="line">        name: String!</span><br><span class="line">        abilities: [String!]!</span><br><span class="line">        length(unit: LengthUnit &#x3D; METER): Float</span><br><span class="line">    &#125;</span><br><span class="line">&#96;);</span><br></pre></td></tr></table></figure>
+<p>标量类型</p>
+<ul>
+<li>ID</li>
+<li>String</li>
+<li>Boolean</li>
+<li>Int Float<br>注意 ！表示非空<br>枚举<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">enum Episode &#123;</span><br><span class="line">  NEWHOPE</span><br><span class="line">  EMPIRE</span><br><span class="line">  JEDI</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>接口和实现接口的类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">type Human implements Character &#123;</span><br><span class="line">  id: ID!</span><br><span class="line">  name: String!</span><br><span class="line">  friends: [Character]</span><br><span class="line">  appearsIn: [Episode]!</span><br><span class="line">  starships: [Starship]</span><br><span class="line">  totalCredits: Int</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>联合类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">union SearchResult &#x3D; Human | Droid | Starship</span><br></pre></td></tr></table></figure>
+
+<h4 id="操作类型"><a href="#操作类型" class="headerlink" title="操作类型"></a>操作类型</h4><ul>
+<li>query 查询：获取数据、查找</li>
+<li>mutation 变更：对数据进行变更，比如增加、删除、修改</li>
+<li>substription 订阅：当数据发生更改，进行消息推送</li>
+</ul>
+<h4 id="GraphQL-client"><a href="#GraphQL-client" class="headerlink" title="GraphQL client"></a>GraphQL client</h4><p>前面的express-graphQL启动后打开GraphiQL页面，GraphiQL就是一个客户端，使用GraphQL client向 GraphQL 服务器上的入口端点发送一个 HTTP POST 请求，其中将 GraphQL 查询作为 JSON 载荷的 query 字段，就能调用 GraphQL 服务器。<br>其js实现大致是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">fetch(&#39;&#x2F;graphql&#39;, &#123;</span><br><span class="line">  method: &#39;POST&#39;,</span><br><span class="line">  headers: &#123;</span><br><span class="line">    &#39;Content-Type&#39;: &#39;application&#x2F;json&#39;,</span><br><span class="line">    &#39;Accept&#39;: &#39;application&#x2F;json&#39;,</span><br><span class="line">  &#125;,</span><br><span class="line">  body: JSON.stringify(&#123;query: &quot;&#123; hello &#125;&quot;&#125;)</span><br><span class="line">&#125;)</span><br><span class="line">  .then(r &#x3D;&gt; r.json())</span><br><span class="line">  .then(data &#x3D;&gt; console.log(&#39;data returned:&#39;, data));</span><br></pre></td></tr></table></figure>
+<h4 id="查询参数"><a href="#查询参数" class="headerlink" title="查询参数"></a>查询参数</h4><p>schema 中的 Query声明了若干查询方法，查询方法的具体实现在root中定义，其参数类型的指定格式与typescript相同！<br>调用格式如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  battle(name:&quot;dark lord&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/05/11/React-vs-Angular/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/05/11/React-vs-Angular/" class="post-title-link" itemprop="url">React vs Angular</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-11 10:18:53 / Modified: 10:35:17" itemprop="dateCreated datePublished" datetime="2021-05-11T10:18:53+08:00">2021-05-11</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="template"><a href="#template" class="headerlink" title="template"></a>template</h4><p>vue和angular都鼓励开发者编写尽可能与常规Html相似的template，react却并不是，react则崇尚all in js. 不过从编译角度看，两种方式都是语法糖而已，无论编码风格，编译后都是一个可执行函数</p>
+<h4 id="render-principle"><a href="#render-principle" class="headerlink" title="render principle"></a>render principle</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/rockan007/article/details/90716237">了解Angular Ivy: Incremental DOM 和 Virtual DOM</a></p>
+<h4 id="ecosystem"><a href="#ecosystem" class="headerlink" title="ecosystem"></a>ecosystem</h4><p>react生态庞杂，官方定义了基架，各种具体场景的实现技术在社区百花齐放，各路大神乐于造自己的轮子，库选型劝退选择恐惧症。。。<br>angular：桶里啥都有。。。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/04/27/UIdesign/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -415,463 +885,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/04/16/pwa/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/04/16/pwa/" class="post-title-link" itemprop="url">渐进式web开发</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-04-16 10:20:53 / Modified: 10:24:02" itemprop="dateCreated datePublished" datetime="2021-04-16T10:20:53+08:00">2021-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Progressing Web Application<br><a target="_blank" rel="noopener" href="https://create-react-app.dev/docs/making-a-progressive-web-app/">https://create-react-app.dev/docs/making-a-progressive-web-app/</a><br><a target="_blank" rel="noopener" href="https://web.dev/progressive-web-apps/">https://web.dev/progressive-web-apps/</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/04/14/formatjs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/04/14/formatjs/" class="post-title-link" itemprop="url">formatjs</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-04-14 15:46:29 / Modified: 15:58:55" itemprop="dateCreated datePublished" datetime="2021-04-14T15:46:29+08:00">2021-04-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn add react-intl</span><br><span class="line">yarn add -D @formatjs&#x2F;ts-transformer</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>we highly recommend declaring defaultMessages inline along with their usages because of the following reasons: 建议使用声明内联的defaultMessages， 连同他们的usage，原因如下</p>
-</blockquote>
-<ol>
-<li>Messages colocated with their usages become self-managed, as their usages change/removed, so are the messages. 搭配usage的Message成为自治的 当usage更改或移除，Message亦同</li>
-<li>Messages are highly contextual. We’ve seen a lot of cases where developers assume a certain grammar when they write their messages. Buttons/Call-To-Actions and labels are also translated differently. Message高度关联上下文， 杜绝为message发明新语法或编规则</li>
-<li>Text styling is also dependent on the message itself. Things like truncation, capitalization… certainly affect the messages themselves. 会与样式相关</li>
-<li>Better integrations with toolchains. Most toolchains cannot verify cross-file references to validate syntax/usage. 易于工具链集成</li>
-</ol>
-<h4 id="格式化语法"><a href="#格式化语法" class="headerlink" title="格式化语法"></a>格式化语法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import * as React from &#39;react&#39;</span><br><span class="line">import &#123;IntlProvider, FormattedMessage, FormattedNumber&#125; from &#39;react-intl&#39;</span><br><span class="line"></span><br><span class="line">&lt;IntlProvider messages&#x3D;&#123;messagesInFrench&#125; locale&#x3D;&quot;fr&quot; defaultLocale&#x3D;&quot;en&quot;&gt;</span><br><span class="line">    &lt;p&gt;</span><br><span class="line">    &lt;FormattedMessage</span><br><span class="line">        id&#x3D;&quot;myMessage&quot;</span><br><span class="line">        defaultMessage&#x3D;&quot;Today is &#123;ts, date, ::yyyyMMdd&#125;&quot;</span><br><span class="line">        values&#x3D;&#123;&#123;ts: Date.now()&#125;&#125;</span><br><span class="line">    &#x2F;&gt;</span><br><span class="line">    &lt;br &#x2F;&gt;</span><br><span class="line">    &lt;FormattedNumber value&#x3D;&#123;19&#125; style&#x3D;&quot;currency&quot; currency&#x3D;&quot;EUR&quot; &#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;p&gt;</span><br><span class="line">&lt;&#x2F;IntlProvider&gt;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>Error: [React Intl] Could not find required ‘intl’ object.  IntlProvider needs to exist in the component ancestry</p>
-</blockquote>
-<p>当没有IntlProvider父组件时报上述异常</p>
-<h4 id="提取文本映射"><a href="#提取文本映射" class="headerlink" title="提取文本映射"></a>提取文本映射</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D @formatjs&#x2F;cli</span><br></pre></td></tr></table></figure>
-<p>package.json中添加脚本命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;extract&quot;: &quot;formatjs extract&quot;</span><br></pre></td></tr></table></figure>
-<p>执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yarn extract &#39;src&#x2F;**&#x2F;*.ts*&#39; --out-file lang&#x2F;en.json --id-interpolation-pattern &#39;[sha512:contenthash:base64:6]&#39;</span><br><span class="line">或</span><br><span class="line">npm run extract -- &#39;src&#x2F;**&#x2F;*.ts*&#39; --out-file lang&#x2F;en.json --id-interpolation-pattern &#39;[sha512:contenthash:base64:6]&#39;</span><br></pre></td></tr></table></figure>
-<p>将待翻译的message保存为指定语言的json文件，没id的message自动编码id</p>
-<h4 id="分发"><a href="#分发" class="headerlink" title="分发"></a>分发</h4><p>将翻译好的多语言lang/***.json编译为Intl使用的格式<br>package.json中添加脚本命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;compile&quot;: &quot;formatjs compile&quot;</span><br></pre></td></tr></table></figure>
-<p>执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yarn compile lang&#x2F;fr.json --ast --out-file compiled-lang&#x2F;fr.json</span><br><span class="line">或</span><br><span class="line">npm run compile -- lang&#x2F;fr.json --ast --out-file compiled-lang&#x2F;fr.json</span><br></pre></td></tr></table></figure>
-<h4 id="切换语言代码"><a href="#切换语言代码" class="headerlink" title="切换语言代码"></a>切换语言代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import * as React from &#39;react&#39;</span><br><span class="line">import * as ReactDOM from &#39;react-dom&#39;</span><br><span class="line">import &#123;IntlProvider&#125; from &#39;react-intl&#39;</span><br><span class="line"></span><br><span class="line">function loadLocaleData(locale: string) &#123;</span><br><span class="line">  switch (locale) &#123;</span><br><span class="line">    case &#39;fr&#39;:</span><br><span class="line">      return import(&#39;compiled-lang&#x2F;fr.json&#39;)</span><br><span class="line">    default:</span><br><span class="line">      return import(&#39;compiled-lang&#x2F;en.json&#39;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function App(props) &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;IntlProvider</span><br><span class="line">      locale&#x3D;&#123;props.locale&#125;</span><br><span class="line">      defaultLocale&#x3D;&quot;en&quot;</span><br><span class="line">      messages&#x3D;&#123;props.messages&#125;</span><br><span class="line">    &gt;</span><br><span class="line">      &lt;MainApp &#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;IntlProvider&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async function bootstrapApplication(locale, mainDiv) &#123;</span><br><span class="line">  const messages &#x3D; await loadLocaleData(locale)</span><br><span class="line">  ReactDOM.render(&lt;App locale&#x3D;&#123;locale&#125; messages&#x3D;&#123;messages&#125; &#x2F;&gt;, mainDiv)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>切换语言触发IntlProvider下的组件初始化，将本地化的messages词条传入组件上下文</p>
-<h4 id="useIntl钩子"><a href="#useIntl钩子" class="headerlink" title="useIntl钩子"></a>useIntl钩子</h4><p>返回当前语言的provider对象，提供formatData,formatMessage等方法，从messages词条中映射字符串</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const intl &#x3D; useIntl()</span><br><span class="line">return (</span><br><span class="line">  &lt;span title&#x3D;&#123;intl.formatDate(date)&#125;&gt;</span><br><span class="line">    &lt;FormattedDate value&#x3D;&#123;date&#125; &#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;span&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>带参数的格式化Message</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">dragAreaSupportTip(format: string) &#123;</span><br><span class="line">  const messages &#x3D; defineMessages(&#123;</span><br><span class="line">    supportTip: &#123;</span><br><span class="line">      id: &#39;dragArea.supportTip&#39;,</span><br><span class="line">      defaultMessage: &#39;Only supports &#123;format&#125; files&#39;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;)</span><br><span class="line">  return intl.formatMessage(messages.supportTip, &#123; format &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>formatjs extract和compile命令可以在此使用<br>switch case 场景</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">translateEnums(name:string)&#123;</span><br><span class="line">  name &#x3D; name.replace(&#x2F; &#x2F;g, &#39;_&#39;)</span><br><span class="line">  const messages &#x3D; defineMessages(&#123;</span><br><span class="line">    transName: &#123;</span><br><span class="line">      id: &#39;enums.name&#39;,</span><br><span class="line">      defaultMessage: &#96;&#123;name, select,</span><br><span class="line">        dog &#123;dog&#125;</span><br><span class="line">        cat &#123;cat&#125;</span><br><span class="line">        King_Kong &#123;King Kong&#125;</span><br><span class="line">        other &#123;&#123;name&#125;&#125;</span><br><span class="line">      &#125;&#96;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;)</span><br><span class="line">  const translatedName &#x3D; this.intl.formatMessage(messages.transName, &#123; name:name &#125;);</span><br><span class="line">  return translatedName.replace(&#x2F;_&#x2F;g, &#39; &#39;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>格式是{key, select, 选项..}的样子，见<a target="_blank" rel="noopener" href="https://formatjs.io/docs/core-concepts/icu-syntax/#select-format">format.js Doc:select format</a> 选项是’value {text}的格式，value据说遵循Unicode Pattern_Syntax 然而我并没有找到空格的表示法，如上’金刚’的名字用下划线替换了空格，另外匹配失败返回原字符串，变量key需再加大括号括起来</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/04/02/ElasticSearch/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/04/02/ElasticSearch/" class="post-title-link" itemprop="url">ElasticSearch</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-04-02 09:45:57 / Modified: 13:24:45" itemprop="dateCreated datePublished" datetime="2021-04-02T09:45:57+08:00">2021-04-02</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dreamroute/p/8484457.html">https://www.cnblogs.com/dreamroute/p/8484457.html</a></p>
-<h4 id="全文搜索引擎"><a href="#全文搜索引擎" class="headerlink" title="全文搜索引擎"></a>全文搜索引擎</h4><p>‘全文检索’不是ElasticSearch，ElasticSearch是一个开源的基于全文搜索引擎（Apache Lucene）的搜索和分析引擎。</p>
-<p>全文搜索引擎面向文档型存储，即插入其数据库的每条记录作为一个文档，搜索引擎为提取文档的词，生成索引，通过查询索引达到搜索目标文档的目的。这种先建立索引，再对索引进行搜索的过程就叫全文检索（Full-text Search）<br><img src="https://tvax3.sinaimg.cn/large/a60edd42ly1gp57m8a30oj20nm0k4wis.jpg"></p>
-<h4 id="文档-类型-索引"><a href="#文档-类型-索引" class="headerlink" title="文档-类型-索引"></a>文档-类型-索引</h4><p>关系数据库：      ⇒ 数据库 ⇒ 表    ⇒ 行    ⇒ 列(Columns)</p>
-<p>Elasticsearch：  ⇒ 索引(Index)   ⇒ 类型(type)  ⇒ 文档(Docments)  ⇒ 字段(Fields)  </p>
-<h4 id="二叉树-倒排"><a href="#二叉树-倒排" class="headerlink" title="二叉树 倒排"></a>二叉树 倒排</h4><h4 id="Kibana"><a href="#Kibana" class="headerlink" title="Kibana"></a>Kibana</h4><p>ElasticSearch的可视化仪表盘</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/03/31/DataLake/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/03/31/DataLake/" class="post-title-link" itemprop="url">Data Lake</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-03-31 12:48:33" itemprop="dateCreated datePublished" datetime="2021-03-31T12:48:33+08:00">2021-03-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-06 09:34:22" itemprop="dateModified" datetime="2021-04-06T09:34:22+08:00">2021-04-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="Philosophy"><a href="#Philosophy" class="headerlink" title="Philosophy"></a>Philosophy</h4><p>湖是水源汇聚之处<br><img src="https://pic1.zhimg.com/80/v2-43b18039e25cd2d231e76b6fd61292c0_720w.jpg"></p>
-<blockquote>
-<p>Azure Data Lake includes all the capabilities required to make it easy for developers, data scientists, and analysts to store data of any size, shape, and speed, and do all types of processing and analytics across platforms and languages. It removes the complexities of ingesting(插入) and storing all of your data while making it faster to get up and running with batch(批量), streaming, and interactive analytics.  ———— <a target="_blank" rel="noopener" href="https://azure.microsoft.com/en-us/solutions/data-lake/">Azure Data Lake Solution</a></p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/03/23/MaterialDesign/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/03/23/MaterialDesign/" class="post-title-link" itemprop="url">MaterialDesign</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-03-23 13:20:04" itemprop="dateCreated datePublished" datetime="2021-03-23T13:20:04+08:00">2021-03-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 14:49:14" itemprop="dateModified" datetime="2021-03-30T14:49:14+08:00">2021-03-30</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://material.io/develop/web">Material Design</a></p>
-<p><a target="_blank" rel="noopener" href="http://mcg.mbitson.com/#!?csd2021=%2336b0c9&themename=mcgtheme">Color Palette tool</a><br>一套以上述工具生成的颜色模板(基于#36b0c9)👇</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">$qqs-design:(</span><br><span class="line">    50: #e7f6f9,</span><br><span class="line">    100: #c3e7ef,</span><br><span class="line">    200: #9bd8e4,</span><br><span class="line">    300: #72c8d9,</span><br><span class="line">    400: #54bcd1,</span><br><span class="line">    500: #36b0c9,</span><br><span class="line">    600: #30a9c3,</span><br><span class="line">    700: #29a0bc,</span><br><span class="line">    800: #2297b5,</span><br><span class="line">    900: #1687a9,</span><br><span class="line">    A100: #dcf6ff,</span><br><span class="line">    A200: #a9e9ff,</span><br><span class="line">    A400: #76ddff,</span><br><span class="line">    A700: #5dd6ff,</span><br><span class="line">    contrast: (</span><br><span class="line">      50: #262626,</span><br><span class="line">      100: #262626,</span><br><span class="line">      200: #262626,</span><br><span class="line">      300: white,</span><br><span class="line">      400: white,</span><br><span class="line">      500: white,</span><br><span class="line">      600: white,</span><br><span class="line">      A100: #262626,</span><br><span class="line">      A200: white,</span><br><span class="line">      A400: white,</span><br><span class="line">      A700: white</span><br><span class="line">    )</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<p>material套用自定义颜色模板</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Custom Theming for Angular Material</span><br><span class="line">&#x2F;&#x2F; For more information: https:&#x2F;&#x2F;material.angular.io&#x2F;guide&#x2F;theming</span><br><span class="line">@import &#39;~@angular&#x2F;material&#x2F;theming&#39;;</span><br><span class="line">&#x2F;&#x2F; Plus imports for other components in your app.</span><br><span class="line">@import &#39;theme.scss&#39;;</span><br><span class="line">&#x2F;&#x2F; Include the common styles for Angular Material. We include this here so that you only</span><br><span class="line">&#x2F;&#x2F; have to load a single css file for Angular Material in your app.</span><br><span class="line">&#x2F;&#x2F; Be sure that you only ever include this mixin once!</span><br><span class="line">@include mat-core();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Define the palettes for your theme using the Material Design palettes available in palette.scss</span><br><span class="line">&#x2F;&#x2F; (imported above). For each palette, you can optionally specify a default, lighter, and darker</span><br><span class="line">&#x2F;&#x2F; hue. Available color palettes: https:&#x2F;&#x2F;material.io&#x2F;design&#x2F;color&#x2F;</span><br><span class="line">$CSDPartnerPortal-primary: mat-palette($csd2021);</span><br><span class="line">$CSDPartnerPortal-accent: mat-palette($csd2021, 500, A100, A400);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; The warn palette is optional (defaults to red).</span><br><span class="line">$CSDPartnerPortal-warn: mat-palette($mat-red);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Create the theme object. A theme consists of configurations for individual</span><br><span class="line">&#x2F;&#x2F; theming systems such as &quot;color&quot; or &quot;typography&quot;.</span><br><span class="line">$CSDPartnerPortal-theme: mat-light-theme((</span><br><span class="line">  color: (</span><br><span class="line">    primary: $CSDPartnerPortal-primary,</span><br><span class="line">    accent: $CSDPartnerPortal-accent,</span><br><span class="line">    warn: $CSDPartnerPortal-warn,</span><br><span class="line">  )</span><br><span class="line">));</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Include theme styles for core and each component used in your app.</span><br><span class="line">&#x2F;&#x2F; Alternatively, you can import and @include the theme mixins for each component</span><br><span class="line">&#x2F;&#x2F; that you are using.</span><br><span class="line">@include angular-material-theme($CSDPartnerPortal-theme);</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/03/11/Grid/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/03/11/Grid/" class="post-title-link" itemprop="url">Grid</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-03-11 14:07:30 / Modified: 16:43:02" itemprop="dateCreated datePublished" datetime="2021-03-11T14:07:30+08:00">2021-03-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>如果说flex适合做一维(水平或竖直放向)元素的布局，那么grid就是做二维布局的，如字面意思，grid布局将平面划分成 m*n 的网格，子元素分布其中，以所处/所占的行和列的控制实现页面layout的划分</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class&#x3D;&quot;wrapper&quot;&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;one&quot;&gt;One&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;two&quot;&gt;Two&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;three&quot;&gt;Three&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;four&quot;&gt;Four&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;five&quot;&gt;Five&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;six&quot;&gt;Six&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">.wrapper &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: repeat(3, 1fr);</span><br><span class="line">  grid-gap: 10px;</span><br><span class="line">  grid-auto-rows: minmax(100px, auto);</span><br><span class="line">&#125;</span><br><span class="line">.one &#123;</span><br><span class="line">  grid-column: 1 &#x2F; 3;</span><br><span class="line">  grid-row: 1;</span><br><span class="line">&#125;</span><br><span class="line">.two &#123;</span><br><span class="line">  grid-column: 2 &#x2F; 4;</span><br><span class="line">  grid-row: 1 &#x2F; 3;</span><br><span class="line">&#125;</span><br><span class="line">.three &#123;</span><br><span class="line">  grid-row: 2 &#x2F; 5;</span><br><span class="line">  grid-column: 1;</span><br><span class="line">&#125;</span><br><span class="line">.four &#123;</span><br><span class="line">  grid-column: 3;</span><br><span class="line">  grid-row: 3;</span><br><span class="line">&#125;</span><br><span class="line">.five &#123;</span><br><span class="line">  grid-column: 2;</span><br><span class="line">  grid-row: 4;</span><br><span class="line">&#125;</span><br><span class="line">.six &#123;</span><br><span class="line">  grid-column: 3;</span><br><span class="line">  grid-row: 4;</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
-<p>display: grid 或 inline-grid区分整个区域是否作为行内元素插入，不影响区域内的grid</p>
-<p>列划分：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grid-template-columns: 200px 500px 100px;</span><br><span class="line">grid-template-columns: repeat(4, 25%);</span><br><span class="line">grid-template-columns: 200px repeat(3, 1fr) 100px;</span><br></pre></td></tr></table></figure>
-<p>注：fr是grid的特殊单位，可以从总分列去掉固定宽度列后均分剩余列<br>行划分grid-template-rows类似，也可以按比例划分剩余宽度</p>
-<p>间距：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grid-gap: 5px;</span><br><span class="line">grid-row-gap: 5px;</span><br><span class="line">grid-column-gap: 5px;</span><br></pre></td></tr></table></figure>
-
-<p>填充:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grid-template-columns: repeat(auto-fill, 200px);</span><br></pre></td></tr></table></figure>
-<p>以200px为一列，根据区域宽度调整列数（响应式）</p>
-<p>区间：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grid-template-columns: 1fr 1fr minmax(300px, 2fr)</span><br></pre></td></tr></table></figure>
-<p>第三个列宽最少也是要 300px，但是最大不能大于第一第二列宽的两倍。</p>
-<p>区域定义：（略）</p>
-<p>流：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grid-auto-flow: row;</span><br><span class="line">grid-auto-flow: row dense;</span><br><span class="line">grid-auto-flow: column;</span><br></pre></td></tr></table></figure>
-<p>填充单元格的横纵顺序，如果遇到尺寸不够而挤到下一行的情况，dense可以使用合适的子元素填充前面的空余单元格</p>
-<p>对齐：<br>justify-item, align-item:父容器配置，分别控制子元素在所处单元格空间的对齐方向，两者默认是stretch撑满空间<br>可选值：start center end stretch</p>
-<p>justify-content, align-content:父容器配置，分别控制整个grid(父容器)在上层容器中的对齐方向，两者默认是start</p>
-<p>justify-self, align-self:子元素配置，控制自身在所处单元格空间的对齐方向与*-item一致</p>
-<p>隐式网格：<br>在超出grid-template-columns和grid-template-rows的定义之后应用的网格划分</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grid-template-columns: 200px 500px 100px;</span><br><span class="line">grid-template-rows: 100px 100px;</span><br><span class="line">grid-auto-rows: 50px;</span><br></pre></td></tr></table></figure>
-
-<p>指定坐标：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.item &#123;</span><br><span class="line">  grid-column-start: 3;</span><br><span class="line">  grid-column-end: 4;</span><br><span class="line">  grid-row-start: 1;</span><br><span class="line">  grid-row-end: 4;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/qqsnote/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/20/">20</a><a class="extend next" rel="next" href="/qqsnote/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/qqsnote/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/21/">21</a><a class="extend next" rel="next" href="/qqsnote/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -937,18 +954,18 @@
       <div class="site-state-item site-state-posts">
           <a href="/qqsnote/archives/">
         
-          <span class="site-state-item-count">196</span>
+          <span class="site-state-item-count">201</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/qqsnote/categories/">
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/qqsnote/tags/">
-        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-count">81</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -959,7 +976,7 @@
       </div>
 
       <div class="tag-cloud-tags">
-        <a href="/qqsnote/tags/Net/" style="font-size: 26px; color: #f4f4f4">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 14px; color: #d2d2d2">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 26px; color: #f4f4f4">Azure</a> <a href="/qqsnote/tags/C/" style="font-size: 16px; color: #d7d7d7">C#</a> <a href="/qqsnote/tags/CSS/" style="font-size: 20px; color: #e3e3e3">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 14px; color: #d2d2d2">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 18px; color: #ddd">Docker</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16px; color: #d7d7d7">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 14px; color: #d2d2d2">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 20px; color: #e3e3e3">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 24px; color: #eee">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 20px; color: #e3e3e3">Node.js</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/Python/" style="font-size: 22px; color: #e8e8e8">Python</a> <a href="/qqsnote/tags/React/" style="font-size: 16px; color: #d7d7d7">React</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 16px; color: #d7d7d7">SQL_Server</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 12px; color: #ccc">TypeScript</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 14px; color: #d2d2d2">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 16px; color: #d7d7d7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 14px; color: #d2d2d2">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28px; color: #f9f9f9">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 14px; color: #d2d2d2">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 12px; color: #ccc">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14px; color: #d2d2d2">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16px; color: #d7d7d7">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 12px; color: #ccc">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 14px; color: #d2d2d2">多语言</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12px; color: #ccc">性能优化</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 14px; color: #d2d2d2">数据库</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14px; color: #d2d2d2">算法</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 22px; color: #e8e8e8">认证&授权</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12px; color: #ccc">面试</a>
+        <a href="/qqsnote/tags/Net/" style="font-size: 26.4px; color: #f5f5f5">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.8px; color: #d1d1d1">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24.6px; color: #f0f0f0">Azure</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C#</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.2px; color: #e0e0e0">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 13.8px; color: #d1d1d1">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 17.4px; color: #dbdbdb">Docker</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.6px; color: #d6d6d6">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.8px; color: #d1d1d1">EntityFramework</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.8px; color: #d1d1d1">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 19.2px; color: #e0e0e0">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.8px; color: #ebebeb">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 19.2px; color: #e0e0e0">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 12px; color: #ccc">OData</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/Python/" style="font-size: 21px; color: #e6e6e6">Python</a> <a href="/qqsnote/tags/React/" style="font-size: 17.4px; color: #dbdbdb">React</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 17.4px; color: #dbdbdb">SQL_Server</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 12px; color: #ccc">TypeScript</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 13.8px; color: #d1d1d1">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 15.6px; color: #d6d6d6">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.8px; color: #d1d1d1">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.2px; color: #fafafa">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.8px; color: #d1d1d1">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 12px; color: #ccc">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 13.8px; color: #d1d1d1">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.6px; color: #d6d6d6">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 12px; color: #ccc">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.8px; color: #d1d1d1">多语言</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12px; color: #ccc">性能优化</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px; color: #ccc">数据库</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.8px; color: #d1d1d1">算法</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12px; color: #ccc">面试</a>
       </div>
     </div>
   </aside>

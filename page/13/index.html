@@ -145,6 +145,424 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/01/10/PythonWebCrawler/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/01/10/PythonWebCrawler/" class="post-title-link" itemprop="url">Python爬虫</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-01-10 17:16:47" itemprop="dateCreated datePublished" datetime="2020-01-10T17:16:47+08:00">2020-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-01-14 09:41:52" itemprop="dateModified" datetime="2020-01-14T09:41:52+08:00">2020-01-14</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>爬虫(Web Crawler)</p>
+</blockquote>
+<blockquote>
+<p>郑重声明：本文仅限于编程学习，用于非法目的及造成侵权后果的行为，老子概不负责</p>
+</blockquote>
+<h4 id="http请求"><a href="#http请求" class="headerlink" title="http请求"></a>http请求</h4><p>私以为，爬虫程序就是以程序执行代替人工操作，在一定范围的网络资源中找自己要的东西。当人做这项枯燥的工作时，无非输入网址–打开网页–用肉眼识别–下载这样子，下面基本上就是用python模拟这个过程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line">response &#x3D; requests.get(&#39;https:&#x2F;&#x2F;qqstone.github.io&#x2F;qqsnote&#x2F;2019&#x2F;10&#x2F;28&#x2F;MySQL&#x2F;&#39;)</span><br><span class="line">print(response.text)</span><br><span class="line">if response.text.find(&#39;主键&#39;):</span><br><span class="line">    print(&#39;find it！&#39;)</span><br><span class="line">    keyUnicode &#x3D; str(&#39;主键&#39;.encode(&#39;unicode_escape&#39;)).replace(&#39;\\\\&#39;,&#39;\\&#39;)[2:14]</span><br><span class="line">    print(&#39;\S*&#39;+keyUnicode+&#39;\S*&#39;)</span><br><span class="line">    matchObj &#x3D; re.findall(&#39;\S*&#39;+keyUnicode+&#39;\S*&#39;,response.text)</span><br><span class="line">    print(matchObj)</span><br></pre></td></tr></table></figure>
+<h4 id="反“反爬设置”"><a href="#反“反爬设置”" class="headerlink" title="反“反爬设置”"></a>反“反爬设置”</h4><p>有时请求一个网页时，发现无论通过Get或Post以及其他请求方式，都会出现403错误。这种现象多数是由于服务器拒绝了访问，因为这些网页为了防止恶意采集信息，所用的反爬虫设置。<br><br>此时可以通过模拟浏览器的header信息来进行访问。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line">url&#x3D;&#39;https:&#x2F;&#x2F;www.acfun.cn&#x2F;a&#x2F;ac12293064&#39;</span><br><span class="line">headers&#x3D;&#123;&#39;User-Agent&#39;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;79.0.3945.117 Safari&#x2F;537.36&#39;&#125;</span><br><span class="line">response &#x3D; requests.get(url,headers&#x3D;headers)</span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>
+<p>上述只是针对user agent检测的手段，通常网站管理员采取的反爬虫基本手段还有封锁IP，检测请求间隔，封锁cookie等，针对这些手段需要采取相应的措施如使用代理，使用sleep模拟点击控制间隔，禁用cookie等</p>
+<h4 id="超时处理"><a href="#超时处理" class="headerlink" title="超时处理"></a>超时处理</h4><h4 id="使用代理"><a href="#使用代理" class="headerlink" title="使用代理"></a>使用代理</h4><h4 id="解析html树"><a href="#解析html树" class="headerlink" title="解析html树"></a>解析html树</h4><h4 id="Scrapy框架"><a href="#Scrapy框架" class="headerlink" title="Scrapy框架"></a>Scrapy框架</h4><p>依赖：<br></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pip install Twisted</span><br><span class="line"># windows平台用下面这个</span><br><span class="line">pip install Twisted[windows_platform]</span><br><span class="line"></span><br><span class="line">pip install Scrapy</span><br></pre></td></tr></table></figure>
+<p>参考 <a target="_blank" rel="noopener" href="https://docs.scrapy.org/en/latest/">Scrapy文档</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">import scrapy</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class QuotesSpider1(scrapy.Spider):</span><br><span class="line">    name &#x3D; &quot;quotes1&quot;</span><br><span class="line">    keyword &#x3D; &quot;&quot;</span><br><span class="line">    pages &#x3D; 75</span><br><span class="line"></span><br><span class="line">    def start_requests(self):</span><br><span class="line">        url &#x3D; &#39;https:&#x2F;&#x2F;xxxxxxx.xxx.html&#39;</span><br><span class="line">        yield scrapy.Request(url&#x3D;url, callback&#x3D;self.parse)</span><br><span class="line">        for i in range(2, self.pages):</span><br><span class="line">            surl &#x3D; url.replace(&#39;.html&#39;, &#39;-&#39;+str(i)+&#39;.html&#39;)</span><br><span class="line">            yield scrapy.Request(url&#x3D;surl, callback&#x3D;self.parse_key_word)</span><br><span class="line"></span><br><span class="line">    def parse(self, response):</span><br><span class="line">        regexp &#x3D; r&#39;\d&#123;2&#125;&#39;</span><br><span class="line">        video_list_tags &#x3D; response.css(&#39;h3::attr(title)&#39;)</span><br><span class="line">        for vt in video_list_tags:</span><br><span class="line">            #if vt.extract().find(self.keyword) &gt;&#x3D; 0:</span><br><span class="line">            match_array &#x3D; re.findall(regexp, vt.extract())</span><br><span class="line"></span><br><span class="line">            if len(match_array):</span><br><span class="line">                self.log(vt.extract())</span><br><span class="line">                filename &#x3D; &#39;output.log&#39;</span><br><span class="line">                with open(filename, &#39;a&#39;, encoding&#x3D;&#39;utf-8&#39;) as f:</span><br><span class="line">                    f.write(vt.extract()+&#39;--&gt;&#39;+response.url+&quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">    def parse_key_word(self, response):</span><br><span class="line">        video_list_tags &#x3D; response.css(&#39;h3::attr(title)&#39;)</span><br><span class="line">        for vt in video_list_tags:</span><br><span class="line">            if vt.extract().find(self.keyword) &gt;&#x3D; 0:</span><br><span class="line">                self.log(vt.extract())</span><br><span class="line">                filename &#x3D; &#39;output.log&#39;</span><br><span class="line">                with open(filename, &#39;a&#39;, encoding&#x3D;&#39;utf-8&#39;) as f:</span><br><span class="line">                    f.write(vt.extract() + &#39;--&gt;&#39; + response.url + &quot;\n&quot;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>执行scrapy实例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy crawl quotes1</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/01/06/ppp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/01/06/ppp/" class="post-title-link" itemprop="url">Point to Point Protocal</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-01-06 09:31:59" itemprop="dateCreated datePublished" datetime="2020-01-06T09:31:59+08:00">2020-01-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-01-13 09:34:41" itemprop="dateModified" datetime="2020-01-13T09:34:41+08:00">2020-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE/" itemprop="url" rel="index"><span itemprop="name">通信协议</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>参考：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/0d05e5f71a70">Android 上网概述</a></p>
+<p>使用3g/4g/5g网络的移动设备，通过ppp协议与蜂窝网络的基站建立通信</p>
+<p><img src="https://tva2.sinaimg.cn/large/a60edd42gy1gan1ycy4iqj20xc0jrgqy.jpg" alt="基带和蜂窝网络"><br>ppp协议是链路层协议</p>
+<p><img src="https://tva1.sinaimg.cn/large/a60edd42gy1gan1zsxm2cj20xc0eemyv.jpg" alt="协议结构"><br>Linux对PPP数据链路的建立过程进行抽象，实现了pppd拨号应用程序，专门用于管理PPP数据链路的建立与关闭，见下图。<br><br>pppd是一个后台服务进程(daemon)，实现了所有鉴权、压缩/解压和加密/解密等扩展功能的控制协议，负责把要发送的数据包传递给PPP协议处理模块，设置PPP协议的参数，用来建立/关闭连接。</p>
+<p><img src="https://tva2.sinaimg.cn/large/a60edd42gy1gan281gkvkj20xc0rgtfz.jpg" alt="Android设备网络访问架构"></p>
+<p>链路建立的大致过程：<br><img src="https://tvax2.sinaimg.cn/large/a60edd42gy1gan2bxh8erj20xc0fvdkr.jpg" alt="链路建立"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2019/12/31/AliyunIOT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2019/12/31/AliyunIOT/" class="post-title-link" itemprop="url">AliyunIOT</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-31 10:16:15" itemprop="dateCreated datePublished" datetime="2019-12-31T10:16:15+08:00">2019-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-01-13 09:34:40" itemprop="dateModified" datetime="2020-01-13T09:34:40+08:00">2020-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%B9%B3%E5%8F%B0/" itemprop="url" rel="index"><span itemprop="name">平台</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2019/12/31/RaspberryPi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2019/12/31/RaspberryPi/" class="post-title-link" itemprop="url">RaspberryPi</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-31 10:15:33" itemprop="dateCreated datePublished" datetime="2019-12-31T10:15:33+08:00">2019-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-01-13 09:34:41" itemprop="dateModified" datetime="2020-01-13T09:34:41+08:00">2020-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E7%89%A9%E8%81%94%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">物联网</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>( Raspberry Pi Model B Plus Rev1.2 )</p>
+<h4 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h4><p>官方指引：<a target="_blank" rel="noopener" href="https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up">Setting up your Raspberry Pi</a></p>
+<blockquote>
+<p>常见异常：HDMI无响应<br></p>
+</blockquote>
+<p>修改/boot/config.txt</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hdmi_force_hotplug&#x3D;1</span><br><span class="line">config_hdmi_boost&#x3D;4</span><br><span class="line">hdmi_group&#x3D;2</span><br><span class="line">hdmi_mode&#x3D;9</span><br><span class="line">hdmi_drive&#x3D;2</span><br><span class="line">hdmi_ignore_edid&#x3D;0xa5000080</span><br><span class="line">disable_overscan&#x3D;1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>设置默认命令行启动</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo raspi-config</span><br></pre></td></tr></table></figure>
+<p>Boot Options -&gt; Desktop / CLI -&gt; Console</p>
+<blockquote>
+<p>开启ssh server<br>见 <a href="https://qqstone.github.io/qqsnote/2019/10/30/ssh/">ssh笔记</a></p>
+</blockquote>
+<h4 id="GPIO"><a href="#GPIO" class="headerlink" title="GPIO"></a>GPIO</h4><h4 id="USB摄像头"><a href="#USB摄像头" class="headerlink" title="USB摄像头"></a>USB摄像头</h4><p><a target="_blank" rel="noopener" href="https://www.raspberrypi.org/documentation/usage/webcams/">Using a standard USB webcam</a><br>实践发现，手上的UVC Camera一旦停止调用就会跳出(中断)<br><br>搭建直播流服务</p>
+<h4 id="4g上网"><a href="#4g上网" class="headerlink" title="4g上网"></a>4g上网</h4><p>实践时 电脑USB接口向树莓派供电 插上网卡就电压不足(Under-voltage detected)<br><br>lsusb命令识别出” ID 05c6:6000 Qualcomm,Inc.Siemens SG75 “<br><br>安装ppp包</p>
+<h4 id="内网穿透"><a href="#内网穿透" class="headerlink" title="内网穿透"></a>内网穿透</h4><p>ipv6</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2019/12/29/LinuxServerSetUp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2019/12/29/LinuxServerSetUp/" class="post-title-link" itemprop="url">安装Linux服务器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-29 16:22:26" itemprop="dateCreated datePublished" datetime="2019-12-29T16:22:26+08:00">2019-12-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-02 14:09:19" itemprop="dateModified" datetime="2021-03-02T14:09:19+08:00">2021-03-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>关于使用ubuntu发行版和centos发行版的倾向（存目）</p>
+</blockquote>
+<h3 id="简单的ubuntu"><a href="#简单的ubuntu" class="headerlink" title="简单的ubuntu"></a>简单的ubuntu</h3><h4 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h4><p>实践日期：2019-12-29 <a target="_blank" rel="noopener" href="http://mirror.sax.uk.as61049.net/releases.ubuntu.com/18.04.3/ubuntu-18.04.3-live-server-amd64.iso">ubuntu-18.04.3-live-server-amd64.iso</a></p>
+<h4 id="安装和分区（存目）"><a href="#安装和分区（存目）" class="headerlink" title="安装和分区（存目）"></a>安装和分区（存目）</h4><h4 id="安装ssl"><a href="#安装ssl" class="headerlink" title="安装ssl"></a>安装ssl</h4><h4 id="配置网卡"><a href="#配置网卡" class="headerlink" title="配置网卡"></a>配置网卡</h4><p>不知道怎么就安装了cloud image<br><br>参考<a target="_blank" rel="noopener" href="https://graspingtech.com/ubuntu-server-18.04-static-ip/">Configure Ubuntu Server 18.04 to use a static IP address</a></p>
+<h4 id="在线安装Applications"><a href="#在线安装Applications" class="headerlink" title="在线安装Applications"></a>在线安装Applications</h4><h4 id="配置apache"><a href="#配置apache" class="headerlink" title="配置apache"></a>配置apache</h4><p>启用端口 /etc/apache2/ports.conf</p>
+<p>配置/etc/sites-availiable/yoursite.conf<br>栗子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:90&gt;</span><br><span class="line">	ServerName www.example.com</span><br><span class="line"></span><br><span class="line">	DirectoryIndex index.html</span><br><span class="line">	DocumentRoot &#x2F;home&#x2F;qqs&#x2F;Workspace&#x2F;csc_simulate&#x2F;</span><br><span class="line">	&lt;Directory &#x2F;home&#x2F;qqs&#x2F;Workspace&#x2F;csc_simulate&gt;</span><br><span class="line">		Require all granted</span><br><span class="line">	&lt;&#x2F;Directory&gt;</span><br><span class="line">	Alias &#x2F;viewer &#x2F;home&#x2F;qqs&#x2F;Workspace&#x2F;cs_meshviewer&#x2F;build</span><br><span class="line">	&lt;Directory &#x2F;home&#x2F;qqs&#x2F;Workspace&#x2F;cs_meshviewer&#x2F;build&gt;</span><br><span class="line">		Require all granted</span><br><span class="line">	&lt;&#x2F;Directory&gt;</span><br><span class="line"></span><br><span class="line">	&lt;Location &#x2F;viewer&gt;</span><br><span class="line">        	DirectoryIndex index.html</span><br><span class="line">    &lt;&#x2F;Location&gt;</span><br><span class="line"></span><br><span class="line">	ErrorLog $&#123;APACHE_LOG_DIR&#125;&#x2F;error.log</span><br><span class="line">	CustomLog $&#123;APACHE_LOG_DIR&#125;&#x2F;access.log combined</span><br><span class="line"></span><br><span class="line">	ProxyPreserveHost On</span><br><span class="line">	ProxyPass &#x2F;download http:&#x2F;&#x2F;10.196.98.58:3000&#x2F;download</span><br><span class="line">	ProxyPassReverse &#x2F;download http:&#x2F;&#x2F;10.196.98.58:3000&#x2F;download</span><br><span class="line">&lt;&#x2F;VirtualHost&gt;</span><br></pre></td></tr></table></figure>
+<p>注意 <Directory> <Location>并不是唯一的，应根据需要定义路径的访问控制，<a target="_blank" rel="noopener" href="https://serverfault.com/questions/196957/difference-between-location-and-directory-apache-directives">Difference between Directory and Location</a><br>启用和禁用site</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a2ensite yoursite.conf</span><br><span class="line">a2dissite yoursite.conf</span><br></pre></td></tr></table></figure>
+
+<p>启用和禁用模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 关于反向代理</span><br><span class="line">a2enmod proxy</span><br><span class="line">a2enmod proxy_http</span><br><span class="line">a2enmod proxy_balancer</span><br><span class="line">a2enmod lbmethod_byrequests</span><br><span class="line">&#x2F;&#x2F; 关于虚拟路径</span><br><span class="line">a2enmod alias</span><br><span class="line">&#x2F;&#x2F; 禁用：a2dismod</span><br></pre></td></tr></table></figure>
+<p>启用、停用和重启服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start|stop|reload apache2</span><br></pre></td></tr></table></figure>
+<h4 id="Issue-403-You-don’t-have-permission-to-access-this-resource"><a href="#Issue-403-You-don’t-have-permission-to-access-this-resource" class="headerlink" title="Issue 403 You don’t have permission to access this resource."></a>Issue 403 You don’t have permission to access this resource.</h4><h3 id="令人发狂的CentOS（Selinux）"><a href="#令人发狂的CentOS（Selinux）" class="headerlink" title="令人发狂的CentOS（Selinux）"></a>令人发狂的CentOS（Selinux）</h3><h4 id="镜像-1"><a href="#镜像-1" class="headerlink" title="镜像"></a>镜像</h4><p>实践日期：2019-12-29 <a target="_blank" rel="noopener" href="http://www.gtlib.gatech.edu/pub/centos/8.0.1905/isos/x86_64/CentOS-8-x86_64-1905-dvd1.iso">CentOS-8-x86_64-1905-dvd1.iso</a></p>
+<h4 id="网卡设置"><a href="#网卡设置" class="headerlink" title="网卡设置"></a>网卡设置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ip add</span><br><span class="line">nmcli device show</span><br><span class="line">nmcli device status</span><br><span class="line">nmcli connection down enp0s3</span><br><span class="line">nmcli connection up enp0s3</span><br><span class="line">nmcli c reload</span><br></pre></td></tr></table></figure>
+<h4 id="静态IP"><a href="#静态IP" class="headerlink" title="静态IP"></a>静态IP</h4><p>/etc/sysconfig/network-scripts/ifcfg-enp0s3</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">TYPE&#x3D;Ethernet</span><br><span class="line">PROXY_METHOD&#x3D;none</span><br><span class="line">BROWSER_ONLY&#x3D;no</span><br><span class="line">BOOTPROTO&#x3D;none # 默认是dhcp，根据dhcp分配 改为none或static</span><br><span class="line">NAME&#x3D;enp0s3</span><br><span class="line">DEFROUTE&#x3D;yes</span><br><span class="line">IPV4_FAILURE_FATAL&#x3D;no</span><br><span class="line">IPV6INIT&#x3D;yes</span><br><span class="line">IPV6_AUTOCONF&#x3D;yes</span><br><span class="line">IPV6_DEFROUTE&#x3D;yes</span><br><span class="line">IPV6_FAILURE_FATAL&#x3D;no</span><br><span class="line">IPV6_ADDR_GEN_MODE&#x3D;stable-privacy</span><br><span class="line">NAME&#x3D;enp0s3</span><br><span class="line">UUID&#x3D;0b813e18-6008-485c-ba8c-d19e259a847a</span><br><span class="line">DEVICE&#x3D;enp0s3</span><br><span class="line">ONBOOT&#x3D;yes # 开机启用该配置</span><br><span class="line">IPADDR&#x3D;10.196.98.99</span><br><span class="line">GATEWAY&#x3D;10.196.98.1</span><br><span class="line">NETMASK&#x3D;255.255.254.0</span><br><span class="line">DNS1&#x3D;10.192.0.100</span><br><span class="line">PREFIX&#x3D;24</span><br></pre></td></tr></table></figure>
+<h4 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld.service #关闭</span><br><span class="line">systemctl start firewalld.service #启动</span><br><span class="line"></span><br><span class="line">firewall-cmd --zone&#x3D;public --permanent --add-port 22&#x2F;tcp #开启端口</span><br><span class="line">systemctl restart firewalld.service #重启</span><br></pre></td></tr></table></figure>
+<h4 id="关闭selinux"><a href="#关闭selinux" class="headerlink" title="关闭selinux"></a>关闭selinux</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sestatus &#x2F;&#x2F; 查看状态</span><br><span class="line">setenforce 0 &#x2F;&#x2F; 临时关闭</span><br></pre></td></tr></table></figure>
+<p>禁用selinux<br><br>编辑/etc/selinux/config, set SELINUX=disabled。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2019/12/26/HelmetJS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -442,7 +860,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-07-28 10:41:08" itemprop="dateModified" datetime="2020-07-28T10:41:08+08:00">2020-07-28</time>
+                <time title="Modified: 2021-05-25 15:29:38" itemprop="dateModified" datetime="2021-05-25T15:29:38+08:00">2021-05-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -470,7 +888,16 @@
 <li>https支持传输ssl证书以避免服务端仿冒</li>
 <li>https报文使用对称加密 密钥包含在证书中</li>
 </ul>
-
+<p>postman的”验证ssl证书”开关： settings -&gt; General -&gt; SSL certificate verification </p>
+<h4 id="ssl-certificate-warning"><a href="#ssl-certificate-warning" class="headerlink" title="ssl certificate warning"></a>ssl certificate warning</h4><p><img src="https://tvax4.sinaimg.cn/large/a60edd42gy1gqugoxo311j20qs0s70ue.jpg" alt="ssl warning"></p>
+<ul>
+<li>SSL证书不是来自公认的证书颁发机构(CA)</li>
+<li>数字证书信任链配置错误</li>
+<li>证书的域名匹配程度不完整</li>
+<li>证书已经过了有效期</li>
+<li>客户端不支持SNI协议<br>由于第一条，开发环境的带自签名的https服务仅被本地认证，远程访问就会出现warning</li>
+</ul>
+<h4 id="生成自签名证书"><a href="#生成自签名证书" class="headerlink" title="生成自签名证书"></a>生成自签名证书</h4><h4 id="信任证书"><a href="#信任证书" class="headerlink" title="信任证书"></a>信任证书</h4>
       
     </div>
 
@@ -577,450 +1004,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2019/12/12/MQ/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2019/12/12/MQ/" class="post-title-link" itemprop="url">MQ中间件</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-12-12 13:22:43" itemprop="dateCreated datePublished" datetime="2019-12-12T13:22:43+08:00">2019-12-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-01-13 09:34:41" itemprop="dateModified" datetime="2020-01-13T09:34:41+08:00">2020-01-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">中间件</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="Message-Queue"><a href="#Message-Queue" class="headerlink" title="Message Queue"></a>Message Queue</h4><blockquote>
-<p>RabbitMQ is one of the most popular open source message brokers. RabbitMQ is lightweight and easy to deploy on premises and in the cloud. It supports multiple messaging protocols.</p>
-</blockquote>
-<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Erlang">Erlang</a>，具备函數語言特色的程序设计语言</p>
-<h4 id="installation"><a href="#installation" class="headerlink" title="installation"></a>installation</h4><p>RPM Manual：</p>
-<p><a target="_blank" rel="noopener" href="https://www.rabbitmq.com/install-rpm.html#package-dependencies">参考官网 Tutorials</a></p>
-<ul>
-<li>Before installing RabbitMQ, you must install a supported version of Erlang/OTP. <a target="_blank" rel="noopener" href="https://github.com/rabbitmq/erlang-rpm/releases">Zero-dependency Erlang RPM for RabbitMQ</a> : this is a (virtually) zero dependency 64-bit Erlang RPM package that provides just enough to run RabbitMQ. It may be easier to install than other Erlang RPMs in most environments. It may or may not be suitable for running other Erlang-based software or 3rd party RabbitMQ plugins.</li>
-<li>other dependencies : <a target="_blank" rel="noopener" href="https://pkgs.org/download/socat">socat</a>, <a target="_blank" rel="noopener" href="https://pkgs.org/download/logrotate">logrotate</a></li>
-<li>download and install rabbit-server.rpm(<a target="_blank" rel="noopener" href="https://www.rabbitmq.com/install-rpm.html#downloads">https://www.rabbitmq.com/install-rpm.html#downloads</a>)</li>
-<li>启动/关闭 /sbin/service rabbitmq-server start/stop</li>
-<li>开机启动 chkconfig rabbitmq-server on</li>
-</ul>
-<p>Docker Image</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull rabbitmq</span><br><span class="line">docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management</span><br></pre></td></tr></table></figure>
-<p>启用Management Plugin</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rabbitmq-plugins enable rabbitmq_management</span><br></pre></td></tr></table></figure>
-<p>访问 http://{node-hostname}:15672/ 对RabbitMQ-Server进行可视化管理 </p>
-<h4 id="授权，认证-以及-Access-Control"><a href="#授权，认证-以及-Access-Control" class="headerlink" title="授权，认证 以及 Access Control"></a>授权，认证 以及 Access Control</h4><p><a target="_blank" rel="noopener" href="https://www.rabbitmq.com/access-control.html">参考官网 Tutorials</a></p>
-<p>默认用户guest/guest只被允许本地登录</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 创建用户qqs&#x2F;pass1234</span><br><span class="line">sudo rabbitmqctl add_user qqs pass1234</span><br><span class="line">&#x2F;&#x2F; 用户列表</span><br><span class="line">sudo rabbitmqctl list_users</span><br><span class="line">&#x2F;&#x2F; 授权管理员</span><br><span class="line">sudo rabbitmqctl set_user_tags qqs administrator</span><br></pre></td></tr></table></figure>
-<p>vhost 是 RabbitMQ 控制权限的最小粒度<br>注意，/是默认的vhost，缺省了名称。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rabbitmqctl list_vhosts</span><br><span class="line">rabbitmqctl add_vhost test_vhost</span><br><span class="line">&#x2F;&#x2F; set_permissions [-p &lt;vhost&gt;] &lt;user&gt; &lt;conf&gt; &lt;write&gt; &lt;read&gt;</span><br><span class="line">rabbitmqctl set_permissions -p &#x2F;          qqs &quot;.*&quot; &quot;.*&quot; &quot;.*&quot;</span><br><span class="line">rabbitmqctl set_permissions -p test_host  qqs &quot;.*&quot; &quot;.*&quot; &quot;.*&quot;</span><br></pre></td></tr></table></figure>
-<h4 id="client-demos"><a href="#client-demos" class="headerlink" title="client demos"></a>client demos</h4><p>见 Github <a target="_blank" rel="noopener" href="https://github.com/rabbitmq/rabbitmq-tutorials">rabbitmq tutorials</a></p>
-<p>javascript client demo：<br><br>package</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i amqplib</span><br></pre></td></tr></table></figure>
-<p>send.js</p>
-<figure class="highlight plain"><figcaption><span>node</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">var amqp &#x3D; require(&#39;amqplib&#x2F;callback_api&#39;);</span><br><span class="line"></span><br><span class="line">amqp.connect(&#39;amqp:&#x2F;&#x2F;qqs:pass1234@111.111.111.111:5672&#x2F;&#39;, function(error0, connection) &#123;</span><br><span class="line">    if (error0) &#123;</span><br><span class="line">        throw error0;</span><br><span class="line">    &#125;</span><br><span class="line">    connection.createChannel(function(error1, channel) &#123;</span><br><span class="line">        if (error1) &#123;</span><br><span class="line">            throw error1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        var queue &#x3D; &#39;hello&#39;;</span><br><span class="line">        var msg &#x3D; &#39;Hello World!&#39;;</span><br><span class="line"></span><br><span class="line">        channel.assertQueue(queue, &#123;</span><br><span class="line">            durable: false</span><br><span class="line">        &#125;);</span><br><span class="line">        channel.sendToQueue(queue, Buffer.from(msg));</span><br><span class="line"></span><br><span class="line">        console.log(&quot; [x] Sent %s&quot;, msg);</span><br><span class="line">    &#125;);</span><br><span class="line">    setTimeout(function() &#123;</span><br><span class="line">        connection.close();</span><br><span class="line">        process.exit(0);</span><br><span class="line">    &#125;, 500);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>receive.js</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;env node</span><br><span class="line"></span><br><span class="line">var amqp &#x3D; require(&#39;amqplib&#x2F;callback_api&#39;);</span><br><span class="line"></span><br><span class="line">amqp.connect(&#39;amqp:&#x2F;&#x2F;qqs:pass1234@111.111.111.111:5672&#x2F;&#39;, function(error0, connection) &#123;</span><br><span class="line">    if (error0) &#123;</span><br><span class="line">        throw error0;</span><br><span class="line">    &#125;</span><br><span class="line">    connection.createChannel(function(error1, channel) &#123;</span><br><span class="line">        if (error1) &#123;</span><br><span class="line">            throw error1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        var queue &#x3D; &#39;hello&#39;;</span><br><span class="line"></span><br><span class="line">        channel.assertQueue(queue, &#123;</span><br><span class="line">            durable: false</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        console.log(&quot; [*] Waiting for messages in %s. To exit press CTRL+C&quot;, queue);</span><br><span class="line"></span><br><span class="line">        channel.consume(queue, function(msg) &#123;</span><br><span class="line">            console.log(&quot; [x] Received %s&quot;, msg.content.toString());</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            noAck: true</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h4 id="定时任务"><a href="#定时任务" class="headerlink" title="定时任务"></a>定时任务</h4>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2019/12/09/OAuth2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2019/12/09/OAuth2/" class="post-title-link" itemprop="url">OAuth</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-12-09 10:39:14" itemprop="dateCreated datePublished" datetime="2019-12-09T10:39:14+08:00">2019-12-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-11-20 09:54:08" itemprop="dateModified" datetime="2020-11-20T09:54:08+08:00">2020-11-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%8D%8F%E8%AE%AE%E5%92%8C%E8%A7%84%E8%8C%83/" itemprop="url" rel="index"><span itemprop="name">协议和规范</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h4><p>某年月日开发AMS系统，使用公司SSO服务提供的账号密码，用户在AMS前端登录页填写账号密码，AMS后台有记录post请求的requestbody的功能，于是我得到了用户的SSO账号密码。。。</p>
-<p>对于本AMS系统，应视为使用第三方账号登录，类似使用wechat或github账号登录，点击入口后弹出第三方页面，通过彼系统认证返回客户端（browser）授权码，本系统凭此授权码访问与第三方有关的资源，通常可能只是从第三方获取用户名、头像、邮箱来填充本系统的个人信息识别.<br><img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twfy9pmzj20ud0l8ab4.jpg" alt="stacklogin"></p>
-<p><img src="https://tvax1.sinaimg.cn/large/a60edd42gy1g9twgcmpxij20ue0l775l.jpg" alt="gitlogin"></p>
-<p><del>此外在CS Scanflow登录Cloud地模块中，设计期望以账密登录后返回两个token，其中A是访问Cloud相关资源地凭据，B是保持登录(Remember me)需要token，当A过期时，调用接口，Cloud认证B合法，返回新的A，即可在后续使用A继续访问Cloud资源。</del></p>
-<h4 id="OpenID"><a href="#OpenID" class="headerlink" title="OpenID"></a>OpenID</h4><p>OpenID 去中心化的身份识别框架，根据协议，任何网站可以作为identity provider，通过一串 URI 向某个网站证明用户的身份。</p>
-<h4 id="OAuth标准"><a href="#OAuth标准" class="headerlink" title="OAuth标准"></a>OAuth标准</h4><blockquote>
-<p>OAuth在”客户端(受限资源/服务请求方)”与”服务提供商”之间，设置了一个授权层（authorization layer）。”客户端”不能直接登录”服务提供商”，只能登录授权层，使用授权层颁发的令牌（token），访问服务提供商的资源。用户注册在服务端的账户密码，不会暴露给客户端。服务提供商可以自由限制授权层令牌的权限范围和有效期。<br><br>QQs：OAuth不强调认证，它是一个授权协议，实现的是支持由第三方提供授权访问的标准。</p>
-</blockquote>
-<h4 id="OIDC"><a href="#OIDC" class="headerlink" title="OIDC"></a>OIDC</h4><p>OpenID Connect 基于OAuth 2.0协议之上的简单身份层，它允许客户端根据授权服务器的认证结果最终确认终端用户的身份，以及获取基本的用户信息；它支持包括Web、移动、JavaScript在内的所有客户端类型去请求和接收终端用户信息和身份认证会话信息；它是可扩展的协议，允许你使用某些可选功能，如身份数据加密、OpenID提供商发现、会话管理等。</p>
-<h4 id="授权方式"><a href="#授权方式" class="headerlink" title="授权方式"></a>授权方式</h4><h5 id="授权码（authorization-code）"><a href="#授权码（authorization-code）" class="headerlink" title="授权码（authorization code）"></a>授权码（authorization code）</h5><p>上文已提到的使用第三方登录的方式即授权码方式，授权码方式是最常用且靠谱的授权方式，相比之下，其余三种比较扯淡。<br><br>下图中A.com实为客户端，如某电商平台，B.com为用户信息持有方，如某社交平台(包含了受限数据服务以及授权服务)，经过对接A.com可以通过如图的流程使用B.com的用户登录<br><img src="https://tvax4.sinaimg.cn/large/a60edd42gy1g9twsgu7ksj20m80cijrk.jpg" alt="authcodemode"></p>
-<ol>
-<li>跳转到B授权页</li>
-<li>确认授权，重定向回A，并带回authorization code</li>
-<li>向B请求访问受限数据，传递A身份，以及授权码</li>
-<li>请求返回可访问受限数据令牌<h5 id="隐藏式（隐式授权）"><a href="#隐藏式（隐式授权）" class="headerlink" title="隐藏式（隐式授权）"></a>隐藏式（隐式授权）</h5>直接返回令牌，安全风险较高 <sup><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html">注1</a></sup><h5 id="密码式"><a href="#密码式" class="headerlink" title="密码式"></a>密码式</h5>返回账号密码，A以此申请访问B的令牌，风险更高。(私以为，既然B予以这种信任，即将访问权限控制让与A，A可以直接以账密登录B而不用可能受限的token)<h5 id="凭据式"><a href="#凭据式" class="headerlink" title="凭据式"></a>凭据式</h5>对于没有前端的命令行应用，以get请求，用query parameters传参直接得到令牌。<h4 id="前后端分离的SSO"><a href="#前后端分离的SSO" class="headerlink" title="前后端分离的SSO"></a>前后端分离的SSO</h4><img src="https://tvax3.sinaimg.cn/large/a60edd42gy1ggrgt64oe1j20p60mywgl.jpg" alt="互联网图片侵删"><h4 id="关于OAuth-OpenId-OIDC什么的"><a href="#关于OAuth-OpenId-OIDC什么的" class="headerlink" title="关于OAuth, OpenId, OIDC什么的"></a>关于OAuth, OpenId, OIDC什么的</h4>网上有文章说OAuth是authorization， OpenId是authentication，这听起来很谜。。<blockquote>
-<p>OpenID是一个去中心化的网上身份认证系统。（维基百科）</p>
-</blockquote>
-</li>
-</ol>
-<p>所谓认证系统，解决的是”你是谁”的问题，用户在在identity provider（idp）的服务上注册，客户端登录即去idp获取OpenID标识对应的token，服务提供者校验身份，是拿客户端的token去idp确认。<br>OIDC（OpenID Connect）OpenID + OAuth2.0认证（授权访问）服务<br><img src="https://tvax3.sinaimg.cn/large/a60edd42gy1gh5i7z0q6bj20e808jwfe.jpg"></p>
-<blockquote>
-<p>access token 是客户端和资源服务器之间的凭据</p>
-</blockquote>
-<p>那access token在资源服务器上是如何验证的呢？每个请求过来，资源服务器都会拿access token到SSO上去核对吗？</p>
-<p>事实上是不一定的。以JWT为例。如果Access Token是JWT形式签发，资源服务可以使用验证签名的方式判断是否合法，只需要把签名密钥在资源服务同步一份即可。典型的是使用非对称加密（见<a href="/qqsnote/2019/07/19/Encryption/" title="加密">加密</a>篇），资源服务保留一份公钥，access token由授权服务使用私钥签发，资源服务是可以对其进行校验的。JWT允许携带一些信息，如用户，权限，有效期等，因此资源服务判断JWT合法之后可以继续根据携带信息来判断是否可访问资源。这样就有可以快速验证有效性，不需要频繁访问授权服务的优点，缺点是Access Token一旦签发，将很难收回，只能通过过期来失效。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2019/12/06/httpdownload/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2019/12/06/httpdownload/" class="post-title-link" itemprop="url">一个Download的实现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-12-06 12:42:47" itemprop="dateCreated datePublished" datetime="2019-12-06T12:42:47+08:00">2019-12-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-01-13 09:34:40" itemprop="dateModified" datetime="2020-01-13T09:34:40+08:00">2020-01-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="需求：导出列表"><a href="#需求：导出列表" class="headerlink" title="需求：导出列表"></a>需求：导出列表</h4><p>一个服务端分页的可检索列表，页面只缓存当前页的数据，导出功能无法完全在前端，点击export将现有检索条件传到后端，由后端查询数据库并生成excel文件，传到前端。</p>
-<h4 id="后端实现-Express-js"><a href="#后端实现-Express-js" class="headerlink" title="后端实现(Express.js)"></a>后端实现(Express.js)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">app.post(&#39;&#x2F;list&#x2F;export&#39;, (req,res)&#x3D;&gt;&#123;</span><br><span class="line">    const data &#x3D; getDataFromDB(req.body)</span><br><span class="line">        generateExcel(results, ()&#x3D;&gt;&#123;</span><br><span class="line">            res.download(path.join(__dirname,&#39;list.xlsx&#39;));</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;, err &#x3D;&gt; &#123;</span><br><span class="line">        res.json(err)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const columns &#x3D; [</span><br><span class="line">    &#123; header: &#39;ID&#39;, key: &#39;id&#39;, width: 32 &#125;,</span><br><span class="line">    &#123; header: &#39;Name&#39;, key: &#39;name&#39;, width: 32 &#125;];</span><br><span class="line">const generateExcel &#x3D; function(data, callback)&#123;</span><br><span class="line">    const excel &#x3D; require(&#39;exceljs&#39;);</span><br><span class="line">    &#x2F;&#x2F; create excel workbook</span><br><span class="line">    var options &#x3D; &#123;</span><br><span class="line">        filename:path.join(__dirname, &#39;list.xlsx&#39;),</span><br><span class="line">        useStyles: true,</span><br><span class="line">        useSharedStrings: true</span><br><span class="line">    &#125;;</span><br><span class="line">    const workbook &#x3D; new excel.stream.xlsx.WorkbookWriter(options);</span><br><span class="line">    workbook.creator &#x3D; &#39;QQs&#39;;</span><br><span class="line">    workbook.created &#x3D; new Date();</span><br><span class="line">    workbook.modified &#x3D; new Date();</span><br><span class="line">    &#x2F;&#x2F; views</span><br><span class="line">    workbook.views &#x3D; [</span><br><span class="line">        &#123;</span><br><span class="line">            x: 0, y: 0, width: 10000, height: 20000,</span><br><span class="line">            firstSheet: 0, activeTab: 1, visibility: &#39;visible&#39;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">    &#x2F;&#x2F; add worksheet</span><br><span class="line">    const sheet &#x3D; workbook.addWorksheet(&#39;List&#39;);</span><br><span class="line">    &#x2F;&#x2F; define columns</span><br><span class="line">    sheet.columns &#x3D; columns;</span><br><span class="line">    &#x2F;&#x2F; add rows</span><br><span class="line">    &#x2F;*</span><br><span class="line">    数据量大的情况下考虑到nodejs内存分配瓶颈</span><br><span class="line">    *应限制每次select的条数分批addRow并且Row.commit</span><br><span class="line">    *&#x2F;</span><br><span class="line">    data.forEach(record &#x3D;&gt; &#123;</span><br><span class="line">        const row &#x3D; record;</span><br><span class="line">        &#x2F;&#x2F; TODO data convertor</span><br><span class="line">        sheet.addRow(row).commit();</span><br><span class="line">    &#125;);</span><br><span class="line">    sheet.commit();</span><br><span class="line">    workbook.commit().then(callback);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>生成Excel用到了第三方库exceljs，该库实现了流式写excel的方法，可以在数据量较大的情况下缓解IO压力(待考证)</p>
-<p>response.download(filename)方法以Blob方式返回数据</p>
-<h4 id="前端实现-Angular8"><a href="#前端实现-Angular8" class="headerlink" title="前端实现(Angular8)"></a>前端实现(Angular8)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">export() &#123;</span><br><span class="line">    const postParams &#x3D; new Object();</span><br><span class="line">    &#x2F;&#x2F; TODO collect query parameters</span><br><span class="line">    this.httpClient</span><br><span class="line">      .post(&#39;list&#x2F;export&#39;, postParams, &#123;</span><br><span class="line">        responseType: &#39;blob&#39;,</span><br><span class="line">        headers: new HttpHeaders().append(&#39;Content-Type&#39;, &#39;application&#x2F;json&#39;),</span><br><span class="line">      &#125;)</span><br><span class="line">      .subscribe(res &#x3D;&gt; &#123;</span><br><span class="line">        this.downloadFile(res);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  &#x2F;**</span><br><span class="line">   * 创建blob对象，并利用浏览器打开url进行下载</span><br><span class="line">   * @param data 文件流数据</span><br><span class="line">   *&#x2F;</span><br><span class="line">  downloadFile(data) &#123;</span><br><span class="line">    &#x2F;&#x2F; 下载类型 xls</span><br><span class="line">    const contentType &#x3D; &#39;application&#x2F;vnd.openxmlformats-officedocument.spreadsheetml.sheet&#39;;</span><br><span class="line">    const blob &#x3D; new Blob([data], &#123; type: contentType &#125;);</span><br><span class="line">    const url &#x3D; window.URL.createObjectURL(blob);</span><br><span class="line">    &#x2F;&#x2F; 打开新窗口方式进行下载</span><br><span class="line">    &#x2F;&#x2F; window.open(url);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 以动态创建a标签进行下载</span><br><span class="line">    const a &#x3D; document.createElement(&#39;a&#39;);</span><br><span class="line">    a.href &#x3D; url;</span><br><span class="line">    &#x2F;&#x2F; a.download &#x3D; fileName;</span><br><span class="line">    a.download &#x3D; &#39;list.xlsx&#39;;</span><br><span class="line">    a.click();</span><br><span class="line">    window.URL.revokeObjectURL(url);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>接受请求必须设置response headers，否则默认设置无法取得返回值并进入next回调。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2019/12/04/NodejsFramework/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2019/12/04/NodejsFramework/" class="post-title-link" itemprop="url">Nodejs服务端框架</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-12-04 19:03:17" itemprop="dateCreated datePublished" datetime="2019-12-04T19:03:17+08:00">2019-12-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-01-13 09:34:40" itemprop="dateModified" datetime="2020-01-13T09:34:40+08:00">2020-01-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="Express"><a href="#Express" class="headerlink" title="Express"></a>Express</h3><p>集合式开发框架，自身已经集成了诸多常用中间件如，router， static， bodyparse等。然而随着开发需求的丰富，仍然不免要在github上调查采集。</p>
-<p>某年月日，基于express.js的服务，使用了morgan格式化日志，如何记response body是个难题，因为一旦response.end()或者response.json(x),其发送的内容将不复存在。</p>
-<blockquote>
-<p>express 的中间件机制是线性执行的</p>
-</blockquote>
-<p>受限于当时的js标准，异步过程只能以回调的方式实现，如果顺位在后的中间件返回结果到前一个，必须在调用后者时就带上回调函数, 当中间件“链”很长时，就成了Callback Hell</p>
-<p>于是作者（TJ Holowaychuk大神）又写了一个Koa，实现洋葱模型的中间件机制。</p>
-<h3 id="Koa"><a href="#Koa" class="headerlink" title="Koa"></a>Koa</h3><p>据说是轻量级、渐进式框架。</p>
-<h3 id="Egg"><a href="#Egg" class="headerlink" title="Egg"></a>Egg</h3><p>阿里基于Koa统一规范化常用服务及功能，给出较为详细的文档说明，势必免去开发者一些调查采集的工作。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2019/11/27/login/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2019/11/27/login/" class="post-title-link" itemprop="url">login</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-11-27 10:40:35" itemprop="dateCreated datePublished" datetime="2019-11-27T10:40:35+08:00">2019-11-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-01-13 09:34:41" itemprop="dateModified" datetime="2020-01-13T09:34:41+08:00">2020-01-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在ng-alain脚手架项目中，默认存token到localstorage（也可以配置为其他存储类型），运行期间不再改动配置。</p>
-<blockquote>
-<p>不应该把 Remember me 当作实际授权有效期的条件，Token 该什么时候过期就应该什么时候过期， Remember me 一般是用于支持自动无感刷新 Token。</p>
-</blockquote>
-<p>redis value中存token，expire time，remember，当remember为false，应校验前端传来的token并核对expire time，当remember为true，应在token过期时自动刷新，并将新的token保存到前端</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/page/12/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/qqsnote/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/20/">20</a><a class="extend next" rel="next" href="/qqsnote/page/14/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/page/12/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/qqsnote/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/21/">21</a><a class="extend next" rel="next" href="/qqsnote/page/14/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1086,18 +1073,18 @@
       <div class="site-state-item site-state-posts">
           <a href="/qqsnote/archives/">
         
-          <span class="site-state-item-count">196</span>
+          <span class="site-state-item-count">201</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/qqsnote/categories/">
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/qqsnote/tags/">
-        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-count">81</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1108,7 +1095,7 @@
       </div>
 
       <div class="tag-cloud-tags">
-        <a href="/qqsnote/tags/Net/" style="font-size: 26px; color: #f4f4f4">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 14px; color: #d2d2d2">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 26px; color: #f4f4f4">Azure</a> <a href="/qqsnote/tags/C/" style="font-size: 16px; color: #d7d7d7">C#</a> <a href="/qqsnote/tags/CSS/" style="font-size: 20px; color: #e3e3e3">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 14px; color: #d2d2d2">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 18px; color: #ddd">Docker</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16px; color: #d7d7d7">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 14px; color: #d2d2d2">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 20px; color: #e3e3e3">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 24px; color: #eee">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 20px; color: #e3e3e3">Node.js</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/Python/" style="font-size: 22px; color: #e8e8e8">Python</a> <a href="/qqsnote/tags/React/" style="font-size: 16px; color: #d7d7d7">React</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 16px; color: #d7d7d7">SQL_Server</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 12px; color: #ccc">TypeScript</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 14px; color: #d2d2d2">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 16px; color: #d7d7d7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 14px; color: #d2d2d2">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28px; color: #f9f9f9">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 14px; color: #d2d2d2">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 12px; color: #ccc">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14px; color: #d2d2d2">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16px; color: #d7d7d7">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 12px; color: #ccc">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 14px; color: #d2d2d2">多语言</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12px; color: #ccc">性能优化</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 14px; color: #d2d2d2">数据库</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14px; color: #d2d2d2">算法</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 22px; color: #e8e8e8">认证&授权</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12px; color: #ccc">面试</a>
+        <a href="/qqsnote/tags/Net/" style="font-size: 26.4px; color: #f5f5f5">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.8px; color: #d1d1d1">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24.6px; color: #f0f0f0">Azure</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C#</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.2px; color: #e0e0e0">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 13.8px; color: #d1d1d1">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 17.4px; color: #dbdbdb">Docker</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.6px; color: #d6d6d6">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.8px; color: #d1d1d1">EntityFramework</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.8px; color: #d1d1d1">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 19.2px; color: #e0e0e0">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.8px; color: #ebebeb">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 19.2px; color: #e0e0e0">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 12px; color: #ccc">OData</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/Python/" style="font-size: 21px; color: #e6e6e6">Python</a> <a href="/qqsnote/tags/React/" style="font-size: 17.4px; color: #dbdbdb">React</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 17.4px; color: #dbdbdb">SQL_Server</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 12px; color: #ccc">TypeScript</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 13.8px; color: #d1d1d1">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 15.6px; color: #d6d6d6">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.8px; color: #d1d1d1">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.2px; color: #fafafa">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.8px; color: #d1d1d1">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 12px; color: #ccc">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 13.8px; color: #d1d1d1">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.6px; color: #d6d6d6">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 12px; color: #ccc">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.8px; color: #d1d1d1">多语言</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12px; color: #ccc">性能优化</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px; color: #ccc">数据库</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.8px; color: #d1d1d1">算法</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12px; color: #ccc">面试</a>
       </div>
     </div>
   </aside>

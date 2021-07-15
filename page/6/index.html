@@ -145,6 +145,386 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/10/08/dotNetCore-MemoryCache/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/10/08/dotNetCore-MemoryCache/" class="post-title-link" itemprop="url">.Net Core 缓存</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-08 16:51:04" itemprop="dateCreated datePublished" datetime="2020-10-08T16:51:04+08:00">2020-10-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-11-26 14:11:56" itemprop="dateModified" datetime="2020-11-26T14:11:56+08:00">2020-11-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/aspnet/core/performance/caching/memory?view=aspnetcore-3.1">.net core 中的缓存内存</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">using Microsoft.Extensions.Caching.Memory;</span><br><span class="line"></span><br><span class="line">public class HomeController : Controller</span><br><span class="line">&#123;</span><br><span class="line">    private IMemoryCache _cache;</span><br><span class="line"></span><br><span class="line">    public HomeController(IMemoryCache memoryCache)</span><br><span class="line">    &#123;</span><br><span class="line">        _cache &#x3D; memoryCache;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>CacheKeys API</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public static class CacheKeys</span><br><span class="line">&#123;</span><br><span class="line">    public static string Entry &#123; get &#123; return &quot;_Entry&quot;; &#125; &#125;</span><br><span class="line">    public static string CallbackEntry &#123; get &#123; return &quot;_Callback&quot;; &#125; &#125;</span><br><span class="line">    public static string CallbackMessage &#123; get &#123; return &quot;_CallbackMessage&quot;; &#125; &#125;</span><br><span class="line">    public static string Parent &#123; get &#123; return &quot;_Parent&quot;; &#125; &#125;</span><br><span class="line">    public static string Child &#123; get &#123; return &quot;_Child&quot;; &#125; &#125;</span><br><span class="line">    public static string DependentMessage &#123; get &#123; return &quot;_DependentMessage&quot;; &#125; &#125;</span><br><span class="line">    public static string DependentCTS &#123; get &#123; return &quot;_DependentCTS&quot;; &#125; &#125;</span><br><span class="line">    public static string Ticks &#123; get &#123; return &quot;_Ticks&quot;; &#125; &#125;</span><br><span class="line">    public static string CancelMsg &#123; get &#123; return &quot;_CancelMsg&quot;; &#125; &#125;</span><br><span class="line">    public static string CancelTokenSource &#123; get &#123; return &quot;_CancelTokenSource&quot;; &#125; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>缓存一个时间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">DateTime cacheTiming;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Look for cache key.</span><br><span class="line">if (!_cache.TryGetValue(CacheKeys.Entry, out cacheEntry))</span><br><span class="line">&#123;</span><br><span class="line">    cacheEntry &#x3D; DateTime.Now;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; Set cache options.</span><br><span class="line">    var cacheEntryOptions &#x3D; new MemoryCacheEntryOptions()</span><br><span class="line">        &#x2F;&#x2F; Keep in cache for this time, reset time if accessed.</span><br><span class="line">        .SetSlidingExpiration(TimeSpan.FromSeconds(3));</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; Save data in cache.</span><br><span class="line">    _cache.Set(CacheKeys.Entry, cacheTiming, cacheEntryOptions);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>取出缓存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var timing &#x3D; _cache.Get&lt;DateTime?&gt;(CacheKeys.Entry);</span><br></pre></td></tr></table></figure>
+<p>可调过期（slide expiration）时间和绝对过期（absolute expiration）时间</p>
+<ul>
+<li>可调过期：指定一个时间，TimeSpan，指定时间内有被Get缓存时间则顺延，否则过期</li>
+<li>绝对到期：指定在一个固定的时间点到期<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/aspnet/core/performance/caching/memory?view=aspnetcore-3.1#use-setsize-size-and-sizelimit-to-limit-cache-size">使用 SetSize、Size 和 SizeLimit 限制缓存大小</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/09/09/wasm-coreprinciples/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/09/09/wasm-coreprinciples/" class="post-title-link" itemprop="url">WebAssembly核心原理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-09-09 19:04:16" itemprop="dateCreated datePublished" datetime="2020-09-09T19:04:16+08:00">2020-09-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-15 15:48:27" itemprop="dateModified" datetime="2021-01-15T15:48:27+08:00">2021-01-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="关于section"><a href="#关于section" class="headerlink" title="关于section"></a>关于section</h4><h4 id="EMSCRIPTEN-KEEPALIVE宏"><a href="#EMSCRIPTEN-KEEPALIVE宏" class="headerlink" title="EMSCRIPTEN_KEEPALIVE宏"></a>EMSCRIPTEN_KEEPALIVE宏</h4><h4 id="enscripten-embind"><a href="#enscripten-embind" class="headerlink" title="enscripten embind"></a>enscripten embind</h4><p>C++暴露接口的一种方式</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/09/09/wasm-fundation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/09/09/wasm-fundation/" class="post-title-link" itemprop="url">WebAssembly基础</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-09-09 17:16:14" itemprop="dateCreated datePublished" datetime="2020-09-09T17:16:14+08:00">2020-09-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-28 15:46:17" itemprop="dateModified" datetime="2021-04-28T15:46:17+08:00">2021-04-28</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="Javascript"><a href="#Javascript" class="headerlink" title="Javascript"></a>Javascript</h3><h4 id="window-requestAnimationFrame"><a href="#window-requestAnimationFrame" class="headerlink" title="window.requestAnimationFrame"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame">window.requestAnimationFrame</a></h4><p>顾名思义用于动画帧的绘制, 类似于setInterval,传入回调函数,该回调函数将会在下一次浏览器尝试重新绘制当前帧动画时被调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;迭代调用以使dom持续更新</span><br><span class="line"></span><br><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">      div &#123;</span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        position: absolute;</span><br><span class="line">      &#125;</span><br><span class="line">    &lt;&#x2F;style&gt;</span><br><span class="line">  &lt;&#x2F;head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;div&gt;&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;&#x2F;body&gt;</span><br><span class="line">  &lt;script&gt;</span><br><span class="line">    let start &#x3D; null;</span><br><span class="line">    let element &#x3D; document.querySelector(&#39;div&#39;);</span><br><span class="line"></span><br><span class="line">    const step &#x3D; (timestamp) &#x3D;&gt; &#123;</span><br><span class="line">      if (!start) start &#x3D; timestamp;</span><br><span class="line">      let progress &#x3D; timestamp - start;</span><br><span class="line">      element.style.left &#x3D; Math.min(progress &#x2F; 10, 200) + &#39;px&#39;;</span><br><span class="line">      if (progress &lt; 2000) &#123;</span><br><span class="line">        window.requestAnimationFrame(step);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    window.requestAnimationFrame(step);</span><br><span class="line">  &lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="Performance-API"><a href="#Performance-API" class="headerlink" title="Performance API"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Performance_API/Using_the_Performance_API">Performance API</a></h4><p>performance.timing<br>performance.now()返回当前时刻距离 “time origin” 所经过的毫秒数，以此可以计算代码执行所花时间，精度大于Date.now()</p>
+<h4 id="requestIdleCallback"><a href="#requestIdleCallback" class="headerlink" title="requestIdleCallback"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestIdleCallback">requestIdleCallback</a></h4><p>传入一个回调函数，在浏览器的空闲时段内调用的函数排队。这使开发者能够在主事件循环上执行后台和低优先级工作，而不会影响延迟关键事件，如动画和输入响应。</p>
+<h4 id="TypedArray"><a href="#TypedArray" class="headerlink" title="TypedArray"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/TypedArray">TypedArray</a></h4><p>类型化数组，其实例描述底层的二进制数据缓冲区的类数组视图。<br><br>实际上并没有TypedArray这个全局属性或者构造方法，可以认为是Int8Array，Uint32Array等对象的实例化数组的统称</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const DEFAULT_INDEX &#x3D; 0;</span><br><span class="line">&#x2F;&#x2F; Way one:</span><br><span class="line">const int8Arr &#x3D; new Int8Array(10);</span><br><span class="line">int8Arr[DEFAULT_INDEX] &#x3D; 16;</span><br><span class="line">console.log(int8Arr);  &#x2F;&#x2F; Int8Array [16, 0, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">int8Arr[0]&#x3D;256, int8Arr[1]&#x3D;257;</span><br><span class="line">console.log(int8Arr);  &#x2F;&#x2F; Int8Array(10) [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Way two:</span><br><span class="line">const buffer &#x3D; new ArrayBuffer(16);</span><br><span class="line">uintArray &#x3D; new Uint8Array(buffer); &#x2F;&#x2F; Uint8Array(16) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">uintArray.set([255,255,255],4)</span><br><span class="line">console.log(uintArray);  &#x2F;&#x2F; Uint8Array(16) [0, 0, 0, 0, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0]</span><br></pre></td></tr></table></figure>
+<p>Way two中，ArrayBuffer 的构造函数其参数指定了该 ArrayBuffer 所能够存放的单字节数量，因此在“转换到”对应的 TypedArray 时，一定要确保 ArrayBuffer 的大小是 TypedArray 元素类型所对应字节大小的整数倍。<br><br>TypedArray.prototype.set, 方法接受两个参数，第一个参数为将要进行数据读取的 JavaScript 普通数组；第二个参数为将要存放在类型数组中的元素偏移位置。</p>
+<p>可以作为类型化数组的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects">内置对象</a>：</p>
+<ul>
+<li>Int8Array</li>
+<li>Uint8Array</li>
+<li>Uint8ClampedArray</li>
+<li>Int16Array</li>
+<li>Uint16Array</li>
+<li>Int32Array</li>
+<li>Uint32Array</li>
+<li>Float32Array</li>
+<li>Float64Array<h4 id="C-C"><a href="#C-C" class="headerlink" title="C/C++"></a>C/C++</h4>对于C++的函数重载，C++编译器通常使用名为 “Name Mangling” 的机制，在编译的可执行文件中区分同名函数<br><br>使用extern “C” {}用以避免“Name Mangling”处理：由于在这个特殊的结构中，C++ 编译器会强制以 C 语言的语法规则，来编译放置在这个作用域内的所有 C++ 源代码。而在 C 语言的规范中，没有“函数重载”这类特性，因此也不会对函数名进行 “Name Mangling” 的处理。<h4 id="编译优化"><a href="#编译优化" class="headerlink" title="编译优化"></a>编译优化</h4>DCE(Dead Code Elimination)<br><br>在诸如 Clang / GCC 等编译器中，我们通常可以为编译器指定一些有关编译优化的标记，以让编译器可以通过使用不同等级的优化策略来优化目标代码的生成。而诸如 -O0 / -O1 / -O2 一直到 -Os 与 -O4 等选项，便是这些优化标记中的一部分。<h4 id="原码-反码-补码"><a href="#原码-反码-补码" class="headerlink" title="原码 反码 补码"></a>原码 反码 补码</h4>原码符号位不变 逐位取反–&gt; 反码 <br><br>反码+1 –&gt; 补码<h4 id="访问控制列表"><a href="#访问控制列表" class="headerlink" title="访问控制列表"></a>访问控制列表</h4>ACL（Access Control List）<h4 id="堆栈机、寄存器机和累加器机"><a href="#堆栈机、寄存器机和累加器机" class="headerlink" title="堆栈机、寄存器机和累加器机"></a>堆栈机、寄存器机和累加器机</h4></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/09/08/dotNetCore-CI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/09/08/dotNetCore-CI/" class="post-title-link" itemprop="url">.Net Core的持续集成</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-09-08 16:24:39 / Modified: 17:31:05" itemprop="dateCreated datePublished" datetime="2020-09-08T16:24:39+08:00">2020-09-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>显然，.Net Core开发过程中，使用Visual Studio提供的近乎完美IDE，build和deploy都非常简单，如果说是用jenkins进行持续集成，那便相当于用脚本完成更新源码–构建–部署等过程。</p>
+<h4 id="jenkins-ant"><a href="#jenkins-ant" class="headerlink" title="jenkins ant"></a>jenkins ant</h4><blockquote>
+<p>Apache Ant，是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。由Apache软件基金会所提供。默认情况下，它的buildfile(XML文件)名为build.xml。——————wiki</p>
+</blockquote>
+<p>build.xml定义了若干步骤（即target），以xml节点格式定义每个步骤的目录，执行程序，以及参数等</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; ?&gt; </span><br><span class="line">&lt;project name&#x3D;&quot;Hello World&quot; default&#x3D;&quot;execute&quot;&gt;</span><br><span class="line"></span><br><span class="line">	&lt;target name&#x3D;&quot;init&quot;&gt;</span><br><span class="line">		&lt;mkdir dir&#x3D;&quot;build&#x2F;classes&quot;&#x2F;&gt;</span><br><span class="line">		&lt;mkdir dir&#x3D;&quot;dist&quot;&#x2F;&gt;</span><br><span class="line">	&lt;&#x2F;target&gt;</span><br><span class="line">	&lt;target name&#x3D;&quot;compile&quot; depends&#x3D;&quot;init&quot;&gt;</span><br><span class="line">		&lt;javac srcdir&#x3D;&quot;src&quot; destdir&#x3D;&quot;build&#x2F;classes&quot;&#x2F;&gt;</span><br><span class="line">	&lt;&#x2F;target&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name&#x3D;&quot;compress&quot; depends&#x3D;&quot;compile&quot;&gt;</span><br><span class="line">	        &lt;jar destfile&#x3D;&quot;dist&#x2F;HelloWorld.jar&quot; basedir&#x3D;&quot;build&#x2F;classes&quot;  &#x2F;&gt;</span><br><span class="line">	&lt;&#x2F;target&gt;</span><br><span class="line"></span><br><span class="line">	&lt;target name&#x3D;&quot;execute&quot; depends&#x3D;&quot;compile&quot;&gt;</span><br><span class="line">		&lt;java classname&#x3D;&quot;HelloWorld&quot; classpath&#x3D;&quot;build&#x2F;classes&quot;&#x2F;&gt;</span><br><span class="line">	&lt;&#x2F;target&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;project&gt;</span><br></pre></td></tr></table></figure>
+<p>在Jenkins中可以配置使用Apache Ant，在构建时便可以使用build.xml来管理步骤<br><img src="https://tvax4.sinaimg.cn/large/a60edd42ly1gijd2ewcpyj20wz0lo3zk.jpg" alt="JenkinsAnt"><br>源码目录build/build.xml:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;project name&#x3D;&quot;PartnerPortal&quot; default&#x3D;&quot;PartnerPortal&quot; basedir&#x3D;&quot;.&quot;&gt;</span><br><span class="line">	&lt;description&gt;</span><br><span class="line">	PartnerPortal Daily Build File.</span><br><span class="line">	&lt;&#x2F;description&gt;</span><br><span class="line"></span><br><span class="line">	&lt;property file&#x3D;&quot;build.properties&quot;&#x2F;&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name&#x3D;&quot;build_partner_portal&quot; description&#x3D;&quot;Build CS ScanFlow with Microsoft Visual Studio&quot;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;      build CSD PP x64         &quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;MSVC    : $&#123;msbuild.exe&#125;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;root    : $&#123;root_dir&#125;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;exec dir&#x3D;&quot;.&quot; executable&#x3D;&quot;restore_dotnet.bat&quot; failonerror&#x3D;&quot;true&quot; &#x2F;&gt;</span><br><span class="line">		&lt;exec dir&#x3D;&quot;.&quot; executable&#x3D;&quot;$&#123;msbuild.exe&#125;&quot; failonerror&#x3D;&quot;true&quot;&gt;</span><br><span class="line">			&lt;arg line&#x3D;&quot;..&#x2F;CSD.PartnerPortal.sln &#x2F;property:Configuration&#x3D;Release&quot;&#x2F;&gt;</span><br><span class="line">		&lt;&#x2F;exec&gt;</span><br><span class="line">	&lt;&#x2F;target&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name&#x3D;&quot;restore_envirement&quot; description&#x3D;&quot;restore dotnet&quot;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;      restore dotnet         &quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;exec dir&#x3D;&quot;.&quot; executable&#x3D;&quot;restore_dotnet.bat&quot; failonerror&#x3D;&quot;true&quot; &#x2F;&gt;</span><br><span class="line">	&lt;&#x2F;target&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;target name&#x3D;&quot;publish_to_server&quot; description&#x3D;&quot;publish to server&quot;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;      publish  start       &quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;echo message&#x3D;&quot;&quot;&#x2F;&gt;</span><br><span class="line">		&lt;exec dir&#x3D;&quot;.&quot; executable&#x3D;&quot;publish.bat&quot; failonerror&#x3D;&quot;true&quot; &#x2F;&gt;</span><br><span class="line">	&lt;&#x2F;target&gt;</span><br><span class="line"></span><br><span class="line">	&lt;target name &#x3D;&quot;PartnerPortal&quot; description&#x3D;&quot;Build solution&quot;&gt;</span><br><span class="line">		&lt;antcall target&#x3D;&quot;restore_envirement&quot; &#x2F;&gt;</span><br><span class="line">		&lt;antcall target&#x3D;&quot;build_partner_portal&quot; &#x2F;&gt;</span><br><span class="line">		&lt;antcall target&#x3D;&quot;publish_to_server&quot; &#x2F;&gt;</span><br><span class="line">	&lt;&#x2F;target&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;project&gt;</span><br></pre></td></tr></table></figure>
+<p>build/restore_dotnet.bat:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet restore ..&#x2F;CSD.PartnerPortal.sln</span><br></pre></td></tr></table></figure>
+<p>build/publish.bat:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet publish --no-build -c Release &quot;..\CSD.PartnerPortal.csproj&quot; &#x2F;p:PublishProfile&#x3D;&quot;..\Properties\PUblishProfiles\CSDPPci - Web Deploy.pubxml&quot; &#x2F;p:Password&#x3D;xxxxxxxxxxxxxxxxxxxxxxxxxxx</span><br></pre></td></tr></table></figure>
+<p>项目的Properties目录下的 .pubxml配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;utf-8&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;Project ToolsVersion&#x3D;&quot;4.0&quot; xmlns&#x3D;&quot;http:&#x2F;&#x2F;schemas.microsoft.com&#x2F;developer&#x2F;msbuild&#x2F;2003&quot;&gt;</span><br><span class="line">  &lt;PropertyGroup&gt;</span><br><span class="line">    &lt;WebPublishMethod&gt;MSDeploy&lt;&#x2F;WebPublishMethod&gt;</span><br><span class="line">    &lt;ResourceId&gt;&#x2F;subscriptions&#x2F;subscriptionid01&#x2F;resourceGroups&#x2F;resourcegroupname01&#x2F;providers&#x2F;Microsoft.Web&#x2F;sites&#x2F;CSDPPci&lt;&#x2F;ResourceId&gt;</span><br><span class="line">    &lt;ResourceGroup&gt;resourcegroupname01&lt;&#x2F;ResourceGroup&gt;</span><br><span class="line">    &lt;PublishProvider&gt;AzureWebSite&lt;&#x2F;PublishProvider&gt;</span><br><span class="line">    &lt;LastUsedBuildConfiguration&gt;Release&lt;&#x2F;LastUsedBuildConfiguration&gt;</span><br><span class="line">    &lt;LastUsedPlatform&gt;Any CPU&lt;&#x2F;LastUsedPlatform&gt;</span><br><span class="line">    &lt;SiteUrlToLaunchAfterPublish&gt;http:&#x2F;&#x2F;csdppci.azurewebsites.net&lt;&#x2F;SiteUrlToLaunchAfterPublish&gt;</span><br><span class="line">    &lt;LaunchSiteAfterPublish&gt;True&lt;&#x2F;LaunchSiteAfterPublish&gt;</span><br><span class="line">    &lt;ExcludeApp_Data&gt;False&lt;&#x2F;ExcludeApp_Data&gt;</span><br><span class="line">    &lt;ProjectGuid&gt;2df39477-f1f3-4522-9ca7-d0eefb5b16b7&lt;&#x2F;ProjectGuid&gt;</span><br><span class="line">    &lt;MSDeployServiceURL&gt;csdppci.scm.azurewebsites.net:443&lt;&#x2F;MSDeployServiceURL&gt;</span><br><span class="line">    &lt;DeployIisAppPath&gt;CSDPPci&lt;&#x2F;DeployIisAppPath&gt;</span><br><span class="line">    &lt;RemoteSitePhysicalPath &#x2F;&gt;</span><br><span class="line">    &lt;SkipExtraFilesOnServer&gt;True&lt;&#x2F;SkipExtraFilesOnServer&gt;</span><br><span class="line">    &lt;MSDeployPublishMethod&gt;WMSVC&lt;&#x2F;MSDeployPublishMethod&gt;</span><br><span class="line">    &lt;EnableMSDeployBackup&gt;True&lt;&#x2F;EnableMSDeployBackup&gt;</span><br><span class="line">    &lt;UserName&gt;$CSDPPci&lt;&#x2F;UserName&gt;</span><br><span class="line">    &lt;_SavePWD&gt;True&lt;&#x2F;_SavePWD&gt;</span><br><span class="line">    &lt;_DestinationType&gt;AzureWebSite&lt;&#x2F;_DestinationType&gt;</span><br><span class="line">    &lt;InstallAspNetCoreSiteExtension&gt;False&lt;&#x2F;InstallAspNetCoreSiteExtension&gt;</span><br><span class="line">  &lt;&#x2F;PropertyGroup&gt;</span><br><span class="line">&lt;&#x2F;Project&gt;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/09/07/Diagrams/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/09/07/Diagrams/" class="post-title-link" itemprop="url">设计图</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-09-07 13:48:06" itemprop="dateCreated datePublished" datetime="2020-09-07T13:48:06+08:00">2020-09-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-08 10:16:02" itemprop="dateModified" datetime="2020-09-08T10:16:02+08:00">2020-09-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="架构视图"><a href="#架构视图" class="headerlink" title="架构视图"></a>架构视图</h4><blockquote>
+<p>设计文档中要附有大量、各种各样的图，目的是为了与包括开发，项目，dba等角色达成更好的沟通</p>
+</blockquote>
+<ul>
+<li>逻辑视图</li>
+<li>开发视图</li>
+<li>过程视图（如泳道图）</li>
+<li>物理视图</li>
+<li>场景视图</li>
+</ul>
+<h4 id="Wireframe"><a href="#Wireframe" class="headerlink" title="Wireframe"></a>Wireframe</h4>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/09/03/WebTest/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -302,7 +682,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-16 13:29:27" itemprop="dateModified" datetime="2020-12-16T13:29:27+08:00">2020-12-16</time>
+                <time title="Modified: 2021-05-14 12:40:41" itemprop="dateModified" datetime="2021-05-14T12:40:41+08:00">2021-05-14</time>
               </span>
 
           
@@ -316,9 +696,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>课外：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/dotnet/architecture/modern-web-apps-azure/choose-between-traditional-web-and-single-page-apps">关于传统web app和SPA的选择</a><br>将单页面应用植入到ASP.Net<br></p>
+          <p>课外：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/dotnet/architecture/modern-web-apps-azure/choose-between-traditional-web-and-single-page-apps">关于传统web app和SPA的选择</a></p>
+<p>将单页面应用植入到ASP.Net<br></p>
 <h4 id="方式一：项目模板和spa中间件："><a href="#方式一：项目模板和spa中间件：" class="headerlink" title="方式一：项目模板和spa中间件："></a>方式一：项目模板和spa中间件：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">% 安装spa template pack</span><br><span class="line">dotnet new -i Microsoft.DotNet.Web.Spa.ProjectTemplates</span><br><span class="line">% 使用模板创建项目 </span><br><span class="line">dotnet new angular -n MyDotnetNgProject</span><br></pre></td></tr></table></figure>
-<p>angular is short for template”ASP. NET Core with Angular”, -n 指定项目名称，键入dotnet new –help查看选项参数说明。<br>项目大致结构</p>
+<p>angular is short for template”<span>ASP.NET</span> Core with Angular”, -n 指定项目名称，键入dotnet new –help查看选项参数说明。<br>项目大致结构</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">│   appsettings.json</span><br><span class="line">│   MyDotNetNgProject.csproj</span><br><span class="line">│   Program.cs</span><br><span class="line">│   Startup.cs</span><br><span class="line">├───ClientApp</span><br><span class="line">│   │   angular.json</span><br><span class="line">│   │   package.json</span><br><span class="line">│   │   tsconfig.json</span><br><span class="line">│   │   tslint.json</span><br><span class="line">│   ├───e2e</span><br><span class="line">│   │   └───src</span><br><span class="line">│   └───src</span><br><span class="line">│       ├───app</span><br><span class="line">│       │   ├───counter</span><br><span class="line">│       │   ├───fetch-data</span><br><span class="line">│       │   ├───home</span><br><span class="line">│       │   └───nav-menu</span><br><span class="line">│       ├───assets</span><br><span class="line">│       └───environments</span><br><span class="line">├───Controllers</span><br><span class="line">├───obj</span><br><span class="line">├───Pages</span><br><span class="line">├───Properties</span><br><span class="line">│       launchSettings.json</span><br><span class="line">└───wwwroot</span><br></pre></td></tr></table></figure>
 <p>整个前端项目以ClientApp目录为根目录，在ASP的Startup.Configure中调用spa中间件,如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">app.UseSpa(spa &#x3D;&gt; &#123;</span><br><span class="line">    &#x2F;&#x2F; To learn more about options for serving an Angular SPA from ASP.NET Core,</span><br><span class="line">    &#x2F;&#x2F; see https:&#x2F;&#x2F;go.microsoft.com&#x2F;fwlink&#x2F;?linkid&#x3D;864501</span><br><span class="line"></span><br><span class="line">    spa.Options.SourcePath &#x3D; &quot;ClientApp&quot;;</span><br><span class="line"></span><br><span class="line">    if (env.IsDevelopment())</span><br><span class="line">    &#123;</span><br><span class="line">        spa.UseAngularCliServer(npmScript: &quot;start&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
@@ -353,7 +734,7 @@
 <li>PropertyGroup, 声明编译过程中用到的变量，如一些路径，所谓的group，为了增强可读性，而将一组变量放在一个PropertyGroup中，其他的再放一个PropertyGroup<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;PropertyGroup&gt;</span><br><span class="line">  ...</span><br><span class="line">  &lt;SpaRoot&gt;ClientApp\&lt;&#x2F;SpaRoot&gt;</span><br><span class="line">&lt;&#x2F;PropertyGroup&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
 <li>ItemGroup, 顾名思义，存放集合的项，一个group中各项属性名相同，可以认为是类型为XX(即属性名)的一个集合，下例是第三方的package，另外也可以放其他模块所需的任意内容，用相应的属性标识出<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;ItemGroup&gt;</span><br><span class="line">  &lt;PackageReference Include&#x3D;&quot;EntityFrameworkCore.SqlServer.HierarchyId&quot; Version&#x3D;&quot;1.1.1&quot; &#x2F;&gt;</span><br><span class="line">  &lt;PackageReference Include&#x3D;&quot;Microsoft.AspNetCore.Mvc.NewtonsoftJson&quot; Version&#x3D;&quot;3.1.2&quot; &#x2F;&gt;</span><br><span class="line">  &lt;PackageReference Include&#x3D;&quot;Microsoft.AspNetCore.SpaServices.Extensions&quot; Version&#x3D;&quot;3.1.7&quot; &#x2F;&gt;</span><br><span class="line">  &lt;PackageReference Include&#x3D;&quot;Microsoft.EntityFrameworkCore.SqlServer&quot; Version&#x3D;&quot;3.1.7&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;ItemGroup&gt;</span><br></pre></td></tr></table></figure></li>
 <li>Target<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">  &lt;Target Name&#x3D;&quot;DebugEnsureNodeEnv&quot; BeforeTargets&#x3D;&quot;Build&quot; Condition&#x3D;&quot; &#39;$(Configuration)&#39; &#x3D;&#x3D; &#39;Debug&#39; And !Exists(&#39;$(SpaRoot)node_modules&#39;) &quot;&gt;</span><br><span class="line">  &lt;!-- Ensure Node.js is installed --&gt;</span><br><span class="line">  &lt;Exec Command&#x3D;&quot;node --version&quot; ContinueOnError&#x3D;&quot;true&quot;&gt;</span><br><span class="line">    &lt;Output TaskParameter&#x3D;&quot;ExitCode&quot; PropertyName&#x3D;&quot;ErrorCode&quot; &#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;Exec&gt;</span><br><span class="line">  &lt;Error Condition&#x3D;&quot;&#39;$(ErrorCode)&#39; !&#x3D; &#39;0&#39;&quot; Text&#x3D;&quot;Node.js is required to build and run this project. To continue, please install Node.js from https:&#x2F;&#x2F;nodejs.org&#x2F;, and then restart your command prompt or IDE.&quot; &#x2F;&gt;</span><br><span class="line">  &lt;Message Importance&#x3D;&quot;high&quot; Text&#x3D;&quot;Restoring dependencies using &#39;npm&#39;. This may take several minutes...&quot; &#x2F;&gt;</span><br><span class="line">  &lt;Exec WorkingDirectory&#x3D;&quot;$(SpaRoot)&quot; Command&#x3D;&quot;npm install&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;Target&gt;</span><br><span class="line"></span><br><span class="line">&lt;Target Name&#x3D;&quot;PublishRunWebpack&quot; AfterTargets&#x3D;&quot;ComputeFilesToPublish&quot;&gt;</span><br><span class="line">  &lt;!-- As part of publishing, ensure the JS resources are freshly built in production mode --&gt;</span><br><span class="line">  &lt;Exec WorkingDirectory&#x3D;&quot;$(SpaRoot)&quot; Command&#x3D;&quot;npm install&quot; &#x2F;&gt;</span><br><span class="line">  &lt;Exec WorkingDirectory&#x3D;&quot;$(SpaRoot)&quot; Command&#x3D;&quot;npm run build -- --prod&quot; &#x2F;&gt;</span><br><span class="line">  &lt;Exec WorkingDirectory&#x3D;&quot;$(SpaRoot)&quot; Command&#x3D;&quot;npm run build:ssr -- --prod&quot; Condition&#x3D;&quot; &#39;$(BuildServerSideRenderer)&#39; &#x3D;&#x3D; &#39;true&#39; &quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">  &lt;!-- Include the newly-built files in the publish output --&gt;</span><br><span class="line">  &lt;ItemGroup&gt;</span><br><span class="line">    &lt;DistFiles Include&#x3D;&quot;$(SpaRoot)dist\**; $(SpaRoot)dist-server\**&quot; &#x2F;&gt;</span><br><span class="line">    &lt;DistFiles Include&#x3D;&quot;$(SpaRoot)node_modules\**&quot; Condition&#x3D;&quot;&#39;$(BuildServerSideRenderer)&#39; &#x3D;&#x3D; &#39;true&#39;&quot; &#x2F;&gt;</span><br><span class="line">    &lt;ResolvedFileToPublish Include&#x3D;&quot;@(DistFiles-&gt;&#39;%(FullPath)&#39;)&quot; Exclude&#x3D;&quot;@(ResolvedFileToPublish)&quot;&gt;</span><br><span class="line">      &lt;RelativePath&gt;%(DistFiles.Identity)&lt;&#x2F;RelativePath&gt;</span><br><span class="line">      &lt;CopyToPublishDirectory&gt;PreserveNewest&lt;&#x2F;CopyToPublishDirectory&gt;</span><br><span class="line">      &lt;ExcludeFromSingleFile&gt;true&lt;&#x2F;ExcludeFromSingleFile&gt;</span><br><span class="line">    &lt;&#x2F;ResolvedFileToPublish&gt;</span><br><span class="line">  &lt;&#x2F;ItemGroup&gt;</span><br><span class="line">&lt;&#x2F;Target&gt;</span><br></pre></td></tr></table></figure>
-上例是ASP. NET Core with Angular模板项目使用的build target，两种编译环境，而且其中还有条件语句，有点厉害</li>
+上例是<span>ASP.NET</span> Core with Angular模板项目使用的build target，两种编译环境，而且其中还有条件语句，有点厉害</li>
 </ul>
 
       
@@ -584,391 +965,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/08/04/vtk/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/08/04/vtk/" class="post-title-link" itemprop="url">vtk</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-08-04 10:03:13" itemprop="dateCreated datePublished" datetime="2020-08-04T10:03:13+08:00">2020-08-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-08-06 16:38:49" itemprop="dateModified" datetime="2020-08-06T16:38:49+08:00">2020-08-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>The Rendering Engine<br>mapper</p>
-<h4 id="vtkActor"><a href="#vtkActor" class="headerlink" title="vtkActor"></a>vtkActor</h4><p>派生自vtkProp类，渲染场景中数据的可视化表达是通过vtkProp的子类负责的。<del>比如，本例要渲染一个柱体，柱体的数据类型是vtkPolyData，</del>数据要在场景中渲染时，不是直接把数据加入渲染场景就可以，待渲染的数据是以vtkProp对象存在于渲染场景中。</p>
-<p>三维空间中渲染对象最常用的vtkProp子类是vtkActor(表达场景中的几何数据)和vtkVolume(表达场景中的体数据)；二维空间中的数据则是用vtkActor2D表达。</p>
-<p>vtkProp子类负责确定渲染场景中对象的位置、大小和方向信息。Prop依赖于两个对象(Prop一词来源于戏剧里的“道具”，在VTK里表示的是渲染场景中可以看得到的对象。)，一个是Mapper(vtkMapper)对象，负责存放数据和渲染信息，另一个是属性(vtkProperty)对象，负责控制颜色、不透明度等参数。</p>
-<p>VTK中定义了大量(超过50个)的Prop类，如vtkImageActor(负责图像显示)和vtkPieChartActor(用于创建数组数据的饼图可视化表达)。其中的一些Prop内部直接包括了控制显示的参数和待渲染数据的索引，因此并不需要额外的Property和Mapper对象。vtkActor的子类vtkFollower可以自动的更新方向信息以保持始终面向一个特定的相机。这样无论怎样旋转，三维场景中的广告板(Billboards)或者文本都是可见的。vtkActor的子类vtkLODActor可以自动改变自身的几何表达来实现需要达到的交互帧率。vtkProp3D的子类vtkLODProp3D则是通过从许多Mapper(可以是体数据的Mapper和几何数据的Mapper集合)中进行选择来实现交互。vtkAssembly建立Actor的等级结构以便在整个结构平移、旋转或者缩放时能够更合理的控制变换。</p>
-<p>vtkActor::SetMapper()——设置生成几何图元的Mapper。即连接一个Actor到可视化pipeline的末端(可视化pipeline的末端就是Mapper)。</p>
-<h4 id="vtkMapper"><a href="#vtkMapper" class="headerlink" title="vtkMapper"></a>vtkMapper</h4><p>将输入的数据转换为几何图元(点、线、多边形)进行渲染。</p>
-<h4 id="vtkRenderWindow"><a href="#vtkRenderWindow" class="headerlink" title="vtkRenderWindow"></a>vtkRenderWindow</h4><p>连接操作系统与VTK渲染引擎</p>
-<h4 id="vtkRenderer"><a href="#vtkRenderer" class="headerlink" title="vtkRenderer"></a>vtkRenderer</h4><p>负责管理场景的渲染过程。组成场景的所有对象包括Prop，照相机(Camera)和光照(Light)都被集中在一个vtkRenderer对象中。父类vtkViewport。一个vtkRenderWindow中可以有多个vtkRenderer对象，而这些vtkRenderer可以渲染在窗口中不同的矩形区域中(即视口)，或者覆盖整个窗口区域。</p>
-<ul>
-<li><p>vtkRenderer::AddActor()</p>
-</li>
-<li><p>vtkRenderer::SetBackground()</p>
-<h4 id="Interactor"><a href="#Interactor" class="headerlink" title="Interactor"></a>Interactor</h4><p>提供平台独立的响应鼠标、键盘和时钟事件的交互机制，通过VTK的Command/Observer设计模式将监听到的特定平台的鼠标、键盘和时钟事件交由vtkInteractorObserver或其子类，如vtkInteractorStyle进行处理。vtkInteractorStyle等监听这些消息并进行处理以完成旋转、拉伸和放缩等运动控制。vtkRenderWindowInteractor自动建立一个默认的3D场景交互器样式(Interactor Style)：vtkInteractorStyleSwitch，当然你也可以选择其他的交互器样式，或者是创建自己的交互器样式。在本例中，我们就是选择了其他的交互器样式来替代默认的：vtkInteractorStyleTrackballCamera</p>
-</li>
-<li><p>vtkRenderWindowInteractor::SetRenderWindow()——设置渲染窗口，消息是通过渲染窗口捕获到的，所以必须要给交互器对象设置渲染窗口。</p>
-</li>
-<li><p>vtkRenderWindowInteractor::SetInteractorStyle()——定义交互器样式，默认的交互样式为vtkInteractorStyleSwitch。</p>
-</li>
-<li><p>vtkRenderWindowInteractor::Initialize() ——为处理窗口事件做准备，交互器工作之前必须先调用这个方法进行初始化。</p>
-</li>
-<li><p>vtkRenderWindowInteractor::Start() ——开始进入事件响应循环，交互器处于等待状态，等待用户交互事件的发生。进入事件响应循环之前必须先调用Initialize()方法。</p>
-</li>
-</ul>
-<h4 id="vtkInteractorStyleTrackballCamera"><a href="#vtkInteractorStyleTrackballCamera" class="headerlink" title="vtkInteractorStyleTrackballCamera"></a>vtkInteractorStyleTrackballCamera</h4><p>交互器样式的一种，该样式下，用户是通过控制相机对物体作旋转、放大、缩小等操作。</p>
-<p><img src="https://tvax2.sinaimg.cn/large/a60edd42gy1ghelso7vv1j20gz08paaw.jpg" alt="vtk scope"></p>
-<h4 id="pipeline"><a href="#pipeline" class="headerlink" title="pipeline"></a>pipeline</h4><h4 id="官方-paraview"><a href="#官方-paraview" class="headerlink" title="官方 paraview"></a>官方 paraview</h4>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/30/Redux/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/07/30/Redux/" class="post-title-link" itemprop="url">Redux</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2020-07-30 10:52:25 / Modified: 10:52:26" itemprop="dateCreated datePublished" datetime="2020-07-30T10:52:25+08:00">2020-07-30</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/27/CSharp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/07/27/CSharp/" class="post-title-link" itemprop="url">C#</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-07-27 10:45:30" itemprop="dateCreated datePublished" datetime="2020-07-27T10:45:30+08:00">2020-07-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-02 10:39:39" itemprop="dateModified" datetime="2021-04-02T10:39:39+08:00">2021-04-02</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="decimal"><a href="#decimal" class="headerlink" title="decimal"></a>decimal</h4><p>因为float计算时有精度损耗，而且产生损耗时在程序中并不提示，于是创建decimal类型，付出额外的性能，进行高精度计算</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">decimal d&#x3D;1.23M</span><br></pre></td></tr></table></figure>
-<h4 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foreach (Object item in items)&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="string-format"><a href="#string-format" class="headerlink" title="string format"></a>string format</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String result &#x3D; $&quot;the value is &#123;value&#125;&quot;</span><br></pre></td></tr></table></figure>
-<p>见<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/tokens/interpolated">Mircrosoft Docs: C#字符串内插</a></p>
-<p>string list 分隔</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String.Join(&quot;,&quot;, list)</span><br></pre></td></tr></table></figure>
-<h4 id="IEnumerable-Select"><a href="#IEnumerable-Select" class="headerlink" title="IEnumerable.Select"></a>IEnumerable<T>.Select</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vm.children &#x3D; parentList.Select(parentItem &#x3D;&gt; parentItem.Child).ToList();</span><br></pre></td></tr></table></figure>
-<h4 id="委托Delegate"><a href="#委托Delegate" class="headerlink" title="委托Delegate"></a>委托Delegate</h4><blockquote>
-<p>C# 中的委托（Delegate）类似于 C 或 C++ 中函数的指针, 是一种引用类型变量</p>
-</blockquote>
-<h4 id="初始化Object"><a href="#初始化Object" class="headerlink" title="初始化Object"></a>初始化Object</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">result.data &#x3D;new &#123;</span><br><span class="line">        List &#x3D; itemList,</span><br><span class="line">        Total &#x3D; itemsTotal</span><br><span class="line"> &#125;;</span><br><span class="line"></span><br><span class="line">result &#x3D; await _context.OurBrand</span><br><span class="line">        .Where(brand &#x3D;&gt; brand.name !&#x3D; &quot;QQsIndustry&quot;)</span><br><span class="line">        .Select(brand&#x3D;&gt;new JObject&#123;&#123;&quot;name&quot;, brand.name&#125;, &#123;&quot;logo&quot;, brand.logo&#125;&#125;)</span><br><span class="line">        .ToListAsync();</span><br></pre></td></tr></table></figure>
-<h4 id="正则表达式极其校验"><a href="#正则表达式极其校验" class="headerlink" title="正则表达式极其校验"></a>正则表达式极其校验</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">string pattern &#x3D; @&quot;^[A-Z]&#123;4&#125;[AB0-9][0-9]&#123;3&#125;$&quot;;</span><br><span class="line">flag &#x3D; Regex.IsMatch(sn, pattern)</span><br></pre></td></tr></table></figure>
-<h4 id="HttpWebRequest"><a href="#HttpWebRequest" class="headerlink" title="HttpWebRequest"></a>HttpWebRequest</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">public async Task&lt;MyResult&gt; SendHttpRequestAsync(string uri, Object postData, string token)&#123;</span><br><span class="line">    </span><br><span class="line">    HttpWebRequest request &#x3D; WebRequest.CreateHttp(uri); &#x2F;&#x2F; TODO deal with exception</span><br><span class="line">    </span><br><span class="line">    request.Headers.Add(&quot;Authorization&quot;, string.Format(&quot;Bearer &#123;0&#125;&quot;, token));</span><br><span class="line">    request.ContentType &#x3D; @&quot;application&#x2F;json&quot;;</span><br><span class="line">    request.Method &#x3D; @&quot;Post&quot;;</span><br><span class="line">    request.Host &#x3D; GetHost(uri);</span><br><span class="line">    request.Timeout &#x3D; 60000;</span><br><span class="line"></span><br><span class="line">    byte[] data &#x3D; Encoding.UTF8.GetBytes(JsonUtility.ObjToJson(postData));</span><br><span class="line">    request.ContentLength &#x3D; data.Length;</span><br><span class="line"></span><br><span class="line">    using (var stream &#x3D; request.GetRequestStream())</span><br><span class="line">    &#123;</span><br><span class="line">        stream.Write(data, 0, data.Length);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    try&#123;</span><br><span class="line">        using (WebResponse response &#x3D; await request.GetResponseAsync())</span><br><span class="line">        &#123;</span><br><span class="line">            using (var receiveStream &#x3D; response.GetResponseStream())</span><br><span class="line">            &#123;</span><br><span class="line">                using (var reader &#x3D; new StreamReader(receiveStream)) &#x2F;&#x2F; TODO deal with System.ArgumentNullException</span><br><span class="line">                &#123;</span><br><span class="line">                    if (reader !&#x3D; null)</span><br><span class="line">                    &#123;</span><br><span class="line">                        var responseString &#x3D; System.Web.HttpUtility.HtmlDecode(reader.ReadToEnd().Trim());</span><br><span class="line">                        return JsonUtility.JsonToObj&lt;MyResult&gt;(response);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;catch(WebException ex)&#123;</span><br><span class="line">        string message;</span><br><span class="line">        WebResponse errorResponse &#x3D; ex.Response;</span><br><span class="line">        if (errorResponse !&#x3D; null)</span><br><span class="line">        &#123;</span><br><span class="line">            using (Stream responseStream &#x3D; errorResponse.GetResponseStream())</span><br><span class="line">            &#123;</span><br><span class="line">                StreamReader reader &#x3D; new StreamReader(responseStream, Encoding.GetEncoding(&quot;utf-8&quot;));</span><br><span class="line">                message &#x3D; reader.ReadToEnd();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            throw new Exception(&quot;Unknown&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上例中的发送/接收用了流读写的方式，估计这也是所有封装Http请求的通用原理，注意catch块中对WebException的处理，这样可以看到服务端返回的所有信息，相当于用postman调用失败后看到的错误信息，比error code 或 ‘Bad Request’描述丰富<br>参考: <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/692342/net-httpwebrequest-getresponse-raises-exception-when-http-status-code-400-ba">StackOverflow: HttpWebRequest 400 Bad Request</a>, <a target="_blank" rel="noopener" href="https://blog.csdn.net/zhruifei/article/details/78356347">HttpWebRequest详细用法</a></p>
-<h4 id="文件接口"><a href="#文件接口" class="headerlink" title="文件接口"></a>文件接口</h4><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/347734073">IFormFile</a></p>
-<h4 id="Regex"><a href="#Regex" class="headerlink" title="Regex"></a>Regex</h4><p>email 地址校验前进行域名转码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">try</span><br><span class="line">&#123;</span><br><span class="line">    email &#x3D; Regex.Replace(email, @&quot;(@)(.+)$&quot;, DomainMapper,</span><br><span class="line">                        RegexOptions.None, TimeSpan.FromMilliseconds(200));</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; Examines the domain part of the email and normalizes it.</span><br><span class="line">    string DomainMapper(Match match)</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F; Use IdnMapping class to convert Unicode domain names.</span><br><span class="line">        var idn &#x3D; new IdnMapping();</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; Pull out and process domain name (throws ArgumentException on invalid)</span><br><span class="line">        string domainName &#x3D; idn.GetAscii(match.Groups[2].Value);</span><br><span class="line"></span><br><span class="line">        return match.Groups[1].Value + domainName;</span><br><span class="line">    &#125;</span><br><span class="line">catch (RegexMatchTimeoutException e)</span><br><span class="line">&#123;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br><span class="line">catch (ArgumentException e)</span><br><span class="line">&#123;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br><span class="line">try</span><br><span class="line">&#123;</span><br><span class="line">    return Regex.IsMatch(email,</span><br><span class="line">        @&quot;^[^@\s]+@[^@\s]+\.[^@\s]+$&quot;,</span><br><span class="line">        RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));</span><br><span class="line">&#125;</span><br><span class="line">catch (RegexMatchTimeoutException)</span><br><span class="line">&#123;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/dotnet/api/system.globalization.idnmapping.getascii?view=net-5.0">IdnMapping.GetAscii</a>:将包含 US-ASCII 字符范围以外的Unicode字符的域名称标签字符串编码为（U+0020 至 U+007E）内的可显示 Unicode 字符的字符串</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/27/dotNetCore-Middleware/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/07/27/dotNetCore-Middleware/" class="post-title-link" itemprop="url">.Net Core 中间件</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-07-27 10:14:04" itemprop="dateCreated datePublished" datetime="2020-07-27T10:14:04+08:00">2020-07-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-14 17:02:24" itemprop="dateModified" datetime="2021-04-14T17:02:24+08:00">2021-04-14</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这里的中间件概念和express.js中的是一致的,</p>
-<p>下面栗子的代码来源： <a target="_blank" rel="noopener" href="https://juejin.im/entry/5b39c743e51d4558a21fad54">Net Core中间件封装原理示例demo解析</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public static class RequestIpExtensions</span><br><span class="line">&#123;</span><br><span class="line">    public static IApplicationBuilder UseRequestIp(this IApplicationBuilder builder)</span><br><span class="line">    &#123;</span><br><span class="line">        return builder.UseMiddleware&lt;RequestIPMiddleware&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>each middleware extension method is exposed on IApplicationBuilder through the Microsoft.AspNetCore.Builder namespace. 通过IApplicationBuilder接口方法引入中间件，IApplicationBuilder由Microsoft.AspNetCore.Builder命名空间提供</p>
-</blockquote>
-<p>中间件的具体实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class RequestIPMiddleware</span><br><span class="line">&#123;</span><br><span class="line">    private readonly RequestDelegate _next;</span><br><span class="line">    private readonly ILogger _logger;</span><br><span class="line"></span><br><span class="line">    public RequestIPMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)</span><br><span class="line">    &#123;</span><br><span class="line">        _next &#x3D; next;</span><br><span class="line">        _logger &#x3D; loggerFactory.CreateLogger&lt;RequestIPMiddleware&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public async Task Invoke(HttpContext context)</span><br><span class="line">    &#123;</span><br><span class="line">        _logger.LogInformation(&quot;User Ip: &quot; + context.Connection.RemoteIpAddress.ToString());</span><br><span class="line">        await _next.Invoke(context);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用中间<br><br>Startup.cs</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void Configure(IApplicationBuilder app, IHostingEnvironment env)</span><br><span class="line">&#123;</span><br><span class="line">    ....</span><br><span class="line">    app.UseRequestIp();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/22/WebDev-OtherStories/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/07/22/WebDev-OtherStories/" class="post-title-link" itemprop="url">WebDev_OtherStories</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-07-22 10:11:02" itemprop="dateCreated datePublished" datetime="2020-07-22T10:11:02+08:00">2020-07-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-28 09:49:18" itemprop="dateModified" datetime="2021-01-28T09:49:18+08:00">2021-01-28</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="js的特点"><a href="#js的特点" class="headerlink" title="js的特点"></a>js的特点</h4><blockquote>
-<p>the part that is good is not original, and the part that is original is not good.</p>
-</blockquote>
-<h4 id="关于浏览器"><a href="#关于浏览器" class="headerlink" title="关于浏览器"></a>关于浏览器</h4><p><a target="_blank" rel="noopener" href="https://juejin.im/post/5aa5cb846fb9a028e25d2fb1">从url到页面显示</a></p>
-<ul>
-<li>“user agent stylesheet”用户代理样式，浏览器默认样式，无法在开发者模式中修改</li>
-</ul>
-<h4 id="js-事件"><a href="#js-事件" class="headerlink" title="js 事件"></a>js 事件</h4><ul>
-<li>原生js并没有document.ready事件，<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000016574288">document.ready和window.onload</a></li>
-</ul>
-<h4 id="前后端分离和SPA"><a href="#前后端分离和SPA" class="headerlink" title="前后端分离和SPA"></a>前后端分离和SPA</h4><p>显然前后端分离不一定非要做成SPA，但是SPA被认为是前后端分离的最佳实践：<br>前后端分离的初衷是对后台服务的优化，即将静态资源的传输移出后台逻辑，分离后前后端之间的接口只提供数据。<br><br>SPA的出现是“复用一切可复用”的设计原则的体现，即根据交互仅对局部视图更新，其他部分复用。<br><br>也就是说，SPA和前后端分离同样是解决可复用内容（包括页面模板）的问题，如果你的产品有必要做这个问题的优化，那么前后端分离和SPA就自然而然地成为选择。</p>
-<h4 id="浏览器信息"><a href="#浏览器信息" class="headerlink" title="浏览器信息"></a>浏览器信息</h4><p>window.navigator.userAgent 参考<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/NavigatorID/userAgent">MDN Web API</a><br>输出如 “Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36”<br>Caution! 该属性可修改 无法确保准确性</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/qqsnote/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/20/">20</a><a class="extend next" rel="next" href="/qqsnote/page/7/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/qqsnote/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/21/">21</a><a class="extend next" rel="next" href="/qqsnote/page/7/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1034,18 +1034,18 @@
       <div class="site-state-item site-state-posts">
           <a href="/qqsnote/archives/">
         
-          <span class="site-state-item-count">196</span>
+          <span class="site-state-item-count">201</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/qqsnote/categories/">
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/qqsnote/tags/">
-        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-count">81</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1056,7 +1056,7 @@
       </div>
 
       <div class="tag-cloud-tags">
-        <a href="/qqsnote/tags/Net/" style="font-size: 26px; color: #f4f4f4">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 14px; color: #d2d2d2">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 26px; color: #f4f4f4">Azure</a> <a href="/qqsnote/tags/C/" style="font-size: 16px; color: #d7d7d7">C#</a> <a href="/qqsnote/tags/CSS/" style="font-size: 20px; color: #e3e3e3">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 14px; color: #d2d2d2">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 18px; color: #ddd">Docker</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16px; color: #d7d7d7">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 14px; color: #d2d2d2">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 20px; color: #e3e3e3">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 24px; color: #eee">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 20px; color: #e3e3e3">Node.js</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/Python/" style="font-size: 22px; color: #e8e8e8">Python</a> <a href="/qqsnote/tags/React/" style="font-size: 16px; color: #d7d7d7">React</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 16px; color: #d7d7d7">SQL_Server</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 12px; color: #ccc">TypeScript</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 14px; color: #d2d2d2">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 16px; color: #d7d7d7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 14px; color: #d2d2d2">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28px; color: #f9f9f9">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 14px; color: #d2d2d2">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 12px; color: #ccc">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14px; color: #d2d2d2">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16px; color: #d7d7d7">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 12px; color: #ccc">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 14px; color: #d2d2d2">多语言</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12px; color: #ccc">性能优化</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 14px; color: #d2d2d2">数据库</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14px; color: #d2d2d2">算法</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 22px; color: #e8e8e8">认证&授权</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12px; color: #ccc">面试</a>
+        <a href="/qqsnote/tags/Net/" style="font-size: 26.4px; color: #f5f5f5">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.8px; color: #d1d1d1">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24.6px; color: #f0f0f0">Azure</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C#</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.2px; color: #e0e0e0">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 13.8px; color: #d1d1d1">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 17.4px; color: #dbdbdb">Docker</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.6px; color: #d6d6d6">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.8px; color: #d1d1d1">EntityFramework</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.8px; color: #d1d1d1">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 19.2px; color: #e0e0e0">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.8px; color: #ebebeb">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 19.2px; color: #e0e0e0">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 12px; color: #ccc">OData</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/Python/" style="font-size: 21px; color: #e6e6e6">Python</a> <a href="/qqsnote/tags/React/" style="font-size: 17.4px; color: #dbdbdb">React</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 17.4px; color: #dbdbdb">SQL_Server</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 12px; color: #ccc">TypeScript</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 13.8px; color: #d1d1d1">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 15.6px; color: #d6d6d6">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.8px; color: #d1d1d1">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.2px; color: #fafafa">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.8px; color: #d1d1d1">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 12px; color: #ccc">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 13.8px; color: #d1d1d1">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.6px; color: #d6d6d6">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 12px; color: #ccc">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.8px; color: #d1d1d1">多语言</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12px; color: #ccc">性能优化</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px; color: #ccc">数据库</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.8px; color: #d1d1d1">算法</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12px; color: #ccc">面试</a>
       </div>
     </div>
   </aside>
