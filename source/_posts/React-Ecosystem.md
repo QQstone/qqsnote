@@ -35,7 +35,8 @@ https://www.zhihu.com/question/65479147/answer/942582216)</sup>
 [更骚的create-react-app开发环境配置craco](https://cloud.tencent.com/developer/article/1749704)
 从create-react-app开始配置(关于create-react-app见{% post_link React React %})
 ```
-npx create-react-app my-project
+npx create-react-app my-project 
+npx create-react-app my-project --template typescript
 yarn add antd @craco/craco craco-less @babel/plugin-proposal-decorators babel-plugin-import -D
 ```
 添加craco配置 craco.conf.js，即模块化配置，根据所需的资源参考方案：https://github.com/gsoft-inc/craco/tree/master/recipes

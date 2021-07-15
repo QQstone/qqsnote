@@ -6,6 +6,13 @@ tags:
 categories: 
 - 数据库
 ---
+#### 命令
+```
+sqlcmd -S .\SqlExpress
+NET START/PAUSE/CONTINUE/STOP/ MSSQLSERVER
+```
+QQs未能成功实践。。
+或者，任务管理器手动启动 MSSQL$SQLEXPRESS 
 #### schema
 在MySQL中schema的概念和database一致<br>
 但是微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner<br>

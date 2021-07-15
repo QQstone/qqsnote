@@ -2,7 +2,7 @@
 title: 关系型数据库和非关系型数据库
 date: 2019-08-19 14:11:51
 tags:
-- 数据库
+- NoSQL
 categories: 
 - 数据库
 ---

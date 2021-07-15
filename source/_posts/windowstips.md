@@ -70,3 +70,5 @@ b. 命令行(分两步：删除文件；删除目录)
 del /s/f/q node_modules
 rmdir /s/q node_modules
 ```
+#### 信任来自开发机的SSL证书(https)
+[将计算机配置为信任 IIS Express 证书](https://docs.microsoft.com/zh-cn/troubleshoot/visualstudio/general/warnings-untrusted-certificate#method-2-configure-computers-to-trust-the-iis-express-certificate)

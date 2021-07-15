@@ -79,3 +79,9 @@ git push --tags bitbucket
 remote tracking branch是一个引用(reference),表示是远端分支的状态，不应被修改
 
 stale branch是远端已经移除的remote tracking branch[StackOverflow:What is a “stale” git branch?](https://stackoverflow.com/questions/29112156/what-is-a-stale-git-branch)
+
+#### git log
+退出日志文本是按q，同vim
+
+查看所有分支对当前目录的修改，并显示所修改文件:
+git log --stat --graph --all

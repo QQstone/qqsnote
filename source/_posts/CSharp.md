@@ -4,6 +4,8 @@ date: 2020-07-27 10:45:30
 tags:
 - .Net
 - C#
+categories: 
+- 后端技术
 ---
 #### decimal
 因为float计算时有精度损耗，而且产生损耗时在程序中并不提示，于是创建decimal类型，付出额外的性能，进行高精度计算
@@ -146,3 +148,18 @@ catch (RegexMatchTimeoutException)
 }
 ```
 [IdnMapping.GetAscii](https://docs.microsoft.com/zh-cn/dotnet/api/system.globalization.idnmapping.getascii?view=net-5.0):将包含 US-ASCII 字符范围以外的Unicode字符的域名称标签字符串编码为（U+0020 至 U+007E）内的可显示 Unicode 字符的字符串
+
+#### sealed class
+
+#### [catch when](https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/keywords/when)
+```
+try
+{
+    await _dbContext.SaveChangesAsync();
+}
+// Is this error due to device SerialNumber constraint violation?
+catch (SqlUniqueConstraintViolationError ex) when (ex.Message.Contains(device.SerialNumber))
+{
+    throw new DataException($"A device with the same serial number ({device.SerialNumber}) already exist.", ex);
+}
+```

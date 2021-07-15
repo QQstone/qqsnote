@@ -72,6 +72,10 @@ const source = { b: 4, c: 5 };
 
 const returnedTarget = Object.assign(target, source); // expected output: Object { a: 1, b: 4, c: 5 }
 ```
+用法用途
++ 浅拷贝 cloneObj = Object.assign({}, ...sources)
++ 覆盖目标同名属性
++ 合并数组 实际上是覆盖序号属性值 即Object.assign([1,2,3], [4,5]) // [4,5,3]
 ### 箭头函数表达式
 ```
   const squaredIntegers = arr.filter(item=>{

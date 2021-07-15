@@ -133,3 +133,44 @@ use csc;
 show tables;
 ```
 #### key, primary key, unique key
+
+#### 分组取第一条
+MySQl 8 之前的版本不支持partition by
+```
+select * from
+(
+select *,row_number() over(partition by Grade order by Score desc) as Sequence from Student
+)T where T.Sequence<=1
+```
+workaround
+```
+SELECT 
+        t1.*
+    FROM
+        action_history t1
+    INNER JOIN (SELECT 
+        MAX(timestramp) AS newest, process_id
+    FROM
+        action_history
+    GROUP BY process_id) t2 ON t2.process_id = t1.process_id
+        AND t2.newest = t1.timestramp
+```
+
+#### 加/减后缀
+```
+UPDATE all_user 
+SET 
+    email = CONCAT(email, '_disabled')
+WHERE
+    email NOT LIKE '%yopmail.com'
+        AND user_id < 108
+```
+去后缀，即取该字段的左起（总长度-后缀长度）个字符
+```
+UPDATE all_user 
+SET 
+    email = LEFT(email, LENGTH(email) - 9)
+WHERE
+    email NOT LIKE '%yopmail.com'
+        AND user_id < 108
+```

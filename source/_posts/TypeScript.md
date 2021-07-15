@@ -6,7 +6,11 @@ tags:
 categories: 
 - 前端技术
 ---
-[官方Doc]()
+QQs：TS相比ES————静态类型，代码的可读性和可维护性
+TS相比ES不只是静态类型，还有Class Interface Generics(泛型) Enum等
+辩证地看，也有它地缺点如学习成本，搭框架地额外成本，与js库的兼容性，额外的编译过程等
+[官方Doc](https://www.tslang.cn/docs/home.html)
+[在线编译器](https://www.typescriptlang.org/zh/play)
 #### 调试
 方法一 <br>
 npm install typescript<br>

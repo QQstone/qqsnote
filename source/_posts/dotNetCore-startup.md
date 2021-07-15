@@ -3,6 +3,8 @@ title: .Net Core 入坑
 date: 2020-05-09 13:40:00
 tags:
 - .Net
+categories: 
+- 后端技术
 ---
 #### .net core
 > [.NET Core](https://docs.microsoft.com/zh-cn/dotnet/core/introduction) 是一个通用的开放源代码开发平台。 可以使用多种编程语言针对 x64、x86、ARM32 和 ARM64 处理器创建适用于 Windows、macOS 和 Linux 的 .NET Core 应用。 为云、IoT、客户端 UI 和机器学习提供了框架和 API。
@@ -27,7 +29,7 @@ tags:
   依赖关系注入
   筛选器
   Areas
-  Web API
+  [Web API](https://docs.microsoft.com/zh-cn/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio)
   Testability
   Razor查看引擎
   强类型视图
@@ -411,3 +413,6 @@ public Guid ID
 
 #### 配置多个环境
 https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/environments?view=aspnetcore-3.1
+
+#### solution和projects
+[多项目解决方案(class library projects)](https://medium.com/swlh/creating-a-multi-project-net-core-database-solution-a69decdf8d7e)
