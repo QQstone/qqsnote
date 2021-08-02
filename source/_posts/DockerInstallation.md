@@ -22,9 +22,11 @@ categories:
     ```
     docker search httpd
 
-    docker pull httpd
+    docker pull httpd:latest
     ```
     > 这里的Docker Hub相当于npmjs.org仓库，镜像是容器的模板，镜像之于容器，如同class之于object。这里的httpd称为应用容器镜像，是包含指定应用的环境。
+
+    latest 是版本tag，下载非latest的指定版本镜像只能查Docker Hub
 + 删除镜像 docker image rm hello-world
 
 + 启动容器 docker container run [OPTIONS] IMAGE [COMMAND]

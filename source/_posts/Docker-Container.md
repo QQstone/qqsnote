@@ -81,3 +81,12 @@ docker ps列表容器
 ```
 docker run ubuntu /bin/bash -c "while true; do echo docker connected; sleep 5; done" // 每5s 输出一次
 ```
+
+#### docker for mysql 5.7
+```
+docker pull mysql:5.7
+docker run --name mysql_57_instance -v /home/qqs/Workspace/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7
+docker exec -it mysql_57_instance bash
+mysql -u root -p
+...
+```

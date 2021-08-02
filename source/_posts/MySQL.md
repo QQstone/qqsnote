@@ -56,6 +56,7 @@ CentOS<br>
 见/etc/my.conf指定了配置目录<br>
 曾修改主机ip时mysql启动失败（查看状态:service mysqld status），现象是在本地登录mysql -u xxx -p验证密码后报异常:<br>
 <i>ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock'</i>
+
 #### 数据库时间
 ```
 select now();// yyyy-MM-dd hh24:mi:ss
@@ -174,3 +175,14 @@ WHERE
     email NOT LIKE '%yopmail.com'
         AND user_id < 108
 ```
+#### 查询各表数据条数
+```
+USE information_schema;
+SELECT table_name,table_rows FROM TABLES WHERE TABLE_SCHEMA = 'ams' 
+```
+#### MySQL Utilities
+数据库更新工具 
+```
+$ mysqldbcompare --server1=admin:admin@10.196.98.83:3306 --server2=admin:admin@10.196.98.107:3306 ams:ams --run-all-tests --changes-for=server1 --difftype=sql >> d:\temp\diff.sql
+```
+该工具依赖表mysql.proc, mysql.event已在mysql8以上版本移除，如有需要宜寻5.7等版本数据库导出

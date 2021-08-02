@@ -163,3 +163,188 @@ catch (SqlUniqueConstraintViolationError ex) when (ex.Message.Contains(device.Se
     throw new DataException($"A device with the same serial number ({device.SerialNumber}) already exist.", ex);
 }
 ```
+#### Http Request
+```
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using QQsProj.Models;
+
+namespace QQsProj.Utilities
+{
+    internal class HttpUtility
+    {
+        public static async Task<string> DoHttpRequestAsync(string host, string uri, string postData,
+                                                        string contentType, HttpMethod method,
+                                                        string token)
+        {
+            HttpWebRequest request = CreateHttpRequest(host, uri, method, contentType, token);
+            if (request == null)
+            {
+                return string.Empty;
+            }
+
+            request.Timeout = 60000;
+
+            if (postData != null)
+            {
+                byte[] byte1 = Encoding.UTF8.GetBytes(postData);
+                request.ContentLength = byte1.Length;
+
+                using (var stream = request.GetRequestStream())
+                {
+                    stream.Write(byte1, 0, byte1.Length);
+                }
+            }
+            else
+            {
+                request.ContentLength = 0;
+            }
+            try
+            {
+                using (var response = await request.GetResponseAsync())
+                {
+                    using (var receiveStream = response.GetResponseStream())
+                    {
+                        using (var reader = new StreamReader(receiveStream))
+                        {
+                            if (reader != null)
+                            {
+                                return System.Web.HttpUtility.HtmlDecode(reader.ReadToEnd().Trim());
+                            }
+                        }
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                using (HttpWebResponse httpResponse = (HttpWebResponse)ex.Response)
+                {
+                    if (httpResponse != null && httpResponse.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        var strToken = await EventManager.TokenExpired();
+                        return await DoHttpRequestAsync(null, uri, postData, contentType, method, strToken);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private static HttpWebRequest CreateHttpRequest(string host, string uri, HttpMethod method,
+                                                        string conentType, string token)
+        {
+            HttpWebRequest request = WebRequest.CreateHttp(uri);
+            if (!string.IsNullOrEmpty(token))
+            {
+                request.Headers.Add("Authorization", string.Format("Bearer {0}", token));
+            }
+            request.ContentType = conentType;
+            request.Method = method.ToString();
+            if (!string.IsNullOrEmpty(host))
+            {
+                request.Host = host;
+            }****
+
+            return request;
+        }
+    }
+}
+```
+#### 反序列化
+JsonUtility.cs
+```
+using System.IO;
+using System.Runtime.Serialization.Json;
+using System.Text;
+
+namespace QQsProj.Utilities
+{
+    internal class JsonUtility
+    {
+        public static string ObjToJson<T>(T obj)
+        {
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(obj.GetType());
+            string retVal = string.Empty;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                serializer.WriteObject(ms, obj);
+                retVal = Encoding.UTF8.GetString(ms.ToArray());
+            }
+            return retVal;
+        }
+
+        public static T JsonToObj<T>(string json)
+        {
+            T obj;
+            using (MemoryStream ms = new MemoryStream(Encoding.Unicode.GetBytes(json)))
+            {
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
+                obj = (T)serializer.ReadObject(ms);
+            }
+            return obj;
+        }
+    }
+}
+```
+调用：
+```
+var res = JsonUtility.JsonToObj<List<Account>>(response)
+```
+其中Model.Account须标记属性如下
+```
+using System;
+using System.Runtime.Serialization;
+
+namespace QQsProj.Models
+{
+    [DataContract]
+    public class Account
+    {
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+        [DataMember(Name = "emailAddress")]
+        public string EmailAddress { get; set; }
+        [DataMember(Name = "logo")]
+        public string Logo { get; set; }
+        [DataMember(Name = "addressId")]
+        public string AddressId { get; set; }
+        [DataMember(Name = "recordId", EmitDefaultValue = false)]
+        public string RecordId { get; set; }
+        [DataMember(Name = "recordStatus", EmitDefaultValue = false)]
+        public string RecordStatus { get; set; }
+        //[DataMember(Name = "recordCreated")]
+        public DateTime RecordCreated { get; set; }
+    }
+}
+```
+DataMember注解使Model的属性可以与json属性相互转化，此处因为时间类型牵扯到格式问题偷懒注释掉DataMember以避免报错，亦可在get set中进行具体时间格式转换
+EmitDefaultValue = false在Model转json时不自动初始化如"recordId":null的键值对，以免于在接口中传输
+
+服务调用OData API，用HttpWebRequest.GetResponseAsync获取的string反序列化为目标Model的list，定义：
+ODataResponse.cs
+```
+using System.Runtime.Serialization;
+
+namespace QQsProj.Models
+{
+    [DataContract]
+    public class ODataResponse<T>
+    {
+        [DataMember(Name = "value")]
+        public T[] Value { get; set; }
+        [DataMember(Name = "odata.metadata")]
+        public string Metadata { get; set; }
+    }
+}
+```
+调用:
+```
+var responseObj = JsonUtility.JsonToObj<ODataResponse<CsfpPartner>>(response);
+if (null != responseObj.Value && responseObj.Value.Length>0)
+{
+    res = responseObj.Value[0];
+}
+```

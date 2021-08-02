@@ -34,3 +34,7 @@ sudo nano /etc/netplan/01-xxxx.yaml
 sudo netplan apply
 # sudo netplan --debug apply
 ```
+#### 查看发行版本号
+```
+cat /etc/issue
+```

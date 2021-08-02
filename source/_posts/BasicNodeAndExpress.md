@@ -207,3 +207,5 @@ to be continued...
 
 #### Tips
 [path.resolve vs path.join](https://stackoverflow.com/questions/35048686/whats-the-difference-between-path-resolve-and-path-join)
+
+[express-async-errors](https://github.com/davidbanham/express-async-errors)

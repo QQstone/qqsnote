@@ -196,3 +196,10 @@ GO
 [查找祖先](https://docs.microsoft.com/zh-cn/sql/relational-databases/hierarchical-data-sql-server?view=sql-server-ver15#finding-ancestors-by-using-the-clr)
 [列出祖先]([列出祖先](https://docs.microsoft.com/zh-cn/sql/relational-databases/hierarchical-data-sql-server?view=sql-server-ver15#listing-ancestors))
 [移动子树](https://docs.microsoft.com/zh-cn/sql/relational-databases/hierarchical-data-sql-server?view=sql-server-ver15#moving-subtrees)
+
+#### 获取每个表的数据条数
+```
+select schema_name(t.schema_id) as [Schema], t.name as TableName,i.rows as [RowCount] 
+from sys.tables as t, sysindexes as i 
+where t.object_id = i.id and i.indid <=1
+```
