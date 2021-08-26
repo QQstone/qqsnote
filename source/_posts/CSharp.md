@@ -7,6 +7,18 @@ tags:
 categories: 
 - 后端技术
 ---
+#### 编程概念
+[Microsoft Docs: C#](https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/concepts/)
++ .NET 中的程序集 程序集是.net应用程序的最小部署单元。它可以是dll或exe。
++ 使用 Async 和 Await 的异步编程 (使用Task保存异步操作)
++ 特性 (Attribute)	将元数据或声明性信息与代码相关联。 关联的特性在运行时使用 反射 这项技术实现
++ 集合 (C#)	介绍了 .NET 提供的一些类型集合。 展示了如何使用简单的集合和键/值对集合。
++ 协变和逆变 (C#)	介绍了如何在接口和委托中启用隐式转换泛型类型参数。
++ 表达式树 (C#)	介绍了如何使用表达式树来启用动态修改可执行代码。
++ 迭代器 (C#)	介绍了用于单步执行集合并一次返回一个元素的迭代器。
++ 语言集成查询 (LINQ) (C#)	介绍了 C# 语言语法中强大的查询功能，以及用于查询关系数据库、XML 文档、数据集和内存中集合的模型。
++ 反射 (C#)	介绍了如何使用反射来动态创建类型实例、将类型绑定到现有对象，或从现有对象获取类型并调用其方法或访问其字段和属性。
++ 序列化 (C#)	还介绍了有关二进制、XML 和 SOAP 序列化的关键概念。
 #### decimal
 因为float计算时有精度损耗，而且产生损耗时在程序中并不提示，于是创建decimal类型，付出额外的性能，进行高精度计算
 ```
@@ -348,3 +360,26 @@ if (null != responseObj.Value && responseObj.Value.Length>0)
     res = responseObj.Value[0];
 }
 ```
+#### volatile
+[Microsoft Docs 关键字](https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/keywords/volatile)
+
+#### nameof
+返回变量名称的字符串
+
+#### 泛型
+
+#### IEnumerable<T> ICollection<T> IQeurable<T> List<T> T[]
+IEnumerable是其他接口或实现的基类
+> Exposes the enumerator, which supports a simple iteration over a collection of a specified type. 暴露enumerator，支持在指定类型的集合上进行简单迭代
+
+并不常用IEnumerable<T>声明变量，更多使用ICollection<T> 使用ToList方法IEnumerable<T>将其转换为ICollection<T>：
+```
+public interface ICollection<T> : IEnumerable<T>, IEnumerable
+
+public interface IList<T> : ICollection<T>, IEnumerable<T>, IEnumerable
+ 
+public class List<T> : IList<T>, ICollection<T>, IEnumerable<T>, IList, ICollection, IEnumerable
+```
+![](https://tvax2.sinaimg.cn/large/0032xJMSgy1gtdrfazvquj60dw07sdht02.jpg)
+#### Dictionary
+面试问题

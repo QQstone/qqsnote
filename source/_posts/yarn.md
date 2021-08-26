@@ -14,3 +14,6 @@ execuate project
 ```
 yarn [YourScriptInPackageJSON]
 ```
+
+#### TroubleShooting
+[cannot be loaded because running scripts is disabled on this system.](https://stackoverflow.com/questions/4037939/powershell-says-execution-of-scripts-is-disabled-on-this-system)

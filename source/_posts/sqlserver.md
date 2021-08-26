@@ -38,7 +38,7 @@ ALTER SCHEMA ent TRANSFER OBJECT::dbo.table1;
 ```
 #### 创建新用户及授权访问
 [参考原文](https://www.fujieace.com/mssql/create-login.html)<br>
-+ 配置登录名 Database Server --> Security --> Logins
++ 配置登录名 Database Server --> Security --> Logins --> 右键New Login
 + 常规General标签页中，配置认证方式等
 + 服务器角色（Server Roles）添加 public sysadmon
 + 用户映射（User Mapping）添加创建的新用户
@@ -203,3 +203,7 @@ select schema_name(t.schema_id) as [Schema], t.name as TableName,i.rows as [RowC
 from sys.tables as t, sysindexes as i 
 where t.object_id = i.id and i.indid <=1
 ```
+#### login fail Error 18456
+[CSDN Blog:SQL Server Error 18456](https://blog.csdn.net/mo_feng_/article/details/62226310)
+
+other issues: [Microsoft Docs: Troubleshooting Connect to SQL Server](https://docs.microsoft.com/zh-cn/sql/database-engine/configure-windows/troubleshoot-connecting-to-the-sql-server-database-engine?view=sql-server-ver15#enable-protocols)

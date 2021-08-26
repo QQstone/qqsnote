@@ -69,14 +69,17 @@ public void Configure(IApplicationBuilder app)
 ```
 #### filter
 + $filter=name eq 'QQstone'
++ $filter=type ne 'standard'
 + $filter=contains(email, '163.com')
++ $filter=quantity gt 1 and le 100
+  gt(greater than) lt(less than) ge(greater than or equal to) le(less than or equal to)
 注意单引号  
 #### select
 + $select=name,email,type
 #### expand
 关联查询 $expand=department
 #### 关于分页
-`https://localhost:44346/odata/v1/Users?$count`
+`https://localhost:44346/odata/v1/Users?$count=true`
 
 
 `https://localhost:44346/odata/v1/Users?$skip=20&$top=10`

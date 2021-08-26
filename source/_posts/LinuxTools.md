@@ -95,6 +95,13 @@ Nov 25th 遭遇 [issue 27711](https://github.com/nodejs/node/issues/27711) 需�
 ```
 sudo n 10.16.0
 ```
+RPM
+```
+wget https://example.com/file.rpm
+sudo yum localinstall file.rpm
+sudo rpm –ivh file.rpm
+sudo rpm –ivh https://example.com/file.rpm
+```
 #### 查看系统版本
 ```
 cat /etc/issue 查看发行版

@@ -138,10 +138,11 @@ amqp.connect('amqp://qqs:pass1234@111.111.111.111:5672/', function(error0, conne
 
         var queue = 'hello';
         var msg = 'Hello World!';
-
+        // 订阅
         channel.assertQueue(queue, {
             durable: false
         });
+        // 发布
         channel.sendToQueue(queue, Buffer.from(msg));
 
         console.log(" [x] Sent %s", msg);
@@ -186,3 +187,8 @@ amqp.connect('amqp://qqs:pass1234@111.111.111.111:5672/', function(error0, conne
 ```
 #### 定时任务
 原理是：消息设置过期时间放入队列1，过期移入队列2，订阅者监听队列2
+
+#### AMQP
+高级消息队列协议(Advanced Message Queue Protocol) AMQP实体：队列、交换机、绑定
+![](https://tva1.sinaimg.cn/large/0032xJMSgy1gt2gjuwp1xj60jg094q4o02.jpg)
++ 默认交换机 根据消息携带的route key直接路由到同名的队列

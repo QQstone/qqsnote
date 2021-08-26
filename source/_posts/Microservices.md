@@ -25,3 +25,10 @@ tags:
 相应的缺点是服务划分的困扰，系统复杂化，实施部署、纠错的难度增大等
 
 “无非是业务拆分和基架体系搭建”
+
+#### SOA
+Service Oriented Ambiguity 即面向服务架构
+
+SOAP(web service) http+xml
+REST http+json
+RPC socket

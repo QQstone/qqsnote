@@ -21,7 +21,7 @@ public void ConfigureServices(IServiceCollection services){
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => Configuration.Bind("CookieSettings", options));
 }
 ```
-AddAuthentication的参数是方案名称，默认使用JwtBearerDefaults.AuthenticationScheme作为名称。
+AddAuthentication的参数是方案名称，默认值为JwtBearerDefaults.AuthenticationScheme(即"Bearer")。
 
 可使用多种身份验证方案
 ```
@@ -62,7 +62,7 @@ services.AddAuthentication("BasicAuthentication")
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 ```
 
-BasicAuthenticationHandler是自定义的身份验证处理程序，派生自AuthenticationHandler\<TOptions\>
+BasicAuthenticationHandler是自定义的身份验证处理类，派生自AuthenticationHandler\<TOptions\>
 ```
 public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {

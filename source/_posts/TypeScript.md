@@ -346,3 +346,15 @@ class Greeter {
 ```
 #### typescript-eslint
 见[Typescript-ESLint](github.com/typescript-eslint/typescript-eslint#typescript-eslint)
+
+#### 面试必备
+typescript的特点 
++ 提供面向对面编程(OOP)的特性 如 类，接口，模块
++ 静态类型检查
++ ES6特性 箭头函数 变量声明等
++ 可选参数
++ 内置类型
+
+优点和技巧
++ 静态类型
++ 扩展名为.d.ts的Definition文件提供对现有JavaScript库（如Jquery，D3.js等）的支持。
