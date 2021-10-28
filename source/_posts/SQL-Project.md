@@ -5,7 +5,7 @@ tags:
 - SQL_Server
 - Jenkins
 categories: 
-- 数据库
+- **数据库**
 - 工具
 ---
 #### SSDT Project
@@ -62,6 +62,14 @@ Scripts文件夹右键Add --> Script... 选择Pre Deployment Scripts或Post Depl
 Scripts目录下的sql文件属性中，默认Build Action = Build导致编译失败，应改为Build Action = None
 
 .jfm文件，可以认为是对项目操作的备份，若未自动添加到gitignore，则可手动添加
+
+> Cannot import the following key file: RightCheckDB.pfx. The key file may be password protected. To correct this, try to import the certificate again or manually install the certificate to the Strong Name CSP with the following key container name: VS_KEY_E7D8A7C85598CE59
+
+pfx是保存SSL Certificate的一种文件格式，上述错误表示SQL项目需要重新认证凭据。
+重新写入密码的方式
+```
+"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools\sn.exe" -i companyname.pfx VS_KEY_3E185446540E7F7A
+```
 #### 用MSBuild和Jenkins实现Continuse Integration
 ```
 ## set msbuild.exe=C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe

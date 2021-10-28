@@ -14,6 +14,8 @@ execuate project
 ```
 yarn [YourScriptInPackageJSON]
 ```
-
+#### yarn 和 npm
++ yarn 速度更快（并行和离线缓存）
++ lock 版本 （与package-lock.json）
 #### TroubleShooting
 [cannot be loaded because running scripts is disabled on this system.](https://stackoverflow.com/questions/4037939/powershell-says-execution-of-scripts-is-disabled-on-this-system)

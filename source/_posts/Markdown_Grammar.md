@@ -67,8 +67,8 @@ console.log('code here')
 $$
 \left[
  \begin{matrix}
-   x' \\
-   y' 
+   x_i^2 \\
+   y_j^2
   \end{matrix}
   \right]=
  \left[

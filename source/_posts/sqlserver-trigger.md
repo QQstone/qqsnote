@@ -2,7 +2,7 @@
 title: SQL Server 触发器
 date: 2021-07-13 10:02:08
 tags:
-- SQL_Server
+- 触发器
 categories: 
 - 数据库
 ---

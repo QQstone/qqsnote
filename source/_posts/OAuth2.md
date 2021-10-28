@@ -54,3 +54,23 @@ OIDC（OpenID Connect）OpenID + OAuth2.0认证（授权访问）服务
 那access token在资源服务器上是如何验证的呢？每个请求过来，资源服务器都会拿access token到SSO上去核对吗？
 
 事实上是不一定的。以JWT为例。如果Access Token是JWT形式签发，资源服务可以使用验证签名的方式判断是否合法，只需要把签名密钥在资源服务同步一份即可。典型的是使用非对称加密（见{% post_link Encryption 加密%}篇），资源服务保留一份公钥，access token由授权服务使用私钥签发，资源服务是可以对其进行校验的。JWT允许携带一些信息，如用户，权限，有效期等，因此资源服务判断JWT合法之后可以继续根据携带信息来判断是否可访问资源。这样就有可以快速验证有效性，不需要频繁访问授权服务的优点，缺点是Access Token一旦签发，将很难收回，只能通过过期来失效。
+
+#### access token, id token, refresh token
+在Google，微博等认证门户登录成功后 颁发id token， 表示该账户通过认证， 是可以被信赖的， id token中包含用户的名字，邮箱等信息，可以个性化用户体验（personalize user experience）如在UI上显示用户姓名，在生日当天发送祝福消息等 总之与认证有关与授权无关
+
+access token用作访问受限的资源，即identity server授权客户端访问某受保护的资源，为其颁发access token，在资源服务器（作为audience）上验证，access token不绑定客户端，因此可以copy出来使用，也就是客户端有责任保护自己的access token安全
+
+可以说access token用于资源服务器，而不是客户端，与id token不同，它没有什么要告诉客户端的，包括账户是否已通过认证，事实上，账户退出，access token依然可以工作
+
+refresh token用以刷新access token 这对于SPA可能不足以保证refresh token的安全，可以使用refresh token的轮换机制，即在access token刷新后更新refresh token，使原refresh token不会再被攻击者利用blabla
+[refresh token, what are they and when to use them](https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/)
+
++ 客户端是在服务器上执行的传统 Web 应用程序吗？使用[授权代码流](https://auth0.com/docs/flows#authorization-code-flow)。
+
++ 客户端是单页应用程序 (SPA) 吗？使用[带有验证密钥的授权代码流进行代码交换 (PKCE)](https://auth0.com/docs/flows#authorization-code-flow-with-proof-key-for-code-exchange-pkce-)。
+
++ 客户端是不需要访问令牌的单页应用程序 (SPA) 吗？将[隐式流与 Form Post 一起使用](https://auth0.com/docs/flows#implicit-flow-with-form-post)。
+
++ 客户端是资源所有者吗？您可以使用[客户端凭据流](https://auth0.com/docs/flows#client-credentials-flow)。
+
++ 客户端是否绝对信任用户凭据？您可以使用[Resource Owner Password Flow](https://auth0.com/docs/flows#resource-owner-password-flow)。

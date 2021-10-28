@@ -416,3 +416,11 @@ https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/environments?view=aspn
 
 #### solution和projects
 [多项目解决方案(class library projects)](https://medium.com/swlh/creating-a-multi-project-net-core-database-solution-a69decdf8d7e)
+
+[关于多个项目启动](https://docs.microsoft.com/en-us/visualstudio/ide/how-to-set-multiple-startup-projects?view=vs-2019#to-set-multiple-startup-projects)
+
+#### 关于[HttpGet][HttpPost]标注以及方法HttpMethod识别
+[CSDN Blog WebApi进阶](https://www.cnblogs.com/landeanfen/p/5337072.html)
+
+> 博主的理解是：方法名以Get开头，WebApi会自动默认这个请求就是get请求，而如果你以其他名称开头而又不标注方法的请求方式，那么这个时候服务器虽然找到了这个方法，但是由于请求方式不确定，所以直接返回给你405——方法不被允许的错误。
+结论：所有的WebApi方法最好是加上请求的方式（[HttpGet]/[HttpPost]/[HttpPut]/[HttpDelete]），不要偷懒，这样既能防止类似的错误，也有利于方法的维护，别人一看就知道这个方法是什么请求。

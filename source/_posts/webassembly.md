@@ -92,7 +92,7 @@ emcc hello.c -s WASM=1 -o hello.html
 编译生成hello.wasm hello.js hello.html 可以用emrun运行这个html(直接用浏览器打开会认为读取file://文件违反policy) 因为docker没有映射端口，拷出来用http-server运行，是这样婶的：
 ![emscript_helloworld](https://tva3.sinaimg.cn/large/a60edd42ly1gj59qkbh1mj20qo0i2wf9.jpg)
 #### FFmpeg.js 的实现
-原文：[Build FFmpeg WebAssembly version (= ffmpeg.wasm)](https://itnext.io/build-ffmpeg-webassembly-version-ffmpeg-js-part-1-preparation-ed12bf4c8fac) 此链接国内网络或无法访问，可参考国内博客的类似文章，keyword:"webassembyly" + "ffmpeg"
+原文：[Build FFmpeg WebAssembly version (= ffmpeg.wasm)](https://itnext.io/build-ffmpeg-webassembly-version-ffmpeg-js-part-1-preparation-ed12bf4c8fac) 此链接国内网络或无法访问，可参考国内博客的类似文章，keyword:"webassemby" + "ffmpeg"
 
 关于ffmpeg,{% post_link video-streaming video和视频流 %}那篇曾用其进行视频的转码和输出流。<br>
 > FFmpeg 是一个开放源代码的自由软件，可以运行音频和视频多种格式的录影、转换、流功能，包含了libavcodec(用于多个项目中音频和视频的解码器库)，以及libavformat(音频与视频格式转换库)。————维基百科

@@ -15,7 +15,11 @@ Azure Function项目自包含运行环境，不依赖外部服务、框架等
     ```
 + VS Code Azure Functions 扩展<br>
 搜索 azure functions，或者在 Visual Studio Code 中打开此[链接](vscode:extension/ms-azuretools.vscode-azurefunctions "点击在VS Code中打开")，安装该扩展。
-
+#### 命令行调试
+安装[Azure Functions .NET Worker](https://github.com/Azure/azure-functions-dotnet-worker)
+```
+func host start --dotnet-isolated-debug
+```
 #### 创建Functions
 1. 按 F1 键打开命令面板。 在命令面板中，搜索并选择 Azure Functions: Create new project...。
 2. 按照提示对项目进行预设

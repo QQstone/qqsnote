@@ -203,6 +203,14 @@ select schema_name(t.schema_id) as [Schema], t.name as TableName,i.rows as [RowC
 from sys.tables as t, sysindexes as i 
 where t.object_id = i.id and i.indid <=1
 ```
+#### 按rownumber删除
+```
+; with cte(rownum)as(
+    select row_number () over(partition by [Col1], [Col2] order by Col3) from [table]
+)
+delete from cte where rownum > 1
+```
+按Col1 Col2分组删除 保留组唯一
 #### login fail Error 18456
 [CSDN Blog:SQL Server Error 18456](https://blog.csdn.net/mo_feng_/article/details/62226310)
 

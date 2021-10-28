@@ -3,6 +3,7 @@ title: Tips in windows
 date: 2019-09-10 09:39:44
 tags:
 - windows
+- 环境变量
 categories: 
 - 工具
 ---
@@ -72,3 +73,30 @@ rmdir /s/q node_modules
 ```
 #### 信任来自开发机的SSL证书(https)
 [将计算机配置为信任 IIS Express 证书](https://docs.microsoft.com/zh-cn/troubleshoot/visualstudio/general/warnings-untrusted-certificate#method-2-configure-computers-to-trust-the-iis-express-certificate)
+
+#### 远程连接时关闭指定进程
+gpedit.msc -> 计算机配置 -> 管理模板 -> Windows组件服务 -> 远程桌面服务 -> 远程桌面会话主机 -> 远程会话环境 -> 连接时启动程序
+程序路径和文件名：%systemroot%\system32\cmd.exe /c D:\Environment\killMouseWithoutBorders.bat <span style="color:#ff0;font-weight:bold">Caution! 无法执行指定脚本</span>
+
+关闭进程 
+```
+@echo off
+cd /d "%~dp0"
+cacls.exe "%SystemDrive%\System Volume Information" >nul 2>nul
+if %errorlevel%==0 goto Admin
+if exist "%temp%\getadmin.vbs" del /f /q "%temp%\getadmin.vbs"
+echo Set RequestUAC = CreateObject^("Shell.Application"^)>"%temp%\getadmin.vbs"
+echo RequestUAC.ShellExecute "%~s0","","","runas",1 >>"%temp%\getadmin.vbs"
+echo WScript.Quit >>"%temp%\getadmin.vbs"
+"%temp%\getadmin.vbs" /f
+if exist "%temp%\getadmin.vbs" del /f /q "%temp%\getadmin.vbs"
+exit
+
+:Admin
+taskkill /f /im MouseWithoutBorders.exe
+```
+关于 cmd 接受参数 输入cmd /?
+![](https://tva4.sinaimg.cn/large/0032xJMSgy1guh3rcmoq0j60hk09qdhv02.jpg)
+
+关于bat脚本获取administrator权限
+[知乎：怎样自动以管理员身份运行bat文件?](https://www.zhihu.com/question/34541107/answer/137174053)

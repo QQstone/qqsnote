@@ -286,8 +286,9 @@ render() {
 #### 继承
 没有继承！
 > 在render return中组合子组件提供了清晰而安全地定制组件外观和行为的灵活方式，没有需要使用继承来构建组件层次的情况。[React Docs:组合 vs 继承](https://zh-hans.reactjs.org/docs/composition-vs-inheritance.html#so-what-about-inheritance)
-#### onRef
+#### createRef onRef useRef
 子组件实例化回调函数，用以获取子组件对象
+> useRef 仅能用在 FunctionComponent，createRef 仅能用在 ClassComponent。
 #### Fragment
 相当于Angular的template，插入子组件不生成额外的元素(如div)，<React.Fragment></React.Fragment>可以省略为<></>
 #### ReactDOMServer
@@ -333,4 +334,4 @@ yarn add --dev typescript
 
 使用tsc命令编译
 
-添加@types/react
+添加@types/react, vs code 右下角TypeScript版本选择4.*.*-pnpify

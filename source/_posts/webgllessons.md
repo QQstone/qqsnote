@@ -75,4 +75,29 @@ let program = this.initShader(this.gl, vertexShaderSource, fragShaderSource);
 //获取顶点着色器的位置变量apos
 var aposLocation = this.gl.getAttribLocation(program, 'apos');
 ```
+#### 标量 向量 张量
++ 标量 scalar
++ 向量 vendor
++ 张量 tensor 与矢量相类似，定义由若干坐标系改变时满足一定坐标转化关系的有序数组成的集合为张量。
 
+> 在二维空间里，二维二阶张量（平面应力张量）的每个方向都可以用二维空间两个方向表示。（区分2阶张量的2个方向，和二维空间的两个方向x，y）所以共有2^2=4个方向。
+在三维空间里，三维二阶张量（空间应力张量）的每个方向都可以用三维空间三个方向表示。（区分2阶张量的2个方向，和三维空间的三个方向x，y、z）所以共有3^2=9个方向。[通俗理解张量tensor](https://www.jianshu.com/p/2a0f7f7735ad)
+
+三维空间内的向量根据笛卡尔坐标系的x,y,z三个基向量分解为三个分量 故
+$$v=\left[
+ \begin{matrix}
+   v_x \\
+   v_y \\
+   v_z 
+  \end{matrix}
+  \right]$$
+
+而三维二阶张量，其物理含义是某点分解为三个两两正交的平面以及每个平面上的力（力是向量 其自有三个分量）3×3共9个分量
+![](https://tvax1.sinaimg.cn/large/a60edd42gy1gvv4q8pv40j20fl09m0t8.jpg)
+视频截图 方块表示每个分量上的值(模值，标量)
+[应力张量](https://pencilq.com/38/)
+[通俗地理解张量](https://www.zhihu.com/question/23720923/answer/32739132)
+
+#### mesh polygon nurbs
+mesh是曲面 在计算机三维处理中常以polygon(多边形)来实现
+NURBS （Non-uniform rational basis spline非均匀有理基本样条）基于数学公式表达的曲面，但在计算机三维处理中实现 还是需要差值以及polygon

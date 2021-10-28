@@ -223,6 +223,10 @@ electron-builder方案
 一般在package.json中，已分离出electron-build.json配置的在该文件中
 本章未完待补充QQs
 
+#### Error write EPIPE
+修改node，electron-builder版本使之兼容可解决
+#### [object][object]
+修改electron-builder版本规避
 #### BrowserWindow.loadURL Issue
 
 #### npm ERR! code ELIFECYCLE 
@@ -236,7 +240,27 @@ app.on('window-all-closed', () => {
   }
 })
 ```
+#### spawn makensis,exe ENOENT
+electron-builder 不支持yarn2+ 直接使用electron-builder build命令打包即可
+[GitMemory:Electron-Userland](https://githubmemory.com/repo/electron-userland/electron-builder/issues/5809)
+#### require is not defined
+```
+// Create the browser window.
+win = new BrowserWindow({
+  width: 800,
+  height: 600,
+  webPreferences: {
+    nodeIntegration: false, // is default value after Electron v5
+    contextIsolation: true, // protect against prototype pollution
+    preload: path.join(__dirname, "preload.js")
+  }
+});
+```
 #### shell.openExternal
 > Open the given external protocol URL in the desktop's default manner. 对于系统支持的协议，以系统默认行为打开URL
 
 windows 开始 搜索“按协议指定默认应用程序”或“Choose default apps by protocol”
+
+#### 其他概念
++ [Electron Fiddle](https://electronjs.org/fiddle)是由Electron开发并由其维护者支持的沙盒程序
++ [离屏渲染(Off-Screen Rendering)](https://www.electronjs.org/zh/docs/latest/tutorial/offscreen-rendering)相对于当前屏幕渲染，GPU另辟缓存区为下一步的显示效果进行渲染的机制

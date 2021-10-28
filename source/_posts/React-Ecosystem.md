@@ -8,6 +8,8 @@ tags:
 ```
 yarn add @material-ui/core
 ```
+
+[override material ui styles](https://blog.bitsrc.io/4-ways-to-override-material-ui-styles-43aee2348ded)
 #### [Next.js](https://github.com/vercel/next.js)
 典型的网站模块和框架，封装webpack、babel, 支持按需加载和seo优化
 
