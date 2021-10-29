@@ -1,6 +1,7 @@
 ---
 title: Markdown 语法
 date: 2018-07-31 17:00:18
+mathjax: true
 categories: 
 - 工具
 tags: 
@@ -67,8 +68,8 @@ console.log('code here')
 $$
 \left[
  \begin{matrix}
-   x_i^2 \\
-   y_j^2
+   x_{ii}^2 \\
+   y_{ij}^2
   \end{matrix}
   \right]=
  \left[
@@ -85,3 +86,6 @@ $$
   \right]
 $$
 更多数学表示--> [CSDN: nuoyanli](https://blog.csdn.net/nuoyanli/article/details/96179976)
+公式的语法是mathjax的规范 hexo-js-next渲染公式需用hexo-renderer-kramed(默认是hexo-renderer-marked)
+配置theme\next\_config.yml   mathjax: enable: true
+同时在文章title下使能 mathjax: true

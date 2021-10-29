@@ -1,6 +1,7 @@
 ---
 title: Canvas-wordCloud
 date: 2021-04-25 14:52:09
+mathjax: true
 tags:
 - canvas
 - javascript

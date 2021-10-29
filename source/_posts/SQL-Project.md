@@ -5,7 +5,7 @@ tags:
 - SQL_Server
 - Jenkins
 categories: 
-- **数据库**
+- 数据库
 - 工具
 ---
 #### SSDT Project

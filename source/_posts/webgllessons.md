@@ -1,6 +1,7 @@
 ---
 title: WebGL教程
 date: 2019-09-12 14:45:02
+mathjax: true
 tags:
 - WebGL
 categories: 
@@ -94,7 +95,14 @@ $$v=\left[
 
 而三维二阶张量，其物理含义是某点分解为三个两两正交的平面以及每个平面上的力（力是向量 其自有三个分量）3×3共9个分量
 ![](https://tvax1.sinaimg.cn/large/a60edd42gy1gvv4q8pv40j20fl09m0t8.jpg)
-视频截图 方块表示每个分量上的值(模值，标量)
+如视频截图 方块表示每个分量上的值(模值，标量)
+$$t=\left[
+ \begin{matrix}
+   v_{xx} & v_{xy} & v_{xz} \\
+   v_{yx} & v_{yy} & v_{xz} \\
+   v_{zx} & v_{xy} & v_{zz} 
+  \end{matrix}
+  \right]$$
 [应力张量](https://pencilq.com/38/)
 [通俗地理解张量](https://www.zhihu.com/question/23720923/answer/32739132)
 
