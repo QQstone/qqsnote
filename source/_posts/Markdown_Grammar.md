@@ -89,3 +89,4 @@ $$
 公式的语法是mathjax的规范 hexo-js-next渲染公式需用hexo-renderer-kramed(默认是hexo-renderer-marked)
 配置theme\next\_config.yml   mathjax: enable: true
 同时在文章title下使能 mathjax: true
+详见[hexo-theme-next doc:数学公式](https://github.com/theme-next/hexo-theme-next/blob/master/docs/zh-CN/MATH.md)

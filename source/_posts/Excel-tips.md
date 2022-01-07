@@ -35,3 +35,7 @@ y=vlookup(x, source_table, column_index, boolean)
 #### 条件格式
 如 Home-->Conditional Formatting-->Highlight Cell Rules-->Duplicate Values<br>
 高亮显示所选区域中存在重复值的cell
+
+#### 批量输入
++ Ctrl + D
++ Home --> Editing --> Fill

@@ -84,3 +84,26 @@ const AppRoutes = () => {
     )
 }
 ```
+
+#### 拖拽 react-dnd
+```
+function DraggableComponent(props) {
+  const [collected, drag, dragPreview] = useDrag(() => ({
+    type,
+    item: { id }
+  }))
+}
+```
+useDrag钩子, 接受一个specification配置 声明拖动的type 被拖动项item 需要回传的collect， 返回collect的属性，drag source的引用以及drag preview元素
+```
+const [{ isOver, canDrop }, dropRef] = useDrop({
+    accept,
+    drop: onDrop,
+    collect: (monitor) => ({
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop(),
+    }),
+})
+```
+useDrop钩子接收一个‘specification’配置作为参数 可配置drop-target接收的类型 需要回传的props参数
+返回包含drop-target节点的reference以及回传的props如{isOver, canDrop}的一个列表 

@@ -75,7 +75,7 @@ ssh  -o StrictHostKeyChecking=no  192.168.xxx.xxx
 ```
 git config core.sshCommand "ssh -i /home/csd/.ssh/id_rsa -o StrictHostKeyChecking=no git@hostname"
 ```
-#### linux系统之前的ssh授权访问
+#### linux系统之间的ssh授权访问
 一、概述
 
 1、就是为了让两个linux机器之间使用ssh不需要用户名和密码。采用了数字签名RSA或者DSA来完成这个操作

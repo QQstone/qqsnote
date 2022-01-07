@@ -236,3 +236,21 @@ EMCC_DEBUG=1 emcc dip.cc
   --no-entry 
   -o dip.wasm
 ```
+
+#### issues expected magic word 00 61 73 6d, found ...
+获取的wasm模块的MIME type不是application/wasm
+
+#### 关于wasm的调用
+WebAssembly还没有和 \<script type='module'> 或ES6的import语句集成，也就是说，当前还没有内置的方式让浏览器直接获取模块。
+ensdk生成的wasm js为js逻辑和wasm模块充当‘接口’
+实际上，在wasm js中，用fetch获取wasm文件的二进制代码，存入ArrayBuffer对象，并使用现代WebApi提供的[WebAssembly](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly)对象，调用WebAssembly.instantiate()将带类型数组(ArrayBuffer)编译和实例化为wasm module的对象
+大致形如
+```
+fetch('module.wasm').then(response =>
+  response.arrayBuffer()
+).then(bytes =>
+  WebAssembly.instantiate(bytes, importObject)
+).then(results => {
+  // Do something with the compiled results!
+});
+```

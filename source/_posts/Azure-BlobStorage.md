@@ -11,7 +11,7 @@ Blob Storage存储资源的三个层次
 
 Azure 门户点击Storage Account，查看当前tenant的Storage Account，进入其中某个account, 关于存储，提供了一个[Explorer工具](https://azure.microsoft.com/en-us/features/storage-explorer/)
 左侧工具 Blob Services - Containers 创建容器csd-commom，（意外地发现之前做App Services备份地Deploy Packages在这里）
-进入容器，可以直接使用页面提供地上传入口，上传可以填写一个folder，文件上传时自动使用该folder作为子目录
+进入容器，可以直接使用页面提供的上传入口，上传可以填写一个folder，文件上传时自动使用该folder作为子目录
 [官方教程：使用 Azure 存储在云中上传图像数据](https://docs.microsoft.com/zh-cn/azure/storage/blobs/storage-upload-process-images?tabs=dotnet)
 $blobStorageAccount（存储账户）
     $blobStorageAccount（容器）

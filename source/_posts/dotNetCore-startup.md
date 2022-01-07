@@ -390,6 +390,15 @@ public Guid ID
     get { return _id; }
 }
 ```
+issue "No context type was found in the assembly 'MyServices.Models'."
+在多项目解决方案中，执行Migration的是Models项目，读取Startup中的context配置， 检查Startup.cs的addDbContext配置
+另有命令
+```
+Enable-Migrations -ProjectName MyServices.Models -StartUpProjectName MyServices.API -ContextTypeName MyServices.Models.Contexts.DataContext -Verbose 
+```
+issue "The type 'xxContext' does not inherit from DbContext. The DbMigrationsConfiguration.ContextType property must be set to a type that inherits from DbContext."
+解决方法是在startup项目安装 Microsoft.EntityFrameworkCore.Tools
+
 #### 业务API
 
 #### 前端组件 [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
@@ -423,4 +432,4 @@ https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/environments?view=aspn
 [CSDN Blog WebApi进阶](https://www.cnblogs.com/landeanfen/p/5337072.html)
 
 > 博主的理解是：方法名以Get开头，WebApi会自动默认这个请求就是get请求，而如果你以其他名称开头而又不标注方法的请求方式，那么这个时候服务器虽然找到了这个方法，但是由于请求方式不确定，所以直接返回给你405——方法不被允许的错误。
-结论：所有的WebApi方法最好是加上请求的方式（[HttpGet]/[HttpPost]/[HttpPut]/[HttpDelete]），不要偷懒，这样既能防止类似的错误，也有利于方法的维护，别人一看就知道这个方法是什么请求。
+结论：所有的WebApi方法最好是加上请求的方式（[HttpGet]/[HttpPost]/[HttpPut]/[HttpDelete]），不要偷懒，这样既能防止类似的错误，也有利于方法的维护，别人一看就知道这个方法是什么请求

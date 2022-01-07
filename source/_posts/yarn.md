@@ -17,5 +17,16 @@ yarn [YourScriptInPackageJSON]
 #### yarn 和 npm
 + yarn 速度更快（并行和离线缓存）
 + lock 版本 （与package-lock.json）
+
+#### yarn.lock
++ 如package-lock.json 开发过程中不应删除重建 应当及时提交
++ yarn 过程根据yarn.lock的依赖树安装及拷贝package **且对与package.json不一致的依赖进行更新**
++ 使用 yarn upgrade 根据package.json对依赖进行升级 并更新yarn.lock
+
+#### yarn 和 yarn install
+> yarn install is used to install all dependencies for a project. This is most commonly used when you have just checked out code for a project, or when another developer on the project has added a new dependency that you need to pick up.
+If you are used to using npm you might be expecting to use --save or --save-dev. These have been replaced by yarn add and yarn add --dev. For more information, see the yarn add documentation.
+
+> Running yarn with no command will run yarn install, passing through any provided flags.
 #### TroubleShooting
 [cannot be loaded because running scripts is disabled on this system.](https://stackoverflow.com/questions/4037939/powershell-says-execution-of-scripts-is-disabled-on-this-system)

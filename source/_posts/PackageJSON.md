@@ -1,5 +1,5 @@
 ---
-title: Package.json
+title: package.json
 date: 2019-07-18 21:10:49
 tags:
 - Node.js
@@ -49,3 +49,8 @@ Use the caret-character (^) to prefix the version of moment in your dependencies
 ```
 "qqsmodule": "file:../CustomModules/qqsmodule"
 ```
+#### package-lock
+[Node Docs: package-lock](http://nodejs.cn/learn/the-package-lock-json-file)
++ 记录整个依赖树的具体版本， 即包括了依赖的依赖，
++ 须提交package-lock 在npm install时安装指定的版本
++ 每次npm update时依据package.json中的升级版本设置修改package-lock.json

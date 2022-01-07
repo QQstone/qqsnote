@@ -93,6 +93,8 @@ class Calendar extends React.Component {
 使用函数表达式不需要this指针而class定义是要的(ES6 ()=>{}不创建this)
 
 另外设置默认参数：ComponentA.defaultProps = {name:'New Component'}
+
+更多组件通信见{% post_link React-ComponentCommunicate React组件交互 %}
 #### 参数校验
 ```
 MyComponent.propTypes = {
@@ -289,6 +291,8 @@ render() {
 #### createRef onRef useRef
 子组件实例化回调函数，用以获取子组件对象
 > useRef 仅能用在 FunctionComponent，createRef 仅能用在 ClassComponent。
+
+**组件的对象会随组件的更新而刷新，但useRef返回的对象不会随着组件的更新而重新构建，像引入的全局变量，且随组件的销毁而释放，不需手动销毁**
 #### Fragment
 相当于Angular的template，插入子组件不生成额外的元素(如div)，<React.Fragment></React.Fragment>可以省略为<></>
 #### ReactDOMServer

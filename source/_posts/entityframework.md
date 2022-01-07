@@ -16,7 +16,7 @@ class MyContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AuditEntry>();
+        modelBuilder.Entity<Blog>();
     }
 }
 

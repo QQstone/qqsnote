@@ -54,3 +54,9 @@ error: xxxx requires python 3.5 or above
 sudo apt install python-is-python3
 ```
 唉，行吧。。
+
+#### pip 升级issue
+```
+python -m ensurepip
+python -m pip install --upgrade pip
+```

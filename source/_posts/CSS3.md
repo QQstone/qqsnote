@@ -31,6 +31,14 @@ scale() // 缩放
 skew() // 倾斜
 matrix() // 上述转换的综合
 ```
+居中：
+```
+position: 'absolute',
+margin: 'auto',
+top: '50%',
+left: '50%',
+transform: `translate(-50%, -50%)`,
+```
 transition 过渡
 ```
 transition:transform 0.5s

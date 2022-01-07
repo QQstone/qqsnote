@@ -11,6 +11,10 @@ categories:
 #### 关于0.1+0.2==0.3 false
 [0.1 + 0.2不等于0.3？为什么JavaScript有这种“骚”操作？](https://juejin.im/post/5b90e00e6fb9a05cf9080dff)
 关于浮点数的二进制表示，js浮点数精度(存目)
+
+#### 保留2位小数
+Number.prototype.toFixed 返回指定小数位数的**字符串** 必要时四舍五入 且必要时以0补足位数
+返回number的方法不如用类似 Math.round(num * 100) / 100 保留两位小数
 ### JS Tips
 #### Caps lock sensitive
 ```
@@ -93,6 +97,18 @@ Function.prototype.bind = function (context) {
     fBound.prototype = new fNOP();
     return fBound;
 }
+```
+关于替换this的操作可用于回调函数调用类函数, 如下类型A中定义回调函数，该回调函数会作为目标对象B的函数形参，process是类A的函数，但如果在目标对象B中调用callback函数，函数中的this会指向到B
+```
+callback = (response)=>{
+  this.process(response) // 这里的this指向当前运行环境
+}
+
+B.getDataAsync(this.callback)
+```
+应使用bind
+```
+B.getDataAsync(this.callback.bind(this))
 ```
 #### 柯里化Currying
 ```

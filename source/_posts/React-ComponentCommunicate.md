@@ -5,7 +5,7 @@ tags:
 - React
 ---
 #### props
-略 见{% post_link React React %} 子组件传参
+略 见{% post_link React React %} 子组件传参 
 #### context
 Context 提供了一种在组件之间共享此类值的方式，而不必显式地通过组件树的逐层传递 props。
 App.tsx
@@ -126,6 +126,7 @@ export default () => {
       )
 };
 ```
+useCallback
 其他hooks
 #### 关于函数式组件和Hooks
 使用Hooks代替class中的生命周期函数，是函数式组件进行逻辑复用、状态管理的方式

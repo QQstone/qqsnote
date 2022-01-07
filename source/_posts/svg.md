@@ -47,11 +47,25 @@ svg 可缩放矢量图形(Scalable Vector Graphics), 使用xml格式定义图形
 </label>
 ```
 #### svg-react-loader
-将.svg文件资源作为组件载入
+将.svg文件资源作为**组件**载入
 ```
 import MyIcon from '-!svg-react-loader!../../assets/image/icon.svg'
 ...
 return (<> <MyIcon> <>)
+```
+作为资源路径
+```
+import MyIcon from '../../assets/image/icon.svg'
+...
+return (<img src={MyIcon} />)
+```
+作为inline element(原生React特性)
+```
+import {ReactComponent as MyIcon} from '../../assets/image/icon.svg'
+...
+return (<div style={{color:'red', cursor: 'pointer'}}>
+    <MyIcon />
+</div>)
 ```
 #### ng-inline-svg
 shared.module.ts

@@ -18,7 +18,7 @@ mapper
 
 而<b>vtkActor</b>(表达场景中的几何数据)和<b>vtkVolume</b>(表达场景中的体数据)是三维空间中渲染对象最常用的vtkProp子类；二维空间中的数据则是用vtkActor2D表达。
 
-vtkProp子类负责确定渲染场景中对象的位置、大小和方向信息。Prop依赖于两个对象(Prop一词来源于戏剧里的“道具”，在VTK里表示的是渲染场景中可以看得到的对象。)，一个是Mapper(vtkMapper)对象，负责存放数据和渲染信息，另一个是属性(vtkProperty)对象，负责控制颜色、不透明度等参数。
+vtkProp子类负责确定渲染场景中对象的位置、大小和方向信息。Prop依赖于两个对象(Prop一词来源于戏剧里的“道具”，在VTK里表示的是渲染场景中可以看得到的对象。)，一个是Mapper(vtkMapper)对象，负责存放数据和渲染信息，另一个是属性(<b>vtkProperty</b>)对象，负责控制颜色、不透明度等参数。
 
 VTK中定义了大量(超过50个)的Prop类，如vtkImageActor(负责图像显示)和vtkPieChartActor(用于创建数组数据的饼图可视化表达)。其中的一些Prop内部直接包括了控制显示的参数和待渲染数据的索引，因此并不需要额外的Property和Mapper对象。vtkActor的子类vtkFollower可以自动的更新方向信息以保持始终面向一个特定的相机。这样无论怎样旋转，三维场景中的广告板(Billboards)或者文本都是可见的。vtkActor的子类vtkLODActor可以自动改变自身的几何表达来实现需要达到的交互帧率。vtkProp3D的子类vtkLODProp3D则是通过从许多Mapper(可以是体数据的Mapper和几何数据的Mapper集合)中进行选择来实现交互。vtkAssembly建立Actor的等级结构以便在整个结构平移、旋转或者缩放时能够更合理的控制变换。
 
@@ -38,6 +38,8 @@ camera
 cam = renderer.getActiveCamera();
 cam.setParallelProjection(true); //透视，false为平行 Parallel Projection
 ```
+获取平行放大比率 getParallelScale
+**MouseWheel的滚动事件并非移动camera的距离，而是将视野中心的区域放大，相当于视场角缩小，投影比例增大**
 #### vtkRenderWindow
 连接操作系统与VTK渲染引擎
 
