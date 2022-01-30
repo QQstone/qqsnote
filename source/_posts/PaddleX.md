@@ -53,3 +53,17 @@ pip install labelme
 # 启动
 labelme
 ```
+#### ToDo
++ 主要的学习算法
++ 评估报告及指标的涵义 **
++ 模型预测实践
++ 结果详细参数导出 ***
+
++ 圆形标记 -> 目标范围集合R = (U0,U1...Un)
++ 抠图
++ 导出目标滤波
++ 计算每个范围内的全物理量
++ 动态化统计阈值
+#### issues
+> Cannot allocate ???kb  memory on GPU 0,  memory has been allocated and available memory is only 0.000000B.
+

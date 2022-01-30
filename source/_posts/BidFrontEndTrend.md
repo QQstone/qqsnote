@@ -20,3 +20,6 @@ Tips
 [刷新/关闭页面前发请求](https://segmentfault.com/a/1190000018271575)
 [Navigator.sendBeacon(url, data)](https://developer.mozilla.org/zh-CN/docs/Web/API/Navigator/sendBeacon) 在页面unload时也可以调用
 #### microservice和serverless
+
+#### Interview T-stack
+[后端一次性给你10w条数据](https://juejin.cn/post/7031923575044964389)

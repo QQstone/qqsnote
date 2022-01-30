@@ -85,3 +85,9 @@ stale branch是远端已经移除的remote tracking branch[StackOverflow:What is
 
 查看所有分支对当前目录的修改，并显示所修改文件:
 git log --stat --graph --all
+
+#### stage
+git status
+git add/rm <file>...
+git reset ./temp.txt
+git checkout -- <file>...

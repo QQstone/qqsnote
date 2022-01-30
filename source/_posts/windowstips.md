@@ -71,6 +71,10 @@ b. 命令行(分两步：删除文件；删除目录)
 del /s/f/q node_modules
 rmdir /s/q node_modules
 ```
+powershell应该用
+```
+Remove-Item -Path node_modules -Force -Recurse
+```
 #### 信任来自开发机的SSL证书(https)
 [将计算机配置为信任 IIS Express 证书](https://docs.microsoft.com/zh-cn/troubleshoot/visualstudio/general/warnings-untrusted-certificate#method-2-configure-computers-to-trust-the-iis-express-certificate)
 
@@ -100,3 +104,11 @@ taskkill /f /im MouseWithoutBorders.exe
 
 关于bat脚本获取administrator权限
 [知乎：怎样自动以管理员身份运行bat文件?](https://www.zhihu.com/question/34541107/answer/137174053)
+
+#### 获取ip
+```
+for /f "tokens=2 delims=:" %%i in ('ipconfig ^| findstr IPv4') do (
+    set ipAddr=%%i
+)
+```
+tokens第x项 delims以xx为分隔

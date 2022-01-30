@@ -26,3 +26,5 @@ const updateTubeActor = (actor, polydata, lineWidth) => {
 + setCapping
 + setNumberOfSides
 + setRadius
+
+#### get slice

@@ -3,6 +3,39 @@ title: MaterialDesign
 date: 2021-03-23 13:20:04
 tags:
 ---
+#### Material UI System
+System是Material UI 自定义主题、样式的一套方法
+依赖
+```
+npm install @material-ui/system@next @emotion/react @emotion/styled
+```
++ 直接就可以在你需要的组件上面进行样式定制
++ 避免定义一些列的样式（className）或带样式组件（styled-component）
++ 制定统一的标准 如字体 字号 色系
+
+[关于使用sx系统样式与定义styled-component的书写差异](https://mui.com/zh/system/basics/#why-use-the-system)
+styled-component
+```
+const StatHeader = styled('div')(z
+  ({ theme }) => `
+  color: blue;
+`,
+);
+
+...
+return (
+  <StatHeader>font color is blue here</StatHeader>
+)
+```
+‘轻’组件(Box, Stack, Typography, and Grid) 和 sx属性
+```
+
+return (
+   <Box sx={{ color: 'text.secondary' }}>this color is blue here</Box>
+)
+```
+
+#### Material Design
 [Material Design](https://material.io/develop/web)
 
 [Color Palette tool](http://mcg.mbitson.com/#!?csd2021=%2336b0c9&themename=mcgtheme)

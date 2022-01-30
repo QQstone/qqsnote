@@ -25,6 +25,7 @@ dotnet sln add src/MyServices.EntityManagers/MyServices.EntityManagers.csproj
 dotnet sln add src/MyServices.Models/MyServices.Models.csproj
 ```
 创建详细目录，如下
+```
 ─src
     ├───MyServices.API
     │   ├───Controllers
@@ -44,16 +45,17 @@ dotnet sln add src/MyServices.Models/MyServices.Models.csproj
         ├───DTO
         ├───Enums
         └───Migrations
+```
 安装依赖
 API layer
 + Microsoft.AspNetCore.Mvc.NewtonsoftJson
-+ Microsoft.AspNetCore.OData
++ Microsoft.AspNetCore.OData √
 + Microsoft.OData.ModelBuilder
-+ Microsoft.EntityFrameworkCore
-+ Microsoft.EntityFrameworkCore.Design
-+ Microsoft.EntityFrameworkCore.SqlServer
-+ Microsoft.EntityFrameworkCore.Tools
-+ Swashbuckle.AspNetCore
++ Microsoft.EntityFrameworkCore √
++ Microsoft.EntityFrameworkCore.Design √
++ Microsoft.EntityFrameworkCore.SqlServer √
++ Microsoft.EntityFrameworkCore.Tools √
++ Swashbuckle.AspNetCore √
 EntityManager layer
 None
 Model layer
