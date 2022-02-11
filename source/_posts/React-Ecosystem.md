@@ -107,3 +107,5 @@ const [{ isOver, canDrop }, dropRef] = useDrop({
 ```
 useDrop钩子接收一个‘specification’配置作为参数 可配置drop-target接收的类型 需要回传的props参数
 返回包含drop-target节点的reference以及回传的props如{isOver, canDrop}的一个列表 
+
+#### vite.js
