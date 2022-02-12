@@ -19,6 +19,20 @@ categories:
 + 语言集成查询 (LINQ) (C#)	介绍了 C# 语言语法中强大的查询功能，以及用于查询关系数据库、XML 文档、数据集和内存中集合的模型。
 + 反射 (C#)	介绍了如何使用反射来动态创建类型实例、将类型绑定到现有对象，或从现有对象获取类型并调用其方法或访问其字段和属性。
 + 序列化 (C#)	还介绍了有关二进制、XML 和 SOAP 序列化的关键概念。
+#### object 值类型和引用类型 装箱拆箱
+值类型：
++ 简单类型
++ 结构体
++ 枚举
++ 存于栈中 自动释放
++ 不可派生
+引用类型
++ 类定义
++ 接口
++ String
++ Array
++ 存于堆 手动释放
+值类型转换为引用类型为装箱 反之为拆箱，装箱拆箱操作显著消耗系统资源 应当避免
 #### decimal
 因为float计算时有精度损耗，而且产生损耗时在程序中并不提示，于是创建decimal类型，付出额外的性能，进行高精度计算
 ```
@@ -367,7 +381,11 @@ if (null != responseObj.Value && responseObj.Value.Length>0)
 返回变量名称的字符串
 
 #### 泛型
-
+```
+public static void foo<T>(T parameter){
+    Console.WriteLine("parameter={0} type is {1}", paramater.toString(), parameter.GetType().Name)
+}
+```
 #### IEnumerable<T> ICollection<T> IQeurable<T> List<T> T[]
 IEnumerable是其他接口或实现的基类
 > Exposes the enumerator, which supports a simple iteration over a collection of a specified type. 暴露enumerator，支持在指定类型的集合上进行简单迭代
