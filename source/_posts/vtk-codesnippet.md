@@ -2,6 +2,10 @@
 title: vtk-codesnippet
 date: 2021-11-04 11:05:27
 tags:
+- vtk
+- WebGL
+categories: 
+- 图像处理
 ---
 #### 图形跟随camera
 ```
@@ -26,3 +30,5 @@ const updateTubeActor = (actor, polydata, lineWidth) => {
 + setCapping
 + setNumberOfSides
 + setRadius
+
+#### get slice

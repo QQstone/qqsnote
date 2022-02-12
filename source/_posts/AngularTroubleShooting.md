@@ -63,6 +63,14 @@ remove from main.ts
 ```
 export { renderModule, renderModuleFactory } from '@angular/platform-server';
 ```
+
+> npm ERR! Invalid package name "__ngcc_entry_points__.json": name cannot start with an underscore
+升级Angular过程中未知package错误 清理依赖重新安装
+```
+rm -rf node_modules
+rm -f package-lock.json
+npm i
+```
 #### css: ng-deep
 曾使用ng-inline-svg将svg模板嵌入angular模板(见{% post_link svg svg %})，插入方式使用的是其定义的指令
 ```

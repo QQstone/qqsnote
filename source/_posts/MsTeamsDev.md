@@ -53,6 +53,14 @@ Microsoft Teams开发人员文档https://docs.microsoft.com/zh-cn/microsoftteams
             │   TermsOfUse.jsx
 Tab其实就是个React App
 #### 运行和调试
+press F5
+调试host为 https://localhost:3000
+偶见 localhost refused to connect. 查看Teams Toolkit的Accounts中side loading是否处于disabled状态
+> Your Microsoft 365 tenant admin hasn't enabled sideloading permission for your account. You can't install your app to Teams! 
+
+出于种种原因造成的side loading disabled 应进入[Microsoft365 Admin Center](https://admin.microsoft.com/adminportal/home)设置
+Show all --> Admin centers --> Teams Apps --> Setup policies --> Global
+打开 Upload custom apps
 #### 上传到teams
 编译产生 build\appPackage.local.zip 即项目的应用包，该目录下还有应用部件清单 manifest.json
 
@@ -84,3 +92,8 @@ teamsfx new template todo-list-SPFx
 登录Teams添加app
 TODO 主动从外部系统向 Teams 发送信息，允许用户从 Teams 客户端内部处理该信息。
 TODO 允许用户在另一个系统中快速查找信息，并将结果添加到 Teams 中的对话。
+
+#### trouble shooting
+> Teams Toolkit issue: Your Microsoft 365 tenant admin hasn't enabled sideloading permission for your account. You can't install your app to Teams
+
+[Microsoft Doc: Prepare Your M365 Tenant](https://docs.microsoft.com/zh-cn/microsoftteams/platform/concepts/build-and-test/prepare-your-o365-tenant)
