@@ -5,6 +5,7 @@ tags:
 - React
 ---
 这里是React-Redux，Redux状态管理的React绑定库，使React组件从Redux store中读取数据，并且向store分发actions以更新数据
+![](https://gowa.club/res/1*QERgzuzphdQz4e0fNs1CFQ.gif)
 ```
 npm install --save react-redux
 或
@@ -70,4 +71,181 @@ export function Counter() {
     </div>
   )
 }
+```
+#### store
+一个待办列表（todo list）的store示例
+```
+{
+  todos: [{
+    text: 'Eat food',
+    completed: true
+  }, {
+    text: 'Exercise',
+    completed: false
+  }],
+  visibilityFilter: 'SHOW_COMPLETED'
+}
+```
+store管理状态，状态不可随意改变
+#### action
+action用以触发状态更新 形如
+```
+{type:'action_nameXX', value:'any value'}
+```
+#### reduce
+联系state和action的方法 即传入state action 根据action更新state 最后返回新的state
+```
+function visibilityFilter(state = 'SHOW_ALL', action) {
+  switch (action.type) {
+    case 'SET_VISIBILITY_FILTER':
+      return action.filter
+    default:
+      return state
+  }
+}
+
+function todos(state = [], action) {
+  switch (action.type) {
+    case 'ADD_TODO':
+      return [
+        ...state,
+        {
+          text: action.text,
+          completed: false
+        }
+      ]
+    case 'COMPLETE_TODO':
+      return state.map((todo, index) => {
+        if (index === action.index) {
+          return Object.assign({}, todo, {
+            completed: true
+          })
+        }
+        return todo
+      })
+    default:
+      return state
+  }
+}
+```
+#### Flux Immutable
+#### 数据流
+createStore
+useSelector
+dispatch
+middleware
+#### 语法糖
+createSlice
+#### 关于state tree极其reducer的嵌套
+从vuex迁移 原vuex代码
+```
+export const initialState = () => ({
+  data: {
+    nextID: 1,
+    index: {},
+    imageIDs: [],
+    dicomIDs: [],
+    modelIDs: [],
+    labelmapIDs: [],
+    vtkCache: {},
+  },
+
+  // track the mapping from volumeID to data ID
+  dicomVolumeToDataID: {},
+  selectedBaseImage: NO_SELECTION,
+
+  // data-data associations, in parent-of or child-of relationships.
+  // is used for cascaded deletes
+  dataAssoc: {
+    childrenOf: {},
+    parentOf: {},
+  },
+});
+
+export default (deps) =>
+  new Vuex.Store({
+    modules: {
+      dicom: dicom(deps),
+      visualization: visualization(deps),
+      widgets: widgets(deps),
+      annotations: annotations(deps),
+      measurements: measurements(deps),
+    },
+
+    state: initialState(),
+
+    getters: {
+      visibleLabelmaps(state) {
+        return state.data.labelmapIDs.filter(
+          (id) => state.dataAssoc.parentOf[id] === state.selectedBaseImage
+        );
+      },
+      sceneObjectIDs(state, getters) {
+        const { selectedBaseImage, data } = state;
+        const order = [].concat(getters.visibleLabelmaps, data.modelIDs);
+        if (selectedBaseImage !== NO_SELECTION) {
+          order.unshift(selectedBaseImage);
+        }
+        return order;
+      },
+    },
+
+    mutations: {
+      ...datasets.mutations,
+    },
+
+    actions: {
+      ...datasets.makeActions(deps),
+    },
+  });
+```
+redux:
+```
+const preloadedState = {
+  data: {
+    nextID: 1,
+    index: {},
+    imageIDs: [],
+    dicomIDs: [],
+    modelIDs: [],
+    labelmapIDs: [],
+    vtkCache: {},
+  },
+
+  // track the mapping from volumeID to data ID
+  dicomVolumeToDataID: {},
+  selectedBaseImage: -1,
+
+  // data-data associations, in parent-of or child-of relationships.
+  // is used for cascaded deletes
+  dataAssoc: {
+    childrenOf: {},
+    parentOf: {},
+  },
+  widgets: { focusedWidget: -1, widgetList: [], activeWidgetID: -1 },
+  annotations: {
+    selectedLabelmap: -1,
+    currentLabelFor: {}, // labelmap ID -> currently selected label
+    labels: {}, // labelmapID -> label -> color
+    radius: 0,
+    radiusRange: [1, 100],
+  },
+  measurements: {
+    widgets: [], // list of widget ids
+    measurements: {}, // widget ID -> opaque measurement obj
+    // widget/measurement parent is the base image association
+    parents: {}, // data ID -> [widget ID]
+    widgetParent: {}, // widget ID -> data ID
+  },
+};
+const store = createStore(reducer, preloadedState);
+
+const reducer = (state, action) => {
+  return {
+    ...state,
+    widgets: widgets(state.widgets, action),
+    annotations: annotations(state.annotations, action),
+    measurements: widgets(state.measurements, action),
+  };
+};
 ```

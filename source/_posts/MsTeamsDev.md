@@ -97,3 +97,5 @@ TODO 允许用户在另一个系统中快速查找信息，并将结果添加到
 > Teams Toolkit issue: Your Microsoft 365 tenant admin hasn't enabled sideloading permission for your account. You can't install your app to Teams
 
 [Microsoft Doc: Prepare Your M365 Tenant](https://docs.microsoft.com/zh-cn/microsoftteams/platform/concepts/build-and-test/prepare-your-o365-tenant)
+
+[Tab Appde的身份验证流程](https://docs.microsoft.com/zh-cn/microsoftteams/platform/tabs/how-to/authentication/auth-flow-tab)

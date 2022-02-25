@@ -112,3 +112,10 @@ for /f "tokens=2 delims=:" %%i in ('ipconfig ^| findstr IPv4') do (
 )
 ```
 tokens第x项 delims以xx为分隔
+
+#### VS Code
+launch.json设置相对路径
+```
+"cwd": "${fileDirname}", //相对当前文件位置
+"cwd": "${workspaceFolder}", //相对工作目录
+```

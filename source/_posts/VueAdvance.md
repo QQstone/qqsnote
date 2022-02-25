@@ -1,7 +1,8 @@
 ---
-title: VueAdvance
+title: Vue进阶
 date: 2022-01-21 11:14:17
 tags:
+- vuejs
 ---
 #### provider & inject
 类似于React的 Context Provider, 避免父组件向孙子后代组件传参时逐层引用，而以依赖注入的形式暴露给其他组件
