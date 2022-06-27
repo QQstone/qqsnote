@@ -58,7 +58,7 @@ OIDC（OpenID Connect）OpenID + OAuth2.0认证（授权访问）服务
 #### access token, id token, refresh token
 在Google，微博等认证门户登录成功后 颁发id token， 表示该账户通过认证， 是可以被信赖的， id token中包含用户的名字，邮箱等信息，可以个性化用户体验（personalize user experience）如在UI上显示用户姓名，在生日当天发送祝福消息等 总之与认证有关与授权无关
 
-access token用作访问受限的资源，即identity server授权客户端访问某受保护的资源，为其颁发access token，在资源服务器（作为audience）上验证，access token不绑定客户端，因此可以copy出来使用，也就是客户端有责任保护自己的access token安全
+access token用作访问受限的资源，即身份认证授权服务器授权客户端访问某受保护的资源，为其颁发access token，在资源服务器（作为audience）上验证，access token不绑定客户端，因此可以copy出来使用，也就是客户端有责任保护自己的access token安全
 
 可以说access token用于资源服务器，而不是客户端，与id token不同，它没有什么要告诉客户端的，包括账户是否已通过认证，事实上，账户退出，access token依然可以工作
 

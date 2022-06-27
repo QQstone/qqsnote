@@ -17,7 +17,9 @@ tags:
 进阶
 + 将角色权限迁移至Identity Server
 #### is4
-identity server4 是一系列中间件 如IdentityServer4.EntityFramework, IdentityServer4.AccessTokenValidation等
+identity server4 是作为OpenID Connect provider中间件 
+
+有限的免费： free for dev/testing/personal projects and companies or individuals making less than 1M USD gross annnual revenue
 
 首先安装dotnet cli提供的identityserver模板
 ```
@@ -207,77 +209,178 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env){
 
 
 
-使用带entity framework的：
+#### 使用entity framework库保存配置以及运行中数据
+官方文档中基于上述Quickstart项目扩展，使前者In Memery的配置以及运行数据可以保存到数据库
+[github上的sample]()与使用is4ef模板生成的项目有差别
+download sample源码 在此基础上开发自己的需求 加入IConfiguration并从appsettings.json读取connectionstring
+
+源码在startup中定义了一个InitializeDatabase方法 在第一次启动时执行以初始化SQL Server数据库 之后就把它注释掉
+
+将我们的client写入到数据库配置
 ```
-dotnet new is4ef -n IdentityServer
+INSERT INTO [dbo].[Clients]
+           ([Enabled]
+           ,[ClientId]
+           ,[ProtocolType]
+           ,[RequireClientSecret]
+           ,[ClientName]
+           ,[Description]
+           ,[ClientUri]
+           ,[LogoUri]
+           ,[RequireConsent]
+           ,[AllowRememberConsent]
+           ,[AlwaysIncludeUserClaimsInIdToken]
+           ,[RequirePkce]
+           ,[AllowPlainTextPkce]
+           ,[RequireRequestObject]
+           ,[AllowAccessTokensViaBrowser]
+           ,[FrontChannelLogoutUri]
+           ,[FrontChannelLogoutSessionRequired]
+           ,[BackChannelLogoutUri]
+           ,[BackChannelLogoutSessionRequired]
+           ,[AllowOfflineAccess]
+           ,[IdentityTokenLifetime]
+           ,[AllowedIdentityTokenSigningAlgorithms]
+           ,[AccessTokenLifetime]
+           ,[AuthorizationCodeLifetime]
+           ,[ConsentLifetime]
+           ,[AbsoluteRefreshTokenLifetime]
+           ,[SlidingRefreshTokenLifetime]
+           ,[RefreshTokenUsage]
+           ,[UpdateAccessTokenClaimsOnRefresh]
+           ,[RefreshTokenExpiration]
+           ,[AccessTokenType]
+           ,[EnableLocalLogin]
+           ,[IncludeJwtId]
+           ,[AlwaysSendClientClaims]
+           ,[ClientClaimsPrefix]
+           ,[PairWiseSubjectSalt]
+           ,[Created]
+           ,[Updated]
+           ,[LastAccessed]
+           ,[UserSsoLifetime]
+           ,[UserCodeType]
+           ,[DeviceCodeLifetime]
+           ,[NonEditable])
+     VALUES
+           (1
+           ,'angular_spa'
+           ,'oidc'
+           ,0
+           ,null
+           ,null
+           ,null
+           ,null
+           ,0
+           ,1
+           ,0
+           ,1
+           ,0
+           ,0
+           ,0
+           ,null
+           ,1
+           ,null
+           ,1
+           ,0
+           ,300
+           ,null
+           ,3600
+           ,300
+           ,null
+           ,2592000
+           ,1296000
+           ,1
+           ,0
+           ,1
+           ,0
+           ,1
+           ,1
+           ,0
+           ,'client_'
+           ,null
+           ,SYSDATETIME()
+           ,null
+           ,null
+           ,null
+           ,null
+           ,300
+           ,0)
 ```
-生成文件如下
-│   AMS_IS.csproj
-│   appsettings.json
-│   Config.cs
-│   IdentityServer.db
-│   Program.cs
-│   SeedData.cs
-│   Startup.cs
-│   tempkey.jwk
-│   updateUI.ps1
-│
-├───Migrations
-│   │   ConfigurationDb.sql
-│   │   PersistedGrantDb.sql
-│   │
-│   ├───ConfigurationDb
-│   │
-│   └───PersistedGrantDb
-│
-├───Properties
-│       launchSettings.json
-│
-├───Quickstart
-│   │   Extensions.cs
-│   │   SecurityHeadersAttribute.cs
-│   │   TestUsers.cs
-│   │
-│   ├───Account
-│   │       AccountController.cs
-│   │       AccountOptions.cs
-│   │       ExternalController.cs
-│   │       ExternalProvider.cs
-│   │       LoggedOutViewModel.cs
-│   │       LoginInputModel.cs
-│   │       LoginViewModel.cs
-│   │       LogoutInputModel.cs
-│   │       LogoutViewModel.cs
-│   │       RedirectViewModel.cs
-│   │
-│   ├───Consent
-│   │       ConsentController.cs
-│   │       ConsentInputModel.cs
-│   │       ConsentOptions.cs
-│   │       ConsentViewModel.cs
-│   │       ProcessConsentResult.cs
-│   │       ScopeViewModel.cs
-│   │
-│   ├───Device
-│   │       DeviceAuthorizationInputModel.cs
-│   │       DeviceAuthorizationViewModel.cs
-│   │       DeviceController.cs
-│   │
-│   ├───Diagnostics
-│   │       DiagnosticsController.cs
-│   │       DiagnosticsViewModel.cs
-│   │
-│   ├───Grants
-│   │       GrantsController.cs
-│   │       GrantsViewModel.cs
-│   │
-│   └───Home
-│           ErrorViewModel.cs
-│           HomeController.cs
-│
-├───Views
-│
-└───wwwroot
+写入client scope
+```
+INSERT INTO [dbo].[ClientScopes]
+           ([Scope]
+           ,[ClientId])
+     VALUES
+           ('openid'
+           ,3);
+		   INSERT INTO [dbo].[ClientScopes]
+           ([Scope]
+           ,[ClientId])
+     VALUES
+           ('profile'
+           ,3);
+		   INSERT INTO [dbo].[ClientScopes]
+           ([Scope]
+           ,[ClientId])
+     VALUES
+           ('api1'
+           ,3)
+```
+
+client cors配置
+```
+INSERT INTO [dbo].[ClientCorsOrigins]
+           ([Origin]
+           ,[ClientId])
+     VALUES
+           ('http://localhost:4200'
+           ,3)
+```
+到这一步 angular spa 可以完成到identity server的跳转但是显示授权错误“Sorry, there was an error : unauthorized_client
+Unknown client or client not enabled”
+```
+
+INSERT INTO [dbo].[ClientGrantTypes]
+           ([GrantType]
+           ,[ClientId])
+     VALUES
+           ('implicit'
+           ,3)
+GO
+```
+```
+INSERT INTO [dbo].[ApiResources]
+           ([Enabled]
+           ,[Name]
+           ,[DisplayName]
+           ,[Description]
+           ,[AllowedAccessTokenSigningAlgorithms]
+           ,[ShowInDiscoveryDocument]
+           ,[Created]
+           ,[Updated]
+           ,[LastAccessed]
+           ,[NonEditable])
+     VALUES
+           (1
+           ,'api1'
+           ,'AMS API'
+           ,null
+           ,null
+           ,1
+           ,SYSDATETIME()
+           ,null
+           ,null
+           ,0)
+GO
+```
+安装entityframework sqlserver依赖
+```
+dotnet add package IdentityServer4.EntityFramework
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+```
+
 模板使用的是sqlitedb 见startup.cs
 ```
 services..AddConfigurationStore(options =>
@@ -285,3 +388,29 @@ services..AddConfigurationStore(options =>
     options.ConfigureDbContext = builder => builder.UseSqlite(connectionString);
 })
 ```
++ ConfigurationDbContext  - 配置数据如 clients, resources, scopes
++ PersistedGrantDbContext - 临时处理数据如 authorization codes, refresh tokens
+
+用户数据库上下文
+```
+dotnet ef migrations add InitUserContext -c AMSIS.Data.UserContext -o Data/Migrations/UserDb
+Update-Database -c AMSIS.Data.UserContext
+```
+#### login/logout workflow 和 重定向
+当token无效时（比如后台校验jwt返回前台401）前台spa应跳转至登录页如 http://localhost:44365/account/login?returnUri=http%3A//localhost%3A4200/passport/callback
+
+spa应在路由到callback时从url中取得token存localstorage
+
+#### registry workflow
+跳转到注册页 填表单 保存profile
+应在业务领域分离出用户/账户信息 使用从identityserver取得的openid关联本业务领域数据
+
+#### 返回包含自定义Claim的Profile
+  
+
+#### 为自己的用户体系实现认证接口
+
+#### 部署到http
+[lax cookie policy](https://www.likecs.com/show-306384005.html)
+
+
