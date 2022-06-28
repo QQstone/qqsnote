@@ -210,3 +210,31 @@ subject.subscribe((data) => {
 
 subject.next(Math.random());
 ```
+
+#### toPromise deprecated
+Rxjs v8版本后toPromise方法弃用， 原因基于Observable与Promise前后返回值不一致的issue
+[RxJS heads up: toPromise is being deprecated](https://indepth.dev/posts/1287/rxjs-heads-up-topromise-is-being-deprecated)
+
+曾常使用的
+```
+public async loadCategories() {
+  this.categories = await this.inventoryService
+    .getCategories()
+    .toPromise()
+}
+```
+变更为
+```
+import { lastValueFrom } from 'rxjs';
+...
+public async loadCategories() {
+  const categories$ = this.inventoryService.getCategories();
+  this.categories = await lastValueFrom(categories$);
+}
+```
+[rxjs 6中被废弃的toPromise](http://www.proyy.com/7079091621215600677.html)
+
+> The lastValueFrom is almost exactly the same as toPromise() meaning that it will resolve with the last value that has arrived when the Observable completes, but with the difference in behavior when Observable completes without emitting a single value. When Observable completes without emitting, toPromise() will successfully resolve with undefined (thus the return type change), while the lastValueFrom will reject with the EmptyError. Thus, the return type of the lastValueFrom is Promise<T>, just like toPromise() had in RxJS 6.lastValueFrom几乎与toPromise() 一个意思，在Observable complete的时候，lastValueFrom会带着Observable最后一个产生的值resolve，但是不同之处在于Observable不带值complete的情况下。
+当Observable不产生值并且complete时，toPromise方法会成功resolve为undefined（也就是返回类型改变了，不再是T），但是lastValueFrom会带着EmptyErrorreject。因此，就如同在RxJS 6里一样，它的返回类型是Promise<T>。
+
+> However, you might want to take the first value as it arrives without waiting an Observable to complete, thus you can use firstValueFrom. The firstValueFrom will resolve a Promise with the first value that was emitted from the Observable and will immediately unsubscribe to retain resources. The firstValueFrom will also reject with an EmptyError if the Observable completes with no values emitted.然而，你可能不等Observable complete，想要使用其第一个生产的值，因此可以用firstValueFrom。firstValueFrom会将Observable第一个生产的值resolve并且立刻unsubscribe保存该值。firstValueFrom也会在Observable没有值产生而complete的情况下带着 EmptyErrorreject。

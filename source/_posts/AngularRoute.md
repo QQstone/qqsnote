@@ -28,3 +28,8 @@ this.route.queryParamMap.subscribe(queryParam=>this.queryParams=queryParam)
 // return
 this.router.navigate(['../'], {queryParams: this.queryParams});
 ```
+
+#### Hash:false
+去掉url的＃
+
+useHash:false的情况下navigateByUrl完整的url出现404，相对路由路径正常 

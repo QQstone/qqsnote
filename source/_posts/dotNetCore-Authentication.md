@@ -5,7 +5,7 @@ tags:
 - .Net
 - 认证&授权
 ---
-
+#### 关于认证
 参考[ASP.NET Core 中的那些认证中间件及一些重要知识点](https://www.cnblogs.com/savorboard/p/aspnetcore-authentication.html)
 > 在 <span>ASP.NET</span> Core 中，身份验证由 IAuthenticationService 负责，而它供身份验证中间件使用。
 
@@ -53,7 +53,10 @@ public void ConfigureServices(IServiceCollection services)
     });
 }
 ```
-再说方案名称（AuthenticationScheme），授权策略（authorization policy）可使用方案名称来指定应使用哪种（或哪些）身份验证方案来对用户进行身份验证。 当配置身份验证时，通常是指定默认身份验证方案。 除非资源请求了特定方案，否则使用默认方案。下文中有使用特性注解为资源（如api）指定授权方案的栗子
+再说方案名称（AuthenticationScheme），可使用方案名称来指定应使用哪种（或哪些）身份验证方案来对用户进行身份验证。 当配置身份验证时，通常是指定默认身份验证方案。除非资源请求了特定方案，否则使用默认方案。
+
+授权策略（authorization policy） 
+下文中有使用特性注解为资源（如api）指定授权方案的栗子
 [自定义策略提供程序-IAuthorizationPolicyProvider](https://github.com/dotnet/AspNetCore/tree/release/3.1/src/Security/samples/CustomPolicyProvider)
 
 文章[Asp.Net Basic Authentication](https://jasonwatmore.com/post/2018/09/08/aspnet-core-21-basic-authentication-tutorial-with-example-api)自定义了使用Basic Auth进行认证的方案，配置方案如
