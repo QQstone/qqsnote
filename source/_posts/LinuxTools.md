@@ -252,3 +252,11 @@ chmod a+r file1.txt // 同上
 ```
 sudo lsof -i:8080
 ```
+#### dos2unix
+windows&linux交叉编译环境下脚本结尾标记可能出错
+> Bash syntax error: unexpected end of file
+
+使用dos2unix工具转换脚本文件
+```
+dos2unix task.sh
+```

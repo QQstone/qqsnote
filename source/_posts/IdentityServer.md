@@ -29,7 +29,7 @@ IdentityServer4 with ASP.NET Core Identity            is4aspid
 IdentityServer4 Empty                                 is4empty
 IdentityServer4 with Entity Framework Stores          is4ef
 IdentityServer4 with In-Memory Stores and Test Users  is4inmem
-IdentityServer4 Quickstart UI (UI assets only)
+IdentityServer4 Quickstart UI (UI assets only)        is4ui
 入门：
 入门项目包含三个部分，身份认证服务(https://localhost:5001), API(https://localhost:44323/identity), Client(一个console program)
 
@@ -284,4 +284,30 @@ services..AddConfigurationStore(options =>
 {
     options.ConfigureDbContext = builder => builder.UseSqlite(connectionString);
 })
+```
+#### 使用is4保护express api
+```
+const jwt = require("express-jwt"),
+jwksClient = require("jwks-rsa");
+
+const auth = jwt({
+  secret: jwksClient.expressJwtSecret({
+    cache: true, // see https://github.com/auth0/node-jwks-rsa#caching
+    rateLimit: true, // see https://github.com/auth0/node-jwks-rsa#rate-limiting
+    jwksRequestsPerMinute: 2,
+    jwksUri: `${is4host}/.well-known/openid-configuration/jwks`,
+  }),
+
+  audience: "api1.resource", // <---- its your api resource.
+  issuer: issuer, // <----- address of identityserver4.
+  algorithms: ["RS256"], //<----- its needed algorithm to handle secret.
+});
+app.use(auth)
+```
+其中is4host是identity server4的主机域名或ip 如上搭建的https://localhost:5001
+issuer,jwksUri 均可从${is4host}/.well-known/openid-configuration中找到
+
+#### No signing credential is configured, can't create JWT token
+```
+builder.AddDeveloperSigningCredential();
 ```

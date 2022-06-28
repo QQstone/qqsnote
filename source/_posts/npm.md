@@ -31,3 +31,12 @@ npm 用于包管理（安装、卸载、调用已安装的包blabla），npx在�
 ```
 mklink /d D:\project\B\node_modules D:\project\A\node_modules
 ```
+
+#### 源
+```
+npm --registry https://registry.npm.taobao.org install 
+```
+设置
+```
+npm config set registry https://registry.npm.taobao.org
+```

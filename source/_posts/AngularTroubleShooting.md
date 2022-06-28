@@ -71,7 +71,7 @@ rm -rf node_modules
 rm -f package-lock.json
 npm i
 ```
-#### css: ng-deep
+#### css: ng-deep host-context
 曾使用ng-inline-svg将svg模板嵌入angular模板(见{% post_link svg svg %})，插入方式使用的是其定义的指令
 ```
 <div [inlineSVG]="'assets/image/icon.svg'"></div>
@@ -96,6 +96,19 @@ Angular官方文档中对于样式‘透传’有如下solution
 参考[ng-inline-svg issue#14](https://github.com/arkon/ng-inline-svg/issues/14)
 
 关于deprecated，是deep与w3c的[草案](https://drafts.csswg.org/css-scoping-1/)曾用关键字冲突，然而其一Angular尚无替代方案，其二w3c已移除了相关建议，若将来协议落地，Angular亦无须重复实现这个feature(引述：[StackOverflow：What to use in place of ::ng-deep](https://stackoverflow.com/questions/47024236/what-to-use-in-place-of-ng-deep))
+
+:host-context可以根据组件外部元素来决定组件内的样式
+```
+<nav class="collapse">
+<nav-header></nav-header>
+<nav>
+```
+在NavHeader.component.less
+```
+:host-context(.collapse) .title{
+    ...
+}
+```
 
 #### Can't bind to 'ngForOf' since it isn't a known property of XXX
 疑似升级至ng11后出现，多个modules，任意组件使用指令均可能报错，解决方法是在所在子模块手动引入CommonModule

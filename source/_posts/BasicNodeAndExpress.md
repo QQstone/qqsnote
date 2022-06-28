@@ -96,6 +96,8 @@ app.get('/now', function(req, res, next){
         res.json({time: req.time})
 })
 ```
+大致是express().\[method](\[path],\[middleware],(req,res)=>{...})
+
 可以引用第三方中间件函数
 #### body-parse
 将post body内容编码并放入req.body

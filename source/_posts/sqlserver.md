@@ -215,3 +215,11 @@ delete from cte where rownum > 1
 [CSDN Blog:SQL Server Error 18456](https://blog.csdn.net/mo_feng_/article/details/62226310)
 
 other issues: [Microsoft Docs: Troubleshooting Connect to SQL Server](https://docs.microsoft.com/zh-cn/sql/database-engine/configure-windows/troubleshoot-connecting-to-the-sql-server-database-engine?view=sql-server-ver15#enable-protocols)
+
+#### 查看版本
+```
+select @@version
+```
+
+#### 作业和代理
+某需求欲使用SQL Server的计划进行自动备份，启动SQL Server Agent时账户密码不正确 且该账号登录SSMS没有计划、代理等菜单
