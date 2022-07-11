@@ -13,6 +13,7 @@ tags:
 % 安装spa template pack
 dotnet new -i Microsoft.DotNet.Web.Spa.ProjectTemplates
 % 使用模板创建项目 
+dotnet new --list
 dotnet new angular -n MyDotnetNgProject
 ```
 angular is short for template"<span>ASP.NET</span> Core with Angular", -n 指定项目名称，键入dotnet new --help查看选项参数说明。

@@ -9,9 +9,10 @@ tags:
 pm2 start index.js
 pm2 stop all
 pm2 logs
+pm2 delete all
 ```
 #### env variables
-将node.js应用封装成模块ecosystem.config.js
+将node.js应用封装成模块ecosystem.config.js （也可以直接用json）
 ```
 module.exports = {
   apps : [

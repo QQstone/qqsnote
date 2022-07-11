@@ -222,4 +222,8 @@ select @@version
 ```
 
 #### 作业和代理
-某需求欲使用SQL Server的计划进行自动备份，启动SQL Server Agent时账户密码不正确 且该账号登录SSMS没有计划、代理等菜单
+~~某需求欲使用SQL Server的计划进行自动备份，启动SQL Server Agent时账户密码不正确 且该账号登录SSMS没有计划、代理等菜单~~
+
+SQL Server Express没有这部分功能
+
+#### sqlcmd
