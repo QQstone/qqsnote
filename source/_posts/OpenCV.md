@@ -33,3 +33,67 @@ categories:
 ```
 pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple opencv-python
 ```
+读取显示图像
+```
+img = cv2.imread('singlemushroom.jpg', cv2.IMREAD_UNCHANGED)
+cv2.imshow("origin image", img)
+
+img_gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+
+cv2.imshow("gray image", img_gray)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+# 写入图像
+cv2.imwrite("originImage.jpg", img)
+```
+缩放
+```
+result = cv2.resize(src, (200,100))
+```
+像素操作
+```
+#矩阵运算
+
+#拷贝区域
+ball=img[280:340,330:390]
+img[273:333,100:160]=ball
+```
+通道
+```
+#通道顺序与R-G-B顺序相反
+b,g,r=cv2.split(img)
+#b=img[:,:,0]
+img=cv2.merge(b,g,r)
+```
+阈值
+```
+#读取图片
+src = cv2.imread('miao.jpg')
+
+#灰度图像处理
+GrayImage = cv2.cvtColor(src,cv2.COLOR_BGR2GRAY)
+
+#二进制阈值化处理
+r, b = cv2.threshold(GrayImage, 127, 255, cv2.THRESH_BINARY)
+#THRESH_BINARY 超过阈值像素设为最大值 否则为0
+#THRESH_BINARY_INV 超过阈值像素设为0 否则为最大值
+#THRESH_TRUNC 大于阈值部分设为最大值 否则不变
+#THRESH_TOZERO 大于阈值部分不变 否则设为0
+#THRESH_TOZERO_INV 大于阈值部分设为0 否则不变
+print(r)
+
+#显示图像
+cv2.imshow("src", src)
+cv2.imshow("result", b)
+```
+卷积和滤波
+设想3*3矩阵 对中心位置像素值做卷积运算 其作用即一种平滑滤波
+
+膨胀和腐蚀，开运算和闭运算 
+
+
+自适应阈值
+
+联通区域计数
