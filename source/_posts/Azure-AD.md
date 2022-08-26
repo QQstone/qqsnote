@@ -249,6 +249,9 @@ namespace active_directory_b2c_wpf
 > Silent Sign In Workflow
 
 #### 自定义登录页
+参考[Microsoft Docs: ADB2C UX自定义](https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/customize-ui?pivots=b2c-user-flow)
+可设置蓝色 灰色 经典风格的sign in页面 以及公司logo 
+设置表单项目及排序等
 #### Wechat
 首先是在[微信公众平台](https://open.weixin.qq.com/cgi-bin/applist?t=manage/list&page=0&num=20&openapptype=512&token=046ef0026c9a457aa1f8f33db6868c26e193c21d&lang=zh_CN)注册网站应用,注册过程需要填写企业/个人网站的官网和备案号，很头疼
 

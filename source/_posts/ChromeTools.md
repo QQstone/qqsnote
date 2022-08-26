@@ -36,3 +36,5 @@ categories:
 #### headless chrome 
 [知乎：Headless Chrome入门](https://zhuanlan.zhihu.com/p/29207391) 即不显示浏览器界面而在命令行运行Chrome功能，该模式主要用于自动化测试工具#### 响应式
 [使用 Chrome DevTools 中的 Device Mode 模拟移动设备](https://developers.google.com/web/tools/chrome-devtools/device-mode#device)
+
+#### performance

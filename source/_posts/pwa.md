@@ -106,3 +106,20 @@ self.addEventListener('activate', (event) => {
     );
 });
 ```
+关于serviceworker，既为worker，也就是运行于页面js线程以外的独立脚本，其作用是拦截页面请求、离线缓存、离线通知、并发处理等
+
+生命周期：
+
+如index.html中 加载应用时即注册service worker，注册成功后安装sw并触发安装事件(install event)，见sw.js代码，在安装事件的响应中，处理应用缓存
+
+安装成功后激活service worker触发激活事件(active event)
+
+激活成功后service worker进入idle状态 在该状态下所有请求会触发fetch event 直到应用关闭
+
+添加到主屏幕（a2hs）
+使应用支持a2hs:
++ https
++ 正确配置的manifest.json
++ 合适的图标
++ 注册service worker
+注册service worker是作为a2hs条件的，但是可以a2hs，未必可以离线使用
