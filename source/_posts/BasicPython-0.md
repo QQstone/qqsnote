@@ -40,6 +40,21 @@ Python没有分割代码块符号，以缩进以及冒号:区分层次，一般�
 首先：python使用的变量，在默认情况下一定是用局部变量。
 其次：python如果想使用作用域之外的全局变量，则需要加global前缀。
 
+#### 执行脚本
+```
+$ python test.py arg1 arg2 arg3
+```
+脚本内容如
+```
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+import sys
+
+print '参数个数为:', len(sys.argv), '个参数。'
+print '参数列表:', str(sys.argv)
+```
+
 #### 关于python2.7和python3.5的一万种冲突方式
 目前的很多情况下，linux的软件管理工具仍然会将python2.7作为默认安装版本，然后在某个时刻你会看到
 ```

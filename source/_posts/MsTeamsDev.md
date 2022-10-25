@@ -68,7 +68,10 @@ press F5
 Show all --> Admin centers --> Teams Apps --> Setup policies --> Global
 打开 Upload custom apps
 #### 部署到Azure
-先执行Teams Toolkit提供的DEPLOYMENT-->Provision in the Cloud功能，toolkit将以项目名称自行创建App Service、Storage Account及Vitual Network等Rescource
+先执行Teams Toolkit提供的DEPLOYMENT-->Provision in the Cloud功能，toolkit将以项目名称自行创建~~App Service、Storage Account及Vitual Network等~~Rescource
+
+事实上，Teams Tab App的前端静态文件使用Azure Storage Account托管，访问控制通过[托管标识(Managed Identity)](https://learn.microsoft.com/zh-cn/azure/app-service/tutorial-connect-app-access-storage-javascript?tabs=azure-portal), 关于Provision时创建哪种资源见[Provision cloud resources](https://learn.microsoft.com/en-us/microsoftteams/platform/toolkit/provision?from=teamstoolkit&pivots=visual-studio-code#create-resources)
+
 使用Deploy to the Cloud 将当前项目作为Web App部署到前面Provision预备的资源上
 
 记得配置Api的Endpoint 比如写/public/config.json

@@ -29,3 +29,12 @@ PyCharm -> 文件 -> 设置 -> 工具 -> 外部工具
 ![v2-7039dac81f16e3567988b1a16b745067_720w.jpg](http://tva1.sinaimg.cn/large/a60edd42gy1h5j1g8wdgxj20av099zkp.jpg)
 
 类似的 可添加PyRCC
+
+#### QT designer
+完成如上配置 可在PyCharm的外部工具打开 QT designer，
+使用QT designer生成UI文件
+
+#### .ui文件到.py文件
+```
+pyuic demo.ui -o demo.py
+```
