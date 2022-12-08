@@ -75,3 +75,19 @@ sudo apt install python-is-python3
 python -m ensurepip
 python -m pip install --upgrade pip
 ```
+#### python packages 国内源
+```
+pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple ****
+```
+
+#### 查看package版本
+控制台
+```
+pip list
+pip list | grep opencv-python
+```
+程序中
+```
+import cv2
+print(cv2.__version__)
+```

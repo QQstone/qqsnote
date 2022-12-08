@@ -73,7 +73,7 @@ result = await _context.OurBrand
         .Select(brand=>new JObject{{"name", brand.name}, {"logo", brand.logo}})
         .ToListAsync();
 ```
-#### 正则表达式极其校验
+#### 正则表达式及其校验
 ```
 string pattern = @"^[A-Z]{4}[AB0-9][0-9]{3}$";
 flag = Regex.IsMatch(sn, pattern)
@@ -401,3 +401,16 @@ public class List<T> : IList<T>, ICollection<T>, IEnumerable<T>, IList, ICollect
 ![](https://tvax2.sinaimg.cn/large/0032xJMSgy1gtdrfazvquj60dw07sdht02.jpg)
 #### Dictionary
 面试问题
+
+#### 函数柯里化
+js柯里化求和
+```
+const sum=a=>b=>c=>(a+b+c) 
+// sum = a => (b => (c => (a+b+c))) 
+sum(1)(1)(2)  //res:4
+```
+C#柯里化
+```
+Func<Int32, Func<Int32, Int32>> sum = x => y => x + y;
+Func<Int32, Int32> sumwith5 = sum(5)
+```
