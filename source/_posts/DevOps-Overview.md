@@ -4,7 +4,13 @@ date: 2020-12-10 14:44:06
 tags:
 - DevOps
 ---
-Azure DevOps的组成
+[Azure DevOps Engineer Expert](https://docs.microsoft.com/zh-cn/certifications/devops-engineer/)
+
+> DevOps 是人员、流程和产品的集合体现，它可让我们向最终用户持续交付价值。 ———— Donovan Brown
+
+#### Azure DevOps 
+Azure DevOps 是 Microsoft 提供的一种软件即服务 (SaaS) 平台，它能提供用于开发和部署软件的端到端 DevOps 工具链。
+组成
 + Azure Repos 源代码管理
 + Azure Pipelines CI/CD服务
 + Azure Boards 类似TP的kanban工具以及Agile tools等

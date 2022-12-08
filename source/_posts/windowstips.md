@@ -119,3 +119,19 @@ launch.json设置相对路径
 "cwd": "${fileDirname}", //相对当前文件位置
 "cwd": "${workspaceFolder}", //相对工作目录
 ```
+
+#### 开机启动
+启动regedit
+路径 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+新建【字符串值】并输入路径
+![v2-47bd203958d5ee2adc26105ca6dbeedb_b.webp](http://tva1.sinaimg.cn/large/a60edd42gy1h52r9987ejg20ot0ivten.jpg)
+
+#### 工具
+截图 Win + Shift + S
+窗口移动 Win + ← | →
+窗口最大化最小化 Win + ↑ | ↓
+
+#### ide
+F5  Start Debug/Continue, Shift + F5 Stop Debugging
+F11 Step In, Shift + F11 Step Out
+F10 Step Over

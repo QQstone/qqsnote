@@ -90,3 +90,25 @@ $$
 配置theme\next\_config.yml   mathjax: enable: true
 同时在文章title下使能 mathjax: true
 详见[hexo-theme-next doc:数学公式](https://github.com/theme-next/hexo-theme-next/blob/master/docs/zh-CN/MATH.md)
+
+[PlantUML绘图](https://zhuanlan.zhihu.com/p/147331550)
+
+安装VS Code插件： Markdown Preview Enhanced, PlantUML
+
+```plantuml
+@startuml
+
+== Initialization ==
+
+Alice -> Bob: : Can you solve: <math>ax^2+bx+c=0</math>
+Bob --> Alice: <math>x = (-b+-sqrt(b^2-4ac))/(2a)</math>
+activate Alice #FFBBBB
+note left: this is a first note
+
+Alice -> Bob: Another dialogue
+deactivate Alice
+
+Alice <-- Bob: Another dialogue
+
+@enduml
+```@enduml

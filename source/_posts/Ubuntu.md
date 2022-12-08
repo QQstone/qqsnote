@@ -31,6 +31,23 @@ Ctrl C无法终结，按Ctrl Z将进程转到后台执行，然后ps -ef查看�
 #### ubuntu lts 的IP设置
 ```
 sudo nano /etc/netplan/01-xxxx.yaml
+```
+这个配置文件内容如下例
+```
+network:
+  version: 2
+  renderer: NetworkManager
+  ethernets:
+    enp0s3:
+      addresses:
+        - 192.168.1.100/24
+      gateway4: 192.168.1.1
+      nameservers:
+        addresses: [8.8.8.8, 4.4.4.4]
+```
+enp0s3为配置的ethernet(以太网)网络接口 用 ip link show 命令显示网络接口列表
+```
+# netplan try 若配置正确 这个命令会应用上面的配置 并提示是否退回之前的设置
 sudo netplan apply
 # sudo netplan --debug apply
 ```

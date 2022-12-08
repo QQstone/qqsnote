@@ -12,7 +12,7 @@ categories:
 OData解决的是Restful Api定义太随便的问题
 比如查询人员
 A团队的API 可能是这样：http://A/api/Users/001
-B团队的API 可能是这样：http://A/api/Users/id=001
+B团队的API 可能是这样：http://A/api/Users?id=001
 返回结果也可能各有加工，{status: "ok",data: {...}}的设计实际上只是自我感觉良好
 
 OData则约束调用接口 {{ServerName}}{{ODataBase}}Users{{UserId}}
@@ -40,7 +40,7 @@ OData似乎暴露了过多的底层设计的，而这么做的目的和结果是
 
 参考[OData.org Getting started](https://www.odata.org/getting-started/understand-odata-in-6-steps/)
 #### 安装和应用OData Library
-Nuget Package Manager 安装Microsoft.AspNetCore.OData
+Nuget Package Manager 安装Microsoft.AspNetCore.OData <span style="color:#ff0;font-weight:bold">Caution!</span> 这里是7.0版本
 添加Model DBContext Controller(这块参考EntityFramework)
 ```
 public void ConfigureServices(IServiceCollection services)
@@ -67,6 +67,8 @@ public void Configure(IApplicationBuilder app)
     });
 }
 ```
+
+参考[QQs TeamsPersistanceCenter项目](https://github.com/QQstone/TeamsPersistanceCenter)
 #### filter
 + $filter=name eq 'QQstone'
 + $filter=type ne 'standard'

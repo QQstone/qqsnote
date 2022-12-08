@@ -91,3 +91,14 @@ git status
 git add/rm <file>...
 git reset ./temp.txt
 git checkout -- <file>...
+
+#### tag
+标签tag用于标记一个commit
+```
+git tag -a v1.0.3 -m "bump version to v1.0.3"
+```
+使用git tag命令查看所有标签，使用git checkout检出指定标签版本
+移除尚未推送到远端的标签:
+```
+git tag -d v1.0.3
+```

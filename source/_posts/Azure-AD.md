@@ -226,6 +226,16 @@ namespace active_directory_b2c_wpf
 + Azure AD 框架进行认证
 + Azure AD 框架查询并授权 颁发相应的token
 + 客户端接收到token并缓存
+#### 自定义策略用户流
+使用ADB2C认证授权流可选择预置的User flow（见上文）或自定义策略
+
+[Microsoft Docs：为 Identity Experience Framework 应用程序添加签名和加密密钥](https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/tutorial-create-user-flows?pivots=b2c-custom-policy#add-signing-and-encryption-keys-for-identity-experience-framework-applications)
+
+[A Walkthrough For Azure AD B2C Custom Policy (Identity Experience Framework)](https://tsmatz.wordpress.com/2020/05/12/azure-ad-b2c-ief-custom-policy-walkthrough/)
+
+下载新手配置包（[starterpack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack.git)）
++ 
+
 #### 使用Azure AD 作为identity provider（存目）
 以实现一键(使用AD凭据)登录
 #### 对接wechat 作为identity provider（存目）
@@ -249,6 +259,9 @@ namespace active_directory_b2c_wpf
 > Silent Sign In Workflow
 
 #### 自定义登录页
+参考[Microsoft Docs: ADB2C UX自定义](https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/customize-ui?pivots=b2c-user-flow)
+可设置蓝色 灰色 经典风格的sign in页面 以及公司logo 
+设置表单项目及排序等
 #### Wechat
 首先是在[微信公众平台](https://open.weixin.qq.com/cgi-bin/applist?t=manage/list&page=0&num=20&openapptype=512&token=046ef0026c9a457aa1f8f33db6868c26e193c21d&lang=zh_CN)注册网站应用,注册过程需要填写企业/个人网站的官网和备案号，很头疼
 

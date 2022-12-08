@@ -284,6 +284,7 @@ var MaYun = context.Students
             .Where(s => s.FirstName == GetName()).ToList();
 // update
 MaYun.Age=8;
+context.Update(MaYun)
 context.SaveChanges()
 // delete
 context.Remove(MaYun);
@@ -621,3 +622,22 @@ public class WorkerRunner
 }
 ```
 就是new一个DBContext用， <span style="color:#ff0;font-weight:bold">Caution!</span> 经测单靠new DBContext不能阻止transaction Error
+
+#### 自动生成id
+```
+[Table("User")]
+public class User{
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public string Id { get; set; }
+}
+```
+#### 默认值
+```
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<User>()
+        .Property(e => e.Role)
+        .HasDefaultValue(1);
+}
+```

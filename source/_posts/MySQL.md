@@ -133,6 +133,11 @@ create database csc;
 use csc;
 show tables;
 ```
+#### 联合更新
+```
+update asset a inner join department d on a.depart_id=d.depart_id set a.department=d.depart_name 
+where a.department <> d.depart_name 
+```
 #### key, primary key, unique key
 
 #### 分组取第一条
