@@ -4,6 +4,10 @@ date: 2020-10-20 09:42:13
 tags:
 - Azure
 ---
+云管理员，与普通IT管理员相比，不需要过多关注具体硬件软件的内容，云管理员管理着包括存储、网络连接和计算云功能在内的云服务，并对整个IT生命周期中的每项服务具有深入了解
+
+他们接收最终用户对接入新云应用程序的请求，为其提供服务建议
+
 ### Overview
 There are 7 modules to learn:
 + Prerequisites for Azure administrators

@@ -135,3 +135,19 @@ launch.json设置相对路径
 F5  Start Debug/Continue, Shift + F5 Stop Debugging
 F11 Step In, Shift + F11 Step Out
 F10 Step Over
+
+#### C语言编译环境
+Nginx Build：
++ Microsoft Visual C compiler. 装有Microsoft Visual Studio即可
++ [MSYS](https://sourceforge.net/projects/mingw/files/MSYS/) or [MSYS2](https://www.msys2.org/). Mini GUN 环境， 与Cygwin大致相当
++ Perl, Perl 是 Practical Extraction and Report Language 的缩写，可翻译为 "实用报表提取语言"。if you want to build OpenSSL® and nginx with SSL support. For example [ActivePerl](http://www.activestate.com/activeperl) or [Strawberry Perl](http://strawberryperl.com/).
++ [Mercurial](https://www.mercurial-scm.org/) client.
++ PCRE, zlib and OpenSSL libraries sources.
+
+我用Cygwin！[Cygwin最小系统](https://zhuanlan.zhihu.com/p/58480246)
+
+已安装Cygwin的，再次启动安装程序Setup.exe可以安装依赖的Libraries, 如上PCRE、zlib、OpenSSL
+导航到d盘的源码目录
+```
+
+```

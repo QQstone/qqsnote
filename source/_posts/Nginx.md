@@ -104,3 +104,5 @@ location / {
 #### 负载均衡
 [juejin](https://juejin.im/post/5b01336af265da0b8a67e5c9)
 
+#### 代理服务
+[ngx_http_proxy_connect_module](https://github.com/chobits/ngx_http_proxy_connect_module)

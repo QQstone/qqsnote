@@ -9,10 +9,28 @@ categories:
 ---
 > 一切可以用JavaScript实现的，终将用Javascript来实现
 
+#### Node.js
 官方定义
 >Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
 
 Node 是js的一种新的运行环境，基于Chrome V8 js引擎开发，以事件驱动和无阻塞IO模型实现轻量和高效. npm是Node包管理生态系统，目前是世界最大的开源库。<br> 
+
+#### 关于CommonJS
+[CommonJS规范————阮一峰](http://javascript.ruanyifeng.com/nodejs/module.html)
+CommonJS规范是旨在解决Javascript的作用域问题，其规定每个文件就是一个模块，有其自己的作用域，一个文件里面定义的变量、函数、类，都是私有的，对其他文件不可见（例外的文件之间分享使用global全局变量）模块必须通过 module.exports 导出对外的变量或接口，通过 require() 来导入其他模块的输出到当前模块作用域中。
+
+require是同步执行的，只有加载完成，才能执行后面的操作 浏览器端一般遵循异步模块定义(asynchronous module definition, AMD)协议
+
+#### module
+上文所述，每个文件就是一个模块，在每个模块/文件内部，都有一个module对象，该对象存在以下属性
++ <span>module.id</span> 模块的识别符，通常是带有绝对路径的模块文件名。
++ module.filename 模块的文件名，带有绝对路径。
++ module.loaded 返回一个布尔值，表示模块是否已经完成加载。
++ module.parent 返回一个对象，表示调用该模块的模块。(可以判断是否为应用入口)
++ module.children 返回一个数组，表示该模块要用到的其他模块。
++ module.exports 表示模块对外输出的值。
+
+#### Express.js
 Express 是一个简洁而灵活的 node.js Web 应用程序框架, 提供了一系列强大特性帮助你创建各种 Web 应用，和丰富的 HTTP 工具。<br>
 
 server.js
@@ -47,7 +65,6 @@ let exists = _fs.exists;
 let readfile = _fs.readfile;
 ```
 ES6模块不是对象，而是通过export命令显示指定输出<strong>代码</strong>，再通过import输入。import的可以是对象定义或表达式等
-
 express封装了http method 和 router
 ```
 /** A first working Express Server */

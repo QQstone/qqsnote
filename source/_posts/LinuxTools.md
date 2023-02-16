@@ -252,6 +252,9 @@ chmod a+r file1.txt // 同上
 ```
 sudo lsof -i:8080
 ```
+#### curl
+即client url tool [curl 的用法指南](https://www.ruanyifeng.com/blog/2019/09/curl-reference.html)
+
 #### dos2unix
 windows&linux交叉编译环境下脚本结尾标记可能出错
 > Bash syntax error: unexpected end of file

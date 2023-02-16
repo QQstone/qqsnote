@@ -47,8 +47,22 @@ Three.js对WebGL工作步骤进一步封装，提供方便理解的绘图API以�
 
 关于学习Web3D相关技术的经验介绍：[如何学习WebGL和Three.js](http://www.yanhuangxueyuan.com/doc/Three.js/learnWebGLThreejs.html)
 
+### Babylon.js
+被认为相比于Three.js 更为工程化的web 3d框架
+
+### Ceicum
+地理位置坐标库
+
 ### Enable WebGL in your browser
 
 [参考](https://superuser.com/questions/836832/how-can-i-enable-webgl-in-my-browser)
 
 ### [Ali Hilo](https://hiloteam.github.io/tutorial/index.html)
+
+### CUDA
+
+> CUDA is a parallel computing platform and programming model developed by NVIDIA for general computing on its own GPUs
+
+### unity
+
+### webXR

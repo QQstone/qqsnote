@@ -433,3 +433,13 @@ https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/environments?view=aspn
 
 > 博主的理解是：方法名以Get开头，WebApi会自动默认这个请求就是get请求，而如果你以其他名称开头而又不标注方法的请求方式，那么这个时候服务器虽然找到了这个方法，但是由于请求方式不确定，所以直接返回给你405——方法不被允许的错误。
 结论：所有的WebApi方法最好是加上请求的方式（[HttpGet]/[HttpPost]/[HttpPut]/[HttpDelete]），不要偷懒，这样既能防止类似的错误，也有利于方法的维护，别人一看就知道这个方法是什么请求
+
+#### TargetFramework
+项目属性中的item，如\<TargetFramework>net6-windows10.0.22621.0\</TargetFramework> Visual Studio解析为
++ Target framework: .Net 6.0
++ Target OS: Windows
++ Target OS version: 10.0.22621.0
+
+一般只需要.Net6即可，在 OS 特定的 TargetFramework 的末尾指定可选的 OS 版本，例如，net6.0-ios15.0。 版本指示应用或库可用的 API。 它不控制应用或库在运行时支持的 OS 版本。 它用于选择项目编译的引用程序集，并用于从 NuGet 包中选择资产。 将此版本视为“平台版本”或“OS API 版本”，可以与运行时 OS 版本进行区分。
+
+当特定于 OS 的 TargetFramework 不显式指定平台版本时，它具有可从基础 TargetFramework 和平台名称推断的隐含值。 例如，.NET 6 中 iOS 的默认平台值为 15.0，这意味着 net6.0-ios 是规范 net6.0-ios15.0 TargetFramework 的简写形式。
