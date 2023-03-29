@@ -10,3 +10,6 @@ date: 2022-09-06 15:04:46
 > WebView2 runtime is available on most Windows 10 and Windows 11 machines by default. But it may not be available on older platforms.
 
 若缺需要查看WebView2运行时是否安装 [Microsoft Docs：检测是否已安装合适的 WebView2 运行时](https://learn.microsoft.com/zh-cn/microsoft-edge/webview2/concepts/distribution#detect-if-a-suitable-webview2-runtime-is-already-installed)
+
+#### webview vs webbrowser
+[WebBrowser类](https://learn.microsoft.com/zh-cn/dotnet/api/system.windows.forms.webbrowser?view=windowsdesktop-7.0)

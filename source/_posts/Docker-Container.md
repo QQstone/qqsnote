@@ -27,7 +27,7 @@ jenkins
 + --rm 容器退出后自动移除 实际上写这个会报与--restart always冲突
 + --name myjenkins容器Name命名为myjenkins
 + -p 8080:8080 -p 50000:50000 容器端口映射到宿主端口，前者是主机端口，后者是容器端口
-+ -v volumn设置（详见“卷和持久化数据”）
++ -v volume设置（详见“卷和持久化数据”）
 + --restart always重启策略
 + jenkins 镜像
 
@@ -36,6 +36,16 @@ jenkins
 
 Docker提供了3种预置网络配置：桥接、主机、无网络
 端口映射适应于桥接网络，是启动容器的默认网络设置，如果是主机网络，则可以直接使用主机上的剩余端口
+
+**jenkins升级**
+在jenkins ui中upgrade 重启后无法访问 查看docker container log发现需要升级JDK版本
+
+由于我们启用jenkins时映射了宿主volume,不用担心丢失工作数据， 可以更新docker image 删除并重建容器
+
+[如何进入无限重启的容器](https://segmentfault.com/a/1190000043471705)
+
+[更新docker jenkins环境(jdk, ant)](https://blog.csdn.net/renfng/article/details/120704334)
+
 #### 连接到容器
 
 docker attach [containerID]

@@ -414,3 +414,5 @@ C#柯里化
 Func<Int32, Func<Int32, Int32>> sum = x => y => x + y;
 Func<Int32, Int32> sumwith5 = sum(5)
 ```
+
+#### 多线程

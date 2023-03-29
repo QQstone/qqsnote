@@ -75,6 +75,13 @@ ssh  -o StrictHostKeyChecking=no  192.168.xxx.xxx
 ```
 git config core.sshCommand "ssh -i /home/csd/.ssh/id_rsa -o StrictHostKeyChecking=no git@hostname"
 ```
+
+> 异常：kex_exchange_identification: read: Software caused connection abort. banner exchange: Connection to 20.205.243.166 port 22: Software caused connection abort
+fatal: Could not read from remote repository.
+
+use https than ssh
+
+
 #### linux系统之间的ssh授权访问
 一、概述
 

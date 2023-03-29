@@ -54,3 +54,6 @@ Use the caret-character (^) to prefix the version of moment in your dependencies
 + 记录整个依赖树的具体版本， 即包括了依赖的依赖，
 + 须提交package-lock 在npm install时安装指定的版本
 + 每次npm update时依据package.json中的升级版本设置修改package-lock.json
+
+#### version lens
+VS Code extension 鼠标悬停在dependency的项上，可查看最新版本和依赖项目链接

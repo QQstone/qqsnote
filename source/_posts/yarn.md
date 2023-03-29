@@ -28,5 +28,18 @@ yarn [YourScriptInPackageJSON]
 If you are used to using npm you might be expecting to use --save or --save-dev. These have been replaced by yarn add and yarn add --dev. For more information, see the yarn add documentation.
 
 > Running yarn with no command will run yarn install, passing through any provided flags.
+
+#### 从私有Repository安装
+配置.yarnrc.yml 即yarn resouce configure
+```
+npmRegistries:
+  //qqstone.jfrog.io/artifactory/api/npm/Viewer/:
+    npmAlwaysAuth: true
+    npmAuthIdent: c2hpLnFpdUAlbnZpc3RhY28uY236QUtDcDhuSER6YWo3NDNIekNDOVRxOW1Kb0tGVHVaKU5yZ2N4aU5jaWVRQ0hEb2tNR0ROTE43TGkybV5aRkVzSkxkUzdMYkDudA==
+
+npmScopes:
+  qqsjfrog:
+    npmRegistryServer: "https://qqstone.jfrog.io/artifactory/api/npm/Viewer/"
+```
 #### TroubleShooting
 [cannot be loaded because running scripts is disabled on this system.](https://stackoverflow.com/questions/4037939/powershell-says-execution-of-scripts-is-disabled-on-this-system)

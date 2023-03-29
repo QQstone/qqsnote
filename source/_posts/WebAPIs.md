@@ -23,3 +23,22 @@ var xhr = new XMLHttpRequest;
 xhr.open("POST", url, false);
 xhr.send(data);
 ```
+
+#### ResizeObserver
+示例 [ResizeObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/ResizeObserver#%E7%A4%BA%E4%BE%8B)
+调用构造方法返回一个ResizeObserver对象，传入回调函数(entries)=>{}，即当监听到目标width height改变时，执行该函数，参数entries为ResizeObserverEntry接口的集合，可以访问真正在观察的 Element 或 SVGElement 最新的大小
+```
+const observer = new ResizeObserver(entries=>{
+  for (let entry of entries) {
+    if(entry.contentBoxSize) { // 内容盒尺寸
+      h1Elem.style.fontSize = `${Math.max(1.5, entry.contentBoxSize.inlineSize / 200)}rem`; // 前文某标题const h1Elem = document.querySelector('h1');
+      pElem.style.fontSize = `${Math.max(1, entry.contentBoxSize.inlineSize / 600)}rem`; // 前文某段文字const pElem = document.querySelector('p');
+    } else {
+      h1Elem.style.fontSize = `${Math.max(1.5, entry.contentRect.width / 200)}rem`;
+      pElem.style.fontSize = `${Math.max(1, entry.contentRect.width / 600)}rem`;
+    }
+  }
+})
+
+```
+关于内容盒和边框盒

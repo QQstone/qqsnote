@@ -64,6 +64,10 @@ div
 }
 ```
 #### transparent vs rgba(0,0,0,0)
+
+#### 优先级
++ 相同选择器 层叠覆盖
++ 具体、特异性强的选择器优先级高：类选择器 > 元素选择器
 #### 中空元素
 [clip-patch](https://developer.mozilla.org/zh-CN/docs/Web/CSS/clip-path)
 #### css实现toggle switch
@@ -128,3 +132,5 @@ css形如
 另margin和box-sizing在flex布局下是无效的
 
 [前端小智 CSS特效](https://segmentfault.com/a/1190000023290140)
+
+#### Container Query

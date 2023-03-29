@@ -65,7 +65,13 @@ echo /db/* >> .git/info/sparse-checkout
     // resolve merge conflict
     git rebase --continue
 ```
+```
     git rebase -i <start-commit> <end-commit> //(start-commit, end-commit] 前开后闭区间，合并到当前分支，默认 end-commit 为当前 HEAD
+```
+把 develop rebase 进 feature/new_featueXXX 分支，develop为上游(Upstream), checkout 的new_featueXXX 分支为Currnet Branch.
+
+每将一次develop的commit rebase进feature 都合并为一个中间版本commit，然后 git rebase --continue。实际中，rebase过程中可能产生冲突，如果两条分支都含有多次commit，且修改内容相互渗透，产生很多冲突，continue时是个中间版本 很难保证复合变基的逻辑吧 那将使这种"规范"失去意义 索性直接merge算了
+
 #### repository 迁移
 ```
 git clone --bare git@old-repo.git 

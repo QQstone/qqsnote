@@ -12,6 +12,8 @@ https://web.dev/progressive-web-apps/
 
 渐进式意使是网站根据浏览器的功能相应地呈现，高级的浏览器呈现高级的效果。就目前来看主要表现是对于版本比较高的 chrome，firefox 等浏览器，pwa 可以使用 add to home screen 的功能，使网络应用固定在桌面、移动设备主屏幕，成为独立应用
 
+脱机使用的渐进式web应用更快速也更可靠，还具备更吸引人的移动端体验，比如在网络不佳的场景下使用，还有添加到主屏幕的功能
+
 #### 网络应用清单 manifest.json
 参考[PWA manifest 配置](https://zhuanlan.zhihu.com/p/61173507)
 ```

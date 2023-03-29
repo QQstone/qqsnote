@@ -16,3 +16,10 @@ Azure DevOps 是 Microsoft 提供的一种软件即服务 (SaaS) 平台，它能
 + Azure Boards 类似TP的kanban工具以及Agile tools等
 + Azure Test Plans 测试工具，包括manual/exploratory testing 和 continuous testing
 + Azure Artifacts 大致上就是构建自己的库(allows teams to share packages such as Maven, npm, NuGet and more from public and private sources and integrate package sharing into your CI/CD pipelines)
+
+#### 生产DevOps的内容
++ 操作系统
++ 脚本
++ 容器
++ 云
++ 其他

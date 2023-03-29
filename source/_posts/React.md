@@ -309,7 +309,7 @@ ReactDOMServer.renderToString(<App />);
 ```
 服务端渲染(SSR),生成dom的html字符串,实现SEO优化
 #### Create React App
-这是一个package [create-react-app](https://www.npmjs.com/package/create-react-app), 如angular-cli，和vue-cli中包含的命令工具(这里封装的命令是react-scripts, 见package.json中的scripts)，用以创建基于React的完整应用。
+这是一个package [create-react-app](https://create-react-app.dev/docs/getting-started), 如angular-cli，和vue-cli中包含的命令工具(这里封装的命令是react-scripts, 见package.json中的scripts)，用以创建基于React的完整应用。
 ```
 my-app/
   node_modules/
@@ -327,7 +327,8 @@ my-app/
   package.json
 
 ```
-关于typescript
+
+#### 关于typescript
 ```
 yarn add --dev typescript
 ```

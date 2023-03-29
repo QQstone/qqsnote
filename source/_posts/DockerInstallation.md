@@ -35,3 +35,4 @@ categories:
 
     docker container ls
     ```
++ 查看日志（输出到当前终端）docker logs -f contianderId 

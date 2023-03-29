@@ -2,6 +2,7 @@
 title: PaddleX
 date: 2021-12-24 17:03:57
 tags:
+- AI
 ---
 百度旗下深度学习平台
 介于网络问题 使用源码编译 参考[PaddlePaddle在Windows下使用源码编译](https://www.paddlepaddle.org.cn/documentation/docs/zh/1.5/beginners_guide/install/compile/compile_Windows.html)
