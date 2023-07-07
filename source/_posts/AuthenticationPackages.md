@@ -71,15 +71,8 @@ IPublicClientApplication publicClientApp = PublicClientApplicationBuilder.Create
         .WithAuthority(AzureCloudInstance.AzurePublic, Tenant)
         .Build();
 ```
-使用自定义交互界面, 调用 WithCustomWebUi() 方法 传入自定义页面的实例，自定义页面类需要实现ICustomWebUi接口，接口定义了异步方法AcquireAuthorizationCodeAsync，该方法参数
+使用自定义交互界面, 调用 **WithCustomWebUi()** 方法 传入自定义页面的实例，自定义页面类需要实现**ICustomWebUi**接口，接口定义了异步方法 AcquireAuthorizationCodeAsync，该方法参数
 + authorizationUri Uri
 URI computed by MSAL.NET that will let the UI extension navigate to the STS authorization endpoint in order to sign-in the user and have them consent
 
 + redirectUri Uri The redirect URI that was configured. The auth code will be appended to this redirect URI and the browser will redirect to it.
-
-cancellationToken
-CancellationToken
-The cancellation token to which you should respond to. See https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-cancellation for details.
-
-Returns
-Task<Uri>

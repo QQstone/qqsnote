@@ -85,3 +85,6 @@ mycomponent.html
 ```
 <div [inlineSVG]="'assets/image/icon.svg'"></div>
 ```
+
+#### 鼠标响应
+[Web MDN: svg pointer-events](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/pointer-events)

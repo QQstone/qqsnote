@@ -16,6 +16,8 @@ categories:
 ### 退出、重启等
 域名+exit/restart
 
+windows的启动、停止和重启 ———— 在安装目录下执行cmd命令 jenkins.exe start/stop/restart
+
 ### env: ‘node’: No such file or directory
 现于docker jenkins-blueocean，找到nodejs安装路径如“/var/jenkins_home/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/nodejs_v10/bin”之下的npm命令，执行个npm -v，显示相同提示。<br>
 据说是镜像bug [JENKINS-34815](https://issues.jenkins-ci.org/browse/JENKINS-34815?jql=status%20%3D%20Closed%20AND%20text%20~%20%22jenkins.plugins.nodejs.tools.NodeJSInstallation%22)

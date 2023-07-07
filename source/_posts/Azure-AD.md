@@ -34,8 +34,10 @@ Azure保存用户的标识，即使使用第三方的sso如公司的sso认证或
 
 ![scenario-singlesignon](https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/overview/scenario-singlesignon.png)
 
-+ talent 组织或用户集合
-+ directory 存储所涉及的对象（如凭据，用户信息，配置）的物理或逻辑位置
+名称和概念
++ authority 颁发机构 形如 https://login.microsoftonline.com/tfp/{tenant}/{policyName}
++ tenantID 注册使用AAD 成为“tenant” 获得tenantID 由tenant name命名的子域名等
++ directory 存储所涉及的对象（如凭据，用户信息，配置）的物理或逻辑位置 
 + Application registration 将自己公司产品注册为Azure AD B2C的App,以使用由Azure提供的贴牌认证
 + user flow 和 costom policy分别指基本的注册-登录-配置的流程以及自定义的策略
 + identity providers 第三方的标识提供方 如Facebook账号或Wechat账号授权服务 

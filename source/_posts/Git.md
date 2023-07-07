@@ -72,6 +72,14 @@ echo /db/* >> .git/info/sparse-checkout
 
 每将一次develop的commit rebase进feature 都合并为一个中间版本commit，然后 git rebase --continue。实际中，rebase过程中可能产生冲突，如果两条分支都含有多次commit，且修改内容相互渗透，产生很多冲突，continue时是个中间版本 很难保证复合变基的逻辑吧 那将使这种"规范"失去意义 索性直接merge算了
 
+rebase的取消
+rebase完成后没有与该操作对应的commit记录，即不改变前后commit的个数（只调整顺序）但是git本身是有所有操作的记录的，因此任何操作都可以回退, 使用git reflog显示这些记录 并选择标记头进行回退
+```
+git reflog
+---显示action历史---
+git reset --hard HEAD{10}
+```
+[git rebase 的撤销](https://www.cnblogs.com/suanec/p/7511137.html)
 #### repository 迁移
 ```
 git clone --bare git@old-repo.git 

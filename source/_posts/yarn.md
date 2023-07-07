@@ -29,6 +29,8 @@ If you are used to using npm you might be expecting to use --save or --save-dev.
 
 > Running yarn with no command will run yarn install, passing through any provided flags.
 
+查看包版本 yarn info xxpkg
+yarn list xxpkg --depth=0
 #### 从私有Repository安装
 配置.yarnrc.yml 即yarn resouce configure
 ```

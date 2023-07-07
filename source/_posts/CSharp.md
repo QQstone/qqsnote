@@ -58,9 +58,6 @@ String.Join(",", list)
 ```
 vm.children = parentList.Select(parentItem => parentItem.Child).ToList();
 ```
-#### 委托Delegate
-> C# 中的委托（Delegate）类似于 C 或 C++ 中函数的指针, 是一种引用类型变量
-
 #### 初始化Object
 ```
 result.data =new {
@@ -414,5 +411,44 @@ C#柯里化
 Func<Int32, Func<Int32, Int32>> sum = x => y => x + y;
 Func<Int32, Int32> sumwith5 = sum(5)
 ```
+#### 异步编程模式
++ 基于任务(Task<>)的异步模式
++ 基于事件的异步模式 XXAsync(object sender, EventArgs e)
++  IAsyncResult 模式（不建议）
 
+命名的惯例： 
+```
+Task<string> GetAsync(){}
+Task BeginProcess(){}
+```
 #### 多线程
+
+创建线程和结束线程
+[wpf 关闭程序退出线程_多线程与高并发](https://blog.csdn.net/weixin_39878688/article/details/111116800)
+
++ Application.Shutdown(exitCode) 或因线程未结束 无法返回正确的exitCode
++ System.Environment.Exit(exitCode) 强制关闭进程
+
+WhenAny WhenAll 类似响应式编程函数，分别为任意task返回、所有task返回，task的异常会抛出在相同层面 [AggregateException 类](https://learn.microsoft.com/zh-cn/dotnet/api/system.aggregateexception?view=net-7.0)
+
+#### cancellationToken
+CancellationToken 线程取消信号 用于取消异步操作或长时间运行的同步操作
+The cancellation token to which you should respond to. See https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-cancellation for details.
+#### 线程安全
+通用类型很少整体上是线程安全的，原因如下：
++ 开发成本 全线程安全的开发负担可能会很大，特别是如果一个类型有很多字段（每个字段在任意多线程上下文中都是潜在的交互）。
++ 可能会带来性能成本（无论该类型是否被多个线程实际使用，都需要付出一定的代价）。
++ 线程安全类型并不一定会使使用它的程序成为线程安全的，并且通常后者涉及的工作使前者变得多余。
+因此，线程安全通常在需要的地方实现，以便处理特定的多线程场景。
+#### lock
+
+#### 委托Delegate
+> C# 中的委托（Delegate）类似于 C 或 C++ 中函数的指针, 是一种引用类型变量 
+
+作为函数方法的引用，委托用于将方法作为参数传给其他方法 如将回调函数传给System.Timers.Timer构造函数
+```
+var timer = new Timer(delegate {
+    Dispatcher.Invoke(() => { lst.Add(DateTime.Now.ToString(); }));
+}, null, 3000, 1)
+```
+其灵活性在于可以在既定的程序结构中更改函数方法的调用，类似于接口之于模块

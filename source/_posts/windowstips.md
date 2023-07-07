@@ -151,3 +151,36 @@ Nginx Build：
 ```
 
 ```
+
+#### bat相对路径
+```
+cd /d %~dp0
+.\tool\signtool.exe sign /f ".\cert\xxx.pfx" /p pswxxx /fd SHA256 /t "http：//timestamp.digicert.com" %1
+```
+默认情况下，脚本执行的目录在cmd调用脚本的位置，比如以管理员权限打开cmd，其工作目录在C:\User\CurrentUser
+而脚本往往放在项目目录下 用相对路径描述所需资源位置，执行时可以cd到脚本目录下，更好的做法是在每个bat开头加入
+“cd /d %~dp0” 表示移动到该脚本目录位置
+
+#### 查找最新的文件并输出创建时间
+```
+@echo off
+setlocal
+set folderPath=".\"
+set latestFile=
+
+for /f "delims=" %%f in ('dir %folderPath% /b /o-d /tc') do (
+    if not defined latestFile (
+        set latestFile=%%f
+    )
+)
+
+for /f "skip=5 tokens=1,2,4,5* delims= " %%a in ('dir %folderPath%\%latestFile% /a:-d /o:d /t:c') do (
+    if "%%~c" NEQ "bytes" (
+        echo(
+            @echo file name:        %%~d
+            @echo creation date:    %%~d
+            @echo creation time:    %%~d
+        )
+    )
+)
+```

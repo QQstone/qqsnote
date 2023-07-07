@@ -123,9 +123,14 @@ dilate=cv2.dilate(img,kernel,iterations=1)
 ```
 开为先腐蚀再膨胀 闭为先膨胀后腐蚀
 
-#### 边缘检测Sobel canny Laplace
+#### 边缘检测 canny
++ 去噪 噪声会影响该算法进行边缘检测的准确性
++ 计算每个点的梯度大小和方向 例如用一对Sobel算子作为卷积核对图像滤波
++ 抑制非边缘点 边缘点应该满足：±梯度方向上的局部最大值，因此将不满足条件的点归零
++ 用两个阈值条件筛选剩余的边缘‘条纹’ 
 ```
 
+edges = cv.Canny(blur, 50, 150, apertureSize)
 ```
 #### FindContour
 一种边缘提取方法

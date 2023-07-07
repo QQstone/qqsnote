@@ -238,8 +238,11 @@ Linux 以一定时间间隔更新内核时间，做上述调整后立即重启�
 su -l USERNAME
 ```
 #### chmod
+Linux/Unix 的文件调用权限分为三级 : 文件所有者（Owner）、用户组（Group）、其它用户（Other Users）。
 ![](https://www.runoob.com/wp-content/uploads/2014/08/file-permissions-rwx.jpg)
+例如 owner - RWX， group - R_X, other - R__
 ![](https://www.runoob.com/wp-content/uploads/2014/08/rwx-standard-unix-permission-bits.png)
+如上，u 表示该文件的拥有者，g 表示与该文件的拥有者属于同一个群体(group)者，o 表示其他以外的人，a 表示这三者皆是。
 ```
 chmod [ugoa...][[+-=][rwxX]
 ```
@@ -248,6 +251,8 @@ chmod [ugoa...][[+-=][rwxX]
 chmod ugo+r file1.txt //将文件 file1.txt 设为所有人皆可读
 chmod a+r file1.txt // 同上
 ```
+其他参数
++ -R 对目录递归变更权限
 #### 查看端口使用
 ```
 sudo lsof -i:8080

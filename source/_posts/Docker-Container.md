@@ -100,3 +100,8 @@ docker exec -it mysql_57_instance bash
 mysql -u root -p
 ...
 ```
+
+> Containers for the linked service will be reachable at a hostname identical to the alias, or the service name if no alias was specified.
+
+使用docker for mysql部署数据库，docker容器运行起后，不需要进入容器修改配置（事实上使用docker -it进入容器终端后，/etc/mysql/下面没有配置文件），在配置外部数据连接时，使用容器名代替localhost或127.0.0.1
+参考[issue: SQLSTATE[HY000] [2002] Connection refused](https://stackoverflow.com/questions/40075065/using-docker-i-get-the-error-sqlstatehy000-2002-no-such-file-or-directory)

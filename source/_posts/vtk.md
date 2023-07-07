@@ -9,6 +9,15 @@ categories:
 ---
 The Rendering Engine
 mapper
+#### vtk.js --> @kitware/vtk.js
+歪果仁不像码农期待的那样勤奋，官方的模板（如react-vtk-js）以及范例框架（ParaviewWeb）还是使用的vtk.js旧版本
+对于旧版本，提供了[craco-vtk](https://www.npmjs.com/package/craco-vtk)包进行移植
+```
+npm install --save @craco/craco craco-vtk vtk.js shader-loader worker-loader css-loader style-loader postcss-loader
+```
+craco-vtk在GitHub上的Repo已被移除(不过可以找到fork)，内容可参考[craco-itk](https://github.com/InsightSoftwareConsortium/craco-itk)
+
+itk(Insight Segmentation and Registration Toolkit) 基于vtk的医学图像配准和分割工具包
 #### pipeline
 ![vtk pipeline](https://tva3.sinaimg.cn/large/a60edd42gy1gvuuf066c7j20ko0aljuv.jpg)
 + reader
