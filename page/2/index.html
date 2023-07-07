@@ -145,6 +145,613 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2023/03/15/NeRF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2023/03/15/NeRF/" class="post-title-link" itemprop="url">NeRF</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-03-15 16:59:04 / Modified: 16:59:22" itemprop="dateCreated datePublished" datetime="2023-03-15T16:59:04+08:00">2023-03-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2023/03/08/StableDiffusion/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2023/03/08/StableDiffusion/" class="post-title-link" itemprop="url">StableDiffusion</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-03-08 18:18:34" itemprop="dateCreated datePublished" datetime="2023-03-08T18:18:34+08:00">2023-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-03-16 17:37:52" itemprop="dateModified" datetime="2023-03-16T17:37:52+08:00">2023-03-16</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><blockquote>
+<p>Stable Diffusion is a latent text-to-image diffusion model. Thanks to a generous compute donation from Stability AI and support from LAION, we were able to train a Latent Diffusion Model on 512x512 images from a subset of the LAION-5B database. Similar to Google’s Imagen, this model uses a frozen CLIP ViT-L/14 text encoder to condition the model on text prompts. With its 860M UNet and 123M text encoder, the model is relatively lightweight and runs on a GPU with at least 10GB VRAM. </p>
+<h4 id="本地部署"><a href="#本地部署" class="headerlink" title="本地部署"></a>本地部署</h4><p>env requirement:</p>
+</blockquote>
+<h4 id="models"><a href="#models" class="headerlink" title="models"></a>models</h4><ul>
+<li>GFPGAN 腾讯开源的人像修复算法</li>
+<li>VAE (Variational Auto-Encoder 变分自编码器)</li>
+<li>LoRA (Low-Rank Adaptation of Large Language Models) 自然语言处理</li>
+<li>DeepBooru<h4 id="vas"><a href="#vas" class="headerlink" title="vas"></a>vas</h4></li>
+</ul>
+<h4 id="tags"><a href="#tags" class="headerlink" title="tags"></a>tags</h4><p>korean doll</p>
+<p>nagetive prompt</p>
+<p>paintings, sketchers, (worst quality:2), (low quality:2), (normal quality:2), lowres, normal quality, ((monochrome)), ((grayscale)), skin spots, acnes, skin blemishes, age spot, glans</p>
+<h4 id="troubleshooting"><a href="#troubleshooting" class="headerlink" title="troubleshooting"></a>troubleshooting</h4><blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/8427">not enough GPU memory</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line"></span><br><span class="line">set PYTHON&#x3D;</span><br><span class="line">set GIT&#x3D;</span><br><span class="line">set VENV_DIR&#x3D;</span><br><span class="line">set COMMANDLINE_ARGS&#x3D; --lowvram --no-half --precision full --no-half-vae --opt-sub-quad-attention --opt-split-attention-v1 --autolaunch </span><br><span class="line"></span><br><span class="line">call webui.bat</span><br></pre></td></tr></table></figure><br>No python at “D:\Program Files\Anaconda3\env\py310\Python.exe”<br>删除项目env下除Libs外的所有文件 重新执行webui.bat</p>
+<h4 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h4></blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2023/03/06/conda/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2023/03/06/conda/" class="post-title-link" itemprop="url">conda</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-03-06 13:18:08 / Modified: 15:34:54" itemprop="dateCreated datePublished" datetime="2023-03-06T13:18:08+08:00">2023-03-06</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>安装Anaconda后 默认只能在conda prompt中使用，若在cmd控制台使用conda命令<br>需要将Anaconda/Scripts/目录假如环境变量</p>
+<h4 id="源"><a href="#源" class="headerlink" title="源"></a>源</h4><p>可以形如下添加源的命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda config --add channels - https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;anaconda&#x2F;pkgs&#x2F;free</span><br><span class="line">conda config --add channels - https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;anaconda&#x2F;pkgs&#x2F;main</span><br></pre></td></tr></table></figure></p>
+<p>或编辑用户目录下的.condarc文件 如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">channels:</span><br><span class="line">  - defaults</span><br><span class="line">auto_activate_base: true</span><br><span class="line">anaconda_upload: false</span><br><span class="line">show_channel_urls: true</span><br><span class="line">defaults_channels:</span><br><span class="line">  - https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;anaconda&#x2F;pkgs&#x2F;main</span><br><span class="line">  - https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;anaconda&#x2F;pkgs&#x2F;r</span><br><span class="line">  - https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;anaconda&#x2F;pkgs&#x2F;msys2</span><br><span class="line">custom_channels:</span><br><span class="line">  conda-forge: https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;anaconda&#x2F;cloud</span><br><span class="line">  msys2: https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;anaconda&#x2F;cloud</span><br><span class="line">  bioconda: https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;anaconda&#x2F;cloud</span><br><span class="line">  menpo: https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;anaconda&#x2F;cloud</span><br><span class="line">  pytorch: https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;anaconda&#x2F;cloud</span><br><span class="line">  pytorch-lts: https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;anaconda&#x2F;cloud</span><br><span class="line">  simpleitk: https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;anaconda&#x2F;cloud</span><br></pre></td></tr></table></figure><br>清理环境缓存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda clean -i</span><br></pre></td></tr></table></figure><br>显示channels<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda show channels</span><br></pre></td></tr></table></figure></p>
+<h4 id="创建指定python版本的虚拟环境"><a href="#创建指定python版本的虚拟环境" class="headerlink" title="创建指定python版本的虚拟环境"></a>创建指定python版本的虚拟环境</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda create -n py310 python&#x3D;3.10.6</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>TroubleShooting CondaHTTPError: HTTP 000 CONNECTION FAILED for url ＜<a target="_blank" rel="noopener" href="https://repo.anaconda.com/pkgs/main/nux-64">https://repo.anaconda.com/pkgs/main/nux-64</a></p>
+<p>错误原因 D:\Anaconda3\DLLs_ssl.pyd会寻找依赖库OpenSSL DLLs，由于项目目录下未找到，它会去默认目录C:\Windows\System32查找，默认目录下存在该库，但是别的应用安装的，版本不一致，所以出现上述错误。</p>
+<p>解决方法：从目录D:\Anaconda3\Library\bin下复制libcrypto-1_1-x64.<em>和libssl-1_1-x64.</em>到D:\Anaconda3\DLLs，这样就会在项目目录下直接查找到该库了。 参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/guotianqing/article/details/108650253">CSDN Blog</a></p>
+</blockquote>
+<h4 id="激活虚拟环境"><a href="#激活虚拟环境" class="headerlink" title="激活虚拟环境"></a>激活虚拟环境</h4><p>列出环境<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda env list</span><br></pre></td></tr></table></figure><br>激活<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda activate py310</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>TroubleShooting  Your shell has not been properly configured to use ‘conda activate’. If using ‘conda activate’ from a batch script, change your invocation to ‘CALL conda.bat activate’.</p>
+<p>管理员权限打开命令行 conda init cmd.exe, 同理powershell bash等终端，重启命令行即可执行activate命令</p>
+</blockquote>
+<h4 id="安装、更新、卸载包"><a href="#安装、更新、卸载包" class="headerlink" title="安装、更新、卸载包"></a>安装、更新、卸载包</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">conda install pandas</span><br><span class="line">conda update pandas</span><br><span class="line">conda remove pandas</span><br><span class="line">conda remove -n py310 #清除所有</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2023/03/03/WebDev-BrokenAccessControl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2023/03/03/WebDev-BrokenAccessControl/" class="post-title-link" itemprop="url">越权访问</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-03-03 11:22:19 / Modified: 11:22:42" itemprop="dateCreated datePublished" datetime="2023-03-03T11:22:19+08:00">2023-03-03</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2023/03/02/jenkins-pipeline/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2023/03/02/jenkins-pipeline/" class="post-title-link" itemprop="url">jenkins-pipeline</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-03-02 17:34:57" itemprop="dateCreated datePublished" datetime="2023-03-02T17:34:57+08:00">2023-03-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-03-03 18:14:57" itemprop="dateModified" datetime="2023-03-03T18:14:57+08:00">2023-03-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Jenkins Pipeline 提供了一套可扩展的工具，用于将“简单到复杂”的交付流程实现为“持续交付即代码”。Jenkins Pipeline 的定义通常被写入到一个文本文件（称为 Jenkinsfile ）中，该文件可以被放入项目的源代码控制库中。 </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2023/02/27/WPF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2023/02/27/WPF/" class="post-title-link" itemprop="url">WPF</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-02-27 16:19:33" itemprop="dateCreated datePublished" datetime="2023-02-27T16:19:33+08:00">2023-02-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-04-18 14:35:16" itemprop="dateModified" datetime="2023-04-18T14:35:16+08:00">2023-04-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="Application-Window"><a href="#Application-Window" class="headerlink" title="Application Window"></a>Application Window</h4><p>App.xmal<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure><br>MainWindow.xmal<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h4 id="dispatch-invoke"><a href="#dispatch-invoke" class="headerlink" title="dispatch.invoke"></a>dispatch.invoke</h4><p>从主 UI 线程派生的后台线程不能更新的内容，比如在Button onClick中创建的线程，为了使后台线程访问Button的内容属性,后台线程必须将工作委托给<br>Dispatcher 与 UI 线程关联。 这通过使用Invoke 或 BeginInvoke实现。 Invoke 是同步，BeginInvoke 是异步的。</p>
+<h4 id="control-template"><a href="#control-template" class="headerlink" title="control template"></a>control template</h4><p>实现一个按钮 倒圆角 背景 字体 MouseOver效果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;Button HorizontalAlignment&#x3D;&quot;Center&quot; VerticalAlignment&#x3D;&quot;Center&quot; Height&#x3D;&quot;40&quot; Width&#x3D;&quot;120&quot; </span><br><span class="line">    Foreground&#x3D;&quot;#4D4D4D&quot; Content&#x3D;&quot;Close&quot; FontSize&#x3D;&quot;14&quot; FontWeight&#x3D;&quot;bold&quot; Click&#x3D;&quot;btnOK_Click&quot;&gt;</span><br><span class="line">    &lt;Button.Template &gt;</span><br><span class="line">        &lt;ControlTemplate TargetType&#x3D;&quot;&#123;x:Type Button&#125;&quot; &gt;</span><br><span class="line">            &lt;Border x:Name&#x3D;&quot;btnBorder&quot; BorderBrush&#x3D;&quot;&#123;TemplateBinding Control.BorderBrush&#125;&quot; CornerRadius&#x3D;&quot;5,5,5,5&quot;&gt;</span><br><span class="line">                &lt;Border.Background &gt;#DDF9FE&lt;&#x2F;Border.Background&gt;</span><br><span class="line">                &lt;TextBlock x:Name&#x3D;&quot;BtnText&quot; Text&#x3D;&quot;&#123;TemplateBinding ContentControl.Content&#125;&quot;</span><br><span class="line">                            Foreground&#x3D;&quot;&#123;TemplateBinding Foreground&#125;&quot;</span><br><span class="line">                            HorizontalAlignment&#x3D;&quot;Center&quot; VerticalAlignment&#x3D;&quot;Center&quot;&gt;&lt;&#x2F;TextBlock&gt;</span><br><span class="line">            &lt;&#x2F;Border&gt;</span><br><span class="line">            &lt;ControlTemplate.Triggers&gt;</span><br><span class="line">                &lt;Trigger Property&#x3D;&quot;IsMouseOver&quot; Value&#x3D;&quot;True&quot;&gt;</span><br><span class="line">                    &lt;Setter TargetName&#x3D;&quot;btnBorder&quot; Property&#x3D;&quot;Background&quot; Value&#x3D;&quot;#36B0C9&quot;&#x2F;&gt;</span><br><span class="line">                    &lt;Setter TargetName&#x3D;&quot;BtnText&quot; Property&#x3D;&quot;Foreground&quot; Value&#x3D;&quot;#FFF&quot;&#x2F;&gt;</span><br><span class="line">                &lt;&#x2F;Trigger&gt;</span><br><span class="line">            &lt;&#x2F;ControlTemplate.Triggers&gt;</span><br><span class="line">        &lt;&#x2F;ControlTemplate&gt;</span><br><span class="line">    &lt;&#x2F;Button.Template&gt;</span><br><span class="line">&lt;&#x2F;Button&gt;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2023/02/16/VRandAR/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2023/02/16/VRandAR/" class="post-title-link" itemprop="url">VRandAR</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-02-16 16:51:06 / Modified: 16:52:10" itemprop="dateCreated datePublished" datetime="2023-02-16T16:51:06+08:00">2023-02-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a target="_blank" rel="noopener" href="https://developers.google.com/ar">ARCore</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2023/02/09/Web3D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2023/02/09/Web3D/" class="post-title-link" itemprop="url">Web3D</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-02-09 10:57:11" itemprop="dateCreated datePublished" datetime="2023-02-09T10:57:11+08:00">2023-02-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-02-16 18:29:05" itemprop="dateModified" datetime="2023-02-16T18:29:05+08:00">2023-02-16</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="瓶颈"><a href="#瓶颈" class="headerlink" title="瓶颈"></a>瓶颈</h4><ul>
+<li>终端的渲染性能<br>包括网页端WebGL的渲染性能，以及移动终端的硬件性能</li>
+<li>网络对大型模型场景的传输能力</li>
+</ul>
+<h4 id="像素流送"><a href="#像素流送" class="headerlink" title="像素流送"></a>像素流送</h4><p><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/SharingAndReleasing/PixelStreaming/PixelStreamingIntro/">UE像素流送</a></p>
+<h4 id="WebGPU"><a href="#WebGPU" class="headerlink" title="WebGPU"></a>WebGPU</h4><p>WebGL是OpenGL ES版本API的封装，已经有十几年的历史，随着图形技术的发展，W3C提出全新的规范，浏览器封装了现代图形API（Dx12、Vulkan、Metal）让浏览器里面直接可以调用这三个现代图形API能力，实现高质量的渲染效果，调用GPU的强大计算能力。</p>
+<blockquote>
+<p>WebGPU is available for now in Chrome Canary behind an experimental flag. You can enable it at chrome://flags/#enable-unsafe-webgpu . The API is constantly changing and currently unsafe. </p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/95956384">WebGPU学习系列目录</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/11/11/Cpp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2022/11/11/Cpp/" class="post-title-link" itemprop="url">C++</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-11-11 15:49:44" itemprop="dateCreated datePublished" datetime="2022-11-11T15:49:44+08:00">2022-11-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-18 09:54:05" itemprop="dateModified" datetime="2022-11-18T09:54:05+08:00">2022-11-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>成员函数的调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">void res &#x3D; ClassA::functionX()</span><br><span class="line">ClassA a;</span><br><span class="line">void res &#x3D; a.functionX()</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/10/18/PythonOOP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -221,700 +828,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/10/18/OpenSourceLicense/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2022/10/18/OpenSourceLicense/" class="post-title-link" itemprop="url">开源协议</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-10-18 16:32:24" itemprop="dateCreated datePublished" datetime="2022-10-18T16:32:24+08:00">2022-10-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-03-29 14:18:31" itemprop="dateModified" datetime="2023-03-29T14:18:31+08:00">2023-03-29</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>宽松许可</p>
-<ul>
-<li>MIT</li>
-<li>Apache</li>
-<li>BSD<br>鼓励开源和代码共享，允许修改、再发布，尊重原作者权利，在发布或代码引用处声明BSD协议</li>
-</ul>
-<p>弱化的著作权 </p>
-<ul>
-<li>LGPL</li>
-</ul>
-<p>著作权</p>
-<ul>
-<li>GPL</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/09/30/DigitalSignature/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2022/09/30/DigitalSignature/" class="post-title-link" itemprop="url">数字签名</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-09-30 10:52:10" itemprop="dateCreated datePublished" datetime="2022-09-30T10:52:10+08:00">2022-09-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-08 10:27:33" itemprop="dateModified" datetime="2022-10-08T10:27:33+08:00">2022-10-08</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>使用 jenkins ant 自动化脚本调用build.xml任务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; ?&gt;</span><br><span class="line">&lt;project basedir&#x3D;&quot;.&quot; default&#x3D;&quot;build_all&quot; name&#x3D;&quot;TestProj&quot;&gt;</span><br><span class="line">    &lt;description&gt;</span><br><span class="line">        TestProj Build File.</span><br><span class="line">    &lt;&#x2F;description&gt;</span><br><span class="line">    &lt;tstamp&gt;</span><br><span class="line">        &lt;format locale&#x3D;&quot;en&quot; pattern&#x3D;&quot;yyMMdd&quot; property&#x3D;&quot;TODAY_CN&quot;&#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;tstamp&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;property name&#x3D;&quot;build_ver&quot; Value&#x3D;&quot;1.0.5.0&quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;target description&#x3D;&quot;Create publish folder&quot; name&#x3D;&quot;create_folder&quot;&gt;</span><br><span class="line">        &lt;delete dir&#x3D;&quot;$&#123;build_ver&#125;&quot; quiet&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">        &lt;mkdir dir&#x3D;&quot;$&#123;build_ver&#125;\publish&quot;&#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;target&gt;</span><br><span class="line"></span><br><span class="line">    &lt;target description&#x3D;&quot;Pack TestProj&quot; name&#x3D;&quot;sign_and_copy&quot;&gt;</span><br><span class="line">        &lt;exec dir&#x3D;&quot;.&quot; executable&#x3D;&quot;cmd.exe&quot;&gt;</span><br><span class="line">            &lt;arg line&#x3D;&quot;&#x2F;c&quot;&#x2F;&gt;</span><br><span class="line">            &lt;arg line&#x3D;&quot;.\uac_cert\signtool.exe sign &#x2F;f &quot;.\uac_cert\test.pfx&quot; &#x2F;p passwordxxx &#x2F;fd SHA256 &#x2F;t &quot;http:&#x2F;&#x2F;timestamp.digicert.com&quot; &quot;..\TestProj\bin\Release\TestProj.exe&quot;&quot;&#x2F;&gt;</span><br><span class="line">        &lt;&#x2F;exec&gt;</span><br><span class="line"></span><br><span class="line">        &lt;copy file&#x3D;&quot;..\TestProj\bin\Release\TestProj.exe&quot; overwrite&#x3D;&quot;true&quot; todir&#x3D;&quot;$&#123;build_ver&#125;\publish&quot;&#x2F;&gt;</span><br><span class="line">		&lt;copy file&#x3D;&quot;..\TestProj\bin\Release\Microsoft.Identity.Client.dll&quot; overwrite&#x3D;&quot;true&quot; todir&#x3D;&quot;$&#123;build_ver&#125;\publish&quot;&#x2F;&gt;</span><br><span class="line">		&lt;copy file&#x3D;&quot;..\TestProj\bin\Release\Newtonsoft.Json.dll&quot; overwrite&#x3D;&quot;true&quot; todir&#x3D;&quot;$&#123;build_ver&#125;\publish&quot;&#x2F;&gt;</span><br><span class="line">		&lt;zip destfile&#x3D;&quot;$&#123;build_ver&#125;\publish.zip&quot; basedir&#x3D;&quot;$&#123;build_ver&#125;\publish&quot; &#x2F;&gt;</span><br><span class="line">		&lt;delete dir&#x3D;&quot;$&#123;build_ver&#125;\publish&quot; quiet&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;target&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- Build All --&gt;</span><br><span class="line">    &lt;target description&#x3D;&quot;Build solution&quot; name&#x3D;&quot;build_all&quot;&gt;</span><br><span class="line">        &lt;antcall target&#x3D;&quot;create_folder&quot;&#x2F;&gt;</span><br><span class="line">        &lt;antcall target&#x3D;&quot;pack_pubclient&quot;&#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;target&gt;</span><br><span class="line">&lt;&#x2F;project&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>其中使用signtool.exe给构建生成的应用添加数字签名，签名密钥保存在pfx文件中 需使用password访问 </p>
-<blockquote>
-<p>issue: capicom.dll没有正确安装或者是没有注册</p>
-</blockquote>
-<p>加密API组件对象模型（Cryptographic API Component Object Model，capicom）微软Windows系统组件，用于以数字方式签署数据代码、验证数字签章、加密解密等，见<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/seccrypto/cryptography-portal">CryptoAPI</a></p>
-<p>注册capicom<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Regsvr32 c:&#x2F;windows&#x2F;system32&#x2F;capicom.dll</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/09/20/dotNetCore-Diagnostics/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2022/09/20/dotNetCore-Diagnostics/" class="post-title-link" itemprop="url">.Net Core 诊断工具</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-09-20 09:42:29" itemprop="dateCreated datePublished" datetime="2022-09-20T09:42:29+08:00">2022-09-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-09-21 13:58:01" itemprop="dateModified" datetime="2022-09-21T13:58:01+08:00">2022-09-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="System-Diagnostics命名空间"><a href="#System-Diagnostics命名空间" class="headerlink" title="System.Diagnostics命名空间"></a><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/dotnet/api/system.diagnostics?view=net-6.0">System.Diagnostics命名空间</a></h4><blockquote>
-<p>提供允许你与系统进程、事件日志和性能计数器进行交互的类。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">using System.Diagnostics</span><br><span class="line">...</span><br><span class="line">class Program</span><br><span class="line">&#123;</span><br><span class="line">    static void Main(string[] args)&#123;</span><br><span class="line">        InitLog()</span><br><span class="line">        Trace.WriteLine($&quot;log is here&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">    private static void InitLog()&#123;</span><br><span class="line">        string logDirectory &#x3D; @&quot;D:\log\&quot;</span><br><span class="line">        string timestamp &#x3D; DateTime.UtcNow.ToString(&quot;yyyyMMdd_HHmmss&quot;, CultureInfo.InvariantCulture);</span><br><span class="line">        logDirectory &#x3D; $&quot;&#123;logDirectory&#125;_&#123;timestamp&#125;.log&quot;;</span><br><span class="line">        Trace.Listeners.Add(new TextWriterTraceListener(File.CreateText(logDirectory)));</span><br><span class="line">        Trace.AutoFlush &#x3D; true；</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/09/19/BasicPython-argparse/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2022/09/19/BasicPython-argparse/" class="post-title-link" itemprop="url">Python基础-argparse模块</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-09-19 13:37:46" itemprop="dateCreated datePublished" datetime="2022-09-19T13:37:46+08:00">2022-09-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-09-21 16:03:22" itemprop="dateModified" datetime="2022-09-21T16:03:22+08:00">2022-09-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">编程语言</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>argparse模块是python用于解析命令行参数和选项的标准模块 对于封装好的py函数文件 可实现在命令行输出—help的效果：</p>
-<p>定义函数文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#-*- coding: UTF-8 -*-</span><br><span class="line">import argparse</span><br><span class="line"></span><br><span class="line">def parse_args():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    :return:进行参数的解析</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    description &#x3D; &quot;you should add those parameter&quot; </span><br><span class="line">    parser &#x3D; argparse.ArgumentParser(description&#x3D;description)        # 这些参数都有默认值，当调用parser.print_help()或者运行程序时由于参数不正确(此时python解释器其实也是调用了pring_help()方法)时，</span><br><span class="line">                                                                     # 会打印这些描述信息，一般只需要传递description参数，如上。</span><br><span class="line">    mode_desc &#x3D; &quot;action mode&quot;</span><br><span class="line">    image_desc &#x3D; &quot;the path of image&quot;</span><br><span class="line">    parser.add_argument(&#39;--mode&#39;, help&#x3D;mode_desc)</span><br><span class="line">    parser.add_argument(&#39;--image&#39;, help&#x3D;image_desc)</span><br><span class="line">    args &#x3D; parser.parse_args()</span><br><span class="line">    return args</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    args &#x3D; parse_args()</span><br><span class="line">    if()</span><br></pre></td></tr></table></figure><br>命令行输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python arg.py -h</span><br></pre></td></tr></table></figure><br>输出提示为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Windows PowerShell</span><br><span class="line">Copyright (C) Microsoft Corporation. All rights reserved.   </span><br><span class="line"></span><br><span class="line">you should add those parameter</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --help            show this help message and exit</span><br><span class="line">  --addresses ADDRESSES</span><br><span class="line">                        The path of address</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
-<p>ArgumentParser.add_argument(name or flags…[,  action][, nargs][, const][, default][, type][, choices][, required][, help][, metavar][, dest])</p>
-<ul>
-<li>name or flags — 选项字符串的名字或者列表，例如 foo 或者 -f, —foo。</li>
-<li><p>action— 命令行遇到参数时的动作，默认值是 store; store_const—表示赋值为const；append—将遇到的值存储成列表，也就是如果参数重复则会保存多个值; append_const—将参数规范中定义的一个值保存到一个列表；count—存储遇到的次数；此外，也可以继承 argparse.Action 自定义参数解析动作；</p>
-</li>
-<li><p>nargs — 应该读取的命令行参数个数，可以是数字，或者通配符如?表示0个或1个；*表示 0 或多个；+表示 1 或多个。</p>
-</li>
-<li><p>const - action 和 nargs 所需要的常量值。</p>
-</li>
-<li>default— 不指定参数时的默认值。</li>
-<li>type — 命令行参数应该被转换成的类型。(str, int, bool..)</li>
-<li>choices — 参数可允许的值的一个容器。</li>
-<li>required — 可选参数是否可以省略 (仅针对可选参数)。</li>
-<li>help — 参数的帮助信息，当指定为 argparse.SUPPRESS 时表示不显示该参数的帮助信息.</li>
-<li>metavar — 在 usage 说明中的参数名称，对于必选参数默认就是参数名称，对于可选参数默认是全大写的参数名称.</li>
-<li>dest — 解析后的参数名称，默认情况下，对于可选参数选取最长的名称，中划线转换为下划线.</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">parser.add_argument(&#39;--name&#39;, type&#x3D;str, required&#x3D;True, default&#x3D;&#39;&#39;, help&#x3D;&#39;名&#39;)</span><br><span class="line"></span><br><span class="line">parser.add_argument(&#39;--foo&#39;, action&#x3D;&#39;store_const&#39;, const&#x3D;42) # 实际foo&#x3D;42</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>是否输入了某参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">parser.add_argument(&#39;--properties&#39;, action&#x3D;&#39;store_true&#39;, help&#x3D;properties_desc) </span><br></pre></td></tr></table></figure><br>如上调用python arg.py时，若带参数—properties 则args.properties=True 否则为False</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/09/08/ImageSegmentation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2022/09/08/ImageSegmentation/" class="post-title-link" itemprop="url">图像分割</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-09-08 20:05:51" itemprop="dateCreated datePublished" datetime="2022-09-08T20:05:51+08:00">2022-09-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-09-09 21:00:31" itemprop="dateModified" datetime="2022-09-09T21:00:31+08:00">2022-09-09</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">图像处理</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ul>
-<li>基于阈值的图像分割</li>
-<li>边缘检测</li>
-<li>分离背景</li>
-<li>K-Means聚类</li>
-<li>均值漂移算法</li>
-<li>分水岭算法</li>
-<li>图像漫水填充分割</li>
-</ul>
-<h4 id="阈值"><a href="#阈值" class="headerlink" title="阈值"></a>阈值</h4><p>图像分割的效果取决于临界值的选取</p>
-<h4 id="边缘检测"><a href="#边缘检测" class="headerlink" title="边缘检测"></a>边缘检测</h4><p>根据像素值变化的特点 根据梯度值确定边界</p>
-<p>findContours 和 drawContours是基于边缘检测的统计方法</p>
-<h4 id="查找轮廓"><a href="#查找轮廓" class="headerlink" title="查找轮廓"></a>查找轮廓</h4><p>GrabCut算法 设置掩码矩阵（蒙版）分离前景和背景</p>
-<h4 id="K-Means聚类"><a href="#K-Means聚类" class="headerlink" title="K-Means聚类"></a>K-Means聚类</h4><ul>
-<li>第一步 确定K值 即将数据集分为K个族类</li>
-<li>第二部 从数据集中随机选择K个数据点作为质心（Centroid）</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/09/06/dotNetCore-WebView/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2022/09/06/dotNetCore-WebView/" class="post-title-link" itemprop="url">WebView2</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-09-06 15:04:46" itemprop="dateCreated datePublished" datetime="2022-09-06T15:04:46+08:00">2022-09-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-03-30 10:06:24" itemprop="dateModified" datetime="2023-03-30T10:06:24+08:00">2023-03-30</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/microsoft-edge/webview2/">WebView2</a>使用 Microsoft Edge（要知道Edge也是fork自Chromium的分发版本） 作为绘制引擎, 展示web内容的混合应用控件<br>可以认为Electron是WebView2的前辈 二者的原理是一样的</p>
-<blockquote>
-<p>WebView2 runtime is available on most Windows 10 and Windows 11 machines by default. But it may not be available on older platforms.</p>
-</blockquote>
-<p>若缺需要查看WebView2运行时是否安装 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/microsoft-edge/webview2/concepts/distribution#detect-if-a-suitable-webview2-runtime-is-already-installed">Microsoft Docs：检测是否已安装合适的 WebView2 运行时</a></p>
-<h4 id="webview-vs-webbrowser"><a href="#webview-vs-webbrowser" class="headerlink" title="webview vs webbrowser"></a>webview vs webbrowser</h4><p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/dotnet/api/system.windows.forms.webbrowser?view=windowsdesktop-7.0">WebBrowser类</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/09/01/matplotlib/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2022/09/01/matplotlib/" class="post-title-link" itemprop="url">matplotlib</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-09-01 10:36:07 / Modified: 10:40:29" itemprop="dateCreated datePublished" datetime="2022-09-01T10:36:07+08:00">2022-09-01</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43156127/article/details/120665238">正态分布拟合</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/08/29/BasicPython-PyCharm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2022/08/29/BasicPython-PyCharm/" class="post-title-link" itemprop="url">Python基础——PyCharm</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-08-29 17:12:48" itemprop="dateCreated datePublished" datetime="2022-08-29T17:12:48+08:00">2022-08-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-08-30 13:19:30" itemprop="dateModified" datetime="2022-08-30T13:19:30+08:00">2022-08-30</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://itcn.blog/p/5748331052.html">更换国内镜像源</a><br><img src="http://tva1.sinaimg.cn/large/a60edd42gy1h5opzr3k5oj217x0f4wju.jpg" alt="PyCharm-pkgMgt.PNG"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/08/24/PyQt/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2022/08/24/PyQt/" class="post-title-link" itemprop="url">PyQt</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-08-24 17:30:49" itemprop="dateCreated datePublished" datetime="2022-08-24T17:30:49+08:00">2022-08-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-09 22:23:16" itemprop="dateModified" datetime="2022-11-09T22:23:16+08:00">2022-11-09</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>PyQt 是 Qt 的Python版本，Qt是基于C++的GUI，在Python的UI组件库中，PyQt功能强大，提供QT Designer设计UI。PyQt 可与 C++ Qt无缝整合，另有QtWebEngine结合web前端实现Electron的功能。</p>
-<p>题外话：Tkinter 是Python解决UI的原生库，优点在于没有其他依赖。但内容基础功能简单 比其他UI库都有不及</p>
-<p>PyQt5类分为很多模块</p>
-<blockquote>
-<p>QtCore 包含了核心的非GUI的功能。主要和时间、文件与文件夹、各种数据、流、URLs、mime类文件、进程与线程一起使用。<br>QtGui 包含了窗口系统、事件处理、2D图像、基本绘画、字体和文字类。QtWidgets类包含了一系列创建桌面应用的UI元素。 QtMultimedia包含了处理多媒体的内容和调用摄像头API的类。 QtNetwork包含了网络编程的类，这些工具能让TCP/IP和UDP开发变得更加方便和可靠。QtWebSockets包含了WebSocket协议的类。 QtWebKit包含了一个基WebKit2的web浏览器。 </p>
-</blockquote>
-<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install pyqt5</span><br><span class="line">pip install pyqt5-tools</span><br></pre></td></tr></table></figure>
-<p>使用国内pip源<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;pypi&#x2F;web&#x2F;simple pyqt5</span><br></pre></td></tr></table></figure><br>添加pyqt5-tools路径到环境变量Path</p>
-<p>配置PyCharm外部工具<br>PyCharm -&gt; 文件 -&gt; 设置 -&gt; 工具 -&gt; 外部工具</p>
-<p>填入QT designer路径<br><img src="http://tva1.sinaimg.cn/large/a60edd42gy1h5j1czipcaj20av099jsh.jpg" alt="image.png"></p>
-<p>另添加 Pyuic 用于将ui文件转为py文件 </p>
-<p>须填入参数$FileName$ -o $FileNameWithoutExtension$.py<br><img src="http://tva1.sinaimg.cn/large/a60edd42gy1h5j1g8wdgxj20av099zkp.jpg" alt="v2-7039dac81f16e3567988b1a16b745067_720w.jpg"></p>
-<p>类似的 可添加PyRCC</p>
-<h4 id="PyQt-Hello-World"><a href="#PyQt-Hello-World" class="headerlink" title="PyQt Hello World"></a>PyQt Hello World</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line">from PyQt5.QtWidgets import QApplication, QWidget</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line"></span><br><span class="line">    app &#x3D; QApplication(sys.argv)</span><br><span class="line"></span><br><span class="line">    w &#x3D; QWidget()</span><br><span class="line">    w.resize(250, 150)</span><br><span class="line">    w.setFixedSize(250, 150) # 固定大小</span><br><span class="line">    w.move(300, 300)</span><br><span class="line">    w.setWindowTitle(&#39;HelloWorld!&#39;)</span><br><span class="line">    w.show()</span><br><span class="line"></span><br><span class="line">    sys.exit(app.exec_())</span><br></pre></td></tr></table></figure>
-<h4 id="QT-designer"><a href="#QT-designer" class="headerlink" title="QT designer"></a>QT designer</h4><p>完成如上配置 可在PyCharm的外部工具打开 QT designer，<br>使用QT designer生成UI文件</p>
-<h4 id="从-ui文件到-py文件"><a href="#从-ui文件到-py文件" class="headerlink" title="从.ui文件到.py文件"></a>从.ui文件到.py文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyuic demo.ui -o demo.py</span><br></pre></td></tr></table></figure>
-<p>生成的py文件是UI的类定义文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">class Ui_MainWindow(object):</span><br><span class="line">    def setupUi(self, MainWindow):</span><br><span class="line">        MainWindow.setObjectName(&quot;MainWindow&quot;)</span><br><span class="line">        MainWindow.resize(800, 600)</span><br><span class="line">        self.centralWidget &#x3D; QtWidgets.QWidget(MainWindow)</span><br><span class="line">        self.centralWidget.setObjectName(&quot;centralWidget&quot;)</span><br><span class="line">        self.btn_import &#x3D; QtWidgets.QToolButton(self.centralWidget)</span><br><span class="line">        self.btn_import.setGeometry(QtCore, QRect(610, 20, 71, 22))</span><br><span class="line">        self.btn_import.setObjectName(&quot;btn_import&quot;)</span><br><span class="line">        self.btn_import.clicked.connect(self.on_clicked_btn_import)</span><br><span class="line"></span><br><span class="line">    def retranslateUi(self, MainWindow):</span><br><span class="line">        _translate &#x3D; QtCore.QCoreApplication.translate</span><br><span class="line">        MainWindow.setWindowTitle(_translate(&quot;MainWindow&quot;, &quot;MainWindow&quot;))</span><br><span class="line">        self.btn_import.setText(_translate(&quot;MainWindow&quot;, &quot;import&quot;))</span><br><span class="line">    </span><br><span class="line">    def on_clicked_btn_import(self):</span><br><span class="line">        print(&quot;btn_import clicked&quot;)</span><br><span class="line">    </span><br><span class="line">    .....</span><br></pre></td></tr></table></figure><br>运行该UI需要在程序入口（__main__）实例化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line"></span><br><span class="line">from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox</span><br><span class="line"></span><br><span class="line">from ui.mainWindow import Ui_MainWindow # 引入UI的类定义</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class Startup(QMainWindow, Ui_MainWindow):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        super(Startup, self).__init__()</span><br><span class="line">        self.setupUi(self)</span><br><span class="line"></span><br><span class="line">    def importImg(self):</span><br><span class="line">        fname &#x3D; QFileDialog.getOpenFileName(self, &#39;import Image&#39;, &#39;.&#x2F;&#39;)</span><br><span class="line"></span><br><span class="line">        if fname[0]:</span><br><span class="line">            QMessageBox.information(self, &#39;import success&#39;, fname[0], QMessageBox.Yes)</span><br><span class="line">        print(&quot;import img is here&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    app &#x3D; QApplication(sys.argv)</span><br><span class="line">    startup &#x3D; Startup()</span><br><span class="line">    startup.show()</span><br><span class="line">    sys.exit(app.exec_())</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>可见这里的Startup类即 Ui_MainWindow 实例化参数object 两个类是相互引用的；Startup类函数即主窗体的槽函数</p>
-<h4 id="事件、信号和槽函数"><a href="#事件、信号和槽函数" class="headerlink" title="事件、信号和槽函数"></a>事件、信号和槽函数</h4><p>在控件层面 事件如点击按钮（clicked）选择菜单（triggered），事件可以直接connect到响应函数（槽函数）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">btn &#x3D; QPushButton(&#39;test&#39;, self)</span><br><span class="line">btn.resize(btn.sizeHint())</span><br><span class="line">btn.move(50, 50)</span><br><span class="line">btn.clicked.connect(self.showDlg)</span><br></pre></td></tr></table></figure><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># MenuBar -&gt; Menu -&gt; Action -&gt; Slot</span><br><span class="line">self.menubar &#x3D; QtWidgets.QMenuBar(MainWindow)</span><br><span class="line">self.menubar.setGeometry(QtCore.QRect(0, 0, 842, 26))</span><br><span class="line">self.menubar.setObjectName(&quot;menubar&quot;)</span><br><span class="line">self.menu &#x3D; QtWidgets.QMenu(self.menubar)</span><br><span class="line">self.menu.setObjectName(&quot;menu&quot;)</span><br><span class="line">MainWindow.setMenuBar(self.menubar)</span><br><span class="line"></span><br><span class="line">self.actionimport &#x3D; QtWidgets.QAction(MainWindow)</span><br><span class="line">self.actionimport.setObjectName(&quot;actionimport&quot;)</span><br><span class="line">self.menu.addAction(self.actionimport)</span><br><span class="line">self.menubar.addAction(self.menu.menuAction())</span><br><span class="line"></span><br><span class="line">self.retranslateUi(MainWindow)</span><br><span class="line">self.actionimport.triggered.connect(MainWindow.importImg)</span><br><span class="line">QtCore.QMetaObject.connectSlotsByName(MainWindow)</span><br></pre></td></tr></table></figure><br>或者，不同事件发送某信号，而某个模块监听到该信号而触发响应<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个信号closeApp。当触发鼠标点击事件时信号会被发射。信号连接到QMainWindow的close()方法。</span><br><span class="line">class Communicate(QObject):   </span><br><span class="line">    closeApp &#x3D; pyqtSignal()</span><br><span class="line"># 信号使用了pyqtSignal()方法创建，并且成为外部类Communicate类的属性。</span><br><span class="line">self.c &#x3D; Communicate()</span><br><span class="line">self.c.closeApp.connect(self.close)</span><br><span class="line"># 把自定义的closeApp信号连接到QMainWindow的close()槽上。</span><br><span class="line">def mousePressEvent(self, event):</span><br><span class="line">     </span><br><span class="line">    self.c.closeApp.emit()</span><br><span class="line"># 当我们在窗口上点击一下鼠标，closeApp信号会被发射。应用中断。</span><br></pre></td></tr></table></figure></p>
-<h4 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h4><p>pyinstaller vs Nuitka</p>
-<blockquote>
-<p>Nuitka(音妞卡)是将python程序转换成C语言的可执行elf文件。这样在运行时就可以享受到C语言处理过程中的优化，提高速度。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -U nuitka</span><br></pre></td></tr></table></figure>
-<p>编译依赖Python和C compiler，c compiler需支持C11或C++03 这意味着需安装MinGW64 C11编译器 基于gcc11.2或更高版本，或visual studio</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="page-number current">2</span><a class="page-number" href="/qqsnote/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/25/">25</a><a class="extend next" rel="next" href="/qqsnote/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="page-number current">2</span><a class="page-number" href="/qqsnote/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/26/">26</a><a class="extend next" rel="next" href="/qqsnote/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -980,7 +897,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/qqsnote/archives/">
         
-          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-count">257</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -991,7 +908,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/qqsnote/tags/">
-        <span class="site-state-item-count">98</span>
+        <span class="site-state-item-count">100</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1002,7 +919,7 @@
       </div>
 
       <div class="tag-cloud-tags">
-        <a href="/qqsnote/tags/Net/" style="font-size: 28.5px; color: #fbfbfb">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 16.5px; color: #d9d9d9">AI</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24px; color: #eee">Azure</a> <a href="/qqsnote/tags/C/" style="font-size: 15px; color: #d5d5d5">C#</a> <a href="/qqsnote/tags/CSS/" style="font-size: 18px; color: #ddd">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15px; color: #d5d5d5">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 19.5px; color: #e1e1e1">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 16.5px; color: #d9d9d9">OpenCV</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Python/" style="font-size: 25.5px; color: #f2f2f2">Python</a> <a href="/qqsnote/tags/React/" style="font-size: 18px; color: #ddd">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 12px; color: #ccc">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 19.5px; color: #e1e1e1">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 16.5px; color: #d9d9d9">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/object-Object/" style="font-size: 12px; color: #ccc">[object Object]</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 27px; color: #f7f7f7">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 16.5px; color: #d9d9d9">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 13.5px; color: #d0d0d0">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 12px; color: #ccc">医学图像</a> <a href="/qqsnote/tags/%E5%8D%8F%E8%AE%AE%E5%92%8C%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">协议和规范</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 12px; color: #ccc">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12px; color: #ccc">性能优化</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.5px; color: #d0d0d0">算法</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12px; color: #ccc">面试</a>
+        <a href="/qqsnote/tags/Net/" style="font-size: 28.5px; color: #fbfbfb">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 16.5px; color: #d9d9d9">AI</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24px; color: #eee">Azure</a> <a href="/qqsnote/tags/C/" style="font-size: 15px; color: #d5d5d5">C#</a> <a href="/qqsnote/tags/CSS/" style="font-size: 18px; color: #ddd">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15px; color: #d5d5d5">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 21px; color: #e6e6e6">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.5px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 16.5px; color: #d9d9d9">OpenCV</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Python/" style="font-size: 25.5px; color: #f2f2f2">Python</a> <a href="/qqsnote/tags/React/" style="font-size: 18px; color: #ddd">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 12px; color: #ccc">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 19.5px; color: #e1e1e1">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 16.5px; color: #d9d9d9">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/object-Object/" style="font-size: 12px; color: #ccc">[object Object]</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 27px; color: #f7f7f7">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 16.5px; color: #d9d9d9">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 13.5px; color: #d0d0d0">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 12px; color: #ccc">医学图像</a> <a href="/qqsnote/tags/%E5%8D%8F%E8%AE%AE%E5%92%8C%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">协议和规范</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 12px; color: #ccc">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12px; color: #ccc">性能优化</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.5px; color: #d0d0d0">算法</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12px; color: #ccc">面试</a>
       </div>
     </div>
   </aside>

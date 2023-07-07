@@ -145,6 +145,724 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/09/23/DevOps-Database/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/09/23/DevOps-Database/" class="post-title-link" itemprop="url">DevOps-Database</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-09-23 09:52:26" itemprop="dateCreated datePublished" datetime="2021-09-23T09:52:26+08:00">2021-09-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1740904">数据迁移，不停机上线的正确姿势</a></p>
+<h4 id="staging-slot-切换"><a href="#staging-slot-切换" class="headerlink" title="staging slot 切换"></a>staging slot 切换</h4><p>新建staging库，从旧数据库同步数据，同步数据结束后在空闲时段停服，将流量切换至新库</p>
+<h4 id="不停机"><a href="#不停机" class="headerlink" title="不停机"></a>不停机</h4><ol>
+<li>准备新库 表结构更新或分库分表操作</li>
+<li>开启双写，服务端同时向新老两个库写入数据 此阶段需要联查历史数据进行写入的操作可以先查老数据库 再写入新库</li>
+<li>双写过程中，开始历史数据迁移，将某一时间点的历史数据迁移到新库，迁移范围要覆盖到双写数据范围以避免数据遗漏</li>
+<li>数据校验，确认没有遗漏 以及写入失败的个别情况</li>
+<li>开启双读，流量逐步过渡到新库</li>
+<li>关闭老库写功能</li>
+<li>删除双写双读等业务无关逻辑</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/09/13/http/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/09/13/http/" class="post-title-link" itemprop="url">HTTP</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-09-13 13:14:00" itemprop="dateCreated datePublished" datetime="2021-09-13T13:14:00+08:00">2021-09-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-03-01 11:19:10" itemprop="dateModified" datetime="2023-03-01T11:19:10+08:00">2023-03-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages/httpmsgstructure2.png" alt=""></p>
+<h4 id="Get和Post的区别"><a href="#Get和Post的区别" class="headerlink" title="Get和Post的区别"></a>Get和Post的区别</h4><p><img src="https://tvax1.sinaimg.cn/large/0032xJMSgy1guexb1cxwdj611i0o0tpb02.jpg" alt=""><br>总结：get 用于获取信息，无副作用，幂等，且可缓存。<br>post 用于修改服务器上的数据，有副作用，非幂等，不可缓存</p>
+<blockquote>
+<p>其实HTTP协议本身并没有对URL和BODY的长度限制，对URL限制的大多是浏览器和服务端自己限制的。</p>
+<p>传参方式不受TCP传输限制 Get使用url Post使用Body的方式是约定俗成 服务端可自行制定规则从header或body获取参数</p>
+</blockquote>
+<h4 id="幂等性-Idempotence"><a href="#幂等性-Idempotence" class="headerlink" title="幂等性 (Idempotence)"></a>幂等性 (Idempotence)</h4><h4 id="Put-vs-Post"><a href="#Put-vs-Post" class="headerlink" title="Put vs Post"></a>Put vs Post</h4><h4 id="Data-URL"><a href="#Data-URL" class="headerlink" title="Data URL"></a>Data URL</h4><p>最初见于css插入图片资源 data协议数据格式形如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data:[&lt;mediatype&gt;][;base64],&lt;data&gt;</span><br></pre></td></tr></table></figure><br>其中mediatype 是个 MIME 类型的字符串，例如 ‘image/jpeg’ 表示 JPEG 图像文件。如果被省略，则默认值为 text/plain;charset=US-ASCII。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/09/08/forntend-performance/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/09/08/forntend-performance/" class="post-title-link" itemprop="url">forntend-performance</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-09-08 15:19:52" itemprop="dateCreated datePublished" datetime="2021-09-08T15:19:52+08:00">2021-09-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-02-23 18:06:39" itemprop="dateModified" datetime="2023-02-23T18:06:39+08:00">2023-02-23</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="RAIL模型"><a href="#RAIL模型" class="headerlink" title="RAIL模型"></a>RAIL模型</h4><p><a target="_blank" rel="noopener" href="https://web.dev/i18n/zh/rail/">使用 RAIL 模型衡量性能</a> 即对于应用的 相应 — 动画 — 空闲 — 加载 四种不同场景，用户会对性能有不一样的期望</p>
+<p><img src="https://web-dev.imgix.net/image/admin/uc1IWVOW2wEhIY6z4KjJ.png?auto=format&amp;w=964" alt=""></p>
+<p>以用户为中心的性能指标</p>
+<ul>
+<li>First Paint 首次绘制（FP） 记录从空白页到任意像素的呈现所需时间</li>
+<li>First contentful paint 首次内容绘制 (FCP) 首次页面加载完成</li>
+<li>Largest contentful paint 最大内容绘制 (LCP) 任意访问和交互过程中 呈现内容所需的最长时间</li>
+<li>First input delay 首次输入延迟 (FID) 从第一次交互到第一次响应</li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/i18n/zh/tti/">Time to Interactive 可交互时间 (TTI)</a> 衡量页面从内容渲染完成到可以相应用户交互所需时间 </li>
+<li>Total blocking time 总阻塞时间 (TBT) 即FCP与TTI之间的时差</li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/i18n/zh/cls/">Cumulative layout shift 累积布局偏移 (CLS)</a> 这是一个评分 衡量页面出现意外的加载内容偏移的程度</li>
+</ul>
+<h4 id="页面渲染的过程"><a href="#页面渲染的过程" class="headerlink" title="页面渲染的过程"></a>页面渲染的过程</h4><p><img src="http://tva1.sinaimg.cn/large/a60edd42gy1hbdklde1bkj20vq0brwje.jpg" alt=""></p>
+<h4 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h4><p><a target="_blank" rel="noopener" href="https://http2.akamai.com/demo">http2</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/08/26/Azure-AppInsights/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/08/26/Azure-AppInsights/" class="post-title-link" itemprop="url">Azure-AppInsights</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-08-26 10:33:05" itemprop="dateCreated datePublished" datetime="2021-08-26T10:33:05+08:00">2021-08-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在你的应用中安装sdk向Azure Application Insight服务发送遥测数据，支持web客户端，web服务和后台服务等<br>对应用性能影响小。非阻塞，单独线程<br><img src="https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/media/app-insights-overview/diagram.png" alt=""></p>
+<blockquote>
+<p>The instrumentation monitors your app and directs the telemetry data to an Azure Application Insights Resource using a unique GUID that we refer to as an Instrumentation Key. You can instrument not only the web service application, but also any background components, and the JavaScript in the web pages themselves. The application and its components can run anywhere - it doesn’t have to be hosted in Azure.  使用Guid作为Instrumentation Key(ikey)标识作为监视器的Azure Insights资源。 监测web服务应用或后台组件亦或页面js 这些应用或组件、命令不必托管在Azure中</p>
+<h4 id="创建Azure-App-Insights资源"><a href="#创建Azure-App-Insights资源" class="headerlink" title="创建Azure App Insights资源"></a>创建Azure App Insights资源</h4><p>Azure Portal -&gt; Application Insights -&gt; Create<br><img src="https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/media/create-new-resource/review-create.png" alt=""></p>
+<h4 id="添加Javascript-SDK"><a href="#添加Javascript-SDK" class="headerlink" title="添加Javascript SDK"></a>添加Javascript SDK</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i --save @microsoft&#x2F;applicationinsights-web</span><br></pre></td></tr></table></figure>
+<p>使用ikey或连接字符串创建客户端instance<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import &#123; ApplicationInsights &#125; from &#39;@microsoft&#x2F;applicationinsights-web&#39;</span><br><span class="line"></span><br><span class="line">const appInsights &#x3D; new ApplicationInsights(&#123; config: &#123;</span><br><span class="line">  instrumentationKey: &#39;YOUR_INSTRUMENTATION_KEY_GOES_HERE&#39; &#x2F;* 使用ikey *&#x2F;</span><br><span class="line">  &#x2F;* 或使用 connectionString: &#39;YOUR_CONNECTION_STRING_GOES_HERE&#39; *&#x2F;</span><br><span class="line">  &#x2F;* ...Other Configuration Options... *&#x2F;</span><br><span class="line">&#125; &#125;);</span><br><span class="line">appInsights.loadAppInsights();</span><br><span class="line">appInsights.trackPageView(); &#x2F;&#x2F; Manually call trackPageView to establish the current user&#x2F;session&#x2F;pageview</span><br></pre></td></tr></table></figure><br>React Plugin<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install @microsoft&#x2F;applicationinsights-react-js</span><br><span class="line">npm install @microsoft&#x2F;applicationinsights-web</span><br></pre></td></tr></table></figure><br>创建实例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; AppInsights.js</span><br><span class="line">import &#123; ApplicationInsights &#125; from &#39;@microsoft&#x2F;applicationinsights-web&#39;;</span><br><span class="line">import &#123; ReactPlugin &#125; from &#39;@microsoft&#x2F;applicationinsights-react-js&#39;;</span><br><span class="line">import &#123; createBrowserHistory &#125; from &#39;history&#39;;</span><br><span class="line"></span><br><span class="line">const browserHistory &#x3D; createBrowserHistory(&#123; basename: &#39;&#39; &#125;);</span><br><span class="line">const reactPlugin &#x3D; new ReactPlugin();</span><br><span class="line">const appInsights &#x3D; new ApplicationInsights(&#123;</span><br><span class="line">    config: &#123;</span><br><span class="line">        instrumentationKey: &#39;YOUR_INSTRUMENTATION_KEY_GOES_HERE&#39;,</span><br><span class="line">        extensions: [reactPlugin],</span><br><span class="line">        extensionConfig: &#123;</span><br><span class="line">          [reactPlugin.identifier]: &#123; history: browserHistory &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">appInsights.loadAppInsights();</span><br><span class="line">export &#123; reactPlugin, appInsights &#125;;</span><br></pre></td></tr></table></figure><br>在AppComponent使用Context.Provider 使所有子组件内可使用 useContext hook调用AppInsights实例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import React from &quot;react&quot;;</span><br><span class="line">import &#123; AppInsightsContext &#125; from &quot;@microsoft&#x2F;applicationinsights-react-js&quot;;</span><br><span class="line">import &#123; reactPlugin &#125; from &quot;.&#x2F;AppInsights&quot;;</span><br><span class="line"></span><br><span class="line">const App &#x3D; () &#x3D;&gt; &#123;</span><br><span class="line">    return (</span><br><span class="line">        &lt;AppInsightsContext.Provider value&#x3D;&#123;reactPlugin&#125;&gt;</span><br><span class="line">            &#x2F;* your application here *&#x2F;</span><br><span class="line">        &lt;&#x2F;AppInsightsContext.Provider&gt;</span><br><span class="line">    );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><br>子组件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import React from &quot;react&quot;;</span><br><span class="line">import &#123; useAppInsightsContext &#125; from &quot;@microsoft&#x2F;applicationinsights-react-js&quot;;</span><br><span class="line"></span><br><span class="line">const MyComponent &#x3D; () &#x3D;&gt; &#123;</span><br><span class="line">    const appInsights &#x3D; useAppInsightsContext();</span><br><span class="line">    </span><br><span class="line">    appInsights.trackMetric(&quot;Component &#39;MyComponent&#39; is in use&quot;);</span><br><span class="line">    appInsights.trackEvent(&#123; name: &#39;Component Init&#39;, properties: &#123; &#39;mydata&#39; &#125; &#125;);</span><br><span class="line">    </span><br><span class="line">    return (</span><br><span class="line">        &lt;h1&gt;My Component&lt;&#x2F;h1&gt;</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line">export default MyComponent;</span><br></pre></td></tr></table></figure></p>
+<h4 id="useTrackMetric"><a href="#useTrackMetric" class="headerlink" title="useTrackMetric"></a>useTrackMetric</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const MyComponent &#x3D; () &#x3D;&gt; &#123;</span><br><span class="line">    const appInsights &#x3D; useAppInsightsContext();</span><br><span class="line">    const trackComponent &#x3D; useTrackMetric(appInsights, &quot;MyComponent&quot;);</span><br><span class="line">    </span><br><span class="line">    return (</span><br><span class="line">        &lt;h1 onHover&#x3D;&#123;trackComponent&#125; onClick&#x3D;&#123;trackComponent&#125;&gt;My Component&lt;&#x2F;h1&gt;</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="useTrackEvent"><a href="#useTrackEvent" class="headerlink" title="useTrackEvent"></a>useTrackEvent</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; useState, useEffect &#125; from &quot;react&quot;;</span><br><span class="line">import &#123; useAppInsightsContext, useTrackEvent &#125; from &quot;@microsoft&#x2F;applicationinsights-react-js&quot;;</span><br><span class="line"></span><br><span class="line">const MyComponent &#x3D; () &#x3D;&gt; &#123;</span><br><span class="line">    const appInsights &#x3D; useAppInsightsContext();</span><br><span class="line">    const [cart, setCart] &#x3D; useState([]);</span><br><span class="line">    const trackCheckout &#x3D; useTrackEvent(appInsights, &quot;Checkout&quot;, cart);</span><br><span class="line">    const trackCartUpdate &#x3D; useTrackEvent(appInsights, &quot;Cart Updated&quot;, cart);</span><br><span class="line">    useEffect(() &#x3D;&gt; &#123;</span><br><span class="line">        trackCartUpdate(&#123; cartCount: cart.length &#125;);</span><br><span class="line">    &#125;, [cart]);</span><br><span class="line">    </span><br><span class="line">    const performCheckout &#x3D; () &#x3D;&gt; &#123;</span><br><span class="line">        trackCheckout();</span><br><span class="line">        &#x2F;&#x2F; submit data</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    return (</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;ul&gt;</span><br><span class="line">                &lt;li&gt;Product 1 &lt;button onClick&#x3D;&#123;() &#x3D;&gt; setCart([...cart, &quot;Product 1&quot;])&#125;&gt;Add to Cart&lt;&#x2F;button&gt;&lt;&#x2F;li&gt;</span><br><span class="line">                &lt;li&gt;Product 2 &lt;button onClick&#x3D;&#123;() &#x3D;&gt; setCart([...cart, &quot;Product 2&quot;])&#125;&gt;Add to Cart&lt;&#x2F;button&gt;&lt;&#x2F;li&gt;</span><br><span class="line">                &lt;li&gt;Product 3 &lt;button onClick&#x3D;&#123;() &#x3D;&gt; setCart([...cart, &quot;Product 3&quot;])&#125;&gt;Add to Cart&lt;&#x2F;button&gt;&lt;&#x2F;li&gt;</span><br><span class="line">                &lt;li&gt;Product 4 &lt;button onClick&#x3D;&#123;() &#x3D;&gt; setCart([...cart, &quot;Product 4&quot;])&#125;&gt;Add to Cart&lt;&#x2F;button&gt;&lt;&#x2F;li&gt;</span><br><span class="line">            &lt;&#x2F;ul&gt;</span><br><span class="line">            &lt;button onClick&#x3D;&#123;performCheckout&#125;&gt;Checkout&lt;&#x2F;button&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default MyComponent;</span><br></pre></td></tr></table></figure>
+<h4 id="Click-Analytics-Auto-collection-plugin"><a href="#Click-Analytics-Auto-collection-plugin" class="headerlink" title="Click Analytics Auto-collection plugin"></a>Click Analytics Auto-collection plugin</h4><p>自动跟踪网页上的单击事件，并使用 HTML 元素上的 data-* 属性来填充事件遥测数据。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import &#123; ApplicationInsights &#125; from &#39;@microsoft&#x2F;applicationinsights-web&#39;;</span><br><span class="line">import &#123; ClickAnalyticsPlugin &#125; from &#39;@microsoft&#x2F;applicationinsights-clickanalytics-js&#39;;</span><br><span class="line"></span><br><span class="line">const clickPluginInstance &#x3D; new ClickAnalyticsPlugin();</span><br><span class="line">&#x2F;&#x2F; Click Analytics configuration</span><br><span class="line">const clickPluginConfig &#x3D; &#123;</span><br><span class="line">  autoCapture: true</span><br><span class="line">&#125;;</span><br><span class="line">&#x2F;&#x2F; Application Insights Configuration</span><br><span class="line">const configObj &#x3D; &#123;</span><br><span class="line">  instrumentationKey: &quot;YOUR INSTRUMENTATION KEY&quot;,</span><br><span class="line">  extensions: [clickPluginInstance],</span><br><span class="line">  extensionConfig: &#123;</span><br><span class="line">    [clickPluginInstance.identifier]: clickPluginConfig</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">const appInsights &#x3D; new ApplicationInsights(&#123; config: configObj &#125;);</span><br><span class="line">appInsights.loadAppInsights();</span><br></pre></td></tr></table></figure></p>
+<h4 id="监视对象"><a href="#监视对象" class="headerlink" title="监视对象"></a>监视对象</h4><ul>
+<li>User   用浏览器cookie中存储的匿名id区分用户<br>JavaScript SDK 自动生成匿名用户和会话 ID，然后在从应用发送这些 ID 后使用这些 ID 填充遥测事件。</li>
+<li>Session 不活动半小时重新记Session 活动24h后重新记Session</li>
+<li>Event 每次执行trackEvent逻辑 Event参数已加入一组标准属性，包括匿名用户id（anonymous user ID）QQs存疑！<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/javascript#cookie-handling">cookie处理</a> <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/javascript#enable-time-on-page-tracking">visit time</a></li>
+</ul>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/08/04/DesignPatternPrinciples/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/08/04/DesignPatternPrinciples/" class="post-title-link" itemprop="url">设计模式原则</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-08-04 09:26:47" itemprop="dateCreated datePublished" datetime="2021-08-04T09:26:47+08:00">2021-08-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>简写为SOLID</p>
+<h4 id="单一职责-Sigle-Responsibility-Principle"><a href="#单一职责-Sigle-Responsibility-Principle" class="headerlink" title="单一职责(Sigle Responsibility Principle)"></a>单一职责(Sigle Responsibility Principle)</h4><p>避免设计对象（类，方法）承担多项职责，在对职责1操作或修改时可能会造成职责2的异常。</p>
+<ul>
+<li>在需要if else时考虑划分为两个类或方法</li>
+<li>在需求变更导致职责细分时考虑将类或方法划分</li>
+</ul>
+<h4 id="开放关闭-Open-Closed-Principle"><a href="#开放关闭-Open-Closed-Principle" class="headerlink" title="开放关闭(Open Closed Principle)"></a>开放关闭(Open Closed Principle)</h4><p>设计对象应该根据需求被扩展，而不应该因需求而做修改，即对类进行抽象和继承<br>违反开放关闭原则：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class Factory &#123;</span><br><span class="line">    public Computer produceComputer(String type) &#123;</span><br><span class="line">        Computer c &#x3D; null;</span><br><span class="line">        if(type.equals(&quot;macbook&quot;))&#123;</span><br><span class="line">            c &#x3D; new Macbook();</span><br><span class="line">        &#125;else if(type.equals(&quot;surface&quot;))&#123;</span><br><span class="line">            c &#x3D; new Surface();</span><br><span class="line">        &#125;</span><br><span class="line">        return c;</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>抽象出produce接口<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">interface Factory &#123;</span><br><span class="line">    public Computer produceComputer();</span><br><span class="line">&#125;</span><br><span class="line">class AppleFactory implements Factory &#123;</span><br><span class="line">    public Computer produceComputer() &#123;</span><br><span class="line">        return new Macbook();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class MSFactory implements Factory &#123;</span><br><span class="line">    public Computer produceComputer() &#123;</span><br><span class="line">        return new Surface();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="里氏替换-Liskov-Substitution-Principle"><a href="#里氏替换-Liskov-Substitution-Principle" class="headerlink" title="里氏替换(Liskov Substitution Principle)"></a>里氏替换(Liskov Substitution Principle)</h4><blockquote>
+<p>所有引用基类的地方必须能透明地使用其子类的对象。</p>
+</blockquote>
+<p>A的子类B继承父类时，不应改变原功能，只做扩展</p>
+<h4 id="接口隔离-Interface-Segregation-Principle"><a href="#接口隔离-Interface-Segregation-Principle" class="headerlink" title="接口隔离(Interface Segregation Principle)"></a>接口隔离(Interface Segregation Principle)</h4><p>合理设计接口的粒度，避免类型依赖它不需要的接口</p>
+<h4 id="依赖倒置-Dependency-Injection-Principle"><a href="#依赖倒置-Dependency-Injection-Principle" class="headerlink" title="依赖倒置(Dependency Injection Principle)"></a>依赖倒置(Dependency Injection Principle)</h4><p>高层模块不应依赖低层模块，以免因为低层修改而牵扯高层，两者应该共同依赖接口，将改动限制在接口的实现上<br>即最少知道，类型对其直接引用的对象A保持最少的了解，不会通过该对象与第三者对象B建立间接的调用关系，要求A将必要的方法封装为public提供外部调用，而不暴露其引用了B的事实</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/07/13/sqlserver-trigger/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/07/13/sqlserver-trigger/" class="post-title-link" itemprop="url">SQL Server 触发器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-07-13 10:02:08" itemprop="dateCreated datePublished" datetime="2021-07-13T10:02:08+08:00">2021-07-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li>触发器是一类存储过程</li>
+<li>由数据表的事件(如insert update delete)触发，而不是手动调用</li>
+</ul>
+<h4 id="登录触发器"><a href="#登录触发器" class="headerlink" title="登录触发器"></a>登录触发器</h4><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/sql/relational-databases/triggers/logon-triggers?view=sql-server-ver15">官网例子</a> 场景：如果登录名login_test 已经创建了三个用户会话，触发器将拒绝该用户的登录尝试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">USE master;  </span><br><span class="line">GO  </span><br><span class="line">CREATE LOGIN login_test WITH PASSWORD &#x3D; N&#39;3KHJ6dhx(0xVYsdf&#39; MUST_CHANGE,  </span><br><span class="line">    CHECK_EXPIRATION &#x3D; ON;  </span><br><span class="line">GO  </span><br><span class="line">GRANT VIEW SERVER STATE TO login_test;  </span><br><span class="line">GO  </span><br><span class="line">CREATE TRIGGER connection_limit_trigger  </span><br><span class="line">ON ALL SERVER WITH EXECUTE AS N&#39;login_test&#39;  </span><br><span class="line">FOR LOGON  </span><br><span class="line">AS  </span><br><span class="line">BEGIN  </span><br><span class="line">IF ORIGINAL_LOGIN()&#x3D; N&#39;login_test&#39; AND  </span><br><span class="line">    (SELECT COUNT(*) FROM sys.dm_exec_sessions  </span><br><span class="line">            WHERE is_user_process &#x3D; 1 AND  </span><br><span class="line">                original_login_name &#x3D; N&#39;login_test&#39;) &gt; 3  </span><br><span class="line">    ROLLBACK;  </span><br><span class="line">END;</span><br></pre></td></tr></table></figure><br>可知登录触发器在身份认证之后，建立会话之前触发<br>多个触发器的顺序，即支持指定the first和the last 见<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/sql/relational-databases/triggers/logon-triggers?view=sql-server-ver15#specifying-first-and-last-trigger">Microsoft Docs</a></p>
+<h4 id="DDL"><a href="#DDL" class="headerlink" title="DDL"></a>DDL</h4><p>data define language 数据定义语言<br>即在使用会改变数据库数据结构的语句时触发，如CREATE、ALTER、DROP、GRANT、DENY、REVOKE 或 UPDATE STATISTICS 开头的 Transact-SQL 语句<br>场景</p>
+<ul>
+<li>防止对数据库架构进行某些更改。</li>
+<li>希望数据库中发生某种情况以响应数据库架构的更改。</li>
+<li>记录数据库架构的更改或事件。<h4 id="DML"><a href="#DML" class="headerlink" title="DML"></a>DML</h4>data manipulation language (DML) 数据操作语言  INSERT、UPDATE 或 DELETE 语句<br>after 触发器<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">CREATE TRIGGER schemaA.SyncData </span><br><span class="line">   ON  schemaA.TableA</span><br><span class="line">   AFTER INSERT</span><br><span class="line">AS </span><br><span class="line">BEGIN</span><br><span class="line">	-- SET NOCOUNT ON added to prevent extra result sets from</span><br><span class="line">	-- interfering with SELECT statements.</span><br><span class="line"></span><br><span class="line">    -- Insert statements for trigger here</span><br><span class="line">	insert into schemaB.TableB(Name,TrustedId,EmailAddress,Logo,Type,Enable,RecordStatus,RecordCreated,RecordLastUpdated)</span><br><span class="line">	select name,record_pk,email,logo,&#39;1&#39;,0,0,SYSDATETIME(),SYSDATETIME() from schemaA.TableA</span><br><span class="line">	SET NOCOUNT ON;</span><br><span class="line">END</span><br><span class="line">GO</span><br></pre></td></tr></table></figure>
+instead of 触发器</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/07/10/FrontEnd-Fundation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/07/10/FrontEnd-Fundation/" class="post-title-link" itemprop="url">前端基础</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-07-10 22:08:04" itemprop="dateCreated datePublished" datetime="2021-07-10T22:08:04+08:00">2021-07-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li>DOCTYPE 有什么作用？怎么写？<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br></pre></td></tr></table></figure>
+html5规范的文档声明，示意浏览器以相应的标准解析文档，使支持html5规范如新的标签等</li>
+<li>列出常见的标签，并简单介绍这些标签用在什么场景？<br>canvas</li>
+<li>页面出现了乱码，是怎么回事？如何解决？<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta http-equiv&#x3D;&quot;Content-Type&quot; content&#x3D;&quot;text&#x2F;html; charset&#x3D;utf-8&quot; &#x2F;&gt; </span><br></pre></td></tr></table></figure>
+可能是即字符编码不匹配造成</li>
+<li>title 属性和 alt 属性分别有什么作用？</li>
+<li>HTML 的注释怎样写？</li>
+<li>data- 属性的作用？<br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Global_attributes/data-*">自定义数据属性data-*</a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var box &#x3D; document.getElementById(&quot;box&quot;); &#x2F;&#x2F; &lt;div id&#x3D;&quot;box&quot; data-user-name&#x3D;&quot;QQs&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">var username &#x3D; box.dataset.userName;</span><br></pre></td></tr></table></figure></li>
+<li>\<img> 的 title 和 alt 有什么区别？</li>
+<li>Web 标准以及 W3C 标准是什么？ <a target="_blank" rel="noopener" href="https://www.runoob.com/web/web-standards.html">web标准</a></li>
+<li>HTML 全局属性（<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Global_attributes">Global Attribute</a>）有哪些？<br>id class style title name data-* contenteditable translate</li>
+<li>meta 有哪些常见的值？charset</li>
+<li>meta viewport 是做什么用的，怎么写？\<meta data-n-head="ssr" name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover"></li>
+<li>列出常见的标签，并简单介绍这些标签用在什么场景？</li>
+<li>如何在 HTML 页面上展示 <div></div> 这几个字符？</li>
+<li>你是如何理解 HTML 语义化的？</li>
+<li>前端需要注意哪些 SEO?</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/06/11/DataBaseLock/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/06/11/DataBaseLock/" class="post-title-link" itemprop="url">DataBaseLock</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-06-11 11:00:59" itemprop="dateCreated datePublished" datetime="2021-06-11T11:00:59+08:00">2021-06-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/05/31/vbox/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/05/31/vbox/" class="post-title-link" itemprop="url">Virtualbox</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-05-31 10:04:12" itemprop="dateCreated datePublished" datetime="2021-05-31T10:04:12+08:00">2021-05-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-09-07 15:36:10" itemprop="dateModified" datetime="2022-09-07T15:36:10+08:00">2022-09-07</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="VBoxManage"><a href="#VBoxManage" class="headerlink" title="VBoxManage"></a>VBoxManage</h4><p>ubuntu可ssh远程用此命令行工具管理虚拟机</p>
+<ul>
+<li>VBoxManage list vms/runningvms</li>
+<li>VBoxManage startvm MyUbuntu<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vboxmanage startvm MyUbuntu --type headless #在宿主机端隐藏图形界面 </span><br></pre></td></tr></table></figure></li>
+<li>VBoxManage controlvm MyUbuntu poweroff</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/05/14/graphQL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -225,711 +943,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/05/11/React-vs-Angular/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/05/11/React-vs-Angular/" class="post-title-link" itemprop="url">React vs Angular</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-05-11 10:18:53" itemprop="dateCreated datePublished" datetime="2021-05-11T10:18:53+08:00">2021-05-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="template"><a href="#template" class="headerlink" title="template"></a>template</h4><p>vue和angular都鼓励开发者编写尽可能与常规Html相似的template，react却并不是，react则崇尚all in js. 不过从编译角度看，两种方式都是语法糖而已，无论编码风格，编译后都是一个可执行函数</p>
-<h4 id="render-principle"><a href="#render-principle" class="headerlink" title="render principle"></a>render principle</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/rockan007/article/details/90716237">了解Angular Ivy: Incremental DOM 和 Virtual DOM</a></p>
-<h4 id="ecosystem"><a href="#ecosystem" class="headerlink" title="ecosystem"></a>ecosystem</h4><p>react生态庞杂，官方定义了基架，各种具体场景的实现技术在社区百花齐放，各路大神乐于造自己的轮子，库选型劝退选择恐惧症。。。<br>angular：桶里啥都有。。。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/04/27/UIdesign/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/04/27/UIdesign/" class="post-title-link" itemprop="url">UIdesign</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-27 10:56:42" itemprop="dateCreated datePublished" datetime="2021-04-27T10:56:42+08:00">2021-04-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://www.canva.com/">https://www.canva.com/</a><br>这个网站的404是一个拼图游戏，纯html img + css以及拖动实现</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/04/25/Canvas-wordCloud/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/04/25/Canvas-wordCloud/" class="post-title-link" itemprop="url">Canvas-wordCloud</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-25 14:52:09" itemprop="dateCreated datePublished" datetime="2021-04-25T14:52:09+08:00">2021-04-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const canvas &#x3D; document.getElementById(&#39;canvas&#39;)</span><br><span class="line">const ctx &#x3D; canvas.getContext(&#39;2d&#39;)</span><br><span class="line"></span><br><span class="line">ctx.beginPath()</span><br><span class="line">ctx.arc(75,75,50,0,Math.PI*2,true);&#x2F;&#x2F;以(75, 75)为圆心50为半径绘制从0~2pi的圆弧，true为顺时针</span><br><span class="line">ctx.stroke() &#x2F;&#x2F;使用线条绘制图形轮廓 相对的fill是填充图形</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>canvas元素创造了一块固定的画布，它公开了一个或多个渲染上下文，其可以用来绘制和处理要展示的内容。<br>getContext(‘2d’)提供了二维渲染上下文 并没有‘3d’参数，而是‘webgl’或‘webgl2’ 见<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLCanvasElement/getContext">GetContext MDN</a></p>
-<h3 id="hexo-tag-cloud"><a href="#hexo-tag-cloud" class="headerlink" title="hexo tag cloud"></a>hexo tag cloud</h3><p><a target="_blank" rel="noopener" href="https://github.com/D0n9X1n/hexo-tag-cloud">Hexo plugin: hexo-tag-cloud</a><br>该项目使用使用胶水语言(如swig)，将tagCanvas.js植入Hexo项目<br><a target="_blank" rel="noopener" href="https://www.goat1000.com/tagcanvas.php">tagCanvas.js 库</a><br>在本项目qqsnote中，并按hexo-tag-cloud的README示意的没有集成到sidebar,而是集成到了theme/next/layout/page.swig，并按tagCanvas.js 库文档示意设置了权重显示模式</p>
-</blockquote>
-<h4 id="在屏幕上画一个立体球"><a href="#在屏幕上画一个立体球" class="headerlink" title="在屏幕上画一个立体球"></a>在屏幕上画一个立体球</h4><p>看一眼 <a target="_blank" rel="noopener" href="https://github.com/whxaxes/canvas-test/blob/master/src/3D-demo/3Dball.html">吖猩的3D旋转球</a></p>
-<p>在球面的经纬焦点处绘制粒子，从球心到球半径R分n层纬度，2n经度，则共4n<sup>2</sup>+2n个点<br>假设在每个点处放置半径r的粒子小球，小球在二维屏幕的投影用arc绘制填充即可，投影圆的位置为(x,y)，z=(R<sup>2</sup>-x<sup>2</sup>-y<sup>2</sup>)<sup>1/2</sup><br>有意思的来了：球在二维的投影，位置(远近z)反映在投影上是投影圆的半径(也可以进而根据这个比例设置opacity)，两个成像物体成像到固定像平面，像高r与物距l的关系是<br>r’/r = (l-f)/(f-z)<br>当l=2f时成像与物体等大 即r’=f/(f-z)*r<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;</span><br><span class="line">    &#x2F;&#x2F; init webgl</span><br><span class="line">    const canvas &#x3D; document.getElementById(&#39;wordCloud&#39;)</span><br><span class="line">    const ctx &#x3D; canvas.getContext(&#39;2d&#39;)</span><br><span class="line">    ctx.clearRect(0, 0, canvas.width, canvas.height);</span><br><span class="line">    const vpx &#x3D; canvas.width&#x2F;2 &#x2F;&#x2F; 圆心偏移原点(0,0) 使x，y不为负数</span><br><span class="line">    const vpy &#x3D; canvas.height&#x2F;2</span><br><span class="line">    const R &#x3D; 300</span><br><span class="line">    &#x2F;&#x2F; z: [-300 300]</span><br><span class="line">    f &#x3D; 600 </span><br><span class="line">    opacity_min &#x3D; 0.3</span><br><span class="line">    const atoms&#x3D;[]</span><br><span class="line">    &#x2F;&#x2F; solid ball 经纬</span><br><span class="line">    &#x2F;&#x2F; 粒子</span><br><span class="line">    const atom &#x3D; function(x,y,z,r)&#123;</span><br><span class="line">        this.x &#x3D; x;</span><br><span class="line">        this.y &#x3D; y;</span><br><span class="line">        this.z &#x3D; z;</span><br><span class="line">        this.r &#x3D; r;</span><br><span class="line">    &#125;</span><br><span class="line">    atom.prototype.paint&#x3D;function()&#123;</span><br><span class="line">        ctx.save() &#x2F;&#x2F;?</span><br><span class="line">        ctx.beginPath()</span><br><span class="line">        const r_projection &#x3D; this.r*f&#x2F;(f-this.z) &#x2F;&#x2F; projection 投影</span><br><span class="line">        ctx.arc(vpx+this.x,vpy+this.y,this.r,0,Math.PI*2,true)</span><br><span class="line">        ctx.fillStyle&#x3D;&#96;rgba(255,255,255,$&#123;opacity_min + (R+this.z)&#x2F;2&#x2F;R&#125;)&#96;</span><br><span class="line">        ctx.fill()</span><br><span class="line">        ctx.restore()</span><br><span class="line">    &#125;</span><br><span class="line">    const N &#x3D; 5</span><br><span class="line">    for(let k&#x3D;-N; k&lt;&#x3D;N; k++)&#123; &#x2F;&#x2F; 2N+1个纬度</span><br><span class="line">        const R_latitude &#x3D; Math.pow(R*R - Math.pow(R*k&#x2F;N,2),0.5)</span><br><span class="line">        for(let i &#x3D; 0; i&lt;2*N; i++)&#123; &#x2F;&#x2F; 2N条经线</span><br><span class="line">            const x &#x3D; R_latitude*Math.cos(i*Math.PI&#x2F;N)</span><br><span class="line">            const y &#x3D; R_latitude*Math.sin(i*Math.PI&#x2F;N)</span><br><span class="line">            const z &#x3D; k&#x2F;N*R</span><br><span class="line">            const a &#x3D; new atom(x,y,z,1.5)</span><br><span class="line">            a.paint()</span><br><span class="line">            atoms.push(a)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure><br><img src="https://tvax4.sinaimg.cn/large/a60edd42ly1gpy2efigmqj20o20mcq2u.jpg" alt="五层纬度球"></p>
-<p>如上相当于从z轴方向俯视一个球，了解另一种“撒点”方式:<br>球坐标点(R, θ, φ)<br><img src="https://tva3.sinaimg.cn/large/a60edd42ly1gpy37k5u8sj208c07g0so.jpg" alt="球坐标系"><br>x = R <em> sinθ </em> sinφ<br>y = R <em> sinθ </em> cosφ<br>z = R <em> cosθ<br>θ不取0和180就可以避免出现‘南北极’(上面的算法中极点是一圈粒子重合在一起)<br>设共N个粒子，i取[0, N)<br>找一个f(i)取值(-1, 1) 作为cosθ 那就f(i) = 2</em>(i + 1)/N - 1<br>找一个g(i)</p>
-<h4 id="旋转"><a href="#旋转" class="headerlink" title="旋转"></a>旋转</h4><p>绕z轴 转过角度θ</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-   x' \\
-   y' 
-  \end{matrix}
-  \right]=
- \left[
- \begin{matrix}
-   cosθ & -sinθ \\
-   sinθ & cosθ 
-  \end{matrix}
-  \right]·
-  \left[
- \begin{matrix}
-   x \\
-   y 
-  \end{matrix}
-  \right]</script><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/102814853">旋转矩阵的推导</a></p>
-<p>实际上绕z旋转在投影屏幕上就是同心圆环绕，并没有粒子的前后(z)不变，也难以用一个二维的变量控制，因此前辈们都使用将鼠标(x, y)的偏移对应并分解到绕x，y轴的旋转之实现<br>旋转矩阵是相同的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">let angleX &#x3D; angleY &#x3D; 0</span><br><span class="line">function rotateX(angle)&#123;</span><br><span class="line">    atoms.forEach(atom&#x3D;&gt;&#123;</span><br><span class="line">        const y &#x3D; atom.y*Math.cos(angle) - atom.z*Math.sin(angle) </span><br><span class="line">        const z &#x3D; atom.y*Math.sin(angle) + atom.z*Math.cos(angle)</span><br><span class="line">        atom.y &#x3D; y</span><br><span class="line">        atom.z &#x3D; z </span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">function rotateY(angle)&#123;</span><br><span class="line">    atoms.forEach(atom&#x3D;&gt;&#123;</span><br><span class="line">        const z &#x3D; atom.z*Math.cos(angle) - atom.x*Math.sin(angle) </span><br><span class="line">        const x &#x3D; atom.z*Math.sin(angle) + atom.x*Math.cos(angle)</span><br><span class="line">        atom.z &#x3D; z</span><br><span class="line">        atom.x &#x3D; x </span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">function rolling()&#123; &#x2F;&#x2F; click事件，点击一下随机绕x或y转十分之一圆周</span><br><span class="line">    ctx.clearRect(0, 0, canvas.width, canvas.height);</span><br><span class="line">    if(Math.random()&gt;0.5)&#123;</span><br><span class="line">        rotateX(Math.PI&#x2F;36)</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        rotateY(Math.PI&#x2F;36)</span><br><span class="line">    &#125;</span><br><span class="line">    atoms.forEach(atom&#x3D;&gt;&#123;</span><br><span class="line">        atom.paint()</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>根据鼠标偏移控制旋转角度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">canvas.addEventListener(&#39;mousemove&#39;,function(e)&#123;</span><br><span class="line">    var x &#x3D; e.clientX - vpx</span><br><span class="line">    var y &#x3D; e.clientY - vpy</span><br><span class="line">    angleX &#x3D; -x*0.00001</span><br><span class="line">    angleY &#x3D; -y*0.00001</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure><br>对于博客，该事件加在body上，使整个页面上都可以响应鼠标位置，相应的应减去球心位置偏移 (canvas.offsetLeft + document.body.scrollLeft + document.documentElement.scrollLeft, canvas.offsetTop + document.body.scrollTop + document.documentElement.scrollTop)</p>
-<h4 id="window-requrestAnimationFrame"><a href="#window-requrestAnimationFrame" class="headerlink" title="window.requrestAnimationFrame"></a>window.requrestAnimationFrame</h4><blockquote>
-<p>告诉浏览器:你希望执行一个动画，并且要求浏览器在下次重绘之前调用指定的回调函数更新动画。该方法需要传入一个回调函数作为参数，该回调函数会在浏览器下一次重绘之前执行</p>
-</blockquote>
-<p>因为渲染canvas和执行js不是一个线程，使用for循环来串起动画是行不通的，setInterval和setTimeout倒可以使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">let start</span><br><span class="line">function animation(timestamp)&#123;</span><br><span class="line">    ctx.clearRect(0, 0, canvas.width, canvas.height);</span><br><span class="line">    if(!start)&#123;</span><br><span class="line">        start &#x3D; timestamp</span><br><span class="line">    &#125;</span><br><span class="line">    rotateX(angleX)</span><br><span class="line">    rotateY(angleY)</span><br><span class="line">    atoms.forEach(atom&#x3D;&gt;&#123;</span><br><span class="line">        atom.paint()</span><br><span class="line">    &#125;)</span><br><span class="line">    const elapsed &#x3D; timestamp - start</span><br><span class="line">    if(true)&#123;</span><br><span class="line">        requestAnimationFrame(animation)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">requestAnimationFrame(animation)</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/04/25/jsMDN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/04/25/jsMDN/" class="post-title-link" itemprop="url">JavaScript MDN</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-25 14:33:43" itemprop="dateCreated datePublished" datetime="2021-04-25T14:33:43+08:00">2021-04-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">编程语言</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h4><p>常规用法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">str.replace(&#39;_&#39;,&#39;&#39;)</span><br><span class="line">str.replace(&#x2F;[^0-9a-zA-Z]&#x2F;g,&quot;&quot;);</span><br></pre></td></tr></table></figure><br>指定函数作为参数<br>即第二个参数为函数<br>见于hexo源码 /node_modules/hexo/lib/hexo/post.js line 42, line 25<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">restoreCodeBlocks(str) &#123;</span><br><span class="line">    return str.replace(rCodeBlockPlaceHolder, _restoreContent(this.cache));</span><br><span class="line">&#125;</span><br><span class="line">const _restoreContent &#x3D; cache &#x3D;&gt; (_, index) &#x3D;&gt; &#123;</span><br><span class="line">  assert(cache[index]);</span><br><span class="line">  const value &#x3D; cache[index];</span><br><span class="line">  cache[index] &#x3D; null;</span><br><span class="line">  return value;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><br>rCodeBlockPlaceHolder是一串正则表达式，replace对str中符合正则表达式的结果(即str.match(rCodeBlockPlaceHolder))应用参数二方法，方法执行结果替换相应的字符串<br>值得注意的是，_restoreContent(this.cache)返回一个带迭代的方法，index对应str.match(rCodeBlockPlaceHolder)的次序</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/04/23/DataStructuresAndAlgorithms/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/04/23/DataStructuresAndAlgorithms/" class="post-title-link" itemprop="url">数据结构和算法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-23 15:13:25" itemprop="dateCreated datePublished" datetime="2021-04-23T15:13:25+08:00">2021-04-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/04/16/pwa/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/04/16/pwa/" class="post-title-link" itemprop="url">渐进式web开发</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-16 10:20:53" itemprop="dateCreated datePublished" datetime="2021-04-16T10:20:53+08:00">2021-04-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-03-29 14:19:30" itemprop="dateModified" datetime="2023-03-29T14:19:30+08:00">2023-03-29</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Progressing Web Application<br><a target="_blank" rel="noopener" href="https://create-react-app.dev/docs/making-a-progressive-web-app/">https://create-react-app.dev/docs/making-a-progressive-web-app/</a><br><a target="_blank" rel="noopener" href="https://web.dev/progressive-web-apps/">https://web.dev/progressive-web-apps/</a></p>
-<p>渐进式意使是网站根据浏览器的功能相应地呈现，高级的浏览器呈现高级的效果。就目前来看主要表现是对于版本比较高的 chrome，firefox 等浏览器，pwa 可以使用 add to home screen 的功能，使网络应用固定在桌面、移动设备主屏幕，成为独立应用</p>
-<p>脱机使用的渐进式web应用更快速也更可靠，还具备更吸引人的移动端体验，比如在网络不佳的场景下使用，还有添加到主屏幕的功能</p>
-<h4 id="网络应用清单-manifest-json"><a href="#网络应用清单-manifest-json" class="headerlink" title="网络应用清单 manifest.json"></a>网络应用清单 manifest.json</h4><p>参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/61173507">PWA manifest 配置</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;short_name&quot;: &quot;MY APP&quot;,</span><br><span class="line">  &quot;name&quot;: &quot;MY APP Full Name&quot;,</span><br><span class="line">  &quot;icons&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">      &quot;src&quot;: &quot;icon&#x2F;lowres.webp&quot;,</span><br><span class="line">      &quot;sizes&quot;: &quot;48x48&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;image&#x2F;webp&quot;</span><br><span class="line">    &#125;,&#123;</span><br><span class="line">      &quot;src&quot;: &quot;icon&#x2F;lowres&quot;,</span><br><span class="line">      &quot;sizes&quot;: &quot;48x48&quot;</span><br><span class="line">    &#125;,&#123;</span><br><span class="line">      &quot;src&quot;: &quot;icon&#x2F;hd_hi.ico&quot;,</span><br><span class="line">      &quot;sizes&quot;: &quot;72x72 96x96 128x128 256x256&quot;</span><br><span class="line">    &#125;,&#123;</span><br><span class="line">      &quot;src&quot;: &quot;icon&#x2F;hd_hi.svg&quot;,</span><br><span class="line">      &quot;sizes&quot;: &quot;257x257&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;start_url&quot;: &quot;&#x2F;&quot;,</span><br><span class="line">  &quot;display&quot;: &quot;standalone&quot;,</span><br><span class="line">  &quot;theme_color&quot;: &quot;#000000&quot;,</span><br><span class="line">  &quot;background_color&quot;: &quot;#FFB71B&quot;,</span><br><span class="line">  &quot;url&quot;: &quot;&#x2F;&quot;,</span><br><span class="line">  &quot;manifestUrl&quot;: &quot;&#x2F;manifest.json&quot;,</span><br><span class="line">  &quot;lang&quot;: &quot;en&quot;,</span><br><span class="line">  &quot;description&quot;: &quot;blabla&quot;,</span><br><span class="line">  &quot;scope&quot;: &quot;.&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>manifest的生成可以借助webpack plugin生成</p>
-<h4 id="Service-Worker"><a href="#Service-Worker" class="headerlink" title="Service Worker"></a>Service Worker</h4><blockquote>
-<p>Service Worker 是一直在浏览器后台运行的worker线程，设置其拦截用户的请求（如加载脚本和图片）进而可以改变请求行为，如不访问服务器直接返回， 再如从缓存加载资源 以提升在离线或加载繁重的应用场景</p>
-</blockquote>
-<p>如下注册Service Worker，Service Worker必须由HTTPS协议载入，Service Worker脚本须与网站同域<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">if (&#39;serviceWorker&#39; in navigator) &#123;</span><br><span class="line">&#x2F;&#x2F; register service worker</span><br><span class="line"> navigator.serviceWorker.register(&#39;.&#x2F;sw.js&#39;, &#123;scope: &#39;.&#x2F;&#39;&#125;) &#x2F;&#x2F; 参数1：注册提供的脚本URL 参数2：导航匹配</span><br><span class="line">.then(()&#x3D;&gt;&#123;</span><br><span class="line">    console.log(&#39;注册成功&#39;)</span><br><span class="line">&#125;).catch(()&#x3D;&gt;&#123;</span><br><span class="line">    console.log(&#39;注册失败&#39;)</span><br><span class="line">&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>sw.js</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 缓存静态文件</span><br><span class="line">self.addEventListener(&#39;install&#39;, (event) &#x3D;&gt; &#123;</span><br><span class="line">    event.waitUntil(caches.open(&#39;myapp&#39;).then((cache) &#x3D;&gt;  cache.addAll([&#39;**&#x2F;*&#39;])));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 缓存接口数据</span><br><span class="line">self.addEventListener(&#39;fetch&#39;, (event) &#x3D;&gt; &#123;</span><br><span class="line">    event.respondWith(caches.match(event.request).then((response) &#x3D;&gt; &#123;</span><br><span class="line">        &#x2F;&#x2F; 匹配到请求</span><br><span class="line">        if (response !&#x3D;&#x3D; undefined) &#123;</span><br><span class="line">            return response;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            return fetch(event.request).then((response) &#x3D;&gt; &#123;</span><br><span class="line">                &#x2F;&#x2F; 缓存响应数据</span><br><span class="line">                let responseClone &#x3D; response.clone();</span><br><span class="line">                caches.open(&#39;v1&#39;).then((cache) &#x3D;&gt; &#123;</span><br><span class="line">                    cache.put(event.request, responseClone);</span><br><span class="line">                &#125;);</span><br><span class="line">                return response;</span><br><span class="line">            &#125;).catch(() &#x3D;&gt; &#123;</span><br><span class="line">                return caches.match(&#39;&#x2F;gallery&#x2F;myLittleVader.jpg&#39;);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 更新缓存</span><br><span class="line">self.addEventListener(&#39;activate&#39;, (event) &#x3D;&gt; &#123;</span><br><span class="line">    event.waitUntil(</span><br><span class="line">        caches.keys().then((cacheNames) &#123;</span><br><span class="line">            return Promise.all(</span><br><span class="line">                cacheNames.map(function(cacheName) &#123;</span><br><span class="line">                    &#x2F;&#x2F; 如果有更新</span><br><span class="line">                    if (cacheName !&#x3D;&#x3D; &#39;v1&#39;) &#123;</span><br><span class="line">                        return caches.delete(cacheName);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">            );</span><br><span class="line">        &#125;).then(function()&#123;</span><br><span class="line">            return self.clients.claim()</span><br><span class="line">        &#125;)</span><br><span class="line">    );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>Service Worker生命周期：</p>
-<p>如index.html中 加载应用时即注册service worker，注册成功即触发安装事件(install event)，见sw.js代码，在安装事件的响应中，处理应用缓存</p>
-<p>安装成功后激活service worker触发激活事件(active event)</p>
-<p>激活成功后service worker进入idle状态 在该状态下所有请求会触发fetch event 直到应用关闭</p>
-<p>Service Worker的更新：</p>
-<p>触发更新</p>
-<ul>
-<li>导航到作用域内页面时</li>
-<li>某事件触发后24h未下载Service Worker</li>
-</ul>
-<p>若Service Worker下载后被发现是新文件，无论Service Worker内容是否与现有的相同，都将触发install</p>
-<p>如果是第一次安装Service Worker，如上所述安装成功后触发激活，但对于更新，Service Worker已启用的情形，会等待所有已加载的页面不再依赖旧的Service Worker后，触发激活</p>
-<h4 id="添加到主屏幕（a2hs）"><a href="#添加到主屏幕（a2hs）" class="headerlink" title="添加到主屏幕（a2hs）"></a>添加到主屏幕（a2hs）</h4><p>使应用支持a2hs:</p>
-<ul>
-<li>https</li>
-<li>正确配置的manifest.json</li>
-<li>合适的图标</li>
-<li>注册service worker<br>注册service worker是作为a2hs条件的，但是可以a2hs，未必可以离线使用</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/04/14/formatjs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/04/14/formatjs/" class="post-title-link" itemprop="url">formatjs</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-14 15:46:29" itemprop="dateCreated datePublished" datetime="2021-04-14T15:46:29+08:00">2021-04-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn add react-intl</span><br><span class="line">yarn add -D @formatjs&#x2F;ts-transformer</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>we highly recommend declaring defaultMessages inline along with their usages because of the following reasons: 建议使用声明内联的defaultMessages， 连同他们的usage，原因如下</p>
-</blockquote>
-<ol>
-<li>Messages colocated with their usages become self-managed, as their usages change/removed, so are the messages. 搭配usage的Message成为自治的 当usage更改或移除，Message亦同</li>
-<li>Messages are highly contextual. We’ve seen a lot of cases where developers assume a certain grammar when they write their messages. Buttons/Call-To-Actions and labels are also translated differently. Message高度关联上下文， 杜绝为message发明新语法或编规则</li>
-<li>Text styling is also dependent on the message itself. Things like truncation, capitalization… certainly affect the messages themselves. 会与样式相关</li>
-<li>Better integrations with toolchains. Most toolchains cannot verify cross-file references to validate syntax/usage. 易于工具链集成</li>
-</ol>
-<h4 id="格式化语法"><a href="#格式化语法" class="headerlink" title="格式化语法"></a>格式化语法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import * as React from &#39;react&#39;</span><br><span class="line">import &#123;IntlProvider, FormattedMessage, FormattedNumber&#125; from &#39;react-intl&#39;</span><br><span class="line"></span><br><span class="line">&lt;IntlProvider messages&#x3D;&#123;messagesInFrench&#125; locale&#x3D;&quot;fr&quot; defaultLocale&#x3D;&quot;en&quot;&gt;</span><br><span class="line">    &lt;p&gt;</span><br><span class="line">    &lt;FormattedMessage</span><br><span class="line">        id&#x3D;&quot;myMessage&quot;</span><br><span class="line">        defaultMessage&#x3D;&quot;Today is &#123;ts, date, ::yyyyMMdd&#125;&quot;</span><br><span class="line">        values&#x3D;&#123;&#123;ts: Date.now()&#125;&#125;</span><br><span class="line">    &#x2F;&gt;</span><br><span class="line">    &lt;br &#x2F;&gt;</span><br><span class="line">    &lt;FormattedNumber value&#x3D;&#123;19&#125; style&#x3D;&quot;currency&quot; currency&#x3D;&quot;EUR&quot; &#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;p&gt;</span><br><span class="line">&lt;&#x2F;IntlProvider&gt;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>Error: [React Intl] Could not find required ‘intl’ object.  IntlProvider needs to exist in the component ancestry</p>
-</blockquote>
-<p>当没有IntlProvider父组件时报上述异常</p>
-<h4 id="提取文本映射"><a href="#提取文本映射" class="headerlink" title="提取文本映射"></a>提取文本映射</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D @formatjs&#x2F;cli</span><br></pre></td></tr></table></figure>
-<p>package.json中添加脚本命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;extract&quot;: &quot;formatjs extract&quot;</span><br></pre></td></tr></table></figure><br>执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yarn extract &#39;src&#x2F;**&#x2F;*.ts*&#39; --out-file lang&#x2F;en.json --id-interpolation-pattern &#39;[sha512:contenthash:base64:6]&#39;</span><br><span class="line">或</span><br><span class="line">npm run extract -- &#39;src&#x2F;**&#x2F;*.ts*&#39; --out-file lang&#x2F;en.json --id-interpolation-pattern &#39;[sha512:contenthash:base64:6]&#39;</span><br></pre></td></tr></table></figure><br>将待翻译的message保存为指定语言的json文件，没id的message自动编码id</p>
-<h4 id="分发"><a href="#分发" class="headerlink" title="分发"></a>分发</h4><p>将翻译好的多语言lang/<em>*</em>.json编译为Intl使用的格式<br>package.json中添加脚本命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;compile&quot;: &quot;formatjs compile&quot;</span><br></pre></td></tr></table></figure><br>执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yarn compile lang&#x2F;fr.json --ast --out-file compiled-lang&#x2F;fr.json</span><br><span class="line">或</span><br><span class="line">npm run compile -- lang&#x2F;fr.json --ast --out-file compiled-lang&#x2F;fr.json</span><br></pre></td></tr></table></figure></p>
-<h4 id="切换语言代码"><a href="#切换语言代码" class="headerlink" title="切换语言代码"></a>切换语言代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import * as React from &#39;react&#39;</span><br><span class="line">import * as ReactDOM from &#39;react-dom&#39;</span><br><span class="line">import &#123;IntlProvider&#125; from &#39;react-intl&#39;</span><br><span class="line"></span><br><span class="line">function loadLocaleData(locale: string) &#123;</span><br><span class="line">  switch (locale) &#123;</span><br><span class="line">    case &#39;fr&#39;:</span><br><span class="line">      return import(&#39;compiled-lang&#x2F;fr.json&#39;)</span><br><span class="line">    default:</span><br><span class="line">      return import(&#39;compiled-lang&#x2F;en.json&#39;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function App(props) &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;IntlProvider</span><br><span class="line">      locale&#x3D;&#123;props.locale&#125;</span><br><span class="line">      defaultLocale&#x3D;&quot;en&quot;</span><br><span class="line">      messages&#x3D;&#123;props.messages&#125;</span><br><span class="line">    &gt;</span><br><span class="line">      &lt;MainApp &#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;IntlProvider&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async function bootstrapApplication(locale, mainDiv) &#123;</span><br><span class="line">  const messages &#x3D; await loadLocaleData(locale)</span><br><span class="line">  ReactDOM.render(&lt;App locale&#x3D;&#123;locale&#125; messages&#x3D;&#123;messages&#125; &#x2F;&gt;, mainDiv)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>切换语言触发IntlProvider下的组件初始化，将本地化的messages词条传入组件上下文</p>
-<h4 id="useIntl钩子"><a href="#useIntl钩子" class="headerlink" title="useIntl钩子"></a>useIntl钩子</h4><p>返回当前语言的provider对象，提供formatData,formatMessage等方法，从messages词条中映射字符串<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const intl &#x3D; useIntl()</span><br><span class="line">return (</span><br><span class="line">  &lt;span title&#x3D;&#123;intl.formatDate(date)&#125;&gt;</span><br><span class="line">    &lt;FormattedDate value&#x3D;&#123;date&#125; &#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;span&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure><br>带参数的格式化Message<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">dragAreaSupportTip(format: string) &#123;</span><br><span class="line">  const messages &#x3D; defineMessages(&#123;</span><br><span class="line">    supportTip: &#123;</span><br><span class="line">      id: &#39;dragArea.supportTip&#39;,</span><br><span class="line">      defaultMessage: &#39;Only supports &#123;format&#125; files&#39;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;)</span><br><span class="line">  return intl.formatMessage(messages.supportTip, &#123; format &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>formatjs extract和compile命令可以在此使用<br>switch case 场景<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">translateEnums(name:string)&#123;</span><br><span class="line">  name &#x3D; name.replace(&#x2F; &#x2F;g, &#39;_&#39;)</span><br><span class="line">  const messages &#x3D; defineMessages(&#123;</span><br><span class="line">    transName: &#123;</span><br><span class="line">      id: &#39;enums.name&#39;,</span><br><span class="line">      defaultMessage: &#96;&#123;name, select,</span><br><span class="line">        dog &#123;dog&#125;</span><br><span class="line">        cat &#123;cat&#125;</span><br><span class="line">        King_Kong &#123;King Kong&#125;</span><br><span class="line">        other &#123;&#123;name&#125;&#125;</span><br><span class="line">      &#125;&#96;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;)</span><br><span class="line">  const translatedName &#x3D; this.intl.formatMessage(messages.transName, &#123; name:name &#125;);</span><br><span class="line">  return translatedName.replace(&#x2F;_&#x2F;g, &#39; &#39;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>格式是{key, select, 选项..}的样子，见<a target="_blank" rel="noopener" href="https://formatjs.io/docs/core-concepts/icu-syntax/#select-format">format.js Doc:select format</a> 选项是’value {text}的格式，value据说遵循Unicode Pattern_Syntax 然而我并没有找到空格的表示法，如上’金刚’的名字用下划线替换了空格，另外匹配失败返回原字符串，变量key需再加大括号括起来</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/04/02/ElasticSearch/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/04/02/ElasticSearch/" class="post-title-link" itemprop="url">ElasticSearch</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-02 09:45:57" itemprop="dateCreated datePublished" datetime="2021-04-02T09:45:57+08:00">2021-04-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dreamroute/p/8484457.html">https://www.cnblogs.com/dreamroute/p/8484457.html</a></p>
-<h4 id="全文搜索引擎"><a href="#全文搜索引擎" class="headerlink" title="全文搜索引擎"></a>全文搜索引擎</h4><p>‘全文检索’不是ElasticSearch，ElasticSearch是一个开源的基于全文搜索引擎（Apache Lucene）的搜索和分析引擎。</p>
-<p>全文搜索引擎面向文档型存储，即插入其数据库的每条记录作为一个文档，搜索引擎为提取文档的词，生成索引，通过查询索引达到搜索目标文档的目的。这种先建立索引，再对索引进行搜索的过程就叫全文检索（Full-text Search）<br><img src="https://tvax3.sinaimg.cn/large/a60edd42ly1gp57m8a30oj20nm0k4wis.jpg" alt=""></p>
-<h4 id="文档-类型-索引"><a href="#文档-类型-索引" class="headerlink" title="文档-类型-索引"></a>文档-类型-索引</h4><p>关系数据库：      ⇒ 数据库 ⇒ 表    ⇒ 行    ⇒ 列(Columns)</p>
-<p>Elasticsearch：  ⇒ 索引(Index)   ⇒ 类型(type)  ⇒ 文档(Docments)  ⇒ 字段(Fields)  </p>
-<h4 id="二叉树-倒排"><a href="#二叉树-倒排" class="headerlink" title="二叉树 倒排"></a>二叉树 倒排</h4><h4 id="Kibana"><a href="#Kibana" class="headerlink" title="Kibana"></a>Kibana</h4><p>ElasticSearch的可视化仪表盘</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/03/31/DataLake/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/03/31/DataLake/" class="post-title-link" itemprop="url">Data Lake</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-03-31 12:48:33" itemprop="dateCreated datePublished" datetime="2021-03-31T12:48:33+08:00">2021-03-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-04-24 20:04:45" itemprop="dateModified" datetime="2022-04-24T20:04:45+08:00">2022-04-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="Philosophy"><a href="#Philosophy" class="headerlink" title="Philosophy"></a>Philosophy</h4><p>湖是水源汇聚之处<br><img src="https://pic1.zhimg.com/80/v2-43b18039e25cd2d231e76b6fd61292c0_720w.jpg" alt=""></p>
-<blockquote>
-<p>Azure Data Lake includes all the capabilities required to make it easy for developers, data scientists, and analysts to store data of any size, shape, and speed, and do all types of processing and analytics across platforms and languages. It removes the complexities of ingesting(插入) and storing all of your data while making it faster to get up and running with batch(批量), streaming, and interactive analytics.  ———— <a target="_blank" rel="noopener" href="https://azure.microsoft.com/en-us/solutions/data-lake/">Azure Data Lake Solution</a></p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/qqsnote/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/25/">25</a><a class="extend next" rel="next" href="/qqsnote/page/7/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/qqsnote/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/26/">26</a><a class="extend next" rel="next" href="/qqsnote/page/7/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -995,7 +1012,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/qqsnote/archives/">
         
-          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-count">257</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1006,7 +1023,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/qqsnote/tags/">
-        <span class="site-state-item-count">98</span>
+        <span class="site-state-item-count">100</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1017,7 +1034,7 @@
       </div>
 
       <div class="tag-cloud-tags">
-        <a href="/qqsnote/tags/Net/" style="font-size: 28.5px; color: #fbfbfb">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 16.5px; color: #d9d9d9">AI</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24px; color: #eee">Azure</a> <a href="/qqsnote/tags/C/" style="font-size: 15px; color: #d5d5d5">C#</a> <a href="/qqsnote/tags/CSS/" style="font-size: 18px; color: #ddd">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15px; color: #d5d5d5">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 19.5px; color: #e1e1e1">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 16.5px; color: #d9d9d9">OpenCV</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Python/" style="font-size: 25.5px; color: #f2f2f2">Python</a> <a href="/qqsnote/tags/React/" style="font-size: 18px; color: #ddd">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 12px; color: #ccc">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 19.5px; color: #e1e1e1">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 16.5px; color: #d9d9d9">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/object-Object/" style="font-size: 12px; color: #ccc">[object Object]</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 27px; color: #f7f7f7">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 16.5px; color: #d9d9d9">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 13.5px; color: #d0d0d0">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 12px; color: #ccc">医学图像</a> <a href="/qqsnote/tags/%E5%8D%8F%E8%AE%AE%E5%92%8C%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">协议和规范</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 12px; color: #ccc">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12px; color: #ccc">性能优化</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.5px; color: #d0d0d0">算法</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12px; color: #ccc">面试</a>
+        <a href="/qqsnote/tags/Net/" style="font-size: 28.5px; color: #fbfbfb">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 16.5px; color: #d9d9d9">AI</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24px; color: #eee">Azure</a> <a href="/qqsnote/tags/C/" style="font-size: 15px; color: #d5d5d5">C#</a> <a href="/qqsnote/tags/CSS/" style="font-size: 18px; color: #ddd">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15px; color: #d5d5d5">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 21px; color: #e6e6e6">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.5px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 16.5px; color: #d9d9d9">OpenCV</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Python/" style="font-size: 25.5px; color: #f2f2f2">Python</a> <a href="/qqsnote/tags/React/" style="font-size: 18px; color: #ddd">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 12px; color: #ccc">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 19.5px; color: #e1e1e1">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 16.5px; color: #d9d9d9">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/object-Object/" style="font-size: 12px; color: #ccc">[object Object]</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 27px; color: #f7f7f7">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 16.5px; color: #d9d9d9">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 13.5px; color: #d0d0d0">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 12px; color: #ccc">医学图像</a> <a href="/qqsnote/tags/%E5%8D%8F%E8%AE%AE%E5%92%8C%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">协议和规范</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 12px; color: #ccc">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12px; color: #ccc">性能优化</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.5px; color: #d0d0d0">算法</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12px; color: #ccc">面试</a>
       </div>
     </div>
   </aside>
@@ -1095,59 +1112,6 @@
   
 
   
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
 
   
 
