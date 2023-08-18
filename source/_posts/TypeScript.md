@@ -231,7 +231,7 @@ printLabel(myObj);
 ```
 可见，参数对象并非实现接口，只需对外表现接口的特性
 
-另外，接口里的属性不全都是必需的
+另外，接口里的属性可以定义为非必须的
 ```
 interface SquareConfig { 
     color?: string;
@@ -251,6 +251,22 @@ let myStr: string = myArray[0];
 
 另，索引亦可为string类型。注意当同时使用两种类型的索引，数字索引的返回值必须是字符串索引返回值类型的子类型。	这是因为当使用	number	来索引时，JavaScript会将它转换成	string	然后再去索引对象。	就是说用	100	（一个	number	）去索引等同于使用	"100"	（一个	string	）去 索引，因此两者需要保持一致。
 
+interface 和 type：
+如上所述，interface是接口，是一种规范，简单的对功能的抽象。接口可以用extends扩展(栗子略了)
+type是类型, 多次声明的接口定义是扩展叠加的关系
+```
+interface WidgetProps{
+    click:any
+}
+interface WidgetProps{
+    drag:any
+}
+CanWidgetProperty ： WidgetProps = {
+    click: handleClick;
+    drag:  handleDrag;
+}
+```
+type顾名思义是类型，可以是基础类型（或其组合，如用逻辑|的组合）的别名。与interface相比似乎更加固定、安全（不似interface灵活）
 #### 类
  > 实现接口..
  
@@ -295,13 +311,17 @@ function identity<T>(arg: T): T
     return arg; 
 }
 ```
+在es中class本质是函数，故class也可将泛型作为构造方法参数，并加以类型约束
+```
+
+```
 #### infer
 ```
 type ParamType<T> = T extends (param: infer P) => any ? P : T;
 ```
 infer表示P是待推断的参数类型，如T
 #### never
-不会返回结果的类型，一直在while(true)的函数，或者一定会抛出异常的函数
+不会返回结果的类型，一直是while(true)的函数，或者一定会抛出异常的函数
 #### 模块
 > export 和 import
 #### namespace(存目)

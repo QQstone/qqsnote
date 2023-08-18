@@ -4,6 +4,29 @@ date: 2021-01-28 16:39:10
 tags:
 - React
 ---
+#### 受控组件和不受控组件
+以封装Html表单控件的组件为例，假设ControlledComponent渲染一个input控件，为使input的value可以通过ControlledComponent进行控制，
+会在ControlledComponent的state为input的value创建一个属性，比如this.state.text，这个属性会绑定到input上，同时input修改时会触发onChange事件，于是在onChange的响应方法中setState更新
+```
+class ControlledComponent extends React.Component{
+  constructor (props) {
+    super(props);
+    this.state = {
+      text: "add your comments"
+    }
+  }
+  onChange (e) {
+    console.log(e.target.value);
+    this.setState({
+      text: e.target.value
+    })
+  }
+  render () {
+    return <input name="text" value={this.state.text} onChange={(e) => this.onChange(e)} />
+  }
+}
+```
+> 在HTML的表单元素中，它们通常自己维护一套state，并随着用户的输入自己进行UI上的更新，这种行为是不被我们程序所管控的。而如果将React里的state属性和表单元素的值建立依赖关系，再通过onChange事件与setState()结合更新state属性，就能达到控制用户输入过程中表单发生的操作。被React以这种方式控制取值的表单输入元素就叫做受控组件。 [掘金:受控和非受控组件真的那么难理解吗？](https://juejin.cn/post/6858276396968951822)
 #### props
 略 见{% post_link React React %} 子组件传参 
 #### context

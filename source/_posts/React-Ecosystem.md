@@ -13,6 +13,8 @@ yarn add @material-ui/core
 #### [Next.js](https://github.com/vercel/next.js)
 典型的网站模块和框架，封装webpack、babel, 支持按需加载和seo优化
 
+[styled component](https://stackoverflow.com/questions/54832736/send-variable-to-withstyles-in-material-ui)
+
 #### Redux
 React提供了视图层面组件化开发的模式。为实现组件之间通信和多样的交互，需要引入Redux库
 > Redux is a predictable state container for JavaScript apps.

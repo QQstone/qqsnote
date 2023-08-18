@@ -340,3 +340,20 @@ yarn add --dev typescript
 使用tsc命令编译
 
 添加@types/react, vs code 右下角TypeScript版本选择4.*.*-pnpify
+
+#### list
+```
+const ArrayComponent = () => {
+  const array = ['John', 'Robbie', 'Tony']
+  return (
+    <>
+    {array.map((name, index)=><Item key={index} >{name}</Item>)}
+    <>
+  )
+}
+
+```
+需要指出的是 key 并不是 Item定义的Props，在Item组件内部访问key会得到undefined
+[Github Issue: 
+this.key seems to always be undefined inside a React component
+](https://github.com/facebook/react/issues/2429#issuecomment-61008642)

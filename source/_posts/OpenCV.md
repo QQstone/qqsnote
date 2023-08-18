@@ -208,3 +208,6 @@ cv2.destroyAllWindows()
 + DENSITY 密度
 + FACECOLOR 直方图颜色
 + ALPHA
+
+#### opencv.js
+[OpenCV directly in the browser (webassembly + webworker)](https://aralroca.com/blog/opencv-in-the-web)
