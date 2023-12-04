@@ -70,5 +70,7 @@ conda activate py310
 conda install pandas
 conda update pandas
 conda remove pandas
-conda remove -n py310 #清除所有
+
+conda env list
+conda env remove -n py310 #清除所有
 ```

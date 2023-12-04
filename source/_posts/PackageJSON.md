@@ -57,3 +57,12 @@ Use the caret-character (^) to prefix the version of moment in your dependencies
 
 #### version lens
 VS Code extension 鼠标悬停在dependency的项上，可查看最新版本和依赖项目链接
+
+#### 关于版本号和构建编号
+> The standard build numbering convention makes use of a fourth numerical indicator which is appended
+to the release number, where the fourth indicator is the build number.
+
++ For verification builds, the build number starts with a “1”, and increments with each successive
+build. For each successive release, the build indicator starts again with zero’s.
++ For development builds, the build number starts with “20001” and increments with each
+successive build. For each successive release, the build indicator starts again with zero’s.

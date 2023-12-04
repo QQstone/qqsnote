@@ -76,3 +76,15 @@ IPublicClientApplication publicClientApp = PublicClientApplicationBuilder.Create
 URI computed by MSAL.NET that will let the UI extension navigate to the STS authorization endpoint in order to sign-in the user and have them consent
 
 + redirectUri Uri The redirect URI that was configured. The auth code will be appended to this redirect URI and the browser will redirect to it.
+
+[Public Client Application 和 Confidential Client Application](https://learn.microsoft.com/en-us/entra/identity-platform/msal-client-applications): Confidential Client Application用于服务端应用，不会轻易访问到，使用client_secret标识身份；Public Client Application 运行在桌面或移动设备，保存client_secret是不安全的，因此凭借用户的credentials访问API
+
+#### use WAM
+Web 帐户管理器 (Web Account Manager) windows10提供的认证账户保存组件
+
++ Enhanced security. See [Token protection](https://learn.microsoft.com/zh-cn/azure/active-directory/conditional-access/concept-token-protection). 关联客户端密码和token的加密
++ Support for Windows Hello(是使用 PIN、面部识别或指纹来快速访问 Windows的入口), Conditional Access, and FIDO keys(Fast IDentity Online Keys 在线密钥对).
++ Integration with the Windows Email & accounts view.
+Fast single sign-on.
++ Ability to sign in silently with the current Windows account.
++ Bug fixes and enhancements shipped with Windows.

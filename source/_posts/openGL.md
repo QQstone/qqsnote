@@ -48,7 +48,7 @@ Three.js对WebGL工作步骤进一步封装，提供方便理解的绘图API以�
 关于学习Web3D相关技术的经验介绍：[如何学习WebGL和Three.js](http://www.yanhuangxueyuan.com/doc/Three.js/learnWebGLThreejs.html)
 
 ### Babylon.js
-被认为相比于Three.js 更为工程化的web 3d框架
+词义巴比伦，被认为相比于Three.js 更为工程化的web 3d框架
 
 ### Ceicum
 地理位置坐标库

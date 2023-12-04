@@ -156,6 +156,35 @@ def mousePressEvent(self, event):
     self.c.closeApp.emit()
 # 当我们在窗口上点击一下鼠标，closeApp信号会被发射。应用中断。
 ```
+#### 页面间的信号
+子页面发射信号 槽函数在父页面
+子页面：
+```
+class Child_Widget(QWidget):
+    status_signal = pyqtSignal(str)
+    def __init__(self):
+        super(Child_Widget, self).__init__()
+    def updateStatus(self):
+        self.status_signal.emit('update')
+```
+父页面：
+```
+class Parent_Widget(QWidget):
+    ...
+    def child_init(self):
+        self.child_widget = Child_Widget()
+        self.child_widget.status_signal.connect(self.update_child_status)
+        self.child_widget.show()
+    def update_child_status(self)：
+        self.line.setText('status updated')
+```
+#### ui控件
+[Basic Widget](https://www.tutorialspoint.com/pyqt5/pyqt5_basic_widgets.htm)
+[输入框QLineEdit](https://www.tutorialspoint.com/pyqt5/pyqt5_qlineedit_widget.htm)
+[按钮QPushButton](https://www.tutorialspoint.com/pyqt5/pyqt5_qpushbutton_widget.htm)
+[整数调整器QPinBox](https://www.tutorialspoint.com/pyqt5/pyqt5_qspinbox_widget.htm)
+...
+#### 对话框
 #### 封装
 pyinstaller vs Nuitka
 

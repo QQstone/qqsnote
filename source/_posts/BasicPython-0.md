@@ -91,3 +91,21 @@ pip list | grep opencv-python
 import cv2
 print(cv2.__version__)
 ```
+#### requirements.txt
+> requirements.txt is a file that contains a list of packages or libraries needed to work on a project that can all be installed with the file. It provides a consistent environment and makes collaboration easier. 包含项目工作所需的包或库，可以用于一键安装
+```
+pip install -r requirements.txt
+```
+tips: 加如下参数以指定源 -i `https://pypi.douban.com/simple`
+
+生成requirements.txt:
+```
+pip freeze > requirements.txt
+```
+pip freeze 保存当前Python环境下所有类库
+
+```
+pip install pipreqs
+pipreqs ./ --encoding=utf-8
+```
+pipreqs 导出当前项目使用的类库

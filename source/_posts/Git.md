@@ -80,6 +80,10 @@ git reflog
 git reset --hard HEAD{10}
 ```
 [git rebase 的撤销](https://www.cnblogs.com/suanec/p/7511137.html)
+
+包括git reset到之前的版本，此时HEAD会指向到旧版本，较新的commit不在git log中可见了，可以通过git reflog查看 tip: git reflog --date=iso查看操作时间 
+找到commit的SHA号码 git reset到它即可
+
 #### repository 迁移
 ```
 git clone --bare git@old-repo.git 
@@ -116,3 +120,5 @@ git tag -a v1.0.3 -m "bump version to v1.0.3"
 ```
 git tag -d v1.0.3
 ```
+
+#### git blame

@@ -48,6 +48,11 @@ cv2.destroyAllWindows()
 # 写入图像
 cv2.imwrite("originImage.jpg", img)
 ```
+cv.imread的枚举参数
++ cv2.IMREAD_COLOR = 1     ：读入一副彩色图像。透明度会被忽略，默认参数
++ cv2.IMREAD_GRAYSCALE = 0 ：以灰度模式读入图像
++ cv2.IMREAD_UNCHANGED = -1：保留读取图片原有的颜色通道
+
 #### 缩放
 ```
 result = cv2.resize(src, (200,100))
@@ -111,7 +116,7 @@ thresh4 = cv2.adaptiveThreshold(gray_image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
 #高斯滤波
 gaussianBlur = cv2.GaussianBlur(greyImg, (3,3), 0)
 ```
-#### 膨胀和腐蚀，开运算和闭运算 
+#### 膨胀和腐蚀，开运算和闭运算 顶帽和底帽
 ```
 #腐蚀
 kernel=np.ones((5,5),np.uint8)
@@ -122,6 +127,9 @@ kernel=np.ones((5,5),np.uint8)
 dilate=cv2.dilate(img,kernel,iterations=1)
 ```
 开为先腐蚀再膨胀 闭为先膨胀后腐蚀
+
+顶帽：原图像 - 开运算结果  顶帽得到的是开运算中断开的细节
+底帽：原图像 - 闭运算结果  底帽得到的是闭运算中补上的细节
 
 #### 边缘检测 canny
 + 去噪 噪声会影响该算法进行边缘检测的准确性
@@ -208,6 +216,9 @@ cv2.destroyAllWindows()
 + DENSITY 密度
 + FACECOLOR 直方图颜色
 + ALPHA
+
+
+#### matchtemplate
 
 #### opencv.js
 [OpenCV directly in the browser (webassembly + webworker)](https://aralroca.com/blog/opencv-in-the-web)
