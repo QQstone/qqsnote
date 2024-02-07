@@ -35,6 +35,7 @@ state是state在某个时间点的快照，state与view绑定
 https://www.zhihu.com/question/65479147/answer/942582216)</sup>
 
 #### craco
+create-react-application-configure-override
 [craco](https://github.com/gsoft-inc/craco),当下流行的对React项目进行自定义配置的社区解决方案，[AntDesign4](https://ant.design/docs/react/use-with-create-react-app-cn#%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE)官方亦有在使用
 [更骚的create-react-app开发环境配置craco](https://cloud.tencent.com/developer/article/1749704)
 从create-react-app开始配置(关于create-react-app见{% post_link React React %})

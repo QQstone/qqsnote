@@ -138,3 +138,10 @@ Service Worker的更新：
 + 合适的图标
 + 注册service worker
 注册service worker是作为a2hs条件的，但是可以a2hs，未必可以离线使用
+
+
+#### 框架支持
+[react pwa](https://create-react-app.dev/docs/making-a-progressive-web-app/)
+```
+npx create-react-app my-app --template cra-template-pwa
+```

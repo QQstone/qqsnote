@@ -8,9 +8,11 @@ categories:
 ---
 安装并初始化既有项目
 ```
-npx eslint --init
+npm eslint --init
 ```
 安装后自动运行cli提示，选择所需的运行环境(node.js vs browser),模块化风格(es import/export vs CommonJS),是否使用typescript等
+之后会向package.json添加并安装@typescript-eslint/eslint-plugin eslint-plugin-react @typescript-eslint/parser eslint等
+
 
 配置cli(commandline interface)
 package.json

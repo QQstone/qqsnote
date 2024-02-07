@@ -8,10 +8,15 @@ tags:
 - UML
 ---
 [plantuml](https://plantuml.com/zh/sequence-diagram)
+preview in vscode：
++ 安装PlantUML插件 PlantUML Previewer插件
++ 配置 PlantUML Server
+按Alt + D打开PlantUML Preview
+generate through Hexo
 #### 流程图
 
 ```plantuml
-@startuml
+@start
 start
 if(account cache exist?) then (no) 
     :return null; 
@@ -21,7 +26,7 @@ else (yes)
     :get result or exceptions;
     :return result;
 stop
-@enduml
+@end
 ```
 {% plantuml %}
 start

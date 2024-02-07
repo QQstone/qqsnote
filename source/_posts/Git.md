@@ -22,6 +22,10 @@ git push origin master
 // clone and rename 
 git clone git@xxxxxx YourFolderName
 ```
+#### clone指定分支
+```
+git clone -b release git@xxxx.xxx:projectX.git
+```
 #### 忽略本地修改拉取远程分支
 ```
 git fetch --all
@@ -84,6 +88,12 @@ git reset --hard HEAD{10}
 包括git reset到之前的版本，此时HEAD会指向到旧版本，较新的commit不在git log中可见了，可以通过git reflog查看 tip: git reflog --date=iso查看操作时间 
 找到commit的SHA号码 git reset到它即可
 
+#### git cherry-pick
+```
+git checkout develop
+git cherry-pick f2ef69d 9839b06
+```
+例如f2ef69d 9839b06是release上刚修好的bug，可以使用上述命令将两处修改直接复制到develop分支
 #### repository 迁移
 ```
 git clone --bare git@old-repo.git 
@@ -120,5 +130,18 @@ git tag -a v1.0.3 -m "bump version to v1.0.3"
 ```
 git tag -d v1.0.3
 ```
-
 #### git blame
+
+
+
+#### troubleshooting 
+> error: object file .git/objects/61/9151e2619bc36c3c4f5f0c86432b2ca651706d is empty fatal: loose object 619151e2619bc36c3c4f5f0c86432b2ca651706d (stored in .git/objects/61/9151e2619bc36c3c4f5f0c86432b2ca651706d) is corrupt
+
+尝试用下列方法修复
+```
+# 删除.git/objects/*/目录下的空文件
+git fsck --full 
+git gc --auto
+```
+git fsck命令用于检查文件有效性和连贯性
+git gc 清理不必要的文件并优化本地存储库

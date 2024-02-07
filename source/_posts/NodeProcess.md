@@ -67,3 +67,5 @@ langs.forEach(async (lang) => {
     await runCMD(lang)
 })
 ```
+
+#### 等待用户输入

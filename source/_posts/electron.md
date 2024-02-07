@@ -24,6 +24,8 @@ categories:
 2. package.json 
 3. 主进程main.js
 
+<span style="color:#ff0;font-weight:bold">Caution!</span> 新版本electron嵌入了nodejs运行时，故而系统安装的nodejs环境仅用于执行npm install --save-dev electron，与之后的开发运行再无关系
+
 以angular-electron为例，npm run start过程，<br>
 ```
 "start": "npm run postinstall:electron && npm-run-all -p ng:serve electron:serve",

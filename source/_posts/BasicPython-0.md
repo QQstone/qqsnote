@@ -19,11 +19,11 @@ categories:
 
 Python没有分割代码块符号，以缩进以及冒号:区分层次，一般以4个空格为基本缩进单位。
 > 命名规范
- + 模块名：全部小写 + 下划线_
+ + 模块名：全部小写 + 下划线_连接 如 update_userlist
  + 包名：全部小写，不推荐使用下划线
- + 类名：Pascal风格（首字母大写）
- + 模块内部类型：_ + Pascal风格<br>
- 使用单下划线_开头的变量和函数是受保护的，在使用from xxx import * 时不会被导入；使用双下划线__开头的变量或方法是类私有的
+ + 类名：Pascal风格（首字母大写）如RegularUser
+ + 模块内部类型：_ + Pascal风格<br> 如_Config
+ 使用单下划线_开头的变量和函数是受保护的 **protected**，在使用from xxx import * 时不会被导入；使用双下划线__开头的变量或方法是类私有的 **private**
  + 函数、类的属性和方法：同模块命名
  + 常量：全部大写
  
@@ -39,6 +39,12 @@ Python没有分割代码块符号，以缩进以及冒号:区分层次，一般�
 在python中，变量不需要先声明，直接使用即可，那我们怎么知道用的是局部变量还是全局变量呢？
 首先：python使用的变量，在默认情况下一定是用局部变量。
 其次：python如果想使用作用域之外的全局变量，则需要加global前缀。
+
+```
+def initSettings(self):
+    global config
+    config = Configure()
+```
 
 #### 执行脚本
 ```
@@ -109,3 +115,8 @@ pip install pipreqs
 pipreqs ./ --encoding=utf-8
 ```
 pipreqs 导出当前项目使用的类库
+
+#### global
+
+
+###
