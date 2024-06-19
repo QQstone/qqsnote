@@ -50,6 +50,11 @@ git branch -d temp
 git reset --hard cd8462xxxx
 ```
 即将HEAD游标指向到之前的一次commit
+#### git clean -fxd
+-f --force
+-x 移除包括被gitignore忽略的文件 支持-e参数（if have）
+-X 移除所有git ignore的文件 用于从头开始重建一切
+-d 递归并移除untrack目录
 #### 部分检出
 ```
 git config core.sparsecheckout true

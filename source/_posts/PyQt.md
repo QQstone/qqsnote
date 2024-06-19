@@ -184,7 +184,42 @@ class Parent_Widget(QWidget):
 [按钮QPushButton](https://www.tutorialspoint.com/pyqt5/pyqt5_qpushbutton_widget.htm)
 [整数调整器QPinBox](https://www.tutorialspoint.com/pyqt5/pyqt5_qspinbox_widget.htm)
 ...
-#### 对话框
+#### 对话框 
+dialog class
+```
+from PyQt5.QtWidgets import QDialog
+
+class Ui_ModeEditor(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.__mainWindow = parent
+        .....
+    
+    def setupUi(self):
+        self.buttonsLayout = QtWidgets.QHBoxLayout(self)
+        self.buttonsLayout.setObjectName("buttonsLayout")
+        btn_save = QtWidgets.QToolButton(self)
+        btn_save.setObjectName("btn_save")
+        btn_save.setText("保存")
+        btn_save.clicked.connect(self.accept)
+        btn_cancel = QtWidgets.QToolButton(self)
+        btn_cancel.setObjectName("btn_cancel")
+        btn_cancel.setText("取消")
+        btn_cancel.clicked.connect(self.reject)
+        self.buttonsLayout.addWidget(btn_save)
+        self.buttonsLayout.addWidget(btn_cancel)
+```
+use dialog
+```
+self.dialog = Ui_ModeEditor(self)
+self.modeEditor.setWindowTitle("编辑模式")
+
+retVal = self.dialog.exec()
+if retVal == QDialog.Accepted:
+    # return accepted
+else:
+    # close without accept
+```
 #### 封装
 pyinstaller vs Nuitka
 
@@ -194,3 +229,8 @@ pyinstaller vs Nuitka
 pip install -U nuitka
 ```
 编译依赖Python和C compiler，c compiler需支持C11或C++03 这意味着需安装MinGW64 C11编译器 基于gcc11.2或更高版本，或visual studio
+
+```
+pip install pyinstaller
+pyinstaller -F -w main.py -n "测量工具"
+```

@@ -134,3 +134,23 @@ css形如
 [前端小智 CSS特效](https://segmentfault.com/a/1190000023290140)
 
 #### Container Query
+
+#### 文字对齐
+单行文字可以调整line-hight
+行内元素文字内容换行 会向上堆叠 元素高出其他行内元素，竖直方向对齐时，调整其他元素的vertical-align
+```
+<div class="field-label">content:</div>
+<div class="field-text">blablablah</div>
+<style>
+  .field-label{
+    display: inline-block;
+    width: 8em;
+    vertical-align: top;
+  }
+  .field-text{
+    display: inline-block;
+    width: 8em;
+    word-break: break-word;
+  }
+</style>
+```

@@ -150,6 +150,21 @@ export default () => {
 };
 ```
 useCallback
+实际上useState不能返回一个方法(读取类型为function的state，会自动执行返回结果)，当需要根据若干state的变化得到动态的函数时，使用useCallback, useCallback的定义形如useEffect
+```
+useEffect(()=>{
+  // do sth with refresh
+  renderView()
+},[refresh])
+
+renderView = useCallback(()=>{
+  // do render data
+}, [renderer, data])
+```
+上述renderView方法随renderer, data的变化更新函数体实现，而renderView的执行时机只受refresh状态触发(而不需要在同时监听三个状态的副作用中判断是否需要执行renderView)
+
+useMemo
+在组件重复渲染中缓存结果
 其他hooks
 #### 关于函数式组件和Hooks
 使用Hooks代替class中的生命周期函数，是函数式组件进行逻辑复用、状态管理的方式

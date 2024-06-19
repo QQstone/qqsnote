@@ -117,6 +117,24 @@ maximus = Math.max(...arr); // returns 89
 arr0 = [...arr]
 console.log(arr0==arr)  // false
 ```
+异步归并方法
+```
+const groupedMeshes = await meshes.reduce(async (accP, mesh, index) => {
+  const acc = await accP;
+  const group = isUpper(mesh) ? acc[0]: acc[1];
+  if(group.length==0){
+    group.push(mesh)
+  }else{
+    const newMesh = compute(mesh, group[0])
+    group.push(newMesh)
+  }
+  return Promise.resolve(acc)
+}, Promise.resolve([
+  new Array<IMesh>(),
+  new Array<IMesh>()
+]))
+```
+上述代码的需求是，将一个集合中的Mesh进行分组运算，分组依据是Upper or Lower，组内运算时以第一个Mesh为基准，调整组内其他Mesh
 ### 解构赋值（Destructuring Assignment）
 ```
 var voxel = {x: 3.6, y: 7.4, z: 6.54 };

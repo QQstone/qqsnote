@@ -6,6 +6,19 @@ tags:
 categories: 
 - 前端技术
 ---
+#### 关于Webpack的学了又忘
+再看这一部分，是因为配置 {% post_link React-Ecosystem craco %}过程中碰壁，Webpack是常用的工程化工具，前端开发需要Webpack地方，大多是需要配置Webpack configure向工程中嵌入一些插件
+
+> 「面试当中有时候会问到 Webpack 相关的配置」是我首先要强烈批判的点，也是 Webpack 学习雷区，「熟背 Webpack」并不是健康的学习导向。———— [《前端有必要学Webpack吗》](https://www.zhihu.com/tardis/zm/ans/2438957473?source_id=1003)
+
++ Code Splitting 代码分割
++ Hashing 指资源的版本信息映射
++ Importing Modules 引入模块
++ Non-JavaScript Resources 支持非JavaScript 类型资源
++ Output Module Formats 输出模块格式
++ Transformations 转译
+
+
 #### 安装配置webpack
 ```
 npm i webpack webpack-cli

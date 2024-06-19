@@ -7,6 +7,45 @@ tags:
 categories: 
 - 前端技术
 ---
+#### fetch download CORS issue
+```
+const fetchDCM = async (url:string) => {
+const response = await fetch(url, { method: "GET" })
+if (response.ok) {
+    const buffer = await response.arrayBuffer()
+    const data = parseLoadData(buffer);
+    ......
+}
+};
+```
+浏览器中点击直接下载文件的链接，放在fetch方法中会有跨域问题
+
+浏览器中点击下载文件的链接时，这被视为用户的直接操作，浏览器允许这类导航请求执行，因为它符合用户的意图且风险较低。
+
+fetch属于AJAX请求范畴，会受到同源策略的严格限制。即使请求的目标是下载一个文件，浏览器也会将其视为脚本试图访问跨域资源，从而可能触发跨域资源共享（CORS）检查。如果服务器没有正确配置CORS响应头，允许你的源域名发起请求，浏览器就会阻止这次请求或者请求成功但无法访问响应体中的数据。
+
+CORS（跨域资源共享）主要是为了保护客户端（即用户的浏览器）的安全和隐私，同时也为服务器端提供了一定程度上的控制权。其工作原理是通过在浏览器层面实施安全策略，确保来自不同源的Web内容不能随意访问或操作其他源的资源，除非得到服务器的明确许可。
+
+具体来说，当一个网页尝试通过JavaScript等客户端脚本从不同的源加载数据时，CORS机制会要求浏览器在实际发送请求之前，先向服务器发起一个预检（preflight）请求，询问服务器是否允许这样的跨域操作。服务器通过在响应头中添加特定的CORS相关字段，如Access-Control-Allow-Origin，来指示浏览器哪些来源的请求是可以接受的。如果服务器不允许该请求，浏览器则会阻止客户端脚本获取响应数据，从而防止了潜在的安全威胁，如跨站脚本攻击（XSS）和数据泄露等。
+
+因此，虽然CORS规则是由服务器设置并返回给客户端的，其主要目的还是在于保护客户端免受恶意第三方网站的侵害，同时给予服务器对资源访问权限的精细控制。
+```
+// Manual CORS Configuration
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 
+               'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
+
+app.get('/download/:filename', (req, res) => {
+    const filePath = path.join(__dirname, 'public', req.params.filename);
+    res.setHeader('Content-Disposition', 'attachment;');
+    const readStream = fs.createReadStream(filePath);
+    readStream.pipe(res);
+});
+```
+
 #### 需求：导出列表
 一个服务端分页的可检索列表，页面只缓存当前页的数据，导出功能无法完全在前端，点击export将现有检索条件传到后端，由后端查询数据库并生成excel文件，传到前端。
 #### 后端实现(Express.js)

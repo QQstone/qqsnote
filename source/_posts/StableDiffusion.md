@@ -1,5 +1,5 @@
 ---
-title: Stable Diffusion
+title: Stable Diffusion 和 ComfyUI
 date: 2023-03-08 18:18:34
 tags:
 - AI
@@ -19,7 +19,7 @@ env requirement:
 + Python3.10
 #### models
 + GFPGAN 腾讯开源的人像修复算法
-+ VAE (Variational Auto-Encoder 变分自编码器)
++ VAE (Variational Auto-Encoder 变分自编码器) 修复图片中的某些部分,例如修复人脸图片中的眼睛，或者可以理解为一种滤镜
 + LoRA (Low-Rank Adaptation of Large Language Models) 自然语言处理
 + DeepBooru
 #### vas
@@ -46,3 +46,31 @@ call webui.bat
 > No python at "D:\Program Files\Anaconda3\env\py310\Python.exe"
 删除项目env下除Libs外的所有文件 重新执行webui.bat
 #### 资源
+[Stable Diffusion 提示词入门指南](https://juejin.cn/post/7273025863989755956)
+基础模型库：[C站](https://civitai.com/) [Huggingface](https://huggingface.co/) 出自[魔法学院文章](https://www.wehelpwin.com/article/4033)
+
+#### ComfyUI
+对Stable Diffusion相关工具链的进一步封装，提供工作流编辑。
+![](https://github.com/comfyanonymous/ComfyUI/blob/master/comfyui_screenshot.png)
+[GitHub](https://github.com/comfyanonymous/ComfyUI?tab=readme-ov-file#nvidia)
+```
+git clone https://github.com/comfyanonymous/ComfyUI.git
+```
+编辑extra_model_paths.yaml文件以访问Stable Diffusion Webui项目目录下的模型
+```
+pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
+pip install -r requirements.txt
+python main.py --listen=127.0.0.1 --port=8188
+```
+
+#### checkpoints
+可见载入我们的大模型的label写的是checkpoints, 即所谓大模型放在model/checkpoints目录, checkpoints常见于RPG游戏被认为是存档点，对于训练复杂的模型，也需要记录阶段性的实验结果，以方便之后的运算基于此进行。
+Keras Docs对checkpoints的解释 from[《理解checkpoints》](https://cloud.tencent.com/developer/article/1583630)：
++ The architecture of the model, allowing you to re-create the model
++ The weights of the model
++ The training configuration (loss, optimizer, epochs, and other meta-information)
++ The state of the optimizer, allowing to resume training exactly where you left off.
+
+checkpoints是基础模型的参数定制
+
+#### controlnet

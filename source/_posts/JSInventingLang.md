@@ -170,21 +170,23 @@ xxx.addB().addC()
 通知浏览器以严格模式运行脚本，严格模式下会将一些在非严格模式下被忽略的错位识别为异常，一些静默行为（无效但非异常操作）会被禁止
   + 防止无意添加全局变量，声明全局变量必须用global关键字
   + 静默行为被禁止 抛出TypeError
-  ```
-  // 如无效的赋值 
-  NaN=0
-  // 写入不可写属性
-  var obj={}
-  Object.defineProperty(obj, 'x', {value:0, writable:false})
-  // 写入只读
-  var obj={
-    get x(){
-      return 0;
-    }
+```
+// 如无效的赋值 
+NaN=0
+// 写入不可写属性
+var obj={}
+Object.defineProperty(obj, 'x', {value:0, writable:false})
+// 写入只读
+var obj={
+  get x(){
+    return 0;
   }
-  obj.x = 2
-  // 扩展不可扩展对象
-  var fixed = {}
-  Object.preventExtensions(fixed)
-  fixed.newProp = 0
-  ```
+}
+obj.x = 2
+// 扩展不可扩展对象
+var fixed = {}
+Object.preventExtensions(fixed)
+fixed.newProp = 0
+```
+#### vanilla.js
+it's a joke. 这是一个空的js，用以提醒其他开发者使用plain JavaScript实现，而不要引入任何library

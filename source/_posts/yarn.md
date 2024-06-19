@@ -44,4 +44,21 @@ npmScopes:
     npmRegistryServer: "https://qqstone.jfrog.io/artifactory/api/npm/Viewer/"
 ```
 #### TroubleShooting
-[cannot be loaded because running scripts is disabled on this system.](https://stackoverflow.com/questions/4037939/powershell-says-execution-of-scripts-is-disabled-on-this-system)
+  1. > [cannot be loaded because running scripts is disabled on this system.](https://stackoverflow.com/questions/4037939/powershell-says-execution-of-scripts-is-disabled-on-this-system)
+
+
+2. > Error: This tool requires a Node version compatible with >=18.12.0
+
+    Yarn v4要求nodejs >=18.12.0
+
+    切换Yarn version的命令是 yarn set version 3.0.2
+    但是在v4且node imcompatible的情况下任何yarn命令均失效
+
+    只有npm i -g yarn 并没有npm i -g yarn@3 因此使用nvm切到node18再复原是较好的办法
+
+3. > YN0028: The lockfile would have been modified by this install, which is explicitly forbidden.
+   
+   ```
+    yarn install --frozen-lockfile false
+   ```
+   see [Github issue](https://github.com/yarnpkg/yarn/issues/4147#issuecomment-321792657)

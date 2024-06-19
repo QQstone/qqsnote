@@ -9,3 +9,8 @@ tags:
 
 #### 模型
 gpt 175 billion netro cell
+
+
+#### 资源
+[白嫖限制试用的api](https://juejin.cn/post/7357546247848427558)
+[使用cloud function实现外网gpt代理访问](https://juejin.cn/post/7353849549540589587)

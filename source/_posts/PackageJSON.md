@@ -6,6 +6,7 @@ tags:
 categories: 
 - 前端技术
 ---
+
 #### author
 #### description
 #### license
@@ -66,3 +67,5 @@ to the release number, where the fourth indicator is the build number.
 build. For each successive release, the build indicator starts again with zero’s.
 + For development builds, the build number starts with “20001” and increments with each
 successive build. For each successive release, the build indicator starts again with zero’s.
+
+#### scripts
