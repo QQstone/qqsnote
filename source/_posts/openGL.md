@@ -63,6 +63,11 @@ Three.js对WebGL工作步骤进一步封装，提供方便理解的绘图API以�
 
 > CUDA is a parallel computing platform and programming model developed by NVIDIA for general computing on its own GPUs
 
+### vulkan
+"次世代OpenGL行动", Vulkan针对实时3D程序设计，提供高性能和低CPU管理负担
+
+Vulkan是个显式的API，也就是说，几乎所有的事情你都需要亲自负责。驱动程序是一个 软件，用于接收 API调用传递过来的指令和数据，并将它们进行转换，使得硬件可以理解。
+
 ### unity
 
 ### webXR

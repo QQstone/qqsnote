@@ -190,3 +190,5 @@ fixed.newProp = 0
 ```
 #### vanilla.js
 it's a joke. 这是一个空的js，用以提醒其他开发者使用plain JavaScript实现，而不要引入任何library
+
+[javascript 手写面试题](https://juejin.cn/post/7211116982513713212)

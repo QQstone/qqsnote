@@ -188,3 +188,9 @@ for /f "skip=5 tokens=1,2,4,5* delims= " %%a in ('dir %folderPath%\%latestFile% 
 #### others
 + InstallShield is used for the creation of installers on Windows Platforms.
 + Cygwin is used for creation of ISO files.
+
+#### 进程返回值
+```
+your_program.exe  
+echo %ERRORLEVEL%
+```

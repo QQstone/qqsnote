@@ -154,3 +154,8 @@ css形如
   }
 </style>
 ```
+
+#### 混合模式 mix-blend-mode
+[mix-blend-mode](https://developer.mozilla.org/en-US/docs/Web/CSS/mix-blend-mode)
+将所处位置的层叠像素叠加 可以叠加视频背景
+区别于[text-fill-color](https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-text-fill-color)

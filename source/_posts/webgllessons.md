@@ -7,6 +7,10 @@ tags:
 categories: 
 - 图像处理
 ---
+#### RoadMap
+[webgl学习路线](https://juejin.cn/post/7383894634156130313?searchId=20240703103839DF2909CC9BD7E7EF9519)
+#### 目标导向
+keyWords: 渲染引擎开发 shader设计优化
 #### 三维模型的平面投影————矩阵运算
 [图解webgl](https://juejin.im/entry/58fdb9b544d9040069ef2488)
 #### WebGLRenderingContext

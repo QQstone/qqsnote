@@ -463,7 +463,7 @@ flat自动移除空项
 ### 新增基本数据类型 BigInt
 js基本数据类型（值类型）已不止5种（ES6之后是六种）！ES10后一共有七种基本数据类型，分别是： String、Number、Boolean、Null、Undefined、Symbol、BigInt
 
-关于Symbol，生成唯一的值，用于不关心具体值的场景 见[知乎：JS 中的 Symbol 是什么？](https://zhuanlan.zhihu.com/p/22652486)
+关于Symbol，生成唯一的值，用于不关心具体值(只需要用变量名区分即可)的场景 见[知乎：JS 中的 Symbol 是什么？](https://zhuanlan.zhihu.com/p/22652486)
 #### 装饰器Decorator
 Angular常见的@Component(), @Module()等，在Ts中已有规范
 ES6 提案 尚未标准化，js decorator或无法被浏览器适用，需使用babel打包并规范化

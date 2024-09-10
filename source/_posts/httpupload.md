@@ -57,3 +57,5 @@ function canvas2file(){
 ```
 格物致知：从响应式编程理解‘流’
 {% post_link node-stream nodejs_stream %}
+
+[大文件分片上传](https://juejin.cn/post/7353106546827624463)
