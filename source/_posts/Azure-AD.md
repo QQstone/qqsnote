@@ -1,5 +1,5 @@
 ---
-title: Azure-AD
+title: Azure-ADB2C
 date: 2020-07-01 10:09:03
 tags:
 - Azure
@@ -44,7 +44,7 @@ Azure保存用户的标识，即使使用第三方的sso如公司的sso认证或
 
 #### Azure ADB2C
 Active Directory 的identity是在login.microsoftonline.com注册的，登录Azure portal也是同样的唯一的账号，B2C则提供了选择多个identity provider的功能，可以使用自己注册的tenant，抑或是社交账号，注册登录入口形如https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/oauth2/v2.0/authorize
-下面以官方sample为例配置，以求使用[桌面客户端](https://github.com/Azure-Samples/active-directory-b2c-dotnet-desktop.git)通过Azure AD B2C的认证框架访问[Web Api](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi.git)
+下面以官方sample为例配置，以求使用[wpf桌面客户端](https://github.com/Azure-Samples/active-directory-b2c-dotnet-desktop.git)通过Azure AD B2C的认证框架访问[Web Api](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi.git)
 #### 域服务(AD DS)和应用程序管理
 即除了B2C之外的主要功能。AD DS见{% post_link Azure-ADDS Azure域服务 %}
 AD可以用于管理Gallery App也就是微软库中的SaaS应用，也可以通过应用程序代理管理本地的应用(On-premises applications)
@@ -161,7 +161,7 @@ app.listen(port, () => {
 #### 注册客户端程序
 将官网sample的wpf client注册到Azure AD B2C<br>
 创建完成后添加Api权限，或者说授权scope：管理--API权限(API Permission)--Add a permission--My APIs,选择已注册的Web API应用
-![06 add client api permissions](https://tvax1.sinaimg.cn/large/a60edd42gy1ggqjzx4r8ij21hc0smadq.jpg)
+![06 add client api permissions](https://i0.wp.com/tvax1.sinaimg.cn/large/a60edd42gy1ggqjzx4r8ij21hc0smadq.jpg)
 勾选Permissions，即上文中的scopes
 ![07 select permissions](https://tvax4.sinaimg.cn/large/a60edd42gy1ggqjzyald0j21hc0smgqd.jpg)
 授权client使用scope：管理--API权限(API Permission)--Grant admin consent for xxxx(telent Name)--click Yes<br>
@@ -236,7 +236,21 @@ namespace active_directory_b2c_wpf
 [A Walkthrough For Azure AD B2C Custom Policy (Identity Experience Framework)](https://tsmatz.wordpress.com/2020/05/12/azure-ad-b2c-ief-custom-policy-walkthrough/)
 
 下载新手配置包（[starterpack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack.git)）
-+ 
+
+#### 移动客户端Android
+Redierct Uri形如 msauth://{PACKAGE_NAME}/{BASE64_URL_ENCODED_PACKAGE_SIGNATURE}
+将React Native应用注册为ADB2C的客户端：
+Azure Portal -> ADB2C -> App registration -> Authentication -> Platform configurations -> Add a platform -> Android
+
++ PACKAGE_NAME /android/app/src/main/java/com/exampleapp/MainApplication.kt 从路径以及java源码的顶层包名可知，此处为 **com.exampleapp**
++ SIGNATURE 生成签名↓
+  ```
+    keytool -exportcert -alias androiddebugkey -keystore %HOMEPATH%\.android\debug.keystore | openssl sha1 -binary | openssl base64
+  ```
+#### 移动客户端ios
+Redirect Urix形如msauth.{BUNDLE_ID}://auth
+同上Add a platform for iOS/macOS并填入BUNDLE_ID
+事实上BUNDLE_ID也是如com.exampleapp的字符串
 
 #### 使用Azure AD 作为identity provider（存目）
 以实现一键(使用AD凭据)登录

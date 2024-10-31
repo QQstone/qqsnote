@@ -8,7 +8,7 @@ tags:
 ---
 ![](https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages/httpmsgstructure2.png)
 #### Get和Post的区别
-![](https://tvax1.sinaimg.cn/large/0032xJMSgy1guexb1cxwdj611i0o0tpb02.jpg)
+![](https://i0.wp.com/tvax1.sinaimg.cn/large/0032xJMSgy1guexb1cxwdj611i0o0tpb02.jpg)
 总结：get 用于获取信息，无副作用，幂等，且可缓存。
 post 用于修改服务器上的数据，有副作用，非幂等，不可缓存
 

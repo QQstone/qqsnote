@@ -32,7 +32,7 @@ storage可以配置为group，相同group的文件会相互拷贝（这个是需
 
 下载文件<br>
 
-![下载](https://tvax1.sinaimg.cn/large/a60edd42gy1gfirmkezk3j20mw0akjug.jpg)
+![下载](https://i0.wp.com/tvax1.sinaimg.cn/large/a60edd42gy1gfirmkezk3j20mw0akjug.jpg)
 如图，client实现下载，需
 + 请求tracker 获拉取下载的storage的 ip port等
 + 调用相应的storage接口下载文件

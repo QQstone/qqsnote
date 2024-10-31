@@ -15,7 +15,7 @@ select version()
 
 mysql安装时为root用户创建初始密码，可以在日志中找到<br>
 /var/log/mysqld.log
-![mysqld.log](https://tvax1.sinaimg.cn/large/a60edd42gy1g8du7mi9ihj20j10eijv9.jpg)
+![mysqld.log](https://i0.wp.com/tvax1.sinaimg.cn/large/a60edd42gy1g8du7mi9ihj20j10eijv9.jpg)
 
 登录之后会勒令重设密码
 > You must reset your password using ALTER USRE statement before executing this statement.

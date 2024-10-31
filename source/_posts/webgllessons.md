@@ -98,7 +98,7 @@ $$v=\left[
   \right]$$
 
 而三维二阶张量，其物理含义是某点分解为三个两两正交的平面以及每个平面上的力（力是向量 其自有三个分量）3×3共9个分量
-![](https://tvax1.sinaimg.cn/large/a60edd42gy1gvv4q8pv40j20fl09m0t8.jpg)
+![](https://i0.wp.com/tvax1.sinaimg.cn/large/a60edd42gy1gvv4q8pv40j20fl09m0t8.jpg)
 如视频截图 方块表示每个分量上的值(模值，标量)
 $$t=\left[
  \begin{matrix}

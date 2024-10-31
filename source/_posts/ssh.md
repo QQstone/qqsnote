@@ -14,7 +14,7 @@ dpkg -l | grep ssh
 ```
 默认只有ssh-client,如下
 
-![20170210203338059](https://tvax1.sinaimg.cn/large/a60edd42gy1g8g662fyfoj20le059dgy.jpg)
+![20170210203338059](https://i0.wp.com/tvax1.sinaimg.cn/large/a60edd42gy1g8g662fyfoj20le059dgy.jpg)
 安装命令：
 ```
 sudo apt-get install openssh-server

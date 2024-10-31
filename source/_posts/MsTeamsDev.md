@@ -83,7 +83,7 @@ Zip Teams metadata package可获得该Web App的配置信息 包括名称及地�
 
 将应用包上传到teams中测试：Teams 左边栏点击Apps --> Manage your apps --> Upload an app to your org's app catalog
 上传后图标显示在Apps列表中 可将其添加到team的chat中
-![upload teams app](https://tvax1.sinaimg.cn/large/a60edd42gy1gx8shhfcbgj21400s5n2g.jpg)
+![upload teams app](https://i0.wp.com/tvax1.sinaimg.cn/large/a60edd42gy1gx8shhfcbgj21400s5n2g.jpg)
 #### 发布到组织
 #### Todo List Sample (SPFx)
 ```
