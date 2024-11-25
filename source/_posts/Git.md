@@ -26,6 +26,10 @@ git clone git@xxxxxx YourFolderName
 ```
 git clone -b release git@xxxx.xxx:projectX.git
 ```
+#### 创建分支
+```
+git checkout -b bug/fixXXXissue
+```
 #### 忽略本地修改拉取远程分支
 ```
 git fetch --all
@@ -137,7 +141,29 @@ git tag -d v1.0.3
 ```
 #### git blame
 
+#### submodule
+为项目添加子模块
+```
+git submodule add https://example.com/demo/lib1 lib1
+```
+关联了子模块的项目含有.gitmoudles文件 形如
+```
+[submodule "lib1"]
+    path = lib1
+    url = https://example.com/demo/lib1
+[submodule "lib2"]
+    path = lib2
+    url = https://example.com/demo/lib2
+[submodule "lib3"]
+    path = lib3
+    url = https://example.com/demo/lib3
+```
+拉取项目后源码中不包含这些子项目 使用git submodule命令更新
+```
+git submodule init lib1 lib2 #init命令可以按需初始化 lib1 lib2写入项目config
+git submodule update
 
+```
 
 #### troubleshooting 
 > error: object file .git/objects/61/9151e2619bc36c3c4f5f0c86432b2ca651706d is empty fatal: loose object 619151e2619bc36c3c4f5f0c86432b2ca651706d (stored in .git/objects/61/9151e2619bc36c3c4f5f0c86432b2ca651706d) is corrupt

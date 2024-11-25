@@ -74,6 +74,9 @@ ds = pydicom.dcmread(file)
 三维计算机图形学、图像处理和可视化软件，内核C++构建，具备多种转换界面，支持Java、Python等方式调用
 render: camera actor light
 data set:
+
+#### itk
+ITK 是一个开放源码、面向对象的软件系统，提供一个医学图像处理、图像分割与配准的算法平台
 #### xslt
 
 #### PACS

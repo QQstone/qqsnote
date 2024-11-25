@@ -267,6 +267,11 @@ CanWidgetProperty ： WidgetProps = {
 }
 ```
 type顾名思义是类型，可以是基础类型（或其组合，如用逻辑|的组合）的别名。与interface相比似乎更加固定、安全（不似interface灵活）
+
+实现多个接口：
+```
+let person: Person & AdditionalProperties
+```
 #### 类
  > 实现接口..
  
@@ -364,6 +369,28 @@ class Greeter {
     }
 }
 ```
+#### 运行时变量属性未在类型声明中
+使typeScript 识别未声明的属性 除了parameter:any 有以下几种方法更好的做法
++ 重新声明中变量
+  ```
+  // types.d.ts
+    import 'some-library';
+
+    declare module 'some-library' {
+        export interface Person {
+            [key: string]: any; // 添加索引签名
+            email?: string;     // 添加可选属性
+        }
+    }
+  ```
++ 类型断言
+  ```
+    let personWithTypeAssertion: Person = {
+    name: "John Doe",
+    age: 30,
+    additionalProperty: "Some value" // TypeScript 不会报错
+    } as Person & { additionalProperty: string };
+  ```
 #### typescript-eslint
 见[Typescript-ESLint](github.com/typescript-eslint/typescript-eslint#typescript-eslint)
 
