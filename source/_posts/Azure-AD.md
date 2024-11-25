@@ -59,7 +59,7 @@ loading半天后提示创建成功，点击链接切换directory
 
 Directory creation was successful. Click here to navigate to your new directory: QQStudio.
 
-![directory created](https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjwy66qzj20ry0kc0vz.jpg)
+![directory created](https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1ggqjwy66qzj20ry0kc0vz.jpg)
 #### user flow
 选择由Azure AD B2C控制的行为，一般就是登入登出，注册、注销，重置密码。<br>
 选择Sign up and sign in
@@ -86,10 +86,10 @@ Managed application in local directory:Demo website
 ```
 这里的Redireact URI是http://localhost:8888/auth，期望在本机运行桌面客户端程序，访问Api跳转到Azure Page登录，成功后进入到该地址。<br>
 进入管理--认证(Authentication),选择使用[隐式授权流](https://docs.microsoft.com/zh-cn/azure/active-directory/develop/v2-oauth2-implicit-grant-flow?WT.mc_id=Portal-Microsoft_AAD_RegisteredApps)(Implicit grant, 见笔记{% post_link OAuth2 OAuth2 %}), 并添加Redirect Uri<br>
-![04register_app_add_auth_url](https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjztlsc1j21820oyadq.jpg)
+![04register_app_add_auth_url](https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1ggqjztlsc1j21820oyadq.jpg)
 进入管理--公开API(expose API),Application ID URI set 为https://qqstudio.onmicrosoft.com/api 默认是由GUID组成的<br>
 添加scope(Add a scope)
-![05add access scope](https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjzvx048j21hc0smtch.jpg)
+![05add access scope](https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1ggqjzvx048j21hc0smtch.jpg)
 scope是控制访问权限的定义，将在后续步骤中被授权到已注册的client<br>
 
 #### 配置Web Api应用的Authorization
@@ -163,11 +163,11 @@ app.listen(port, () => {
 创建完成后添加Api权限，或者说授权scope：管理--API权限(API Permission)--Add a permission--My APIs,选择已注册的Web API应用
 ![06 add client api permissions](https://i0.wp.com/tvax1.sinaimg.cn/large/a60edd42gy1ggqjzx4r8ij21hc0smadq.jpg)
 勾选Permissions，即上文中的scopes
-![07 select permissions](https://tvax4.sinaimg.cn/large/a60edd42gy1ggqjzyald0j21hc0smgqd.jpg)
+![07 select permissions](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1ggqjzyald0j21hc0smgqd.jpg)
 授权client使用scope：管理--API权限(API Permission)--Grant admin consent for xxxx(telent Name)--click Yes<br>
 QQs跟随sample的步骤遗漏了下面这一步————添加重定向地址————导致在配置客户端时Redirect Uri不知道填什么<br>
 管理--Authentication--Add a platform--Mobile and desktop applications 然后可以看到根据当前talent的user flow生成的登录页模板 勾选https://qqstudio.b2clogin.com/oauth2/nativeclient
-![08 client redirect to login page](https://tvax3.sinaimg.cn/large/a60edd42gy1ggqjzzhlnwj21hc0sm79k.jpg)
+![08 client redirect to login page](https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1ggqjzzhlnwj21hc0sm79k.jpg)
 #### 配置客户端以访问已授权的Api
 sample client是个WPF应用，引入了Microsoft.Identity.Client这个包来进行token校验
 ```
@@ -222,7 +222,7 @@ namespace active_directory_b2c_wpf
 #### 关于校验和跳转的包的实现的推测
 + 客户端访问api，Http/Https Request
 + 客户端Request使用Jwt Bearer Authentication 传递token
-  ![10 bearer auth](https://tvax4.sinaimg.cn/large/a60edd42gy1ghejipxhdkj213f0cmjru.jpg)
+  ![10 bearer auth](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1ghejipxhdkj213f0cmjru.jpg)
 + 服务端接收到的request中token缺少或过期，返回401
 + 客户端收到401打开Azure Sign in Page，附带重定向回api end point 的url
 + Azure AD 框架进行认证

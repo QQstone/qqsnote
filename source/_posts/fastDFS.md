@@ -19,7 +19,7 @@ yum install git gcc gcc-c++ make automake autoconf libtool pcre pcre-devel zlib 
 apt install git gcc g++ make automake autoconf libtool libpcre3 libpcre3-dev zlib1g zlib1g-dev  libssl-dev wget vi
 ```
 #### tracker和storage
-![fdfs](https://tvax4.sinaimg.cn/large/a60edd42gy1gfip5ah0saj20f70dln0y.jpg)
+![fdfs](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1gfip5ah0saj20f70dln0y.jpg)
 如配置步骤所述，fdfs安装好后有tracker配置文件和storage配置文件，前者配置tracker用于上传下载的调度，后者配置storage作为文件存储。<br>
 tracher监听storage的状态同步消息，使当client上传或下载时，提供可用的storage路径<br>
 storage可以配置为group，相同group的文件会相互拷贝（这个是需要一定时间的，在集群方案中需要考虑）<br>

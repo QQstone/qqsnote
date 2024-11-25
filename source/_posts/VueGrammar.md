@@ -39,7 +39,7 @@ vm.$watch('a', function (newValue, oldValue) {
 })
 ```
 生命周期钩子
-![生命周期](https://tvax4.sinaimg.cn/large/a60edd42gy1gciycw8nxuj20xc2cftaj.jpg)
+![生命周期](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1gciycw8nxuj20xc2cftaj.jpg)
 ```
 new Vue({
   data: {

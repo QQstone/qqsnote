@@ -28,7 +28,7 @@ OpenID Connect 基于OAuth 2.0协议之上的简单身份层，它允许客户�
 ##### 授权码（authorization code）
 上文已提到的使用第三方登录的方式即授权码方式，授权码方式是最常用且靠谱的授权方式，相比之下，其余三种比较扯淡。<br>
 下图中A.com实为客户端，如某电商平台，B.com为用户信息持有方，如某社交平台(包含了受限数据服务以及授权服务)，经过对接A.com可以通过如图的流程使用B.com的用户登录
-![authcodemode](https://tvax4.sinaimg.cn/large/a60edd42gy1g9twsgu7ksj20m80cijrk.jpg)
+![authcodemode](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1g9twsgu7ksj20m80cijrk.jpg)
 1. 跳转到B授权页
 2. 确认授权，重定向回A，并带回authorization code
 3. 向B请求访问受限数据，传递A身份，以及授权码
@@ -40,14 +40,14 @@ OpenID Connect 基于OAuth 2.0协议之上的简单身份层，它允许客户�
 ##### 凭据式
 对于没有前端的命令行应用，以get请求，用query parameters传参直接得到令牌。
 #### 前后端分离的SSO
-![互联网图片侵删](https://tvax3.sinaimg.cn/large/a60edd42gy1ggrgt64oe1j20p60mywgl.jpg)
+![互联网图片侵删](https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1ggrgt64oe1j20p60mywgl.jpg)
 #### 关于OAuth, OpenId, OIDC什么的
 网上有文章说OAuth是authorization， OpenId是authentication，这听起来很谜。。
 > OpenID是一个去中心化的网上身份认证系统。（维基百科）
 
 所谓认证系统，解决的是"你是谁"的问题，用户在在identity provider（idp）的服务上注册，客户端登录即去idp获取OpenID标识对应的token，服务提供者校验身份，是拿客户端的token去idp确认。
 OIDC（OpenID Connect）OpenID + OAuth2.0认证（授权访问）服务
-![](https://tvax3.sinaimg.cn/large/a60edd42gy1gh5i7z0q6bj20e808jwfe.jpg)
+![](https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1gh5i7z0q6bj20e808jwfe.jpg)
 
 > access token 是客户端和资源服务器之间的凭据
 

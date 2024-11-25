@@ -68,7 +68,7 @@ cam.setParallelProjection(true); //透视，false为平行 Parallel Projection
 #### vtkInteractorStyleTrackballCamera
 交互器样式的一种，该样式下，用户是通过控制相机对物体作旋转、放大、缩小等操作。
 
-![vtk scope](https://tvax2.sinaimg.cn/large/a60edd42gy1ghelso7vv1j20gz08paaw.jpg)
+![vtk scope](https://i0.wp.com/tvax2.sinaimg.cn/large/a60edd42gy1ghelso7vv1j20gz08paaw.jpg)
 
 #### 官方 paraview
 [paraview](https://www.cb.uu.se/~aht/VizPhD2018/Paraview.pdf)

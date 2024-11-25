@@ -99,7 +99,7 @@ teamsfx new template todo-list-SPFx
 配置一个list 见[Microsoft Doc:]()
 代码中/SPFx/src/webparts/todoList/components/SharePointListManager.ts line17 设置为sharepoint上list的名字
 用vscode的Teams Toolkit打开项目
-![teams toolkit menu](https://tvax2.sinaimg.cn/large/a60edd42gy1gx0fsl3n0xj20bf0rk41z.jpg)
+![teams toolkit menu](https://i0.wp.com/tvax2.sinaimg.cn/large/a60edd42gy1gx0fsl3n0xj20bf0rk41z.jpg)
 选择项目目录打开
 在teams toolkit中选择Provision in the cloud 在Cloud端创建app
 ![teams provision](https://tva1.sinaimg.cn/large/a60edd42gy1gx56rdzzv1j20af05d75g.jpg)****

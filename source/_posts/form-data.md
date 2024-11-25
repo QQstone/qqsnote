@@ -4,8 +4,8 @@ date: 2020-04-03 12:47:08
 tags:
 ---
 Postman
-![postform-data-auth](https://tvax4.sinaimg.cn/large/a60edd42gy1gdghu6ikgmj210109x0tb.jpg)
-![postform-data](https://tvax2.sinaimg.cn/large/a60edd42gy1gdghv8sf7zj210309gdgd.jpg)
+![postform-data-auth](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1gdghu6ikgmj210109x0tb.jpg)
+![postform-data](https://i0.wp.com/tvax2.sinaimg.cn/large/a60edd42gy1gdghv8sf7zj210309gdgd.jpg)
 Node.js Server
 ```
 const express = require('express');

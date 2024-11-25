@@ -9,7 +9,7 @@ categories:
 [Microsoft DOc: Swagger/OpenAPI](https://docs.microsoft.com/zh-cn/aspnet/core/tutorials/web-api-help-pages-using-swagger?view=aspnetcore-6.0) Swagger 项目已于 2015 年捐赠给 OpenAPI 计划，自此它被称为 OpenAPI。 是一个与语言无关的规范，用于描述 REST API。 它使计算机和用户无需直接访问源代码即可了解 REST API 的功能。
 
 visual stuadio创建ASP.NET Core Web API项目模板，包含Enable OpenAPI support选项 即swagger页面
-![swagger](https://tvax3.sinaimg.cn/large/a60edd42gy1gy3voeuu6oj20sg0iwmzu.jpg)
+![swagger](https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1gy3voeuu6oj20sg0iwmzu.jpg)
 初始startup.cs的配置是
 ```
 public void ConfigureServices(IServiceCollection services)
@@ -51,7 +51,7 @@ swagger.json不会自动生成 从controller获取接口文档由下述swagger�
 右键API项目 -> Properties -> Build -> Output
 Output path 为空 即项目根目录
 勾选XML documentation file 并命名
-![xmlswagger](https://tvax4.sinaimg.cn/large/a60edd42gy1gy3w5kk83gj20qp0g10x2.jpg)
+![xmlswagger](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1gy3w5kk83gj20qp0g10x2.jpg)
 ```
 services.AddSwaggerGen(c =>
 {

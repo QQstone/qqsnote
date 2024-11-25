@@ -75,7 +75,7 @@ r'/r = (l-f)/(f-z)
     }
 </script>
 ```
-![五层纬度球](https://tvax4.sinaimg.cn/large/a60edd42ly1gpy2efigmqj20o20mcq2u.jpg)
+![五层纬度球](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42ly1gpy2efigmqj20o20mcq2u.jpg)
 
 如上相当于从z轴方向俯视一个球，了解另一种“撒点”方式:
 球坐标点(R, θ, φ)

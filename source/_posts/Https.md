@@ -13,7 +13,7 @@ categories:
 postman的"验证ssl证书"开关： settings -> General -> SSL certificate verification 
 
 #### ssl certificate warning
-![ssl warning](https://tvax4.sinaimg.cn/large/a60edd42gy1gqugoxo311j20qs0s70ue.jpg)
+![ssl warning](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1gqugoxo311j20qs0s70ue.jpg)
 + SSL证书不是来自公认的证书颁发机构(CA)
 + 数字证书信任链配置错误
 + 证书的域名匹配程度不完整

@@ -30,7 +30,7 @@ RenderWindowInteractor事件中使用屏幕像素坐标
  　　屏幕坐标系即图像坐标系，其坐标轴方向与视点坐标系一致，但是其x,y坐标值为像素坐标值。窗口尺寸决定了视点坐标与像素坐标的投影关系。不同的viewports（范围：0~1）能将同一个视点坐标系下的物体投影到不同的屏幕坐标系下。
 
 物体最初在模型坐标系下建立，并展示在世界坐标系中。通过相机空间变换矩阵投影到视点坐标系下，并经viewport展示在屏幕上。
-![coordinate conversion](https://tvax4.sinaimg.cn/large/a60edd42gy1gw0ktswtv8j20my0hiq3z.jpg)
+![coordinate conversion](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1gw0ktswtv8j20my0hiq3z.jpg)
 
 ```
 const computerDisplayToWorld = (x, y, z) => {

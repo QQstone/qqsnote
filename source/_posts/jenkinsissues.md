@@ -33,7 +33,7 @@ windows的启动、停止和重启 ———— 在安装目录下执行cmd命�
 ```
 ### 构建完成后拷贝文件到目标服务器
 关于插件publish over ssh
-![publish over ssh](https://tvax2.sinaimg.cn/large/a60edd42gy1gd6c791juej20ll0j80tm.jpg)
+![publish over ssh](https://i0.wp.com/tvax2.sinaimg.cn/large/a60edd42gy1gd6c791juej20ll0j80tm.jpg)
 配置中填的是jenkins这边的私钥，应为jenkins生成ssh key 或使用jenkins所在服务器的ssh private key
 ```
 ssh-keygen -t rsa -C "jenkins" -f ~/.ssh/jenkins

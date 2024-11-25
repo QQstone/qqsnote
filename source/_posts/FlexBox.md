@@ -98,4 +98,4 @@ main axis未必是水平的 由flex-direction控制**
 
 + align-content 
 顾名思义 对其所有元素 应用于 超出一行 且未占满整个container的情形 
-![](https://tvax2.sinaimg.cn/large/a60edd42gy1gyauhci0gbj20m80gn0vx.jpg)
+![](https://i0.wp.com/tvax2.sinaimg.cn/large/a60edd42gy1gyauhci0gbj20m80gn0vx.jpg)

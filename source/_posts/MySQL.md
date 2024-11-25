@@ -87,7 +87,7 @@ alter table all_user add unique key(employeeid, isvalid)
 CAUTION ! 上述语句是为了能在记录标记删除后，原纪录的唯一字段可以重新使用，但是如果isvalid是boolean(0-1)类型的，再次删除会造成违反联合唯一约束，解决方法是将isvalid以自增值标记，或以时间戳标记
 #### 数据导入
 MySQL Workbench工具，支持csv，json格式的import wizard，其实可以直接用命令方式导入
-![Capture_mysql_workbench](https://tvax4.sinaimg.cn/large/a60edd42gy1g9swbdtdpbj20rg0mijto.jpg)
+![Capture_mysql_workbench](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1g9swbdtdpbj20rg0mijto.jpg)
 工具提供了直观图形界面和字段映射。<br>
 然而csv的支持是个大坑。
 > Excel在读取csv的时候是通过读取文件头上的bom来识别编码的，如果文件头无bom信息，则默认按照unicode编码读取。
@@ -124,7 +124,7 @@ git push
 ```
 ///
 思考：我要是不在本地跑源码(node server.js),是否可以省略拉本地仓库的步骤？是否可以直接将备份文件“push”到远程仓库？
-![](https://tvax2.sinaimg.cn/large/a60edd42gy1gaj6h0z7e5j20m806btb2.jpg)
+![](https://i0.wp.com/tvax2.sinaimg.cn/large/a60edd42gy1gaj6h0z7e5j20m806btb2.jpg)
 编辑文件在上图的workspace范畴中，我想，问题答案应该是否定的。
 #### 常用查询
 ```

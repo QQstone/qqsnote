@@ -35,7 +35,7 @@ build.xml定义了若干步骤（即target），以xml节点格式定义每个�
 </project>
 ```
 在Jenkins中可以配置使用Apache Ant，在构建时便可以使用build.xml来管理步骤
-![JenkinsAnt](https://tvax4.sinaimg.cn/large/a60edd42ly1gijd2ewcpyj20wz0lo3zk.jpg)
+![JenkinsAnt](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42ly1gijd2ewcpyj20wz0lo3zk.jpg)
 源码目录build/build.xml:
 ```
 <?xml version="1.0"?>

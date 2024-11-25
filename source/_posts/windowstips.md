@@ -49,7 +49,7 @@ run ie4uinit -show
 #### Fix The Parameter is Incorrect Exception
 某年月日因磁盘松动，重新连接后报如图异常
 
-![](https://tvax4.sinaimg.cn/large/a60edd42gy1gc3wq4b78fj20a304ljrj.jpg)
+![](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1gc3wq4b78fj20a304ljrj.jpg)
 
 命令行执行
 ```

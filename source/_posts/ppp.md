@@ -22,4 +22,4 @@ pppd是一个后台服务进程(daemon)，实现了所有鉴权、压缩/解压�
 ![Android设备网络访问架构](https://tva2.sinaimg.cn/large/a60edd42gy1gan281gkvkj20xc0rgtfz.jpg)
 
 链路建立的大致过程：
-![链路建立](https://tvax2.sinaimg.cn/large/a60edd42gy1gan2bxh8erj20xc0fvdkr.jpg)
+![链路建立](https://i0.wp.com/tvax2.sinaimg.cn/large/a60edd42gy1gan2bxh8erj20xc0fvdkr.jpg)

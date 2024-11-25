@@ -395,7 +395,7 @@ public interface IList<T> : ICollection<T>, IEnumerable<T>, IEnumerable
  
 public class List<T> : IList<T>, ICollection<T>, IEnumerable<T>, IList, ICollection, IEnumerable
 ```
-![](https://tvax2.sinaimg.cn/large/0032xJMSgy1gtdrfazvquj60dw07sdht02.jpg)
+![](https://i0.wp.com/tvax2.sinaimg.cn/large/0032xJMSgy1gtdrfazvquj60dw07sdht02.jpg)
 #### Dictionary
 面试问题
 

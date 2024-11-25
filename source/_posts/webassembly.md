@@ -59,10 +59,10 @@ source ./emsdk_env.sh // 定义环境变量
 > You always have to source ./emsdk_env.sh first in a new terminal session
 > 
 输入emcc -v查看信息
-![emcc](https://tvax3.sinaimg.cn/large/a60edd42gy1gidk1ak7cyj20kg05aq50.jpg)
+![emcc](https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1gidk1ak7cyj20kg05aq50.jpg)
 看起来比较正常，说明工具安装成功
 
-![emsdk setup](https://tvax4.sinaimg.cn/large/a60edd42gy1gidgl4nx6yj20ka0c2n1n.jpg)
+![emsdk setup](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1gidgl4nx6yj20ka0c2n1n.jpg)
 
 另，其实安装emsdk不是必须的，docker hub中有现成的
 ```
@@ -166,10 +166,10 @@ source ./emsdk_env.sh // 定义环境变量
 > You always have to source ./emsdk_env.sh first in a new terminal session
 > 
 输入emcc -v查看信息
-![emcc](https://tvax3.sinaimg.cn/large/a60edd42gy1gidk1ak7cyj20kg05aq50.jpg)
+![emcc](https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1gidk1ak7cyj20kg05aq50.jpg)
 看起来比较正常，说明工具安装成功
 
-![emsdk setup](https://tvax4.sinaimg.cn/large/a60edd42gy1gidgl4nx6yj20ka0c2n1n.jpg)
+![emsdk setup](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1gidgl4nx6yj20ka0c2n1n.jpg)
 
 另，其实安装emsdk不是必须的，docker hub中有现成的
 ```

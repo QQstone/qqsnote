@@ -52,7 +52,7 @@ sqlserver实例默认以计算机名+服务提供者命名，如SHAL400/SQLEXPRE
    ![sqlserver_remote_access](https://tva1.sinaimg.cn/large/a60edd42gy1gij7y2m0oxj20u40qm75y.jpg)
 2. 打开SQL Server Configuration Manager(SSCM) SQL Server Browser Running, 
 3. SSCM--SQL Server Network Configuration--Protocols for SQLEXPRESS--TCP/IP Enable, 然后右键打开Properties设置ip及端口如下（注意IPAll的TCP Dynamic Ports不要写死）
-	![sqlserver_remote_access_tcpip](https://tvax3.sinaimg.cn/large/a60edd42gy1gij89zv9myj20ef0hk75n.jpg)
+	![sqlserver_remote_access_tcpip](https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1gij89zv9myj20ef0hk75n.jpg)
 4. 配置防火墙略<br>
 
 #### 调用存储过程
