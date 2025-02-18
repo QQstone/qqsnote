@@ -405,3 +405,15 @@ typescript的特点
 优点和技巧
 + 静态类型
 + 扩展名为.d.ts的Definition文件提供对现有JavaScript库（如Jquery，D3.js等）的支持。
+
+#### troubleshooting
+> fork-ts-checker-webpack-plugin error in undefined(undefined,undefined)
+
+该插件与typescript类型检查有关 该报错原因难以定位 修改typescript到旧版本解决
+场景：
+```
+    "@craco/craco": "^6.0.0",
+    "@types/node": "^14.14.16",
+    "react": "^17.0.1",
+    "typescript": "4.1.3",
+```

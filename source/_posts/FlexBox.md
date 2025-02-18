@@ -36,15 +36,15 @@ flex-direction<br>
 value: row | column | row-reverse | column-reverse
 
 justify-content<br>
-value: flex-start | flex-end | space-betwee | space-around
+value: flex-start | flex-end | space-between | space-around
 子元素不占满父元素时，在水平方向设置排列和空余的选项
 
 align-items<br>
-value: flex-start | flex-end | space-betwee | space-around
+value: flex-start | flex-end | space-between | space-around
 子元素不占满父元素时，在垂直方向设置排列和空余的选项
 
 align-content
-value: flex-start | flex-end | center | strech | space-betwee | space-around
+value: flex-start | flex-end | center | strech | space-between | space-around
 
 flex-wrap<br>
 value: nowrap | wrap | wrap-reverse

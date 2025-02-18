@@ -136,3 +136,13 @@ xmlInfo.match(/(<parameter.*?\/>).*?\1/)
   (?<!from |require\(|: |console\.log\()'.+'
   ```
   即非空字符串且排除import from，require，以及console.log等语法
+
++ 图床地址`https://tvax+数字+.sinaimg.cn` 模式的字符串替换为 `https://i0.wp.com/tvax+相同数字+.sinaimg.cn` 的字符串
+  捕获组
+  ```
+  (https:\/\/tvax)(\d)(\.sinaimg\.cn)
+  ```
+  替换
+  ```
+  https://i0.wp.com/tvax$2.sinaimg.cn
+  ```

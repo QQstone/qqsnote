@@ -46,6 +46,8 @@ Use the tilde-character (~) to prefix the version of moment in your dependencies
 
 Use the caret-character (^) to prefix the version of moment in your dependencies and allow npm to update it to any new MINOR release(小版本).
 
+[Git做版本管理及CHANGELOG](https://juejin.cn/post/7138790886817103886)
+
 #### 本地依赖
 ```
 "qqsmodule": "file:../CustomModules/qqsmodule"

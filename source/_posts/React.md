@@ -18,6 +18,16 @@ ReactDOM.render(JSX,document.getElementById("challenge-node"))
 ```
 + 用{}包含js代码，包括变量和相应方法
 + 用className绑定class样式
+
+除了jsx标记之外，还有createElement创建React组件的方法
+```
+//声明
+// 
+const element = React.createElement('div', { className: 'greeting' }, 'Hello World!')
+
+//引用
+<element />
+```
 #### 注释
 use the syntax {/* */}
 #### 表单

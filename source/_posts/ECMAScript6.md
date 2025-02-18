@@ -259,7 +259,8 @@ function loadImageAsync(url) {
 ```
 加载图片的异步过程，成功或失败时触发相应的事件(load,error)，resolve和reject刚好对应作为事件响应方法
 
-// TODO Promise 链式调用(存目)
+Promise 链式调用
+Promise可以链式调用是因为then()返回也是一个Promise，见{% post_link InterviewQuestions-Promise 手写Promise %} 注意是then(onFulfilled, onRejected)如果缺省onFulfilled，则第一个Promise中的结果不做任何保留，意义在于过程，如果onFulfilled=(result)=>{ return newPromise(...)} 即将第一个Promise过程得到的result传入newPromise newPromise作为onFulfilled，resolve(newPromise)就将数据传递给了下一个过程，依次类推可以依次执行不同的异步操作
 
 Promise().then(...)的第二个参数可以捕捉异常，和链式调用最后的catch有和区别？
 > catch只是一个语法糖而己 还是通过then 来处理的，大概如下所示

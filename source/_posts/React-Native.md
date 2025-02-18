@@ -152,7 +152,25 @@ css px是逻辑像素，物理像素/逻辑像素叫**设备像素比** 这里cs
 
 PPI(pixels per inch)每英寸物理像素点
 
+RN中的**Flexbox**规则和Web中Css FlexBox基本一致，主要的不同就是flex-direction默认不同，css中默认是水平方向，rn中默认是垂直方向。
 
+阴影样式
+```
+shadowBorder:{
+  shadowColor:'#000',
+  shadowOffset:{width:0, height:0},
+  shadowOpacity:0.6,
+  shadowRadius:8,
+
+  elevation:1
+}
+```
+对应css
+```
+box-shadow: '0 0 8px 8px #000a'
+```
+即iOS 通过 shadowOffset shadowOpacity shadowRadius 来实现阴影，而 Android 则通过 elevation 来实现阴影，
+[ios](https://todoit.tech/shadow-box.html)
 #### Navigator
 [React Native Navigation](https://react-navigation.nodejs.cn/)
 React Native 中导航变得很复杂，原因在于页面url不会加入window.history
@@ -200,7 +218,27 @@ function App(): React.JSX.Element {
 }
 ```
 #### 响应式
+Dimensions API
+```
+import { Dimensions } from 'react-native'
 
+const { width, height } = Dimensions.get('screen')//包括状态栏和底部导航
+const { width, height } = Dimensions.get('window')//Android不包括， IOS上与screen相同
+```
+监听屏幕尺寸改变(横竖屏切换，折叠屏)
+```
+useEffect(() => {
+    const subscription = Dimensions.addEventListener(
+      'change',
+      ({ window }) => {
+        setWindowSize({
+          width: window.width,
+          height: window.height,
+        })
+      })
+    return () => subscription?.remove() //组件unmount时移除监听
+}, [])
+```
 
 #### AndroidManifest.xml
 声明安卓应用版本信息，元数据，权限声明等，相应的ios应用是Info.plist

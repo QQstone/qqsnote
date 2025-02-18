@@ -7,7 +7,11 @@ categories:
 - 前端技术
 ---
 #### 边框
-+ box-shadow
++ [box-shadow example](https://getcssscan.com/css-box-shadow-examples?ref=producthunt)
+  ```
+  box-shadow: red 0 0 5px 5px
+  ```
+  颜色可以放在开头或结尾，也可缺省(即#fff) 数值顺序依次x-offset, y-offset, blur radius, spread radius
 + border-image
 #### 背景
 ```
@@ -159,3 +163,23 @@ css形如
 [mix-blend-mode](https://developer.mozilla.org/en-US/docs/Web/CSS/mix-blend-mode)
 将所处位置的层叠像素叠加 可以叠加视频背景
 区别于[text-fill-color](https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-text-fill-color)
+
+#### 三角
+```
+triangle:{
+    position:'absolute',
+    top:42,
+    right:28,
+    width:0,
+    height:0,
+    backgroundColor:'transparent',
+    borderWidth:10,
+    borderStyle:'solid',
+    borderTopColor:'transparent',
+    borderRightColor:'transparent',
+    borderBottomColor:'white',
+    borderLeftColor:'transparent',
+    justifyContent:'center',
+    alignItems:'center'
+}
+```

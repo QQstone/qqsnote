@@ -16,6 +16,12 @@ set JAVA_HOME="C:\jre\bin"
 ```
 %JAVA_HOME%
 ```
+常用环境变量 
++ %COMPUTERNAME% 当前计算机的名称
++ %USERNAME% 当前登录用户的用户名
++ %USERPROFILE% 用户目录
++ %PATH% 路径列表 用于定义可执行文件的搜索路径
++ %TEMP% 临时文件路径
 #### 输出到剪切板
 ```
 echo %JAVA_HOME% | clip
@@ -61,6 +67,11 @@ chkdsk /f
 tasklist|grep cscportal
 
 taskkill /IM "cscportal.exe" /F
+```
+#### 查找端口占用
+```
+netstat -ano | findstr "8081"
+taskkill /PID <pid> /F
 ```
 #### 琐碎文件的删除
 win10 系统中删除文件夹，会进行文件统计，对于文件目录和源代码目录琐碎的情形，它敢给你统计几个小时，正确的删除姿势有两种
@@ -194,3 +205,6 @@ for /f "skip=5 tokens=1,2,4,5* delims= " %%a in ('dir %folderPath%\%latestFile% 
 your_program.exe  
 echo %ERRORLEVEL%
 ```
+
+#### win11
+按住shift右键显示 缺省的右键菜单

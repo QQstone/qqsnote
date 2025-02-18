@@ -192,3 +192,28 @@ fixed.newProp = 0
 it's a joke. 这是一个空的js，用以提醒其他开发者使用plain JavaScript实现，而不要引入任何library
 
 [javascript 手写面试题](https://juejin.cn/post/7211116982513713212)
+
+#### task 和 microtask 
+[Tasks, microtasks, queues and schedules](https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/)
+```
+console.log('script start'); // task
+
+setTimeout(function () {
+  console.log('setTimeout'); // scheduled task
+}, 0);
+
+Promise.resolve()
+  .then(function () {
+    console.log('promise1'); // microtask
+  })
+  .then(function () {
+    console.log('promise2');
+  });
+
+// 结果：
+// script start
+// promise1
+// promise2
+// setTimeout
+```
+至少Chrome中, Promise.resolve().then()中的回调作为microtask会立即排队等待当前任务执行完， 而setTimeout的回调则在给定延迟之后，排队任务队列中。

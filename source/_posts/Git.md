@@ -6,19 +6,21 @@ tags:
 categories: 
 - 工具
 ---
-常规
+#### 日常
 ```
 git config --global user.email "QQs@xxxx.xxx"
 git config --global user.name "QQs"
 git init
 git remote add origin git@xxxx.xxx:projectX.git
 // 添加远程主机命名为origin
-git pull origin master:local
-// 拉取origin上的master分支 命名为local
+git branch -r
+// 查看远程分支
+git pull origin dev:develop
+// 拉取origin上的dev分支 命名为develop
 git add .
 git commit -m "blablabla"
-git push origin master
-// 将修改推送到origin上的master分支上
+git push origin dev
+// 将修改推送到origin上的dev分支上
 // clone and rename 
 git clone git@xxxxxx YourFolderName
 ```
@@ -163,6 +165,13 @@ git submodule add https://example.com/demo/lib1 lib1
 git submodule init lib1 lib2 #init命令可以按需初始化 lib1 lib2写入项目config
 git submodule update
 
+```
+
+#### ssh协议改https
+```
+git remote add temp_remote_name https://xxxxxxx.git
+git remote remove origin
+git remote rename temp_remote_name origin
 ```
 
 #### troubleshooting 

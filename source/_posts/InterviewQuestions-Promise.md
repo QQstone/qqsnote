@@ -67,3 +67,5 @@ class MyPromise{
 注意：代码尚缺少形参类型判断及异常处理(try catch throw) 且Promise还有其他API如resolve all finally...
 
 精进参考-> [掘金：你能手写一个Promise吗](https://juejin.cn/post/6850037281206566919)
+
+> 如何获取promise多个then之后的值

@@ -19,6 +19,7 @@ yarn add @material-ui/core
 React提供了视图层面组件化开发的模式。为实现组件之间通信和多样的交互，需要引入Redux库
 > Redux is a predictable state container for JavaScript apps.
 ```
+npx create-react-app my-app --template redux-typescript
 npm install @reduxjs/toolkit
 ```
 #### store， state， action

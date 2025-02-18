@@ -62,3 +62,6 @@ npmScopes:
     yarn install --frozen-lockfile false
    ```
    see [Github issue](https://github.com/yarnpkg/yarn/issues/4147#issuecomment-321792657)
+
+4. Error: Your application tried to access XXX but it isn't declared in your dependencies; this makes the require call ambiguous and unsound
+    疑因使用nvm导致存在冲突的yarn cache路径,导致程序并没有按yarn.lock确定所需的依赖包，该问题在卸载nvm，删除%USERPROFILE%\AppData\Local\Yarn\Berry文件并重装nodejs后解决

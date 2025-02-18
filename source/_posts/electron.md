@@ -16,7 +16,7 @@ categories:
 
 如果是windows平台的应用需求，wpf的产品将在体积，资源占用，安全的系统访问等方面碾压electron
 
-迈步越过的坑：
+[知乎：为什么用 electron 开发的桌面应用那么多？](https://www.zhihu.com/question/509656170)
 
 #### 构建项目框架
 0. 脚手架 npm i -g angular-cli electron
