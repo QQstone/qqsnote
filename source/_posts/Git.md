@@ -166,7 +166,10 @@ git submodule init lib1 lib2 #init命令可以按需初始化 lib1 lib2写入项
 git submodule update
 
 ```
-
+大型项目递归拉取submodule
+```
+git submodule update --init --recursive
+```
 #### ssh协议改https
 ```
 git remote add temp_remote_name https://xxxxxxx.git

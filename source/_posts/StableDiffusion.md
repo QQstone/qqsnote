@@ -20,8 +20,12 @@ env requirement:
 #### models
 + GFPGAN 腾讯开源的人像修复算法
 + VAE (Variational Auto-Encoder 变分自编码器) 修复图片中的某些部分,例如修复人脸图片中的眼睛，或者可以理解为一种滤镜
-+ LoRA (Low-Rank Adaptation of Large Language Models) 自然语言处理
++ LoRA (Low-Rank Adaptation of Large Language Models) 自然语言处理大模型的低秩(Low-Rank)适应性版本(Adaptation)
 + DeepBooru
+
+#### LoRA
+[什么是LoRA模型](https://zhuanlan.zhihu.com/p/624230991)
+自然语言大模型参数庞大(如GPT参数量超过千亿)，训练成本太高，因此LoRA采用了一个办法，仅训练低秩矩阵（low rank matrics），使用时将LoRA模型的参数注入（inject）SD模型，从而改变SD模型的生成风格，或者为SD模型添加新的人物/IP。
 #### vas
 
 #### tags
@@ -62,7 +66,7 @@ pip install torch torchvision torchaudio --extra-index-url https://download.pyto
 pip install -r requirements.txt
 python main.py --listen=127.0.0.1 --port=8188
 ```
-
+#### Flux.1
 #### checkpoints
 可见载入我们的大模型的label写的是checkpoints, 即所谓大模型放在model/checkpoints目录, checkpoints常见于RPG游戏被认为是存档点，对于训练复杂的模型，也需要记录阶段性的实验结果，以方便之后的运算基于此进行。
 Keras Docs对checkpoints的解释 from[《理解checkpoints》](https://cloud.tencent.com/developer/article/1583630)：
@@ -74,3 +78,7 @@ Keras Docs对checkpoints的解释 from[《理解checkpoints》](https://cloud.te
 checkpoints是基础模型的参数定制
 
 #### controlnet
+
+
+#### others
+[清华大学第六弹：AIGC发展研究3.0](https://pan.quark.cn/s/cfec4694b3a9)

@@ -445,10 +445,46 @@ The cancellation token to which you should respond to. See https://docs.microsof
 #### 委托Delegate
 > C# 中的委托（Delegate）类似于 C 或 C++ 中函数的指针, 是一种引用类型变量 
 
-作为函数方法的引用，委托用于将方法作为参数传给其他方法 如将回调函数传给System.Timers.Timer构造函数
+作为函数方法的引用，委托用于将**方法**作为参数传给其他方法 
+```
+public delegate int MethodDelegate(int x, int y)
+public int Add(int x, int y) { return x + y;}
+
+public static void Main(string[] args){
+    MethodDelegate method = new MethodDelegate(Add);
+    Console.WriteLine(method(10, 20));
+}
+```
+委托可通过+ -运算符进行组合，多个方法组合的委托为[多播(multicast)委托](https://learn.microsoft.com/zh-cn/dotnet/csharp/programming-guide/delegates/how-to-combine-delegates-multicast-delegates)
+
+如将回调函数传给System.Timers.Timer构造函数
 ```
 var timer = new Timer(delegate {
     Dispatcher.Invoke(() => { lst.Add(DateTime.Now.ToString(); }));
 }, null, 3000, 1)
 ```
 其灵活性在于可以在既定的程序结构中更改函数方法的调用，类似于接口之于模块
+
+Action\<T\> 和 Func\<T\> 
+两个内置的泛型委托，唯一的区别在于Action没有范围值而Func必有返回值
+
+事件是特殊的委托————变量委托
+```
+public delegate void DoSth(object sender, EventArgs e);
+public static event DoSth myDoSth;
+static void Print(object sender, EventArgs e)
+{
+    Console.WriteLine(sender);
+}
+...
+// 注册事件响应
+DoSth d = new DoSth(Print);
+object sender = 10;
+EventArgs e = new EventArgs();
+myDoSth += new DoSth(d);//+=委托（委托的实例化对象）
+myDoSth(sender, e);//执行方法
+//声明了事件myDoSth,事件的类型是DoSth这个委托
+//通过 += 为事件注册委托
+//通过DoSth委托的构造函数为事件注册委托实例
+//采用委托变量(参数列表)这种形式，让事件执行方法
+```

@@ -208,3 +208,10 @@ echo %ERRORLEVEL%
 
 #### win11
 按住shift右键显示 缺省的右键菜单
+
+#### mklink
+使用mklink将系统盘资源转移到其他盘
+```
+mklink /J C:\Users\qqs\.nuget D:\Environment\.nuget 
+```
+源路径要删除 因为/J 相当于创建C:\Users\qqs\.nuget为快捷方式指向新的路径
