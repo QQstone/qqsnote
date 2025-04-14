@@ -2,6 +2,10 @@
 title: AI辅助编程C++
 date: 2023-08-31 10:39:46
 tags:
+- AI
+- C++
+categories: 
+- 人工智能
 ---
 > QMetaObject::activate(this, &staticMetaObject, 20, nullptr) 这是QT程序中一条发射信号的指令，对不对
 

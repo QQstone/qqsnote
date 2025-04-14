@@ -3,6 +3,8 @@ title: Angular-Carousel
 date: 2021-01-07 12:39:28
 tags:
 - Angular
+categories: 
+- 前端技术
 ---
 ```
 import { Component, ContentChild, Input, TemplateRef } from "@angular/core";

@@ -4,6 +4,8 @@ date: 2020-06-15 16:39:32
 tags:
 - .Net
 - EntityFramework
+categories: 
+- 后端技术
 ---
 > EntirtyFramework框架是一个轻量级的可扩展版本的流行实体框架数据访问技术,ORM工具(Object Relational Mapping 对象关系映射)
 

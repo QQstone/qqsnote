@@ -2,6 +2,9 @@
 title: form-data 以及 basic auth
 date: 2020-04-03 12:47:08
 tags:
+- Web开发
+categories: 
+- 前端技术
 ---
 Postman
 ![postform-data-auth](https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1gdghu6ikgmj210109x0tb.jpg)

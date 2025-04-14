@@ -2,6 +2,9 @@
 title: APNG
 date: 2024-07-24 10:21:19
 tags:
+- React
+categories: 
+- 前端技术
 ---
 APNG, 全称是“Animated Portable Network Graphics”, 是PNG的位图动画扩展，可以实现png格式的动态图片效果。
 

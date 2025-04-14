@@ -2,6 +2,9 @@
 title: 关于Upload功能的概述
 date: 2021-02-01 09:32:33
 tags:
+- 上传
+categories: 
+- 前端技术
 ---
 #### file input
 前端文件上传入口一律使用input type="file", 关于UI的优化可参考{% post_link Angular-Tips Angular-Tips%}

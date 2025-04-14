@@ -3,6 +3,8 @@ title: conda
 date: 2023-03-06 13:18:08
 tags:
 - Python
+categories: 
+- 工具
 ---
 安装Anaconda后 默认只能在conda prompt中使用，若在cmd控制台使用conda命令
 需要将Anaconda/Scripts/目录假如环境变量

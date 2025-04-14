@@ -2,6 +2,9 @@
 title: Azure-BlobStorage
 date: 2021-02-03 14:21:15
 tags:
+- Azure
+categories: 
+- 平台
 ---
 Blob Storage存储资源的三个层次
 + storage account 存储实例的顶级层次

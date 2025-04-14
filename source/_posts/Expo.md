@@ -2,6 +2,9 @@
 title: Expo
 date: 2024-12-09 10:23:00
 tags:
+- Web开发
+categories: 
+- 移动端
 ---
 objectives orientation：
 + what & what benefits, defect(缺点)

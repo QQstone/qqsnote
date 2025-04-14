@@ -3,6 +3,8 @@ title: Azure 域服务
 date: 2020-11-24 14:34:36
 tags:
 - Azure
+categories: 
+- 平台
 ---
 Caution！ 这个东西非常昂贵 不要在自己的Azure上学习实践！
 #### Azure AD DS

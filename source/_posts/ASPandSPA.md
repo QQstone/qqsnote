@@ -4,6 +4,8 @@ date: 2020-08-31 10:58:10
 tags:
 - Angular
 - .Net
+categories: 
+- 后端技术
 ---
 课外：[关于传统web app和SPA的选择](https://docs.microsoft.com/zh-cn/dotnet/architecture/modern-web-apps-azure/choose-between-traditional-web-and-single-page-apps)
 

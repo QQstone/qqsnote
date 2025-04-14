@@ -2,6 +2,7 @@
 title: ComputerScience
 date: 2024-03-27 09:56:59
 tags:
+- 操作系统
 ---
 ### 线程
 > Q: java线程池和cpu线程数的关系

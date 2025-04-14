@@ -2,6 +2,9 @@
 title: Halcon
 date: 2024-06-27 09:57:59
 tags:
+- 图像处理
+categories: 
+- 图像处理
 ---
 ||OpenCV|Halcon
 :-----|:-----|:-----

@@ -2,6 +2,7 @@
 title: async await是generator的语法糖
 date: 2021-02-05 13:43:55
 tags:
+- ES6
 ---
 async await写一个训练过程
 ```

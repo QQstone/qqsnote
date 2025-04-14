@@ -2,6 +2,9 @@
 title: Android
 date: 2024-01-13 11:04:09
 tags:
+- Android
+categories: 
+- 前端技术
 ---
 Android是一个基于Linux内核的开源操作系统, 由谷歌开发.它被广泛用于各种设备, 包括智能手机, 平板电脑, 电视和智能手表.
 

@@ -2,6 +2,9 @@
 title: Expo AuthSession
 date: 2024-12-09 10:23:00
 tags:
+- Web开发
+categories: 
+- 移动端
 ---
 ```
 npx expo install expo-auth-session expo-crypto # expo-crypto 是 peer dependency 须与 expo-auth-session 一起安装

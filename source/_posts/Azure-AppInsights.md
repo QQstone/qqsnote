@@ -2,6 +2,9 @@
 title: Azure-AppInsights
 date: 2021-08-26 10:33:05
 tags:
+- Azure
+categories: 
+- 平台
 ---
 在你的应用中安装sdk向Azure Application Insight服务发送遥测数据，支持web客户端，web服务和后台服务等
 对应用性能影响小。非阻塞，单独线程

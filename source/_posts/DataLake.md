@@ -2,6 +2,7 @@
 title: Data Lake
 date: 2021-03-31 12:48:33
 tags:
+- Azure
 categories: 
 - 数据库
 ---

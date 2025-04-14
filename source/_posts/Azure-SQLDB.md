@@ -3,6 +3,8 @@ title: Azure-SQLDB
 date: 2021-01-04 13:49:37
 tags:
 - Azure
+categories: 
+- 平台
 ---
 Azure SQL包括
 + Azure SQL DB

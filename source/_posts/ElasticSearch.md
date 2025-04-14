@@ -2,6 +2,7 @@
 title: ElasticSearch
 date: 2021-04-02 09:45:57
 tags:
+- ElasticSearch
 ---
 参考https://www.cnblogs.com/dreamroute/p/8484457.html
 #### 全文搜索引擎

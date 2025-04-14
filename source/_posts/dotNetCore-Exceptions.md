@@ -2,6 +2,7 @@
 title: dotNetCore 异常处理
 date: 2023-05-24 10:14:09
 tags:
+- .Net
 ---
 QQs     ：在.net程序中，处理因网络连接问题或者服务端故障造成的请求异常，应该捕获异常类型？
 ChatGPT ：

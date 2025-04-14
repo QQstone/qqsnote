@@ -2,6 +2,9 @@
 title: forntend-performance
 date: 2021-09-08 15:19:52
 tags:
+- Web开发
+categories: 
+- 前端技术
 ---
 #### RAIL模型
 [使用 RAIL 模型衡量性能](https://web.dev/i18n/zh/rail/) 即对于应用的 相应 -- 动画 -- 空闲 -- 加载 四种不同场景，用户会对性能有不一样的期望

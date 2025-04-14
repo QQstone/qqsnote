@@ -2,6 +2,10 @@
 title: 八股文-手写Promise
 date: 2024-11-19 11:16:17
 tags:
+- javascript
+- Web开发
+categories: 
+- 前端技术
 ---
 Promise的调用形如
 ```

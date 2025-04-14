@@ -2,6 +2,7 @@
 title: GrowthMindset
 date: 2024-03-20 13:52:03
 tags:
+- 成长思维
 ---
 Growth Mindset 成长思维, 是一个重要的心理学概念。斯坦福大学的行为心理学教授Carol S. Dweck是这一概念的提出者。她认为人的思维模式主要分为两种：成长型思维和固定型思维。
 

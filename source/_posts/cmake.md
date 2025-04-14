@@ -2,6 +2,9 @@
 title: cmake
 date: 2024-07-18 13:37:10
 tags:
+- C++
+categories: 
+- 工具
 ---
 [Cmake](https://cmake.org/download/) 是通用的自动化构建工具, 可用于构建各种类型的项目，包括*C++、C、Python、Java*等
 
