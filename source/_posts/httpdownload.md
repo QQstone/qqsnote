@@ -140,3 +140,9 @@ export() {
   }
 ```
 接受请求必须设置response headers，否则默认设置无法取得返回值并进入next回调。
+
+#### 单次下载限制
+浏览器下载线程有限制，通常同一时间下载不超过10个文件，超过数量的请求直接被无视
+
+解决方案一是设置时间间隔 避免同时下载
+二是zip一下打包下载 [jszip](https://stuk.github.io/jszip/documentation/examples.html)

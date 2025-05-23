@@ -14,4 +14,72 @@ WPS Autodesk Maya 极品飞车是Qt开发的
 
 #### Qt creator
 
-#### 
+#### Delegate Model
+```
+ListView {
+
+      id: listview
+
+      Layout.fillWidth: true 
+
+      height: 80
+
+      orientation: ListView.Horizontal
+
+      spacing: 15
+
+      displaced: Transition {
+
+        NumberAnimation {
+
+          properties: "x,y"
+
+          easing.type: Easing.OutQuad
+
+        }
+
+      }
+ 
+      model: DelegateModel {
+
+        id: visualModel
+
+        model: selectedItems
+
+        delegate: DropArea {
+
+          id: delegateRoot
+
+          width: tt.width
+
+          height: tt.height
+ 
+          onEntered: function (drag) {
+
+            visualModel.items.move(drag.source.curIndex, tt.curIndex)
+
+          }
+
+          property int visualIndex: DelegateModel.itemsIndex
+ 
+          DraggableIcon {
+
+            id: tt
+
+            dragParent: listview
+
+            curIndex: delegateRoot.visualIndex
+
+            sourceImg: source
+
+            keyImg: key
+
+          }
+
+        }
+
+      }
+
+    }
+ 
+```

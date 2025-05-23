@@ -54,6 +54,7 @@ call webui.bat
 基础模型库：[C站](https://civitai.com/) [Huggingface](https://huggingface.co/) 出自[魔法学院文章](https://www.wehelpwin.com/article/4033)
 
 #### ComfyUI
+recommended Python3.12！
 对Stable Diffusion相关工具链的进一步封装，提供工作流编辑。
 ![](https://github.com/comfyanonymous/ComfyUI/blob/master/comfyui_screenshot.png)
 [GitHub](https://github.com/comfyanonymous/ComfyUI?tab=readme-ov-file#nvidia)
@@ -62,11 +63,20 @@ git clone https://github.com/comfyanonymous/ComfyUI.git
 ```
 编辑extra_model_paths.yaml文件以访问Stable Diffusion Webui项目目录下的模型
 ```
-pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
 pip install -r requirements.txt
 python main.py --listen=127.0.0.1 --port=8188
 ```
-#### Flux.1
+其中torch 2.5GB下载较久 源地址 https://download.pytorch.org/whl/cu126/torch-2.6.0%2Bcu126-cp312-cp312-win_amd64.whl  下载后本地安装命令如
+```
+pip install D:\Download\torch-2.6.0+cu126-cp312-cp312-win_amd64.whl
+```
+修改haggingface.io使用国内镜像：D:\Software\Anaconda3\envs\py312\Lib\site-packages\huggingface_hub\__init__.py脚本末尾添加
+```
+os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
+```
+[ComfyUI中文手册](https://comfyuidoc.com/zh/)
+#### SD3 SD3.5 Flux.1
 #### checkpoints
 可见载入我们的大模型的label写的是checkpoints, 即所谓大模型放在model/checkpoints目录, checkpoints常见于RPG游戏被认为是存档点，对于训练复杂的模型，也需要记录阶段性的实验结果，以方便之后的运算基于此进行。
 Keras Docs对checkpoints的解释 from[《理解checkpoints》](https://cloud.tencent.com/developer/article/1583630)：

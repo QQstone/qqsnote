@@ -150,7 +150,9 @@ export default () => {
 };
 ```
 useCallback
-实际上useState不能返回一个方法(读取类型为function的state，会自动执行返回结果)，当需要根据若干state的变化得到动态的函数时，使用useCallback, useCallback的定义形如useEffect
+> useCallback是一个允许在多次渲染中缓存函数的hook
+
+useState不能返回一个方法(读取类型为function的state，会自动执行返回结果)，当需要根据若干state的变化得到动态的函数时，使用useCallback, useCallback的定义形如useEffect
 ```
 useEffect(()=>{
   // do sth with refresh
@@ -162,6 +164,8 @@ renderView = useCallback(()=>{
 }, [renderer, data])
 ```
 上述renderView方法随renderer, data的变化更新函数体实现，而renderView的执行时机只受refresh状态触发(而不需要在同时监听三个状态的副作用中判断是否需要执行renderView)
+
+但是调用useCallback方法时，函数体可能已因依赖项改变而改变
 
 useMemo
 在组件重复渲染中缓存结果

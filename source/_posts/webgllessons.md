@@ -9,12 +9,13 @@ categories:
 ---
 #### RoadMap
 [webgl学习路线](https://juejin.cn/post/7383894634156130313?searchId=20240703103839DF2909CC9BD7E7EF9519)
+
 #### 目标导向
 keyWords: 渲染引擎开发 shader设计优化
 #### 三维模型的平面投影————矩阵运算
 [图解webgl](https://juejin.im/entry/58fdb9b544d9040069ef2488)
 #### WebGLRenderingContext
-
+获取webgl并调用webgl接口设置渲染背景色
 ```
 const canvas = document.getElementById('webgl');
 // if webgl context isnot exist, init it 
@@ -27,59 +28,125 @@ webgl.clear(webgl.COLOR_BUFFER_BIT);
 ```
 color 是float 0.0~1.0 映射 0~255<br>
 颜色缓冲区（COLOR_BUFFER_BIT），其他还有深度缓冲区（DEPTH_BUFFER_BIT）模板参数缓冲区（STENCIL_BUFFER_BIT）参考 [官方标准](www.khronos.org)
-#### vs fs shader
 
+#### 着色器
+着色器是使用 GLSL(OpenGL ES Shading Language)编写的程序，它携带着绘制形状的顶点信息以及构造绘制在屏幕上像素的所需数据，换句话说，它负责记录着像素点的位置和颜色。<br>
+顶点着色器（Programmable Vertex Processor）和 片元着色器（Programmable Fragment Processor）
+
+[WebAPI: WebGLRenderingContext.shaderSource](https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/shaderSource)设置着色器源码，参数分别是着色器变量，和源码字符串
+```
+const vertexShaderSource = `
+    void main(){
+        gl_Position=vec4(0.0,0.0,0.0,1.0);
+        gl_PointSize=100.0; //这里写100就会报错！
+    }
+`;
+const fragmentShaderSource = `
+    void main(){
+        gl_FragColor=vec4(1.0,1.0,0.0,1.0);
+    }
+` 
+```
+GLSL非常严格，函数分号的缺失、甚至浮点数写成整型都可能在后面调用WebGLProgram时报错 变量名也是GLSL定义死的不可更改
+> WebGL: INVALID_OPERATION: useProgram: program not valid
 #### 着色器函数
 ```
- private initShader(gl:WebGLRenderingContext, vertexShaderSource:string, fragmentShaderSource:string) {
-    //创建顶点着色器对象
-    let vertexShader = gl.createShader(gl.VERTEX_SHADER);
-    //创建片元着色器对象
-    let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-    //引入顶点、片元着色器源代码
-    gl.shaderSource(vertexShader, vertexShaderSource);
-    gl.shaderSource(fragmentShader, fragmentShaderSource);
-    //编译顶点、片元着色器
-    gl.compileShader(vertexShader);
-    gl.compileShader(fragmentShader);
+const initShader = (gl: WebGLRenderingContext )=>{
+    // 创建程序对象
+    const program = gl.createProgram();
+    if(program){
+        // 创建着色器对象
+        const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vertexShaderSource)
+        const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource)
+        // 附加着色器到程序
+        gl.attachShader(program, vertexShader!)
+        gl.attachShader(program, fragmentShader!)
+        // 链接webgl上下文对象和程序对象
+        gl.linkProgram(program)
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            alert(
+              "无法初始化着色器程序: " +
+              gl.getProgramInfoLog(program),
+            );
+            return null;
+          }
+        // 启动程序对象
+        gl.useProgram(program)
+    }
+    
+}
 
-    //创建程序对象program
-    let program = gl.createProgram();
-    //附着顶点着色器和片元着色器到program
-    gl.attachShader(program, vertexShader);
-    gl.attachShader(program, fragmentShader);
-    //链接program
-    gl.linkProgram(program);
-    //使用program
-    gl.useProgram(program);
-    //返回程序program对象
-    return program;
-  }
+const loadShader = (gl: WebGLRenderingContext, type:number, source: string)=>{
+    const shader = gl.createShader(type)
+    if(!shader) return null
+    gl.shaderSource(shader, source)
+    gl.compileShader(shader)
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        alert(
+        "编译着色器时出错：" + gl.getShaderInfoLog(shader),
+        );
+        gl.deleteShader(shader);
+        return null;
+      }
+    return shader
+}
 ```
-#### 着色器
-着色器是使用 OpenGL ES Shading Language(GLSL)编写的程序，它携带着绘制形状的顶点信息以及构造绘制在屏幕上像素的所需数据，换句话说，它负责记录着像素点的位置和颜色。<br>
-顶点着色器（Programmable Vertex Processor）和 片元着色器（Programmable Fragment Processor）
+使用上述着色器绘制点
 ```
-var vertexShaderSource = '' +
-//attribute声明vec4类型变量apos
-'attribute vec4 apos;' +
-'void main(){' +
-//顶点坐标apos赋值给内置变量gl_Position
-'   gl_Position =apos;' +
-'}';
+initShader(webgl)
+webgl.drawArrays(webgl.POINTS, 0, 1)
+```
 
-//片元着色器（Programmable Fragment Processor）源码
-let fragShaderSource = '' +
-'void main(){' +
-//定义片元颜色
-'   gl_FragColor = vec4(1.0,0.0,0.0,1.0);' +
-'}';
-
-//初始化着色器
-let program = this.initShader(this.gl, vertexShaderSource, fragShaderSource);
-//获取顶点着色器的位置变量apos
-var aposLocation = this.gl.getAttribLocation(program, 'apos');
+#### vertex shader attribute
+声明attribute变量
 ```
+const vertexShaderSource = `
+    attribute vec4 a_Position;
+    void main(){
+        gl_Position=a_Position;
+        gl_PointSize=100.0;
+    }
+`;
+```
+获取attribute变量指针, 这里的a_Position是个number类型的常量，通过webgl接口可以访问到它‘指向’的shader中的attribute
+```
+const a_Position = webgl!.getAttribLocation(webglProgram, 'a_Position')
+webgl!.vertexAttrib3f(a_Position, 0.0, 0.5, 0.0);
+```
+webgl提供了一系列修改顶点着色器attribute同族方法 用于设置不同数量的分量 [vertexAttrib[1234]f[v]] 其中f指浮点数(https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/vertexAttrib)
+v是vector值 类型为Float32Array 如
+```
+vertexAttrib3fv(index, value)
+```
+#### fragment shader uniform
+相应的片元着色器中是uniform变量 对于片元着色器有特殊要求指明浮点数精度
+```
+const fragmentShaderSource = `
+    precision mediump float; //中等精度浮点数
+    uniform vec4 u__FragColor; 
+    void main(){
+        gl_FragColor=u__FragColor;
+    }
+` 
+const u__FragColor = webgl.getUniformLocation(webgl.program,'u__FragColor');
+webgl.uniform4f(u__FragColor, 1.0,1.0,0.0,1.0)
+```
+> attribute 变量用于在顶点着色器中从应用程序（如OpenGL程序）传递逐顶点数据。每个顶点可以有不同的值，因此 attribute 变量通常用于传递顶点的位置、法线、纹理坐标、颜色等数据。
+
+使用场景：
++ 当你需要为每个顶点提供特定的数据时。
++ 当数据需要随着每个顶点变化时。
+> uniform 变量用于在顶点着色器和片段着色器之间传递数据，或者从应用程序传递到着色器程序。uniform 变量的值在整个绘制调用中是恒定的，不会随着顶点的变化而变化。
+
+使用场景：
++ 当你需要传递一些在整个绘制调用中保持不变的数据时。
++ 当数据需要在顶点着色器和片段着色器之间共享时。
+
+#### 补间动画
+补间动画在两关键帧之间插值而得。
+
+#### 多点数据
+
 #### 标量 向量 张量
 + 标量 scalar
 + 向量 vendor
@@ -113,3 +180,6 @@ $$t=\left[
 #### mesh polygon nurbs
 mesh是曲面 在计算机三维处理中常以polygon(多边形)来实现
 NURBS （Non-uniform rational basis spline非均匀有理基本样条）基于数学公式表达的曲面，但在计算机三维处理中实现 还是需要差值以及polygon
+
+#### interview
+[面试题](https://juejin.cn/post/7236357619983269943?searchId=202505121118127716CD99F393F0CD681E)

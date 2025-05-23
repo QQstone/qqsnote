@@ -40,6 +40,8 @@ WebGL重建三维图像的步骤大致包括
 #### 着色器
 webGL工作的基本单位是着色器（shaders）。着色器编程使用glsl语言，运行在显卡中，webgl标准使用js拼装着色器代码，编译成二进制包并塞入显卡执行
 
+着色器如同笔刷 由顶点着色器决定绘制在哪里 由片元着色器决定用什么笔触/颜色等要素填充
+
 ### Three.js
 Three.js对WebGL工作步骤进一步封装，提供方便理解的绘图API以操作WebGL接口
 
@@ -73,3 +75,11 @@ Vulkan是个显式的API，也就是说，几乎所有的事情你都需要亲�
 ### unity
 
 ### webXR
+
+### WebGPU
+随着计算机图形运算能力的提高，实际OpenGL已被vulkan、DirectX等取代，而裁剪过的OpenGL ES更无法发挥现代计算机的渲染能力，为弥补这部分功能欠缺，Khronos Group(OpenGL和vulkan的制定组织)着手开发webgpu，以支持调用GPU的图形渲染功能（实际上是提供api访问vulkan、Metal驱动）
+![](https://developer.mozilla.org/zh-CN/docs/Web/API/WebGPU_API/basic-webgpu-stack.png)
+
+chrome率先在浏览器层面支持webgpu
+
+Three.js Babylon.js库逐步对支持访问webgpu做了适配，使用一般不需要学习额外的编程方法
