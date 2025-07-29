@@ -55,7 +55,7 @@ new Vue({
   beforeDestroy:function(){
 
   }
-}
+})
 ```
 内联处理器方法
 ```
@@ -66,4 +66,5 @@ new Vue({
   methods:{
       // TODO functions
   }
+})
 ```
