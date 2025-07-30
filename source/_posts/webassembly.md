@@ -18,6 +18,8 @@ webassembly知识储备或许会涵盖“编译原理”，Rust，v8开发，
 + 运行效率高 如应用于文件上传中的扫描<sup>[注1](https://www.zhihu.com/question/265700379/answer/951118579)</sup>
 + 保密性好 见Google reCAPTCHA 另[航妹博客：浅谈前端代码加密](https://www.yhspy.com/2019/04/10/%E6%B5%85%E8%B0%88%E5%89%8D%E7%AB%AF%E4%BB%A3%E7%A0%81%E5%8A%A0%E5%AF%86/)
 
+**为什么wasm效率比js高？因为wasm是二进制指令格式，比执行js代码天然地节省解释和JIT的开销，但效率提高多少要看计算的复杂程度，简单场景或不相上下**
+
 课外：为了提高浏览器性能，曾出现过从 NaCl、PNaCl 到 ASM.js，这些技术作为wasm的前辈，有以下特点————(于航《WebAssembly入门》)
 1. 源码中都使用了类型明确的变量；
 2. 应用都拥有独立的运行时环境，并且与原有的 JavaScript 运行时环境分离；
