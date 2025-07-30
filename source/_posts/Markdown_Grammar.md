@@ -98,7 +98,6 @@ $$
 安装VS Code插件： Markdown Preview Enhanced, PlantUML
 
 ```plantuml
-@startuml
 
 == Initialization ==
 
@@ -112,5 +111,4 @@ deactivate Alice
 
 Alice <-- Bob: Another dialogue
 
-@enduml
-```@enduml
+```

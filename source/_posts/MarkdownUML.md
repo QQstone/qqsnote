@@ -16,7 +16,6 @@ generate through Hexo
 #### 流程图
 
 ```plantuml
-@start
 start
 if(account cache exist?) then (no) 
     :return null; 
@@ -26,7 +25,6 @@ else (yes)
     :get result or exceptions;
     :return result;
 stop
-@end
 ```
 {% plantuml %}
 start

@@ -7,7 +7,7 @@ categories:
 - 工具
 ---
 安装Anaconda后 默认只能在conda prompt中使用，若在cmd控制台使用conda命令
-需要将Anaconda/Scripts/目录假如环境变量
+需要将Anaconda/Scripts/目录加入环境变量
 
 #### 源
 可以形如下添加源的命令

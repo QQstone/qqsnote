@@ -6,7 +6,7 @@ tags:
 categories: 
 - 工具
 ---
-安装并初始化既有项目
+#### 安装并初始化既有项目
 ```
 npm eslint --init
 ```
@@ -28,3 +28,18 @@ package.json
 },
 ```
 [ESLint：环境参数](https://eslint.org/docs/user-guide/configuring#specifying-environments)
+
+#### Issues:
+> Arrow function expected no return value. (consistent-return)
+
+> 141:7 error React Hook useEffect has a missing dependency: 'render'. Either include it or remove the dependency array react-hooks/exhaustive-deps
+
+render 方法中包含state属性 应改为useCallback 加入依赖state属性， 然后把render加入报错的副作用的依赖中
+
+> Expected 'this' to be used by class method 'getValBetweenFms'. (class-methods-use-this)
+
+改为static方法
+
+> Expected to return a value at the end of method 'getValBetweenFms'. (consistent-return)
+
+函数在循环体中某条件达成时返回 运行时必定返回 但静态类型检查不通过 应在函数末尾return undefined

@@ -10,10 +10,50 @@ categories:
 #### RoadMap
 [webgl学习路线](https://juejin.cn/post/7383894634156130313?searchId=20240703103839DF2909CC9BD7E7EF9519)
 
+```plantuml
+@startmindmap
+*[#409EFF] 《webgl编程指南》
+    **[#79bbff] 渲染管线
+        ***_ 理解着色器 图元 光栅化 片元等
+        ***_ webglcontext绘制流程
+    **[#79bbff] 矩阵变换
+        ***_ 平移 旋转 缩放
+        ***_ 视图矩阵
+    **[#79bbff] 渲染特效
+        ***_ 颜色 纹理贴图
+
+    **[#79bbff] GLSL
+        ***_ 基本类型
+        ***_ 矢量和矩阵
+        ***_ 结构体
+        ***_ 函数
+        ***_ 限定字
+        ***_ 预处理
+
+    **[#79bbff] 三维世界
+        ***_ 投影
+        ***_ 可视范围 可视空间
+        ***_ 遮挡
+
+    **[#79bbff] 光照
+
+    **[#79bbff] 高级技术
+        ***_ 帧缓冲区和投影
+        ***_ 等距圆柱贴图
+        ***_ 等宽度线
+
+
+@endmindmap
+```
+
 #### 目标导向
 keyWords: 渲染引擎开发 shader设计优化
 #### 三维模型的平面投影————矩阵运算
 [图解webgl](https://juejin.im/entry/58fdb9b544d9040069ef2488)
+
+渲染管线
+![渲染管线图](../images/webgl_render_pipeline.awebp)
+其中所谓光栅化 我理解是屏幕光栅 将矢量图形映射到有限分辨率的屏幕像素上 每个像素通过片元着色器绘制
 #### WebGLRenderingContext
 获取webgl并调用webgl接口设置渲染背景色
 ```
@@ -180,6 +220,9 @@ $$t=\left[
 #### mesh polygon nurbs
 mesh是曲面 在计算机三维处理中常以polygon(多边形)来实现
 NURBS （Non-uniform rational basis spline非均匀有理基本样条）基于数学公式表达的曲面，但在计算机三维处理中实现 还是需要差值以及polygon
+
+#### 浏览器支持
+访问https://get.webgl.org测试当前浏览器是否支持webgl
 
 #### interview
 [面试题](https://juejin.cn/post/7236357619983269943?searchId=202505121118127716CD99F393F0CD681E)
