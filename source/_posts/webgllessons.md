@@ -45,6 +45,8 @@ categories:
 
 @endmindmap
 ```
+{% post_link LinearAlgebra 线性代数 %}
+{% post_link ComputerGraphics 计算机图形学 %}
 
 #### 目标导向
 keyWords: 渲染引擎开发 shader设计优化
