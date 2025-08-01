@@ -230,3 +230,10 @@ npm install --save-dev typescript ts-loader
 ```
 set GENERATE_SOURCEMAP=false&& yarn build
 ```
+
+#### 代码访问静态资源
+> vue中绑定静态资源路径需要如url: require('@/assets/images/threelogo.png') 为什么url用字符串不行
+
+通过webpack的工程化，静态资源以require模块的形式导入上下文， @ 是 Webpack 中配置的路径别名，通常指向 src 目录。使用 require('@/assets/images/threelogo.png') 可以确保路径正确解析。
+
+public目录的资源一般不需要经过webpack解析

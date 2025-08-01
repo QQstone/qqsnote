@@ -217,3 +217,35 @@ Promise.resolve()
 // setTimeout
 ```
 至少Chrome中, Promise.resolve().then()中的回调作为microtask会立即排队等待当前任务执行完， 而setTimeout的回调则在给定延迟之后，排队任务队列中。
+
+#### 节流和防抖
+防抖，全时间内后面的覆盖前面的
+```
+function debounce(fn, wait){
+  let timeout
+  return function(...args){
+    clearTimeout(timeout)
+    timeout = setTimeout(()=> {
+      fn.apply(this, args)
+    }, wait)
+  }
+}
+```
+事实上带有 this 的函数在使用生命周期钩子的vue/react组件中可能并不好用，应在组件范围声明timer, 在响应函数中clear并重新赋值
+
+注意组件unmount时清理timer避免泄露
+
+节流
+```
+var throttle = function(delay, action){
+  // 这里是个全局变量
+  var last = 0
+  return function(){
+    var curr = new Date()
+    if (curr - last > delay){
+      action.apply(this, arguments)
+      last = curr 
+    }
+  }
+}
+```
