@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="ES6ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。 模块化export require是CommonJS规范的方法,es6 引入了import，可以将模块中的对象部分引入，以减少开销，或者使用import  as o">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ECMAScript">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2018/08/27/ECMAScript6/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="ES6ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。 模块化export require是CommonJS规范的方法,es6 引入了import，可以将模块中的对象部分引入，以减少开销，或者使用import  as o">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-08-27T07:04:20.000Z">
+<meta property="article:modified_time" content="2025-03-02T12:11:18.692Z">
+<meta property="article:author" content="QQs">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2018/08/27/ECMAScript6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>ECMAScript | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2018/08/27/ECMAScript6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ECMAScript
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-27 15:04:20" itemprop="dateCreated datePublished" datetime="2018-08-27T15:04:20+08:00">2018-08-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-02 20:11:18" itemprop="dateModified" datetime="2025-03-02T20:11:18+08:00">2025-03-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h2><p>ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，已经在 2015 年 6 月正式发布了。它的目标，是使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。</p>
+<h3 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h3><p>export require是CommonJS规范的方法,es6 引入了<b>import</b>，可以将模块中的对象部分引入，以减少开销，或者使用import <em> as objName from 引入文件所有对象<br>CommonJS vs ES Modules:<br><em>*nodejs是默认使用CommonJS的</em></em>，其表现可见express的服务中，如”module.exports = AssetService;”以及”var AssetService = require(‘./AssetService’)”。而es6中用”import common from ‘@myRepo/core’”和”export ..”<br>更多了解<a target="_blank" rel="noopener" href="https://nodejs.org/docs/latest/api/esm.html#esm_differences_between_es_modules_and_commonjs">NodeJS Docs</a></p>
+<blockquote>
+<p>Caution: the semicolon at the end of the import is mandatory!<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*util1.js*&#x2F;</span><br><span class="line">export default&#123;</span><br><span class="line">    a:100</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*index.js*&#x2F;</span><br><span class="line">import util1 from &#39;.&#x2F;util1.js&#39;</span><br><span class="line">console.log(util1)</span><br></pre></td></tr></table></figure><br>动态引入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import(&#39;&#x2F;modules&#x2F;my-module.js&#39;)</span><br><span class="line">  .then((module) &#x3D;&gt; &#123;</span><br><span class="line">    &#x2F;&#x2F; Do something with the module.</span><br><span class="line">  &#125;);</span><br><span class="line">&#x2F;&#x2F; OR</span><br><span class="line">let module &#x3D; await import(&#39;&#x2F;modules&#x2F;my-module.js&#39;);</span><br></pre></td></tr></table></figure><br>见<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/import">MDN:import</a><br>据说动态import的模块在打包时会自动分割，见<a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/code-splitting.html#code-splitting">React Docs: 代码分割</a></p>
+<h3 id="关于声明"><a href="#关于声明" class="headerlink" title="关于声明"></a>关于声明</h3><p>let 代替 var. 同一变量不能重复使用let声明, 否则报错<br></p>
+<p>const是常量，区别于只读<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const s &#x3D; [1];</span><br><span class="line">s[0]&#x3D;0;</span><br></pre></td></tr></table></figure><br>但是可以用Object.freeze()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function freezeObj() &#123;</span><br><span class="line">  &quot;use strict&quot;;</span><br><span class="line">  const MATH_CONSTANTS &#x3D; &#123;</span><br><span class="line">    PI: 3.14</span><br><span class="line">  &#125;;</span><br><span class="line">  Object.freeze(MATH_CONSTANTS)</span><br><span class="line">  try &#123;</span><br><span class="line">    MATH_CONSTANTS.PI &#x3D; 99;</span><br><span class="line">  &#125; catch( ex ) &#123;</span><br><span class="line">    console.log(ex);</span><br><span class="line">  &#125;</span><br><span class="line">  return MATH_CONSTANTS.PI;</span><br><span class="line">&#125;</span><br><span class="line">const PI &#x3D; freezeObj();</span><br></pre></td></tr></table></figure></p>
+<h3 id="Object-assign"><a href="#Object-assign" class="headerlink" title="Object.assign()"></a>Object.assign()</h3><p>将所有可枚举属性的值从一个或多个源对象复制到目标对象<br><br>Object.assign(target, …sources)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const target &#x3D; &#123; a: 1, b: 2 &#125;;</span><br><span class="line">const source &#x3D; &#123; b: 4, c: 5 &#125;;</span><br><span class="line"></span><br><span class="line">const returnedTarget &#x3D; Object.assign(target, source); &#x2F;&#x2F; expected output: Object &#123; a: 1, b: 4, c: 5 &#125;</span><br></pre></td></tr></table></figure><br>用法用途</p>
+<ul>
+<li>浅拷贝 cloneObj = Object.assign({}, …sources)</li>
+<li>覆盖目标同名属性</li>
+<li>合并数组 实际上是覆盖序号属性值 即Object.assign([1,2,3], [4,5]) // [4,5,3]<h3 id="箭头函数表达式"><a href="#箭头函数表达式" class="headerlink" title="箭头函数表达式"></a>箭头函数表达式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">const squaredIntegers &#x3D; arr.filter(item&#x3D;&gt;&#123;</span><br><span class="line"> return Math.floor(item)&#x3D;&#x3D;&#x3D;item&amp;&amp;item&gt;0 ;</span><br><span class="line">&#125;).map(item&#x3D;&gt;Math.pow(item, 2))</span><br></pre></td></tr></table></figure>
+箭头表达式牵扯到的一个知识点是“箭头表达式不会创建this”<br>需知javascript this是区分运行环境的标记，见 <a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2018/06/javascript-this.html">阮一峰 JavaScript 的 this 原理</a>，箭头表达式继承外层函数运行环境。</li>
+</ul>
+</blockquote>
+<p>关于省略，函数体只有一个return语句时，可省略return关键字和花括号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">func &#x3D; x &#x3D;&gt; &#123; return x+1;&#125;</span><br><span class="line">func &#x3D; x &#x3D;&gt; (x+1)</span><br></pre></td></tr></table></figure></p>
+<h3 id="剩余参数运算符（Rest-Operator）"><a href="#剩余参数运算符（Rest-Operator）" class="headerlink" title="剩余参数运算符（Rest Operator）"></a>剩余参数运算符（Rest Operator）</h3><p>使用Rest Operator定义参数数量可变的函数，参数将存入Rest Operator指定的变量指代的数组中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function howMany(...args) &#123;</span><br><span class="line">  return &quot;You have passed &quot; + args.length + &quot; arguments.&quot;;</span><br><span class="line">&#125;</span><br><span class="line">console.log(howMany(0, 1, 2)); &#x2F;&#x2F; You have passed 3 arguments</span><br></pre></td></tr></table></figure><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const sum &#x3D; (function() &#123;</span><br><span class="line">  &quot;use strict&quot;;</span><br><span class="line">  return function sum(...args) &#123;</span><br><span class="line">    &#x2F;&#x2F;const args &#x3D; [ x, y, z ];</span><br><span class="line">    return args.reduce((a, b) &#x3D;&gt; a + b, 0);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line">console.log(sum(1, 2, 3)); &#x2F;&#x2F; 6</span><br></pre></td></tr></table></figure><br>回顾下归并方法reduce，array.reduce(callback,[, initialValue])，callback接受以下参数：previousValue，前一次调用回调函数的返回值；currentValue当前处理的数组元素，currentIndex可选，当前数组元素下标；array可选，调用reduce()方法的数组。initialValue可选，作为第一次调用callback方法的previousValue参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var arr &#x3D; [6, 89, 3, 45];</span><br><span class="line">var maximus &#x3D; Math.max.apply(null, arr); &#x2F;&#x2F; returns 89</span><br><span class="line">maximus &#x3D; Math.max(...arr); &#x2F;&#x2F; returns 89</span><br><span class="line"></span><br><span class="line">arr0 &#x3D; [...arr]</span><br><span class="line">console.log(arr0&#x3D;&#x3D;arr)  &#x2F;&#x2F; false</span><br></pre></td></tr></table></figure><br>异步归并方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">const groupedMeshes &#x3D; await meshes.reduce(async (accP, mesh, index) &#x3D;&gt; &#123;</span><br><span class="line">  const acc &#x3D; await accP;</span><br><span class="line">  const group &#x3D; isUpper(mesh) ? acc[0]: acc[1];</span><br><span class="line">  if(group.length&#x3D;&#x3D;0)&#123;</span><br><span class="line">    group.push(mesh)</span><br><span class="line">  &#125;else&#123;</span><br><span class="line">    const newMesh &#x3D; compute(mesh, group[0])</span><br><span class="line">    group.push(newMesh)</span><br><span class="line">  &#125;</span><br><span class="line">  return Promise.resolve(acc)</span><br><span class="line">&#125;, Promise.resolve([</span><br><span class="line">  new Array&lt;IMesh&gt;(),</span><br><span class="line">  new Array&lt;IMesh&gt;()</span><br><span class="line">]))</span><br></pre></td></tr></table></figure><br>上述代码的需求是，将一个集合中的Mesh进行分组运算，分组依据是Upper or Lower，组内运算时以第一个Mesh为基准，调整组内其他Mesh</p>
+<h3 id="解构赋值（Destructuring-Assignment）"><a href="#解构赋值（Destructuring-Assignment）" class="headerlink" title="解构赋值（Destructuring Assignment）"></a>解构赋值（Destructuring Assignment）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var voxel &#x3D; &#123;x: 3.6, y: 7.4, z: 6.54 &#125;;</span><br><span class="line">const &#123; x, y, z &#125; &#x3D; voxel; &#x2F;&#x2F; x &#x3D; 3.6, y &#x3D; 7.4, z &#x3D; 6.54</span><br></pre></td></tr></table></figure>
+<p>或者将部分属性 voxel.x, voxel.y 存入指定变量 a, b<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const &#123; x : a, y : b&#125; &#x3D; voxel &#x2F;&#x2F; a &#x3D; 3.6, b &#x3D; 7.4</span><br></pre></td></tr></table></figure><br>分离多余的变量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let postData &#x3D; Object.assign(&#123; extraAttr:&#39;extra&#39; &#125;, dto);</span><br><span class="line">let &#123; extraAttr, ...entity &#125; &#x3D; postData;</span><br></pre></td></tr></table></figure><br>嵌套对象（nested objects）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const tree &#x3D; &#123;</span><br><span class="line">    text:&#39;A&#39;,</span><br><span class="line">    value:0,</span><br><span class="line">    parentNode:&#123;</span><br><span class="line">        text:&#39;Root&#39;,</span><br><span class="line">        value:-1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const &#123;parentNode:&#123;value:RootVal&#125;&#125; &#x3D; tree;</span><br><span class="line">console.log(RootVal)</span><br></pre></td></tr></table></figure><br>数组<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const [a, b,,, c] &#x3D; [1, 2, 3, 4, 5, 6];</span><br><span class="line">console.log(a, b, c); &#x2F;&#x2F; 1, 2, 5</span><br><span class="line">&#x2F;&#x2F; use rest operator</span><br><span class="line">const [begining,...rest] &#x3D; [1, 2, 3, 4, 5, 6];</span><br></pre></td></tr></table></figure><br>交换值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[a, b] &#x3D; [b, a];</span><br></pre></td></tr></table></figure><br>函数传参<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">const stats &#x3D; &#123;</span><br><span class="line">  max: 56.78,</span><br><span class="line">  standard_deviation: 4.34,</span><br><span class="line">  median: 34.54,</span><br><span class="line">  mode: 23.87,</span><br><span class="line">  min: -0.75,</span><br><span class="line">  average: 35.85</span><br><span class="line">&#125;;</span><br><span class="line">const half &#x3D; (function() &#123;</span><br><span class="line">  &quot;use strict&quot;; </span><br><span class="line">  return function half(&#123;max,min&#125;) &#123;</span><br><span class="line">    return (max + min) &#x2F; 2.0;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line">console.log(half(stats)); &#x2F;&#x2F; 28.015</span><br></pre></td></tr></table></figure><br>ES9 剩余运算符可应用于解构语法</p>
+<h3 id="字符串模块（Template-Literals）"><a href="#字符串模块（Template-Literals）" class="headerlink" title="字符串模块（Template Literals）"></a>字符串模块（Template Literals）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">resultDisplayArray &#x3D; arr.map(item&#x3D;&gt;&#123;</span><br><span class="line">   return &#96;&lt;li class&#x3D;&quot;text-warning&quot;&gt;$&#123;item&#125;&lt;&#x2F;li&gt;&#96;</span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="简化声明"><a href="#简化声明" class="headerlink" title="简化声明"></a>简化声明</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const person &#x3D; &#123;</span><br><span class="line">  name: &quot;Taylor&quot;,</span><br><span class="line">  sayHello: function() &#123;</span><br><span class="line">    return &#96;Hello! My name is $&#123;this.name&#125;.&#96;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可写作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const person &#x3D; &#123;</span><br><span class="line">  name: &quot;Taylor&quot;,</span><br><span class="line">  sayHello() &#123;</span><br><span class="line">    return &#96;Hello! My name is $&#123;this.name&#125;.&#96;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h3 id="class-以及-get-set-以及super"><a href="#class-以及-get-set-以及super" class="headerlink" title="class 以及 get set 以及super"></a>class 以及 get set 以及super</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Book &#123;</span><br><span class="line">  constructor(author) &#123;</span><br><span class="line">    this._author &#x3D; author;</span><br><span class="line">  &#125;</span><br><span class="line">  &#x2F;&#x2F; getter</span><br><span class="line">  get writer()&#123;</span><br><span class="line">    return this._author;</span><br><span class="line">  &#125;</span><br><span class="line">  &#x2F;&#x2F; setter</span><br><span class="line">  set writer(updatedAuthor)&#123;</span><br><span class="line">    this._author &#x3D; updatedAuthor;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h3><blockquote>
+<p>区别于回调函数方式的异步编程方案， ES6将其写入语言标准。</p>
+<p>所谓Promise，简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。从语法上说，Promise 是一个对象，从它可以获取异步操作的消息。</p>
+</blockquote>
+<p>Promise对象的状态<br><br>pending（进行中）、fulfilled（已成功）和rejected（已失败）只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function loadImageAsync(url) &#123;</span><br><span class="line">  return new Promise(function(resolve, reject) &#123;</span><br><span class="line">    const image &#x3D; new Image();</span><br><span class="line"></span><br><span class="line">    image.onload &#x3D; function() &#123;</span><br><span class="line">      resolve(image);</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    image.onerror &#x3D; function() &#123;</span><br><span class="line">      reject(new Error(&#39;Could not load image at &#39; + url));</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    image.src &#x3D; url;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>加载图片的异步过程，成功或失败时触发相应的事件(load,error)，resolve和reject刚好对应作为事件响应方法</p>
+<p>Promise 链式调用<br>Promise可以链式调用是因为then()返回也是一个Promise，见<a href="/qqsnote/2024/11/19/InterviewQuestions-Promise/" title="手写Promise">手写Promise</a> 注意是then(onFulfilled, onRejected)如果缺省onFulfilled，则第一个Promise中的结果不做任何保留，意义在于过程，如果onFulfilled=(result)=&gt;{ return newPromise(…)} 即将第一个Promise过程得到的result传入newPromise newPromise作为onFulfilled，resolve(newPromise)就将数据传递给了下一个过程，依次类推可以依次执行不同的异步操作</p>
+<p>Promise().then(…)的第二个参数可以捕捉异常，和链式调用最后的catch有和区别？</p>
+<blockquote>
+<p>catch只是一个语法糖而己 还是通过then 来处理的，大概如下所示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Promise.prototype.catch &#x3D; function(fn)&#123;</span><br><span class="line">    return this.then(null,fn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="generator"><a href="#generator" class="headerlink" title="generator"></a>generator</h4><p>以function*定义的生成器，与function的区别是除了return，其执行期间可以yield‘返回’多次<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function* foo(x) &#123;</span><br><span class="line">  yield x + 1;</span><br><span class="line">  yield x + 2;</span><br><span class="line">  return x + 3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>斐波那契生成器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function* fib(max) &#123;</span><br><span class="line">  var</span><br><span class="line">      t,</span><br><span class="line">      a &#x3D; 0,</span><br><span class="line">      b &#x3D; 1,</span><br><span class="line">      n &#x3D; 0;</span><br><span class="line">  while (n &lt; max) &#123;</span><br><span class="line">      yield a;</span><br><span class="line">      [a, b] &#x3D; [b, a + b];</span><br><span class="line">      n ++;</span><br><span class="line">  &#125;</span><br><span class="line">  return;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>fib(5)返回一个generator对象console输出形如fib {[[GeneratorStatus]]: “suspended”, [[GeneratorReceiver]]: Window}<br>调用generator对象的next方法迭代<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var f &#x3D; fib(5);</span><br><span class="line">f.next(); &#x2F;&#x2F; &#123;value: 0, done: false&#125;</span><br><span class="line">f.next(); &#x2F;&#x2F; &#123;value: 1, done: false&#125;</span><br><span class="line">f.next(); &#x2F;&#x2F; &#123;value: 1, done: false&#125;</span><br><span class="line">f.next(); &#x2F;&#x2F; &#123;value: 2, done: false&#125;</span><br><span class="line">f.next(); &#x2F;&#x2F; &#123;value: 3, done: false&#125;</span><br><span class="line">f.next(); &#x2F;&#x2F; &#123;value: undefined, done: true&#125;</span><br></pre></td></tr></table></figure><br>也可以var x of fib(5)进行迭代，x即value<br>generator似乎是为了状态管理而生的工具,所谓状态管理，因为其表象是一步接一步(next)来的,后面步骤的结果有可能需要依赖前面一步的状态(比如成功或失败，抑或current result)<br><a href="/qqsnote/2021/02/05/await2generator/" title="async await是generator的语法糖">async await是generator的语法糖</a></p>
+</blockquote>
+<p>关于迭代器和可迭代对象<br>迭代器是使用next()方法实现迭代器协议(lterator protocal)的任意对象，如Array迭代器<br>可以使用for of迭代的对象即<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Iterators_and_Generators#%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1">可迭代对象</a></p>
+<h2 id="ES7"><a href="#ES7" class="headerlink" title="ES7"></a>ES7</h2><h3 id="Array-protorype-includes"><a href="#Array-protorype-includes" class="headerlink" title="Array.protorype.includes"></a>Array.protorype.includes</h3><p>array.includes(x) 相当于 array.indexOf(x)<br><br>ES6中已添加了String.prototype.includes</p>
+<h3 id="指数运算符"><a href="#指数运算符" class="headerlink" title="指数运算符 **"></a>指数运算符 **</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2 ** 2 &#x2F;&#x2F; 4</span><br><span class="line">2 ** 3 &#x2F;&#x2F; 8</span><br></pre></td></tr></table></figure>
+<p>js引擎（V8）对**的实现与Math.pow的运算结果是会有差别的</p>
+<h2 id="ES8"><a href="#ES8" class="headerlink" title="ES8"></a>ES8</h2><h3 id="字符串填充"><a href="#字符串填充" class="headerlink" title="字符串填充"></a>字符串填充</h3><p>以指定字符/字符串/函数方式, 在首或尾填充字符串至特定长度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">str.padStart(targetLength [, padString])</span><br><span class="line"></span><br><span class="line">str.padEnd(targetLength [, padString])</span><br></pre></td></tr></table></figure></p>
+<h3 id="Object-values-Object-entries"><a href="#Object-values-Object-entries" class="headerlink" title="Object.values, Object.entries"></a>Object.values, Object.entries</h3><p>获取对象属性值的集合<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const obj &#x3D; &#123; x: &#39;xxx&#39;, y: 1 &#125;;</span><br><span class="line">Object.values(obj); &#x2F;&#x2F; [&#39;xxx&#39;, 1]</span><br></pre></td></tr></table></figure><br>其实现是for in，因此obj也可以是Array或string，其输出结果也是遍历逐个下标组成的集合。</p>
+<p>获取对象键值对的集合<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const obj &#x3D; &#123; x: &#39;xxx&#39;, y: 1 &#125;;</span><br><span class="line">Object.entries(obj); &#x2F;&#x2F; [[&#39;x&#39;, &#39;xxx&#39;], [&#39;y&#39;, 1]]</span><br></pre></td></tr></table></figure></p>
+<h3 id="async-await"><a href="#async-await" class="headerlink" title="async, await"></a>async, await</h3><p>async(asynchronous)异步</p>
+<p>await(asynchronous wait)等待异步结果<br>下面的代码结构被称作callback hell<br>其需求是从input.xml文件中读取action，如果action=token，则读取注册表，验证token时效，其中读文件，xml转json，读注册表均为异步操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">(function()&#123;</span><br><span class="line">  fs.readfile(&#39;input.xml&#39;,(err,data)&#x3D;&gt;&#123;</span><br><span class="line">    if(err)&#123;</span><br><span class="line">      console.error(err)</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">      regedit.list(&#39;HKCU\Software\QQSTEST\&#39;,(err,data)&#x3D;&gt;&#123;</span><br><span class="line">        if(err)&#123;</span><br><span class="line">          console.error(err)</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">          xmlParser.parseString(data,(err,data)&#x3D;&gt;&#123;</span><br><span class="line">            if(err)&#123;</span><br><span class="line">              console.error(err)</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">              done(data)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">function readfileAsync(filepath)&#123;</span><br><span class="line">  return new Promise((resolve,reject)&#x3D;&gt;&#123;</span><br><span class="line">    fs.readFile(filepath,(err,data)&#x3D;&gt;&#123;</span><br><span class="line">      if(err)&#123;</span><br><span class="line">        reject(err)</span><br><span class="line">      &#125;else&#123;</span><br><span class="line">        resolve(data)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line">(async function()&#123;</span><br><span class="line">  var fileData &#x3D; &#39;&#39;;</span><br><span class="line">  await readfileAsync(&#39;input.xml).then(data&#x3D;&gt;&#123;</span><br><span class="line">    fileData&#x3D;data;</span><br><span class="line">  &#125;,err&#x3D;&gt;&#123;</span><br><span class="line">    console.log(err)</span><br><span class="line">  &#125;)</span><br><span class="line">  if(!fileData) return;</span><br><span class="line">  await readRegEditAsync(&#39;&#39;)</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure><br>在async声明的function内使用await, 执行时等待promise对象的结果，完成其resolve或reject操作后向下执行。</p>
+<p><span style="color:#ff0;font-weight:bold">Caution!</span> 在forEach中加async await不能阻塞循环，事实上forEach回调函数无法跳出循环，不要在forEach里面使用async-await、break、return，在有相关需求的场景下使用for循环语法<br><a target="_blank" rel="noopener" href="https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/389#issuecomment-634385007">Q160解析</a></p>
+<p>见下文 ES 9 异步迭代 </p>
+<h2 id="ES9"><a href="#ES9" class="headerlink" title="ES9"></a>ES9</h2><h3 id="异步迭代"><a href="#异步迭代" class="headerlink" title="异步迭代"></a>异步迭代</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">async function process(array) &#123;</span><br><span class="line">  for await (let i of array) &#123;</span><br><span class="line">    doSomething(i);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Promise-finally"><a href="#Promise-finally" class="headerlink" title="Promise.finally"></a>Promise.finally</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iPromise.then(do_sth1).then(do_sth2)</span><br><span class="line">.catch(err_handle)</span><br><span class="line">.finally(complete_handle)</span><br></pre></td></tr></table></figure>
+<h3 id="在正则表达式中命名模式匹配结果"><a href="#在正则表达式中命名模式匹配结果" class="headerlink" title="在正则表达式中命名模式匹配结果"></a>在正则表达式中命名模式匹配结果</h3><p>模式指使用()封装的规则，在ES9中可以用(?\<name\>)的方式封装，在之后的js逻辑中，可以使用命名变量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 将&quot;年-月-日&quot;改为&quot;月-日-年&quot;</span><br><span class="line">  const reDate &#x3D; &#x2F;(?&lt;year&gt;[0-9]&#123;4&#125;)-(?&lt;month&gt;[0-9]&#123;2&#125;)-(?&lt;day&gt;[0-9]&#123;2&#125;)&#x2F;,</span><br><span class="line">  d &#x3D; &#39;2018-04-30&#39;,</span><br><span class="line">  usDate &#x3D; d.replace(reDate, &#39;$&lt;month&gt;-$&lt;day&gt;-$&lt;year&gt;&#39;);</span><br></pre></td></tr></table></figure></p>
+<h3 id="正则表达式断言和反向断言"><a href="#正则表达式断言和反向断言" class="headerlink" title="正则表达式断言和反向断言"></a>正则表达式断言和反向断言</h3><p>见<a href="/qqsnote/2018/12/15/RegularExpression/" title="正则表达式">正则表达式</a></p>
+<h3 id="正则表达式dotAll"><a href="#正则表达式dotAll" class="headerlink" title="正则表达式dotAll"></a>正则表达式dotAll</h3><p>正则表达式中点.匹配除回车外的任何单字符，标记s改变这种行为，使之匹配包含终止符的所有字符，例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;hello.world&#x2F;.test(&#39;hello\nworld&#39;);  &#x2F;&#x2F; false</span><br><span class="line">&#x2F;hello.world&#x2F;s.test(&#39;hello\nworld&#39;); &#x2F;&#x2F; true</span><br></pre></td></tr></table></figure></p>
+<h3 id="正则表达式-Unicode-转义"><a href="#正则表达式-Unicode-转义" class="headerlink" title="正则表达式 Unicode 转义"></a>正则表达式 Unicode 转义</h3><p>转义语法\p{…}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const reGreekSymbol &#x3D; &#x2F;\p&#123;Script&#x3D;Greek&#125;&#x2F;u;</span><br><span class="line">reGreekSymbol.test(&#39;π&#39;); &#x2F;&#x2F; true</span><br></pre></td></tr></table></figure></p>
+<h2 id="ES10"><a href="#ES10" class="headerlink" title="ES10"></a>ES10</h2><h3 id="Array-prototype-flat-flatMap"><a href="#Array-prototype-flat-flatMap" class="headerlink" title="Array.prototype.flat, flatMap"></a>Array.prototype.flat, flatMap</h3><p>可指定层次数（允许Infinity）迭代遍历，输出元素的集合 ———— 数组降维<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var arr3 &#x3D; [1, 2, [3, 4, [5, 6]]];</span><br><span class="line">arr3.flat(2); &#x2F;&#x2F; [1, 2, 3, 4, 5, 6]</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>flat自动移除空项</p>
+<h3 id="Array-prototype-flatMap"><a href="#Array-prototype-flatMap" class="headerlink" title="Array.prototype.flatMap"></a>Array.prototype.flatMap</h3><p>如array.map(callback)一样遍历每个元素，之后，把运算结果“压平”成一个数组，QQs：不如改叫mapFlat<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[1,2,3].flatMap(i&#x3D;&gt;&#123;return new Array(i).fill(i)&#125;)</span><br><span class="line">&#x2F;&#x2F; output: [1, 2, 2, 3, 3, 3]</span><br></pre></td></tr></table></figure></p>
+<h3 id="String-prototype-trimStart-trimEnd"><a href="#String-prototype-trimStart-trimEnd" class="headerlink" title="String.prototype.trimStart, trimEnd"></a>String.prototype.trimStart, trimEnd</h3><p>去除首/尾的空白字符</p>
+<h3 id="Object-prototype-fromEntries"><a href="#Object-prototype-fromEntries" class="headerlink" title="Object.prototype.fromEntries"></a>Object.prototype.fromEntries</h3><p>是ES8 Object.entries 的反向操作</p>
+<h3 id="String-prototype-matchAll"><a href="#String-prototype-matchAll" class="headerlink" title="String.prototype.matchAll"></a>String.prototype.matchAll</h3><p>返回匹配正则表达式的所有结果的集合</p>
+<h3 id="新增基本数据类型-BigInt"><a href="#新增基本数据类型-BigInt" class="headerlink" title="新增基本数据类型 BigInt"></a>新增基本数据类型 BigInt</h3><p>js基本数据类型（值类型）已不止5种（ES6之后是六种）！ES10后一共有七种基本数据类型，分别是： String、Number、Boolean、Null、Undefined、Symbol、BigInt</p>
+<p>关于Symbol，生成唯一的值，用于不关心具体值(只需要用变量名区分即可)的场景 见<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/22652486">知乎：JS 中的 Symbol 是什么？</a></p>
+<h4 id="装饰器Decorator"><a href="#装饰器Decorator" class="headerlink" title="装饰器Decorator"></a>装饰器Decorator</h4><p>Angular常见的@Component(), @Module()等，在Ts中已有规范<br>ES6 提案 尚未标准化，js decorator或无法被浏览器适用，需使用babel打包并规范化<br>其实质是将定义的方法(装饰器名即函数签名)添加到紧随其后的class, function的propotype上<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 例如 mobx 中 @observer 的用法</span><br><span class="line">&#x2F;**</span><br><span class="line"> * 包装 react 组件</span><br><span class="line"> * @param target</span><br><span class="line"> *&#x2F;</span><br><span class="line">function observer(target) &#123;</span><br><span class="line">    target.prototype.componentWillMount &#x3D; function() &#123;</span><br><span class="line">        targetCWM &amp;&amp; targetCWM.call(this);</span><br><span class="line">        ReactMixin.componentWillMount.call(this);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="关注木易杨每日面试题"><a href="#关注木易杨每日面试题" class="headerlink" title="关注木易杨每日面试题"></a>关注木易杨每日面试题</h4><p><a target="_blank" rel="noopener" href="https://github.com/Advanced-Frontend/Daily-Interview-Question">Daily Interview Question</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/qqsnote/tags/javascript/" rel="tag"># javascript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2018/08/17/FlexBox/" rel="prev" title="弹性盒子布局">
+      <i class="fa fa-chevron-left"></i> 弹性盒子布局
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2018/08/30/Photography-Soft-Light/" rel="next" title="Sexual Photography With Soft Light">
+      Sexual Photography With Soft Light <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ES6"><span class="nav-number">1.</span> <span class="nav-text">ES6</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%8C%96"><span class="nav-number">1.1.</span> <span class="nav-text">模块化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%A3%B0%E6%98%8E"><span class="nav-number">1.2.</span> <span class="nav-text">关于声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-assign"><span class="nav-number">1.3.</span> <span class="nav-text">Object.assign()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">1.4.</span> <span class="nav-text">箭头函数表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%A9%E4%BD%99%E5%8F%82%E6%95%B0%E8%BF%90%E7%AE%97%E7%AC%A6%EF%BC%88Rest-Operator%EF%BC%89"><span class="nav-number">1.5.</span> <span class="nav-text">剩余参数运算符（Rest Operator）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC%EF%BC%88Destructuring-Assignment%EF%BC%89"><span class="nav-number">1.6.</span> <span class="nav-text">解构赋值（Destructuring Assignment）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A8%A1%E5%9D%97%EF%BC%88Template-Literals%EF%BC%89"><span class="nav-number">1.7.</span> <span class="nav-text">字符串模块（Template Literals）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8C%96%E5%A3%B0%E6%98%8E"><span class="nav-number">1.8.</span> <span class="nav-text">简化声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#class-%E4%BB%A5%E5%8F%8A-get-set-%E4%BB%A5%E5%8F%8Asuper"><span class="nav-number">1.9.</span> <span class="nav-text">class 以及 get set 以及super</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise"><span class="nav-number">1.10.</span> <span class="nav-text">Promise</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#generator"><span class="nav-number">1.10.1.</span> <span class="nav-text">generator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES7"><span class="nav-number">2.</span> <span class="nav-text">ES7</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Array-protorype-includes"><span class="nav-number">2.1.</span> <span class="nav-text">Array.protorype.includes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E6%95%B0%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.2.</span> <span class="nav-text">指数运算符 **</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES8"><span class="nav-number">3.</span> <span class="nav-text">ES8</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A1%AB%E5%85%85"><span class="nav-number">3.1.</span> <span class="nav-text">字符串填充</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-values-Object-entries"><span class="nav-number">3.2.</span> <span class="nav-text">Object.values, Object.entries</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#async-await"><span class="nav-number">3.3.</span> <span class="nav-text">async, await</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES9"><span class="nav-number">4.</span> <span class="nav-text">ES9</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E8%BF%AD%E4%BB%A3"><span class="nav-number">4.1.</span> <span class="nav-text">异步迭代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise-finally"><span class="nav-number">4.2.</span> <span class="nav-text">Promise.finally</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%AD%E5%91%BD%E5%90%8D%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D%E7%BB%93%E6%9E%9C"><span class="nav-number">4.3.</span> <span class="nav-text">在正则表达式中命名模式匹配结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%96%AD%E8%A8%80%E5%92%8C%E5%8F%8D%E5%90%91%E6%96%AD%E8%A8%80"><span class="nav-number">4.4.</span> <span class="nav-text">正则表达式断言和反向断言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8FdotAll"><span class="nav-number">4.5.</span> <span class="nav-text">正则表达式dotAll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-Unicode-%E8%BD%AC%E4%B9%89"><span class="nav-number">4.6.</span> <span class="nav-text">正则表达式 Unicode 转义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES10"><span class="nav-number">5.</span> <span class="nav-text">ES10</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Array-prototype-flat-flatMap"><span class="nav-number">5.1.</span> <span class="nav-text">Array.prototype.flat, flatMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array-prototype-flatMap"><span class="nav-number">5.2.</span> <span class="nav-text">Array.prototype.flatMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String-prototype-trimStart-trimEnd"><span class="nav-number">5.3.</span> <span class="nav-text">String.prototype.trimStart, trimEnd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-prototype-fromEntries"><span class="nav-number">5.4.</span> <span class="nav-text">Object.prototype.fromEntries</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String-prototype-matchAll"><span class="nav-number">5.5.</span> <span class="nav-text">String.prototype.matchAll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-BigInt"><span class="nav-number">5.6.</span> <span class="nav-text">新增基本数据类型 BigInt</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8Decorator"><span class="nav-number">5.6.1.</span> <span class="nav-text">装饰器Decorator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E6%B3%A8%E6%9C%A8%E6%98%93%E6%9D%A8%E6%AF%8F%E6%97%A5%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="nav-number">5.6.2.</span> <span class="nav-text">关注木易杨每日面试题</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">317</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 21.82px; color: #e8e8e8">AI</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.64px; color: #d1d1d1">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 26.73px; color: #f6f6f6">Azure</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/C/" style="font-size: 16.91px; color: #dadada">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.91px; color: #dadada">C++</a> <a href="/qqsnote/tags/CSS/" style="font-size: 20.18px; color: #e3e3e3">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15.27px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.91px; color: #dadada">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.91px; color: #dadada">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.64px; color: #d1d1d1">EntityFramework</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.64px; color: #d1d1d1">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 21.82px; color: #e8e8e8">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 23.45px; color: #ececec">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.64px; color: #d1d1d1">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18.55px; color: #dfdfdf">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.64px; color: #d1d1d1">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 18.55px; color: #dfdfdf">OpenCV</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Python/" style="font-size: 25.09px; color: #f1f1f1">Python</a> <a href="/qqsnote/tags/React/" style="font-size: 21.82px; color: #e8e8e8">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15.27px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.64px; color: #d1d1d1">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 20.18px; color: #e3e3e3">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 26.73px; color: #f6f6f6">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/object-Object/" style="font-size: 12px; color: #ccc">[object Object]</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.64px; color: #d1d1d1">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.36px; color: #fafafa">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.64px; color: #d1d1d1">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.91px; color: #dadada">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 16.91px; color: #dadada">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 13.64px; color: #d1d1d1">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.91px; color: #dadada">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 12px; color: #ccc">医学图像</a> <a href="/qqsnote/tags/%E5%8D%8F%E8%AE%AE%E5%92%8C%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">协议和规范</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 13.64px; color: #d1d1d1">图像处理</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.64px; color: #d1d1d1">多语言</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 12px; color: #ccc">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12px; color: #ccc">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.64px; color: #d1d1d1">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 15.27px; color: #d5d5d5">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21.82px; color: #e8e8e8">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 13.64px; color: #d1d1d1">面试</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
