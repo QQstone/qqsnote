@@ -249,3 +249,10 @@ var throttle = function(delay, action){
   }
 }
 ```
+
+#### 禁用文字选中
+```
+document.onmousemove = window.getSelection
+    ? window.getSelection().removeAllRanges()
+    : document.selection.empty();
+```

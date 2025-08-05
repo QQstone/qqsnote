@@ -7,8 +7,18 @@ tags:
 vue的状态管理库 
 其核心是管理一个store(仓库) store保存变量的状态 组件引用store 查询状态
 以commit mutation的方式更新状态 
+
+> 状态驱动视图 UI=f(state)
 #### state
-使用单一状态树，即app只用一个对象管理所有变量
+使用**单一状态树**，即app只用一个对象管理所有变量
+
+vuex通过vue插件系统将store注入到每一个组件，子组件通过this.$store.count访问
+
+#### mapstate
+```
+comouted: mapState(['count'])
+```
+字符串为state的变量名
 #### mutation
 ```
 store.commit('increment', payload)
@@ -47,6 +57,54 @@ actions: {
 
 为了解决以上问题，Vuex 允许我们将 store 分割成模块（module）。每个模块拥有自己的 state、mutation、action、getter、甚至是嵌套子模块——从上至下进行同样方式的分割：
 
-#### mapActions
+#### 实践
+store/index.js
+```
+// 数据
+const state = {
+  count,
+  user:{name:''}
+}
 
-#### ref
+const getters = {
+  getUser(state){
+    return state.user
+  }
+}
+
+// 修改数据 
+const mutations = {
+  updateUser(state, user){
+    state.user = user
+  }
+}
+
+// 异步操作
+const actions = {
+  delayUpdate(store, user){
+    setTimeout(()=>{
+      store.commit('updateUser', user)
+    })
+  }
+}
+
+// 分装
+const modules = {
+  moduleA:{
+    state,
+    mutations,
+    actions
+  },
+  moduleB:{
+    state,
+    mutations,
+    actions
+  }
+}
+```
+子组件中 调用mutation用commit方法 调用action用dispatch方法
+```
+this.$store.commit('updateUser', user)
+
+this.$store.dispatch('delayUpdate', user)
+```

@@ -183,3 +183,8 @@ triangle:{
     alignItems:'center'
 }
 ```
+#### Canvas 加载后出现滚动条
++ html body需覆盖默认margin padding
++ 父元素100vw 100vh
++ 以父元素clientWidth clientHeight设置宽高
++ canvas默认是**行内元素** 受到 line-height 或 baseline 对齐的影响 需要 display:block

@@ -16,6 +16,7 @@ sketchfab模型库
 
 unity -> ASE -> shader
 
+上海F4 米哈游 叠纸 莉莉丝 鹰角
 ### UE vs Unity
 + 图形质量和性能：Unreal Engine在图形渲染和视觉效果方面具有较高的品质，提供更高的渲染质量和更好的性能。Unity也可以实现出色的图形效果，但相较而言，Unreal Engine在这方面更具优势。
 + 编程语言和学习曲线：Unity使用C#作为主要的编程语言，而Unreal Engine使用C++和Blueprints。C++相对较难学习，而Blueprints提供了一种无需编写代码即可创建逻辑的可视化编程方式。因此，Unity在学习曲线上可能更易上手。

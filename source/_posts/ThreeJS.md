@@ -39,8 +39,25 @@ init scene
 
 Controls
 ```
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+...
 // Add OrbitControls
 const controls = new OrbitControls(camera, renderer.domElement)
+
+// controls.update() must be called after any manual changes to the camera's transform
+camera.position.set( 0, 20, 100 );
+controls.update();
+
+// camera 移动是重复的render过程 需要requestAnimationFrame
+function animate() {
+
+	requestAnimationFrame( animate );
+
+	// required if controls.enableDamping or controls.autoRotate are set to true
+	controls.update();
+
+	renderer.render( scene, camera );
+}
 ```
 
 Animation
@@ -120,3 +137,5 @@ camera controls
 + FlyControls
 + PointLockControls
 + TrackballControls
+
+debug tool: dat.gui
