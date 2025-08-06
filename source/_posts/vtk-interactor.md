@@ -5,7 +5,7 @@ tags:
 - vtk
 - WebGL
 categories: 
-- 图像处理
+- 图形学
 ---
 [RenderWindowInteractor](https://kitware.github.io/vtk-js/api/Rendering_Core_RenderWindowInteractor.html)
 

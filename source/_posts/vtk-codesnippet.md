@@ -5,7 +5,7 @@ tags:
 - vtk
 - WebGL
 categories: 
-- 图像处理
+- 图形学
 ---
 #### 图形跟随camera
 ```

@@ -5,7 +5,7 @@ mathjax: true
 tags:
 - WebGL
 categories: 
-- 图像处理
+- 图形学
 ---
 #### RoadMap
 [webgl学习路线](https://juejin.cn/post/7383894634156130313?searchId=20240703103839DF2909CC9BD7E7EF9519)

@@ -4,7 +4,7 @@ date: 2019-09-02 18:07:56
 tags:
 - WebGL
 categories: 
-- 图像处理
+- 图形学
 ---
 ### OpenGL
 官方：[Learn OpenGL](https://learnopengl.com/)<br>

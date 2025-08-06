@@ -5,7 +5,7 @@ tags:
 - vtk
 - WebGL
 categories: 
-- 图像处理
+- 图形学
 ---
 [vtk.js widgets](https://kitware.github.io/vtk-js/docs/concepts_widgets.html)
 
