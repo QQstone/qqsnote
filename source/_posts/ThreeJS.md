@@ -138,4 +138,63 @@ camera controls
 + PointLockControls
 + TrackballControls
 
-debug tool: dat.gui
+debug tool: 
+dat.gui (out of date) -> lil-gui
+[control panel](https://github.com/freeman-lab/control-panel)
+[controlkit](https://github.com/automat/controlkit.js)
+[Guify](https://github.com/colejd/guify)
+[Oui](https://github.com/wearekuva/oui)
+
+纹理映射
+
+```
+const loader = new THREE.TextureLoader()
+const texture = loader.load('./assets/images/cover/cover-6.webp',
+    (txt)=>{
+        console.log(txt)
+    },
+    ()=>{
+        console.log('loading')
+    },
+    (e)=>{
+        console.error(e)
+    }
+)
+// 设置纹理在U轴（水平方向）和V轴（垂直方向）上的重复次数。
+texture.repeat.x = 2
+texture.repeat.y = 2
+// 设置纹理在U轴（S方向）和V轴（T方向）上的包裹模式（wrap mode）。
+// THREE.MirroredRepeatWrapping接缝处镜像翻转
+texture.wrapS = THREE.MirroredRepeatWrapping
+texture.wrapT = THREE.MirroredRepeatWrapping
+texture.offset.x = 0.5
+// 素材逆时针旋转Π/2
+texture.rotation = Math.PI * 0.5
+texture.center.x = 1
+texture.center.y = 1
+// 放大时 线性平滑
+texture.magFilter = THREE.LinearFilter
+// 缩小时 取相邻两个mip层做线性平滑
+texture.minFilter = THREE.LinearMipmapLinearFilter
+const cubeMaterial = new THREE.MeshBasicMaterial({
+    // color: 0xff0000, 
+    // wireframe:true
+    map: texture
+})
+
+const sphereGeometry = new THREE.SphereGeometry(5, 32, 32)
+const ball = new THREE.Mesh(sphereGeometry, cubeMaterial)
+```
+
+material properties:
++ transparent true/false
++ opacity 透明度0~1
++ wireframe 显示线框
++ side 材质应用到外侧(THREE.FrontSide)或者内侧(THREE.BackSide)
++ flatshading
+
+matcap
+
+THREE.MeshDepthMaterial 接近近投影面(camera.near)变明亮反之变暗 适合做雾效 寂静岭阴森视距
+
+THREE.MeshLambertMaterial
