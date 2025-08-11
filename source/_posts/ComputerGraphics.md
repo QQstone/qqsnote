@@ -140,3 +140,11 @@ I_{\text{diffuse}} = k_d \cdot \frac{I}{r^2} \cdot max(0, \mathbf{L} \cdot \math
 $$
 
 $k_d$为漫反射系数 光照强度与光源距离的平方成反比
+
+https://marmoset.co/posts/physically-based-rendering-and-you-can-too/
+https://marmoset.co/posts/basic-theory-of-physically-based-rendering/
+
+#### texture
+纹理映射中随透视距离拉大 纹理图像缩小 若采样点不足 贴图出现混叠 远处呈现摩尔纹
+
+Mipmap 多级纹理映射 生成级数下降的低分辨率纹理 根据投影距离映射不同分辨率纹理 结合滤波处理 削弱高频 
