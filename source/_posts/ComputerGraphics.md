@@ -144,7 +144,17 @@ $k_d$为漫反射系数 光照强度与光源距离的平方成反比
 https://marmoset.co/posts/physically-based-rendering-and-you-can-too/
 https://marmoset.co/posts/basic-theory-of-physically-based-rendering/
 
-#### texture
+#### 纹理映射
 纹理映射中随透视距离拉大 纹理图像缩小 若采样点不足 贴图出现混叠 远处呈现摩尔纹
 
 Mipmap 多级纹理映射 生成级数下降的低分辨率纹理 根据投影距离映射不同分辨率纹理 结合滤波处理 削弱高频 
+
+texture map在没有指定uv坐标的情况下 由引擎自动按照一定规则或重复或拉伸素材生成默认的uv坐标序列 这样映射出的纹理可能存在明显的失真和接缝
+
+对于接缝可指定接缝处映射
+
+Texture can affact shading 类似蒙版用纹理深浅作用于面片法线(fake normal) 从而使之作用于光照 如凹凸贴图 法线贴图 物体边缘和自身投影会露馅 因为没有实际的起伏细节
+
+位移贴图 作用于顶点坐标 产生实际移动
+
+三维纹理 和 体渲染 CT影像
