@@ -141,7 +141,14 @@ $$
 
 $k_d$为漫反射系数 光照强度与光源距离的平方成反比
 
+https://marmoset.co/posts/physically-based-rendering-and-you-can-too/
+https://marmoset.co/posts/basic-theory-of-physically-based-rendering/
+
 #### 纹理映射
+纹理映射中随透视距离拉大 纹理图像缩小 若采样点不足 贴图出现混叠 远处呈现摩尔纹
+
+Mipmap 多级纹理映射 生成级数下降的低分辨率纹理 根据投影距离映射不同分辨率纹理 结合滤波处理 削弱高频 
+
 texture map在没有指定uv坐标的情况下 由引擎自动按照一定规则或重复或拉伸素材生成默认的uv坐标序列 这样映射出的纹理可能存在明显的失真和接缝
 
 blender等建模软件提供了自定义uv的功能 [blender Doc: uv工具](https://docs.blender.org/manual/zh-hans/2.92/modeling/meshes/editing/uv.html)

@@ -367,3 +367,10 @@ const ArrayComponent = () => {
 [Github Issue: 
 this.key seems to always be undefined inside a React component
 ](https://github.com/facebook/react/issues/2429#issuecomment-61008642)
+
+#### Interview Questions
+> 类组件 vs 函数组件
+
+> props不可变性
+
+> React hook 闭包陷阱
