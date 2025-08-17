@@ -26,3 +26,8 @@ categories:
 ![](http://tva1.sinaimg.cn/large/a60edd42gy1hbdklde1bkj20vq0brwje.jpg)
 #### 优化
 [http2](https://http2.akamai.com/demo)
+
+#### 内存泄漏
+clearTimeout, clearInterval, removeEventListener
+Three.js dispose api
+browser - performance - memory
