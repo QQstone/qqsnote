@@ -26,6 +26,10 @@ set JAVA_HOME="C:\jre\bin"
 ```
 echo %JAVA_HOME% | clip
 ```
+#### 输出文本文件内容
+```
+type package.json
+```
 #### 显示文件树
 ```
 # 显示目录
@@ -218,3 +222,7 @@ mklink /J C:\Users\qqs\.nuget D:\Environment\.nuget
 
 #### win + v
 从历史剪切板选择粘贴
+
+#### 多行编辑
+在vscode 和 notepad++ 中按住 alt + shift 选中文本纵向编辑
+在vscode中按ctrl + shift + P 搜索cursor 能找到一个Toggle Multi-Cursor Modifier 具体待QQs研究

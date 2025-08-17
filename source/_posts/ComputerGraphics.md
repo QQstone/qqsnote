@@ -144,6 +144,8 @@ $k_d$为漫反射系数 光照强度与光源距离的平方成反比
 #### 纹理映射
 texture map在没有指定uv坐标的情况下 由引擎自动按照一定规则或重复或拉伸素材生成默认的uv坐标序列 这样映射出的纹理可能存在明显的失真和接缝
 
+blender等建模软件提供了自定义uv的功能 [blender Doc: uv工具](https://docs.blender.org/manual/zh-hans/2.92/modeling/meshes/editing/uv.html)
+
 对于接缝可指定接缝处映射
 
 Texture can affact shading 类似蒙版用纹理深浅作用于面片法线(fake normal) 从而使之作用于光照 如凹凸贴图 法线贴图 物体边缘和自身投影会露馅 因为没有实际的起伏细节
