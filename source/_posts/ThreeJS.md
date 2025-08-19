@@ -2,8 +2,9 @@
 title: Three.js
 date: 2025-07-27 10:03:57
 tags:
+- Three.js
 ---
-
+#### Renderer
 init scene
 ```
     const canvas = document.createElement('canvas')
@@ -37,7 +38,7 @@ init scene
     renderer.render(scene, camera);
 ```
 
-Controls
+#### Controls
 ```
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 ...
@@ -60,7 +61,7 @@ function animate() {
 }
 ```
 
-Animation
+#### Animation
 ```
 tick(){
     mesh.rotaion.y += 0.05
@@ -102,6 +103,7 @@ Issue： 单纯调用gsap无效 需要配合requestAnimationFrame和render方法
     animate();
 ```
 
+#### Camera
 正交相机
 ```
 const camera = new THREE.OrthographicCamera(
@@ -145,7 +147,7 @@ dat.gui (out of date) -> lil-gui
 [Guify](https://github.com/colejd/guify)
 [Oui](https://github.com/wearekuva/oui)
 
-纹理映射
+#### 纹理映射
 
 ```
 const loader = new THREE.TextureLoader()
@@ -195,9 +197,48 @@ material properties:
 
 matcap
 
-THREE.MeshDepthMaterial 接近近投影面(camera.near)变明亮反之变暗 适合做雾效 寂静岭阴森视距
+environmentMap and HDRI(High Dynamic Range Imaging 高动态范围成像)
 
-THREE.MeshLambertMaterial
+在宏大场景中，计算周围环境在物体上的倒影是巨大的运算负担，于是聪明的图形工作者想到了将环境贴图直接贴在反光物体上的想法
+
+在Three.js中支持将立方体环境的图像映射到物体上 常用HDRI生成立方环境贴图的免费网站：https://polyhaven.com/hdris 原HDRIHeaven
+
+或使用blender工具
+
+#### 3D Text
+TextBufferGeometry
+
+[facetype.js](http://gero3.github.io/facetype.js/) 转换.ttf字体成json
+QQs: 包含中文的字体转换后出现问题，json中以‘字-坐标’作key-value，中文(甚至字母和数字)转换失败在json中显示为方框，于是输入的字无法找到映射。loader导入这样的字体会报 character "xxx" does not exists in font family XXX
+```
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+
+// text
+const fontLoader = new FontLoader()
+fontLoader.load('./assets/font/Kristen ITC_Regular.json', (font) => {
+    const textGeometry = new TextGeometry(
+        'Hello 3D',
+        {
+            font,
+            size: 2,
+            depth:0.2, /** 原height属性 */
+            curveSegments: 12,
+            bevelEnabled: true, /**斜角 */
+            bevelThickness: 0.3,
+            bevelSize: 0.2,
+            bevelOffset: 0,
+            bevelSegments: 5
+        }
+    )
+
+    const textMaterial = new THREE.MeshBasicMaterial({ color: 'blue', wireframe:true })
+    const textMesh = new THREE.Mesh(textGeometry, textMaterial)
+    //textMesh.position.set(0,0,0)
+    scene.add(textMesh)
+})
+
+```
 
 
 #### 可视化优化

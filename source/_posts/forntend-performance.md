@@ -3,6 +3,8 @@ title: forntend-performance
 date: 2021-09-08 15:19:52
 tags:
 - Web开发
+- 性能优化
+- http2
 categories: 
 - 前端技术
 ---
@@ -24,3 +26,8 @@ categories:
 ![](http://tva1.sinaimg.cn/large/a60edd42gy1hbdklde1bkj20vq0brwje.jpg)
 #### 优化
 [http2](https://http2.akamai.com/demo)
+
+#### 内存泄漏
+clearTimeout, clearInterval, removeEventListener
+Three.js dispose api
+browser - performance - memory

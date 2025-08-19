@@ -41,4 +41,11 @@ const observer = new ResizeObserver(entries=>{
 })
 
 ```
-关于内容盒和边框盒
+#### localStorage
+```
+localStorage.setItem('qqsCustomizedList'， '['id','name']')
+localStorage.getItem('qqsCustomizedList')
+localStorage.clear()
+```
+#### 关于内容盒和边框盒(存目)
+

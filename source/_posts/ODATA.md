@@ -213,3 +213,6 @@ public IHttpActionResult GetSinglePayinPI(int accountId, int paymentInstrumentId
     return Ok(payinPI);         
 }         
 ```
+
+关于RESTful和GraphGL
+REST(Representational State Transfor) 资源表述性状态传递 将状态管理责任传递到客户端 服务端返回后不保留状态
