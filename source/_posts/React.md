@@ -374,3 +374,25 @@ this.key seems to always be undefined inside a React component
 > props不可变性
 
 > React hook 闭包陷阱
+闭包内缓存state 导致定时器时间间隔内取到的都是上一次的值
+```
+function Counter() {
+  const [count, setCount] = useState(0);
+  const handleClick = () => {
+    setTimeout(() => {
+      setCount(count + 1);
+    }, 1000);
+  };
+  const handleReset = () => {
+    setCount(0);
+  };
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={handleClick}>Increment</button>
+      <button onClick={handleReset}>Reset</button>
+    </div>
+  );
+}
+```
+setCount(count => (count + 1))可以避免

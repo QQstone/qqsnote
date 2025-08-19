@@ -79,3 +79,13 @@ vue create vueproj
    - Vue：中小型项目，需要快速开发，团队技术栈多样
    - React：大型项目，需要丰富生态系统，团队熟悉JS
    - Angular：大型企业应用，需要完整解决方案，团队熟悉TypeScript
+
+
+从Angular、React到Vue
++ 单文件组件 single file component
++ 相似的指令绑定
++ 直接赋值属性 无需setState
++ Composition API类React Hooks
++ props emit类似Angular装饰器风格
+
+从vue2到vue3

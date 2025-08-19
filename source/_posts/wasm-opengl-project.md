@@ -44,3 +44,9 @@ make: *** Waiting for unfinished jobs....
 set VCPKG_MAX_CONCURRENCY=1
 vcpkg install openssl:wasm32-emscripten --clean-after-build
 ```
+
+> The ``FindBoost`` module is removed.
+
+cmake 3.30 起移除了FindBoost模块 导致找不到BOOST_DIR Boost_FILESYSTEM_LIBRARY_DEBUG Boost_INCLUDE_DIR等， 实际上面的步骤中相关包已成功安装在D:\Workspace\Github\vcpkg\installed\wasm32-emscripten\include
+
+![浏览器通过调用opengl编写的wasm可以实现webgl原本不支持的功能吗](../images/BrowserCannotAccessOpenGLThroughWasm.png)

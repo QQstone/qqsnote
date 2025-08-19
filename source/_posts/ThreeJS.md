@@ -198,3 +198,17 @@ matcap
 THREE.MeshDepthMaterial 接近近投影面(camera.near)变明亮反之变暗 适合做雾效 寂静岭阴森视距
 
 THREE.MeshLambertMaterial
+
+
+#### 可视化优化
+[Three.js常见性能问题和内存泄漏](https://blog.csdn.net/m0_57344393/article/details/149439134)
++ 及时dispose释放资源
++ 减少segment
++ 复用geometry实例 
++ 优化requestAnimationFrame 降低帧率和简化回调
+
+#### webGPU
+Three.js 支持webGPU,使用webGPU需要浏览器对该功能的支持 见{% post_link openGL openGL %}
+
+对于没有原生支持的浏览器可以通过Polyfill实现
+

@@ -121,7 +121,8 @@ function Person(name, age, job){ //创建要返回的对象
     //返回对象 
     return o;
 }
-var friend = Person("Nicholas", 29, "Software Engineer"); friend.sayName(); //"Nicholas"
+var friend = Person("Nicholas", 29, "Software Engineer"); 
+friend.sayName(); //"Nicholas"
 ```
 对象实例只能调用闭包内函数以返回name，而无法直接访问任何属性
 ### 原型链和继承

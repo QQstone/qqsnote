@@ -45,7 +45,7 @@ app.component('todo-list', {
 app.component('todo-list-statistics', {
   inject: ['user'],
   created() {
-    console.log(`Injected property: ${this.user}`) // > 注入的 property: John Doe
+    console.log(`Injected property: ${this.user}` // > 注入的 property: John Doe
   }
 })
 ```
@@ -57,3 +57,26 @@ provide() {
     }
 }
 ```
+
+#### 组件通信
++ props/$emit
++ event bus
++ vuex
++ provide/inject
++ attris/listeners
+
+#### Options API vs Composition API
+ 指的是生命周期的选项 类似React class组件中‘选择’恰当的生命周期钩子嵌入业务逻辑。 created, mounted 等生命周期钩子，直接对应 componentDidMount, componentDidUpdate 等
+
+Composition API则React function组件中的hooks
+
+ref() 和 reactive() 对应 useState。
+computed() 对应 useMemo。
+onMounted -> useEffect(..., [])
+onUpdated -> useEffect(..., [...]) (不指定依赖)
+onUnmounted -> useEffect(() => { return () => { ... } }, [])
+#### 组合式函数
+defineProperty
+#### 自定义指令
+
+defineConponent
