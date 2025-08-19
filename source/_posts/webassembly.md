@@ -256,3 +256,17 @@ fetch('module.wasm').then(response =>
   // Do something with the compiled results!
 });
 ```
+
+#### emcmake
+```
+@echo OFF
+@set ROOTDIR=%~dp0
+@set WORKDIR=%ROOTDOR%build
+@rd /s /q %WORKDIR%
+@md %WORKDIR%
+@cd %WORKDIR%
+@call emcmake cmake -G "Ninja" .. -DBUILD_HERE_IS_BIZ_VARIABLES=VALUE 
+@call cmake --build .
+@cd %ROOTDIR%
+@echo ON
+```
