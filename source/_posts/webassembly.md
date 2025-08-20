@@ -257,7 +257,8 @@ fetch('module.wasm').then(response =>
 });
 ```
 
-#### emcmake
+#### emcmake 和 emmake
+emcmake是CMake enscripten的交叉编译环境 emmake是enscripten环境的make工具
 ```
 @echo OFF
 @set ROOTDIR=%~dp0
@@ -270,3 +271,37 @@ fetch('module.wasm').then(response =>
 @cd %ROOTDIR%
 @echo ON
 ```
+上述命令先在build目录下构建build.ninja等脚本文件 然后调用cmake --build .自动在当前目录检测上一步的“中间产出” 例子中的这种情况则是调用ninja执行构建
+> issue: 无法找到或配置所需的资源编译器
+```
+-DCMAKE_FIND_ROOT_PATH="%VCPKG%\installed\wasm32-emscripten"
+```
+> issue: Boost_DIR cannot found
+
++ 工具链文件路径 (GPT说顺序有影响 暂未验证)
+```
+-DCMAKE_TOOLCHAIN_FILE=<vcpkg路径>/scripts/buildsystems/vcpkg.cmake
+-DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=<emscripten路径>/cmake/Modules/Platform/Emscripten.cmake
+```
++ 目标三元组
+
+三元组指操作系统、架构和运行时
+```
+-DVCPKG_TARGET_TRIPLET=wasm32-emscripten
+```
++ 查找模式和路径
+```
+-DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH
+-DCMAKE_PREFIX_PATH="%VCPKG%/installed/wasm32-emscripten"
+```
+> issue: CMake Error: CMAKE_RC_COMPILER not set, after EnableLanguage
+```
+-DCMAKE_RC_COMPILER_INIT=FALSE
+```
+> issue: find_program considered the following locations:...llvm...the item was not found
+
+安装LLVM(Low Level Virtual Machine) x64不影响32位构建目标 安装后命令行clang --version查看当前c语言版本(新版本不影响旧工程构建)
+
+> System is unknown to cmake, create: Platform/Emscripten to use this system, please post your config file on discourse.cmake.org so it can be added to cmake
+
+这条是提示和建议 收集平台信息用于社区共建 不需处理
