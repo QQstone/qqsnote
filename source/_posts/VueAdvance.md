@@ -80,3 +80,32 @@ defineProperty
 #### 自定义指令
 
 defineConponent
+
+#### vue.config.js
+vue cli 项目配置包含项目基本配置和对webpack的封装
+
+基本配置：
++ 构建路径如 publicPath outputDir indexPath
++ 构建设置 transpileDependencies(false to disable sourcemap) ...
++ devServer 配置[webpack-dev-server选项](https://webpack.js.org/configuration/dev-server/) 包括 host proxy等
+```
+module.exports = defineConfig({
+  transpileDependencies: true,
+  devServer: {
+    port: 8081,
+    headers: {
+      // 微前端需要跨域
+      'Access-Control-Allow-Origin': '*'
+    }
+  },
+  configureWebpack: {
+    output: {
+      library: `${packageName}-[name]`,
+      libraryTarget: 'umd',
+      chunkLoadingGlobal: `webpackJsonp_${packageName}`,
+    }
+  }
+})
+```
+webpack配置:
+调整 webpack 配置最简单的方式就是在 vue.config.js 中的 configureWebpack 选项提供一个对象 该对象将会被 webpack-merge 合并入最终的 webpack 配置 (注意与vue.config.js重叠的配置项会被vue.config.js覆盖)

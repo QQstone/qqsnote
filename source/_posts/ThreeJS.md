@@ -37,7 +37,14 @@ init scene
     const renderer = new THREE.WebGLRenderer({canvas: canvas});
     renderer.render(scene, camera);
 ```
-
+<span style="color:#ff0;font-weight:bold">Caution!</span> 虽设置canvas尺寸 但canvas初始化renderer时 其尺寸会受到影响 其结果仍使canvas超出父容器 出现滚动条 
+应使用renderer.setSize
+```
+const renderer = new THREE.WebGLRenderer()
+renderer.setSize(container.current.clientWidth, container.current.clientHeight)
+container.current.appendChild(renderer.domElement)
+```
+另外onResize要加防抖 overflow hidden该加还是得加
 #### Controls
 ```
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -239,7 +246,14 @@ fontLoader.load('./assets/font/Kristen ITC_Regular.json', (font) => {
 })
 
 ```
-
+3D Text默认position位于文字起点 移动到中心
+```
+textGeometry.translate(
+    - (textGeometry.boundingBox.x - 0.2)*0.5, /** 减去倒角 */
+    - (textGeometry.boundingBox.y - 0.2)*0.5,
+    - (textGeometry.boundingBox.z - 0.3)*0.5
+)
+```
 
 #### 可视化优化
 [Three.js常见性能问题和内存泄漏](https://blog.csdn.net/m0_57344393/article/details/149439134)
