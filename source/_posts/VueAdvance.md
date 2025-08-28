@@ -57,13 +57,18 @@ provide() {
     }
 }
 ```
-
+#### 生命周期
++ created vs mounted
++ beforeUpdete updated
++ beforeDestroy destroyed
++ activated deactivated (only for keep-alive)
 #### 组件通信
 + props/$emit
 + event bus
 + vuex
 + provide/inject
 + attris/listeners
+
 
 #### Options API vs Composition API
  指的是生命周期的选项 类似React class组件中‘选择’恰当的生命周期钩子嵌入业务逻辑。 created, mounted 等生命周期钩子，直接对应 componentDidMount, componentDidUpdate 等

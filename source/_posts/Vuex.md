@@ -108,3 +108,9 @@ this.$store.commit('updateUser', user)
 
 this.$store.dispatch('delayUpdate', user)
 ```
+
+#### troubleshooting
+> TypeError: Cannot read properties of undefined (reading 'commit')
+
+vuex@4 不兼容vue2 改为vuex@3
+定义store时 Vue.use(Vuex)

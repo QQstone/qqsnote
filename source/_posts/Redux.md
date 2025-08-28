@@ -12,7 +12,14 @@ npm install --save react-redux
 yarn add react-redux
 ```
 另，有typescript的definition包：@types/react-redux
-
+#### why Redux
+对比useContext
++ 复杂性：Redux通常被认为更复杂，而React Context更简单。
++ 状态管理：Redux提供了更严格的状态管理方式，中心化状态管理————状态在store中，状态的更新通过定义的纯函数进行。
++ 可预测性：由于状态更新的方法是预先定义的，故状态具有一定可预测性， 而context的更新太过灵活。
++ 可追踪性：Redux提供了更好的状态追踪和调试工具Redux DevTools。
++ 适用场景：Redux更适合大型应用，Context更适合小到中等规模的应用，或者作为大型应用中Redux的补充
+#### usage
 以Provider组件载入Redux store
 ```
 import React from "react";
@@ -249,3 +256,4 @@ const reducer = (state, action) => {
   };
 };
 ```
+
