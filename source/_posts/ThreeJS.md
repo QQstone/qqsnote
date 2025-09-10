@@ -3,6 +3,7 @@ title: Three.js
 date: 2025-07-27 10:03:57
 tags:
 - Three.js
+- WebGL
 ---
 #### Renderer
 init scene
@@ -67,7 +68,8 @@ function animate() {
 	renderer.render( scene, camera );
 }
 ```
-
+#### Mesh和Geometry
+两者都可以rotate, Geometry是"是什么(what)" Mesh是"如何(how)"
 #### Animation
 ```
 tick(){
@@ -254,7 +256,8 @@ textGeometry.translate(
     - (textGeometry.boundingBox.z - 0.3)*0.5
 )
 ```
-
+#### 阴影
+#### 粒子
 #### 可视化优化
 [Three.js常见性能问题和内存泄漏](https://blog.csdn.net/m0_57344393/article/details/149439134)
 + 及时dispose释放资源

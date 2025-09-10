@@ -40,3 +40,6 @@ npm --registry https://registry.npm.taobao.org install
 ```
 npm config set registry https://registry.npm.taobao.org
 ```
+
+#### pnpm
+[为什么现在我更推荐 pnpm 而不是 npm/yarn?](https://www.cnblogs.com/cangqinglang/p/14448329.html)

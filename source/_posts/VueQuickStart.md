@@ -41,7 +41,8 @@ vue create vueproj
 #### 原力起飞方式
 [webpack 打包 vue 基础](https://juejin.im/post/5ae43d9a6fb9a07aad1747f9)
 
-
+#### 多模块项目
+[vue-multi-module](https://github.com/BothEyes1993/vue-multi-module)
 #### vue渐进式
 + 完整版 
 + 编译器 用以将模板字符串编译成js渲染函数

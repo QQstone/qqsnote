@@ -62,12 +62,34 @@ provide() {
 + beforeUpdete updated
 + beforeDestroy destroyed
 + activated deactivated (only for keep-alive)
+
+```plantuml
+@startuml
+actor User
+
+User -> FatherComponent: beforeCreate
+User -> FatherComponent: created
+User -> FatherComponent: beforeMount
+
+FatherComponent -> ChildComponent: beforeCreate
+FatherComponent -> ChildComponent: created
+FatherComponent -> ChildComponent: beforeMount
+FatherComponent -> ChildComponent: mounted
+
+User -> FatherComponent: mounted
+
+@enduml
+
+```
+
 #### 组件通信
 + props/$emit
 + event bus
 + vuex
 + provide/inject
-+ attris/listeners
++ ref 由生命周期图示可知 获取子组件引用必须要在mounted后
++ $parent $children jquery的回忆浮现脑海
++ attrs/listeners 
 
 
 #### Options API vs Composition API

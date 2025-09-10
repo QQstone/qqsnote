@@ -146,3 +146,8 @@ xmlInfo.match(/(<parameter.*?\/>).*?\1/)
   ```
   https://i0.wp.com/tvax$2.sinaimg.cn
   ```
+
++ 查找项目对某个库任意api的引用
+```
+import\s*\{([^}]*)\}\s*from\s+['"]three['"]$
+```

@@ -226,3 +226,9 @@ mklink /J C:\Users\qqs\.nuget D:\Environment\.nuget
 #### 多行编辑
 在vscode 和 notepad++ 中按住 alt + shift 选中文本纵向编辑
 在vscode中按ctrl + shift + P 搜索cursor 能找到一个Toggle Multi-Cursor Modifier 具体待QQs研究
+
+#### wmic
+查看内存型号
+```
+wmic memorychip get manufacturer, capacity, speed, memorytype, partnumber
+```

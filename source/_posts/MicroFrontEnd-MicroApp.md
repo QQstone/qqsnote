@@ -9,6 +9,8 @@ categories:
 #### Web Component
 [Web API Doc: Web Component](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_components)
 
+w3c提出浏览器原生支持的组件规范 通过扩展HTMLElement定义html标签 嵌入内容和逻辑（shadow dom隔离）
+
 + 接入简单不需要子应用改造
 + 不支持ie
 + Web Component沙箱隔离 性能较好
