@@ -32,6 +32,22 @@ module.exports = {
   },
 }
 ```
+简单的栗子
+```
+import React from 'react'
+import { Canvas } from '@react-three/fiber'
+
+const App = () => (
+  <Canvas>{/* 相当于初始化的Scene */}
+    <pointLight position={[10, 10, 10]} />
+    <mesh>
+      <sphereGeometry />
+      <meshStandardMaterial color="hotpink" />
+    </mesh>
+  </Canvas>
+)
+```
+
 #### @React-three/drei
 @react-three/drei 是一个工具包（Utility Library），为 @react-three/fiber 提供了一系列高阶组件和实用函数，比如加载模型(useGLTF)、添加环境光(Environment)、设置相机控制(OrbitControls)等。 德语单词“Drei”，意思是“三” 
 [从零探索@react-three/fiber @React-three/drei](https://juejin.cn/post/7521754040453660724)
@@ -52,3 +68,5 @@ const color = useControls({
   <color attach="background" args={[color.value]} />
 </Canvas>
 ```
+
+#### 

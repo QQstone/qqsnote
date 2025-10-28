@@ -36,3 +36,13 @@ categories:
     docker container ls
     ```
 + 查看日志（输出到当前终端）docker logs -f contianderId 
+
+#### docker CI/CD
+
+> 在 CI 流水线的“构建”阶段，执行 docker build 命令来生成一个包含你前端静态文件的镜像。
+
+为项目编写了多阶段构建的 Dockerfile；然后配置了 GitHub Actions，在代码推送到 develop 分支时自动构建 Docker 镜像并部署到测试服务器
+
+问：“你如何优化前端 Docker 镜像？”
+
+答：“我主要采用多阶段构建。第一阶段使用 node 镜像来安装依赖和构建，这个阶段会比较大；第二阶段我只复制第一阶段的 dist 静态文件到一个轻量的 nginx 镜像中。这样最终镜像体积可能只有 几十MB，而不是 1GB 以上。同时我会使用 .dockerignore 来排除不必要的文件。”

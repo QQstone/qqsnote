@@ -15,6 +15,9 @@ yarn add @material-ui/core
 
 [styled component](https://stackoverflow.com/questions/54832736/send-variable-to-withstyles-in-material-ui)
 
+SSR和水合作用
+
+在服务器端已经渲染好的 HTML “骨架”上，附加上 JavaScript 的事件和交互逻辑，使其从一个静态页面变成一个完全可交互的 React 应用的过程。
 #### Redux
 React提供了视图层面组件化开发的模式。为实现组件之间通信和多样的交互，需要引入Redux库
 > Redux is a predictable state container for JavaScript apps.

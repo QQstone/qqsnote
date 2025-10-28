@@ -192,13 +192,49 @@ const half = (function() {
 })();
 console.log(half(stats)); // 28.015
 ```
+函数返回多个值
+```
+func = () => {
+  return [1,2]
+}
+const [x, y] = func()
+```
+类似python中常用的返回多个结果，需要在调用函数时清楚的知道其返回的结果结构 实际上可能并不利于维护
+
 ES9 剩余运算符可应用于解构语法
+### 幂运算符
+```
+2**3
+Math.pow(2,3)
+// 右结合优先级
+2**3**2 // 不等于8的平方64 而是512
+Math.pow(2, Math.pow(3,2))
+-2**3 // Error 语法歧义
+```
+### Math函数扩展
+常用的Math.sigh返回正负符号(-1,0,1) Math.trunc直接移除小数部分
+
 ### 字符串模块（Template Literals）
+String.prototype.format
+```
+// source code
+ƒ (){
+  var e=arguments;
+  return!!this&&this.replace(/\{(\d+)\}/g,function(t,n){return e[n]?e[n]:t})
+}
+```
+\`xxx${str}xxx`模板
 ```
  resultDisplayArray = arr.map(item=>{
     return `<li class="text-warning">${item}</li>`
   });
 ```
+标签函数
+```
+function tag(strings, ...keys){}
+tag`string1${key1}string24{key2}`
+```
+将模板中的字符串和变量分别再拎出来
 ### 简化声明
 ```
 const person = {
@@ -316,6 +352,19 @@ generator似乎是为了状态管理而生的工具,所谓状态管理，因为�
 ### Array.protorype.includes
 array.includes(x) 相当于 array.indexOf(x)<br>
 ES6中已添加了String.prototype.includes
+
+类似的还有startsWith endsWith 参数接受偏移量
+```
+const str = 'Hello World'
+str.include('W') // true
+str.indexOf('W')>=0 // true
+str.starsWith('World', 6)// true
+str.indexOf('World')===6 //true
+```
+String.prototype.repeat
+```
+'*'.repeat(6) // ******
+```
 ### 指数运算符 **
 ```
   2 ** 2 // 4
@@ -441,6 +490,8 @@ const reGreekSymbol = /\p{Script=Greek}/u;
 reGreekSymbol.test('π'); // true
 ```
 ## ES10
+
+## Ecmascript2025(ES16)
 ### Array.prototype.flat, flatMap
 可指定层次数（允许Infinity）迭代遍历，输出元素的集合 ———— 数组降维
 ```

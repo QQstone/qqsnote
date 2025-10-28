@@ -27,6 +27,7 @@ categories:
   console.timeEnd('heavy process')
   ```
 + console.table(array)
++ console.assert(exp,'description') 断言exp返回false时输出字符串
 #### 使用chrome 模拟加载较慢网速
 1. F12
 2. Network Tab
