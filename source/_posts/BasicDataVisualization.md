@@ -7,6 +7,7 @@ categories:
 - 前端技术
 ---
 #### D3.js 和 Echart
+
 原文：[D3.js与echart.js的应用场景](https://juejin.im/post/5cd65a41e51d456e89634ad3 "掘金文章")<br>
 >echarts和D3都是常用的数据可视化库，实现了能应用于各场景的图表等插件，两者之间的不同之处就在于echarts是使用canvas来绘制图形的，而D3是通过Svg来绘制图形的。svg可以操作dom支持事件处理器，想要实现某个操作，直接调用相关的方法实现效果就行，svg操作存在链式语法，与jQuery的链式调用差不多，简单易读。canvas不支持事件处理器所以只能展示数据，而不能修改。
 
