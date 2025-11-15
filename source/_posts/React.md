@@ -5,9 +5,11 @@ tags:
 - React
 ---
 #### JSX模板
+
 以.jsx为后缀的标记文件，用以书写混合js逻辑的dom模板
 example.jsx, jsx文件经Babel编译为js运行
-```
+
+```js
 const JSX = (
   <div className="myDiv">
     <h1>Hello World</h1>
@@ -16,11 +18,13 @@ const JSX = (
 );
 ReactDOM.render(JSX,document.getElementById("challenge-node"))
 ```
+
 + 用{}包含js代码，包括变量和相应方法
 + 用className绑定class样式
 
 除了jsx标记之外，还有createElement创建React组件的方法
-```
+
+```js
 //声明
 // 
 const element = React.createElement('div', { className: 'greeting' }, 'Hello World!')
@@ -28,10 +32,14 @@ const element = React.createElement('div', { className: 'greeting' }, 'Hello Wor
 //引用
 <element />
 ```
+
 #### 注释
-use the syntax {/* */}
+
+use the syntax {/**/}
+
 #### 表单
-```
+
+```js
 render() {
   return (
     <form onSubmit={this.handleSubmit}>
@@ -44,8 +52,10 @@ render() {
   );
 }
 ```
+
 #### ES6语法
-```
+
+```js
 import { Component } from 'react'
 
 class App extends Component {
@@ -73,8 +83,10 @@ const ChildComponent = () => {
 
 ReactDOM.render(<App />, document.getElementById("app")) 
 ```
+
 #### 子组件传参
-```
+
+```js
 const CurrentDate = (props) => {
   return (
     <div>
@@ -100,13 +112,16 @@ class Calendar extends React.Component {
   }
 };
 ```
+
 使用函数表达式不需要this指针而class定义是要的(ES6 ()=>{}不创建this)
 
 另外设置默认参数：ComponentA.defaultProps = {name:'New Component'}
 
 更多组件通信见{% post_link React-ComponentCommunicate React组件交互 %}
+
 #### 参数校验
-```
+
+```js
 MyComponent.propTypes = {
   // 你可以将属性声明为 JS 原生类型，默认情况下
   // 这些属性都是可选的。
@@ -194,16 +209,19 @@ MyComponent.propTypes = {
   })
 };
 ```
+
 [使用 PropTypes 进行类型检查](https://zh-hans.reactjs.org/docs/typechecking-with-proptypes.html#requiring-single-child)
 
 #### state及组件生命周期
+>
 > props是父组件传入的只读参数，state是组件自身的动态的状态
 
 > 为了正确地构建组件，需要找出组件模型所需的 state 的最小表示，其他所有数据根据该state计算出。[React哲学](https://zh-hans.reactjs.org/docs/thinking-in-react.html#step-3-identify-the-minimal-but-complete-representation-of-ui-state)
 props是传入参数，而state是组件内部表征状态的对象，往往在构造函数中，根据props初始化state
 
 组件状态更新使用setState，函数触发组件的重新渲染
-```
+
+```js
 class Clock extends React.Component {
   constructor(props) {
     super(props);
@@ -234,8 +252,10 @@ class Clock extends React.Component {
   }
 }
 ```
+
 #### bind 'this'
-```
+
+```js
 class MyComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -259,8 +279,14 @@ class MyComponent extends React.Component {
   }
 };
 ```
+
+为什么要bind(this) 因为在严格模式下(React内部执行严格模式)函数在对象外被调用时 this 并不指向对象，事实上React组件的响应方法不‘生成’this(即undefined) 这与非严格模式下的html原生事件响应不同(非严格模式下事件会指向window) 原因在于React事件并不真实作用于dom节点，而是编译时生成的独立响应树(事件委托机制)
+
+如果handleClick需要处理组件属性 必须onClick={this.handleClick.bind(this)} 或在构造方法中提前绑定
+
 #### 条件渲染
-```
+
+```js
 render() {
   const isLoggedIn = this.state.isLoggedIn;
   let button;
@@ -278,12 +304,16 @@ render() {
   );
 }
 ```
+
 与运算&&
-```
+
+```js
 {flag && <toggleComponent />}
 ```
+
 三目运算
-```
+
+```js
 render() {
   const isLoggedIn = this.state.isLoggedIn;
 
@@ -295,18 +325,26 @@ render() {
   );
 }
 ```
+
 #### 继承
+
 没有继承！
 > 在render return中组合子组件提供了清晰而安全地定制组件外观和行为的灵活方式，没有需要使用继承来构建组件层次的情况。[React Docs:组合 vs 继承](https://zh-hans.reactjs.org/docs/composition-vs-inheritance.html#so-what-about-inheritance)
+>
 #### createRef onRef useRef
+
 子组件实例化回调函数，用以获取子组件对象
 > useRef 仅能用在 FunctionComponent，createRef 仅能用在 ClassComponent。
 
 **组件的对象会随组件的更新而刷新，但useRef返回的对象不会随着组件的更新而重新构建，像引入的全局变量，且随组件的销毁而释放，不需手动销毁**
+
 #### Fragment
+
 相当于Angular的template，插入子组件不生成额外的元素(如div)，<React.Fragment></React.Fragment>可以省略为<></>
+
 #### ReactDOMServer
-```
+
+```js
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -317,10 +355,14 @@ class App extends React.Component {
 };
 ReactDOMServer.renderToString(<App />);
 ```
+
 服务端渲染(SSR),生成dom的html字符串,实现SEO优化
+
 #### Create React App
+
 这是一个package [create-react-app](https://create-react-app.dev/docs/getting-started), 如angular-cli，和vue-cli中包含的命令工具(这里封装的命令是react-scripts, 见package.json中的scripts)，用以创建基于React的完整应用。
-```
+
+```js
 my-app/
   node_modules/
   public/
@@ -336,14 +378,15 @@ my-app/
   README.md
   package.json
 
-```
+```js
 
 #### 关于typescript
-```
+
+```js
 yarn add --dev typescript
 ```
-在tsconfig.json中配置typescript编译器([略](https://zh-hans.reactjs.org/docs/static-type-checking.html#configuring-the-typescript-compiler))
 
+在tsconfig.json中配置typescript编译器([略](https://zh-hans.reactjs.org/docs/static-type-checking.html#configuring-the-typescript-compiler))
 
 使用tsx文件书写包含jsx代码的typescript代码
 
@@ -352,7 +395,8 @@ yarn add --dev typescript
 添加@types/react, vs code 右下角TypeScript版本选择4.*.*-pnpify
 
 #### list
-```
+
+```js
 const ArrayComponent = () => {
   const array = ['John', 'Robbie', 'Tony']
   return (
@@ -362,20 +406,23 @@ const ArrayComponent = () => {
   )
 }
 
-```
+```js
+
 需要指出的是 key 并不是 Item定义的Props，在Item组件内部访问key会得到undefined
-[Github Issue: 
+[Github Issue:
 this.key seems to always be undefined inside a React component
 ](https://github.com/facebook/react/issues/2429#issuecomment-61008642)
 
 #### Interview Questions
+>
 > 类组件 vs 函数组件
 
 > props不可变性
 
 > React hook 闭包陷阱
 闭包内缓存state 导致定时器时间间隔内取到的都是上一次的值
-```
+
+```js
 function Counter() {
   const [count, setCount] = useState(0);
   const handleClick = () => {
@@ -395,4 +442,5 @@ function Counter() {
   );
 }
 ```
+
 setCount(count => (count + 1))可以避免
