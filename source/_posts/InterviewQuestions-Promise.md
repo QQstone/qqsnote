@@ -73,3 +73,27 @@ class MyPromise{
 精进参考-> [掘金：你能手写一个Promise吗](https://juejin.cn/post/6850037281206566919)
 
 > 如何获取promise多个then之后的值
+
+#### Promise.all vs Promise.race
+
+Promise.all "要么全部成功 要么全部失败" 异步过程全部成功返回各结果组成的数组 任一个reject会立即返回失败不等待其他异步结果
+
+Promise.race 赛跑 返回最先完成的结果 可用于请求超时返回的逻辑
+
+返回各异步api的成功状态可以用Promise.allSettled 结果数组的项封装为：{state: 'fulfilled'|'rejected', value, reason}
+
+手写这三个语法糖 遍历参数集合(异步方法数组)即可 区别在于是否提前返回 亦或结果集项数等于参数长度时返回
+
+**Promise.all:**
+- 用计数器跟踪完成数量
+- 保持结果顺序与输入顺序一致
+- 任一失败立即 reject，不等待其他
+
+**Promise.race:**
+- 最简单，只需要监听第一个完成的事件
+- 空数组永远 pending（这是标准行为）
+
+**Promise.allSettled:**
+- 永远 resolve，不会 reject
+- 每个结果都包装成 `{status, value/reason}` 格式
+- 无论成功失败都要计数

@@ -3,7 +3,7 @@ title: HTTP
 date: 2021-09-13 13:14:00
 tags:
 - http
-- categories: 
+categories: 
 - 协议和规范
 ---
 ![](https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages/httpmsgstructure2.png)

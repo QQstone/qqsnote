@@ -92,3 +92,5 @@ checkpoints是基础模型的参数定制
 
 #### others
 [清华大学第六弹：AIGC发展研究3.0](https://pan.quark.cn/s/cfec4694b3a9)
+
+#### 人物替换

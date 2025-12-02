@@ -6,8 +6,10 @@ tags:
 - WebGL
 ---
 #### Renderer
+
 init scene
-```
+
+```js
     const canvas = document.createElement('canvas')
     const sizes = {
     width: this.$refs.container.clientWidth,
@@ -38,16 +40,21 @@ init scene
     const renderer = new THREE.WebGLRenderer({canvas: canvas});
     renderer.render(scene, camera);
 ```
-<span style="color:#ff0;font-weight:bold">Caution!</span> 虽设置canvas尺寸 但canvas初始化renderer时 其尺寸会受到影响 其结果仍使canvas超出父容器 出现滚动条 
+
+<span style="color:#ff0;font-weight:bold">Caution!</span> 虽设置canvas尺寸 但canvas初始化renderer时 其尺寸会受到影响 其结果仍使canvas超出父容器 出现滚动条
 应使用renderer.setSize
-```
+
+```js
 const renderer = new THREE.WebGLRenderer()
 renderer.setSize(container.current.clientWidth, container.current.clientHeight)
 container.current.appendChild(renderer.domElement)
 ```
+
 另外onResize要加防抖 overflow hidden该加还是得加
+
 #### Controls
-```
+
+```js
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 ...
 // Add OrbitControls
@@ -60,26 +67,32 @@ controls.update();
 // camera 移动是重复的render过程 需要requestAnimationFrame
 function animate() {
 
-	requestAnimationFrame( animate );
+ requestAnimationFrame( animate );
 
-	// required if controls.enableDamping or controls.autoRotate are set to true
-	controls.update();
+ // required if controls.enableDamping or controls.autoRotate are set to true
+ controls.update();
 
-	renderer.render( scene, camera );
+ renderer.render( scene, camera );
 }
 ```
+
 #### Mesh和Geometry
+
 两者都可以rotate, Geometry是"是什么(what)" Mesh是"如何(how)"
+
 #### Animation
-```
+
+```js
 tick(){
     mesh.rotaion.y += 0.05
     console.log("tick tack")
     requestAnimationFrame(tick)
 }
 ```
+
 tick  调用频率是帧速率相关的 可以用Date或者THREE.Clock
-```
+
+```js
 const clock = new THREE.Clock()
 const animate = () => {
     const t = clock.getElapsedTime()
@@ -92,7 +105,8 @@ animate();
 ```
 
 Issue： 单纯调用gsap无效 需要配合requestAnimationFrame和render方法才能使模型运动生效
-```
+
+```js
     gsap.to(group.position, {
         duration:1,
         delay:1,
@@ -113,8 +127,10 @@ Issue： 单纯调用gsap无效 需要配合requestAnimationFrame和render方法
 ```
 
 #### Camera
+
 正交相机
-```
+
+```js
 const camera = new THREE.OrthographicCamera(
     -20*container.current.clientWidth/container.current.clientHeight, /*左边界*/
     20*container.current.clientWidth/container.current.clientHeight,/*右边界*/
@@ -126,7 +142,8 @@ const camera = new THREE.OrthographicCamera(
 ```
 
 相机环绕
-```
+
+```js
  // mouse rotate
 document.addEventListener('mousemove', (e)=>{
     if(!container.current) return
@@ -142,6 +159,7 @@ document.addEventListener('mousemove', (e)=>{
 ```
 
 camera controls
+
 + OrbitControl
 + DeviceOrientationControls
 + FirstPersionControls
@@ -149,7 +167,7 @@ camera controls
 + PointLockControls
 + TrackballControls
 
-debug tool: 
+debug tool:
 dat.gui (out of date) -> lil-gui
 [control panel](https://github.com/freeman-lab/control-panel)
 [controlkit](https://github.com/automat/controlkit.js)
@@ -158,7 +176,7 @@ dat.gui (out of date) -> lil-gui
 
 #### 纹理映射
 
-```
+```js
 const loader = new THREE.TextureLoader()
 const texture = loader.load('./assets/images/cover/cover-6.webp',
     (txt)=>{
@@ -198,6 +216,7 @@ const ball = new THREE.Mesh(sphereGeometry, cubeMaterial)
 ```
 
 material properties:
+
 + transparent true/false
 + opacity 透明度0~1
 + wireframe 显示线框
@@ -210,16 +229,18 @@ environmentMap and HDRI(High Dynamic Range Imaging 高动态范围成像)
 
 在宏大场景中，计算周围环境在物体上的倒影是巨大的运算负担，于是聪明的图形工作者想到了将环境贴图直接贴在反光物体上的想法
 
-在Three.js中支持将立方体环境的图像映射到物体上 常用HDRI生成立方环境贴图的免费网站：https://polyhaven.com/hdris 原HDRIHeaven
+在Three.js中支持将立方体环境的图像映射到物体上 常用HDRI生成立方环境贴图的免费网站：<https://polyhaven.com/hdris> 原HDRIHeaven
 
 或使用blender工具
 
 #### 3D Text
+
 TextBufferGeometry
 
 [facetype.js](http://gero3.github.io/facetype.js/) 转换.ttf字体成json
 QQs: 包含中文的字体转换后出现问题，json中以‘字-坐标’作key-value，中文(甚至字母和数字)转换失败在json中显示为方框，于是输入的字无法找到映射。loader导入这样的字体会报 character "xxx" does not exists in font family XXX
-```
+
+```js
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 
@@ -247,26 +268,33 @@ fontLoader.load('./assets/font/Kristen ITC_Regular.json', (font) => {
     scene.add(textMesh)
 })
 
-```
+```js
+
 3D Text默认position位于文字起点 移动到中心
-```
+
+```js
 textGeometry.translate(
     - (textGeometry.boundingBox.x - 0.2)*0.5, /** 减去倒角 */
     - (textGeometry.boundingBox.y - 0.2)*0.5,
     - (textGeometry.boundingBox.z - 0.3)*0.5
 )
 ```
+
 #### 阴影
+
 #### 粒子
+
 #### 可视化优化
+
 [Three.js常见性能问题和内存泄漏](https://blog.csdn.net/m0_57344393/article/details/149439134)
+
 + 及时dispose释放资源
 + 减少segment
-+ 复用geometry实例 
++ 复用geometry实例
 + 优化requestAnimationFrame 降低帧率和简化回调
 
 #### webGPU
+
 Three.js 支持webGPU,使用webGPU需要浏览器对该功能的支持 见{% post_link openGL openGL %}
 
 对于没有原生支持的浏览器可以通过Polyfill实现
-

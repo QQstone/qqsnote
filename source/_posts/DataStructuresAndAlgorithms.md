@@ -2,6 +2,7 @@
 title: 数据结构和算法
 date: 2021-04-23 15:13:25
 tags:
+- 算法
 ---
 #### 数据结构——图
 
@@ -78,6 +79,88 @@ var topKFrequent = function(nums, k) {
 #### 数据结构——队列
 
 #### 数据结构——链表
+
+至少两部分：数据域&指针域 链表没有索引 查找复杂度O(n)
+
+```js
+class Node(){
+    constructor(data){
+        this.data = data
+        this.next = null
+    }
+}
+
+const head = new Node(1)
+head.next = new Node(2)
+
+// 输出链表
+let point = head
+let res = ''
+while(point){ // 若链表有环 循环不会停止
+    res+=`${point.data}->`
+    point = point.next
+}
+console.log(res)
+```
+
+检查链表是否有环
+
++ 节点放入集合(如Set)遍历中利用Set.has(point)检查是否存在此节点对象
+
++ 快慢指针 遍历环时必会套圈 无环则快指针先跳出循环
+
+```js
+fast = head
+slow = head
+while(fast && fast.next){
+    slow = slow.next
+    fast = fast.next.next
+
+    if(fast === slow){
+        return true
+    }
+}
+return false
+```
+
+双向链表 克服单向链表逆序查找困难的问题
+
+```js
+class Snode{
+    constructor(val,next = null){
+        this.data = val
+        this.next = next
+    }
+}
+class Dnode{
+    constructor(val, perv = null, next = null){
+        this.data = val
+        this.next = next
+        this.prev = perv
+    }
+}
+// test case
+let head = new Snode(null)
+let node = head
+for(let val of [1,2,3,4,5]){
+console.log(val)
+    node.next = new Snode(val)
+    node = node.next
+}
+head = head.next
+// constructed test case
+
+const dhead = new Dnode(head.data)
+let point = head
+let dpoint = dhead
+while(point.next){
+    dpoint.next = new Dnode(point.next.data, dpoint, null)
+
+    point = point.next
+    dpoint = dpoint.next
+}
+console.log(dhead)
+```
 
 #### 数据结构——数组
 

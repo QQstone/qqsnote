@@ -65,7 +65,7 @@ conda activate py310
 ```
 > TroubleShooting  Your shell has not been properly configured to use 'conda activate'. If using 'conda activate' from a batch script, change your invocation to 'CALL conda.bat activate'.
 
-> 管理员权限打开命令行 conda init cmd.exe, 同理powershell bash等终端，重启命令行即可执行activate命令
+> 管理员权限打开命令行 conda init cmd.exe, 同理powershell bash等终端，重启命令行即可执行activate命令 注意conda init后需要重启命令行
 
 #### 安装、更新、卸载包
 ```
@@ -76,3 +76,11 @@ conda remove pandas
 conda env list
 conda env remove -n py310 #清除所有
 ```
+
+#### Pycharm中配置python interpreter使用conda环境
+
+Settings -> Project: XXXX -> Python Interpreter -> Add Interpreter
+
+弹窗中type切换成Conda 配置conda路径如D:\Software\Anaconda\Scripts\conda.exe
+
+reload environments
