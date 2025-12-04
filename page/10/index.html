@@ -485,71 +485,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/11/11/CppIssues/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2022/11/11/CppIssues/" class="post-title-link" itemprop="url">C++ issues</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-11-11 15:49:44" itemprop="dateCreated datePublished" datetime="2022-11-11T15:49:44+08:00">2022-11-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-05 10:07:52" itemprop="dateModified" datetime="2025-07-05T10:07:52+08:00">2025-07-05</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="悬空指针"><a href="#悬空指针" class="headerlink" title="悬空指针"></a>悬空指针</h4><p>即指针指向内容已被销毁<br>某年月日 考虑到返回空结构体难以判断，遂返回nullptr<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">MyExample::AdjustmentPop()&#123;</span><br><span class="line">    if(list.size&gt;0)&#123;</span><br><span class="line">        auto* struct_ptr &#x3D; &amp;list.back(); &#x2F;&#x2F; 返回最后一个元素的地址</span><br><span class="line">        list.pop_back();           &#x2F;&#x2F; 注意：此时 structt_ptr 指向的元素已被移除</span><br><span class="line">        return structt_ptr;   </span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        return nullptr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>当调用AdjustmentPop并访问指向的结构体内容时，其内容会突变为随机值</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/11/11/Cpp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -611,6 +546,71 @@
 <h4 id="debug"><a href="#debug" class="headerlink" title="debug"></a>debug</h4><p>在visual studio中open一个cpp文件，执行 Ctrl+F5 提示“Please Select a Valid Startup Item”<br>一般要下载一个c语言编译器，并配置到vscode<br>对于已经安装visual studio的环境，应能配置使用已有编译器</p>
 <h4 id="类型安全"><a href="#类型安全" class="headerlink" title="类型安全"></a>类型安全</h4><p>类型安全指变量仅能访问权限匹配的内存区域。该概念区分编程语言和程序语境，C++是不具有类型安全的，因为在C++中，没有限制对于内存的解释方式，比如如int型的数据1，同时也可以解读为bool型的数据true，但是可以编程声明加以区分，使程序达成类型安全</p>
 <h4 id="协程（存目）"><a href="#协程（存目）" class="headerlink" title="协程（存目）"></a>协程（存目）</h4><h4 id="troubleshooting"><a href="#troubleshooting" class="headerlink" title="troubleshooting"></a>troubleshooting</h4><p>或出现error LNK2019: unresolved external symbol _Thrd_sleep_for类似错误 与编译器版本有关 应升级visual studio</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/11/11/CppIssues/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2022/11/11/CppIssues/" class="post-title-link" itemprop="url">C++ issues</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-11-11 15:49:44" itemprop="dateCreated datePublished" datetime="2022-11-11T15:49:44+08:00">2022-11-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-05 10:07:52" itemprop="dateModified" datetime="2025-07-05T10:07:52+08:00">2025-07-05</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="悬空指针"><a href="#悬空指针" class="headerlink" title="悬空指针"></a>悬空指针</h4><p>即指针指向内容已被销毁<br>某年月日 考虑到返回空结构体难以判断，遂返回nullptr<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">MyExample::AdjustmentPop()&#123;</span><br><span class="line">    if(list.size&gt;0)&#123;</span><br><span class="line">        auto* struct_ptr &#x3D; &amp;list.back(); &#x2F;&#x2F; 返回最后一个元素的地址</span><br><span class="line">        list.pop_back();           &#x2F;&#x2F; 注意：此时 structt_ptr 指向的元素已被移除</span><br><span class="line">        return structt_ptr;   </span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        return nullptr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>当调用AdjustmentPop并访问指向的结构体内容时，其内容会突变为随机值</p>
 
       
     </div>
