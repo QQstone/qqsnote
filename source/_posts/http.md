@@ -4,7 +4,7 @@ date: 2021-09-13 13:14:00
 tags:
 - http
 categories: 
-- 协议和规范
+- 前端技术
 ---
 ![](https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages/httpmsgstructure2.png)
 #### Get和Post的区别

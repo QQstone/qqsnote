@@ -5,7 +5,7 @@ tags:
 - Azure
 - C#
 categories: 
-- 平台
+- 云平台
 ---
 见 [Azure官方文档token overview](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview#validation)
 

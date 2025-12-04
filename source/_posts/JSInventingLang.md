@@ -4,7 +4,7 @@ date: 2020-02-20 12:30:16
 tags:
 - javascript
 categories: 
-- 编程语言
+- 前端技术
 ---
 ![inventing js](https://tva1.sinaimg.cn/large/a60edd42gy1gc2rdmb6h9j20hr0k40tx.jpg)
 

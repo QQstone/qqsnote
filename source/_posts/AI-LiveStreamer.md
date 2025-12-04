@@ -11,3 +11,6 @@ tags:
 基于Dota2 GSI
 
 [dota2 helper](https://github.com/pjmagee/dota2-helper)
+
+#### 购买域名
+[GoDaddy](https://www.godaddy.com/)

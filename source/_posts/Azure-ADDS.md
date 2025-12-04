@@ -4,7 +4,7 @@ date: 2020-11-24 14:34:36
 tags:
 - Azure
 categories: 
-- 平台
+- 云平台
 ---
 Caution！ 这个东西非常昂贵 不要在自己的Azure上学习实践！
 #### Azure AD DS

@@ -4,7 +4,7 @@ date: 2019-12-20 13:22:21
 tags:
 - https
 categories: 
-- 通信协议
+- 前端技术
 ---
 + https本身没有端口限制
 + https支持传输ssl证书以避免服务端仿冒

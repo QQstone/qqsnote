@@ -4,7 +4,7 @@ date: 2019-11-27 10:40:35
 tags:
 - login
 categories: 
-- 架构
+- 协议和规范
 ---
 
 在ng-alain脚手架项目中，默认存token到localstorage（也可以配置为其他存储类型），运行期间不再改动配置。

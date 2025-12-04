@@ -4,7 +4,7 @@ date: 2021-04-25 14:33:43
 tags:
 - javascript
 categories: 
-- 编程语言
+- 前端技术
 ---
 #### replace
 常规用法

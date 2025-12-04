@@ -4,7 +4,7 @@ date: 2018-12-31 17:16:02
 tags:
 - javascript
 categories: 
-- 编程语言
+- 前端技术
 ---
 方法|描述
 ---|:--

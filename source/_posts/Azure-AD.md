@@ -4,7 +4,7 @@ date: 2020-07-01 10:09:03
 tags:
 - Azure
 categories: 
-- 平台
+- 云平台
 ---
 
 #### Azure AD

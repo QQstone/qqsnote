@@ -4,7 +4,7 @@ date: 2019-08-05 10:50:28
 tags:
 - Azure
 categories: 
-- 平台
+- 云平台
 ---
 Azure Functions 是微软云提供的部署Api服务的一种功能，利用Azure Functions部署些Api，无需创建/配置服务器环境。即无需先创建 VM 或发布 Web 应用程序。
 Azure Function项目自包含运行环境，不依赖外部服务、框架等

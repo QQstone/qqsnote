@@ -3,6 +3,7 @@ title: Python基础——PyCharm
 date: 2022-08-29 17:12:48
 tags:
 - Python
+- PyCharm
 categories: 
 - 工具
 ---

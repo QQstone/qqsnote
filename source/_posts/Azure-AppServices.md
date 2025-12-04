@@ -4,7 +4,7 @@ date: 2022-08-05 13:29:54
 tags:
 - Azure
 categories: 
-- 平台
+- 云平台
 ---
 ### App Services
 #### 部署单页应用

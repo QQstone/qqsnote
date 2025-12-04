@@ -4,7 +4,7 @@ date: 2019-08-13 17:09:59
 tags:
 - javascript
 categories: 
-- 编程语言
+- 前端技术
 ---
 #### “修改默认操作”
 面试题：<br>

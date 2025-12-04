@@ -4,7 +4,7 @@ date: 2019-01-16 18:41:54
 tags:
 - javascript
 categories: 
-- 编程语言
+- 前端技术
 ---
 #### 多线程 worker.js
 + 同源限制： worker线程运行的脚本 必须与主线程脚本文件同源(QQs按：这里应该指的是同域)
