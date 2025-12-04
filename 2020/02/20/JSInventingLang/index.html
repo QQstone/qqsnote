@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="关于0.1+0.2&#x3D;&#x3D;0.3 false0.1 + 0.2不等于0.3？为什么JavaScript有这种“骚”操作？关于浮点数的二进制表示，js浮点数精度(存目) 保留2位小数Number.prototype.toFixed 返回指定小数位数的字符串 必要时四舍五入 且必要时以0补足位数返回number的方法不如用类似 Math.round(num * 100) &#x2F; 100 保留两位小数 动态语">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Inventing JavaScript">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/02/20/JSInventingLang/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="关于0.1+0.2&#x3D;&#x3D;0.3 false0.1 + 0.2不等于0.3？为什么JavaScript有这种“骚”操作？关于浮点数的二进制表示，js浮点数精度(存目) 保留2位小数Number.prototype.toFixed 返回指定小数位数的字符串 必要时四舍五入 且必要时以0补足位数返回number的方法不如用类似 Math.round(num * 100) &#x2F; 100 保留两位小数 动态语">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/a60edd42gy1gc2rdmb6h9j20hr0k40tx.jpg">
+<meta property="article:published_time" content="2020-02-20T04:30:16.000Z">
+<meta property="article:modified_time" content="2025-12-04T07:15:58.479Z">
+<meta property="article:author" content="QQs">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/a60edd42gy1gc2rdmb6h9j20hr0k40tx.jpg">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2020/02/20/JSInventingLang/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Inventing JavaScript | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/02/20/JSInventingLang/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Inventing JavaScript
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-20 12:30:16" itemprop="dateCreated datePublished" datetime="2020-02-20T12:30:16+08:00">2020-02-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-12-04 15:15:58" itemprop="dateModified" datetime="2025-12-04T15:15:58+08:00">2025-12-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://tva1.sinaimg.cn/large/a60edd42gy1gc2rdmb6h9j20hr0k40tx.jpg" alt="inventing js"></p>
+<h4 id="关于0-1-0-2-0-3-false"><a href="#关于0-1-0-2-0-3-false" class="headerlink" title="关于0.1+0.2==0.3 false"></a>关于0.1+0.2==0.3 false</h4><p><a target="_blank" rel="noopener" href="https://juejin.im/post/5b90e00e6fb9a05cf9080dff">0.1 + 0.2不等于0.3？为什么JavaScript有这种“骚”操作？</a><br>关于浮点数的二进制表示，js浮点数精度(存目)</p>
+<h4 id="保留2位小数"><a href="#保留2位小数" class="headerlink" title="保留2位小数"></a>保留2位小数</h4><p>Number.prototype.toFixed 返回指定小数位数的<strong>字符串</strong> 必要时四舍五入 且必要时以0补足位数<br>返回number的方法不如用类似 Math.round(num * 100) / 100 保留两位小数</p>
+<h3 id="动态语言"><a href="#动态语言" class="headerlink" title="动态语言"></a>动态语言</h3><p>Dynamic Programming Language 动态语言或动态编程语言，程序在运行时可以改变其结构：新的函数可以被引进，已有的函数可以被删除等在结构上的变化。动态语言如Javascript Python Ruby等 C/C++ Jave则不是</p>
+<p>另外 图灵完备</p>
+<h3 id="JS-Tips"><a href="#JS-Tips" class="headerlink" title="JS Tips"></a>JS Tips</h3><h4 id="Caps-lock-sensitive"><a href="#Caps-lock-sensitive" class="headerlink" title="Caps lock sensitive"></a>Caps lock sensitive</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var input &#x3D; document.getElementsByTag(&#39;input&#39;)[0];</span><br><span class="line">input.addEventListener(&#39;keyup&#39;,function(event)&#123;console.log(event.getModifierState(&#39;CapsLock&#39;))&#125;);</span><br></pre></td></tr></table></figure>
+<p>getModifierState方法挂在KeyboardEvent或者MouseEvent上，可获取的键盘状态见<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent/getModifierState#Modifier_keys_on_Gecko">MDN:KeyboardEvent.getModifierState()</a></p>
+<h4 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h4><ul>
+<li>幂运算 2**10=1024</li>
+</ul>
+<h4 id="this"><a href="#this" class="headerlink" title="this"></a>this</h4><blockquote>
+<p>this的设计目的是在函数体内部，指代函数当前的运行环境<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">var f &#x3D; function () &#123;</span><br><span class="line">  console.log(this.x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var x &#x3D; 1;</span><br><span class="line">var obj &#x3D; &#123;</span><br><span class="line">  f: f,</span><br><span class="line">  x: 2,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 全局环境执行</span><br><span class="line">f() &#x2F;&#x2F; 1</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; obj 环境执行</span><br><span class="line">obj.f() &#x2F;&#x2F; 2</span><br></pre></td></tr></table></figure><br>另外，严格模式(‘use strict’)下，全局环境下运行时，this不会自动绑定到‘全局对象’上，将变量绑定到全局对象需要显式调用形如global.name = ‘Global’</p>
+</blockquote>
+<h4 id="常用处理"><a href="#常用处理" class="headerlink" title="常用处理"></a>常用处理</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>应用场景标题</th>
+<th>描述</th>
+<th>补充1</th>
+<th>补充2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数组去重</td>
+<td>Array.from(new Set(array))</td>
+<td>通过内置数据解构特性进行去重  <code>[] =&gt; set =&gt; []</code></td>
+<td>通过遍历并判断是否存在进行去重<code>[many items].forEach(item =&gt; (item &lt;不存在于&gt; uniqueArr) &amp;&amp; uniqueArr.push(item))</code></td>
+</tr>
+<tr>
+<td>数组的最后一个元素</td>
+<td>获取数组中位置最后的一个元素</td>
+<td>使用<code>array.at(-1)</code></td>
+<td>略</td>
+</tr>
+<tr>
+<td>数组对象的相关转换</td>
+<td>略</td>
+<td>对象到数组：<code>Object.entries()</code></td>
+<td>数组到对象：<code>Obecjt.fromEntries()</code></td>
+</tr>
+<tr>
+<td>短路操作</td>
+<td>通过短路操作避免后续表达式的执行</td>
+<td><code>a或b</code>：a真b不执行</td>
+<td><code>a且b</code>：a假b不执行</td>
+</tr>
+<tr>
+<td>基于默认值的对象赋值</td>
+<td>通过对象解构合并进行带有默认值的对象赋值操作</td>
+<td><code>&#123;...defaultData, ...data&#125;</code></td>
+<td>略</td>
+</tr>
+<tr>
+<td>多重条件判断优化</td>
+<td>单个值与多个值进行对比判断时，使用<code>includes</code>进行优化</td>
+<td><code>[404,400,403].includes</code></td>
+<td>略</td>
+</tr>
+<tr>
+<td>交换两个值</td>
+<td>通过对象解构操作进行简洁的双值交换</td>
+<td>[a, b] = [b, a]</td>
+<td>略</td>
+</tr>
+<tr>
+<td>位运算</td>
+<td>通过位运算提高性能和简洁程度</td>
+<td>按位与(&amp;)或(\</td>
+<td>)按位取反(~) 取整~~、&lt;&lt;、&gt;&gt;</td>
+<td>&gt;&gt;&gt;移位</td>
+</tr>
+<tr>
+<td><code>replace()</code>的回调</td>
+<td>通过传入回调进行更加细粒度的操作</td>
+<td>略</td>
+<td>略</td>
+</tr>
+<tr>
+<td><code>sort()</code>的回调</td>
+<td>通过传入回调进行更加细粒度的操作</td>
+<td>根据字母顺序排序</td>
+<td>根据真假值进行排序</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="call-和-apply"><a href="#call-和-apply" class="headerlink" title="call 和 apply"></a>call 和 apply</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 已有构造函数</span><br><span class="line">function Product(name, price) &#123;</span><br><span class="line">  this.name &#x3D; name;</span><br><span class="line">  this.price &#x3D; price;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 在新函数中复用已有逻辑</span><br><span class="line">function Food(name, price) &#123;</span><br><span class="line">  Product.call(this, name, price); &#x2F;&#x2F; 实际上相当于将构造函数Product的两行拿过来</span><br><span class="line">  this.category &#x3D; &#39;food&#39;;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; test</span><br><span class="line">const bread &#x3D; new Food(&#39;bread&#39;, 0.8) &#x2F;&#x2F; Food &#123;name: &quot;bread&quot;, price: 0.8, category: &quot;food&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>FunctionX.call(thisArg,…args)中的第一个参数也可以是对象，函数相当于将剩余参数以FunctionX的实现方式应用到该对象内返回一个结果<br>apply与call的区别仅在：剩余参数是数组，即FunctionX.call(thisArg,[…args])</p>
+<h4 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h4><p>bind是基于call或apply实现的函数原型方法 FunctionX.bind(thisArg,…args)返回一个新的<b>函数</b>，该函数套用FunctionX的样子，但以thisArg代替FunctionX的this，剩余参数填补FunctionX所需参数(即结果函数所需参数为FunctionX所需参数减去…args)<br>模拟实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Function.prototype.bind &#x3D; function (context) &#123;</span><br><span class="line">    &#x2F;&#x2F; 调用 bind 的不是函数，需要抛出异常</span><br><span class="line">    if (typeof this !&#x3D;&#x3D; &quot;function&quot;) &#123;</span><br><span class="line">      throw new Error(&quot;Function.prototype.bind - what is trying to be bound is not callable&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F; this 指向调用者</span><br><span class="line">    var self &#x3D; this;</span><br><span class="line">    &#x2F;&#x2F; 实现第2点，因为第1个参数是指定的this,所以只截取第1个之后的参数</span><br><span class="line">    var args &#x3D; Array.prototype.slice.call(arguments, 1);</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F; 创建一个空对象</span><br><span class="line">    var fNOP &#x3D; function () &#123;&#125;;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F; 实现第3点,返回一个函数</span><br><span class="line">    var fBound &#x3D; function () &#123;</span><br><span class="line">        &#x2F;&#x2F; 实现第4点，获取 bind 返回函数的参数</span><br><span class="line">        var bindArgs &#x3D; Array.prototype.slice.call(arguments);</span><br><span class="line">        &#x2F;&#x2F; 然后同传入参数合并成一个参数数组，并作为 self.apply() 的第二个参数</span><br><span class="line">        return self.apply(this instanceof fNOP ? this : context, args.concat(bindArgs));</span><br><span class="line">        &#x2F;&#x2F; 注释1</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F; 注释2</span><br><span class="line">    &#x2F;&#x2F; 空对象的原型指向绑定函数的原型</span><br><span class="line">    fNOP.prototype &#x3D; this.prototype;</span><br><span class="line">    &#x2F;&#x2F; 空对象的实例赋值给 fBound.prototype</span><br><span class="line">    fBound.prototype &#x3D; new fNOP();</span><br><span class="line">    return fBound;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>关于替换this的操作可用于回调函数调用类函数, 如下类型A中定义回调函数，该回调函数会作为目标对象B的函数形参，process是类A的函数，但如果在目标对象B中调用callback函数，函数中的this会指向到B<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">callback &#x3D; (response)&#x3D;&gt;&#123;</span><br><span class="line">  this.process(response) &#x2F;&#x2F; 这里的this指向当前运行环境</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">B.getDataAsync(this.callback)</span><br></pre></td></tr></table></figure><br>应使用bind<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">B.getDataAsync(this.callback.bind(this))</span><br></pre></td></tr></table></figure></p>
+<h4 id="柯里化Currying"><a href="#柯里化Currying" class="headerlink" title="柯里化Currying"></a>柯里化Currying</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">style&#x3D;function()&#123;this.x&#x3D;&quot;&quot;;this.y&#x3D;&quot;&quot;;&#125; &#x2F;&#x2F; 构造函数style</span><br><span class="line">style.prototype.addA&#x3D;function()&#123;</span><br><span class="line">  this.A&#x3D;&#39;A&#39;</span><br><span class="line">  return this </span><br><span class="line">&#125;</span><br><span class="line">style.prototype.addB&#x3D;function()&#123;</span><br><span class="line">  this.B&#x3D;&#39;B&#39;</span><br><span class="line">  return this</span><br><span class="line">&#125;</span><br><span class="line">style.prototype.addC&#x3D;function()&#123;</span><br><span class="line">  this.C&#x3D;&#39;C&#39;</span><br><span class="line">  return this</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; test</span><br><span class="line">xxx&#x3D;new style()</span><br><span class="line">xxx.addA()</span><br><span class="line">xxx.addB().addC()</span><br></pre></td></tr></table></figure>
+<h4 id="Garbage-Collection"><a href="#Garbage-Collection" class="headerlink" title="Garbage Collection"></a>Garbage Collection</h4><ul>
+<li><p>游离dom</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">let root&#x3D;document.getElementById(&quot;root&quot;)</span><br><span class="line">for(let i&#x3D;0;i&lt;2000;i++)&#123;</span><br><span class="line">    let div&#x3D;document.createElement(&quot;div&quot;)</span><br><span class="line">    root.appendChild(div)</span><br><span class="line">&#125;</span><br><span class="line">document.body.removeChild(root)</span><br></pre></td></tr></table></figure>
+<p>  此时document中移除了dom，但内存中root还在，而且上千个子元素仍然被root对象引用，应设root=null解除引用</p>
+</li>
+<li><p>clearInterval和clearTimeOut</p>
+</li>
+</ul>
+<h4 id="关于严格模式"><a href="#关于严格模式" class="headerlink" title="关于严格模式"></a>关于严格模式</h4><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Strict_mode">strict mode</a></p>
+<p>通知浏览器以严格模式运行脚本，严格模式下会将一些在非严格模式下被忽略的错位识别为异常，一些静默行为（无效但非异常操作）会被禁止</p>
+<ul>
+<li>防止无意添加全局变量，声明全局变量必须用global关键字</li>
+<li>静默行为被禁止 抛出TypeError<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 如无效的赋值 </span><br><span class="line">NaN&#x3D;0</span><br><span class="line">&#x2F;&#x2F; 写入不可写属性</span><br><span class="line">var obj&#x3D;&#123;&#125;</span><br><span class="line">Object.defineProperty(obj, &#39;x&#39;, &#123;value:0, writable:false&#125;)</span><br><span class="line">&#x2F;&#x2F; 写入只读</span><br><span class="line">var obj&#x3D;&#123;</span><br><span class="line">  get x()&#123;</span><br><span class="line">    return 0;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">obj.x &#x3D; 2</span><br><span class="line">&#x2F;&#x2F; 扩展不可扩展对象</span><br><span class="line">var fixed &#x3D; &#123;&#125;</span><br><span class="line">Object.preventExtensions(fixed)</span><br><span class="line">fixed.newProp &#x3D; 0</span><br></pre></td></tr></table></figure>
+<h4 id="vanilla-js"><a href="#vanilla-js" class="headerlink" title="vanilla.js"></a>vanilla.js</h4>it’s a joke. 这是一个空的js，用以提醒其他开发者使用plain JavaScript实现，而不要引入任何library</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7211116982513713212">javascript 手写面试题</a></p>
+<h4 id="task-和-microtask"><a href="#task-和-microtask" class="headerlink" title="task 和 microtask"></a>task 和 microtask</h4><p><a target="_blank" rel="noopener" href="https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/">Tasks, microtasks, queues and schedules</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">console.log(&#39;script start&#39;); &#x2F;&#x2F; task</span><br><span class="line"></span><br><span class="line">setTimeout(function () &#123;</span><br><span class="line">  console.log(&#39;setTimeout&#39;); &#x2F;&#x2F; scheduled task</span><br><span class="line">&#125;, 0);</span><br><span class="line"></span><br><span class="line">Promise.resolve()</span><br><span class="line">  .then(function () &#123;</span><br><span class="line">    console.log(&#39;promise1&#39;); &#x2F;&#x2F; microtask</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(function () &#123;</span><br><span class="line">    console.log(&#39;promise2&#39;);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 结果：</span><br><span class="line">&#x2F;&#x2F; script start</span><br><span class="line">&#x2F;&#x2F; promise1</span><br><span class="line">&#x2F;&#x2F; promise2</span><br><span class="line">&#x2F;&#x2F; setTimeout</span><br></pre></td></tr></table></figure><br>至少Chrome中, Promise.resolve().then()中的回调作为microtask会立即排队等待当前任务执行完， 而setTimeout的回调则在给定延迟之后，排队任务队列中。</p>
+<h4 id="节流和防抖"><a href="#节流和防抖" class="headerlink" title="节流和防抖"></a>节流和防抖</h4><p>防抖，全时间内后面的覆盖前面的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function debounce(fn, wait)&#123;</span><br><span class="line">  let timeout</span><br><span class="line">  return function(...args)&#123;</span><br><span class="line">    clearTimeout(timeout)</span><br><span class="line">    timeout &#x3D; setTimeout(()&#x3D;&gt; &#123;</span><br><span class="line">      fn.apply(this, args)</span><br><span class="line">    &#125;, wait)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>事实上带有 this 的函数在使用生命周期钩子的vue/react组件中可能并不好用，应在组件范围声明timer, 在响应函数中clear并重新赋值</p>
+<p>注意组件unmount时清理timer避免泄露</p>
+<p>节流<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var throttle &#x3D; function(delay, action)&#123;</span><br><span class="line">  &#x2F;&#x2F; 这里是个全局变量</span><br><span class="line">  var last &#x3D; 0</span><br><span class="line">  return function()&#123;</span><br><span class="line">    var curr &#x3D; new Date()</span><br><span class="line">    if (curr - last &gt; delay)&#123;</span><br><span class="line">      action.apply(this, arguments)</span><br><span class="line">      last &#x3D; curr </span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="禁用文字选中"><a href="#禁用文字选中" class="headerlink" title="禁用文字选中"></a>禁用文字选中</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">document.onmousemove &#x3D; window.getSelection</span><br><span class="line">    ? window.getSelection().removeAllRanges()</span><br><span class="line">    : document.selection.empty();</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/qqsnote/tags/javascript/" rel="tag"># javascript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/02/18/AngularIvy/" rel="prev" title="Angular Ivy">
+      <i class="fa fa-chevron-left"></i> Angular Ivy
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/03/03/CSharpRazor/" rel="next" title="CSharpRazor">
+      CSharpRazor <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E0-1-0-2-0-3-false"><span class="nav-number">1.</span> <span class="nav-text">关于0.1+0.2&#x3D;&#x3D;0.3 false</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%9D%E7%95%992%E4%BD%8D%E5%B0%8F%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">保留2位小数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%AF%AD%E8%A8%80"><span class="nav-number"></span> <span class="nav-text">动态语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JS-Tips"><span class="nav-number"></span> <span class="nav-text">JS Tips</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Caps-lock-sensitive"><span class="nav-number">1.</span> <span class="nav-text">Caps lock sensitive</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.</span> <span class="nav-text">运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#this"><span class="nav-number">3.</span> <span class="nav-text">this</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%A4%84%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">常用处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#call-%E5%92%8C-apply"><span class="nav-number">5.</span> <span class="nav-text">call 和 apply</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bind"><span class="nav-number">6.</span> <span class="nav-text">bind</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%AF%E9%87%8C%E5%8C%96Currying"><span class="nav-number">7.</span> <span class="nav-text">柯里化Currying</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Garbage-Collection"><span class="nav-number">8.</span> <span class="nav-text">Garbage Collection</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F"><span class="nav-number">9.</span> <span class="nav-text">关于严格模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vanilla-js"><span class="nav-number">10.</span> <span class="nav-text">vanilla.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#task-%E5%92%8C-microtask"><span class="nav-number">11.</span> <span class="nav-text">task 和 microtask</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8A%82%E6%B5%81%E5%92%8C%E9%98%B2%E6%8A%96"><span class="nav-number">12.</span> <span class="nav-text">节流和防抖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A6%81%E7%94%A8%E6%96%87%E5%AD%97%E9%80%89%E4%B8%AD"><span class="nav-number">13.</span> <span class="nav-text">禁用文字选中</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">336</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">128</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 22.5px; color: #eaeaea">AI</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.5px; color: #f2f2f2">Azure</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C++</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.5px; color: #e1e1e1">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.5px; color: #d9d9d9">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 21px; color: #e6e6e6">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.5px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 18px; color: #ddd">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 13.5px; color: #d0d0d0">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24px; color: #eee">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/React/" style="font-size: 21px; color: #e6e6e6">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 16.5px; color: #d9d9d9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.5px; color: #d0d0d0">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27px; color: #f7f7f7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.5px; color: #fbfbfb">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 19.5px; color: #e1e1e1">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 15px; color: #d5d5d5">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.5px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 18px; color: #ddd">图形学</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 15px; color: #d5d5d5">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.5px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.5px; color: #d9d9d9">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 13.5px; color: #d0d0d0">面试</a> <a href="/qqsnote/tags/%E9%A6%99%E6%A9%99%E6%B4%BE/" style="font-size: 12px; color: #ccc">香橙派</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

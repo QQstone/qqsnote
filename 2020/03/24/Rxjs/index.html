@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="current version: 6.5.2 关于响应式编程知乎：响应式编程 Observable 的发布和订阅1234567891011121314151617&#x2F;&#x2F; Create simple observable that emits three valuesconst myObservable &#x3D; of(1, 2, 3); &#x2F;&#x2F; or fr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rxjs">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/03/24/Rxjs/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="current version: 6.5.2 关于响应式编程知乎：响应式编程 Observable 的发布和订阅1234567891011121314151617&#x2F;&#x2F; Create simple observable that emits three valuesconst myObservable &#x3D; of(1, 2, 3); &#x2F;&#x2F; or fr">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-03-24T04:54:34.000Z">
+<meta property="article:modified_time" content="2025-07-05T02:07:52.131Z">
+<meta property="article:author" content="QQs">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2020/03/24/Rxjs/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Rxjs | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/03/24/Rxjs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Rxjs
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-24 12:54:34" itemprop="dateCreated datePublished" datetime="2020-03-24T12:54:34+08:00">2020-03-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-05 10:07:52" itemprop="dateModified" datetime="2025-07-05T10:07:52+08:00">2025-07-05</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>current version: 6.5.2</p>
+<h4 id="关于响应式编程"><a href="#关于响应式编程" class="headerlink" title="关于响应式编程"></a>关于响应式编程</h4><p><a href="zhuanlan.zhihu.com/p/27678951">知乎：响应式编程</a></p>
+<h4 id="Observable-的发布和订阅"><a href="#Observable-的发布和订阅" class="headerlink" title="Observable 的发布和订阅"></a>Observable 的发布和订阅</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Create simple observable that emits three values</span><br><span class="line">const myObservable &#x3D; of(1, 2, 3); &#x2F;&#x2F; or from([1,2,3])</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Create observer object</span><br><span class="line">const myObserver &#x3D; &#123;</span><br><span class="line">  next: x &#x3D;&gt; console.log(&#39;Observer got a next value: &#39; + x),</span><br><span class="line">  error: err &#x3D;&gt; console.error(&#39;Observer got an error: &#39; + err),</span><br><span class="line">  complete: () &#x3D;&gt; console.log(&#39;Observer got a complete notification&#39;),</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Execute with the observer object</span><br><span class="line">myObservable.subscribe(myObserver);</span><br><span class="line">&#x2F;&#x2F; Logs:</span><br><span class="line">&#x2F;&#x2F; Observer got a next value: 1</span><br><span class="line">&#x2F;&#x2F; Observer got a next value: 2</span><br><span class="line">&#x2F;&#x2F; Observer got a next value: 3</span><br><span class="line">&#x2F;&#x2F; Observer got a complete notification</span><br></pre></td></tr></table></figure>
+<p>of(…items) from(iterable)是自带常用产生Observable对象的工具</p>
+<h4 id="Observable-可观察对象"><a href="#Observable-可观察对象" class="headerlink" title="Observable 可观察对象"></a>Observable 可观察对象</h4><p>在http请求中，可观察对象不是new构造的，而是由httpclient的get或post方法返回一个Observable\<any\>. 私以为是成功调用接口后就发布一个结果，这个结果可以用管道加工<br><br>参考 <a target="_blank" rel="noopener" href="https://cn.rx.js.org/manual/overview.html#h16">Observable 的操作符</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">getDict(dictname): Observable&lt;DictItem[]&gt; &#123;</span><br><span class="line">    return this.http.get(&#96;dict&#x2F;$&#123;dictname&#125;&#96;).pipe(</span><br><span class="line">      map((res: HttpResponse) &#x3D;&gt; &#123;</span><br><span class="line">        if (res.status &#x3D;&#x3D;&#x3D; &#39;ok&#39;) &#123;</span><br><span class="line">          return res.data;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">          return [];</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;),</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>获取这个结果就需要订阅（subscribe）这个Observable，这个Observable是匿名的，每次获取它需要调用函数来返回 </p>
+<p>QQs:为什么httpclient方法不需要取消订阅</p>
+</blockquote>
+<p>据说这些方法被实现为只next一次 </p>
+<h4 id="Subject"><a href="#Subject" class="headerlink" title="Subject"></a>Subject</h4><blockquote>
+<p>A Subject is a special type of Observable which shares a single execution path among observers.</p>
+</blockquote>
+<p>被比喻成广播者<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const subject &#x3D; new Subject();</span><br><span class="line"></span><br><span class="line">subject.subscribe(log(&#39;s1 subject&#39;));</span><br><span class="line">subject.subscribe(log(&#39;s2 subject&#39;));</span><br><span class="line"></span><br><span class="line">subject.next(&#39;r&#39;);</span><br><span class="line">subject.next(&#39;x&#39;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="同步数据转Observable"><a href="#同步数据转Observable" class="headerlink" title="同步数据转Observable"></a>同步数据转Observable</h4><p>场景：组件粒度小，在视图中多次实例化，或者重复初始化，为防止频繁调用后台接口应加入数据缓存，<br>基础数据缓存实现为，第一次调用，从httpclient获取接口数据的Observable对象，并用管道处理加入缓存，之后将缓存数据取出转为Observable对象<br>basicdata.service.ts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Observable, of, from &#125; from &#39;rxjs&#39;;</span><br><span class="line">import &#123; map &#125; from &#39;rxjs&#x2F;operators&#39;;</span><br><span class="line"></span><br><span class="line">users: User[];</span><br><span class="line">getUserList(): Observable&lt;User[]&gt; &#123;</span><br><span class="line">  if (this.users) &#123;</span><br><span class="line">    return of(this.users);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    return this.http.post(&#96;user&#x2F;search&#96;, &#123; isvalid: 1 &#125;).pipe(</span><br><span class="line">      map((res) &#x3D;&gt; &#123;</span><br><span class="line">        this.users &#x3D; res as User[];</span><br><span class="line">        return this.users;</span><br><span class="line">      &#125;)</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>app.component.ts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">this.basicData.getUserList().subscribe(list &#x3D;&gt; &#123;</span><br><span class="line">  this.userlist &#x3D; list;</span><br><span class="line">  this.getUserName();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="Promise转Observable"><a href="#Promise转Observable" class="headerlink" title="Promise转Observable"></a>Promise转Observable</h4><p>起初为了用async await编码以及利用链式调用，很多异步操作封装成了Promise，Promise转Observable用from方法转换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Observable, of, from &#125; from &#39;rxjs&#39;;</span><br><span class="line">import &#123; map &#125; from &#39;rxjs&#x2F;operators&#39;;</span><br><span class="line"></span><br><span class="line">getCurrentUserToken(): Observable&lt;any&gt; &#123;</span><br><span class="line">  if (this.currentUser) &#123;</span><br><span class="line">      return of(this.currentUser);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">      return from(this.ipcService.call(&#39;currentuser&#39;)).pipe(</span><br><span class="line">          map(arg &#x3D;&gt; &#123;</span><br><span class="line">              if (arg) &#123;</span><br><span class="line">                  return typeof arg &#x3D;&#x3D;&#x3D; &#39;string&#39; ? JSON.parse(arg) : arg;</span><br><span class="line">              &#125; else &#123;</span><br><span class="line">                  return null;</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;)</span><br><span class="line">      );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Observable的链式调用"><a href="#Observable的链式调用" class="headerlink" title="Observable的链式调用"></a>Observable的链式调用</h4><h4 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h4><p>操作符实在太多了<br><br>实现一个乘10的operator<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function multiplyByTen(input: Observable&lt;any&gt;): Observable&lt;any&gt; &#123;</span><br><span class="line">  return Rx.Observable.create(observer &#x3D;&gt; &#123;</span><br><span class="line">    input.subscribe(&#123;</span><br><span class="line">      next: (v) &#x3D;&gt; observer.next(10 * v),</span><br><span class="line">      error: (err) &#x3D;&gt; observer.error(err),</span><br><span class="line">      complete: () &#x3D;&gt; observer.complete()</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="创建操作符-of-from-interval等："><a href="#创建操作符-of-from-interval等：" class="headerlink" title="创建操作符 of from interval等："></a>创建操作符 of from interval等：</h5><p>from  <br><br>转化Promise对象、类数组对象、<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Iteration_protocols#iterable">迭代器对象</a>转化为 Observables<br>将数组转化为 Observable<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var array &#x3D; [10, 20, 30];</span><br><span class="line">var result &#x3D; Rx.Observable.from(array);</span><br><span class="line">result.subscribe(x &#x3D;&gt; console.log(x));</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 结果如下:</span><br><span class="line">&#x2F;&#x2F; 10 20 30</span><br></pre></td></tr></table></figure><br>将一个无限的迭代器(来自于 generator)转化为 Observable。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function* generateDoubles(seed) &#123;</span><br><span class="line">  var i &#x3D; seed;</span><br><span class="line">  while (true) &#123;</span><br><span class="line">    yield i;</span><br><span class="line">    i &#x3D; 2 * i; &#x2F;&#x2F; double it</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var iterator &#x3D; generateDoubles(3);</span><br><span class="line">var result &#x3D; Rx.Observable.from(iterator).take(10);</span><br><span class="line">result.subscribe(x &#x3D;&gt; console.log(x));</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Results in the following:</span><br><span class="line">&#x2F;&#x2F; 3 6 12 24 48 96 192 384 768 1536</span><br></pre></td></tr></table></figure></p>
+<h5 id="转化操作符-map-mapTo-merge-mergeMap等："><a href="#转化操作符-map-mapTo-merge-mergeMap等：" class="headerlink" title="转化操作符 map mapTo merge mergeMap等："></a>转化操作符 map mapTo merge mergeMap等：</h5><p>map类似于Array.prototype.map投射函数应用于每个值;mapTo相当于忽略实际订阅接受结果，替换为指定值；<br><br>merge将多个订阅捋直成一个订阅；mergeMap将投射函数应用于每个值，并将多个订阅捋直(啥?不懂)</p>
+<h5 id="take"><a href="#take" class="headerlink" title="take"></a>take</h5><h5 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h5><h5 id="tap"><a href="#tap" class="headerlink" title="tap"></a>tap</h5><blockquote>
+<p>Perform a side effect for every emission on the source Observable, but return an Observable that is identical to the source.对源可观察对象的每个‘发射’应用一个副作用，但仍然返回与源相同的可观察对象<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tap&lt;T&gt;(nextOrObserver?: NextObserver&lt;T&gt; | ErrorObserver&lt;T&gt; | CompletionObserver&lt;T&gt; | (</span><br><span class="line">  (x: T) &#x3D;&gt; void),</span><br><span class="line">  error?: (e: any) &#x3D;&gt; void,</span><br><span class="line">  complete?: () &#x3D;&gt; void): MonoTypeOperatorFunction&lt;T&gt;</span><br></pre></td></tr></table></figure><br>参数可以是可观察对象或回调方法<br>常见于附上一个log操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">getHeroes(): Observable&lt;Hero[]&gt; &#123;</span><br><span class="line">  return this.http.get&lt;Hero[]&gt;(this.heroesUrl)</span><br><span class="line">    .pipe(</span><br><span class="line">      tap(heroes &#x3D;&gt; this.log(&#96;fetched heroes&#96;)),</span><br><span class="line">      catchError(this.handleError(&#39;getHeroes&#39;))</span><br><span class="line">    ) as Observable&lt;Hero[]&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="BehaviorSubject"><a href="#BehaviorSubject" class="headerlink" title="BehaviorSubject"></a>BehaviorSubject</h5><p>Subject 的作用是实现 Observable 的多播。由于其 Observable execution 是在多个订阅者之间共享的，所以它可以确保每个订阅者接收到的数据绝对相等。不仅使用 Subject 可以实现多播，RxJS 还提供了一些 Subject 的变体以应对不同场景，那就是：BehaviorSubject、ReplaySubject 以及 AsyncSubject。</p>
+</blockquote>
+<p>BehaviorSubject 的特性就是它会存储“当前”的值。这意味着你始终可以直接拿到 BehaviorSubject 最后一次发出的值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">const subject &#x3D; new Rx.BehaviorSubject(Math.random());</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 订阅者 A</span><br><span class="line">subject.subscribe((data) &#x3D;&gt; &#123;</span><br><span class="line">  console.log(&#39;Subscriber A:&#39;, data);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">subject.next(Math.random());</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 订阅者 B</span><br><span class="line">subject.subscribe((data) &#x3D;&gt; &#123;</span><br><span class="line">  console.log(&#39;Subscriber B:&#39;, data);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">subject.next(Math.random());</span><br></pre></td></tr></table></figure></p>
+<h4 id="toPromise-deprecated"><a href="#toPromise-deprecated" class="headerlink" title="toPromise deprecated"></a>toPromise deprecated</h4><p>Rxjs v8版本后toPromise方法弃用， 原因基于Observable与Promise前后返回值不一致的issue<br><a target="_blank" rel="noopener" href="https://indepth.dev/posts/1287/rxjs-heads-up-topromise-is-being-deprecated">RxJS heads up: toPromise is being deprecated</a></p>
+<p>曾常使用的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public async loadCategories() &#123;</span><br><span class="line">  this.categories &#x3D; await this.inventoryService</span><br><span class="line">    .getCategories()</span><br><span class="line">    .toPromise()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>变更为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import &#123; lastValueFrom &#125; from &#39;rxjs&#39;;</span><br><span class="line">...</span><br><span class="line">public async loadCategories() &#123;</span><br><span class="line">  const categories$ &#x3D; this.inventoryService.getCategories();</span><br><span class="line">  this.categories &#x3D; await lastValueFrom(categories$);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><a target="_blank" rel="noopener" href="http://www.proyy.com/7079091621215600677.html">rxjs 6中被废弃的toPromise</a></p>
+<blockquote>
+<p>The lastValueFrom is almost exactly the same as toPromise() meaning that it will resolve with the last value that has arrived when the Observable completes, but with the difference in behavior when Observable completes without emitting a single value. When Observable completes without emitting, toPromise() will successfully resolve with undefined (thus the return type change), while the lastValueFrom will reject with the EmptyError. Thus, the return type of the lastValueFrom is Promise<T>, just like toPromise() had in RxJS 6.lastValueFrom几乎与toPromise() 一个意思，在Observable complete的时候，lastValueFrom会带着Observable最后一个产生的值resolve，但是不同之处在于Observable不带值complete的情况下。<br>当Observable不产生值并且complete时，toPromise方法会成功resolve为undefined（也就是返回类型改变了，不再是T），但是lastValueFrom会带着EmptyErrorreject。因此，就如同在RxJS 6里一样，它的返回类型是Promise<T>。</p>
+<p>However, you might want to take the first value as it arrives without waiting an Observable to complete, thus you can use firstValueFrom. The firstValueFrom will resolve a Promise with the first value that was emitted from the Observable and will immediately unsubscribe to retain resources. The firstValueFrom will also reject with an EmptyError if the Observable completes with no values emitted.然而，你可能不等Observable complete，想要使用其第一个生产的值，因此可以用firstValueFrom。firstValueFrom会将Observable第一个生产的值resolve并且立刻unsubscribe保存该值。firstValueFrom也会在Observable没有值产生而complete的情况下带着 EmptyErrorreject。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/03/20/SavePassword/" rel="prev" title="用户密码应该如何存储">
+      <i class="fa fa-chevron-left"></i> 用户密码应该如何存储
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/03/27/ChromeTools/" rel="next" title="ChromeTools">
+      ChromeTools <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%93%8D%E5%BA%94%E5%BC%8F%E7%BC%96%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">关于响应式编程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Observable-%E7%9A%84%E5%8F%91%E5%B8%83%E5%92%8C%E8%AE%A2%E9%98%85"><span class="nav-number">2.</span> <span class="nav-text">Observable 的发布和订阅</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Observable-%E5%8F%AF%E8%A7%82%E5%AF%9F%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.</span> <span class="nav-text">Observable 可观察对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Subject"><span class="nav-number">4.</span> <span class="nav-text">Subject</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E6%95%B0%E6%8D%AE%E8%BD%ACObservable"><span class="nav-number">5.</span> <span class="nav-text">同步数据转Observable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Promise%E8%BD%ACObservable"><span class="nav-number">6.</span> <span class="nav-text">Promise转Observable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Observable%E7%9A%84%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8"><span class="nav-number">7.</span> <span class="nav-text">Observable的链式调用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">8.</span> <span class="nav-text">操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%93%8D%E4%BD%9C%E7%AC%A6-of-from-interval%E7%AD%89%EF%BC%9A"><span class="nav-number">8.1.</span> <span class="nav-text">创建操作符 of from interval等：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BD%AC%E5%8C%96%E6%93%8D%E4%BD%9C%E7%AC%A6-map-mapTo-merge-mergeMap%E7%AD%89%EF%BC%9A"><span class="nav-number">8.2.</span> <span class="nav-text">转化操作符 map mapTo merge mergeMap等：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#take"><span class="nav-number">8.3.</span> <span class="nav-text">take</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#filter"><span class="nav-number">8.4.</span> <span class="nav-text">filter</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tap"><span class="nav-number">8.5.</span> <span class="nav-text">tap</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#BehaviorSubject"><span class="nav-number">8.6.</span> <span class="nav-text">BehaviorSubject</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#toPromise-deprecated"><span class="nav-number">9.</span> <span class="nav-text">toPromise deprecated</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">336</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">128</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 22.5px; color: #eaeaea">AI</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.5px; color: #f2f2f2">Azure</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C++</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.5px; color: #e1e1e1">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.5px; color: #d9d9d9">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 21px; color: #e6e6e6">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.5px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 18px; color: #ddd">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 13.5px; color: #d0d0d0">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24px; color: #eee">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/React/" style="font-size: 21px; color: #e6e6e6">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 16.5px; color: #d9d9d9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.5px; color: #d0d0d0">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27px; color: #f7f7f7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.5px; color: #fbfbfb">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 19.5px; color: #e1e1e1">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 15px; color: #d5d5d5">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.5px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 18px; color: #ddd">图形学</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 15px; color: #d5d5d5">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.5px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.5px; color: #d9d9d9">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 13.5px; color: #d0d0d0">面试</a> <a href="/qqsnote/tags/%E9%A6%99%E6%A9%99%E6%B4%BE/" style="font-size: 12px; color: #ccc">香橙派</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

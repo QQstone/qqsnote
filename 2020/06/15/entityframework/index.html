@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="EntirtyFramework框架是一个轻量级的可扩展版本的流行实体框架数据访问技术,ORM工具(Object Relational Mapping 对象关系映射)  EF有三种使用场景，1. 从数据库生成Class(DB First)，2.由实体类生成数据库表结构(Code First)，3.  通过数据库可视化设计器设计数据库，同时生成实体类(Model First)。 实体类型12345">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Entity Framework">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/06/15/entityframework/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="EntirtyFramework框架是一个轻量级的可扩展版本的流行实体框架数据访问技术,ORM工具(Object Relational Mapping 对象关系映射)  EF有三种使用场景，1. 从数据库生成Class(DB First)，2.由实体类生成数据库表结构(Code First)，3.  通过数据库可视化设计器设计数据库，同时生成实体类(Model First)。 实体类型12345">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-15T08:39:32.000Z">
+<meta property="article:modified_time" content="2025-07-05T02:07:52.158Z">
+<meta property="article:author" content="QQs">
+<meta property="article:tag" content=".Net">
+<meta property="article:tag" content="EntityFramework">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2020/06/15/entityframework/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Entity Framework | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/06/15/entityframework/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Entity Framework
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-06-15 16:39:32" itemprop="dateCreated datePublished" datetime="2020-06-15T16:39:32+08:00">2020-06-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-05 10:07:52" itemprop="dateModified" datetime="2025-07-05T10:07:52+08:00">2025-07-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>EntirtyFramework框架是一个轻量级的可扩展版本的流行实体框架数据访问技术,ORM工具(Object Relational Mapping 对象关系映射)</p>
+</blockquote>
+<p>EF有三种使用场景，1. 从数据库生成Class(DB First)，2.由实体类生成数据库表结构(Code First)，3.  通过数据库可视化设计器设计数据库，同时生成实体类(Model First)。</p>
+<h4 id="实体类型"><a href="#实体类型" class="headerlink" title="实体类型"></a>实体类型</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">class MyContext : DbContext</span><br><span class="line">&#123;</span><br><span class="line">    public DbSet&lt;Blog&gt; Blogs &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    protected override void OnModelCreating(ModelBuilder modelBuilder)</span><br><span class="line">    &#123;</span><br><span class="line">        modelBuilder.Entity&lt;Blog&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Blog</span><br><span class="line">&#123;</span><br><span class="line">    public int BlogId &#123; get; set; &#125;</span><br><span class="line">    public string Url &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public List&lt;Post&gt; Posts &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 从模型中排除的类型</span><br><span class="line">[NotMapped]</span><br><span class="line">public class BlogMetadata</span><br><span class="line">&#123;</span><br><span class="line">    public DateTime LoadedFromDatabase &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>按照约定，每个实体类型将设置为映射到与公开实体的 DbSet 属性同名的数据库表。 如果给定实体不存在 DbSet，则使用类名称。或使用注解 [ Table(“tableName”) ]</p>
+<h4 id="实体属性"><a href="#实体属性" class="headerlink" title="实体属性"></a>实体属性</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class Blog</span><br><span class="line">&#123;</span><br><span class="line">    public int BlogId &#123; get; set; &#125;</span><br><span class="line">    public string Url &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;从模型中排除的属性</span><br><span class="line">    [NotMapped]</span><br><span class="line">    public DateTime LoadedFromDatabase &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>列注解：</p>
+<ul>
+<li>列名 [ Column(“blog_id”) ]</li>
+<li>数据类型 [Column(TypeName = “varchar(200)”)]</li>
+<li>校验  [ MaxLength(500) ] [ Required ]       </li>
+</ul>
+</blockquote>
+<h4 id="键"><a href="#键" class="headerlink" title="键"></a>键</h4><p>主键<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">protected override void OnModelCreating(ModelBuilder modelBuilder)</span><br><span class="line">&#123;</span><br><span class="line">    modelBuilder.Entity&lt;Blog&gt;()</span><br><span class="line">        .HasKey(b &#x3D;&gt; b.BlogId)</span><br><span class="line">        .HasName(&quot;PrimaryKey_BlogId&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>Alternative Key<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class MyContext : DbContext</span><br><span class="line">&#123;</span><br><span class="line">    public DbSet&lt;Blog&gt; Blogs &#123; get; set; &#125;</span><br><span class="line">    public DbSet&lt;Post&gt; Posts &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    protected override void OnModelCreating(ModelBuilder modelBuilder)</span><br><span class="line">    &#123;</span><br><span class="line">        modelBuilder.Entity&lt;Post&gt;()</span><br><span class="line">            .HasOne(p &#x3D;&gt; p.Blog)</span><br><span class="line">            .WithMany(b &#x3D;&gt; b.Posts)</span><br><span class="line">            .HasForeignKey(p &#x3D;&gt; p.BlogUrl)</span><br><span class="line">            .HasPrincipalKey(b &#x3D;&gt; b.Url);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="策略维护-多对多关系"><a href="#策略维护-多对多关系" class="headerlink" title="策略维护 多对多关系"></a>策略维护 多对多关系</h4><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/modeling/relationships#other-relationship-patterns">官网Doc</a><br></p>
+<blockquote>
+<p>目前尚不支持多对多关系，没有实体类来表示联接表。 但是，您可以通过包含联接表的实体类并映射两个不同的一对多关系，来表示多对多关系。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">class MyContext : DbContext</span><br><span class="line">&#123;</span><br><span class="line">    public DbSet&lt;Post&gt; Posts &#123; get; set; &#125;</span><br><span class="line">    public DbSet&lt;Tag&gt; Tags &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    protected override void OnModelCreating(ModelBuilder modelBuilder)</span><br><span class="line">    &#123;</span><br><span class="line">        modelBuilder.Entity&lt;PostTag&gt;()</span><br><span class="line">            .HasKey(t &#x3D;&gt; new &#123; t.PostId, t.TagId &#125;);</span><br><span class="line"></span><br><span class="line">        modelBuilder.Entity&lt;PostTag&gt;()</span><br><span class="line">            .HasOne(pt &#x3D;&gt; pt.Post)</span><br><span class="line">            .WithMany(p &#x3D;&gt; p.PostTags)</span><br><span class="line">            .HasForeignKey(pt &#x3D;&gt; pt.PostId);</span><br><span class="line"></span><br><span class="line">        modelBuilder.Entity&lt;PostTag&gt;()</span><br><span class="line">            .HasOne(pt &#x3D;&gt; pt.Tag)</span><br><span class="line">            .WithMany(t &#x3D;&gt; t.PostTags)</span><br><span class="line">            .HasForeignKey(pt &#x3D;&gt; pt.TagId);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Post</span><br><span class="line">&#123;</span><br><span class="line">    public int PostId &#123; get; set; &#125;</span><br><span class="line">    public string Title &#123; get; set; &#125;</span><br><span class="line">    public string Content &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public List&lt;PostTag&gt; PostTags &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Tag</span><br><span class="line">&#123;</span><br><span class="line">    public string TagId &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public List&lt;PostTag&gt; PostTags &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class PostTag</span><br><span class="line">&#123;</span><br><span class="line">    public int PostId &#123; get; set; &#125;</span><br><span class="line">    public Post Post &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public string TagId &#123; get; set; &#125;</span><br><span class="line">    public Tag Tag &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="一对多"><a href="#一对多" class="headerlink" title="一对多"></a>一对多</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 博客</span><br><span class="line">public class Blog</span><br><span class="line">&#123;</span><br><span class="line">    public int BlogId &#123; get; set; &#125;</span><br><span class="line">    public string Url &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public List&lt;Post&gt; Posts &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 文章</span><br><span class="line">public class Post</span><br><span class="line">&#123;</span><br><span class="line">    public int PostId &#123; get; set; &#125;</span><br><span class="line">    public string Title &#123; get; set; &#125;</span><br><span class="line">    public string Content &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public int BlogId &#123; get; set; &#125;</span><br><span class="line">    public Blog Blog &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Post是依赖实体</li>
+<li>Blog是主体实体</li>
+<li>Blog.BlogId是主体键（在本例中为主密钥，而不是备用密钥）</li>
+<li>Post.BlogId为外键</li>
+<li>Post.Blog是一个引用导航属性</li>
+<li>Blog.Posts是集合导航属性</li>
+<li>Post.Blog是的反向导航属性 <h4 id="一对一"><a href="#一对一" class="headerlink" title="一对一"></a>一对一</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class Blog</span><br><span class="line">&#123;</span><br><span class="line">    public int BlogId &#123; get; set; &#125;</span><br><span class="line">    public string Url &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public BlogImage BlogImage &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class BlogImage</span><br><span class="line">&#123;</span><br><span class="line">    public int BlogImageId &#123; get; set; &#125;</span><br><span class="line">    public byte[] Image &#123; get; set; &#125;</span><br><span class="line">    public string Caption &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public int BlogId &#123; get; set; &#125;</span><br><span class="line">    public Blog Blog &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+配置关系时HasForeignKey必须指定实体类型，这一点区别于上面的书写方式<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">modelBuilder.Entity&lt;Blog&gt;()</span><br><span class="line">    .HasOne(b &#x3D;&gt; b.BlogImage)</span><br><span class="line">    .WithOne(i &#x3D;&gt; i.Blog)</span><br><span class="line">    .HasForeignKey&lt;BlogImage&gt;(b &#x3D;&gt; b.BlogForeignKey);</span><br></pre></td></tr></table></figure>
+<h4 id="关联关系"><a href="#关联关系" class="headerlink" title="关联关系"></a>关联关系</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class MyContext : DbContext</span><br><span class="line">&#123;</span><br><span class="line">    public DbSet&lt;Blog&gt; Blogs &#123; get; set; &#125;</span><br><span class="line">    public DbSet&lt;Post&gt; Posts &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    protected override void OnModelCreating(ModelBuilder modelBuilder)</span><br><span class="line">    &#123;</span><br><span class="line">        modelBuilder.Entity&lt;Post&gt;()</span><br><span class="line">            .HasOne&lt;Blog&gt;()</span><br><span class="line">            .WithMany()</span><br><span class="line">            .HasForeignKey(p &#x3D;&gt; p.BlogId);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">关联关系有Reqiuired和Optional之分，前者的情况下，对主体实体的删除会导致依赖实体被级联删除，而对于后者，默认不被配置为级联删除而将外键属性置为null</span><br></pre></td></tr></table></figure>
+<h4 id="关联查询"><a href="#关联查询" class="headerlink" title="关联查询"></a>关联查询</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public async Task&lt;IActionResult&gt; Details(string code)</span><br><span class="line">&#123;</span><br><span class="line">    if (code &#x3D;&#x3D; null)</span><br><span class="line">    &#123;</span><br><span class="line">        return NotFound();</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; Blog &lt;&gt;--- ReferenceMap ---&lt;&gt; Theme</span><br><span class="line">    var Blog &#x3D; await _context. Blogs</span><br><span class="line">                    .Include(blog &#x3D;&gt; blog.ReferenceMap)</span><br><span class="line">                    .ThenInclude(map &#x3D;&gt; map.Theme)</span><br><span class="line">                    .FirstOrDefaultAsync(m &#x3D;&gt; m.Code &#x3D;&#x3D; code);</span><br><span class="line">    if (Blog &#x3D;&#x3D; null)</span><br><span class="line">    &#123;</span><br><span class="line">        return NotFound();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return View(Blog);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+Inclulde 被称为 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/querying/related-data/eager">预先加载 eager load</a><br>使用ThenInclude关联多个层次<br>Include可以包含过滤, 如下取得曾发表带’敏感’词标题文章的所有博客，以及相应的文章<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var restrictBlogs &#x3D; _context.Blogs.Include(blog &#x3D;&gt; blog.Posts.Where(post &#x3D;&gt; post.Title.Contains(&quot;敏感&quot;))).ToList()</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<p>显式加载(explicit load)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var blog &#x3D; _context.Blogs.Single(blog&#x3D;&gt;blog.Author&#x3D;&#x3D;&quot;QQs&quot;) &#x2F;&#x2F; 此处关联属性Posts为null</span><br><span class="line">...</span><br><span class="line">var posts &#x3D; _context.Entry(blog).Collection(blog &#x3D;&gt; blog.Posts).Query().Where(post &#x3D;&gt; post.Title.Contains(&quot;敏感&quot;)).ToList() &#x2F;&#x2F; 此时blog对象的Posts属性被填充（仅过滤结果）</span><br></pre></td></tr></table></figure><br>不返回结果posts可以直接Load<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_context.Entry(blog).Collection(blog &#x3D;&gt; blog.Posts).Load()</span><br></pre></td></tr></table></figure><br>QQs：私以为这与预先加载并无多大区别</p>
+<p>延迟加载（lazy load）<br>见<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/querying/related-data/lazy">Microsoft Docs：相关数据的延迟加载</a></p>
+<h4 id="关联存储"><a href="#关联存储" class="headerlink" title="关联存储"></a>关联存储</h4><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/saving/related-data">here</a><br>向导航属性（blog.Posts）中添加新实体，EF自动发现关联实体并将其插入数据库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">await using (var context &#x3D; new BloggingContext())</span><br><span class="line">&#123;</span><br><span class="line">    var blog &#x3D; await context.Blogs.Include(b &#x3D;&gt; b.Posts).FirstAsync();</span><br><span class="line">    var post &#x3D; new Post &#123; Title &#x3D; &quot;Intro to EF Core&quot; &#125;;</span><br><span class="line"></span><br><span class="line">    blog.Posts.Add(post);</span><br><span class="line">    await context.SaveChangesAsync();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>自动更改外键列<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">await using (var context &#x3D; new BloggingContext())</span><br><span class="line">&#123;</span><br><span class="line">    var blog &#x3D; new Blog &#123; Url &#x3D; &quot;http:&#x2F;&#x2F;blogs.msdn.com&#x2F;visualstudio&quot; &#125;;</span><br><span class="line">    var post &#x3D; await context.Posts.FirstAsync();</span><br><span class="line"></span><br><span class="line">    post.Blog &#x3D; blog;</span><br><span class="line">    await context.SaveChangesAsync();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>上面的代码没有显式操作外键post.blogId，但EF会自动更新，并且将所需的新实体blog插入数据库</p>
+<h4 id="CRUD"><a href="#CRUD" class="headerlink" title="CRUD"></a>CRUD</h4><p>使用数据库上下文修改模型(包括新增和移除)，并执行SaveChanges，相当于commit<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; create</span><br><span class="line">context.Add(new Student&#123;</span><br><span class="line">    FirstName&#x3D;&quot;Jack&quot;,</span><br><span class="line">    SurName&#x3D;&quot;Ma&quot;</span><br><span class="line">&#125;);</span><br><span class="line">context.SaveChanges();</span><br><span class="line">&#x2F;&#x2F; select</span><br><span class="line">var MaYun &#x3D; context.Students</span><br><span class="line">            .Where(s &#x3D;&gt; s.FirstName &#x3D;&#x3D; GetName()).ToList();</span><br><span class="line">&#x2F;&#x2F; update</span><br><span class="line">MaYun.Age&#x3D;8;</span><br><span class="line">context.Update(MaYun)</span><br><span class="line">context.SaveChanges()</span><br><span class="line">&#x2F;&#x2F; delete</span><br><span class="line">context.Remove(MaYun);</span><br><span class="line">context.SaveChanges()</span><br></pre></td></tr></table></figure><br>一般在web应用中使用异步<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; create</span><br><span class="line">context.Add(new Student&#123;</span><br><span class="line">    FirstName&#x3D;&quot;Jack&quot;,</span><br><span class="line">    SurName&#x3D;&quot;Ma&quot;</span><br><span class="line">&#125;);</span><br><span class="line">context.SaveChangesAsync();</span><br><span class="line">&#x2F;&#x2F; select</span><br><span class="line">var MaYun &#x3D; context.Students</span><br><span class="line">            .Where(s &#x3D;&gt; s.FirstName &#x3D;&#x3D; GetName()).ToListAsync();</span><br><span class="line">&#x2F;&#x2F; update</span><br><span class="line">MaYun.Age&#x3D;8;</span><br><span class="line">context.SaveChangesAsync()</span><br><span class="line">&#x2F;&#x2F; delete</span><br><span class="line">context.Remove(MaYun);</span><br><span class="line">context.SaveChangesAsync()</span><br></pre></td></tr></table></figure><br><span style="color:#f50;font-weight:bold">Caution!</span> 在对DbContext的多次操作中，如果前面一次SaveChanges出错，如Add操作违反唯一约束而失败，需要将该实体类实例从DbContext中移除(或修正)，否则出错的命令会一直在提交队列中，反复报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">try</span><br><span class="line">&#123;</span><br><span class="line">    _context.Add(newBlog);</span><br><span class="line">    await _context.SaveChangesAsync();</span><br><span class="line">&#125;</span><br><span class="line">catch (Microsoft.EntityFrameworkCore.DbUpdateException dbEx)</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F; TODO the result description is not properly rigorous.</span><br><span class="line">    if (null !&#x3D; dbEx.InnerException</span><br><span class="line">        &amp;&amp; dbEx.InnerException.Message.Contains(&quot;constraint&quot;))</span><br><span class="line">    &#123;</span><br><span class="line">        System.Console.WriteLine(&quot;Blog exists;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F; other error handle</span><br><span class="line">    &#125;</span><br><span class="line">    _context.Remove(newBlog);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>DBContext.Add成功后 若主键id使用数据库策略生成 Add成功后即可从对象中取到</p>
+<h4 id="DBcontext和connectionstring"><a href="#DBcontext和connectionstring" class="headerlink" title="DBcontext和connectionstring"></a>DBcontext和connectionstring</h4><p>startup.cs<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    services.AddDbContext&lt;BloggingContext&gt;(options &#x3D;&gt;</span><br><span class="line">        options.UseSqlServer(Configuration.GetConnectionString(&quot;DBConnection&quot;)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="重连"><a href="#重连" class="headerlink" title="重连"></a>重连</h4><p>数据库如SQL Server的provider程序，可以识别可重试（retry）的异常类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    services.AddDbContext&lt;PicnicContext&gt;(</span><br><span class="line">        options &#x3D;&gt; options.UseSqlServer(</span><br><span class="line">            Configuration.GetConnectionString(&quot;DBConnection&quot;),</span><br><span class="line">            providerOptions &#x3D;&gt; providerOptions.EnableRetryOnFailure()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><p>额外的，<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency">Transaction commit failure</a></p>
+<p>对于多项实体操作(CRUD)后SaveChanges，SaveChanges是事务性的，意味着前面所有操作成功或失败，而不会产生部分成功部分失败</p>
+<h4 id="Lazy-load"><a href="#Lazy-load" class="headerlink" title="Lazy load"></a>Lazy load</h4><p>访问导航属性（外键）时再次查询数据库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">using (var dbContext &#x3D; new CategoryEntities())</span><br><span class="line">&#123;</span><br><span class="line">    dbContext.Configuration.LazyLoadingEnabled &#x3D; true; &#x2F;&#x2F; 默认是true，针对导航属性</span><br><span class="line">        var categoryList &#x3D; dbContext.Set&lt;Category&gt;().Where(p &#x3D;&gt; p.CategoryId &#x3D;&#x3D; 3);</span><br><span class="line">        &#x2F;&#x2F; 只会在数据库里面查询Category表，不会查询ProductDetail表</span><br><span class="line">        foreach(var category in categoryList)</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(&quot;CategoryId:&quot;+category.CategoryId+ &quot;,CategoryName:&quot;+category.CategoryName);</span><br><span class="line">            &#x2F;&#x2F; 这时才会去数据库查询ProductDetail表</span><br><span class="line">            foreach (var product in category.ProductDetails)</span><br><span class="line">            &#123;</span><br><span class="line">                Console.WriteLine(&quot;ProductName:&quot;+product.ProductName);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>不再继续查询<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">using (var dbContext &#x3D; new CategoryEntities())</span><br><span class="line">&#123;</span><br><span class="line">    dbContext.Configuration.LazyLoadingEnabled &#x3D; false; &#x2F;&#x2F; 不延迟加载,不会再次查询了</span><br><span class="line">    var categoryList &#x3D; dbContext.Set&lt;Category&gt;().Where(p &#x3D;&gt; p.CategoryId &#x3D;&#x3D; 3);</span><br><span class="line">    &#x2F;&#x2F; 只会在数据库里面查询Category表，不会查询ProductDetail表</span><br><span class="line">    foreach (var category in categoryList)</span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(&quot;CategoryId:&quot; + category.CategoryId + &quot;,CategoryName:&quot; + category.CategoryName);</span><br><span class="line">        &#x2F;&#x2F; 这时不会去数据库查询了，所以用户全是空的</span><br><span class="line">        foreach (var product in category.ProductDetails)</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(&quot;ProductName:&quot; + product.ProductName);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>一次性完成查询<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 显示加载</span><br><span class="line">using (var dbContext &#x3D; new CategoryEntities())</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F; 不延迟加载，指定Include，一次性加载主表和从表的所有数据</span><br><span class="line">    var categoryList &#x3D; dbContext.Set&lt;Category&gt;().Include(&quot;ProductDetails&quot;).Where(p &#x3D;&gt; p.CategoryId &#x3D;&#x3D; 3);</span><br><span class="line">    foreach (var category in categoryList)</span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(&quot;CategoryId:&quot; + category.CategoryId + &quot;,CategoryName:&quot; + category.CategoryName);</span><br><span class="line">        &#x2F;&#x2F; 不会再查询</span><br><span class="line">        foreach (var product in category.ProductDetails)</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(&quot;ProductName:&quot; + product.ProductName);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>issue: Data is Null. This method or property cannot be called on Null values.</p>
+<p>一个很简单的出错原因是model的基本类型（非对象，不能设置为null）如int，Guid等的属性，其对应的table field为null。<br>应以int?,Guid?作为属性类型以支持null</p>
+<h4 id="Parent-Child"><a href="#Parent-Child" class="headerlink" title="Parent/Child"></a>Parent/Child</h4><p>对应于使用id，parentid组织的父子关系表，常见的组织机构树，职能头衔树等<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class Group</span><br><span class="line">&#123;</span><br><span class="line">    public Guid ID &#123; get; set; &#125;</span><br><span class="line">    public string Name &#123; get; set; &#125;</span><br><span class="line">    public Guid? ParentID &#123; get; set; &#125;</span><br><span class="line">    public Group Parent &#123; get; set; &#125;</span><br><span class="line">    </span><br><span class="line">    public ICollection&lt;Group&gt; Children &#123; get; &#125; &#x3D; new List&lt;Group&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>查询子树<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var data &#x3D; (await _context.Group.ToListAsync())</span><br><span class="line">            .Where(g &#x3D;&gt; g.ID &#x3D;&#x3D; new Guid(groupId))</span><br><span class="line">            .ToList();</span><br></pre></td></tr></table></figure></p>
+<h4 id="Hierarchy-Data"><a href="#Hierarchy-Data" class="headerlink" title="Hierarchy Data"></a>Hierarchy Data</h4><p>参考<a target="_blank" rel="noopener" href="https://www.meziantou.net/using-hierarchyid-with-entity-framework-core.htm">Using SQL Server HierarchyId with Entity Framework Core</a><br>package: </p>
+<ul>
+<li>Microsoft.EntityFrameworkCore.SqlServer</li>
+<li>EntityFrameworkCore.SqlServer.HierarchyId<br>数据库上下文需要配置启用HierarchyId，否则出现下述异常<br>The property is of type ‘HierarchyId’ which is not supported by current database provider. Either change the property CLR type or ignore the property using the ‘[NotMapped]’ attribute or by using ‘EntityTypeBuilder.Ignore’ in ‘OnModelCreating’.</li>
+</ul>
+</blockquote>
+<p>在Startup.cs,配置启用HierarchyId<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    services.AddDbContext&lt;DataContext&gt;(options &#x3D;&gt;</span><br><span class="line">        options.UseSqlServer(Configuration.GetConnectionString(&quot;DataContext&quot;), conf&#x3D;&gt;</span><br><span class="line">            &#123;</span><br><span class="line">                conf.UseHierarchyId();</span><br><span class="line">            &#125;</span><br><span class="line">        ));</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>model定义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class Group</span><br><span class="line">&#123;</span><br><span class="line">    public Guid ID &#123; get; set; &#125;</span><br><span class="line">    public string Name &#123; get; set; &#125;</span><br><span class="line">    public HierarchyId GroupLevel &#123; get; set; &#125;</span><br><span class="line">    </span><br><span class="line">    public ICollection&lt;Group&gt; Children &#123; get; &#125; &#x3D; new List&lt;Group&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>查询linq<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public async Task&lt;List&lt;Group&gt;&gt; GetChildrenByGroupIDAsync(Guid groupID)</span><br><span class="line">&#123;</span><br><span class="line">    Group self &#x3D; await _context.Groups.FindAsync(groupID);</span><br><span class="line">    List&lt;Group&gt; groups &#x3D; await _context.Groups</span><br><span class="line">        .Where(g &#x3D;&gt; g.GroupLevel.IsDescendantOf(self.GroupLevel))</span><br><span class="line">        .ToListAsync();</span><br><span class="line"></span><br><span class="line">    return groups; &#x2F;&#x2F;.FindAll(g &#x3D;&gt; g.ID !&#x3D; groupID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>其他查询见文章<a href="/qqsnote/2020/06/15/sqlserver/" title="SQLServer">SQLServer</a></p>
+<h4 id="Transient-Error"><a href="#Transient-Error" class="headerlink" title="Transient Error"></a>Transient Error</h4><blockquote>
+<p>Exception: An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding ‘EnableRetryOnFailure()’ to the ‘UseSqlServer’ call.</p>
+</blockquote>
+<p>见<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/54186894/getting-transient-errors-when-making-calls-against-azure-sql-database-from-azure">StackOverflow: Getting transient errors when making calls against Azure SQL Database from Azure Function</a></p>
+<p>数据库系统偶现Transient Error，这种暂时性错误的根本原因（underlying cause）很快就能自行解决，且在错误抛出时，.net程序会抛出上述的SqlException，为了处理这些错误，可应用程序代码中实现重试逻辑，而不是以应用程序错误的形式呈现给用户。<br>在Startup.cs,配置启用RetryOnFailure<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    services.AddDbContext&lt;DataContext&gt;(options &#x3D;&gt;</span><br><span class="line">        options.UseSqlServer(Configuration.GetConnectionString(&quot;DataContext&quot;), conf&#x3D;&gt;</span><br><span class="line">            &#123;</span><br><span class="line">                conf.EnableRetryOnFailure();</span><br><span class="line">            &#125;</span><br><span class="line">        ));</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><del>但是这里有个bug <a target="_blank" rel="noopener" href="https://github.com/efcore/EFCore.SqlServer.HierarchyId/issues/24">System.ArgumentException thrown when EnableRetryOnFailure is used.</a></del> 该bug已在dotNet 5版本修复</p>
+<h4 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;customers&gt; _customers &#x3D; (from a in db.customers select a).ToList();</span><br><span class="line">var _dataToWebPage &#x3D; _customers.Skip(50).Take(50);</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/10145815/c-sharp-entity-framework-pagination">StackOverflow:C# entity framework pagination</a></p>
+<h4 id="ORM注意事项"><a href="#ORM注意事项" class="headerlink" title="ORM注意事项"></a>ORM注意事项</h4><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/#ef-orm-considerations">EF O/RM 注意事项</a></p>
+<h4 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h4><p>startup.cs<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">services.AddDbContext&lt;MyDBContext&gt;(options &#x3D;&gt; &#123;</span><br><span class="line">    options.UseSqlServer(Configuration.GetConnectionString(&quot;MyDBContext&quot;), conf &#x3D;&gt; &#123;</span><br><span class="line">        conf.UseHierarchyId();</span><br><span class="line">        conf.EnableRetryOnFailure();</span><br><span class="line">    &#125;);</span><br><span class="line">    options.LogTo(System.Console.WriteLine);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/logging-events-diagnostics/simple-logging">Docs:简单的日志记录</a><br>日志委托和日志级别：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options.LogTo(Console.WriteLine, LogLevel.Information;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Exception：this-sqltransaction-has-completed-it-is-no-longer-usable"><a href="#Exception：this-sqltransaction-has-completed-it-is-no-longer-usable" class="headerlink" title="Exception：this sqltransaction has completed it is no longer usable"></a>Exception：this sqltransaction has completed it is no longer usable</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[HttpPost]</span><br><span class="line">[Route(&quot;api&#x2F;[controller]&#x2F;create&quot;)]</span><br><span class="line">public async Task&lt;Result&gt; Create([FromBody] QModel model)&#123;</span><br><span class="line">    ...</span><br><span class="line">    try&#123;</span><br><span class="line">        _context.Add(model);</span><br><span class="line">        await _context.SaveChangesAsync();</span><br><span class="line">    &#125;catch(Exception ex)&#123;</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上一个insert数据的接口，在有限的并发条件下（也就是for循环几条请求），个别错误数据可以造成其他正常数据插入失败<br>报 this sqltransaction has completed it is no longer usable 以及 zombie check等解释<br>查了2天资料未能解决<br>次日反思 问题或许出在多条线程同时向数据库上下文中推数据（即_context.Add）其中一个错误数据的出错，事务自动回滚，导致了其他线程中访问该事务已不可用。<br>此处使用_context.AddAsync方法可以解决<br>即，该问题就是个ef方法的线程安全的问题，可见<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/47135262/addasync-vs-add-in-ef-core">StackOverflow: AddAsync vs Add</a><br>那么我一个需求要添加user并为其分配新的group，一个事务里两个add操作怎么办呢，另起一小节：</p>
+<h4 id="一个事务多个操作的线程安全"><a href="#一个事务多个操作的线程安全" class="headerlink" title="一个事务多个操作的线程安全"></a>一个事务多个操作的线程安全</h4><p>其实在官方文档最初的概述中，强调了DbContext的线程不安全 见<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/dbcontext-configuration/#the-dbcontext-lifetime">Microsoft Docs: DBContext Lifetime</a></p>
+<blockquote>
+<p>DbContext 不是线程安全的。 不要在线程之间共享上下文。 请确保在继续使用上下文实例之前，等待所有异步调用。</p>
+</blockquote>
+<p>关于以事务作为上下文生命周期的配置, 见<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/41923804/configuring-dbcontext-as-transient">StackOverflow:Configuring Dbcontext as Transient</a> <span style="color:#f00;font-weight:bold">然而!</span>经实践同一接口的并发测试 仍然会出现this sqltransaction has completed it is no longer usable的异常<br>依赖注入的DBContext<br>在Startup的ConfigureServices中注册MyDBContext服务提供程序：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">services.AddDbContext&lt;MyDBContext&gt;(</span><br><span class="line">    options &#x3D;&gt; options.UseSqlServer(Configuration.GetConnectionString(&quot;MyDBContext&quot;),</span><br><span class="line">                                conf &#x3D;&gt; &#123; conf.UseHierarchyId();</span><br><span class="line">                                    conf.EnableRetryOnFailure();</span><br><span class="line">                                &#125;), ServiceLifetime.Transient);</span><br></pre></td></tr></table></figure><br>注入DBContext:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class GroupsController : ControllerBase</span><br><span class="line">&#123;</span><br><span class="line">    private readonly MyDBContext _context;</span><br><span class="line">    private IGroupTreeService _groupTreeService;</span><br><span class="line"></span><br><span class="line">    public GroupsController(MyDBContext context, IGroupTreeService groupTreeService)</span><br><span class="line">    &#123;</span><br><span class="line">        _context &#x3D; context;</span><br><span class="line">        _groupTreeService &#x3D; groupTreeService;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>控制DBContext生命周期在函数内部<br>官方Doc：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/ef/core/miscellaneous/connection-resiliency#execution-strategies-and-transactions">启用RetryOnFailue情形下的手动事务方式</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">public interface IWorker</span><br><span class="line">&#123;</span><br><span class="line">    void DoWork(Func&lt;MyDbContext&gt; dbFactory);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class WorkerRunner</span><br><span class="line">&#123;</span><br><span class="line">    private readonly DbContextOptions&lt;MyDbContext&gt; _dbOptions;</span><br><span class="line"></span><br><span class="line">    private readonly List&lt;IWorker&gt; _workers;</span><br><span class="line"></span><br><span class="line">    public WorkerRunner(DbContextOptions&lt;MyDbContext&gt; dbOptions, List&lt;IWorker&gt; workers)</span><br><span class="line">    &#123;</span><br><span class="line">        _dbOptions &#x3D; dbOptions;</span><br><span class="line">        _workers &#x3D; workers;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void RunWorkers()</span><br><span class="line">    &#123;</span><br><span class="line">        using (var context &#x3D; new MyDbContext(_dbOptions))</span><br><span class="line">        &#123;</span><br><span class="line">            using (var tran &#x3D; context.Database.BeginTransaction())</span><br><span class="line">            &#123;</span><br><span class="line">                foreach (var worker in _workers)</span><br><span class="line">                    worker.DoWork(() &#x3D;&gt;</span><br><span class="line">                    &#123;</span><br><span class="line">                        &#x2F;&#x2F; This won&#39;t work</span><br><span class="line">                        var db &#x3D; new MyDbContext(_dbOptions);</span><br><span class="line">                        &#x2F;&#x2F; And this one will even throw exception when used with in-memory database (during unit testing)</span><br><span class="line">                        db.Database.UseTransaction(tran.GetDbTransaction());</span><br><span class="line">                        return context;</span><br><span class="line">                    &#125;);</span><br><span class="line"></span><br><span class="line">                tran.Commit();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>就是new一个DBContext用， <span style="color:#ff0;font-weight:bold">Caution!</span> 经测单靠new DBContext不能阻止transaction Error</p>
+<h4 id="自动生成id"><a href="#自动生成id" class="headerlink" title="自动生成id"></a>自动生成id</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[Table(&quot;User&quot;)]</span><br><span class="line">public class User&#123;</span><br><span class="line">    [Key]</span><br><span class="line">    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]</span><br><span class="line">    public string Id &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="默认值"><a href="#默认值" class="headerlink" title="默认值"></a>默认值</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">protected override void OnModelCreating(ModelBuilder modelBuilder)</span><br><span class="line">&#123;</span><br><span class="line">    modelBuilder.Entity&lt;User&gt;()</span><br><span class="line">        .Property(e &#x3D;&gt; e.Role)</span><br><span class="line">        .HasDefaultValue(1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/qqsnote/tags/Net/" rel="tag"># .Net</a>
+              <a href="/qqsnote/tags/EntityFramework/" rel="tag"># EntityFramework</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/06/15/sqlserver/" rel="prev" title="SQL Server">
+      <i class="fa fa-chevron-left"></i> SQL Server
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/06/24/ef-migration/" rel="next" title="Entity Framework Migration">
+      Entity Framework Migration <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E4%BD%93%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">实体类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E4%BD%93%E5%B1%9E%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">实体属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%AE"><span class="nav-number">3.</span> <span class="nav-text">键</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E7%BB%B4%E6%8A%A4-%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%85%B3%E7%B3%BB"><span class="nav-number">4.</span> <span class="nav-text">策略维护 多对多关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E5%A4%9A"><span class="nav-number">5.</span> <span class="nav-text">一对多</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E4%B8%80"><span class="nav-number">6.</span> <span class="nav-text">一对一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BB"><span class="nav-number">7.</span> <span class="nav-text">关联关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2"><span class="nav-number">8.</span> <span class="nav-text">关联查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E5%AD%98%E5%82%A8"><span class="nav-number">9.</span> <span class="nav-text">关联存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CRUD"><span class="nav-number">10.</span> <span class="nav-text">CRUD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DBcontext%E5%92%8Cconnectionstring"><span class="nav-number">11.</span> <span class="nav-text">DBcontext和connectionstring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E8%BF%9E"><span class="nav-number">12.</span> <span class="nav-text">重连</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-number">13.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lazy-load"><span class="nav-number">14.</span> <span class="nav-text">Lazy load</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Parent-Child"><span class="nav-number">15.</span> <span class="nav-text">Parent&#x2F;Child</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hierarchy-Data"><span class="nav-number">16.</span> <span class="nav-text">Hierarchy Data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transient-Error"><span class="nav-number">17.</span> <span class="nav-text">Transient Error</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E9%A1%B5"><span class="nav-number">18.</span> <span class="nav-text">分页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ORM%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">19.</span> <span class="nav-text">ORM注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A5%E5%BF%97"><span class="nav-number">20.</span> <span class="nav-text">日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exception%EF%BC%9Athis-sqltransaction-has-completed-it-is-no-longer-usable"><span class="nav-number">21.</span> <span class="nav-text">Exception：this sqltransaction has completed it is no longer usable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E4%BA%8B%E5%8A%A1%E5%A4%9A%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="nav-number">22.</span> <span class="nav-text">一个事务多个操作的线程安全</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90id"><span class="nav-number">23.</span> <span class="nav-text">自动生成id</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="nav-number">24.</span> <span class="nav-text">默认值</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">336</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">128</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 22.5px; color: #eaeaea">AI</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.5px; color: #f2f2f2">Azure</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C++</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.5px; color: #e1e1e1">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.5px; color: #d9d9d9">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 21px; color: #e6e6e6">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.5px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 18px; color: #ddd">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 13.5px; color: #d0d0d0">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24px; color: #eee">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/React/" style="font-size: 21px; color: #e6e6e6">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 16.5px; color: #d9d9d9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.5px; color: #d0d0d0">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27px; color: #f7f7f7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.5px; color: #fbfbfb">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 19.5px; color: #e1e1e1">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 15px; color: #d5d5d5">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.5px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 18px; color: #ddd">图形学</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 15px; color: #d5d5d5">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.5px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.5px; color: #d9d9d9">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 13.5px; color: #d0d0d0">面试</a> <a href="/qqsnote/tags/%E9%A6%99%E6%A9%99%E6%B4%BE/" style="font-size: 12px; color: #ccc">香橙派</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

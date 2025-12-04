@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="OpenCV是计算机视觉领域应用最广泛的开源工具包，基于C&#x2F;C++，支持Linux&#x2F;Windows&#x2F;MacOS&#x2F;Android&#x2F;iOS，并提供了Python，Matlab和Java等语言的接口   core：核心模块，主要包含了OpenCV中最基本的结构（矩阵，点线和形状等），以及相关的基础运算&#x2F;操作。 imgproc：图像处理模块，包含和图像相关的基础功能（滤波，梯度，改变大小等），以及一些衍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenCV">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2022/06/27/OpenCV/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="OpenCV是计算机视觉领域应用最广泛的开源工具包，基于C&#x2F;C++，支持Linux&#x2F;Windows&#x2F;MacOS&#x2F;Android&#x2F;iOS，并提供了Python，Matlab和Java等语言的接口   core：核心模块，主要包含了OpenCV中最基本的结构（矩阵，点线和形状等），以及相关的基础运算&#x2F;操作。 imgproc：图像处理模块，包含和图像相关的基础功能（滤波，梯度，改变大小等），以及一些衍">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-06-27T14:34:15.000Z">
+<meta property="article:modified_time" content="2025-11-21T02:24:20.331Z">
+<meta property="article:author" content="QQs">
+<meta property="article:tag" content="OpenCV">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2022/06/27/OpenCV/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>OpenCV | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2022/06/27/OpenCV/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenCV
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-06-27 22:34:15" itemprop="dateCreated datePublished" datetime="2022-06-27T22:34:15+08:00">2022-06-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-11-21 10:24:20" itemprop="dateModified" datetime="2025-11-21T10:24:20+08:00">2025-11-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">图像处理</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>OpenCV是计算机视觉领域应用最广泛的开源工具包，基于C/C++，支持Linux/Windows/MacOS/Android/iOS，并提供了Python，Matlab和Java等语言的接口</p>
+</blockquote>
+<ul>
+<li>core：核心模块，主要包含了OpenCV中最基本的结构（矩阵，点线和形状等），以及相关的基础运算/操作。</li>
+<li>imgproc：图像处理模块，包含和图像相关的基础功能（滤波，梯度，改变大小等），以及一些衍生的高级功能（图像分割，直方图，形态分析和边缘/直线提取等）。</li>
+<li>highgui：提供了用户界面和文件读取的基本函数，比如图像显示窗口的生成和控制，图像/视频文件的IO等。<br>如果不考虑视频应用，以上三个就是最核心和常用的模块了。针对视频和一些特别的视觉应用，OpenCV也提供了强劲的支持：</li>
+<li>video：用于视频分析的常用功能，比如光流法（Optical Flow）和目标跟踪等。</li>
+<li>calib3d：三维重建，立体视觉和相机标定等的相关功能。</li>
+<li>features2d：二维特征相关的功能，主要是一些不受专利保护的，商业友好的特征点检测和匹配等功能，比如ORB特征。</li>
+<li>object：目标检测模块，包含级联分类和Latent SVM</li>
+<li>ml：机器学习算法模块，包含一些视觉中最常用的传统机器学习算法。</li>
+<li>flann：最近邻算法库，Fast Library for Approximate</li>
+<li>Nearest Neighbors，用于在多维空间进行聚类和检索，经常和关键点匹配搭配使用。</li>
+<li>gpu：包含了一些gpu加速的接口，底层的加速是CUDA实现。</li>
+<li>photo：计算摄像学（Computational Photography）相关的接口，当然这只是个名字，其实只有图像修复和降噪而已。</li>
+<li>stitching：图像拼接模块，有了它可以自己生成全景照片。</li>
+<li>nonfree：受到专利保护的一些算法，其实就是SIFT和SURF。</li>
+<li>contrib：一些实验性质的算法，考虑在未来版本中加入的。</li>
+<li>legacy：字面是遗产，意思就是废弃的一些接口，保留是考虑到向下兼容。</li>
+<li>ocl：利用OpenCL并行加速的一些接口。</li>
+<li>superres：超分辨率模块，其实就是BTV-L1（Biliteral Total Variation – L1 regularization）算法</li>
+<li>viz：基础的3D渲染模块，其实底层就是著名的3D工具包VTK（Visualization Toolkit）。</li>
+</ul>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple opencv-python</span><br></pre></td></tr></table></figure>
+<h4 id="读取显示图像"><a href="#读取显示图像" class="headerlink" title="读取显示图像"></a>读取显示图像</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">img = cv2.imread(<span class="string">&#x27;singlemushroom.jpg&#x27;</span>, cv2.IMREAD_UNCHANGED)</span><br><span class="line">cv2.imshow(<span class="string">&quot;origin image&quot;</span>, img)</span><br><span class="line"></span><br><span class="line">img_gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)</span><br><span class="line"></span><br><span class="line">cv2.imshow(<span class="string">&quot;gray image&quot;</span>, img_gray)</span><br><span class="line"></span><br><span class="line">cv2.waitKey(<span class="number">0</span>)</span><br><span class="line">cv2.destroyAllWindows()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 写入图像</span></span><br><span class="line">cv2.imwrite(<span class="string">&quot;originImage.jpg&quot;</span>, img)</span><br></pre></td></tr></table></figure>
+<p>cv.imread的枚举参数</p>
+<ul>
+<li>cv2.IMREAD_COLOR = 1     ：读入一副彩色图像。透明度会被忽略，默认参数</li>
+<li>cv2.IMREAD_GRAYSCALE = 0 ：以灰度模式读入图像</li>
+<li>cv2.IMREAD_UNCHANGED = -1：保留读取图片原有的颜色通道</li>
+</ul>
+<h4 id="缩放"><a href="#缩放" class="headerlink" title="缩放"></a>缩放</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result = cv2.resize(src, (<span class="number">200</span>,<span class="number">100</span>))</span><br></pre></td></tr></table></figure>
+<h4 id="像素操作"><a href="#像素操作" class="headerlink" title="像素操作"></a>像素操作</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#矩阵运算</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#拷贝区域</span></span><br><span class="line">ball=img[<span class="number">280</span>:<span class="number">340</span>,<span class="number">330</span>:<span class="number">390</span>]</span><br><span class="line">img[<span class="number">273</span>:<span class="number">333</span>,<span class="number">100</span>:<span class="number">160</span>]=ball</span><br></pre></td></tr></table></figure>
+<h4 id="通道"><a href="#通道" class="headerlink" title="通道"></a>通道</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#通道顺序与R-G-B顺序相反</span></span><br><span class="line">b,g,r=cv2.split(img)</span><br><span class="line"><span class="comment">#b=img[:,:,0]</span></span><br><span class="line">img=cv2.merge(b,g,r)</span><br></pre></td></tr></table></figure>
+<h4 id="阈值"><a href="#阈值" class="headerlink" title="阈值"></a>阈值</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#读取图片</span></span><br><span class="line">src = cv2.imread(<span class="string">&#x27;miao.jpg&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#灰度图像处理</span></span><br><span class="line">GrayImage = cv2.cvtColor(src,cv2.COLOR_BGR2GRAY)</span><br><span class="line"></span><br><span class="line"><span class="comment">#二进制阈值化处理</span></span><br><span class="line">r, b = cv2.threshold(GrayImage, <span class="number">127</span>, <span class="number">255</span>, cv2.THRESH_BINARY)</span><br><span class="line"><span class="comment">#THRESH_BINARY 超过阈值像素设为最大值 否则为0</span></span><br><span class="line"><span class="comment">#THRESH_BINARY_INV 超过阈值像素设为0 否则为最大值</span></span><br><span class="line"><span class="comment">#THRESH_TRUNC 大于阈值部分设为最大值 否则不变</span></span><br><span class="line"><span class="comment">#THRESH_TOZERO 大于阈值部分不变 否则设为0</span></span><br><span class="line"><span class="comment">#THRESH_TOZERO_INV 大于阈值部分设为0 否则不变</span></span><br><span class="line"><span class="built_in">print</span>(r)</span><br><span class="line"></span><br><span class="line"><span class="comment">#显示图像</span></span><br><span class="line">cv2.imshow(<span class="string">&quot;src&quot;</span>, src)</span><br><span class="line">cv2.imshow(<span class="string">&quot;result&quot;</span>, b)</span><br></pre></td></tr></table></figure>
+<p>自适应阈值 adapativeThreshold</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adaptiveThreshold(src, maxValue, adaptiveMethod, thresholdType, blockSize, C[, dst])</span><br></pre></td></tr></table></figure>
+<ul>
+<li>maxValue 满足条件的最大值</li>
+<li>adaptiveMethod 自适应方法 ADAPTIVE_THRESH_MEAN_C ADAPTIVE_THRESH_GAUSSIAN_C<br>ADAPTIVE_THRESH_MEAN_C的计算方法是计算出领域的平均值再减去 C；ADAPTIVE_THRESH_GAUSSIAN_C的计算方法是计算出领域的高斯均值再减去C</li>
+<li>thresholdType 阈值类型 THRESH_BINARY 或者 THRESH_BINARY_INV</li>
+<li>blockSize 邻域大小 如 3，5，7</li>
+<li>C 阈值偏移量</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">thresh1 = cv2.adaptiveThreshold(gray_image, <span class="number">255</span>, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, <span class="number">11</span>, <span class="number">2</span>)</span><br><span class="line">thresh2 = cv2.adaptiveThreshold(gray_image, <span class="number">255</span>, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, <span class="number">31</span>, <span class="number">3</span>)</span><br><span class="line">thresh3 = cv2.adaptiveThreshold(gray_image, <span class="number">255</span>, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, <span class="number">11</span>, <span class="number">2</span>)</span><br><span class="line">thresh4 = cv2.adaptiveThreshold(gray_image, <span class="number">255</span>, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, <span class="number">31</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="卷积和滤波"><a href="#卷积和滤波" class="headerlink" title="卷积和滤波"></a>卷积和滤波</h4><p>设想3*3矩阵 对中心位置像素值做卷积运算 其作用即一种平滑滤波</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#高斯滤波</span></span><br><span class="line">gaussianBlur = cv2.GaussianBlur(greyImg, (<span class="number">3</span>,<span class="number">3</span>), <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="膨胀和腐蚀，开运算和闭运算-顶帽和底帽"><a href="#膨胀和腐蚀，开运算和闭运算-顶帽和底帽" class="headerlink" title="膨胀和腐蚀，开运算和闭运算 顶帽和底帽"></a>膨胀和腐蚀，开运算和闭运算 顶帽和底帽</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#腐蚀</span></span><br><span class="line">kernel=np.ones((<span class="number">5</span>,<span class="number">5</span>),np.uint8)</span><br><span class="line">erosion=cv2.erode(img,kernel,iterations=<span class="number">1</span>) </span><br><span class="line"><span class="comment">#iterations 为重复次数</span></span><br><span class="line"><span class="comment">#膨胀</span></span><br><span class="line">kernel=np.ones((<span class="number">5</span>,<span class="number">5</span>),np.uint8)</span><br><span class="line">dilate=cv2.dilate(img,kernel,iterations=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>开为先腐蚀再膨胀 闭为先膨胀后腐蚀</p>
+<p>顶帽：原图像 - 开运算结果  顶帽得到的是开运算中断开的细节<br>底帽：原图像 - 闭运算结果  底帽得到的是闭运算中补上的细节</p>
+<h4 id="边缘检测-canny"><a href="#边缘检测-canny" class="headerlink" title="边缘检测 canny"></a>边缘检测 canny</h4><ul>
+<li>去噪 噪声会影响该算法进行边缘检测的准确性</li>
+<li>计算每个点的梯度大小和方向 例如用一对Sobel算子作为卷积核对图像滤波</li>
+<li>抑制非边缘点 边缘点应该满足：±梯度方向上的局部最大值，因此将不满足条件的点归零</li>
+<li>用两个阈值条件筛选剩余的边缘‘条纹’</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">edges = cv.Canny(blur, <span class="number">50</span>, <span class="number">150</span>, apertureSize)</span><br></pre></td></tr></table></figure>
+<h4 id="FindContour"><a href="#FindContour" class="headerlink" title="FindContour"></a>FindContour</h4><p>一种边缘提取方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">contours,_=cv2.findContours(img,RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>参数1 二值图像</li>
+<li>参数2 轮廓返回模式（<strong>RETR_EXTERNAL</strong>: 表示只检测最外层轮廓；<strong>RETR_LIST</strong>: 提取所有轮廓，并放置在list中，检测的轮廓不建立等级关系； <strong>RETR_TREE</strong>: 提取所有轮廓并重新建立网状轮廓结构 ）</li>
+<li>参数3 遍历发现方法（<strong>CHAIN_APPROX_NONE</strong>：获取每个轮廓的每个像素，相邻的两个点的像素位置差不超过1；<strong>CHAIN_APPROX_SIMPLE</strong>：压缩水平方向，垂直方向，对角线方向的元素，值保留该方向的重点坐标，如果一个矩形轮廓只需4个点来保存轮廓信息 ）<br><a target="_blank" rel="noopener" href="https://wenku.baidu.com/view/0349bd53a717866fb84ae45c3b3567ec102ddcda.html">用findcontour去孔洞</a></li>
+</ul>
+<h4 id="drawContours"><a href="#drawContours" class="headerlink" title="drawContours"></a>drawContours</h4><p>cv2.drawContours()</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cv2.drawContours(image, contours, contourIdx, color, thickness=<span class="literal">None</span>, lineType=<span class="literal">None</span>, hierarchy=<span class="literal">None</span>, maxLevel=<span class="literal">None</span>, offset=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>image 原图像</li>
+<li>contours 轮廓集合 例如findContours获得的集合</li>
+<li>contourIdx 指定绘制轮廓list中的哪条轮廓，如果是-1，则绘制其中的所有轮廓。</li>
+<li>color 颜色</li>
+<li>thickness 轮廓线的宽度，如果是-1（cv2.FILLED），则为填充模式。</li>
+</ul>
+<h4 id="外接矩形"><a href="#外接矩形" class="headerlink" title="外接矩形"></a>外接矩形</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x, y, w, h = cv2.boundingRect(contour)</span><br><span class="line">img = cv2.rectangle(img, (x, y), (x + w, y + h), (<span class="number">0</span>, <span class="number">255</span>, <span class="number">0</span>), <span class="number">1</span>)</span><br><span class="line">cv2.imshow(img)</span><br></pre></td></tr></table></figure>
+<h4 id="区域质心位置"><a href="#区域质心位置" class="headerlink" title="区域质心位置"></a>区域质心位置</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mu = cv2.moments(contour, <span class="literal">False</span>)</span><br><span class="line">mc = [mu[<span class="string">&#x27;m10&#x27;</span>]/mu[<span class="string">&#x27;m00&#x27;</span>], mu[<span class="string">&#x27;m01&#x27;</span>]/mu[<span class="string">&#x27;m00&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<h4 id="联通区域计数"><a href="#联通区域计数" class="headerlink" title="联通区域计数"></a>联通区域计数</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40467656/article/details/109214792">CSDN Blog:连通区域分析算法</a></p>
+<h4 id="floodFill填充孔洞"><a href="#floodFill填充孔洞" class="headerlink" title="floodFill填充孔洞"></a>floodFill填充孔洞</h4><h4 id="掩膜"><a href="#掩膜" class="headerlink" title="掩膜"></a>掩膜</h4><p>或者叫蒙版 将感兴趣区域（Region of Interest, ROI）提取出来 掩盖其他区域.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">h, w = gaussianBlur.shape</span><br><span class="line">mask = np.zeros((h, w), np.uint8)</span><br><span class="line">cv2.fillPoly(mask, [capContour], (<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>))</span><br><span class="line">roi = cv2.bitwise_and(GrayImage, GrayImage, mask=mask)</span><br><span class="line">cv2.imshow(<span class="string">&#x27;roi&#x27;</span>, roi)</span><br></pre></td></tr></table></figure>
+<h4 id="直方图"><a href="#直方图" class="headerlink" title="直方图"></a>直方图</h4><p>反映像素的值在图像中的分布，值范围分段，进行统计，值可以是亮度，或任意色彩通道的分量<br>直方图可以作为阈值分割的参数选择依据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2  </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment">#读取图像</span></span><br><span class="line">src = cv2.imread(<span class="string">&#x27;orign.bmp&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#绘制直方图</span></span><br><span class="line">plt.hist(src.ravel(), bins=<span class="number">256</span>, density=<span class="number">1</span>, facecolor=<span class="string">&#x27;green&#x27;</span>, alpha=<span class="number">0.75</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;x&quot;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;y&quot;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment">#显示原始图像</span></span><br><span class="line">cv2.imshow(<span class="string">&quot;src&quot;</span>, src)</span><br><span class="line">cv2.waitKey(<span class="number">0</span>)</span><br><span class="line">cv2.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>src.ravel()将二维图像数据展成一维</li>
+<li>BINS 分若干组</li>
+<li>DENSITY 密度</li>
+<li>FACECOLOR 直方图颜色</li>
+<li>ALPHA</li>
+</ul>
+<h4 id="matchtemplate"><a href="#matchtemplate" class="headerlink" title="matchtemplate"></a>matchtemplate</h4><h4 id="opencv-js"><a href="#opencv-js" class="headerlink" title="opencv.js"></a>opencv.js</h4><p><a target="_blank" rel="noopener" href="https://aralroca.com/blog/opencv-in-the-web">OpenCV directly in the browser (webassembly + webworker)</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/qqsnote/tags/OpenCV/" rel="tag"># OpenCV</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2022/06/27/pillow/" rel="prev" title="pillow">
+      <i class="fa fa-chevron-left"></i> pillow
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2022/07/01/server_maintainance/" rel="next" title="服务升级的用户体验">
+      服务升级的用户体验 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E6%98%BE%E7%A4%BA%E5%9B%BE%E5%83%8F"><span class="nav-number">2.</span> <span class="nav-text">读取显示图像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%A9%E6%94%BE"><span class="nav-number">3.</span> <span class="nav-text">缩放</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%83%8F%E7%B4%A0%E6%93%8D%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">像素操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E9%81%93"><span class="nav-number">5.</span> <span class="nav-text">通道</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%88%E5%80%BC"><span class="nav-number">6.</span> <span class="nav-text">阈值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E5%92%8C%E6%BB%A4%E6%B3%A2"><span class="nav-number">7.</span> <span class="nav-text">卷积和滤波</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%86%A8%E8%83%80%E5%92%8C%E8%85%90%E8%9A%80%EF%BC%8C%E5%BC%80%E8%BF%90%E7%AE%97%E5%92%8C%E9%97%AD%E8%BF%90%E7%AE%97-%E9%A1%B6%E5%B8%BD%E5%92%8C%E5%BA%95%E5%B8%BD"><span class="nav-number">8.</span> <span class="nav-text">膨胀和腐蚀，开运算和闭运算 顶帽和底帽</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B-canny"><span class="nav-number">9.</span> <span class="nav-text">边缘检测 canny</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FindContour"><span class="nav-number">10.</span> <span class="nav-text">FindContour</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#drawContours"><span class="nav-number">11.</span> <span class="nav-text">drawContours</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%96%E6%8E%A5%E7%9F%A9%E5%BD%A2"><span class="nav-number">12.</span> <span class="nav-text">外接矩形</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8C%BA%E5%9F%9F%E8%B4%A8%E5%BF%83%E4%BD%8D%E7%BD%AE"><span class="nav-number">13.</span> <span class="nav-text">区域质心位置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%81%94%E9%80%9A%E5%8C%BA%E5%9F%9F%E8%AE%A1%E6%95%B0"><span class="nav-number">14.</span> <span class="nav-text">联通区域计数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#floodFill%E5%A1%AB%E5%85%85%E5%AD%94%E6%B4%9E"><span class="nav-number">15.</span> <span class="nav-text">floodFill填充孔洞</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A9%E8%86%9C"><span class="nav-number">16.</span> <span class="nav-text">掩膜</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B4%E6%96%B9%E5%9B%BE"><span class="nav-number">17.</span> <span class="nav-text">直方图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#matchtemplate"><span class="nav-number">18.</span> <span class="nav-text">matchtemplate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#opencv-js"><span class="nav-number">19.</span> <span class="nav-text">opencv.js</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">336</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">128</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 22.5px; color: #eaeaea">AI</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.5px; color: #f2f2f2">Azure</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C++</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.5px; color: #e1e1e1">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.5px; color: #d9d9d9">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 21px; color: #e6e6e6">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.5px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 18px; color: #ddd">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 13.5px; color: #d0d0d0">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24px; color: #eee">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/React/" style="font-size: 21px; color: #e6e6e6">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 16.5px; color: #d9d9d9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.5px; color: #d0d0d0">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27px; color: #f7f7f7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.5px; color: #fbfbfb">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 19.5px; color: #e1e1e1">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 15px; color: #d5d5d5">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.5px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 18px; color: #ddd">图形学</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 15px; color: #d5d5d5">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.5px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.5px; color: #d9d9d9">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 13.5px; color: #d0d0d0">面试</a> <a href="/qqsnote/tags/%E9%A6%99%E6%A9%99%E6%B4%BE/" style="font-size: 12px; color: #ccc">香橙派</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

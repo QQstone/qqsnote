@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="Microsoft Teams开发人员文档 Teams App 实质是托管在Azure等服务端上的web app，Teams客户端类似于浏览器，打包部署直接用插件完成 此外微软提供sdk使之支持sso及授权访问功能  Microsoft 365 Developer Program部署及发布Teams App需要Talent的管理员权限 加入Microsoft 365 Developer Progr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Microsoft Teams 小程序">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2021/11/16/MsTeamsDev/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="Microsoft Teams开发人员文档 Teams App 实质是托管在Azure等服务端上的web app，Teams客户端类似于浏览器，打包部署直接用插件完成 此外微软提供sdk使之支持sso及授权访问功能  Microsoft 365 Developer Program部署及发布Teams App需要Talent的管理员权限 加入Microsoft 365 Developer Progr">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://docs.microsoft.com/zh-cn/microsoftteams/platform/assets/images/get-started/gs-build-options.png">
+<meta property="og:image" content="http://tva1.sinaimg.cn/large/a60edd42gy1h5jyqi2h1zj20it0n9q9q.jpg">
+<meta property="og:image" content="https://i0.wp.com/tvax1.sinaimg.cn/large/a60edd42gy1gx8shhfcbgj21400s5n2g.jpg">
+<meta property="og:image" content="https://tva3.sinaimg.cn/large/a60edd42gy1gx0gcvo5g9j213c0ukn1m.jpg">
+<meta property="og:image" content="https://i0.wp.com/tvax2.sinaimg.cn/large/a60edd42gy1gx0fsl3n0xj20bf0rk41z.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/a60edd42gy1gx56rdzzv1j20af05d75g.jpg">
+<meta property="og:image" content="https://docs.microsoft.com/zh-cn/microsoftteams/platform/assets/images/authentication/teams-sso-tabs/sso-tab.gif">
+<meta property="og:image" content="https://docs.microsoft.com/zh-cn/microsoftteams/platform/assets/images/authentication/teams-sso-tabs/tab-app-created.png">
+<meta property="article:published_time" content="2021-11-16T11:18:49.000Z">
+<meta property="article:modified_time" content="2025-07-05T02:07:52.117Z">
+<meta property="article:author" content="QQs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://docs.microsoft.com/zh-cn/microsoftteams/platform/assets/images/get-started/gs-build-options.png">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2021/11/16/MsTeamsDev/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Microsoft Teams 小程序 | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/11/16/MsTeamsDev/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Microsoft Teams 小程序
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-11-16 19:18:49" itemprop="dateCreated datePublished" datetime="2021-11-16T19:18:49+08:00">2021-11-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-05 10:07:52" itemprop="dateModified" datetime="2025-07-05T10:07:52+08:00">2025-07-05</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/microsoftteams/platform/">Microsoft Teams开发人员文档</a></p>
+<p>Teams App 实质是托管在Azure等服务端上的web app，Teams客户端类似于浏览器，打包部署直接用插件完成 此外微软提供sdk使之支持sso及授权访问功能</p>
+<p><img src="https://docs.microsoft.com/zh-cn/microsoftteams/platform/assets/images/get-started/gs-build-options.png" alt=""></p>
+<h4 id="Microsoft-365-Developer-Program"><a href="#Microsoft-365-Developer-Program" class="headerlink" title="Microsoft 365 Developer Program"></a>Microsoft 365 Developer Program</h4><p>部署及发布Teams App需要Talent的管理员权限 加入Microsoft 365 Developer Program 创建开发者账号使用免费沙盒—&gt; <a target="_blank" rel="noopener" href="https://developer.microsoft.com/microsoft-365/dev-program">Microsoft 365计划</a></p>
+<p><img src="http://tva1.sinaimg.cn/large/a60edd42gy1h5jyqi2h1zj20it0n9q9q.jpg" alt="m365plan.PNG"></p>
+<h4 id="安装vs-code-extraction：Teams-Toolkit-（preview）"><a href="#安装vs-code-extraction：Teams-Toolkit-（preview）" class="headerlink" title="安装vs code extraction：Teams Toolkit （preview）"></a>安装vs code extraction：Teams Toolkit （preview）</h4><h4 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h4><ul>
+<li>create a new Teams app</li>
+<li>select capability: Tab</li>
+<li>select hosting type: Azure</li>
+<li>select language: JavaScript</li>
+<li>input app name<br>以上设置保存在.fx/settings.<strong>json</strong><br>├───.fx<br>│       settings.json<br>│   package.json<br>│   permissions.json<br>├───appPackage<br>│       color.png<br>│       manifest.source.json<br>│       outline.png<br>│<br>└───tabs<br>  │   .env<br>  │   .gitignore<br>  │   package.json<br>  │   README.md<br>  │<br>  ├───public<br>  │       auth-end.html<br>  │       auth-start.html<br>  │       deploy.png<br>  │       favicon.ico<br>  │       hello.png<br>  │       index.html<br>  │       publish.png<br>  │<br>  └───src<pre><code>  │   index.css
+  │   index.jsx
+  │
+  └───components
+      │   App.css
+      │   App.jsx
+      │   Privacy.jsx
+      │   Tab.jsx
+      │   TabConfig.jsx
+      │   TermsOfUse.jsx
+</code></pre>Tab其实就是个React App<h4 id="运行和调试"><a href="#运行和调试" class="headerlink" title="运行和调试"></a>运行和调试</h4>press F5<br>调试host为 <a target="_blank" rel="noopener" href="https://localhost:3000">https://localhost:3000</a><br>偶见 localhost refused to connect. 查看Teams Toolkit的Accounts中side loading是否处于disabled状态<blockquote>
+<p>Your Microsoft 365 tenant admin hasn’t enabled sideloading permission for your account. You can’t install your app to Teams! </p>
+</blockquote>
+</li>
+</ul>
+<p>出于种种原因造成的side loading disabled 应进入<a target="_blank" rel="noopener" href="https://admin.microsoft.com/adminportal/home">Microsoft365 Admin Center</a>设置<br>Show all —&gt; Admin centers —&gt; Teams Apps —&gt; Setup policies —&gt; Global<br>打开 Upload custom apps</p>
+<h4 id="部署到Azure"><a href="#部署到Azure" class="headerlink" title="部署到Azure"></a>部署到Azure</h4><p>先执行Teams Toolkit提供的DEPLOYMENT—&gt;Provision in the Cloud功能，toolkit将以项目名称自行创建<del>App Service、Storage Account及Vitual Network等</del>Rescource</p>
+<p>事实上，Teams Tab App的前端静态文件使用Azure Storage Account托管，访问控制通过<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/azure/app-service/tutorial-connect-app-access-storage-javascript?tabs=azure-portal">托管标识(Managed Identity)</a>, 关于Provision时创建哪种资源见<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/microsoftteams/platform/toolkit/provision?from=teamstoolkit&amp;pivots=visual-studio-code#create-resources">Provision cloud resources</a></p>
+<p>使用Deploy to the Cloud 将当前项目作为Web App部署到前面Provision预备的资源上</p>
+<p>记得配置Api的Endpoint 比如写/public/config.json</p>
+<p>Zip Teams metadata package可获得该Web App的配置信息 包括名称及地址 以用于添加到Organization的Teams中</p>
+<h4 id="上传到teams"><a href="#上传到teams" class="headerlink" title="上传到teams"></a>上传到teams</h4><p>编译产生 build\appPackage.local.zip 即项目的应用包，该目录下还有应用部件清单 manifest.json</p>
+<p>将应用包上传到teams中测试：Teams 左边栏点击Apps —&gt; Manage your apps —&gt; Upload an app to your org’s app catalog<br>上传后图标显示在Apps列表中 可将其添加到team的chat中<br><img src="https://i0.wp.com/tvax1.sinaimg.cn/large/a60edd42gy1gx8shhfcbgj21400s5n2g.jpg" alt="upload teams app"></p>
+<h4 id="发布到组织"><a href="#发布到组织" class="headerlink" title="发布到组织"></a>发布到组织</h4><h4 id="Todo-List-Sample-SPFx"><a href="#Todo-List-Sample-SPFx" class="headerlink" title="Todo List Sample (SPFx)"></a>Todo List Sample (SPFx)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm i -g teamsfx-cli &#x2F;&#x2F; 安装脚手架</span><br><span class="line">teamsfx new template list &#x2F;&#x2F; 查看可用的sample</span><br></pre></td></tr></table></figure>
+<p>使用如下命令创建sample APP并基于这些sample作为模板开发自己的应用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">teamsfx new template todo-list-SPFx</span><br></pre></td></tr></table></figure><br>在teams中打开sharepoint站点<br><img src="https://tva3.sinaimg.cn/large/a60edd42gy1gx0gcvo5g9j213c0ukn1m.jpg" alt="teams"><br>配置一个list 见<a href="">Microsoft Doc:</a><br>代码中/SPFx/src/webparts/todoList/components/SharePointListManager.ts line17 设置为sharepoint上list的名字<br>用vscode的Teams Toolkit打开项目<br><img src="https://i0.wp.com/tvax2.sinaimg.cn/large/a60edd42gy1gx0fsl3n0xj20bf0rk41z.jpg" alt="teams toolkit menu"><br>选择项目目录打开<br>在teams toolkit中选择Provision in the cloud 在Cloud端创建app<br><img src="https://tva1.sinaimg.cn/large/a60edd42gy1gx56rdzzv1j20af05d75g.jpg" alt="teams provision"><em>**</em><br>点击Deploy to the cloud部署<br>点击Publish to the cloud发布<br>访问<a target="_blank" rel="noopener" href="https://admin.teams.microsoft.com/policies/manage-apps">Microsoft Teams admin center</a>查找已发布的app<br>登录Teams添加app<br>TODO 主动从外部系统向 Teams 发送信息，允许用户从 Teams 客户端内部处理该信息。<br>TODO 允许用户在另一个系统中快速查找信息，并将结果添加到 Teams 中的对话。</p>
+<h4 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h4><blockquote>
+<p>Microsoft 或 Microsoft 365 帐户登录 Teams 后，应用用户可以使用你的应用，而无需再次登录。<br><img src="https://docs.microsoft.com/zh-cn/microsoftteams/platform/assets/images/authentication/teams-sso-tabs/sso-tab.gif" alt=""><br>如上图示，App添加到Teams，切换到该tab时 确认授权App访问Azure AD</p>
+</blockquote>
+<p>步骤：<br>首先 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/microsoftteams/platform/tabs/how-to/authentication/tab-sso-register-aad#to-register-a-new-app-in-azure-ad">在AzureAD注册app</a><br><img src="https://docs.microsoft.com/zh-cn/microsoftteams/platform/assets/images/authentication/teams-sso-tabs/tab-app-created.png" alt=""></p>
+<h4 id="trouble-shooting"><a href="#trouble-shooting" class="headerlink" title="trouble shooting"></a>trouble shooting</h4><blockquote>
+<p>Teams Toolkit issue: Your Microsoft 365 tenant admin hasn’t enabled sideloading permission for your account. You can’t install your app to Teams</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/microsoftteams/platform/concepts/build-and-test/prepare-your-o365-tenant">Microsoft Doc: Prepare Your M365 Tenant</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/microsoftteams/platform/tabs/how-to/authentication/auth-flow-tab">Tab Appde的身份验证流程</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2021/11/04/vtk-codesnippet/" rel="prev" title="vtk-codesnippet">
+      <i class="fa fa-chevron-left"></i> vtk-codesnippet
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2021/12/14/Figma/" rel="next" title="Figma">
+      Figma <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Microsoft-365-Developer-Program"><span class="nav-number">1.</span> <span class="nav-text">Microsoft 365 Developer Program</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85vs-code-extraction%EF%BC%9ATeams-Toolkit-%EF%BC%88preview%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">安装vs code extraction：Teams Toolkit （preview）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="nav-number">3.</span> <span class="nav-text">创建项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%92%8C%E8%B0%83%E8%AF%95"><span class="nav-number">4.</span> <span class="nav-text">运行和调试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0Azure"><span class="nav-number">5.</span> <span class="nav-text">部署到Azure</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8A%E4%BC%A0%E5%88%B0teams"><span class="nav-number">6.</span> <span class="nav-text">上传到teams</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%91%E5%B8%83%E5%88%B0%E7%BB%84%E7%BB%87"><span class="nav-number">7.</span> <span class="nav-text">发布到组织</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Todo-List-Sample-SPFx"><span class="nav-number">8.</span> <span class="nav-text">Todo List Sample (SPFx)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81"><span class="nav-number">9.</span> <span class="nav-text">身份认证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#trouble-shooting"><span class="nav-number">10.</span> <span class="nav-text">trouble shooting</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">336</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">128</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 22.5px; color: #eaeaea">AI</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.5px; color: #f2f2f2">Azure</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C++</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.5px; color: #e1e1e1">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.5px; color: #d9d9d9">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 21px; color: #e6e6e6">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.5px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 18px; color: #ddd">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 13.5px; color: #d0d0d0">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24px; color: #eee">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/React/" style="font-size: 21px; color: #e6e6e6">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 16.5px; color: #d9d9d9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.5px; color: #d0d0d0">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27px; color: #f7f7f7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.5px; color: #fbfbfb">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 19.5px; color: #e1e1e1">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 15px; color: #d5d5d5">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.5px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 18px; color: #ddd">图形学</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 15px; color: #d5d5d5">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.5px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.5px; color: #d9d9d9">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 13.5px; color: #d0d0d0">面试</a> <a href="/qqsnote/tags/%E9%A6%99%E6%A9%99%E6%B4%BE/" style="font-size: 12px; color: #ccc">香橙派</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

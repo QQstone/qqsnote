@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="Azure ADWindows2000 引入Active Directory作为identity provider和authorization database，可想而知，这个名称与其存储方式以及根据talent区分的文件结构之间的关系。随着Web应用的发展，有了云平台的Azure Active Directory，其主要功能之一仍是作为identity provider。 AD和Azure AD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Azure-ADB2C">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/07/01/Azure-AD/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="Azure ADWindows2000 引入Active Directory作为identity provider和authorization database，可想而知，这个名称与其存储方式以及根据talent区分的文件结构之间的关系。随着Web应用的发展，有了云平台的Azure Active Directory，其主要功能之一仍是作为identity provider。 AD和Azure AD">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://docs.azure.cn/zh-cn/active-directory-b2c/media/overview/azureadb2c-overview.png">
+<meta property="og:image" content="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/overview/sign-in-small.png">
+<meta property="og:image" content="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/overview/scenario-singlesignon.png">
+<meta property="og:image" content="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-tenant/portal-02-create-tenant.png">
+<meta property="og:image" content="https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1ggqjwy66qzj20ry0kc0vz.jpg">
+<meta property="og:image" content="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-user-flows/signup-signin-type.png">
+<meta property="og:image" content="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-user-flows/signup-signin-attributes.png">
+<meta property="og:image" content="https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1ggqjztlsc1j21820oyadq.jpg">
+<meta property="og:image" content="https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1ggqjzvx048j21hc0smtch.jpg">
+<meta property="og:image" content="https://i0.wp.com/tvax1.sinaimg.cn/large/a60edd42gy1ggqjzx4r8ij21hc0smadq.jpg">
+<meta property="og:image" content="https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1ggqjzyald0j21hc0smgqd.jpg">
+<meta property="og:image" content="https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1ggqjzzhlnwj21hc0sm79k.jpg">
+<meta property="og:image" content="https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1ghejipxhdkj213f0cmjru.jpg">
+<meta property="article:published_time" content="2020-07-01T02:09:03.000Z">
+<meta property="article:modified_time" content="2025-12-04T07:19:52.812Z">
+<meta property="article:author" content="QQs">
+<meta property="article:tag" content="Azure">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://docs.azure.cn/zh-cn/active-directory-b2c/media/overview/azureadb2c-overview.png">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2020/07/01/Azure-AD/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Azure-ADB2C | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/01/Azure-AD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Azure-ADB2C
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-07-01 10:09:03" itemprop="dateCreated datePublished" datetime="2020-07-01T10:09:03+08:00">2020-07-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-12-04 15:19:52" itemprop="dateModified" datetime="2025-12-04T15:19:52+08:00">2025-12-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E4%BA%91%E5%B9%B3%E5%8F%B0/" itemprop="url" rel="index"><span itemprop="name">云平台</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="Azure-AD"><a href="#Azure-AD" class="headerlink" title="Azure AD"></a>Azure AD</h4><p>Windows2000 引入Active Directory作为identity provider和authorization database，<del>可想而知，这个名称与其存储方式以及根据talent区分的文件结构之间的关系。</del>随着Web应用的发展，有了云平台的Azure Active Directory，其主要功能之一仍是作为identity provider。</p>
+<p>AD和Azure AD的结合实现了以本地Windows身份通过web实现SSO认证。</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://jumpcloud.com/blog/is-azure-ad-an-identity-provider#cookie-accept">《Is Azure AD an Identity Provider?》</a></p>
+<p>Azure AD在office软件甚至其他Saas（Software as a service, 软件即服务）之间无缝访问，以及多重身份验证和条件访问控制</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/active-directory/manage-apps/what-is-application-management">使用 Azure Active Directory 进行应用程序管理</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.predicagroup.com/blog/azure-ad-b2b-b2c-puzzled-out/">Azure AD, B2B, B2C Puzzled Out – What Makes The Difference?</a></p>
+<p>B2B，对接Business和Business，使双方标识均可通过认证，主服务方持有访问权限的控制，<br><br>B2C, 面向customer 如下引述：</p>
+<blockquote>
+<p>Azure Active Directory B2C provides business-to-customer identity as a service. Your customers use their preferred social, enterprise, or local account identities to get single sign-on access to your applications and APIs.</p>
+</blockquote>
+<p>Azure Active Directory B2C 以服务的形式提供企业到客户的身份。 客户可使用其喜欢的社交、企业或本地帐户标识完成单点登录，访问应用程序和 API 。<br><img src="https://docs.azure.cn/zh-cn/active-directory-b2c/media/overview/azureadb2c-overview.png" alt="azureadb2c-overview"></p>
+<p>“贴牌式身份验证解决方案” blabla<br></p>
+<p>届时，访问DataService，跳转到如 CSDataServices.onmicrosoft.com/oauth2/v2.0/authorize?xxxx 格式的地址, 这是挂在Azure上的页面，可以做成本公司产品风格(见本文章节自定义登录页)，sign in的form可以直接使用已注册（保存在Azure AD）的账号, 也可能提供了社交账号的链接，点击后跳转到社交平台登录页。<br><img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/overview/sign-in-small.png" alt="sign_in"></p>
+<p>Azure保存用户的标识，即使使用第三方的sso如公司的sso认证或社交账号，也会有将第三方凭据交换Azure标识的过程，该过程即典型的OAuth2</p>
+<p><img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/overview/scenario-singlesignon.png" alt="scenario-singlesignon"></p>
+<p>名称和概念</p>
+<ul>
+<li>authority 颁发机构 形如 <a target="_blank" rel="noopener" href="https://login.microsoftonline.com/tfp/{tenant}/{policyName}">https://login.microsoftonline.com/tfp/{tenant}/{policyName}</a></li>
+<li>tenantID 注册使用AAD 成为“tenant” 获得tenantID 由tenant name命名的子域名等</li>
+<li>directory 存储所涉及的对象（如凭据，用户信息，配置）的物理或逻辑位置 </li>
+<li>Application registration 将自己公司产品注册为Azure AD B2C的App,以使用由Azure提供的贴牌认证</li>
+<li>user flow 和 costom policy分别指基本的注册-登录-配置的流程以及自定义的策略</li>
+<li>identity providers 第三方的标识提供方 如Facebook账号或Wechat账号授权服务 </li>
+</ul>
+<h4 id="Azure-ADB2C"><a href="#Azure-ADB2C" class="headerlink" title="Azure ADB2C"></a>Azure ADB2C</h4><p>Active Directory 的identity是在login.microsoftonline.com注册的，登录Azure portal也是同样的唯一的账号，B2C则提供了选择多个identity provider的功能，可以使用自己注册的tenant，抑或是社交账号，注册登录入口形如<a target="_blank" rel="noopener" href="https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/oauth2/v2.0/authorize">https://qqstudio.b2clogin.com/qqstudio.onmicrosoft.com/oauth2/v2.0/authorize</a><br>下面以官方sample为例配置，以求使用<a target="_blank" rel="noopener" href="https://github.com/Azure-Samples/active-directory-b2c-dotnet-desktop.git">wpf桌面客户端</a>通过Azure AD B2C的认证框架访问<a target="_blank" rel="noopener" href="https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi.git">Web Api</a></p>
+<h4 id="域服务-AD-DS-和应用程序管理"><a href="#域服务-AD-DS-和应用程序管理" class="headerlink" title="域服务(AD DS)和应用程序管理"></a>域服务(AD DS)和应用程序管理</h4><p>即除了B2C之外的主要功能。AD DS见<a href="/qqsnote/2020/11/24/Azure-ADDS/" title="Azure域服务">Azure域服务</a><br>AD可以用于管理Gallery App也就是微软库中的SaaS应用，也可以通过应用程序代理管理本地的应用(On-premises applications)<br>What does Azure AD Application Proxy do?<br>A.You use it to identify applications in your instance of Azure AD.<br>B.You use it to add on-premises applications to your instance of Azure AD.<br>C.You use it to add Azure AD Gallery applications to your instance of Azure AD.</p>
+<h4 id="创建资源"><a href="#创建资源" class="headerlink" title="创建资源"></a>创建资源</h4><p>进入“创建资源”入口，搜索Azure AD B2C，选择创建—&gt;给出两个选项,选择创建新的<br><img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-tenant/portal-02-create-tenant.png" alt="micro docs"><br>loading半天后提示创建成功，点击链接切换directory</p>
+<p>Directory creation was successful. Click here to navigate to your new directory: QQStudio.</p>
+<p><img src="https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1ggqjwy66qzj20ry0kc0vz.jpg" alt="directory created"></p>
+<h4 id="user-flow"><a href="#user-flow" class="headerlink" title="user flow"></a>user flow</h4><p>选择由Azure AD B2C控制的行为，一般就是登入登出，注册、注销，重置密码。<br><br>选择Sign up and sign in<br><img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-user-flows/signup-signin-type.png" alt=""><br>输入user flow名称<br><br>选择email作为sign up的身份验证<br><br>选择需要收集的注册信息<br><img src="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/media/tutorial-create-user-flows/signup-signin-attributes.png" alt=""></p>
+<p>关于reset password</p>
+<blockquote>
+<p>使用本地帐户的 注册或登录 用户流在体验的第一个页面上包含“忘记了密码?”链接。 单击此链接不会自动触发密码重置用户流。<br>而是将错误代码 AADB2C90118 返回给应用程序。 应用程序需要通过运行一个可重置密码的特定用户流来处理此错误代码。 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/user-flow-overview#linking-user-flows">Microsoft Docs：user flow 概述</a></p>
+<h4 id="注册Api应用程序"><a href="#注册Api应用程序" class="headerlink" title="注册Api应用程序"></a>注册Api应用程序</h4><p>将访问受控的应用(这里是Web Api)注册到Azure AD B2C，框架给予应用程序client id等标记，记下当登录成功时跳转回的地址————Redirect URI(关于Redirect URI的限制见本文Q&amp;A部分)。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Display name:Demo website</span><br><span class="line">Application (client) ID:c4b27029-a5ad-4022-979d-8721101df951</span><br><span class="line">Directory (tenant) ID:9175ffa9-24b3-4fc1-806e-6d53582a7f4f</span><br><span class="line">Object ID:c5064a61-0321-4a39-9f3c-dcef0df9b99c</span><br><span class="line">Supported account types:All Microsoft  users</span><br><span class="line">Redirect URIs:1 web, 0 spa, 0 public client</span><br><span class="line">Application ID URI:Add an Application ID URI</span><br><span class="line">Managed application in local directory:Demo website</span><br></pre></td></tr></table></figure><br>这里的Redireact URI是<a target="_blank" rel="noopener" href="http://localhost:8888/auth，期望在本机运行桌面客户端程序，访问Api跳转到Azure">http://localhost:8888/auth，期望在本机运行桌面客户端程序，访问Api跳转到Azure</a> Page登录，成功后进入到该地址。<br><br>进入管理—认证(Authentication),选择使用<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/active-directory/develop/v2-oauth2-implicit-grant-flow?WT.mc_id=Portal-Microsoft_AAD_RegisteredApps">隐式授权流</a>(Implicit grant, 见笔记<a href="/qqsnote/2019/12/09/OAuth2/" title="OAuth2">OAuth2</a>), 并添加Redirect Uri<br><br><img src="https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1ggqjztlsc1j21820oyadq.jpg" alt="04register_app_add_auth_url"><br>进入管理—公开API(expose API),Application ID URI set 为<a target="_blank" rel="noopener" href="https://qqstudio.onmicrosoft.com/api">https://qqstudio.onmicrosoft.com/api</a> 默认是由GUID组成的<br><br>添加scope(Add a scope)<br><img src="https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1ggqjzvx048j21hc0smtch.jpg" alt="05add access scope"><br>scope是控制访问权限的定义，将在后续步骤中被授权到已注册的client<br></p>
+</blockquote>
+<h4 id="配置Web-Api应用的Authorization"><a href="#配置Web-Api应用的Authorization" class="headerlink" title="配置Web Api应用的Authorization"></a>配置Web Api应用的Authorization</h4><p>使Web Api能将token拿到Azure AD B2C去校验，官方Sample中从config.js读取配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">const config &#x3D; &#123;</span><br><span class="line">    identityMetadata: &quot;https:&#x2F;&#x2F;&quot; + b2cDomainHost + &quot;&#x2F;&quot; + tenantId + &quot;&#x2F;&quot; + policyName + &quot;&#x2F;v2.0&#x2F;.well-known&#x2F;openid-configuration&#x2F;&quot;,</span><br><span class="line">    clientID: clientID,</span><br><span class="line">    policyName: policyName,</span><br><span class="line">    isB2C: true,</span><br><span class="line">    validateIssuer: false,</span><br><span class="line">    loggingLevel: &#39;info&#39;,</span><br><span class="line">    loggingNoPII: false,</span><br><span class="line">    passReqToCallback: false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>express web api的认证和重定向用到了<a target="_blank" rel="noopener" href="https://github.com/jaredhanson/passport">passport</a>和<a target="_blank" rel="noopener" href="https://github.com/AzureAD/passport-azure-ad#readme">passport-azure-ad</a>两个包，后者直接带入上面的config对象做为参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">const express &#x3D; require(&quot;express&quot;);</span><br><span class="line">const morgan &#x3D; require(&quot;morgan&quot;);</span><br><span class="line">const passport &#x3D; require(&quot;passport&quot;);</span><br><span class="line">const config &#x3D; require(&#39;.&#x2F;config&#39;);</span><br><span class="line">const BearerStrategy &#x3D; require(&#39;passport-azure-ad&#39;).BearerStrategy;</span><br><span class="line"></span><br><span class="line">const bearerStrategy &#x3D; new BearerStrategy(config,</span><br><span class="line">    function (token, done) &#123;</span><br><span class="line">        &#x2F;&#x2F; Send user info using the second argument</span><br><span class="line">        done(null, &#123;&#125;, token);</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">const app &#x3D; express();</span><br><span class="line"></span><br><span class="line">app.use(morgan(&#39;dev&#39;));</span><br><span class="line">app.use(passport.initialize());</span><br><span class="line"></span><br><span class="line">passport.use(bearerStrategy);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;enable CORS</span><br><span class="line">app.use((req, res, next) &#x3D;&gt; &#123;</span><br><span class="line">    res.header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);</span><br><span class="line">    res.header(&quot;Access-Control-Allow-Headers&quot;, &quot;Authorization, Origin, X-Requested-With, Content-Type, Accept&quot;);</span><br><span class="line">    next();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; API endpoint</span><br><span class="line">app.get(&quot;&#x2F;hello&quot;,</span><br><span class="line">    passport.authenticate(&#39;oauth-bearer&#39;, &#123;session: false&#125;),</span><br><span class="line">    (req, res) &#x3D;&gt; &#123;</span><br><span class="line">        console.log(&#39;User info: &#39;, req.user);</span><br><span class="line">        console.log(&#39;Validated claims: &#39;, req.authInfo);</span><br><span class="line">        </span><br><span class="line">        if (&#39;scp&#39; in req.authInfo &amp;&amp; req.authInfo[&#39;scp&#39;].split(&quot; &quot;).indexOf(&quot;demo.read&quot;) &gt;&#x3D; 0) &#123;</span><br><span class="line">            &#x2F;&#x2F; Service relies on the name claim.  </span><br><span class="line">            res.status(200).json(&#123;&#39;name&#39;: req.authInfo[&#39;name&#39;]&#125;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            console.log(&quot;Invalid Scope, 403&quot;);</span><br><span class="line">            res.status(403).json(&#123;&#39;error&#39;: &#39;insufficient_scope&#39;&#125;); </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">const port &#x3D; process.env.PORT || 5000;</span><br><span class="line"></span><br><span class="line">app.listen(port, () &#x3D;&gt; &#123;</span><br><span class="line">    console.log(&quot;Listening on port &quot; + port);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="注册客户端程序"><a href="#注册客户端程序" class="headerlink" title="注册客户端程序"></a>注册客户端程序</h4><p>将官网sample的wpf client注册到Azure AD B2C<br><br>创建完成后添加Api权限，或者说授权scope：管理—API权限(API Permission)—Add a permission—My APIs,选择已注册的Web API应用<br><img src="https://i0.wp.com/tvax1.sinaimg.cn/large/a60edd42gy1ggqjzx4r8ij21hc0smadq.jpg" alt="06 add client api permissions"><br>勾选Permissions，即上文中的scopes<br><img src="https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1ggqjzyald0j21hc0smgqd.jpg" alt="07 select permissions"><br>授权client使用scope：管理—API权限(API Permission)—Grant admin consent for xxxx(telent Name)—click Yes<br><br>QQs跟随sample的步骤遗漏了下面这一步————添加重定向地址————导致在配置客户端时Redirect Uri不知道填什么<br><br>管理—Authentication—Add a platform—Mobile and desktop applications 然后可以看到根据当前talent的user flow生成的登录页模板 勾选<a target="_blank" rel="noopener" href="https://qqstudio.b2clogin.com/oauth2/nativeclient">https://qqstudio.b2clogin.com/oauth2/nativeclient</a><br><img src="https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1ggqjzzhlnwj21hc0sm79k.jpg" alt="08 client redirect to login page"></p>
+<h4 id="配置客户端以访问已授权的Api"><a href="#配置客户端以访问已授权的Api" class="headerlink" title="配置客户端以访问已授权的Api"></a>配置客户端以访问已授权的Api</h4><p>sample client是个WPF应用，引入了Microsoft.Identity.Client这个包来进行token校验<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Copyright (c) Microsoft Corporation. All rights reserved.</span><br><span class="line">&#x2F;&#x2F; Licensed under the MIT License.</span><br><span class="line"></span><br><span class="line">using System.IO;</span><br><span class="line">using System.Text;</span><br><span class="line">using System.Windows;</span><br><span class="line">using Microsoft.Identity.Client;</span><br><span class="line"></span><br><span class="line">namespace active_directory_b2c_wpf</span><br><span class="line">&#123;</span><br><span class="line">    public partial class App : Application</span><br><span class="line">    &#123;</span><br><span class="line">        private static readonly string Tenant &#x3D; &quot;61874450-1725-44bb-bb8e-314575861ad6&quot;;</span><br><span class="line">        private static readonly string AzureAdB2CHostname &#x3D; &quot;https:&#x2F;&#x2F;qqstudio.b2clogin.com&#x2F;oauth2&#x2F;nativeclient&quot;;</span><br><span class="line">        private static readonly string ClientId &#x3D; &quot;8e039329-171a-4484-8151-4e67bf561218&quot;; &#x2F;&#x2F; 这里的clientId是WPF Client自己的ID</span><br><span class="line">        private static readonly string RedirectUri &#x3D; &quot;https:&#x2F;&#x2F;fabrikamb2c.b2clogin.com&#x2F;oauth2&#x2F;nativeclient&quot;; &#x2F;&#x2F; 这个是Azure给桌面客户端的登录页</span><br><span class="line">        public static string PolicySignUpSignIn &#x3D; &quot;B2C_1_basic_sign_up_and_sign_in&quot;;</span><br><span class="line"></span><br><span class="line">        public static string[] ApiScopes &#x3D; &#123; &quot;https:&#x2F;&#x2F;qqstudio.onmicrosoft.com&#x2F;api&#x2F;demo.read&quot;, &quot;https:&#x2F;&#x2F;qqstudio.onmicrosoft.com&#x2F;api&#x2F;demo.write&quot; &#125;;</span><br><span class="line">        public static string ApiEndpoint &#x3D; &quot;https:&#x2F;&#x2F;fabrikamb2chello.azurewebsites.net&#x2F;hello&quot;;</span><br><span class="line">        private static string AuthorityBase &#x3D; $&quot;https:&#x2F;&#x2F;&#123;AzureAdB2CHostname&#125;&#x2F;tfp&#x2F;&#123;Tenant&#125;&#x2F;&quot;;</span><br><span class="line">        public static string AuthoritySignUpSignIn &#x3D; $&quot;&#123;AuthorityBase&#125;&#123;PolicySignUpSignIn&#125;&quot;;</span><br><span class="line"></span><br><span class="line">        public static IPublicClientApplication PublicClientApp &#123; get; private set; &#125;</span><br><span class="line"></span><br><span class="line">        static App()</span><br><span class="line">        &#123;</span><br><span class="line">            PublicClientApp &#x3D; PublicClientApplicationBuilder.Create(ClientId)</span><br><span class="line">            .WithB2CAuthority(AuthoritySignUpSignIn)</span><br><span class="line">            .WithRedirectUri(RedirectUri)</span><br><span class="line">            .WithLogging(Log, LogLevel.Info, false) &#x2F;&#x2F; don&#39;t log PII details on a regular basis</span><br><span class="line">            .Build();</span><br><span class="line"></span><br><span class="line">            TokenCacheHelper.Bind(PublicClientApp.UserTokenCache);</span><br><span class="line">        &#125;</span><br><span class="line">        private static void Log(LogLevel level, string message, bool containsPii)</span><br><span class="line">        &#123;</span><br><span class="line">            string logs &#x3D; ($&quot;&#123;level&#125; &#123;message&#125;&quot;);</span><br><span class="line">            StringBuilder sb &#x3D; new StringBuilder();</span><br><span class="line">            sb.Append(logs);</span><br><span class="line">            File.AppendAllText(System.Reflection.Assembly.GetExecutingAssembly().Location + &quot;.msalLogs.txt&quot;, sb.ToString());</span><br><span class="line">            sb.Clear();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="scopes"><a href="#scopes" class="headerlink" title="scopes"></a>scopes</h4><p>通过scopes管理对受保护资源的权限，请求令牌时，客户端传递scope</p>
+<h4 id="关于校验和跳转的包的实现的推测"><a href="#关于校验和跳转的包的实现的推测" class="headerlink" title="关于校验和跳转的包的实现的推测"></a>关于校验和跳转的包的实现的推测</h4><ul>
+<li>客户端访问api，Http/Https Request</li>
+<li>客户端Request使用Jwt Bearer Authentication 传递token<br><img src="https://i0.wp.com/tvax4.sinaimg.cn/large/a60edd42gy1ghejipxhdkj213f0cmjru.jpg" alt="10 bearer auth"></li>
+<li>服务端接收到的request中token缺少或过期，返回401</li>
+<li>客户端收到401打开Azure Sign in Page，附带重定向回api end point 的url</li>
+<li>Azure AD 框架进行认证</li>
+<li>Azure AD 框架查询并授权 颁发相应的token</li>
+<li>客户端接收到token并缓存<h4 id="自定义策略用户流"><a href="#自定义策略用户流" class="headerlink" title="自定义策略用户流"></a>自定义策略用户流</h4>使用ADB2C认证授权流可选择预置的User flow（见上文）或自定义策略</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/tutorial-create-user-flows?pivots=b2c-custom-policy#add-signing-and-encryption-keys-for-identity-experience-framework-applications">Microsoft Docs：为 Identity Experience Framework 应用程序添加签名和加密密钥</a></p>
+<p><a target="_blank" rel="noopener" href="https://tsmatz.wordpress.com/2020/05/12/azure-ad-b2c-ief-custom-policy-walkthrough/">A Walkthrough For Azure AD B2C Custom Policy (Identity Experience Framework)</a></p>
+<p>下载新手配置包（<a target="_blank" rel="noopener" href="https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack.git">starterpack</a>）</p>
+<h4 id="移动客户端Android"><a href="#移动客户端Android" class="headerlink" title="移动客户端Android"></a>移动客户端Android</h4><p>Redierct Uri形如 msauth://{PACKAGE_NAME}/{BASE64_URL_ENCODED_PACKAGE_SIGNATURE}<br>将React Native应用注册为ADB2C的客户端：<br>Azure Portal -&gt; ADB2C -&gt; App registration -&gt; Authentication -&gt; Platform configurations -&gt; Add a platform -&gt; Android</p>
+<ul>
+<li>PACKAGE_NAME /android/app/src/main/java/com/exampleapp/MainApplication.kt 从路径以及java源码的顶层包名可知，此处为 <strong>com.exampleapp</strong></li>
+<li>SIGNATURE 生成签名↓<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keytool -exportcert -alias androiddebugkey -keystore %HOMEPATH%\.android\debug.keystore | openssl sha1 -binary | openssl base64</span><br></pre></td></tr></table></figure>
+<h4 id="移动客户端ios"><a href="#移动客户端ios" class="headerlink" title="移动客户端ios"></a>移动客户端ios</h4>Redirect Urix形如msauth.{BUNDLE_ID}://auth<br>同上Add a platform for iOS/macOS并填入BUNDLE_ID<br>事实上BUNDLE_ID也是如com.exampleapp的字符串</li>
+</ul>
+<h4 id="使用Azure-AD-作为identity-provider（存目）"><a href="#使用Azure-AD-作为identity-provider（存目）" class="headerlink" title="使用Azure AD 作为identity provider（存目）"></a>使用Azure AD 作为identity provider（存目）</h4><p>以实现一键(使用AD凭据)登录</p>
+<h4 id="对接wechat-作为identity-provider（存目）"><a href="#对接wechat-作为identity-provider（存目）" class="headerlink" title="对接wechat 作为identity provider（存目）"></a>对接wechat 作为identity provider（存目）</h4><p>在user flow - identity provider中勾选社交账号 wechat</p>
+<h4 id="关于系统角色定义"><a href="#关于系统角色定义" class="headerlink" title="关于系统角色定义"></a>关于系统角色定义</h4><p>多个系统使用Azure AD B2C，各个系统地权限角色是否要在Azure方维护呢？是否是在expose API时定义scope呢？<br><br>私以为并不是，鉴于<a href="/qqsnote/2019/12/09/OAuth2/" title="OAuth">OAuth</a>一篇中所述，资源服务器保留私钥对access token进行校验，甚至可以从中解析出当前用户key，过期时间等信息，籍此完全可以查询本系统定义地权限角色，而无须频繁访问SSO。</p>
+<h4 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q&amp;A"></a>Q&amp;A</h4><blockquote>
+<p>issue: The application associated with client id has no registered redirect URIs.</p>
+</blockquote>
+<p>按说在App Registry中配置 Redirect URI是optional的，曾遇到此问题是没有勾选隐式授权（Authentication—&gt;Implicit grant）</p>
+<blockquote>
+<p>一定需要注册Redirect URI吗，可以在跳转到登录页时作为query parameter传递吗？</p>
+</blockquote>
+<p>一定要注册, 似乎是出于复杂的安全性的考虑 见<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/47520604/why-is-redirect-url-fully-qualified-in-azure-ad-b2c">StackOverflow:Why is Redirect URL Fully Qualified in Azure AD B2C?
+</a><br>跳转到登录页时确实会传递Redirect_URI参数，否则会报redirect_uri_mismatch的Error且不会传回access token<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/active-directory/develop/reply-url">Redirect Uri 的限制</a>要求作为跳转参数的Redirect_URI，与注册在ADB2C上的若干Redirect URIs之一完全匹配，除了localhost(匹配时自动忽略端口)。<br>官方文档还提到了state参数，跳转参数state将在登录成功后链在Redirect URI后面，可以用来恢复跳转登录前的浏览状态</p>
+<blockquote>
+<p>Silent Sign In Workflow</p>
+</blockquote>
+<h4 id="自定义登录页"><a href="#自定义登录页" class="headerlink" title="自定义登录页"></a>自定义登录页</h4><p>参考<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/customize-ui?pivots=b2c-user-flow">Microsoft Docs: ADB2C UX自定义</a><br>可设置蓝色 灰色 经典风格的sign in页面 以及公司logo<br>设置表单项目及排序等</p>
+<h4 id="Wechat"><a href="#Wechat" class="headerlink" title="Wechat"></a>Wechat</h4><p>首先是在<a target="_blank" rel="noopener" href="https://open.weixin.qq.com/cgi-bin/applist?t=manage/list&amp;page=0&amp;num=20&amp;openapptype=512&amp;token=046ef0026c9a457aa1f8f33db6868c26e193c21d&amp;lang=zh_CN">微信公众平台</a>注册网站应用,注册过程需要填写企业/个人网站的官网和备案号，很头疼</p>
+<p>添加Wechat为AB B2C的identity provider：Azure AD B2C —&gt; Identity providers —&gt; WeChat(Preview) 可以看到Callback URL(填到微信公众平台上注册的网站应用的授权回调域配置中)，Name可以填WeChat，填写网站应用的id/secret</p>
+<p>添加identity provider到User flow：Azure AD B2C —&gt; User flows —&gt; [Your User flow] —&gt; Identity providers 选择已添加到AD B2C的 social identity provider</p>
+<h4 id="多个资源"><a href="#多个资源" class="headerlink" title="多个资源"></a>多个资源</h4><blockquote>
+<p>issue: MSAL AADB2C90146 ‘Openid profile’ provided in request specifies more than one resource for an access token, which is not supported’</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/49362631/msal-aadb2c90146-openid-profile-provided-in-request-specifies-more-than-on">stackoverflow: use requestsilent</a></p>
+<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=AzureADB2CTools.aadb2c">Visual Studio Code 的 Azure AD B2C 扩展</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/active-directory-b2c/troubleshoot-with-application-insights">Application Insights-logs</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/qqsnote/tags/Azure/" rel="tag"># Azure</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/06/29/React/" rel="prev" title="React">
+      <i class="fa fa-chevron-left"></i> React
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/07/10/pm2/" rel="next" title="pm2">
+      pm2 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Azure-AD"><span class="nav-number">1.</span> <span class="nav-text">Azure AD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Azure-ADB2C"><span class="nav-number">2.</span> <span class="nav-text">Azure ADB2C</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%9F%E6%9C%8D%E5%8A%A1-AD-DS-%E5%92%8C%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%AE%A1%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">域服务(AD DS)和应用程序管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%B5%84%E6%BA%90"><span class="nav-number">4.</span> <span class="nav-text">创建资源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#user-flow"><span class="nav-number">5.</span> <span class="nav-text">user flow</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E5%86%8CApi%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-number">6.</span> <span class="nav-text">注册Api应用程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEWeb-Api%E5%BA%94%E7%94%A8%E7%9A%84Authorization"><span class="nav-number">7.</span> <span class="nav-text">配置Web Api应用的Authorization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%A8%8B%E5%BA%8F"><span class="nav-number">8.</span> <span class="nav-text">注册客户端程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%A5%E8%AE%BF%E9%97%AE%E5%B7%B2%E6%8E%88%E6%9D%83%E7%9A%84Api"><span class="nav-number">9.</span> <span class="nav-text">配置客户端以访问已授权的Api</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scopes"><span class="nav-number">10.</span> <span class="nav-text">scopes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%A0%A1%E9%AA%8C%E5%92%8C%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%8C%85%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%9A%84%E6%8E%A8%E6%B5%8B"><span class="nav-number">11.</span> <span class="nav-text">关于校验和跳转的包的实现的推测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AD%96%E7%95%A5%E7%94%A8%E6%88%B7%E6%B5%81"><span class="nav-number">12.</span> <span class="nav-text">自定义策略用户流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E5%AE%A2%E6%88%B7%E7%AB%AFAndroid"><span class="nav-number">13.</span> <span class="nav-text">移动客户端Android</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E5%AE%A2%E6%88%B7%E7%AB%AFios"><span class="nav-number">14.</span> <span class="nav-text">移动客户端ios</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Azure-AD-%E4%BD%9C%E4%B8%BAidentity-provider%EF%BC%88%E5%AD%98%E7%9B%AE%EF%BC%89"><span class="nav-number">15.</span> <span class="nav-text">使用Azure AD 作为identity provider（存目）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E6%8E%A5wechat-%E4%BD%9C%E4%B8%BAidentity-provider%EF%BC%88%E5%AD%98%E7%9B%AE%EF%BC%89"><span class="nav-number">16.</span> <span class="nav-text">对接wechat 作为identity provider（存目）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E7%B3%BB%E7%BB%9F%E8%A7%92%E8%89%B2%E5%AE%9A%E4%B9%89"><span class="nav-number">17.</span> <span class="nav-text">关于系统角色定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Q-amp-A"><span class="nav-number">18.</span> <span class="nav-text">Q&amp;A</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%99%BB%E5%BD%95%E9%A1%B5"><span class="nav-number">19.</span> <span class="nav-text">自定义登录页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Wechat"><span class="nav-number">20.</span> <span class="nav-text">Wechat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E8%B5%84%E6%BA%90"><span class="nav-number">21.</span> <span class="nav-text">多个资源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Tips"><span class="nav-number">22.</span> <span class="nav-text">Tips</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">336</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">128</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 22.5px; color: #eaeaea">AI</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.5px; color: #f2f2f2">Azure</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C++</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.5px; color: #e1e1e1">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.5px; color: #d9d9d9">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 21px; color: #e6e6e6">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.5px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 18px; color: #ddd">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 13.5px; color: #d0d0d0">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24px; color: #eee">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/React/" style="font-size: 21px; color: #e6e6e6">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 16.5px; color: #d9d9d9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.5px; color: #d0d0d0">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27px; color: #f7f7f7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.5px; color: #fbfbfb">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 19.5px; color: #e1e1e1">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 15px; color: #d5d5d5">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.5px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 18px; color: #ddd">图形学</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 15px; color: #d5d5d5">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.5px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.5px; color: #d9d9d9">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 13.5px; color: #d0d0d0">面试</a> <a href="/qqsnote/tags/%E9%A6%99%E6%A9%99%E6%B4%BE/" style="font-size: 12px; color: #ccc">香橙派</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

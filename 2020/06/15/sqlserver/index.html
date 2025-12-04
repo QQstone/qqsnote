@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="命令12sqlcmd -S .\SqlExpressNET START&#x2F;PAUSE&#x2F;CONTINUE&#x2F;STOP&#x2F; MSSQLSERVER QQs未能成功实践。。或者，任务管理器手动启动 MSSQL$SQLEXPRESS  schema在MySQL中schema的概念和database一致但是微软搞什么都要多加点概念，sqlserver中，表名前带有schem">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL Server">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/06/15/sqlserver/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="命令12sqlcmd -S .\SqlExpressNET START&#x2F;PAUSE&#x2F;CONTINUE&#x2F;STOP&#x2F; MSSQLSERVER QQs未能成功实践。。或者，任务管理器手动启动 MSSQL$SQLEXPRESS  schema在MySQL中schema的概念和database一致但是微软搞什么都要多加点概念，sqlserver中，表名前带有schem">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/a60edd42gy1gij7y2m0oxj20u40qm75y.jpg">
+<meta property="og:image" content="https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1gij89zv9myj20ef0hk75n.jpg">
+<meta property="article:published_time" content="2020-06-15T06:19:55.000Z">
+<meta property="article:modified_time" content="2025-07-05T02:07:52.172Z">
+<meta property="article:author" content="QQs">
+<meta property="article:tag" content="SQL_Server">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/a60edd42gy1gij7y2m0oxj20u40qm75y.jpg">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2020/06/15/sqlserver/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>SQL Server | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/06/15/sqlserver/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SQL Server
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-06-15 14:19:55" itemprop="dateCreated datePublished" datetime="2020-06-15T14:19:55+08:00">2020-06-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-05 10:07:52" itemprop="dateModified" datetime="2025-07-05T10:07:52+08:00">2025-07-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sqlcmd -S .\SqlExpress</span><br><span class="line">NET START&#x2F;PAUSE&#x2F;CONTINUE&#x2F;STOP&#x2F; MSSQLSERVER</span><br></pre></td></tr></table></figure>
+<p>QQs未能成功实践。。<br>或者，任务管理器手动启动 MSSQL$SQLEXPRESS </p>
+<h4 id="schema"><a href="#schema" class="headerlink" title="schema"></a>schema</h4><p>在MySQL中schema的概念和database一致<br><br>但是微软搞什么都要多加点概念，sqlserver中，表名前带有schema标记如dbo.table1,这里的dbo指数据库的默认用户database owner<br><br>导出表结构（create table）语句时会带着schema<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">create table [ent].[tabletemp](</span><br><span class="line">	[Id] [uniqueidentifier] NOT NULL,</span><br><span class="line">	[Name] [nvarchar](50) NULL,</span><br><span class="line">PRIMARY KEY CLUSTERED </span><br><span class="line">(</span><br><span class="line">	[Id] ASC</span><br><span class="line">)WITH (PAD_INDEX &#x3D; OFF, STATISTICS_NORECOMPUTE &#x3D; OFF, IGNORE_DUP_KEY &#x3D; OFF, ALLOW_ROW_LOCKS &#x3D; ON, ALLOW_PAGE_LOCKS &#x3D; ON) ON [PRIMARY]</span><br><span class="line">) ON [PRIMARY]</span><br></pre></td></tr></table></figure><br>迁移时执行该语句会提示”The specified schema name “env” either does not exist or you do not have permission to use it.”<br><br>创建schema<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create schema ent</span><br></pre></td></tr></table></figure><br>变更schema<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER SCHEMA ent TRANSFER OBJECT::dbo.table1;  </span><br></pre></td></tr></table></figure></p>
+<h4 id="创建新用户及授权访问"><a href="#创建新用户及授权访问" class="headerlink" title="创建新用户及授权访问"></a>创建新用户及授权访问</h4><p><a target="_blank" rel="noopener" href="https://www.fujieace.com/mssql/create-login.html">参考原文</a><br></p>
+<ul>
+<li>配置登录名 Database Server —&gt; Security —&gt; Logins —&gt; 右键New Login</li>
+<li>常规General标签页中，配置认证方式等</li>
+<li>服务器角色（Server Roles）添加 public sysadmon</li>
+<li>用户映射（User Mapping）添加创建的新用户</li>
+<li>安全对象（Securable）搜索 —&gt; 选择 The Server(当前数据库服务器名)</li>
+<li>状态默认</li>
+</ul>
+<h4 id="ServerName"><a href="#ServerName" class="headerlink" title="ServerName"></a>ServerName</h4><p>sqlserver实例默认以计算机名+服务提供者命名，如SHAL400/SQLEXPRESS, 甚至用ip代替计算机名都会导致无法连接.<br><br>配置sqlserver支持远程访问:<br></p>
+<ol>
+<li>从本地SSMS连接数据库，右键服务器—Facets—Server Configuration—RemoteAccessEnable=true<br><img src="https://tva1.sinaimg.cn/large/a60edd42gy1gij7y2m0oxj20u40qm75y.jpg" alt="sqlserver_remote_access"></li>
+<li>打开SQL Server Configuration Manager(SSCM) SQL Server Browser Running, </li>
+<li>SSCM—SQL Server Network Configuration—Protocols for SQLEXPRESS—TCP/IP Enable, 然后右键打开Properties设置ip及端口如下（注意IPAll的TCP Dynamic Ports不要写死）<br> <img src="https://i0.wp.com/tvax3.sinaimg.cn/large/a60edd42gy1gij89zv9myj20ef0hk75n.jpg" alt="sqlserver_remote_access_tcpip"></li>
+<li>配置防火墙略<br></li>
+</ol>
+<h4 id="调用存储过程"><a href="#调用存储过程" class="headerlink" title="调用存储过程"></a>调用存储过程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXEC storedProcedure1 @param&#x3D;&#39;01&#39;</span><br></pre></td></tr></table></figure>
+<h4 id="约束Constraint"><a href="#约束Constraint" class="headerlink" title="约束Constraint"></a>约束Constraint</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE [dbo].[Group](</span><br><span class="line">	[ID] [uniqueidentifier] NOT NULL,</span><br><span class="line">	[CreateTime] [datetime2](7) NULL,</span><br><span class="line">	[Name] [nvarchar](80) NULL,</span><br><span class="line">	[Valid] [bit] NOT NULL,</span><br><span class="line">	[UpdateTime] [datetime2](7) NULL,</span><br><span class="line">	[Comment] [nvarchar](500) NULL,</span><br><span class="line">    CONSTRAINT [AK_Group_Name] UNIQUE ([Name])</span><br><span class="line">) ON [PRIMARY]</span><br></pre></td></tr></table></figure>
+<h4 id="关于大小写"><a href="#关于大小写" class="headerlink" title="关于大小写"></a>关于大小写</h4><p>据说sqlserver 安装过程中有是否区分大小写的选项，默认情况下无论表名、列名、字段、参数都不区分大小写，更过分的是查询条件的值也不区分————where name=’abc’和where name=’AbC’是一样的结果。如果要区分查询条件的大小写，中文网络上建议如下例子，追加条件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table1 where name&#x3D;&#39;abc&#39; collate Chinese_PRC_CS_AI_WS </span><br></pre></td></tr></table></figure><br>Chinese_PRC_CS_AI_WS实际表示中国大陆UNICODE字符集规则（Chinese PRC），区分大小写（Case Sensitive，CS），不区分重音（Accent Insensitive，AI），区分宽度（Width Sensitive，WS，半角/全角字符受此条件影响）<br><br>类似的还有<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL_Latin1_General_CP1_CS_AI</span><br><span class="line">Latin1_General_CS_AI</span><br></pre></td></tr></table></figure><br>查询当前默认规则<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT SERVERPROPERTY(N&#39;Collation&#39;)</span><br></pre></td></tr></table></figure><br>查询支持的字符集规则<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * from ::fn_helpcollations()</span><br></pre></td></tr></table></figure></p>
+<h4 id="内置对象的表"><a href="#内置对象的表" class="headerlink" title="内置对象的表"></a>内置对象的表</h4><ul>
+<li><p>sys.schemas</p>
+</li>
+<li><p>执行历史</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">SELECT TOP 1000 QS.creation_time, </span><br><span class="line">SUBSTRING(ST.text, </span><br><span class="line">		(QS.statement_start_offset &#x2F; 2) + 1, </span><br><span class="line">		((CASE QS.statement_end_offset </span><br><span class="line">			WHEN - 1 THEN DATALENGTH(st.text) </span><br><span class="line">			ELSE QS.statement_end_offset </span><br><span class="line">			END - QS.statement_start_offset) &#x2F; 2) + 1)</span><br><span class="line">			AS statement_text, </span><br><span class="line">		ST.text, </span><br><span class="line">		QS.total_worker_time, </span><br><span class="line">		QS.last_worker_time, </span><br><span class="line">		QS.max_worker_time, </span><br><span class="line">		QS.min_worker_time</span><br><span class="line">FROM        </span><br><span class="line">sys.dm_exec_query_stats QS CROSS APPLY sys.dm_exec_sql_text(QS.sql_handle) ST</span><br><span class="line">WHERE   1&#x3D;1 </span><br></pre></td></tr></table></figure>
+<h4 id="edit-data"><a href="#edit-data" class="headerlink" title="edit data"></a>edit data</h4><p>SSIS提供了Edit Top 200 Rows,但是写入表格内容各种格式不正确，宜Script Table to…Insert to<br><br>Guid用NEWID(),时间就用SYSDATETIME()</p>
+<h4 id="STUFF"><a href="#STUFF" class="headerlink" title="STUFF"></a>STUFF</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">STUFF ( character_expression , start , length , character_expression )</span><br></pre></td></tr></table></figure>
+<h4 id="CAST-amp-CONVERT"><a href="#CAST-amp-CONVERT" class="headerlink" title="CAST &amp; CONVERT"></a>CAST &amp; CONVERT</h4><p>数据类型转换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT CAST(t1.num AS varchar) from t1;</span><br><span class="line">SELECT CONVERT(varchar, t1.num) from t1;</span><br></pre></td></tr></table></figure></p>
+<h4 id="将自然键替换为人工键"><a href="#将自然键替换为人工键" class="headerlink" title="将自然键替换为人工键"></a>将自然键替换为人工键</h4><p>原实体以序列号为主键，现添加ID列并填充GUID<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE dbo.Table1 DROP CONSTRAINT PK_Table1 &#x2F;&#x2F; 移除原主键</span><br><span class="line">ALTER TABLE dbo.Table1 DROP COLUMN SerialNumber &#x2F;&#x2F; 移除列</span><br><span class="line">ALTER TABLE dbo.Table1 ADD ID uniqueidentifier NOT NULL default newID()</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>exception The object ‘DF<strong>Table1</strong>ID__34C8D9D1’ is dependent on column ‘ID’. ALTER TABLE DROP COLUMN failed because one or more objects access this column</p>
+</blockquote>
+<p>ID作为列名会默认添加CONSTRAINT，如上所提及的DF<strong>Table1</strong>ID<strong>34C8D9D1 因此要删除这个ID列需要先 ALTER TABLE dbo.Table1 DROP CONSTRAINT DF</strong>Table1<strong>ID</strong>34C8D9D1</p>
+<h4 id="层次结构数据"><a href="#层次结构数据" class="headerlink" title="层次结构数据"></a>层次结构数据</h4><p>具有父级、子级关系的层次结构数据<br>Oracle的递归查询语法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select  * from t_dw CONNECT BY PRIOR id &#x3D; parentID START WITH id&#x3D;&#39;dw001&#39;</span><br></pre></td></tr></table></figure><br>SqlServer中没有上述语法，而使用内置hierarchyid简化层次结构数据的存储和查询，</p>
+<p><a target="_blank" rel="noopener" href="https://www.meziantou.net/using-hierarchyid-with-entity-framework-core.htm">https://www.meziantou.net/using-hierarchyid-with-entity-framework-core.htm</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-- 根节点 &#x2F;</span><br><span class="line">update t_dw set orgLvl&#x3D;HierarchyID::GetRoot() where parentID is null</span><br><span class="line">-- 子树   &#x2F;1&#x2F;,&#x2F;2&#x2F;</span><br><span class="line">update t_dw set orgLvl&#x3D;HierarchyID::Parse(&#39;&#x2F;1&#x2F;&#39;) where name&#x3D;&#39;dw1&#39;</span><br><span class="line">update t_dw set orgLvl&#x3D;HierarchyID::Parse(&#39;&#x2F;2&#x2F;&#39;) where name&#x3D;&#39;dw2&#39;</span><br><span class="line">-- 叶    &#x2F;1&#x2F;3&#x2F;</span><br><span class="line">update t_dw set orgLvl&#x3D;HierarchyID::Parse(&#39;&#x2F;1&#x2F;1&#x2F;&#39;) where name&#x3D;&#39;dw1-a&#39;</span><br></pre></td></tr></table></figure>
+<p>插入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">insert t_dw (id,name,ParentID,orgLvl) </span><br><span class="line">values(newid(),&#39;dw1-b&#39;,&#39;xxxxxxxxxxxxxxx&#39;,</span><br><span class="line">HierarchyID::Parse(&#39;&#x2F;1&#x2F;&#39;).GetDescendant(CAST(&#39;&#x2F;1&#x2F;1&#x2F;&#39; AS hierarchyid), NULL))</span><br></pre></td></tr></table></figure><br>得到/1/2/ dw1-b 即在/1/的子节点，左树为/1/1/右树为null位置插入新节点</p>
+<p>层级<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT CAST(&#39;&#x2F;1&#x2F;2&#x2F;&#39; AS hierarchyid).GetLevel() -- 结果：2</span><br></pre></td></tr></table></figure><br>后代<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT name, orgLvl.ToString()</span><br><span class="line">FROM t_dw</span><br><span class="line">WHERE orgLvl.IsDescendantOf(CAST(&#39;&#x2F;1&#x2F;&#39; AS hierarchyid)) &#x3D; 1</span><br></pre></td></tr></table></figure><br>IsDescendant为1(表示true)返回所有后代(实际上也包括‘/1/’自己), 0返回所有非后代（父代，sibling树）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT name, orgLvl.ToString()</span><br><span class="line">FROM t_dw</span><br><span class="line">WHERE orgLvl.GetAncestor(2) &#x3D; HierarchyID::Parse(&#39;&#x2F;1&#x2F;&#39;)</span><br></pre></td></tr></table></figure><br>GetAncestor返回指定层级的后代，参数为层级：0返回‘/1/’自己；1返回所有子节点，2返回所有孙子节点</p>
+<p>移动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">DECLARE @CurrentNode hierarchyid , @OldParent hierarchyid, @NewParent hierarchyid </span><br><span class="line">select  @CurrentNode&#x3D;orgLvl from t_dw where name&#x3D;&#39;dw_x&#39;; -- &#x2F;1&#x2F;1&#x2F;</span><br><span class="line">select  @OldParent&#x3D;orgLvl from t_dw where name&#x3D;&#39;dw_old&#39;; -- &#x2F;1&#x2F;</span><br><span class="line">select  @NewParent&#x3D;orgLvl from t_dw where name&#x3D;&#39;dw_new&#39;; -- &#x2F;3&#x2F;</span><br><span class="line">UPDATE t_dw  </span><br><span class="line">SET OrgNode &#x3D; @CurrentNode.GetReparentedValue(@OldParent, @NewParent)   </span><br><span class="line">WHERE OrgNode &#x3D; @CurrentNode ; -- &#x2F;3&#x2F;1&#x2F; </span><br><span class="line">GO  </span><br></pre></td></tr></table></figure><br>其他进阶操作：<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/sql/relational-databases/hierarchical-data-sql-server?view=sql-server-ver15#finding-ancestors-by-using-the-clr">查找祖先</a><br><a href="[列出祖先](https://docs.microsoft.com/zh-cn/sql/relational-databases/hierarchical-data-sql-server?view=sql-server-ver15#listing-ancestors">列出祖先</a>)<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/sql/relational-databases/hierarchical-data-sql-server?view=sql-server-ver15#moving-subtrees">移动子树</a></p>
+<h4 id="获取每个表的数据条数"><a href="#获取每个表的数据条数" class="headerlink" title="获取每个表的数据条数"></a>获取每个表的数据条数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select schema_name(t.schema_id) as [Schema], t.name as TableName,i.rows as [RowCount] </span><br><span class="line">from sys.tables as t, sysindexes as i </span><br><span class="line">where t.object_id &#x3D; i.id and i.indid &lt;&#x3D;1</span><br></pre></td></tr></table></figure>
+<h4 id="按rownumber删除"><a href="#按rownumber删除" class="headerlink" title="按rownumber删除"></a>按rownumber删除</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">; with cte(rownum)as(</span><br><span class="line">    select row_number () over(partition by [Col1], [Col2] order by Col3) from [table]</span><br><span class="line">)</span><br><span class="line">delete from cte where rownum &gt; 1</span><br></pre></td></tr></table></figure>
+<p>按Col1 Col2分组删除 保留组唯一</p>
+<h4 id="login-fail-Error-18456"><a href="#login-fail-Error-18456" class="headerlink" title="login fail Error 18456"></a>login fail Error 18456</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/mo_feng_/article/details/62226310">CSDN Blog:SQL Server Error 18456</a></p>
+<p>other issues: <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/sql/database-engine/configure-windows/troubleshoot-connecting-to-the-sql-server-database-engine?view=sql-server-ver15#enable-protocols">Microsoft Docs: Troubleshooting Connect to SQL Server</a></p>
+<h4 id="查看版本"><a href="#查看版本" class="headerlink" title="查看版本"></a>查看版本</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select @@version</span><br></pre></td></tr></table></figure>
+<h4 id="作业和代理"><a href="#作业和代理" class="headerlink" title="作业和代理"></a>作业和代理</h4><p><del>某需求欲使用SQL Server的计划进行自动备份，启动SQL Server Agent时账户密码不正确 且该账号登录SSMS没有计划、代理等菜单</del></p>
+<p>SQL Server Express没有这部分功能</p>
+<h4 id="sqlcmd"><a href="#sqlcmd" class="headerlink" title="sqlcmd"></a>sqlcmd</h4>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/qqsnote/tags/SQL-Server/" rel="tag"># SQL_Server</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/06/11/dotNetCore-DataAccess/" rel="prev" title=".Net Core 数据访问">
+      <i class="fa fa-chevron-left"></i> .Net Core 数据访问
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/06/15/entityframework/" rel="next" title="Entity Framework">
+      Entity Framework <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#schema"><span class="nav-number">2.</span> <span class="nav-text">schema</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E7%94%A8%E6%88%B7%E5%8F%8A%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="nav-number">3.</span> <span class="nav-text">创建新用户及授权访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ServerName"><span class="nav-number">4.</span> <span class="nav-text">ServerName</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="nav-number">5.</span> <span class="nav-text">调用存储过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%A6%E6%9D%9FConstraint"><span class="nav-number">6.</span> <span class="nav-text">约束Constraint</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%A4%A7%E5%B0%8F%E5%86%99"><span class="nav-number">7.</span> <span class="nav-text">关于大小写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%A1%A8"><span class="nav-number">8.</span> <span class="nav-text">内置对象的表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#edit-data"><span class="nav-number">9.</span> <span class="nav-text">edit data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#STUFF"><span class="nav-number">10.</span> <span class="nav-text">STUFF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CAST-amp-CONVERT"><span class="nav-number">11.</span> <span class="nav-text">CAST &amp; CONVERT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%86%E8%87%AA%E7%84%B6%E9%94%AE%E6%9B%BF%E6%8D%A2%E4%B8%BA%E4%BA%BA%E5%B7%A5%E9%94%AE"><span class="nav-number">12.</span> <span class="nav-text">将自然键替换为人工键</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E6%95%B0%E6%8D%AE"><span class="nav-number">13.</span> <span class="nav-text">层次结构数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E8%A1%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E6%9D%A1%E6%95%B0"><span class="nav-number">14.</span> <span class="nav-text">获取每个表的数据条数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%89rownumber%E5%88%A0%E9%99%A4"><span class="nav-number">15.</span> <span class="nav-text">按rownumber删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#login-fail-Error-18456"><span class="nav-number">16.</span> <span class="nav-text">login fail Error 18456</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%89%88%E6%9C%AC"><span class="nav-number">17.</span> <span class="nav-text">查看版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A%E5%92%8C%E4%BB%A3%E7%90%86"><span class="nav-number">18.</span> <span class="nav-text">作业和代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sqlcmd"><span class="nav-number">19.</span> <span class="nav-text">sqlcmd</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">336</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">128</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 22.5px; color: #eaeaea">AI</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.5px; color: #f2f2f2">Azure</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C++</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.5px; color: #e1e1e1">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.5px; color: #d9d9d9">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 21px; color: #e6e6e6">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.5px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 18px; color: #ddd">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 13.5px; color: #d0d0d0">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24px; color: #eee">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/React/" style="font-size: 21px; color: #e6e6e6">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 16.5px; color: #d9d9d9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.5px; color: #d0d0d0">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27px; color: #f7f7f7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.5px; color: #fbfbfb">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 19.5px; color: #e1e1e1">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 15px; color: #d5d5d5">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.5px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 18px; color: #ddd">图形学</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 15px; color: #d5d5d5">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.5px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.5px; color: #d9d9d9">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 13.5px; color: #d0d0d0">面试</a> <a href="/qqsnote/tags/%E9%A6%99%E6%A9%99%E6%B4%BE/" style="font-size: 12px; color: #ccc">香橙派</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

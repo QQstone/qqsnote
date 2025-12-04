@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="ws: a Node.js WebSocket library ws is a simple to use, blazing fast, and thoroughly tested WebSocket client andserver implementation. Passes the quite extensive Autobahn test suite: server,client. Not">
+<meta property="og:type" content="article">
+<meta property="og:title" content="websocket">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/04/09/websocket/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="ws: a Node.js WebSocket library ws is a simple to use, blazing fast, and thoroughly tested WebSocket client andserver implementation. Passes the quite extensive Autobahn test suite: server,client. Not">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img.shields.io/npm/v/ws.svg?logo=npm">
+<meta property="og:image" content="https://img.shields.io/travis/websockets/ws/master.svg?logo=travis">
+<meta property="og:image" content="https://img.shields.io/appveyor/ci/lpinca/ws/master.svg?logo=appveyor">
+<meta property="og:image" content="https://img.shields.io/coveralls/websockets/ws/master.svg">
+<meta property="article:published_time" content="2020-04-09T04:57:16.000Z">
+<meta property="article:modified_time" content="2025-07-05T02:07:52.176Z">
+<meta property="article:author" content="QQs">
+<meta property="article:tag" content="websocket">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.shields.io/npm/v/ws.svg?logo=npm">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2020/04/09/websocket/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>websocket | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/04/09/websocket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          websocket
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-04-09 12:57:16" itemprop="dateCreated datePublished" datetime="2020-04-09T12:57:16+08:00">2020-04-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-05 10:07:52" itemprop="dateModified" datetime="2025-07-05T10:07:52+08:00">2025-07-05</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="ws-a-Node-js-WebSocket-library"><a href="#ws-a-Node-js-WebSocket-library" class="headerlink" title="ws: a Node.js WebSocket library"></a><a target="_blank" rel="noopener" href="https://github.com/websockets/ws">ws: a Node.js WebSocket library</a></h1><p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/ws"><img src="https://img.shields.io/npm/v/ws.svg?logo=npm" alt="Version npm"></a><br><a target="_blank" rel="noopener" href="https://travis-ci.com/websockets/ws"><img src="https://img.shields.io/travis/websockets/ws/master.svg?logo=travis" alt="Linux Build"></a><br><a target="_blank" rel="noopener" href="https://ci.appveyor.com/project/lpinca/ws"><img src="https://img.shields.io/appveyor/ci/lpinca/ws/master.svg?logo=appveyor" alt="Windows Build"></a><br><a target="_blank" rel="noopener" href="https://coveralls.io/github/websockets/ws"><img src="https://img.shields.io/coveralls/websockets/ws/master.svg" alt="Coverage Status"></a></p>
+<p>ws is a simple to use, blazing fast, and thoroughly tested WebSocket client and<br>server implementation.</p>
+<p>Passes the quite extensive Autobahn test suite: <a target="_blank" rel="noopener" href="http://websockets.github.io/ws/autobahn/servers/">server</a>,<br><a target="_blank" rel="noopener" href="http://websockets.github.io/ws/autobahn/clients/">client</a>.</p>
+<p><strong>Note</strong>: This module does not work in the browser. The client in the docs is a<br>reference to a back end with the role of a client in the WebSocket<br>communication. Browser clients must use the native<br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/WebSocket"><code>WebSocket</code></a><br>object(QQs: browser client should call the Websocket constructor provided by browser, see the example at bottom of this article). To make the same code work seamlessly on Node.js and the browser, you<br>can use one of the many wrappers available on npm, like<br><a target="_blank" rel="noopener" href="https://github.com/heineiuo/isomorphic-ws">isomorphic-ws</a>.</p>
+<h2 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h2><ul>
+<li><a href="#ws-a-nodejs-websocket-library">ws: a Node.js WebSocket library</a><ul>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#protocol-support">Protocol support</a></li>
+<li><a href="#installing">Installing</a><ul>
+<li><a href="#opt-in-for-performance-and-spec-compliance">Opt-in for performance and spec compliance</a></li>
+</ul>
+</li>
+<li><a href="#api-docs">API docs</a></li>
+<li><a href="#websocket-compression">WebSocket compression</a></li>
+<li><a href="#usage-examples">Usage examples</a><ul>
+<li><a href="#sending-and-receiving-text-data">Sending and receiving text data</a></li>
+<li><a href="#sending-binary-data">Sending binary data</a></li>
+<li><a href="#simple-server">Simple server</a></li>
+<li><a href="#external-https-server">External HTTP/S server</a></li>
+<li><a href="#multiple-servers-sharing-a-single-https-server">Multiple servers sharing a single HTTP/S server</a></li>
+<li><a href="#client-authentication">Client authentication</a></li>
+<li><a href="#server-broadcast">Server broadcast</a></li>
+<li><a href="#echowebsocketorg-demo">echo.websocket.org demo</a></li>
+<li><a href="#use-the-nodejs-streams-api">Use the Node.js streams API</a></li>
+<li><a href="#other-examples">Other examples</a></li>
+</ul>
+</li>
+<li><a href="#faq">FAQ</a><ul>
+<li><a href="#how-to-get-the-ip-address-of-the-client">How to get the IP address of the client?</a></li>
+<li><a href="#how-to-detect-and-close-broken-connections">How to detect and close broken connections?</a></li>
+<li><a href="#how-to-connect-via-a-proxy">How to connect via a proxy?</a></li>
+</ul>
+</li>
+<li><a href="#changelog">Changelog</a></li>
+<li><a href="#license">License</a><ul>
+<li><a href="#browser-client">Browser Client</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Protocol-support"><a href="#Protocol-support" class="headerlink" title="Protocol support"></a>Protocol support</h2><ul>
+<li><strong>HyBi drafts 07-12</strong> (Use the option <code>protocolVersion: 8</code>)</li>
+<li><strong>HyBi drafts 13-17</strong> (Current default, alternatively option<br><code>protocolVersion: 13</code>)</li>
+</ul>
+<h2 id="Installing"><a href="#Installing" class="headerlink" title="Installing"></a>Installing</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install ws</span><br></pre></td></tr></table></figure>
+<h3 id="Opt-in-for-performance-and-spec-compliance"><a href="#Opt-in-for-performance-and-spec-compliance" class="headerlink" title="Opt-in for performance and spec compliance"></a>Opt-in for performance and spec compliance</h3><p>There are 2 optional modules that can be installed along side with the ws<br>module. These modules are binary addons which improve certain operations.<br>Prebuilt binaries are available for the most popular platforms so you don’t<br>necessarily need to have a C++ compiler installed on your machine.</p>
+<ul>
+<li><code>npm install --save-optional bufferutil</code>: Allows to efficiently perform<br>operations such as masking and unmasking the data payload of the WebSocket<br>frames.</li>
+<li><code>npm install --save-optional utf-8-validate</code>: Allows to efficiently check if a<br>message contains valid UTF-8 as required by the spec.</li>
+</ul>
+<h2 id="API-docs"><a href="#API-docs" class="headerlink" title="API docs"></a>API docs</h2><p>See <a href="./doc/ws.md"><code>/doc/ws.md</code></a> for Node.js-like documentation of ws classes and<br>utility functions.</p>
+<h2 id="WebSocket-compression"><a href="#WebSocket-compression" class="headerlink" title="WebSocket compression"></a>WebSocket compression</h2><p>ws supports the <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7692">permessage-deflate extension</a> which enables<br>the client and server to negotiate a compression algorithm and its parameters,<br>and then selectively apply it to the data payloads of each WebSocket message.</p>
+<p>The extension is disabled by default on the server and enabled by default on the<br>client. It adds a significant overhead in terms of performance and memory<br>consumption so we suggest to enable it only if it is really needed.</p>
+<p>Note that Node.js has a variety of issues with high-performance compression,<br>where increased concurrency, especially on Linux, can lead to <a target="_blank" rel="noopener" href="https://github.com/nodejs/node/issues/8871">catastrophic<br>memory fragmentation</a> and slow performance. If you intend to use<br>permessage-deflate in production, it is worthwhile to set up a test<br>representative of your workload and ensure Node.js/zlib will handle it with<br>acceptable performance and memory usage.</p>
+<p>Tuning of permessage-deflate can be done via the options defined below. You can<br>also use <code>zlibDeflateOptions</code> and <code>zlibInflateOptions</code>, which is passed directly<br>into the creation of [raw deflate/inflate streams][node-zlib-deflaterawdocs].</p>
+<p>See [the docs][ws-server-options] for more options.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123;</span><br><span class="line">  port: <span class="number">8080</span>,</span><br><span class="line">  perMessageDeflate: &#123;</span><br><span class="line">    zlibDeflateOptions: &#123;</span><br><span class="line">      <span class="comment">// See zlib defaults.</span></span><br><span class="line">      chunkSize: <span class="number">1024</span>,</span><br><span class="line">      memLevel: <span class="number">7</span>,</span><br><span class="line">      level: <span class="number">3</span></span><br><span class="line">    &#125;,</span><br><span class="line">    zlibInflateOptions: &#123;</span><br><span class="line">      chunkSize: <span class="number">10</span> * <span class="number">1024</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// Other options settable:</span></span><br><span class="line">    clientNoContextTakeover: <span class="literal">true</span>, <span class="comment">// Defaults to negotiated value.</span></span><br><span class="line">    serverNoContextTakeover: <span class="literal">true</span>, <span class="comment">// Defaults to negotiated value.</span></span><br><span class="line">    serverMaxWindowBits: <span class="number">10</span>, <span class="comment">// Defaults to negotiated value.</span></span><br><span class="line">    <span class="comment">// Below options specified as default values.</span></span><br><span class="line">    concurrencyLimit: <span class="number">10</span>, <span class="comment">// Limits zlib concurrency for perf.</span></span><br><span class="line">    threshold: <span class="number">1024</span> <span class="comment">// Size (in bytes) below which messages</span></span><br><span class="line">    <span class="comment">// should not be compressed.</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>The client will only use the extension if it is supported and enabled on the<br>server. To always disable the extension on the client set the<br><code>perMessageDeflate</code> option to <code>false</code>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">&#x27;ws://www.host.com/path&#x27;</span>, &#123;</span><br><span class="line">  perMessageDeflate: <span class="literal">false</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="Usage-examples"><a href="#Usage-examples" class="headerlink" title="Usage examples"></a>Usage examples</h2><h3 id="Sending-and-receiving-text-data"><a href="#Sending-and-receiving-text-data" class="headerlink" title="Sending and receiving text data"></a>Sending and receiving text data</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">&#x27;ws://www.host.com/path&#x27;</span>);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">&#x27;open&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">open</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  ws.send(<span class="string">&#x27;something&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">&#x27;message&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">incoming</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="Sending-binary-data"><a href="#Sending-binary-data" class="headerlink" title="Sending binary data"></a>Sending binary data</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">&#x27;ws://www.host.com/path&#x27;</span>);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">&#x27;open&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">open</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> array = <span class="keyword">new</span> <span class="built_in">Float32Array</span>(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; array.length; ++i) &#123;</span><br><span class="line">    array[i] = i / <span class="number">2</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ws.send(array);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="Simple-server"><a href="#Simple-server" class="headerlink" title="Simple server"></a>Simple server</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">port</span>: <span class="number">8080</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  ws.on(<span class="string">&#x27;message&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">incoming</span>(<span class="params">message</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;received: %s&#x27;</span>, message);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  ws.send(<span class="string">&#x27;something&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="External-HTTP-S-server"><a href="#External-HTTP-S-server" class="headerlink" title="External HTTP/S server"></a>External HTTP/S server</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> https = <span class="built_in">require</span>(<span class="string">&#x27;https&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = https.createServer(&#123;</span><br><span class="line">  cert: fs.readFileSync(<span class="string">&#x27;/path/to/cert.pem&#x27;</span>),</span><br><span class="line">  key: fs.readFileSync(<span class="string">&#x27;/path/to/key.pem&#x27;</span>)</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; server &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  ws.on(<span class="string">&#x27;message&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">incoming</span>(<span class="params">message</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;received: %s&#x27;</span>, message);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  ws.send(<span class="string">&#x27;something&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="Multiple-servers-sharing-a-single-HTTP-S-server"><a href="#Multiple-servers-sharing-a-single-HTTP-S-server" class="headerlink" title="Multiple servers sharing a single HTTP/S server"></a>Multiple servers sharing a single HTTP/S server</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&#x27;http&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">&#x27;url&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer();</span><br><span class="line"><span class="keyword">const</span> wss1 = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">noServer</span>: <span class="literal">true</span> &#125;);</span><br><span class="line"><span class="keyword">const</span> wss2 = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">noServer</span>: <span class="literal">true</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss1.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">wss2.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">&#x27;upgrade&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">upgrade</span>(<span class="params">request, socket, head</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> pathname = url.parse(request.url).pathname;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (pathname === <span class="string">&#x27;/foo&#x27;</span>) &#123;</span><br><span class="line">    wss1.handleUpgrade(request, socket, head, <span class="function"><span class="keyword">function</span> <span class="title">done</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">      wss1.emit(<span class="string">&#x27;connection&#x27;</span>, ws, request);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pathname === <span class="string">&#x27;/bar&#x27;</span>) &#123;</span><br><span class="line">    wss2.handleUpgrade(request, socket, head, <span class="function"><span class="keyword">function</span> <span class="title">done</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">      wss2.emit(<span class="string">&#x27;connection&#x27;</span>, ws, request);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    socket.destroy();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="Client-authentication"><a href="#Client-authentication" class="headerlink" title="Client authentication"></a>Client authentication</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&#x27;http&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer();</span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">noServer</span>: <span class="literal">true</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws, request, client</span>) </span>&#123;</span><br><span class="line">  ws.on(<span class="string">&#x27;message&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">message</span>(<span class="params">msg</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Received message <span class="subst">$&#123;msg&#125;</span> from user <span class="subst">$&#123;client&#125;</span>`</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">&#x27;upgrade&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">upgrade</span>(<span class="params">request, socket, head</span>) </span>&#123;</span><br><span class="line">  authenticate(request, <span class="function">(<span class="params">err, client</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (err || !client) &#123;</span><br><span class="line">      socket.destroy();</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    wss.handleUpgrade(request, socket, head, <span class="function"><span class="keyword">function</span> <span class="title">done</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">      wss.emit(<span class="string">&#x27;connection&#x27;</span>, ws, request, client);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>);</span><br></pre></td></tr></table></figure>
+<p>Also see the provided <a href="./examples/express-session-parse">example</a> using <code>express-session</code>.</p>
+<h3 id="Server-broadcast"><a href="#Server-broadcast" class="headerlink" title="Server broadcast"></a>Server broadcast</h3><p>A client WebSocket broadcasting to all connected WebSocket clients, including<br>itself.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">port</span>: <span class="number">8080</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  ws.on(<span class="string">&#x27;message&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">incoming</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    wss.clients.forEach(<span class="function"><span class="keyword">function</span> <span class="title">each</span>(<span class="params">client</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (client.readyState === WebSocket.OPEN) &#123;</span><br><span class="line">        client.send(data);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>A client WebSocket broadcasting to every other connected WebSocket clients,<br>excluding itself.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">port</span>: <span class="number">8080</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  ws.on(<span class="string">&#x27;message&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">incoming</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    wss.clients.forEach(<span class="function"><span class="keyword">function</span> <span class="title">each</span>(<span class="params">client</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (client !== ws &amp;&amp; client.readyState === WebSocket.OPEN) &#123;</span><br><span class="line">        client.send(data);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="echo-websocket-org-demo"><a href="#echo-websocket-org-demo" class="headerlink" title="echo.websocket.org demo"></a>echo.websocket.org demo</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">&#x27;wss://echo.websocket.org/&#x27;</span>, &#123;</span><br><span class="line">  origin: <span class="string">&#x27;https://websocket.org&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">&#x27;open&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">open</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;connected&#x27;</span>);</span><br><span class="line">  ws.send(<span class="built_in">Date</span>.now());</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">&#x27;close&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">close</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;disconnected&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">&#x27;message&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">incoming</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`Roundtrip time: <span class="subst">$&#123;<span class="built_in">Date</span>.now() - data&#125;</span> ms`</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> <span class="title">timeout</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    ws.send(<span class="built_in">Date</span>.now());</span><br><span class="line">  &#125;, <span class="number">500</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="Use-the-Node-js-streams-API"><a href="#Use-the-Node-js-streams-API" class="headerlink" title="Use the Node.js streams API"></a>Use the Node.js streams API</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">&#x27;wss://echo.websocket.org/&#x27;</span>, &#123;</span><br><span class="line">  origin: <span class="string">&#x27;https://websocket.org&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> duplex = WebSocket.createWebSocketStream(ws, &#123; <span class="attr">encoding</span>: <span class="string">&#x27;utf8&#x27;</span> &#125;);</span><br><span class="line"></span><br><span class="line">duplex.pipe(process.stdout);</span><br><span class="line">process.stdin.pipe(duplex);</span><br></pre></td></tr></table></figure>
+<h3 id="Other-examples"><a href="#Other-examples" class="headerlink" title="Other examples"></a>Other examples</h3><p>For a full example with a browser client communicating with a ws server, see the<br>examples folder.</p>
+<p>Otherwise, see the test cases.</p>
+<h2 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h2><h3 id="How-to-get-the-IP-address-of-the-client"><a href="#How-to-get-the-IP-address-of-the-client" class="headerlink" title="How to get the IP address of the client?"></a>How to get the IP address of the client?</h3><p>The remote IP address can be obtained from the raw socket.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">port</span>: <span class="number">8080</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws, req</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> ip = req.connection.remoteAddress;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>When the server runs behind a proxy like NGINX, the de-facto standard is to use<br>the <code>X-Forwarded-For</code> header.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wss.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws, req</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> ip = req.headers[<span class="string">&#x27;x-forwarded-for&#x27;</span>].split(<span class="regexp">/\s*,\s*/</span>)[<span class="number">0</span>];</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="How-to-detect-and-close-broken-connections"><a href="#How-to-detect-and-close-broken-connections" class="headerlink" title="How to detect and close broken connections?"></a>How to detect and close broken connections?</h3><p>Sometimes the link between the server and the client can be interrupted in a way<br>that keeps both the server and the client unaware of the broken state of the<br>connection (e.g. when pulling the cord).</p>
+<p>In these cases ping messages can be used as a means to verify that the remote<br>endpoint is still responsive.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">noop</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">heartbeat</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.isAlive = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocket.Server(&#123; <span class="attr">port</span>: <span class="number">8080</span> &#125;);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">connection</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  ws.isAlive = <span class="literal">true</span>;</span><br><span class="line">  ws.on(<span class="string">&#x27;pong&#x27;</span>, heartbeat);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> interval = <span class="built_in">setInterval</span>(<span class="function"><span class="keyword">function</span> <span class="title">ping</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  wss.clients.forEach(<span class="function"><span class="keyword">function</span> <span class="title">each</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (ws.isAlive === <span class="literal">false</span>) <span class="keyword">return</span> ws.terminate();</span><br><span class="line"></span><br><span class="line">    ws.isAlive = <span class="literal">false</span>;</span><br><span class="line">    ws.ping(noop);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;, <span class="number">30000</span>);</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">&#x27;close&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">close</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">clearInterval</span>(interval);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Pong messages are automatically sent in response to ping messages as required by<br>the spec.</p>
+<p>Just like the server example above your clients might as well lose connection<br>without knowing it. You might want to add a ping listener on your clients to<br>prevent that. A simple implementation would be:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">heartbeat</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">clearTimeout</span>(<span class="built_in">this</span>.pingTimeout);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Use `WebSocket#terminate()`, which immediately destroys the connection,</span></span><br><span class="line">  <span class="comment">// instead of `WebSocket#close()`, which waits for the close timer.</span></span><br><span class="line">  <span class="comment">// Delay should be equal to the interval at which your server</span></span><br><span class="line">  <span class="comment">// sends out pings plus a conservative assumption of the latency.</span></span><br><span class="line">  <span class="built_in">this</span>.pingTimeout = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.terminate();</span><br><span class="line">  &#125;, <span class="number">30000</span> + <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> client = <span class="keyword">new</span> WebSocket(<span class="string">&#x27;wss://echo.websocket.org/&#x27;</span>);</span><br><span class="line"></span><br><span class="line">client.on(<span class="string">&#x27;open&#x27;</span>, heartbeat);</span><br><span class="line">client.on(<span class="string">&#x27;ping&#x27;</span>, heartbeat);</span><br><span class="line">client.on(<span class="string">&#x27;close&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">clear</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">clearTimeout</span>(<span class="built_in">this</span>.pingTimeout);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="How-to-connect-via-a-proxy"><a href="#How-to-connect-via-a-proxy" class="headerlink" title="How to connect via a proxy?"></a>How to connect via a proxy?</h3><p>Use a custom <code>http.Agent</code> implementation like <a target="_blank" rel="noopener" href="https://github.com/TooTallNate/node-https-proxy-agent">https-proxy-agent</a> or<br><a target="_blank" rel="noopener" href="https://github.com/TooTallNate/node-socks-proxy-agent">socks-proxy-agent</a>.</p>
+<h2 id="Changelog"><a href="#Changelog" class="headerlink" title="Changelog"></a>Changelog</h2><p>We’re using the GitHub <a target="_blank" rel="noopener" href="https://github.com/websockets/ws/releases">releases</a> for changelog entries.</p>
+<h2 id="License"><a href="#License" class="headerlink" title="License"></a>License</h2><p><a href="LICENSE">MIT</a></p>
+<p>[node-zlib-deflaterawdocs]:<br>  <a target="_blank" rel="noopener" href="https://nodejs.org/api/zlib.html#zlib_zlib_createdeflateraw_options">https://nodejs.org/api/zlib.html#zlib_zlib_createdeflateraw_options</a></p>
+<p>[ws-server-options]:<br>  <a target="_blank" rel="noopener" href="https://github.com/websockets/ws/blob/master/doc/ws.md#new-websocketserveroptions-callback">https://github.com/websockets/ws/blob/master/doc/ws.md#new-websocketserveroptions-callback</a></p>
+<h3 id="Browser-Client"><a href="#Browser-Client" class="headerlink" title="Browser Client"></a>Browser Client</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Create WebSocket connection.</span><br><span class="line">const socket &#x3D; new WebSocket(&#39;ws:&#x2F;&#x2F;localhost:8080&#39;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Connection opened</span><br><span class="line">socket.addEventListener(&#39;open&#39;, function (event) &#123;</span><br><span class="line">    socket.send(&#39;Hello Server!&#39;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Listen for messages</span><br><span class="line">socket.addEventListener(&#39;message&#39;, function (event) &#123;</span><br><span class="line">    console.log(&#39;Message from server &#39;, event.data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/qqsnote/tags/websocket/" rel="tag"># websocket</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/04/09/GitFlow/" rel="prev" title="GitFlow">
+      <i class="fa fa-chevron-left"></i> GitFlow
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/04/16/node-ffi/" rel="next" title="node-ffi">
+      node-ffi <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ws-a-Node-js-WebSocket-library"><span class="nav-number">1.</span> <span class="nav-text">ws: a Node.js WebSocket library</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Table-of-Contents"><span class="nav-number">1.1.</span> <span class="nav-text">Table of Contents</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Protocol-support"><span class="nav-number">1.2.</span> <span class="nav-text">Protocol support</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Installing"><span class="nav-number">1.3.</span> <span class="nav-text">Installing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Opt-in-for-performance-and-spec-compliance"><span class="nav-number">1.3.1.</span> <span class="nav-text">Opt-in for performance and spec compliance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API-docs"><span class="nav-number">1.4.</span> <span class="nav-text">API docs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebSocket-compression"><span class="nav-number">1.5.</span> <span class="nav-text">WebSocket compression</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage-examples"><span class="nav-number">1.6.</span> <span class="nav-text">Usage examples</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Sending-and-receiving-text-data"><span class="nav-number">1.6.1.</span> <span class="nav-text">Sending and receiving text data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sending-binary-data"><span class="nav-number">1.6.2.</span> <span class="nav-text">Sending binary data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Simple-server"><span class="nav-number">1.6.3.</span> <span class="nav-text">Simple server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#External-HTTP-S-server"><span class="nav-number">1.6.4.</span> <span class="nav-text">External HTTP&#x2F;S server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multiple-servers-sharing-a-single-HTTP-S-server"><span class="nav-number">1.6.5.</span> <span class="nav-text">Multiple servers sharing a single HTTP&#x2F;S server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Client-authentication"><span class="nav-number">1.6.6.</span> <span class="nav-text">Client authentication</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Server-broadcast"><span class="nav-number">1.6.7.</span> <span class="nav-text">Server broadcast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#echo-websocket-org-demo"><span class="nav-number">1.6.8.</span> <span class="nav-text">echo.websocket.org demo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Use-the-Node-js-streams-API"><span class="nav-number">1.6.9.</span> <span class="nav-text">Use the Node.js streams API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Other-examples"><span class="nav-number">1.6.10.</span> <span class="nav-text">Other examples</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FAQ"><span class="nav-number">1.7.</span> <span class="nav-text">FAQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-get-the-IP-address-of-the-client"><span class="nav-number">1.7.1.</span> <span class="nav-text">How to get the IP address of the client?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-detect-and-close-broken-connections"><span class="nav-number">1.7.2.</span> <span class="nav-text">How to detect and close broken connections?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-connect-via-a-proxy"><span class="nav-number">1.7.3.</span> <span class="nav-text">How to connect via a proxy?</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Changelog"><span class="nav-number">1.8.</span> <span class="nav-text">Changelog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#License"><span class="nav-number">1.9.</span> <span class="nav-text">License</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Browser-Client"><span class="nav-number">1.9.1.</span> <span class="nav-text">Browser Client</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">336</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">128</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 22.5px; color: #eaeaea">AI</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.5px; color: #f2f2f2">Azure</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C++</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.5px; color: #e1e1e1">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.5px; color: #d9d9d9">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 21px; color: #e6e6e6">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.5px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 18px; color: #ddd">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 13.5px; color: #d0d0d0">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24px; color: #eee">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/React/" style="font-size: 21px; color: #e6e6e6">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 16.5px; color: #d9d9d9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.5px; color: #d0d0d0">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27px; color: #f7f7f7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.5px; color: #fbfbfb">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 19.5px; color: #e1e1e1">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 15px; color: #d5d5d5">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.5px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 18px; color: #ddd">图形学</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 15px; color: #d5d5d5">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.5px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.5px; color: #d9d9d9">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 13.5px; color: #d0d0d0">面试</a> <a href="/qqsnote/tags/%E9%A6%99%E6%A9%99%E6%B4%BE/" style="font-size: 12px; color: #ccc">香橙派</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

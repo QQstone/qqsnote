@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content=".net core .NET Core 是一个通用的开放源代码开发平台。 可以使用多种编程语言针对 x64、x86、ARM32 和 ARM64 处理器创建适用于 Windows、macOS 和 Linux 的 .NET Core 应用。 为云、IoT、客户端 UI 和机器学习提供了框架和 API。   运行时和SDK运行 .NET Core 应用，需安装 .NET Core 运行时。创建 .NET">
+<meta property="og:type" content="article">
+<meta property="og:title" content=".Net Core 入坑">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2020/05/09/dotNetCore-startup/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content=".net core .NET Core 是一个通用的开放源代码开发平台。 可以使用多种编程语言针对 x64、x86、ARM32 和 ARM64 处理器创建适用于 Windows、macOS 和 Linux 的 .NET Core 应用。 为云、IoT、客户端 UI 和机器学习提供了框架和 API。   运行时和SDK运行 .NET Core 应用，需安装 .NET Core 运行时。创建 .NET">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-05-09T05:40:00.000Z">
+<meta property="article:modified_time" content="2025-07-05T02:07:52.156Z">
+<meta property="article:author" content="QQs">
+<meta property="article:tag" content=".Net">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2020/05/09/dotNetCore-startup/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>.Net Core 入坑 | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/05/09/dotNetCore-startup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          .Net Core 入坑
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-09 13:40:00" itemprop="dateCreated datePublished" datetime="2020-05-09T13:40:00+08:00">2020-05-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-05 10:07:52" itemprop="dateModified" datetime="2025-07-05T10:07:52+08:00">2025-07-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="net-core"><a href="#net-core" class="headerlink" title=".net core"></a>.net core</h4><blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/dotnet/core/introduction">.NET Core</a> 是一个通用的开放源代码开发平台。 可以使用多种编程语言针对 x64、x86、ARM32 和 ARM64 处理器创建适用于 Windows、macOS 和 Linux 的 .NET Core 应用。 为云、IoT、客户端 UI 和机器学习提供了框架和 API。</p>
+</blockquote>
+<ul>
+<li>运行时和SDK<br>运行 .NET Core 应用，需安装 .NET Core 运行时。<br>创建 .NET Core 应用，需安装 .NET Core SDK。</li>
+<li><p>命令行工具<br>在命令行键入dotnet —help 文章<a href="/qqsnote/2020/08/31/ASPandSPA/" title="ASP和SPA">ASP和SPA</a>有所应用。</p>
+<p>另，代码生成器（<a target="_blank" rel="noopener" href="https://codesmith.atlassian.net/wiki">codesmith generator studio</a>） 和<a target="_blank" rel="noopener" href="https://codesmith.atlassian.net/wiki/spaces/NHibernate/pages/529104/Getting+Started">Nhibernate Template</a> 根据数据库表生成实体类及MVC分层结构</p>
+</li>
+<li>NuGet<br>包管理工具，用于安装依赖NuGet包或用于安装模板</li>
+</ul>
+<h4 id="asp-net-core"><a href="#asp-net-core" class="headerlink" title="asp.net core"></a><code>asp.net core</code></h4><p>  经典的 .net mvc 分层：<br><br>  view controller model<br><br>  asp.net (asp, Active Server Pages 动态服务器页面):<br></p>
+<h4 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h4><p>  模型绑定<br>  模型验证<br>  依赖关系注入<br>  筛选器<br>  Areas<br>  <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&amp;tabs=visual-studio">Web API</a><br>  Testability<br>  Razor查看引擎<br>  强类型视图<br>  标记帮助程序<br>  查看组件</p>
+<h4 id="Program-cs"><a href="#Program-cs" class="headerlink" title="Program.cs"></a>Program.cs</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class Program</span><br><span class="line">&#123;</span><br><span class="line">    public static void Main(string[] args)</span><br><span class="line">    &#123;</span><br><span class="line">        CreateHostBuilder(args).Build().Run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static IHostBuilder CreateHostBuilder(string[] args) &#x3D;&gt;</span><br><span class="line">        Host.CreateDefaultBuilder(args)</span><br><span class="line">            .ConfigureWebHostDefaults(webBuilder &#x3D;&gt;</span><br><span class="line">            &#123;</span><br><span class="line">                webBuilder.UseStartup&lt;Startup&gt;();</span><br><span class="line">            &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Host(宿主)为app提供运行环境并负责启动,创建HostBuilder,指定Startup作为启动类</p>
+<h4 id="Startup-cs"><a href="#Startup-cs" class="headerlink" title="Startup.cs"></a>Startup.cs</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Startup</span><br><span class="line">&#123;</span><br><span class="line">  public void ConfigureServices(IServiceCollection services)</span><br><span class="line">  &#123;</span><br><span class="line">    services.AddControllersWithViews();</span><br><span class="line">    services.AddDbContext&lt;DataServiceContext&gt;(options &#x3D;&gt;</span><br><span class="line">      options.UseSqlServer(Configuration.GetConnectionString(&quot;DataServiceContext&quot;)));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public void Configure(IApplicationBuilder app)</span><br><span class="line">  &#123;</span><br><span class="line">      app.UseHttpsRedirection();</span><br><span class="line">      app.UseStaticFiles();</span><br><span class="line">      app.UseMvc();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>startup.cs中using所需地package，包括需要加载（use）地中间件。</p>
+<p>另，这里引入了SQL Server需要安装并引入 Microsoft.EntityFrameworkCore;<br>Microsoft.EntityFrameworkCore.SqlServer;</p>
+<h4 id="launchSettings-json"><a href="#launchSettings-json" class="headerlink" title="launchSettings.json"></a>launchSettings.json</h4><p>依赖注入Iconfigure，读取配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class OidcConfigurationController : ControllerBase</span><br><span class="line">&#123;</span><br><span class="line">    private IConfiguration _configuration;</span><br><span class="line">    public OidcConfigurationController(IConfiguration Configuration)</span><br><span class="line">    &#123;</span><br><span class="line">        _configuration &#x3D; Configuration;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    [HttpGet]</span><br><span class="line">    [Route(&quot;snmapi&#x2F;[controller]&#x2F;auth&quot;)]</span><br><span class="line">    public CSResult GetOidcConfigure()</span><br><span class="line">    &#123;</span><br><span class="line">        var authSettings &#x3D; new JObject&#123;</span><br><span class="line">            &#123; &quot;client_id&quot;, _configuration[&quot;Auth:client_id&quot;] &#125;,</span><br><span class="line">            &#123; &quot;redirect_uri&quot;, _configuration[&quot;Auth:redirect_uri&quot;] &#125;,</span><br><span class="line">            &#123; &quot;post_logout_redirect_uri&quot;, _configuration[&quot;Auth:post_logout_redirect_uri&quot;] &#125;,</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>只能逐个value地取值，其他读取方法见<a target="_blank" rel="noopener" href="https://juejin.im/post/6844904070847660045">ASP.Net Core读取配置文件的三种方法</a></p>
+<p>Properties/launchSettings.json<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;iisSettings&quot;: &#123;</span><br><span class="line">    &quot;windowsAuthentication&quot;: false,</span><br><span class="line">    &quot;anonymousAuthentication&quot;: true,</span><br><span class="line">    &quot;iisExpress&quot;: &#123;</span><br><span class="line">      &quot;applicationUrl&quot;: &quot;http:&#x2F;&#x2F;localhost:8080&quot;,</span><br><span class="line">      &quot;sslPort&quot;: 0</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;profiles&quot;: &#123;</span><br><span class="line">    &quot;IIS Express&quot;: &#123;</span><br><span class="line">      &quot;commandName&quot;: &quot;IISExpress&quot;,</span><br><span class="line">      &quot;launchBrowser&quot;: true,</span><br><span class="line">      &quot;environmentVariables&quot;: &#123;</span><br><span class="line">        &quot;ASPNETCORE_ENVIRONMENT&quot;: &quot;Development&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;RestrictedProductMaintenance&quot;: &#123;</span><br><span class="line">      &quot;commandName&quot;: &quot;Project&quot;,</span><br><span class="line">      &quot;launchBrowser&quot;: true,</span><br><span class="line">      &quot;environmentVariables&quot;: &#123;</span><br><span class="line">        &quot;ASPNETCORE_ENVIRONMENT&quot;: &quot;Development&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;applicationUrl&quot;: &quot;https:&#x2F;&#x2F;localhost:5001;http:&#x2F;&#x2F;localhost:5000&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>这个配置似乎都是关于运行asp的IIS的。</p>
+<h4 id="创建Model"><a href="#创建Model" class="headerlink" title="创建Model"></a>创建Model</h4><blockquote>
+<p>issue: Unable to cast object of type ‘System.Guid’ to type ‘System.String’.<br><br>SQL Server 的 uniqueidentifier类型列，在 .net core 中直接映射为Guid类型，不存在与string的隐式转换，因此对应Model里的字段应该是Guid，在必要的场合使用toString<br><br>插入Guid<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Guid id &#x3D; Guid.NewGuid();</span><br></pre></td></tr></table></figure><br>Model定义中的数据库特性</p>
+</blockquote>
+<p>从数据库生成模型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Scaffold-DbContext  &quot;Data Source&#x3D;HostName; Initial Catalog&#x3D;DBName; Persist Security Info&#x3D;True; User ID&#x3D;UserName; Password&#x3D;******;&quot; Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models</span><br></pre></td></tr></table></figure></p>
+<h4 id="DBContext"><a href="#DBContext" class="headerlink" title="DBContext"></a>DBContext</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class DataServiceContext: DbContext</span><br><span class="line">&#123;</span><br><span class="line">    public DataServiceContext(DbContextOptions&lt;DataServiceContext&gt; options) : base(options)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public DbSet&lt;RestrictedProductDTO&gt; RestrictedProduct &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Startup.cs中添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    services.AddControllersWithViews();</span><br><span class="line">    services.AddDbContext&lt;DataContext&gt;(options &#x3D;&gt;</span><br><span class="line">        options.UseSqlServer(Configuration.GetConnectionString(&quot;DataContext&quot;)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>ConnectionString是从appsettings.json中读取的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;connectionStrings&quot;: &#123;</span><br><span class="line">    &quot;DataContext&quot;: &quot;Server&#x3D;sqlserver01;Database&#x3D;db01;Trusted_Connection&#x3D;False;user id&#x3D;user01;password&#x3D;xxxx;&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br></pre></td></tr></table></figure><br>数据上下文访问SQL Server，会提示安装Microsoft.EntityFrameworkCore<br><br>这个数据库上下文将被注入controlloer或model中用以获取数据</p>
+<h4 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h4><p>使用Add—Add New Scaffold Item（基架项）选择  MVC controlloer with views, using Entity Framework<br><br>之后在对话框中配置业务需要的Model、Data context等，此举一并生成controller views dbcontext代码，views包含index，create，detail，edit，delete，视图上的请求会自动在controller中实现接口<br></p>
+<p>Error There was an error running the selected code generator:”No parameterless constructor defined for type ‘XXController’”<br><br>曾现此错误，是因为待注入的Data context未配置正确（在startup中添加configureService，其中的connectionstring配置在appsettings.json中）</p>
+<p>创建完成的基架controller<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br></pre></td><td class="code"><pre><span class="line">public class ProductsController : Controller</span><br><span class="line">&#123;</span><br><span class="line">    private readonly DataContext _context;</span><br><span class="line"></span><br><span class="line">    public ProductsController(DataContext context)</span><br><span class="line">    &#123;</span><br><span class="line">        _context &#x3D; context;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; GET: Products</span><br><span class="line">    public async Task&lt;IActionResult&gt; Index()</span><br><span class="line">    &#123;</span><br><span class="line">        return View(await _context.ProductData.ToListAsync());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; GET: Products&#x2F;Details&#x2F;5</span><br><span class="line">    public async Task&lt;IActionResult&gt; Details(string id)</span><br><span class="line">    &#123;</span><br><span class="line">        if (id &#x3D;&#x3D; null)</span><br><span class="line">        &#123;</span><br><span class="line">            return NotFound();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        var product &#x3D; await _context.ProductData</span><br><span class="line">            .FirstOrDefaultAsync(m &#x3D;&gt; m.Id &#x3D;&#x3D; id);</span><br><span class="line">        if (product &#x3D;&#x3D; null)</span><br><span class="line">        &#123;</span><br><span class="line">            return NotFound();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return View(product);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; GET: Products&#x2F;Create</span><br><span class="line">    public IActionResult Create()</span><br><span class="line">    &#123;</span><br><span class="line">        return View();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; POST: Products&#x2F;Create</span><br><span class="line">    &#x2F;&#x2F; To protect from overposting attacks, enable the specific properties you want to bind to, for </span><br><span class="line">    &#x2F;&#x2F; more details, see http:&#x2F;&#x2F;go.microsoft.com&#x2F;fwlink&#x2F;?LinkId&#x3D;317598.</span><br><span class="line">    [HttpPost]</span><br><span class="line">    [ValidateAntiForgeryToken]</span><br><span class="line">    public async Task&lt;IActionResult&gt; Create([Bind(&quot;Id,SN,Brand,CreateTime,ProductName,Restriction&quot;)] Product product)</span><br><span class="line">    &#123;</span><br><span class="line">        if (ModelState.IsValid)</span><br><span class="line">        &#123;</span><br><span class="line">            _context.Add(product);</span><br><span class="line">            await _context.SaveChangesAsync();</span><br><span class="line">            return RedirectToAction(nameof(Index));</span><br><span class="line">        &#125;</span><br><span class="line">        return View(product);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; GET: Products&#x2F;Edit&#x2F;5</span><br><span class="line">    public async Task&lt;IActionResult&gt; Edit(string id)</span><br><span class="line">    &#123;</span><br><span class="line">        if (id &#x3D;&#x3D; null)</span><br><span class="line">        &#123;</span><br><span class="line">            return NotFound();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        var product &#x3D; await _context.ProductData.FindAsync(id);</span><br><span class="line">        if (product &#x3D;&#x3D; null)</span><br><span class="line">        &#123;</span><br><span class="line">            return NotFound();</span><br><span class="line">        &#125;</span><br><span class="line">        return View(product);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; POST: Products&#x2F;Edit&#x2F;5</span><br><span class="line">    &#x2F;&#x2F; To protect from overposting attacks, enable the specific properties you want to bind to, for </span><br><span class="line">    &#x2F;&#x2F; more details, see http:&#x2F;&#x2F;go.microsoft.com&#x2F;fwlink&#x2F;?LinkId&#x3D;317598.</span><br><span class="line">    [HttpPost]</span><br><span class="line">    [ValidateAntiForgeryToken]</span><br><span class="line">    public async Task&lt;IActionResult&gt; Edit(string id, [Bind(&quot;Id,SN,Brand,CreateTime,ProductName,Restriction&quot;)] Product product)</span><br><span class="line">    &#123;</span><br><span class="line">        if (id !&#x3D; product.Id)</span><br><span class="line">        &#123;</span><br><span class="line">            return NotFound();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (ModelState.IsValid)</span><br><span class="line">        &#123;</span><br><span class="line">            try</span><br><span class="line">            &#123;</span><br><span class="line">                _context.Update(product);</span><br><span class="line">                await _context.SaveChangesAsync();</span><br><span class="line">            &#125;</span><br><span class="line">            catch (DbUpdateConcurrencyException)</span><br><span class="line">            &#123;</span><br><span class="line">                if (!ProductExists(product.Id))</span><br><span class="line">                &#123;</span><br><span class="line">                    return NotFound();</span><br><span class="line">                &#125;</span><br><span class="line">                else</span><br><span class="line">                &#123;</span><br><span class="line">                    throw;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            return RedirectToAction(nameof(Index));</span><br><span class="line">        &#125;</span><br><span class="line">        return View(product);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; GET: Products&#x2F;Delete&#x2F;5</span><br><span class="line">    public async Task&lt;IActionResult&gt; Delete(string id)</span><br><span class="line">    &#123;</span><br><span class="line">        if (id &#x3D;&#x3D; null)</span><br><span class="line">        &#123;</span><br><span class="line">            return NotFound();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        var product &#x3D; await _context.ProductData</span><br><span class="line">            .FirstOrDefaultAsync(m &#x3D;&gt; m.Id &#x3D;&#x3D; id);</span><br><span class="line">        if (product &#x3D;&#x3D; null)</span><br><span class="line">        &#123;</span><br><span class="line">            return NotFound();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return View(product);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; POST: Products&#x2F;Delete&#x2F;5</span><br><span class="line">    [HttpPost, ActionName(&quot;Delete&quot;)]</span><br><span class="line">    [ValidateAntiForgeryToken]</span><br><span class="line">    public async Task&lt;IActionResult&gt; DeleteConfirmed(string id)</span><br><span class="line">    &#123;</span><br><span class="line">        var product &#x3D; await _context.ProductData.FindAsync(id);</span><br><span class="line">        _context.ProductData.Remove(product);</span><br><span class="line">        await _context.SaveChangesAsync();</span><br><span class="line">        return RedirectToAction(nameof(Index));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private bool ProductExists(string id)</span><br><span class="line">    &#123;</span><br><span class="line">        return _context.ProductData.Any(e &#x3D;&gt; e.Id &#x3D;&#x3D; id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>return View() 返回视图，路由是根据Controller名称和方法名称组成的，如这里的Product/Index，Product/Create</p>
+<blockquote>
+<p>Controller vs ControllerBase</p>
+</blockquote>
+<p>如果你创建一个 .net core api项目，你会发现api的controller继承ControllerBase，而asp继承Controller<br><br>Controller是ControllerBase的衍生类，支持asp的Views。</p>
+<h4 id="Views"><a href="#Views" class="headerlink" title="Views"></a>Views</h4><p>创建Product/Index.cshtml, 这是一个列表页。顶头：<br>@model IEnumerable\<ProductMaintenance.Models.Product\><br></p>
+<blockquote>
+<p>@model 指令使你能够使用强类型的 Model 对象访问控制器传递给视图的列表。 例如，在 Index.cshtml 视图中，代码使用 foreach 语句通过强类型 Model 对象对列表项进行循环遍历 ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;table class&#x3D;&quot;table&quot;&gt;</span><br><span class="line">    &lt;thead&gt;</span><br><span class="line">        &lt;tr&gt;</span><br><span class="line">            &lt;th&gt;SN&lt;&#x2F;th&gt;</span><br><span class="line">            &lt;th&gt;Brand&lt;&#x2F;th&gt;</span><br><span class="line">            &lt;th&gt;Actions&lt;&#x2F;th&gt;</span><br><span class="line">        &lt;&#x2F;tr&gt;</span><br><span class="line">    &lt;&#x2F;thead&gt;</span><br><span class="line">    &lt;tbody&gt;</span><br><span class="line">        @foreach (var item in Model) &#123;</span><br><span class="line">            &lt;tr&gt;Id</span><br><span class="line">                &lt;td&gt;@Html.DisplayFor(modelItem &#x3D;&gt; item.SN)&lt;&#x2F;td&gt;</span><br><span class="line">                &lt;td&gt;@Html.DisplayFor(modelItem &#x3D;&gt; item.Brand)&lt;&#x2F;td&gt;</span><br><span class="line">                &lt;td&gt;</span><br><span class="line">                    &lt;a asp-action&#x3D;&quot;Edit&quot; asp-route-id&#x3D;&quot;@item.Id&quot;&gt;Edit&lt;&#x2F;a&gt; |</span><br><span class="line">                    &lt;a asp-action&#x3D;&quot;Details&quot; asp-route-id&#x3D;&quot;@item.Id&quot;&gt;Details&lt;&#x2F;a&gt; |</span><br><span class="line">                    &lt;a asp-action&#x3D;&quot;Delete&quot; asp-route-id&#x3D;&quot;@item.Id&quot;&gt;Delete&lt;&#x2F;a&gt;</span><br><span class="line">                &lt;&#x2F;td&gt;</span><br><span class="line">            &lt;&#x2F;tr&gt;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;&#x2F;tbody&gt;</span><br><span class="line">&lt;&#x2F;table&gt;</span><br></pre></td></tr></table></figure><br>实际上，dotnet提供了视图基架Add—Add New Scaffold Item（基架项）选择  MVC  View之后在对话框中配置业务需要的Model、Data context等，选择模板（list, details, create, edit, delete）<br><br>判断是否为null<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@foreach (var item in Model.childrenMap??new List&lt;Child&gt;())</span><br><span class="line">&#123;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">        &lt;td&gt;</span><br><span class="line">            @Html.DisplayFor(modelItem &#x3D;&gt; item.Child.Name)</span><br><span class="line">        &lt;&#x2F;td&gt;</span><br><span class="line">    &lt;&#x2F;tr&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="模型驱动数据库设计"><a href="#模型驱动数据库设计" class="headerlink" title="模型驱动数据库设计"></a>模型驱动数据库设计</h4><p>因需求变动，模型结构变化，与数据库产生冲突<br><br>Code First迁移数据模型<br><br>创建数据模型Model,在Nuget Package Manager —&gt; Package Manager Console中执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Add-Migration updateModelStructure</span><br><span class="line">&#x2F;&#x2F; updateModelStructure 是一个数据库操作的标题，是任意命名的，仅用于记录更新记录和历史</span><br><span class="line">Update-Database</span><br></pre></td></tr></table></figure><br>Add-Migration之后项目中生成了Migrations类，这些类阐释了如何修改数据库见 <a href="/qqsnote/2020/06/15/entityframework/" title="《Entity Framework》篇">《Entity Framework》篇</a><br><br>issue: The entity type ‘XXModel’ requires a primary key to be defined.<br><br>Model类型需标注主键<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">private Guid _id;</span><br><span class="line">[Key]</span><br><span class="line">public Guid ID</span><br><span class="line">&#123;</span><br><span class="line">    get &#123; return _id; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>issue “No context type was found in the assembly ‘MyServices.Models’.”<br>在多项目解决方案中，执行Migration的是Models项目，读取Startup中的context配置， 检查Startup.cs的addDbContext配置<br>另有命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Enable-Migrations -ProjectName MyServices.Models -StartUpProjectName MyServices.API -ContextTypeName MyServices.Models.Contexts.DataContext -Verbose </span><br></pre></td></tr></table></figure><br>issue “The type ‘xxContext’ does not inherit from DbContext. The DbMigrationsConfiguration.ContextType property must be set to a type that inherits from DbContext.”<br>解决方法是在startup项目安装 Microsoft.EntityFrameworkCore.Tools</p>
+</blockquote>
+<h4 id="业务API"><a href="#业务API" class="headerlink" title="业务API"></a>业务API</h4><h4 id="前端组件-Blazor"><a href="#前端组件-Blazor" class="headerlink" title="前端组件 Blazor"></a>前端组件 <a target="_blank" rel="noopener" href="https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor">Blazor</a></h4><h4 id="发布到IIS"><a href="#发布到IIS" class="headerlink" title="发布到IIS"></a>发布到IIS</h4><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/aspnet/core/test/troubleshoot-azure-iis?view=aspnetcore-5.0">TroubleShooting</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/breakus/p/10475246.html"> IIS Issue: HTTP错误500.19 </a></p>
+</blockquote>
+<p>微软.net core 下载页面有如下加粗提示：</p>
+<blockquote>
+<p>On Windows, we recommended installing the Hosting Bundle, which includes the .NET Core Runtime and IIS support.</p>
+</blockquote>
+<p>下载后得到dotnet-hosting-3.0.x.exe<br>另：IIS的远程访问允许<br> <a target="_blank" rel="noopener" href="https://my.oschina.net/zhangqiliang/blog/1932042">新建防火墙规则</a></p>
+<p>另: IIS 路由站点<br>新建IIS 的网站指向一个物理路径就可以了，右击网站添加应用程序，指向发布的文件目录，并添加别名，事实上这个别名会作为虚拟路径(子路由)，实现192.168.1.100:80/App1这样的部署。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/6538926/chrome-returns-bad-request-request-too-long-when-navigating-to-local-iis-exp/38402830">IIS Issue: Chrome 400 Bad Request</a><br><br>某次更新服务后，在IIS上Browser website测试正常，在远程chrome上访问只能get post全部400，新打开一个ie发现是好的(实际上新打开一个chrome隐私窗口也会是好的，这个问题初步被认为与浏览器写了太多cookie有关)</p>
+</blockquote>
+<h4 id="配置多个环境"><a href="#配置多个环境" class="headerlink" title="配置多个环境"></a>配置多个环境</h4><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/environments?view=aspnetcore-3.1">https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/environments?view=aspnetcore-3.1</a></p>
+<h4 id="solution和projects"><a href="#solution和projects" class="headerlink" title="solution和projects"></a>solution和projects</h4><p><a target="_blank" rel="noopener" href="https://medium.com/swlh/creating-a-multi-project-net-core-database-solution-a69decdf8d7e">多项目解决方案(class library projects)</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/ide/how-to-set-multiple-startup-projects?view=vs-2019#to-set-multiple-startup-projects">关于多个项目启动</a></p>
+<h4 id="关于-HttpGet-HttpPost-标注以及方法HttpMethod识别"><a href="#关于-HttpGet-HttpPost-标注以及方法HttpMethod识别" class="headerlink" title="关于[HttpGet][HttpPost]标注以及方法HttpMethod识别"></a>关于[HttpGet][HttpPost]标注以及方法HttpMethod识别</h4><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/landeanfen/p/5337072.html">CSDN Blog WebApi进阶</a></p>
+<blockquote>
+<p>博主的理解是：方法名以Get开头，WebApi会自动默认这个请求就是get请求，而如果你以其他名称开头而又不标注方法的请求方式，那么这个时候服务器虽然找到了这个方法，但是由于请求方式不确定，所以直接返回给你405——方法不被允许的错误。<br>结论：所有的WebApi方法最好是加上请求的方式（[HttpGet]/[HttpPost]/[HttpPut]/[HttpDelete]），不要偷懒，这样既能防止类似的错误，也有利于方法的维护，别人一看就知道这个方法是什么请求</p>
+</blockquote>
+<h4 id="TargetFramework"><a href="#TargetFramework" class="headerlink" title="TargetFramework"></a>TargetFramework</h4><p>项目属性中的item，如\<TargetFramework>net6-windows10.0.22621.0\</TargetFramework> Visual Studio解析为</p>
+<ul>
+<li>Target framework: .Net 6.0</li>
+<li>Target OS: Windows</li>
+<li>Target OS version: 10.0.22621.0</li>
+</ul>
+<p>一般只需要.Net6即可，在 OS 特定的 TargetFramework 的末尾指定可选的 OS 版本，例如，net6.0-ios15.0。 版本指示应用或库可用的 API。 它不控制应用或库在运行时支持的 OS 版本。 它用于选择项目编译的引用程序集，并用于从 NuGet 包中选择资产。 将此版本视为“平台版本”或“OS API 版本”，可以与运行时 OS 版本进行区分。</p>
+<p>当特定于 OS 的 TargetFramework 不显式指定平台版本时，它具有可从基础 TargetFramework 和平台名称推断的隐含值。 例如，.NET 6 中 iOS 的默认平台值为 15.0，这意味着 net6.0-ios 是规范 net6.0-ios15.0 TargetFramework 的简写形式。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/qqsnote/tags/Net/" rel="tag"># .Net</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/05/07/webpack/" rel="prev" title="webpack">
+      <i class="fa fa-chevron-left"></i> webpack
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2020/05/09/dotNetCore-Authentication/" rel="next" title=".Net Core Authentication & Authorization">
+      .Net Core Authentication & Authorization <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#net-core"><span class="nav-number">1.</span> <span class="nav-text">.net core</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#asp-net-core"><span class="nav-number">2.</span> <span class="nav-text">asp.net core</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1"><span class="nav-number">3.</span> <span class="nav-text">路由</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Program-cs"><span class="nav-number">4.</span> <span class="nav-text">Program.cs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Startup-cs"><span class="nav-number">5.</span> <span class="nav-text">Startup.cs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#launchSettings-json"><span class="nav-number">6.</span> <span class="nav-text">launchSettings.json</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAModel"><span class="nav-number">7.</span> <span class="nav-text">创建Model</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DBContext"><span class="nav-number">8.</span> <span class="nav-text">DBContext</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#controller"><span class="nav-number">9.</span> <span class="nav-text">controller</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Views"><span class="nav-number">10.</span> <span class="nav-text">Views</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E9%A9%B1%E5%8A%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1"><span class="nav-number">11.</span> <span class="nav-text">模型驱动数据库设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1API"><span class="nav-number">12.</span> <span class="nav-text">业务API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6-Blazor"><span class="nav-number">13.</span> <span class="nav-text">前端组件 Blazor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%91%E5%B8%83%E5%88%B0IIS"><span class="nav-number">14.</span> <span class="nav-text">发布到IIS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AA%E7%8E%AF%E5%A2%83"><span class="nav-number">15.</span> <span class="nav-text">配置多个环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#solution%E5%92%8Cprojects"><span class="nav-number">16.</span> <span class="nav-text">solution和projects</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-HttpGet-HttpPost-%E6%A0%87%E6%B3%A8%E4%BB%A5%E5%8F%8A%E6%96%B9%E6%B3%95HttpMethod%E8%AF%86%E5%88%AB"><span class="nav-number">17.</span> <span class="nav-text">关于[HttpGet][HttpPost]标注以及方法HttpMethod识别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TargetFramework"><span class="nav-number">18.</span> <span class="nav-text">TargetFramework</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">336</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">128</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 22.5px; color: #eaeaea">AI</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.5px; color: #f2f2f2">Azure</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C++</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.5px; color: #e1e1e1">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.5px; color: #d9d9d9">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 21px; color: #e6e6e6">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.5px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 18px; color: #ddd">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 13.5px; color: #d0d0d0">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24px; color: #eee">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/React/" style="font-size: 21px; color: #e6e6e6">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 16.5px; color: #d9d9d9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.5px; color: #d0d0d0">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27px; color: #f7f7f7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.5px; color: #fbfbfb">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 19.5px; color: #e1e1e1">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 15px; color: #d5d5d5">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.5px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 18px; color: #ddd">图形学</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 15px; color: #d5d5d5">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.5px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.5px; color: #d9d9d9">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 13.5px; color: #d0d0d0">面试</a> <a href="/qqsnote/tags/%E9%A6%99%E6%A9%99%E6%B4%BE/" style="font-size: 12px; color: #ccc">香橙派</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
