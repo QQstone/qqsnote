@@ -15,5 +15,13 @@ tags:
 + Thanks for staying proactive, QQs 感谢你积极响应
 + keep up momentum 保持势头 干劲
 + solely 仅仅 merely 只是 only 只有
++ tweak 微调 稍作改动
 + security vulnerability 安全漏洞
 + overlook 忽视
++ collaborate 合作
++ prioritize 优先考虑
++ Quality Assurence team
++ definitive solution 最终解决方案
++ narrow down 缩小范围
+
+Present Perfect Sample tense 现在完成时 Present Perfect Continue tense 现在完成进行时

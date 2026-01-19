@@ -284,6 +284,11 @@ textGeometry.translate(
 
 #### 粒子
 
+#### 物理引擎
+
++ Cannon.js 
++ Rapier
+
 #### 可视化优化
 
 [Three.js常见性能问题和内存泄漏](https://blog.csdn.net/m0_57344393/article/details/149439134)

@@ -32,3 +32,5 @@ MCP：是 Anthropic 提出的标准化通信协议，类比为 “AI 领域的 H
 Function Call：是某些大模型（如 OpenAI 的 GPT-4）提供的特有接口特性，类似 “品牌专属充电协议”。它以特定格式让 LLM 产出函数调用请求，由宿主执行对应操作并返回结果。
 
 Cline 是一款集成在 Visual Studio Code（以下简称 VS Code）中的开源 AI 编程助手
+
+LLM微调和蒸馏

@@ -41,7 +41,7 @@ addLoadEvent(function() {
             1:    '#00ff30ba'   // light green
         };
         TagCanvas.wheelZoom = true;   // mouse wheel zoom
-        TagCanvas.zoomMin = 0.3;
+        TagCanvas.zoomMin = 0.8;
         TagCanvas.zoomMax = 3;
         TagCanvas.zoomStep = 0.05;
         TagCanvas.imageScale = null;

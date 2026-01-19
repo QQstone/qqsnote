@@ -2,6 +2,11 @@
 title: LLM
 date: 2025-03-05 14:42:14
 tags:
+- LLM
+- 神经网络
+- Transformer
+categories:
+- 人工智能
 ---
 #### Token
 
