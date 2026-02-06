@@ -104,6 +104,15 @@ os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
 
 [ComfyUI中文手册](https://comfyuidoc.com/zh/)
 
+常见节点
+
++ Checkpoint加载器
++ CLIP文本加载器 正反prompt输入
++ 空latent 潜空间设置(长、宽、批次)
++ K采样器 
++ VAE编码器
++ 保存
+
 #### SD3 SD3.5 Flux.1
 
 #### checkpoints
@@ -126,4 +135,10 @@ checkpoints是基础模型的参数定制
 
 #### 人物替换
 
+#### 局部重绘
+
 #### Kontext 万物迁移
+
+#### 应用
+carvton
+lovart
