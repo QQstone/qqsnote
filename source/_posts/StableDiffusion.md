@@ -113,6 +113,10 @@ os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
 + VAE编码器
 + 保存
 
+常用快捷键
+
++ 双击屏幕搜索并添加新节点
+
 #### SD3 SD3.5 Flux.1
 
 #### checkpoints
@@ -127,11 +131,28 @@ Keras Docs对checkpoints的解释 from[《理解checkpoints》](https://cloud.te
 
 checkpoints是基础模型的参数定制
 
+#### latent
+
+从基本的文生图到图生图，删除空latent节点，因为要基于已有图像生成而不是随机空白画布
+
+双击添加节点，搜索图像加载器，添加vae编码器，输入图像输出latent
+
+另外 Ksampler中 设置随机种0 运行后操作randomize 采样器dpmpp_2m 调度器karras 步数20-30 cfg 7-8 降噪0.75-1
+
+从基本图生图到局部重绘 也是对初始latent的修改 相比图生图的输入，局部重回需要加入一个遮罩层，需要把vae编码器换成vae内补编码器(VAE Encode (for Inpaint))可见该编码器相比前者多了一个“遮罩”输入 对应的是图像加载器的遮罩输出 绘制遮罩只需要在加载图像节点右键菜单选择在遮罩编辑器中打开即可绘制
+
+#### K Sampler
+
+设置对潜空间去噪过程，生成起始噪声的随机数种子、去噪步数...
+
+并输出去噪后(按prompt生成后)的潜空间
+
 #### controlnet
 
 #### others
 
 [清华大学第六弹：AIGC发展研究3.0](https://pan.quark.cn/s/cfec4694b3a9)
+
 
 #### 人物替换
 
