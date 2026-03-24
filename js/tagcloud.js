@@ -40,10 +40,10 @@ addLoadEvent(function() {
             0.5: '#3f51b5',     // blue
             1:    '#00ff30ba'   // light green
         };
-        TagCanvas.wheelZoom = true;   // mouse wheel zoom
-        TagCanvas.zoomMin = 0.3;
-        TagCanvas.zoomMax = 3;
-        TagCanvas.zoomStep = 0.05;
+        TagCanvas.wheelZoom = false;   // mouse wheel zoom
+        //TagCanvas.zoomMin = 3;
+        //TagCanvas.zoomMax = 3;
+        //TagCanvas.zoomStep = 0.05;
         TagCanvas.imageScale = null;
         TagCanvas.fadeIn = 1000;
         TagCanvas.clickToFront = 600;

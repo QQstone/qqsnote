@@ -173,7 +173,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2025/08/28/ThreeJS-Raycaster/">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/03/04/InterviewQuestions-Security/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/qqsnote/images/avatar.gif">
@@ -187,7 +187,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/qqsnote/2025/08/28/ThreeJS-Raycaster/" class="post-title-link" itemprop="url">Three.js RayCaster</a>
+            <a href="/qqsnote/2026/03/04/InterviewQuestions-Security/" class="post-title-link" itemprop="url">InterviewQuestions-Security</a>
         </h2>
 
         <div class="post-meta">
@@ -196,16 +196,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2025-08-28 10:03:57" itemprop="dateCreated datePublished" datetime="2025-08-28T10:03:57+08:00">2025-08-28</time>
+              <time title="Created: 2026-03-04 14:37:26 / Modified: 14:37:46" itemprop="dateCreated datePublished" datetime="2026-03-04T14:37:26+08:00">2026-03-04</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-05 10:08:09" itemprop="dateModified" datetime="2025-09-05T10:08:09+08:00">2025-09-05</time>
-              </span>
 
           
 
@@ -218,8 +212,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a target="_blank" rel="noopener" href="https://threejs.org/docs/?q=ray#api/en/core/Raycaster">Three.js Doc: RayCaster</a></p>
-<p>AI coding demo painting on texture<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; --- 创建模型和画布纹理 ---</span><br><span class="line">const canvas &#x3D; document.createElement(&#39;canvas&#39;);</span><br><span class="line">canvas.width &#x3D; 1024;</span><br><span class="line">canvas.height &#x3D; 1024;</span><br><span class="line">const context &#x3D; canvas.getContext(&#39;2d&#39;);</span><br><span class="line">context.fillStyle &#x3D; &#39;#ffffff&#39;;</span><br><span class="line">context.fillRect(0, 0, canvas.width, canvas.height);</span><br><span class="line"></span><br><span class="line">const texture &#x3D; new THREE.CanvasTexture(canvas);</span><br><span class="line">texture.minFilter &#x3D; THREE.LinearFilter;</span><br><span class="line">texture.magFilter &#x3D; THREE.LinearFilter;</span><br><span class="line"></span><br><span class="line">const material &#x3D; new THREE.MeshStandardMaterial(&#123;</span><br><span class="line">    map: texture,</span><br><span class="line">    roughness: 0.8,</span><br><span class="line">    metalness: 0.2,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">const geometry &#x3D; new THREE.SphereGeometry(2, 64, 64);</span><br><span class="line">const sphere &#x3D; new THREE.Mesh(geometry, material);</span><br><span class="line">scene.add(sphere);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; --- 射线投射和鼠标事件 ---</span><br><span class="line">const raycaster &#x3D; new THREE.Raycaster();</span><br><span class="line">const mouse &#x3D; new THREE.Vector2();</span><br><span class="line">let isPainting &#x3D; false;</span><br><span class="line"></span><br><span class="line">function onMouseMove(event) &#123;</span><br><span class="line">    mouse.x &#x3D; (event.clientX &#x2F; window.innerWidth) * 2 - 1;</span><br><span class="line">    mouse.y &#x3D; -(event.clientY &#x2F; window.innerHeight) * 2 + 1;</span><br><span class="line">    if (isPainting) &#123;</span><br><span class="line">        paint();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function onMouseDown(event) &#123;</span><br><span class="line">    isPainting &#x3D; true;</span><br><span class="line">    paint();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function onMouseUp(event) &#123;</span><br><span class="line">    isPainting &#x3D; false;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">window.addEventListener(&#39;mousemove&#39;, onMouseMove);</span><br><span class="line">window.addEventListener(&#39;mousedown&#39;, onMouseDown);</span><br><span class="line">window.addEventListener(&#39;mouseup&#39;, onMouseUp);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; --- 核心绘制函数 ---</span><br><span class="line">function paint() &#123;</span><br><span class="line">  raycaster.setFromCamera(mouse, camera);</span><br><span class="line">  const intersects &#x3D; raycaster.intersectObject(sphere);</span><br><span class="line"></span><br><span class="line">  if (intersects.length &gt; 0) &#123;</span><br><span class="line">    const intersect &#x3D; intersects[0];</span><br><span class="line">    const uv &#x3D; intersect.uv;</span><br><span class="line">    const x &#x3D; uv.x * canvas.width;</span><br><span class="line">    const y &#x3D; (1 - uv.y) * canvas.height;</span><br><span class="line"></span><br><span class="line">    const brushRadius &#x3D; 20;</span><br><span class="line">    context.fillStyle &#x3D; &#39;#ff0000&#39;; &#x2F;&#x2F; 红色笔刷</span><br><span class="line">    context.beginPath();</span><br><span class="line">    context.arc(x, y, brushRadius, 0, Math.PI * 2);</span><br><span class="line">    context.fill();</span><br><span class="line"></span><br><span class="line">    texture.needsUpdate &#x3D; true;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+          <p>xss攻击</p>
+<p>https+ssl</p>
 
       
     </div>
@@ -239,7 +233,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2025/08/25/EventBus/">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/03/03/LOD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/qqsnote/images/avatar.gif">
@@ -253,7 +247,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/qqsnote/2025/08/25/EventBus/" class="post-title-link" itemprop="url">EventBus</a>
+            <a href="/qqsnote/2026/03/03/LOD/" class="post-title-link" itemprop="url">LOD</a>
         </h2>
 
         <div class="post-meta">
@@ -263,14 +257,83 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2025-08-25 13:14:21" itemprop="dateCreated datePublished" datetime="2025-08-25T13:14:21+08:00">2025-08-25</time>
+              <time title="Created: 2026-03-03 10:03:57" itemprop="dateCreated datePublished" datetime="2026-03-03T10:03:57+08:00">2026-03-03</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-05 10:08:09" itemprop="dateModified" datetime="2025-09-05T10:08:09+08:00">2025-09-05</time>
+                <time title="Modified: 2026-03-25 00:27:33" itemprop="dateModified" datetime="2026-03-25T00:27:33+08:00">2026-03-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>美术建模减面</p>
+<p>Draco压缩库</p>
+<p>LOD技术（Levels of Detail）是一种以空间换时间的优化方法，场景中加入LOD控制的、通过摄像机距离决定是否显示的不同细节模型</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> lod = <span class="keyword">new</span> THREE.LOD();</span><br><span class="line">lod.addLevel(object, distance)</span><br><span class="line"></span><br><span class="line">scene.add(lod)</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://threejs.org/examples/#webgl_lod">https://threejs.org/examples/#webgl_lod</a> </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/02/26/AIappDevEngineer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2026/02/26/AIappDevEngineer/" class="post-title-link" itemprop="url">AIappDevEngineer</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-02-26 20:01:04" itemprop="dateCreated datePublished" datetime="2026-02-26T20:01:04+08:00">2026-02-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-03-18 14:07:43" itemprop="dateModified" datetime="2026-03-18T14:07:43+08:00">2026-03-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -278,7 +341,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+                  <a href="/qqsnote/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
                 </span>
             </span>
 
@@ -293,12 +356,37 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>以发布订阅实现的消息中转 如</p>
+          <h3 id="私有化部署模型和api调用"><a href="#私有化部署模型和api调用" class="headerlink" title="私有化部署模型和api调用"></a>私有化部署模型和api调用</h3><h4 id="实践6-1-区分好评-差评-情感判断"><a href="#实践6-1-区分好评-差评-情感判断" class="headerlink" title="实践6-1 区分好评/差评(情感判断)"></a>实践6-1 区分好评/差评(情感判断)</h4><p>Model：RoBERTa 来源：Huggingface</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="comment"># 必须在导入 pipeline 之前设置</span></span><br><span class="line">os.environ[<span class="string">&quot;HF_ENDPOINT&quot;</span>] = <span class="string">&quot;https://hf-mirror.com&quot;</span></span><br><span class="line">os.environ[<span class="string">&quot;HF_HOME&quot;</span>] = <span class="string">&quot;/root/autodl-tmp/models&quot;</span>  <span class="comment"># 同时控制 model 和 tokenizer 缓存</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 加载 pipeline</span></span><br><span class="line"><span class="comment"># 指定 task=&quot;sentiment-analysis&quot;</span></span><br><span class="line"><span class="comment"># 💡 技巧：如果不指定 model，默认下载英文模型。</span></span><br><span class="line"><span class="comment"># 这里我们指定一个中文微调过的模型，效果更好。</span></span><br><span class="line">cache_dir = <span class="string">&#x27;/root/autodl-tmp/models&#x27;</span></span><br><span class="line">classifier = pipeline(</span><br><span class="line">    task=<span class="string">&quot;sentiment-analysis&quot;</span>,</span><br><span class="line">    model=<span class="string">&quot;uer/roberta-base-finetuned-dianping-chinese&quot;</span></span><br><span class="line">    <span class="comment">#model=&quot;bert-base-chinese&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 预测</span></span><br><span class="line">result = classifier(<span class="string">&quot;这个手机屏幕太烂了，反应很慢！&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br><span class="line"><span class="comment"># 输出示例：[&#123;&#x27;label&#x27;: &#x27;negative (negative)&#x27;, &#x27;score&#x27;: 0.98&#125;]</span></span><br><span class="line"></span><br><span class="line">result2 = classifier(<span class="string">&quot;物流很快，包装很精美，五星好评。&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(result2)</span><br><span class="line"><span class="comment"># 输出示例：[&#123;&#x27;label&#x27;: &#x27;positive (positive)&#x27;, &#x27;score&#x27;: 0.99&#125;]</span></span><br></pre></td></tr></table></figure>
+<h4 id="实践6-3-分类-tokenizer分词器"><a href="#实践6-3-分类-tokenizer分词器" class="headerlink" title="实践6-3 分类(tokenizer分词器)"></a>实践6-3 分类(tokenizer分词器)</h4><p>Model: BART</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载分词器</span></span><br><span class="line">tokenizer = AutoTokenizer.from_pretrained(<span class="string">&quot;bert-base-chinese&quot;</span>) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 模拟一个 Batch（两个长度不一样的句子）</span></span><br><span class="line">sentences = [<span class="string">&quot;我爱AI&quot;</span>, <span class="string">&quot;HuggingFace真好用&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 调用分词器</span></span><br><span class="line">inputs = tokenizer(</span><br><span class="line">    sentences,</span><br><span class="line">    padding=<span class="literal">True</span>,      <span class="comment"># 自动填充到最长句子的长度</span></span><br><span class="line">    truncation=<span class="literal">True</span>,   <span class="comment"># 超过最大长度就截断</span></span><br><span class="line">    max_length=<span class="number">10</span>,     <span class="comment"># 设置最大长度</span></span><br><span class="line">    return_tensors=<span class="string">&quot;pt&quot;</span> <span class="comment"># 返回 PyTorch 张量</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(inputs)</span><br><span class="line"><span class="comment"># 重点观察：</span></span><br><span class="line"><span class="comment"># &#x27;input_ids&#x27;: 你的字对应的数字</span></span><br><span class="line"><span class="comment"># &#x27;attention_mask&#x27;: 1代表是真实的字，0代表是填充的(Padding)</span></span><br></pre></td></tr></table></figure>
+<h4 id="实践6-6-实现一个模型调用的pipeline"><a href="#实践6-6-实现一个模型调用的pipeline" class="headerlink" title="实践6-6 实现一个模型调用的pipeline"></a>实践6-6 实现一个模型调用的pipeline</h4><p>NLP 常用任务：</p>
 <ul>
-<li>eventbus = new Vue()</li>
-<li>ng emit on<br>…<br>常称事件总线</li>
+<li>sentiment-analysis：情感分析，判断文本褒贬。</li>
+<li>text-generation：文本生成，如写故事、续写代码。</li>
+<li>zero-shot-classification：零样本分类，无需训练即可根据自定义标签分类。</li>
+<li>question-answering：问答系统，根据给定的上下文回答问题。</li>
+<li>summarization：自动摘要，将长文浓缩为短句。</li>
+<li>translation_xx_to_yy：翻译任务，如translation_en_to_zh。</li>
+<li><p>ner：命名实体识别，提取人名、地名、组织名</p>
+<p>CV &amp; 音频常用任务：</p>
+</li>
+<li><p>image-classification：图像分类。</p>
+</li>
+<li>object-detection：目标检测，识别图中的物体并定位。</li>
+<li>automatic-speech-recognition (ASR)：语音转文字。</li>
+<li>text-to-speech (TTS)：文字转语音。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">class EventBus &#123;</span><br><span class="line">  constructor() &#123;</span><br><span class="line">    this.events &#x3D; &#123;&#125;; &#x2F;&#x2F; 存储事件和对应的回调函数列表 eventKey - Array&lt;callback&gt;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 订阅事件</span><br><span class="line">  on(eventName, callback) &#123;</span><br><span class="line">    if (!this.events[eventName]) &#123;</span><br><span class="line">      this.events[eventName] &#x3D; [];</span><br><span class="line">    &#125;</span><br><span class="line">    this.events[eventName].push(callback);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 发布事件</span><br><span class="line">  emit(eventName, data) &#123;</span><br><span class="line">    if (this.events[eventName]) &#123;</span><br><span class="line">      this.events[eventName].forEach(callback &#x3D;&gt; &#123;</span><br><span class="line">        callback(data);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 取消订阅</span><br><span class="line">  off(eventName, callback) &#123;</span><br><span class="line">    if (this.events[eventName]) &#123;</span><br><span class="line">      this.events[eventName] &#x3D; this.events[eventName].filter(</span><br><span class="line">        cb &#x3D;&gt; cb !&#x3D;&#x3D; callback</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 只订阅一次</span><br><span class="line">  once(eventName, callback) &#123;</span><br><span class="line">    const wrapper &#x3D; (data) &#x3D;&gt; &#123;</span><br><span class="line">      callback(data);</span><br><span class="line">      this.off(eventName, wrapper);</span><br><span class="line">    &#125;;</span><br><span class="line">    this.on(eventName, wrapper);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 使用示例</span><br><span class="line">const bus &#x3D; new EventBus();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 订阅事件</span><br><span class="line">bus.on(&#39;sayHello&#39;, (data) &#x3D;&gt; &#123;</span><br><span class="line">  console.log(&#39;Hello, &#39; + data.name);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 发布事件</span><br><span class="line">bus.emit(&#39;sayHello&#39;, &#123; name: &#39;Alice&#39; &#125;); &#x2F;&#x2F; 输出: Hello, Alice</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 取消订阅</span><br><span class="line">const handler &#x3D; (data) &#x3D;&gt; console.log(&#39;Goodbye, &#39; + data.name);</span><br><span class="line">bus.on(&#39;sayGoodbye&#39;, handler);</span><br><span class="line">bus.emit(&#39;sayGoodbye&#39;, &#123; name: &#39;Bob&#39; &#125;); &#x2F;&#x2F; 输出: Goodbye, Bob</span><br><span class="line">bus.off(&#39;sayGoodbye&#39;, handler);</span><br><span class="line">bus.emit(&#39;sayGoodbye&#39;, &#123; name: &#39;Bob&#39; &#125;); &#x2F;&#x2F; 无输出</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 只订阅一次</span><br><span class="line">bus.once(&#39;greet&#39;, (data) &#x3D;&gt; console.log(&#39;Greetings, &#39; + data.name));</span><br><span class="line">bus.emit(&#39;greet&#39;, &#123; name: &#39;Charlie&#39; &#125;); &#x2F;&#x2F; 输出: Greetings, Charlie</span><br><span class="line">bus.emit(&#39;greet&#39;, &#123; name: &#39;Charlie&#39; &#125;); &#x2F;&#x2F; 无输出</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="huggingface-高效微调-PEFT"><a href="#huggingface-高效微调-PEFT" class="headerlink" title="huggingface 高效微调(PEFT)"></a>huggingface 高效微调(PEFT)</h3><p>Trainer类 封装Forward, Backward, Optimizer_step, Zero_grad迭代过程</p>
+<ul>
+<li>前向传播</li>
+<li>反向传播</li>
+<li>参数优化</li>
+<li>梯度清零</li>
+</ul>
+<p>训练数据集 DataSet 在huggingface上的另一大类资源</p>
+<h4 id="实践6-7-垃圾右键分类器"><a href="#实践6-7-垃圾右键分类器" class="headerlink" title="实践6-7 垃圾右键分类器"></a>实践6-7 垃圾右键分类器</h4><p>利用Dateset微调llm </p>
+
       
     </div>
 
@@ -317,7 +405,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2025/08/12/VueRouter/">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/02/17/BonesBinding/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/qqsnote/images/avatar.gif">
@@ -331,7 +419,67 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/qqsnote/2025/08/12/VueRouter/" class="post-title-link" itemprop="url">Vue Router</a>
+            <a href="/qqsnote/2026/02/17/BonesBinding/" class="post-title-link" itemprop="url">BonesBinding</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-02-17 11:04:36 / Modified: 11:37:15" itemprop="dateCreated datePublished" datetime="2026-02-17T11:04:36+08:00">2026-02-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>fk vs ik (反向控制)</p>
+<p>Regify</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/02/08/turborepo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2026/02/08/turborepo/" class="post-title-link" itemprop="url">turborepo</a>
         </h2>
 
         <div class="post-meta">
@@ -341,15 +489,8 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2025-08-12 11:14:17" itemprop="dateCreated datePublished" datetime="2025-08-12T11:14:17+08:00">2025-08-12</time>
+              <time title="Created: 2026-02-08 15:25:22" itemprop="dateCreated datePublished" datetime="2026-02-08T15:25:22+08:00">2026-02-08</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-05 10:08:09" itemprop="dateModified" datetime="2025-09-05T10:08:09+08:00">2025-09-05</time>
-              </span>
 
           
 
@@ -381,7 +522,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2025/08/09/openGL-learnopengl/">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/01/29/JupyterNotebook/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/qqsnote/images/avatar.gif">
@@ -395,7 +536,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/qqsnote/2025/08/09/openGL-learnopengl/" class="post-title-link" itemprop="url">Learn OpenGL</a>
+            <a href="/qqsnote/2026/01/29/JupyterNotebook/" class="post-title-link" itemprop="url">Jupyter Notebook</a>
         </h2>
 
         <div class="post-meta">
@@ -404,17 +545,9 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2025-08-09 11:45:42" itemprop="dateCreated datePublished" datetime="2025-08-09T11:45:42+08:00">2025-08-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">图形学</span></a>
-                </span>
+              <time title="Created: 2026-01-29 16:04:41 / Modified: 16:15:21" itemprop="dateCreated datePublished" datetime="2026-01-29T16:04:41+08:00">2026-01-29</time>
             </span>
 
           
@@ -428,10 +561,83 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>OpenGL自身是一个巨大的状态机(State Machine)：一系列的变量描述OpenGL此刻应当如何运行。OpenGL的状态通常被称为OpenGL上下文(Context)。我们通常使用如下途径去更改OpenGL状态：设置选项，操作缓冲。最后，我们使用当前OpenGL上下文来渲染。</p>
-<p>切换到绘制线段/图形 —&gt; 绘制参数 —&gt; 更新</p>
-<p>GLFW是一个专门针对OpenGL的C语言库，它提供了一些渲染物体所需的最低限度的接口。如创建窗口、处理输入（如键盘、鼠标、游戏手柄）以及管理 OpenGL 上下文，GLFW是开发 OpenGL 应用程序的常用工具之一</p>
-<p><a target="_blank" rel="noopener" href="https://www.glfw.org/docs/latest/window.html#window_hints">GLFW window hint 枚举</a></p>
+          <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pip install jupyter</span><br><span class="line">jupyter notebook --<span class="built_in">help</span></span><br><span class="line"></span><br><span class="line">jupyter lab #启动一个web交互应用http://<span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>:<span class="number">8888</span>/lab</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/01/25/Reading-FinanceAndEconomics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2026/01/25/Reading-FinanceAndEconomics/" class="post-title-link" itemprop="url">Reading-FinanceAndEconomics</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-01-25 19:44:46" itemprop="dateCreated datePublished" datetime="2026-01-25T19:44:46+08:00">2026-01-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-02-03 13:53:39" itemprop="dateModified" datetime="2026-02-03T13:53:39+08:00">2026-02-03</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="鲍莫尔成本病和劳动份额下降理论"><a href="#鲍莫尔成本病和劳动份额下降理论" class="headerlink" title="鲍莫尔成本病和劳动份额下降理论"></a>鲍莫尔成本病和劳动份额下降理论</h2><h3 id="鲍莫尔成本病"><a href="#鲍莫尔成本病" class="headerlink" title="鲍莫尔成本病"></a>鲍莫尔成本病</h3><ul>
+<li>进步部门（如制造业、软件业、现在的AI）：技术进步极快，生产率（Output per Hour）指数级增长</li>
+<li>停滞部门（如表演艺术、教育、医疗、理发）：这类工作高度依赖“人”的时间，很难通过机器替代</li>
+</ul>
+<p>制造业：工资↑，生产率↑↑ → 成本 ↓（东西越来越便宜）</p>
+<p>服务业：工资↑，生产率→（不变） → 成本↑↑（服务越来越贵）</p>
+<p>这就是为什么你现在买一台高端电脑（制造品）的价格可能和20年前差不多（甚至更便宜），但看一场病、请个家教、修个水管的价格却贵得离谱。随着社会越来越富裕，我们花在“买服务”上的钱占比会越来越高，感觉越来越“穷”。</p>
+<h3 id="劳动份额下降"><a href="#劳动份额下降" class="headerlink" title="劳动份额下降"></a>劳动份额下降</h3><p>这描述的是国民收入这块“大蛋糕”里，切给“劳动”的部分越来越少，切给“资本”的部分越来越多的现象。</p>
+<p>技术进步让机器和软件（资本品）变得极其便宜且高效, AI作为一种新型资本，正在大规模替代“认知型劳动” 降本增效的过程中，造成劳动者与资本家之间贫富差距扩大，财富集中的同时也造成了消费不足</p>
+<blockquote>
+<p>鲍莫尔成本病解释了为什么服务越来越贵，且服务业吸纳了那么多就业</p>
+<p>劳动份额下降解释了为什么打工人虽然辛苦，但分到的钱却越来越少。</p>
+</blockquote>
 
       
     </div>
@@ -451,7 +657,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2025/08/08/MicroFrontEnd-MicroApp/">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/01/25/langchain/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/qqsnote/images/avatar.gif">
@@ -465,7 +671,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/qqsnote/2025/08/08/MicroFrontEnd-MicroApp/" class="post-title-link" itemprop="url">微前端 - Micro App</a>
+            <a href="/qqsnote/2026/01/25/langchain/" class="post-title-link" itemprop="url">langchain</a>
         </h2>
 
         <div class="post-meta">
@@ -475,15 +681,228 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2025-08-08 10:54:13" itemprop="dateCreated datePublished" datetime="2025-08-08T10:54:13+08:00">2025-08-08</time>
+              <time title="Created: 2026-01-25 16:19:30" itemprop="dateCreated datePublished" datetime="2026-01-25T16:19:30+08:00">2026-01-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-10 17:15:32" itemprop="dateModified" datetime="2025-09-10T17:15:32+08:00">2025-09-10</time>
+                <time title="Modified: 2026-02-05 19:37:07" itemprop="dateModified" datetime="2026-02-05T19:37:07+08:00">2026-02-05</time>
               </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a target="_blank" rel="noopener" href="https://docs.langchain.com/oss/python/langchain/overview">langchain docs</a></p>
+<p>langchain是python语言的AI应用开发工具箱，封装并提供 提示词模板、主流LLM api、保存对话上下文等功能的标准化接口 让开发者无需从零搭建复杂架构， 从而快速构建具备“思考、记忆、行动”能力的agent</p>
+<ul>
+<li>Model</li>
+<li>Prompt</li>
+<li>Memory</li>
+</ul>
+<p><img src="../images/langchainCore.png" alt="核心组件"></p>
+<p>安装：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install langchain</span><br><span class="line">pip show langchain</span><br></pre></td></tr></table></figure>
+<p>显示版本1.0(2025年10月发布)以上 与0.3有较大改版, 新增子项目：</p>
+<ul>
+<li>LangGraph：用“图”编排多步、多角色、有状态的工作流，是langchain1.0的底层逻辑。</li>
+<li>LangServe：一键把链/代理封装成REST API，自带/invoke、/stream、/batch 端点与Swagger 页面。</li>
+<li>LangSmith：可视化调试、回归测试、在线监控平台，与1.X 的回调系统深度打通。</li>
+<li>DeepAgent</li>
+</ul>
+<p><img src="../images/langchaindiagram.svg" alt="项目关系"></p>
+<h2 id="使用环境变量"><a href="#使用环境变量" class="headerlink" title="使用环境变量"></a>使用环境变量</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> AgentProj</span><br><span class="line">pip install langchain langchain-openai dotenv</span><br></pre></td></tr></table></figure>
+<p>将环境变量写入项目下的.env文件</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DEEPSEEK_API_KEY=&#x27;xxxxx&#x27;</span><br><span class="line">DEEPSEEK_BASE_URL=&#x27;xxxxx&#x27;</span><br></pre></td></tr></table></figure>
+<p>loadenv并调用os.getenv</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line">API_KEY = os.getenv(<span class="string">&#x27;DEEPSEEK_API_KEY&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="LLM扩展"><a href="#LLM扩展" class="headerlink" title="LLM扩展"></a>LLM扩展</h2><p>注意到langchain-openai是langchain的扩展包 使用下面的安装命令效果相同</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -U &quot;langchain[openai]&quot;</span><br></pre></td></tr></table></figure>
+<p>更多模型提供商: <a target="_blank" rel="noopener" href="https://docs.langchain.com/oss/python/integrations/providers/overview">Official Providers</a> 其实国内外各种大模型都可以直接使用“ChatOpenAI”类来负责调用</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line">API_KEY = os.getenv(<span class="string">&#x27;DEEPSEEK_API_KEY&#x27;</span>)</span><br><span class="line">BASE_URL = <span class="string">&#x27;https://dashscope.aliyuncs.com/compatible-mode/v1&#x27;</span></span><br><span class="line"></span><br><span class="line">llm = ChatOpenAI(</span><br><span class="line">    model_name = <span class="string">&#x27;deepseek-v3.2&#x27;</span>,</span><br><span class="line">    temperature = <span class="number">0.5</span>,</span><br><span class="line">    api_key = API_KEY,</span><br><span class="line">    base_url = BASE_URL</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">response = llm.invoke(<span class="string">&quot;你是谁，回答我!look in my eyes&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>content=’我是DeepSeek，由深度求索公司创造的AI助手！😊 \n\n看着你的眼睛（虽然我没有物理形态），我可以告诉你：\n- 我是一个纯文本AI模型，擅长理解和生成文字内容\n- 拥有128K的上下文处理能力\n- 支持文件上传功能（图像、文档等）\n- 完全免费使用，没有语音功能\n- 知识截止到2024年7月\n\n我的“眼睛”就是我的文字理解能力，能通过你上传的文件“看到”其中的文字信息。有什么问题想要探讨吗？我很乐意帮助你！✨’ additional_kwargs={‘refusal’: None} response_metadata={‘token_usage’: {‘completion_tokens’: 119, ‘prompt_tokens’: 13, ‘total_tokens’: 132, ‘completion_tokens_details’: None, ‘prompt_tokens_details’: {‘audio_tokens’: None, ‘cached_tokens’: 0}}, ‘model_provider’: ‘openai’, ‘model_name’: ‘deepseek-v3.2’, ‘system_fingerprint’: None, ‘id’: ‘chatcmpl-86738849-2401-9a6d-903e-8234934d2197’, ‘finish_reason’: ‘stop’, ‘logprobs’: None} id=’lc_run—019c22e8-e465-7f92-acdd-25b2d4a42e44-0’ tool_calls=[] invalid_tool_calls=[] usage_metadata={‘input_tokens’: 13, ‘output_tokens’: 119, ‘total_tokens’: 132, ‘input_token_details’: {‘cache_read’: 0}, ‘output_token_details’: {}}</p>
+</blockquote>
+<p>DeepSeek有专门的扩展 <a target="_blank" rel="noopener" href="https://reference.langchain.com/python/integrations/langchain_deepseek/?_gl=1*g8jvly*_gcl_au*MTkyNjc2OTc0MS4xNzcwMTAyODEz*_ga*ODgyMjE0NTYzLjE3NzAxMDI4MTM.*_ga_47WX3HKKY2*czE3NzAxMTA3NTgkbzIkZzEkdDE3NzAxMTE0OTAkajI0JGwwJGgw#langchain_deepseek.ChatDeepSeek">langchain_deepseek</a></p>
+<p>type(response)将显示返回类型为AIMessage 在这个结构中显示总token消耗是132 与百炼控制台计费数据一致</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_deepseek <span class="keyword">import</span> ChatDeepSeek</span><br><span class="line"></span><br><span class="line">model = ChatDeepSeek(</span><br><span class="line">    model=<span class="string">&quot;...&quot;</span>,</span><br><span class="line">    temperature=<span class="number">0</span>,</span><br><span class="line">    max_tokens=<span class="literal">None</span>,</span><br><span class="line">    timeout=<span class="literal">None</span>,</span><br><span class="line">    max_retries=<span class="number">2</span>,</span><br><span class="line">    <span class="comment"># api_key=&quot;...&quot;,</span></span><br><span class="line">    <span class="comment"># api_base=&quot;...&quot;,</span></span><br><span class="line">    <span class="comment"># other params...</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>ChatDeepSeek返回的AIMessage中 包含reasoning_content(深度思考)</p>
+<blockquote>
+<p>QQs按：invoke没有参数控制是否输出reasoning_content, 也就是说 官网聊天窗口的‘深度思考’开关是一个模型切换功能</p>
+</blockquote>
+<p>社区集成</p>
+<p>langchain-community:官方维护的社区集成包 包含了数十甚至上百个第三方模型的集成（通义千问、文心一言、Moonshot、各类向量数据库等）</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> langchain_community.chat_models <span class="keyword">import</span> ChatTongyi</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从环境变量获取 dashscope 的 API Key</span></span><br><span class="line">api_key = os.getenv(<span class="string">&#x27;DASHSCOPE_API_KEY&#x27;</span>)</span><br><span class="line">dashscope.api_key = api_key</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载模型 (使用 ChatModel 以支持 tool calling)</span></span><br><span class="line">llm = ChatTongyi(model_name=<span class="string">&quot;qwen-turbo&quot;</span>, dashscope_api_key=api_key)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载 serpapi 工具</span></span><br><span class="line">tools = load_tools([<span class="string">&quot;serpapi&quot;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># LangChain 1.x 新写法</span></span><br><span class="line">agent = create_agent(llm, tools)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行 agent</span></span><br><span class="line">result = agent.invoke(&#123;<span class="string">&quot;messages&quot;</span>: [(<span class="string">&quot;user&quot;</span>, <span class="string">&quot;今天是几月几号?历史上的今天有哪些名人出生&quot;</span>)]&#125;)</span><br><span class="line"><span class="built_in">print</span>(result[<span class="string">&quot;messages&quot;</span>][-<span class="number">1</span>].content)</span><br></pre></td></tr></table></figure>
+<p>流式输出</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> chunk <span class="keyword">in</span> llm.stream(<span class="string">&quot;怎么才能暴富&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(chunk) </span><br></pre></td></tr></table></figure>
+<p>chunk类型是AIMessageChunk 内容是逐个token(可能是一个字、词、标点符号， 取决于大模型分词器)返回的</p>
+<h2 id="提示词模板"><a href="#提示词模板" class="headerlink" title="提示词模板"></a>提示词模板</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建Prompt Template</span></span><br><span class="line">prompt = PromptTemplate(</span><br><span class="line">    input_variables=[<span class="string">&quot;product&quot;</span>],</span><br><span class="line">    template=<span class="string">&quot;What is a good name for a company that makes &#123;product&#125;?&quot;</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">chain = prompt | llm</span><br><span class="line">response = chain.invoke(&#123;<span class="string">&quot;product&quot;</span>:<span class="string">&quot;scanner&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="lcel管道语法"><a href="#lcel管道语法" class="headerlink" title="lcel管道语法"></a>lcel管道语法</h2><p>为什么python支持类似shell命令行的管道语法？ 其实这是利用了 Python 的 <strong>运算符重载</strong>。</p>
+<ul>
+<li><code>|</code> 在 Python 内部对应 <code>__or__</code> 方法。</li>
+<li>LangChain 的核心组件（如 <code>ChatPromptTemplate</code>, <code>ChatOpenAI</code>, <code>StrOutputParser</code>）都实现了这个方法。</li>
+<li>当你写 <code>A | B</code> 时，Python 实际上在后台执行 <code>A.__or__(B)</code>。<br>LangChain 在 <code>__or__</code> 方法里做的事情就是：<strong>把 B 包装起来，存进 A 的属性里，形成一棵调用树。</strong><br>当你最后调用 <code>.invoke()</code> 时，这棵树才开始遍历执行，数据顺着树枝从根部流向末梢。</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># v0.3 写法</span></span><br><span class="line"></span><br><span class="line">template = <span class="string">&quot;告诉我一个关于&#123;topic&#125;的笑话&quot;</span></span><br><span class="line">prompt = PromptTemplate(template=template, input_variables=[<span class="string">&quot;topic&quot;</span>])</span><br><span class="line">llm = ChatOpenAI()</span><br><span class="line"></span><br><span class="line">formatted_prompt = prompt.<span class="built_in">format</span>(topic=<span class="string">&quot;猫&quot;</span>)</span><br><span class="line">response_message = llm.invoke(formatted_prompt)</span><br><span class="line">final_text = response_message.content</span><br><span class="line"></span><br><span class="line"><span class="comment"># lcel 写法</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 新写法：声明式，一眼看穿数据流向</span></span><br><span class="line">chain = prompt | llm | StrOutputParser()</span><br><span class="line">result = chain.invoke(&#123;<span class="string">&quot;topic&quot;</span>: <span class="string">&quot;猫&quot;</span>&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="agent"><a href="#agent" class="headerlink" title="agent"></a>agent</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> create_agent</span><br><span class="line">agent = create_agent(</span><br><span class="line">    model=<span class="string">&quot;claude-sonnet-4-5-20250929&quot;</span>,</span><br><span class="line">    tools=[get_weather],</span><br><span class="line">    system_prompt=<span class="string">&quot;You are a helpful assistant&quot;</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run the agent</span></span><br><span class="line">agent.invoke(</span><br><span class="line">    &#123;<span class="string">&quot;messages&quot;</span>: [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;what is the weather in sf&quot;</span>&#125;]&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="模块和常用库函数"><a href="#模块和常用库函数" class="headerlink" title="模块和常用库函数"></a>模块和常用库函数</h2><h3 id="init-chat-model"><a href="#init-chat-model" class="headerlink" title="init_chat_model"></a>init_chat_model</h3><ul>
+<li>rate_limiter 限制调用速率</li>
+</ul>
+<h3 id="with-structured-output"><a href="#with-structured-output" class="headerlink" title="with_structured_output"></a>with_structured_output</h3><ul>
+<li>pydentic格式化输出</li>
+</ul>
+<h3 id="StrOutputParser"><a href="#StrOutputParser" class="headerlink" title="StrOutputParser"></a>StrOutputParser</h3><h2 id="工具调用"><a href="#工具调用" class="headerlink" title="工具调用"></a>工具调用</h2><h3 id="serpapi-联网搜索"><a href="#serpapi-联网搜索" class="headerlink" title="serpapi 联网搜索"></a>serpapi 联网搜索</h3><p>主流联网搜索工具 可以让大模型突破训练数据时效的限制 检索互联网</p>
+<ul>
+<li>所选llm需具备调用工具能力 如ChatTongyi</li>
+<li>serpapi 也是注册计费api</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_community.agent_toolkits.load_tools <span class="keyword">import</span> load_tools</span><br><span class="line"><span class="comment"># 加载 serpapi 工具</span></span><br><span class="line">tools = load_tools([<span class="string">&quot;serpapi&quot;</span>])</span><br><span class="line">agent = create_agent(llm, tools)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行 agent</span></span><br><span class="line">result = agent.invoke(&#123;<span class="string">&quot;messages&quot;</span>: [(<span class="string">&quot;user&quot;</span>, <span class="string">&quot;今天是几月几号?历史上的今天有哪些名人出生&quot;</span>)]&#125;)</span><br><span class="line"><span class="built_in">print</span>(result[<span class="string">&quot;messages&quot;</span>][-<span class="number">1</span>].content)</span><br></pre></td></tr></table></figure>
+<h3 id="自定义本地计算"><a href="#自定义本地计算" class="headerlink" title="自定义本地计算"></a>自定义本地计算</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用@tool装饰器自定义一个工具</span></span><br><span class="line"><span class="meta">@tool</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculator</span>(<span class="params">expression: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;计算数学表达式。只接受数字和运算符，例如: 2+2, 100/4, 32*1.8+32。不要使用变量名或占位符。&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 只允许数字、运算符和括号</span></span><br><span class="line">    <span class="keyword">import</span> re</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> re.match(<span class="string">r&#x27;^[\d\s\+\-\*\/\.\(\)]+$&#x27;</span>, expression):</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;错误: 表达式 &#x27;<span class="subst">&#123;expression&#125;</span>&#x27; 包含无效字符。请只使用数字和运算符(+,-,*,/)&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">str</span>(<span class="built_in">eval</span>(expression))</span><br><span class="line"><span class="comment"># 加载 serpapi 工具 + 自定义计算器</span></span><br><span class="line">serpapi_tools = load_tools([<span class="string">&quot;serpapi&quot;</span>])</span><br><span class="line">tools = serpapi_tools + [calculator]</span><br><span class="line"></span><br><span class="line"><span class="comment"># LangChain 1.x 新写法</span></span><br><span class="line">agent = create_agent(llm, tools)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行 agent</span></span><br><span class="line">result = agent.invoke(&#123;<span class="string">&quot;messages&quot;</span>: [(<span class="string">&quot;user&quot;</span>, <span class="string">&quot;当前北京的温度是多少华氏度？这个温度的1/4是多少&quot;</span>)]&#125;)</span><br></pre></td></tr></table></figure>
+<p>匹配提示词中的数字和运算符 计算结果</p>
+<blockquote>
+<p>QQs按： 需记得能被llm接收的只有prompt，对于支持工具调用的llm，prompt会重新组装，并多次调用，首先提交的prompt告诉llm有以下工具可以调用，根据用户提问让llm判断是否使用、使用哪些工具，如果llm决定调用，要再提交一次包含工具调用结果的prompt并要求llm将工具调用结果整合到回答中</p>
+</blockquote>
+<p>容错处理（暂略）</p>
+<h3 id="ReAct范式"><a href="#ReAct范式" class="headerlink" title="ReAct范式"></a>ReAct范式</h3><p>Reason + Action 就是让 LLM 像人类一样思考：先观察问题，推理出需要做什么动作，执行动作（调用工具），观察结果，最后得出结论</p>
+<h2 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h2><h2 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h2><p>before/after钩子</p>
+<h3 id="langchain-agent-vs-qwen-agent-vs-LlamaIndex"><a href="#langchain-agent-vs-qwen-agent-vs-LlamaIndex" class="headerlink" title="langchain agent vs qwen agent vs LlamaIndex"></a>langchain agent vs qwen agent vs LlamaIndex</h3>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/01/20/VideoEdit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2026/01/20/VideoEdit/" class="post-title-link" itemprop="url">视频剪辑</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-01-20 14:36:18" itemprop="dateCreated datePublished" datetime="2026-01-20T14:36:18+08:00">2026-01-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-03-04 13:52:21" itemprop="dateModified" datetime="2026-03-04T13:52:21+08:00">2026-03-04</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="流媒体下载"><a href="#流媒体下载" class="headerlink" title="流媒体下载"></a>流媒体下载</h2><p>Youtube 视频、音频 -&gt; <a target="_blank" rel="noopener" href="https://v6.www-y2mate.com/">Y2mate</a></p>
+<p>bilibili等多平台 -&gt; <a target="_blank" rel="noopener" href="https://snapany.com/zh/bilibili">SnapAny</a></p>
+<h2 id="文字转语音"><a href="#文字转语音" class="headerlink" title="文字转语音"></a>文字转语音</h2><p><a target="_blank" rel="noopener" href="https://www.text-to-speech.cn/">text-to-speech(TTS)</a></p>
+<h2 id="ai音频字幕-ai听译"><a href="#ai音频字幕-ai听译" class="headerlink" title="ai音频字幕(ai听译)"></a>ai音频字幕(ai听译)</h2><p><a target="_blank" rel="noopener" href="https://converter.app/cn/mp3-text/">converter app</a></p>
+<h2 id="格式转换-ffmpeg"><a href="#格式转换-ffmpeg" class="headerlink" title="格式转换(ffmpeg)"></a>格式转换(ffmpeg)</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># windows bash 安装</span><br><span class="line">winget install ffmpeg</span><br><span class="line"></span><br><span class="line">ffmpeg -i input.mp4 -vn -acodec libmp3lame -q:a <span class="number">2</span> output.mp3</span><br><span class="line">ffmpeg -i input.mp4 -vn -acodec wmav2 output.wma      </span><br></pre></td></tr></table></figure>
+<h2 id="截取"><a href="#截取" class="headerlink" title="截取"></a>截取</h2><p>视频截取</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.mp4 -ss <span class="number">00</span>:<span class="number">00</span>:<span class="number">10</span> -to <span class="number">00</span>:<span class="number">00</span>:<span class="number">20</span> -c <span class="built_in">copy</span> output.mp4</span><br></pre></td></tr></table></figure>
+<p>图片批量截取</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install Pillow</span><br><span class="line">python clips.py</span><br></pre></td></tr></table></figure>
+<p>clips.py<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置参数</span></span><br><span class="line">input_dir = <span class="string">&#x27;.&#x27;</span>          <span class="comment"># 输入目录，&#x27;.&#x27; 表示当前目录</span></span><br><span class="line">output_dir = <span class="string">&#x27;output&#x27;</span>    <span class="comment"># 输出子目录名</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 截取区域 (左, 上, 右, 下)</span></span><br><span class="line"><span class="comment"># 注意：Pillow 的坐标系统原点(0,0)在左上角</span></span><br><span class="line">crop_box = (<span class="number">1254</span>, <span class="number">104</span>, <span class="number">1798</span>, <span class="number">888</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="comment"># 如果输出目录不存在，则创建</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(output_dir):</span><br><span class="line">        os.makedirs(output_dir)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;创建输出目录: <span class="subst">&#123;output_dir&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取目录下所有文件</span></span><br><span class="line">    files = os.listdir(input_dir)</span><br><span class="line">    png_files = [f <span class="keyword">for</span> f <span class="keyword">in</span> files <span class="keyword">if</span> f.lower().endswith(<span class="string">&#x27;.png&#x27;</span>)]</span><br><span class="line">    </span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> filename <span class="keyword">in</span> png_files:</span><br><span class="line">        input_path = os.path.join(input_dir, filename)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 打开图片</span></span><br><span class="line">            <span class="keyword">with</span> Image.<span class="built_in">open</span>(input_path) <span class="keyword">as</span> img:</span><br><span class="line">                <span class="comment"># 截取指定区域</span></span><br><span class="line">                cropped_img = img.crop(crop_box)</span><br><span class="line">                </span><br><span class="line">                <span class="comment"># 构造输出路径</span></span><br><span class="line">                output_path = os.path.join(output_dir, filename)</span><br><span class="line">                </span><br><span class="line">                <span class="comment"># 保存图片</span></span><br><span class="line">                cropped_img.save(output_path)</span><br><span class="line">                </span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;处理完成: <span class="subst">&#123;filename&#125;</span>&quot;</span>)</span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">                </span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;处理 <span class="subst">&#123;filename&#125;</span> 时出错: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;\n全部完成！共处理 <span class="subst">&#123;count&#125;</span> 张图片。&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></p>
+<h2 id="剪辑软件常用功能-以剪映为例"><a href="#剪辑软件常用功能-以剪映为例" class="headerlink" title="剪辑软件常用功能(以剪映为例)"></a>剪辑软件常用功能(以剪映为例)</h2><ul>
+<li>分辨率 长宽比 短视频9:16</li>
+<li>裁剪</li>
+<li>定格</li>
+<li>文字 动画效果</li>
+</ul>
+<p>流程化</p>
+<p>视频结构：老套的开篇叙事 重点字幕 音效 转场</p>
+<p>视频剪辑工作流 to be continued</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/01/13/Cli/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2026/01/13/Cli/" class="post-title-link" itemprop="url">开发一个Cli</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-01-13 19:34:18 / Modified: 19:49:06" itemprop="dateCreated datePublished" datetime="2026-01-13T19:34:18+08:00">2026-01-13</time>
+            </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -505,381 +924,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="Web-Component"><a href="#Web-Component" class="headerlink" title="Web Component"></a>Web Component</h4><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Web_components">Web API Doc: Web Component</a></p>
-<p>w3c提出浏览器原生支持的组件规范 通过扩展HTMLElement定义html标签 嵌入内容和逻辑（shadow dom隔离）</p>
-<ul>
-<li>接入简单不需要子应用改造</li>
-<li>不支持ie</li>
-<li>Web Component沙箱隔离 性能较好</li>
-</ul>
-<h4 id="集成"><a href="#集成" class="headerlink" title="集成"></a>集成</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i @micro-zoe&#x2F;micro-app -S</span><br></pre></td></tr></table></figure>
-<p>主应用入口<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; src&#x2F;index.js</span><br><span class="line">import microApp from &#39;@micro-zoe&#x2F;micro-app&#39;</span><br><span class="line"></span><br><span class="line">microApp.start()</span><br></pre></td></tr></table></figure><br>contianer组件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;子应用&lt;&#x2F;h1&gt;</span><br><span class="line">    &lt;!--</span><br><span class="line">      name(必传)：应用名称</span><br><span class="line">      url(必传)：应用地址，会被自动补全为http:&#x2F;&#x2F;localhost:3000&#x2F;index.html</span><br><span class="line">      baseroute(可选)：基座应用分配给子应用的基础路由，就是上面的 &#96;&#x2F;my-page&#96;</span><br><span class="line">     --&gt;</span><br><span class="line">    &lt;micro-app name&#x3D;&#39;learnvue&#39; url&#x3D;&#39;http:&#x2F;&#x2F;localhost:8081&#x2F;&#39; baseroute&#x3D;&quot;&#x2F;dentition&quot;&gt;&lt;&#x2F;micro-app&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2025/08/08/MicroFrontEnd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2025/08/08/MicroFrontEnd/" class="post-title-link" itemprop="url">微前端-qiankun</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-08-08 10:54:13" itemprop="dateCreated datePublished" datetime="2025-08-08T10:54:13+08:00">2025-08-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-05 10:08:09" itemprop="dateModified" datetime="2025-09-05T10:08:09+08:00">2025-09-05</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="微前端场景"><a href="#微前端场景" class="headerlink" title="微前端场景"></a>微前端场景</h4><ul>
-<li>老系统架构陈旧 重构难度大 部分需要与时俱进的功能得不到升级</li>
-<li>不同模块需要多个团队参与 尤其专业和技术栈有差异</li>
-<li>A系统若干功能或页面被B系统引用</li>
-</ul>
-<blockquote>
-<p>Techniques, strategies and recipes for building a modern web app with multiple teams that can ship features independently. — Micro Frontends</p>
-</blockquote>
-<p>微前端是一种多个团队通过独立发布功能的方式来共同构建现代化 web 应用的技术手段及方法策略。</p>
-<p>qiankun方案缺点</p>
-<ul>
-<li>改造和适配成本高 如微应用打包、入口生命周期，以及router问题</li>
-<li>js沙箱性能问题</li>
-<li>不支持激活多个微应用 不支持微应用保活</li>
-</ul>
-<h4 id="工作流"><a href="#工作流" class="headerlink" title="工作流"></a>工作流</h4><p>父应用：安装微前端组件 —&gt; 预留容器dom —&gt; 用组件提供的方法注册子系统<br>子应用：暴露生命周期钩子</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i qiankun -S</span><br></pre></td></tr></table></figure>
-<p>register和start都在container的组件层级上 不一定是在顶级组件上 尤其在使用router和模块懒加载的应用中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div id&#x3D;&quot;viewport&quot;&gt;</span><br><span class="line">    &lt;div id&#x3D;&quot;subapp-root&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">import &#123; registerMicroApps, start &#125; from &#39;qiankun&#39;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">  name: &#39;&#39;,</span><br><span class="line">  data () &#123;</span><br><span class="line">    return &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted () &#123;</span><br><span class="line">    &#x2F;&#x2F; 注册微应用</span><br><span class="line">    registerMicroApps([</span><br><span class="line">      &#123;</span><br><span class="line">        name: &#39;learnvue&#39;, &#x2F;&#x2F; app name registered</span><br><span class="line">        entry: &#39;&#x2F;&#x2F;localhost:8081&#39;,</span><br><span class="line">        container: &#39;#viewport&#39;,</span><br><span class="line">        activeRule: &#39;&#x2F;dentition&#39;</span><br><span class="line">      &#125;</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    if (!window.qiankunStarted) &#123;</span><br><span class="line">      window.qiankunStarted &#x3D; true</span><br><span class="line">      start()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>当微应用信息注册完之后，一旦浏览器的 url 发生变化，便会自动触发 qiankun 的匹配逻辑，所有 activeRule 规则匹配上的微应用就会被插入到指定的 container 中，同时依次调用微应用暴露出的生命周期钩子。</p>
-<p>如果微应用不是直接跟路由关联的时候，你也可以选择手动加载微应用的方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import &#123; loadMicroApp &#125; from &#39;qiankun&#39;;</span><br><span class="line"></span><br><span class="line">loadMicroApp(&#123;</span><br><span class="line">  name: &#39;app&#39;,</span><br><span class="line">  entry: &#39;&#x2F;&#x2F;localhost:7100&#39;,</span><br><span class="line">  container: &#39;#yourContainer&#39;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>微应用webpack设置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">const &#123; defineConfig &#125; &#x3D; require(&#39;@vue&#x2F;cli-service&#39;)</span><br><span class="line">const packageName &#x3D; require(&#39;.&#x2F;package.json&#39;).name;</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; defineConfig(&#123;</span><br><span class="line">  transpileDependencies: true,</span><br><span class="line">  </span><br><span class="line">  devServer: &#123;</span><br><span class="line">    port: 8081,</span><br><span class="line">    headers: &#123;</span><br><span class="line">      &#x2F;&#x2F; 微前端需要跨域</span><br><span class="line">      &#39;Access-Control-Allow-Origin&#39;: &#39;*&#39;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  configureWebpack: &#123;</span><br><span class="line">    output: &#123;</span><br><span class="line">      library: &#96;$&#123;packageName&#125;-[name]&#96;, &#x2F;&#x2F; [name]是打包时trunk名称的占位符</span><br><span class="line">      libraryTarget: &#39;umd&#39;, &#x2F;&#x2F; Universal Module Definition通用模块定义</span><br><span class="line">      chunkLoadingGlobal: &#96;webpackJsonp_$&#123;packageName&#125;&#96;,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure><br>暴露声明周期<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;main.js</span><br><span class="line">import Vue from &#39;vue&#39;</span><br><span class="line">import App from &#39;.&#x2F;App.vue&#39;</span><br><span class="line">import &#39;.&#x2F;public-path&#39;</span><br><span class="line">import router from &#39;.&#x2F;router&#39;</span><br><span class="line"></span><br><span class="line">Vue.config.productionTip &#x3D; false</span><br><span class="line"></span><br><span class="line">let instance &#x3D; null;</span><br><span class="line"></span><br><span class="line">function render(props &#x3D; &#123;&#125;) &#123;</span><br><span class="line">  const &#123; container &#125; &#x3D; props;</span><br><span class="line"></span><br><span class="line">  instance &#x3D; new Vue(&#123;</span><br><span class="line">    router,</span><br><span class="line">    render: h &#x3D;&gt; h(App)</span><br><span class="line">  &#125;).$mount(container ? container.querySelector(&#39;#app&#39;) : &#39;#app&#39;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Running in qiankun</span><br><span class="line">&#x2F;* eslint-disable no-undef *&#x2F;</span><br><span class="line">if (window.__POWERED_BY_QIANKUN__) &#123;</span><br><span class="line">  __webpack_public_path__ &#x3D; window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Running standalone</span><br><span class="line">if (!window.__POWERED_BY_QIANKUN__) &#123;</span><br><span class="line">  render();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export async function bootstrap() &#123;</span><br><span class="line">  console.log(&#39;[vue] vue app bootstraped&#39;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export async function mount(props) &#123;</span><br><span class="line">  console.log(&#39;[vue] props from main framework&#39;, props);</span><br><span class="line">  render(props);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export async function unmount() &#123;</span><br><span class="line">  instance.$destroy();</span><br><span class="line">  instance.$el.innerHTML &#x3D; &#39;&#39;;</span><br><span class="line">  instance &#x3D; null;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export async function update(props) &#123;</span><br><span class="line">  console.log(&#39;update props&#39;, props)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="应用间通信"><a href="#应用间通信" class="headerlink" title="应用间通信"></a>应用间通信</h4><h4 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h4><h4 id="troubleshooting"><a href="#troubleshooting" class="headerlink" title="troubleshooting"></a>troubleshooting</h4><p><a target="_blank" rel="noopener" href="https://qiankun.umijs.org/zh/faq#vue-router-%E6%8A%A5%E9%94%99-uncaught-typeerror-cannot-redefine-property-router">Uncaught TypeError: Cannot redefine property: $router</a><br>官网解决方法是将主应用window.Vue对象换个名字</p>
-<p>我的选择是 微应用最好不要用router</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2025/08/06/wasm-opengl-project/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2025/08/06/wasm-opengl-project/" class="post-title-link" itemprop="url">Wasm OpenGL项目</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-08-06 17:16:14" itemprop="dateCreated datePublished" datetime="2025-08-06T17:16:14+08:00">2025-08-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-05 10:08:09" itemprop="dateModified" datetime="2025-09-05T10:08:09+08:00">2025-09-05</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>(windows)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;emscripten-core&#x2F;emsdk.git</span><br><span class="line">cd emsdk</span><br><span class="line"></span><br><span class="line">git pull</span><br><span class="line"># need google access</span><br><span class="line">.&#x2F;emsdk.bat install latest</span><br><span class="line">.&#x2F;emsdk.bat activate latest</span><br><span class="line"></span><br><span class="line">cd ..</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;vcpkg.git</span><br><span class="line">cd vcpkg</span><br><span class="line"></span><br><span class="line">.\bootstrap-vcpkg.bat</span><br><span class="line"></span><br><span class="line"># add vcpkg directory into env variable path</span><br><span class="line"></span><br><span class="line">cd ..&#x2F;Workspace&#x2F;WasmOpenGLProject</span><br><span class="line">vcpkg install boost:wasm32-emscripten </span><br><span class="line"></span><br><span class="line">vcpkg install glm:wasm32-emscripten</span><br><span class="line"></span><br><span class="line">vcpkg install glad:wasm32-emscripten</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>issues error: building openssl:wasm32-emscripten failed with: BUILD_FAILED</p>
-</blockquote>
-<p>查看了\vcpkg\buildtrees\openssl\install-wasm32-emscripten-dbg-err.log 内容是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Trying to rename Makefile-333 -&gt; Makefile: Permission denied</span><br><span class="line">make[1]: *** [Makefile:2395: depend] Error 13</span><br><span class="line">make: *** [Makefile:2293: build_modules] Error 2</span><br><span class="line">make: *** Waiting for unfinished jobs....</span><br></pre></td></tr></table></figure><br>怀疑其他线程访问导致写入失败<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set VCPKG_MAX_CONCURRENCY&#x3D;1</span><br><span class="line">vcpkg install openssl:wasm32-emscripten --clean-after-build</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>The <code>FindBoost</code> module is removed.</p>
-</blockquote>
-<p>cmake 3.30 起移除了FindBoost模块 导致找不到BOOST_DIR Boost_FILESYSTEM_LIBRARY_DEBUG Boost_INCLUDE_DIR等， 实际上面的步骤中相关包已成功安装在D:\Workspace\Github\vcpkg\installed\wasm32-emscripten\include</p>
-<p>make Ninja project<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">emcmake cmake -G &quot;Ninja&quot; ^</span><br><span class="line">    -DCMAKE_SYSTEM_NAME&#x3D;Emscripten ^</span><br><span class="line">    -DCMAKE_SYSTEM_PROCESSOR&#x3D;x86 ^</span><br><span class="line">    -DCMAKE_TOOLCHAIN_FILE&#x3D;&quot;%VCPKG_HUGE%&#x2F;scripts&#x2F;buildsystems&#x2F;vcpkg.cmake&quot; ^</span><br><span class="line">    -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE&#x3D;&quot;%EMSDK%&#x2F;upstream&#x2F;emscripten&#x2F;cmake&#x2F;Modules&#x2F;Platform&#x2F;Emscripten.cmake&quot; ^</span><br><span class="line">    -DVCPKG_TARGET_TRIPLET&#x3D;wasm32-emscripten ^</span><br><span class="line">    -DCMAKE_C_COMPILER&#x3D;&quot;%EMCC_PATH%&quot; ^</span><br><span class="line">    -DCMAKE_CXX_COMPILER&#x3D;&quot;%EMXX_PATH%&quot; ^</span><br><span class="line">    -DCMAKE_BUILD_TYPE&#x3D;Release ^</span><br><span class="line">    -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE&#x3D;BOTH ^</span><br><span class="line">    -DCMAKE_PREFIX_PATH&#x3D;&quot;%VCPKG_HUGE%&#x2F;installed&#x2F;wasm32-emscripten&quot; ^</span><br><span class="line">    ..</span><br><span class="line">cd ..</span><br></pre></td></tr></table></figure><br>build wasm<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd build</span><br><span class="line">emmake ninja</span><br></pre></td></tr></table></figure></p>
-<p><img src="../images/BrowserCannotAccessOpenGLThroughWasm.png" alt="浏览器通过调用opengl编写的wasm可以实现webgl原本不支持的功能吗"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2025/08/01/axios/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2025/08/01/axios/" class="post-title-link" itemprop="url">axios</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-08-01 13:43:55" itemprop="dateCreated datePublished" datetime="2025-08-01T13:43:55+08:00">2025-08-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-08-09 11:45:42" itemprop="dateModified" datetime="2025-08-09T11:45:42+08:00">2025-08-09</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>相比fetch Api, axios 提供了更简洁、更直观的 API，使得发送 HTTP 请求和处理响应更加方便; 自动处理json对象（fetch 可以调用await response.json()）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">axios.post(&#39;&#x2F;api&#x2F;submit&#39;, this.editForm)</span><br><span class="line">        .then(response &#x3D;&gt; &#123;</span><br><span class="line">          console.log(&#39;Form submitted successfully:&#39;, response.data);</span><br><span class="line">        &#125;)</span><br><span class="line">        .catch(error &#x3D;&gt; &#123;</span><br><span class="line">          console.error(&#39;Error submitting form:&#39;, error);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">      axios.request(&#123;</span><br><span class="line">        url: &#39;&#x2F;api&#x2F;submit&#39;,</span><br><span class="line">        method: &#39;post&#39;,</span><br><span class="line">        data: this.editForm</span><br><span class="line">      &#125;).then(response &#x3D;&gt; &#123;</span><br><span class="line">        console.log(&#39;Form submitted successfully:&#39;, response.data);</span><br><span class="line">      &#125;).catch(error &#x3D;&gt; &#123;</span><br><span class="line">        console.error(&#39;Error submitting form:&#39;, error);</span><br><span class="line">      &#125;);</span><br></pre></td></tr></table></figure><br>instance<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const instance &#x3D; axios.create(&#123; baseURL: &#39;&#x2F;api&#39; &#125;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Works just like axios(config)</span><br><span class="line">instance(&#123;</span><br><span class="line">  url: &#39;&#x2F;users&#39;,</span><br><span class="line">  method: &#39;get&#39;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><br>拦截器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Add a request interceptor</span><br><span class="line">axios.interceptors.request.use(function (config) &#123;</span><br><span class="line">    &#x2F;&#x2F; Do something before request is sent</span><br><span class="line">    return config;</span><br><span class="line">  &#125;, function (error) &#123;</span><br><span class="line">    &#x2F;&#x2F; Do something with request error</span><br><span class="line">    return Promise.reject(error);</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123; synchronous: true, runWhen: () &#x3D;&gt; &#x2F;* This function returns true *&#x2F;&#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Add a response interceptor</span><br><span class="line">axios.interceptors.response.use(function onFulfilled(response) &#123;</span><br><span class="line">    &#x2F;&#x2F; Any status code that lie within the range of 2xx cause this function to trigger</span><br><span class="line">    &#x2F;&#x2F; Do something with response data</span><br><span class="line">    return response;</span><br><span class="line">  &#125;, function onRejected(error) &#123;</span><br><span class="line">    &#x2F;&#x2F; Any status codes that falls outside the range of 2xx cause this function to trigger</span><br><span class="line">    &#x2F;&#x2F; Do something with response error</span><br><span class="line">    return Promise.reject(error);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2025/07/28/FastAPI/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2025/07/28/FastAPI/" class="post-title-link" itemprop="url">Python —— FastAPI</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-07-28 10:57:07" itemprop="dateCreated datePublished" datetime="2025-07-28T10:57:07+08:00">2025-07-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-30 21:21:43" itemprop="dateModified" datetime="2025-07-30T21:21:43+08:00">2025-07-30</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2025/07/27/WPF-Prism/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2025/07/27/WPF-Prism/" class="post-title-link" itemprop="url">WPF Prism</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-07-27 16:19:33" itemprop="dateCreated datePublished" datetime="2025-07-27T16:19:33+08:00">2025-07-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-08-09 11:45:42" itemprop="dateModified" datetime="2025-08-09T11:45:42+08:00">2025-08-09</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>安装依赖<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;ItemGroup&gt;</span><br><span class="line">  &lt;PackageReference Include&#x3D;&quot;HandyControl&quot; Version&#x3D;&quot;3.5.1&quot; &#x2F;&gt;</span><br><span class="line">  &lt;PackageReference Include&#x3D;&quot;Prism.Unity&quot; Version&#x3D;&quot;8.1.97&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;ItemGroup&gt;</span><br></pre></td></tr></table></figure><br>app.xmal中Wpf:Application替换成prism:PrismApplication<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;prism:PrismApplication</span><br><span class="line">    x:Class&#x3D;&quot;WpfApp1.App&quot;</span><br><span class="line">    xmlns&#x3D;&quot;http:&#x2F;&#x2F;schemas.microsoft.com&#x2F;winfx&#x2F;2006&#x2F;xaml&#x2F;presentation&quot;</span><br><span class="line">    xmlns:x&#x3D;&quot;http:&#x2F;&#x2F;schemas.microsoft.com&#x2F;winfx&#x2F;2006&#x2F;xaml&quot;</span><br><span class="line">    xmlns:local&#x3D;&quot;clr-namespace:WpfApp1&quot;</span><br><span class="line">    xmlns:prism&#x3D;&quot;http:&#x2F;&#x2F;prismlibrary.com&#x2F;&quot;&gt;</span><br><span class="line">    &lt;Application.Resources&gt;</span><br><span class="line">    &lt;&#x2F;Application.Resources&gt;</span><br><span class="line">&lt;&#x2F;prism:PrismApplication&gt;</span><br></pre></td></tr></table></figure><br>标记中删除了StartupUri=”MainWindow.xaml”（否则生成两个实例）</p>
-<p>cs代码实现两个抽象方法RegisterTypes和CreateShell<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 创建程序主窗口</span><br><span class="line">protected override Window CreateShell()</span><br><span class="line">&#123;</span><br><span class="line">    return Container.Resolve&lt;MainWindow&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">protected override void RegisterTypes(IContainerRegistry container)</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F; 注册导航页面和ViewModel</span><br><span class="line">    container.RegisterForNavigation&lt;MainWindow, MainWindowViewModel&gt;();</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F; 注册单例服务</span><br><span class="line">    container.RegisterSingleton&lt;IMyService, MyService&gt;();</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 配置文件基础路径</span><br><span class="line">    string programData &#x3D; System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);</span><br><span class="line">    programData &#x3D; Path.Combine(programData, &quot;xxxx&quot;);</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F; 从注册表读取配置路径</span><br><span class="line">    using (var key &#x3D; Registry.LocalMachine.OpenSubKey($@&quot;SOFTWARE\xxxx&quot;))</span><br><span class="line">    &#123;</span><br><span class="line">        if (key !&#x3D; null &amp;&amp; key.GetValue(&quot;SolutionPath&quot;) !&#x3D; null)</span><br><span class="line">        &#123;</span><br><span class="line">            programData &#x3D; key.GetValue(&quot;SolutionPath&quot;).ToString();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 初始化全局缓存</span><br><span class="line">    GlobalCache.Instance.FileBasePath &#x3D; programData;</span><br><span class="line">    GlobalCache.Instance.InitPaths();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
-
+          <p>目录</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">web-<span class="number">3</span>d-cli/</span><br><span class="line">├── package.json          # 项目配置和依赖</span><br><span class="line">├── index.js             # CLI 入口文件</span><br><span class="line">├── lib/</span><br><span class="line">│   ├── commands/        # 命令处理模块</span><br><span class="line">│   │   ├── init.js      # 初始化命令</span><br><span class="line">│   │   └── add.js       # 添加场景命令</span><br><span class="line">│   ├── templates/       # 项目模板</span><br><span class="line">│   │   ├── react/       # React 模板</span><br><span class="line">│   │   ├── vue/         # Vue 模板</span><br><span class="line">│   │   └── vanilla/     # 原生模板</span><br><span class="line">│   ├── utils/           # 工具函数</span><br><span class="line">│   │   ├── <span class="built_in">fs</span>.js        # 文件操作</span><br><span class="line">│   │   ├── logger.js    # 日志输出</span><br><span class="line">│   │   └── prompts.js   # 交互式询问</span><br><span class="line">│   └── constants.js     # 常量定义</span><br><span class="line">└── README.<span class="built_in">md</span>            # 项目说明</span><br></pre></td></tr></table></figure>
+<p>npm link</p>
+<p>npm link 是一个用于本地包开发与调试的强大工具，它通过创建符号链接，让你在不发布到 npm 仓库的情况下，将本地开发的包直接在其他项目中使用，实现代码的实时同步更新。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /<span class="built_in">path</span>/to/my-package</span><br><span class="line">npm link</span><br><span class="line"><span class="built_in">cd</span> /<span class="built_in">path</span>/to/my-project</span><br><span class="line">npm link my-package</span><br></pre></td></tr></table></figure>
+<p>npm publish</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -897,7 +948,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/qqsnote/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="page-number current">2</span><a class="page-number" href="/qqsnote/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/34/">34</a><a class="extend next" rel="next" href="/qqsnote/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/qqsnote/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/qqsnote/">1</a><span class="page-number current">2</span><a class="page-number" href="/qqsnote/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/qqsnote/page/37/">37</a><a class="extend next" rel="next" href="/qqsnote/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -963,18 +1014,18 @@
       <div class="site-state-item site-state-posts">
           <a href="/qqsnote/archives/">
         
-          <span class="site-state-item-count">336</span>
+          <span class="site-state-item-count">367</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/qqsnote/categories/">
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/qqsnote/tags/">
-        <span class="site-state-item-count">128</span>
+        <span class="site-state-item-count">143</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -985,7 +1036,7 @@
       </div>
 
       <div class="tag-cloud-tags">
-        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 22.5px; color: #eaeaea">AI</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.5px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.5px; color: #f2f2f2">Azure</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.5px; color: #d9d9d9">C++</a> <a href="/qqsnote/tags/CSS/" style="font-size: 19.5px; color: #e1e1e1">CSS</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 15px; color: #d5d5d5">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.5px; color: #d9d9d9">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.5px; color: #d9d9d9">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.5px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.5px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 21px; color: #e6e6e6">Jenkins</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.5px; color: #eaeaea">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.5px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 18px; color: #ddd">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.5px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 18px; color: #ddd">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 13.5px; color: #d0d0d0">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24px; color: #eee">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/React/" style="font-size: 21px; color: #e6e6e6">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 15px; color: #d5d5d5">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 16.5px; color: #d9d9d9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.5px; color: #d0d0d0">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27px; color: #f7f7f7">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.5px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 28.5px; color: #fbfbfb">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.5px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.5px; color: #d9d9d9">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 19.5px; color: #e1e1e1">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 15px; color: #d5d5d5">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.5px; color: #d9d9d9">加密</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.5px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 18px; color: #ddd">图形学</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.5px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 15px; color: #d5d5d5">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.5px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.5px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.5px; color: #d9d9d9">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 21px; color: #e6e6e6">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 12px; color: #ccc">读书</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 13.5px; color: #d0d0d0">面试</a> <a href="/qqsnote/tags/%E9%A6%99%E6%A9%99%E6%B4%BE/" style="font-size: 12px; color: #ccc">香橙派</a>
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 23.08px; color: #ebebeb">AI</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 30px; color: #fff">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.38px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.85px; color: #f3f3f3">Azure</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 16.15px; color: #d8d8d8">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.15px; color: #d8d8d8">C++</a> <a href="/qqsnote/tags/CSS/" style="font-size: 18.92px; color: #e0e0e0">CSS</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 14.77px; color: #d4d4d4">DevOps</a> <a href="/qqsnote/tags/Docker/" style="font-size: 16.15px; color: #d8d8d8">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.15px; color: #d8d8d8">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.38px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.38px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 20.31px; color: #e4e4e4">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.77px; color: #d4d4d4">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Linux/" style="font-size: 21.69px; color: #e7e7e7">Linux</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.38px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 17.54px; color: #dcdcdc">Node.js</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.38px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 17.54px; color: #dcdcdc">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 13.38px; color: #d0d0d0">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24.46px; color: #efefef">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/React/" style="font-size: 20.31px; color: #e4e4e4">React</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.77px; color: #d4d4d4">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 18.92px; color: #e0e0e0">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.38px; color: #d0d0d0">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 12px; color: #ccc">WPF</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 20.31px; color: #e4e4e4">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 28.62px; color: #fbfbfb">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.38px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 27.23px; color: #f7f7f7">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.38px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.15px; color: #d8d8d8">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 18.92px; color: #e0e0e0">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.77px; color: #d4d4d4">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.15px; color: #d8d8d8">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.38px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">图像处理</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 18.92px; color: #e0e0e0">图形学</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.38px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.77px; color: #d4d4d4">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.38px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 12px; color: #ccc">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.38px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%94%9F%E4%BF%A1%E5%88%86%E6%9E%90/" style="font-size: 12px; color: #ccc">生信分析</a> <a href="/qqsnote/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 12px; color: #ccc">神经网络</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.15px; color: #d8d8d8">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E5%89%AA%E8%BE%91/" style="font-size: 12px; color: #ccc">视频剪辑</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 20.31px; color: #e4e4e4">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 18.92px; color: #e0e0e0">读书</a> <a href="/qqsnote/tags/%E8%B4%A2%E7%BB%8F/" style="font-size: 12px; color: #ccc">财经</a> <a href="/qqsnote/tags/%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4/" style="font-size: 12px; color: #ccc">进程守护</a> <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 13.38px; color: #d0d0d0">面试</a> <a href="/qqsnote/tags/%E9%A6%99%E6%A9%99%E6%B4%BE/" style="font-size: 12px; color: #ccc">香橙派</a>
       </div>
     </div>
   </aside>
@@ -1004,7 +1055,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
