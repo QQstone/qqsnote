@@ -2,6 +2,9 @@
 title: AI science
 date: 2023-08-31 10:39:46
 tags:
+- LLM
+categories:
+- 人工智能
 ---
 [提示工程](https://www.promptingguide.ai/zh)
 
@@ -39,3 +42,40 @@ LLM微调和蒸馏
 
 蒸馏是利用大规模的LLM对小规模LLM进行训练和知识迁移，以获得体量更小 推理速度更快的工程场景版本 传说DeepSeek是用ChatGpt蒸馏出来的
 
+参数量 推理模型参数量 × 2 = FP16 推理所需的最小显存（如7b规模llm需要14GB显存）
+
+量化版本 通过压缩精度的方式 节约推理带宽 Ollama 14b量化4b 只需要不超过10G显存 推理准确度可达98%
+
+qwen-agent 微调框架
+
+编排
+
+temperature
+
+top P
+
+unsloth
+
+SFT训练：json数据集(标准答案) 通过Alpaca转换为格式化prompt 通过SFTTrainer喂给llm调用train
+
+GRPO强化训练 奖励机制
+
+Qwen-VL微调 internvideo 
+
+CoT chain of thinking思维链
+
+few shot
+
+LlamaIndex
+
+tokenizer 分词器 大模型应用的核心组件之一 HF提供的模型pipeline中常见到tokenizer 用于将自然语言分割对齐成适合模型运算的向量 对于不同的模型 所用到的tokenizer或有不同 pipeline中往往先调用tokenizer处理prompt，返回向量ids 然后作为input参数进行推理
+
+推理的直接返回是logits(未归一化的概率分布) logits经过post-processing转变为推理结果
+
+早停 对验证集的推理结果不再收敛时 意味着迭代无法让模型更准确 于是停止训练 一般以连续50轮结果没变为依据
+
+过拟合： 即“死记硬背”答案 表现为训练准确率极高 而预测准确率很低 防止过拟合——数据增强、正则化、早停法、随机失活
+
+池化(Pooling): 卷积神经网络中的一种采样 可以将上一层进来的输入 进行降维压缩，以加快运算速度
+
+随机森林 多个决策树 三个臭皮匠

@@ -14,7 +14,7 @@ Cortex a53 1.4GHz四核ARM处理器 1G内存
 
 balenaEtcher Portable(Portable是绿色免安装)
 
-Orangepizero3_1.0.8_ubuntu_jammy_desktop_xfce_linux5.4.125
+~~Orangepizero3_1.0.8_ubuntu_jammy_desktop_xfce_linux5.4.125~~
 
 一个完整的XFCE桌面环境，在启动后，基础占用通常在 350MB - 500MB 之间。这包括了X窗口服务器、窗口管理器、面板、文件管理器等所有基础组件。而远程图形界面的vnc服务也会占用一部分资源，因此随后换用server镜像
 
@@ -54,6 +54,27 @@ lsusb
 # 输出如 Bus 001 Device 003: ID 1d6b:0002 Linux Foundation 2.0 root hub 
 # 其中1d6b是Vendo ID(vid) 0002是Product ID(pid)
 # 查询linux设备信息 http://www.linux-usb.org/usb.ids
+```
+
+测试音频输入输出
+
+```bash
+# 播放debian内置测试音频
+$ aplay /usr/share/sounds/alsa/Front_Center.wav
+# 检查声卡录音设备
+$ arecord -l
+# 返回如下
+**** List of CAPTURE Hardware Devices ****
+card 2: ahubhdmi [ahubhdmi], device 0: ahub_plat-i2s-hifi i2s-hifi-0 [ahub_plat-i2s-hifi i2s-hifi-0]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 3: Device [USB PnP Sound Device], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+# 使用card 3 device0 录制5秒wav文件
+$ arecord -D plughw:3,0 -d 10 -f cd -c 1 test.wav
+$ aplay test.wav
+
 ```
 
 #### mission 4：调用LLM api

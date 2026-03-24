@@ -10,6 +10,10 @@ Youtube 视频、音频 -> [Y2mate](https://v6.www-y2mate.com/)
 
 bilibili等多平台 -> [SnapAny](https://snapany.com/zh/bilibili)
 
+## 文字转语音
+
+[text-to-speech(TTS)](https://www.text-to-speech.cn/)
+
 ## ai音频字幕(ai听译)
 
 [converter app](https://converter.app/cn/mp3-text/)

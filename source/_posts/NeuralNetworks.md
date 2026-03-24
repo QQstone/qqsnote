@@ -13,3 +13,7 @@ tags:
  输出层 Y = W2*H+b2
 #### CNN
 Convolutional Neural Networks 卷积神经网络
+
+激活函数 sigmoid
+
+SVM 一种浅层神经网络 寻找一个kernal升维

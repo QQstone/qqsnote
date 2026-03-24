@@ -237,3 +237,11 @@ set GENERATE_SOURCEMAP=false&& yarn build
 通过webpack的工程化，静态资源以require模块的形式导入上下文， @ 是 Webpack 中配置的路径别名，通常指向 src 目录。使用 require('@/assets/images/threelogo.png') 可以确保路径正确解析。
 
 public目录的资源一般不需要经过webpack解析
+
+#### 面试提问“Webpack打包的原理是什么”
+
+> Webpack 的核心原理是从入口文件出发，递归分析所有**依赖**，构建出一棵依赖图。它把每个文件——不管是 JS、CSS 还是图片——都当作**模块**来处理。通过 Loader 转换非 JavaScript 模块（比如用 babel-loader 编译 ES6），再通过 Plugin 在关键节点介入打包流程（比如生成 HTML 文件）。最终，它会把代码打包成一个或多个 bundle，并注入一段 runtime 代码，用来在浏览器里按需加载和执行模块。像 Tree Shaking、代码分割这些优化，也都是基于这个依赖图实现的。
+
+Module Chunk 和 Bundle
+
+Module（模块）、Chunk（代码块） 和 Bundle（打包文件）

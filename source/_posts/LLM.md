@@ -4,7 +4,6 @@ date: 2025-03-05 14:42:14
 tags:
 - LLM
 - 神经网络
-- Transformer
 categories:
 - 人工智能
 ---
@@ -52,6 +51,29 @@ Transformer语言模型是基于自注意力机制构建的深度学习架构，
 
 从输出角度上看，更小的词表同样意味着单位token包含的信息更少，完成同样的一句输出将会经过更多的推理次数。
 
-#### CLIP 和 VAE
+本地部署运行大模型：
 
-prompt通过CLIP等文本编码器转换为文本向量 像素分布和特征图通过VAE生成映射关系
++ 个人调试 ollama
++ 企业常用 vllm
+
+```cmd
+pip install sentence-transformers ctransformers ollama
+# 如果使用 vLLM 加速
+pip install vllm
+
+# 从模型库中拉取Qwen2.5-14B-Instruct(实际为量化版本)并运行
+ollama run qwen2.5:14b
+```
+
+Ollama 自动启动http服务 默认监听 http://localhost:11434
+
+Ollama命令
+
+```cmd
+ollama list
+ollama show
+ollama rm
+```
+
+如果是微调过的模型 需要先注册到list中 再run起来(待补充)
+
