@@ -14,3 +14,12 @@ tags:
 [《Rust and WebAssembly》](https://rustwasm.github.io/docs/book/)
 
 > Rust 在图形学领域（尤其是涉及 WebAssembly、现代 API 如 Vulkan/Metal、以及引擎开发）已经展现出了独特的、甚至超越 C++ 的优势
+
+| 维度 | C++ 传统路线 | Rust 现代路线 |
+| :--- | :--- | :--- |
+| 入门门槛 | 低（语法简单），但上手难（内存管理陷阱多） | 高（概念如所有权、生命周期较难理解），但上手稳（编译报错即修复） |
+| 调试难度 | 极高（崩溃往往是随机且难以复现的） | 较低（编译器会告诉你哪里错了，极少运行时崩溃） |
+| 图形库生态 | 极其丰富 (OpenGL, Vulkan, DirectX, SDL2) | 快速增长 (wgpu, winit, bevy, cgmath) |
+| Web 集成 | 需通过 Emscripten 编译，体积大，启动慢 | 原生支持 Wasm，体积小，启动快，JS 互操作友好 |
+| 社区趋势 | 存量巨大，维护旧项目必备 | 增量巨大，新引擎（如 Bevy, Godot 4+）首选 |
+

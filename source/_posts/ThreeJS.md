@@ -298,6 +298,38 @@ scene.fog = new THREE.Fog(0xbfd1e5, 10, 100);
 
 #### 粒子
 
+THREE.Points 用于绘制点云 如果每个点都是炫酷的材质 就是所谓的粒子特效
+
+```js
+// A. 创建几何体 (BufferGeometry)
+const particlesCount = 2000;
+const geometry = new THREE.BufferGeometry();
+
+// 创建位置数组 (每个点有 x, y, z 三个坐标)
+const positions = new Float32Array(particlesCount * 3);
+
+for (let i = 0; i < particlesCount * 3; i++) {
+    // 在 -50 到 50 的范围内随机分布
+    positions[i] = (Math.random() - 0.5) * 100; 
+}
+
+// 将数据绑定到几何体
+geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+// B. 创建材质
+const material = new THREE.PointsMaterial({
+    size: 0.5,           // 粒子大小
+    color: 0x00ff88,     // 粒子颜色
+    transparent: true,   // 开启透明
+    opacity: 0.8,        // 透明度
+    sizeAttenuation: true // 粒子是否随距离变小 (透视效果)
+});
+
+// C. 创建 Points 对象并添加到场景
+const particles = new THREE.Points(geometry, material);
+scene.add(particles);
+```
+
 #### 物理引擎
 
 + Cannon.js 

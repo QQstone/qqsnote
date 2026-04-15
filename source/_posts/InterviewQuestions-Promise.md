@@ -148,3 +148,5 @@ retry(unstableFetch, 3, 2000)
   .then(data => console.log('Success:', data))
   .catch(err => console.error('All retries failed:', err));
 ```
+
+#### 场景题：实现一个调度器 限制同时进行的异步请求不超过3个

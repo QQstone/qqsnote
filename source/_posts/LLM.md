@@ -77,3 +77,10 @@ ollama rm
 
 如果是微调过的模型 需要先注册到list中 再run起来(待补充)
 
+outlines 输出结构化 结构化的诊疗建议 对接传统业务
+
+关于vllm的性能提升 pagedattention解决kv碎片化 推测解码加速decode 效率是ollama的2-3倍
+
+另：SGlang 在多轮对话 
+
+PD分离（Prefill Decode）

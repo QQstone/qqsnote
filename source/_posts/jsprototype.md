@@ -229,3 +229,25 @@ function instance_of(L, R) {//L 表示左表达式，R 表示右表达式
  } 
 }
 ```
+
+#### 可迭代 (Iterable) 可枚举 (Enumerable)
+
+**可迭代**决定了能不能用 for...of 循环遍历每一项。
+
+其本质是对象内部定义了iterator 遍历时调用iterator.next()
+
+原生可迭代对象：数组 (Array)、字符串 (String)、Map、Set、TypedArray、Arguments 对象
+
+**可枚举**决定了能不能用 for...in 循环看到该属性。
+
+js对象其属性包含描述符enumerable 当enumerable为true的可枚举 即可以for in、Object.keys()、 Object.values()、Object.entries()、 JSON.stringify()
+
+```js
+// 定义不可枚举属性
+Object.defineProperty(obj, 'secret', {
+  value: '123456',
+  enumerable: false, 
+  writable: true,
+  configurable: true
+});
+```
