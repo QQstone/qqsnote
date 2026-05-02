@@ -23,3 +23,20 @@ tags:
 | Web 集成 | 需通过 Emscripten 编译，体积大，启动慢 | 原生支持 Wasm，体积小，启动快，JS 互操作友好 |
 | 社区趋势 | 存量巨大，维护旧项目必备 | 增量巨大，新引擎（如 Bevy, Godot 4+）首选 |
 
+## Crate
+
+Rust中 Crate是编译单元 可以理解成一个代码包 每个Crate都是一个独立项目 可以是一个二进制可执行文件或一个库。
+使用 Rust 编译器，也就是 rustc 来编译
+
+```shell
+$ rustc hello.rs
+$ ./hello
+Hello, world!
+```
+
+## Cargo
+
+Rust包管理器 在 Windows 上，下载并运行 rustup-init.exe。它将在控制台中启动安装
+
+
+
