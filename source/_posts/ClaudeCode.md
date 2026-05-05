@@ -24,3 +24,12 @@ claude --plan "Refactor the authentication module to use OAuth2"
 + 提供 URL 用于文档和 API 参考。使用 /permissions 来允许列表经常使用的域。
 + 管道数据 通过运行 cat error.log | claude 直接发送文件内容。
 + 让 Claude 获取它需要的东西。告诉 Claude 使用 Bash 命令、MCP 工具或通过读取文件来自己拉取上下文。
+
+slash命令
+
++ init
++ ask
++ plan 分析需求并制定详细步骤计划 绝不改动任何代码 直到你审查并批准它的计划 plan后按Ctrl+G在临时的markdown文件中修改计划细节
++ compact
++ reset
++ powerup
