@@ -143,6 +143,10 @@ trouble shooting [Can't resolve 'react/jsx-runtime'](https://juejin.cn/post/7096
 
 [Vite vs Webpack](https://juejin.cn/post/7387669136272080936?searchId=202411051613195B2A3CE6D9FACF9F2396)
 
+```cmd
+npm create vite@latest my-app -- --template react-ts
+```
+
 #### @emotion/react
 
 css in js方案

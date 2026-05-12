@@ -23,6 +23,14 @@ tags:
 | Web 集成 | 需通过 Emscripten 编译，体积大，启动慢 | 原生支持 Wasm，体积小，启动快，JS 互操作友好 |
 | 社区趋势 | 存量巨大，维护旧项目必备 | 增量巨大，新引擎（如 Bevy, Godot 4+）首选 |
 
+## Start up
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+[windows 下载Rust](https://rust-lang.org/tools/install/)
+
 ## Crate
 
 Rust中 Crate是编译单元 可以理解成一个代码包 每个Crate都是一个独立项目 可以是一个二进制可执行文件或一个库。
@@ -38,5 +46,56 @@ Hello, world!
 
 Rust包管理器 在 Windows 上，下载并运行 rustup-init.exe。它将在控制台中启动安装
 
+强制开发模式下使用全面优化编译策略
+```Cargo.toml
+[profile.dev]
+opt-level = 2  # 默认是 0，改为 2 表示全面优化
+debug = true   # 建议保留调试信息，否则无法调试
+```
 
+## Trait
+
+在 Rust 语言中，Trait（特质） 是极其核心且灵魂的一个概念。简单来说，它定义了类型必须具备的行为（即“能做什么”），而不是描述类型包含的数据（即“是什么”） 可以把它类比为：
+
++ Java / C# 中的 接口（Interface）
++ C++ 中的纯虚函数 / 抽象类
+
+## 所有权系统和借用检查器
+
+```rust
+fn main() {
+    let s = String::from("hello"); // s拥有这个字符串的所有权
+    println!("s: {}", s);
+    let s1 = s; // s的所有权转移到s1
+    println!("s1: {}", s1);
+    // 这里s已经不再有效，不能再使用它
+    // 下面这行代码会报错，因为s已经不再有效
+    // println!("{}", s);
+    let r1 = &s1; // 不可变引用
+    let r2 = &s1; // 多个不可变引用是允许的
+```
+
+## Rust Wasm
+
+```bash
+cargo install wasm-pack
+cargo new --lib hello_wasm
+```
+
+```cargo.toml
+[package]
+name = "hello_wasm"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+```
+
+```bash
+wasm-pack build --target web
+```
 

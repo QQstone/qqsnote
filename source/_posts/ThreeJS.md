@@ -330,6 +330,14 @@ const particles = new THREE.Points(geometry, material);
 scene.add(particles);
 ```
 
+#### 多camera与离线渲染
+
+同场景多个viewport CAD四视图
+
+同场景 离线渲染到 RenderTarget 本质是将场景在GPU额外渲染一次 输出一个texture 这个texture可以贴在场景中的物体（比如镜子）上
+
+[官方反射镜 Reflector](https://threejs.org/docs/#Reflector) [mirror example](https://threejs.org/examples/?q=reflect#webgl_mirror)
+
 #### 物理引擎
 
 + Cannon.js 
