@@ -177,6 +177,21 @@ git remote remove origin
 git remote rename temp_remote_name origin
 ```
 
+#### git worktree
+
+```cmd
+git worktree add -b feature-render ..\project-feature-render
+git worktree list
+
+git worktree remove ..\project-feature-render
+```
+
+git worktree 区别于 git clone 共享git对象数据库 比git clone要快 
+
+worktree目录中看不到完整的git log 仿佛是新的仓库 不能checkout其他分支 但是可以rebase
+
+使用pnpm避免node_modules重复
+
 #### troubleshooting 
 > error: object file .git/objects/61/9151e2619bc36c3c4f5f0c86432b2ca651706d is empty fatal: loose object 619151e2619bc36c3c4f5f0c86432b2ca651706d (stored in .git/objects/61/9151e2619bc36c3c4f5f0c86432b2ca651706d) is corrupt
 
