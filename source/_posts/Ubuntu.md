@@ -55,3 +55,14 @@ sudo netplan apply
 ```
 cat /etc/issue
 ```
+
+## Tips
+
+从Ubuntu20.04起 系统不再提供python 而是python3
+
+```shell
+# 创建软链接 使用python访问python3
+apt install python-is-python3
+```
+
+.codex等以.开头的目录或文件默认隐藏 在文件管理器中按Ctrl+H切换显示隐藏
