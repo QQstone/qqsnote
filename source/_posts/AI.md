@@ -16,7 +16,7 @@ LangChain
 LangSmith
 是DevOps 平台，专注于 LLM 应用的调试、测试和部署监控。支持追踪链路执行、分析性能瓶颈，适合生产环境优化。
 
-MCP全称：模型上下文协议 ，Model Context Protocol，由Claude的母公司Anthropic推出的开源协议，旨在实现大型语言模型（LLM）与外部数据源和工具的集成，提供安全双向的连接。MCP通过统一的接口标准化了应用程序向LLM提供上下文的方式。
+MCP全称：模型上下文协议 ，[Model Context Protocol](https://cloud.google.com/discover/what-is-model-context-protocol?hl=zh-CN)，由Claude的母公司Anthropic推出的开源协议，旨在实现大型语言模型（LLM）与外部数据源和工具的集成，提供安全双向的连接。MCP通过统一的接口标准化了应用程序向LLM提供上下文的方式。
 
 MCP的核心定位是为大型语言模型（LLM）与外部数据源、工具之间提供统一接口，实现标准化连接。其设计理念类似于“AI领域的USB-C接口”，通过协议标准化，打破数据孤岛，避免为每个数据源单独开发定制化连接器，从而降低开发成本和安全风险。
 
