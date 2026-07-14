@@ -41,6 +41,8 @@ gyp ERR! stack Error: EPERM: operation not permitted, unlink 'D:\projxxx\node_mo
 > 早先本机应用程序使用嵌入的用户代理(嵌入的web view)进行OAuth授权请求，这种方法有很多缺点，包括主机应用程序
 能够复制用户凭据和Cookie，以及需要在每个应用程序中从头进行身份验证的用户。[IETF RFC 8252](https://tools.ietf.org/html/rfc8252)。
 使用浏览器被认为更加安全且容易保留认证状态
+
+> **2026-07 修订**：这条仍然成立。本机应用包括 Electron，应优先使用系统浏览器 + Authorization Code + PKCE，而不是在 `BrowserWindow` / `webview` 中嵌入登录页。旧示例中的 `response_type=id_token token` 属于 implicit/hybrid 风格，今天不建议作为新实现。
 ```
   +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
   |          User Device          |
@@ -68,7 +70,20 @@ gyp ERR! stack Error: EPERM: operation not permitted, unlink 'D:\projxxx\node_mo
   +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 
 ```
-对于electron，渲染界面提供入口signin, 点击会调用默认浏览器打开登录页，authenticate通过后，重定向过程会将授权码或直接将access token返回到electron, 这个‘返回’过程可以使用[自定义协议](https://www.electronjs.org/docs/api/protocol)实现(QQs尚未实践), 亦可实现一个b/s的request & response来完成。
+对于 electron，渲染界面提供入口 signin，点击后调用默认浏览器打开登录页，authenticate 通过后，重定向过程会将授权码返回到 electron。这个“返回”过程可以使用[自定义协议](https://www.electronjs.org/docs/api/protocol)实现，也可以使用 loopback localhost callback。
+
+~~重定向过程会将授权码或直接将access token返回到electron~~
+
+> **2026-07 修订**：新实现应让浏览器只返回 authorization code，Electron 客户端再用 PKCE 的 `code_verifier` 换 token。不要让 access token 出现在 URL fragment 中，也不要在 renderer 中长期保存 token。
+
+推荐流程：
+
+1. Electron 主进程生成 `code_verifier`、`code_challenge`、`state`、`nonce`。
+2. 使用 `shell.openExternal(authUrl)` 打开系统浏览器。
+3. 通过自定义协议或 localhost callback 收到 `code` 和 `state`。
+4. 校验 `state`，用 `code_verifier` 请求 token。
+5. token 存储放在系统凭据管理器、加密存储或主进程内存中，renderer 只拿业务所需的最小状态。
+
 renderUI
 ```
 signinWithADB2C(){
@@ -96,6 +111,8 @@ signinWithADB2C(){
   });
 }
 ```
+> **2026-07 修订**：上面代码仅作历史记录。新代码应改为 `response_type=code`，并添加 `code_challenge`、`code_challenge_method=S256`、随机 `state` 和 `nonce`。
+
 main 主线程中launch一个http server，负责提供Redirect URI的页面，页面自执行request请求，请求亦由http server响应
 ```
 ....
@@ -153,3 +170,11 @@ redirect page (public/index.html)
 ```
 Caution! 需考虑到浏览器将token传递给client的过程，都有被第三方恶意应用占用URL Scheme或者localhost端口截取Access Token的风险。在有"显式"授权流程的方式中，浏览器传递授权码，由client凭授权码换取token，同样无法杜绝第三方拦截。
 了解使用[带有PKCE(Proof Key for Code Exchange)支持的授权码模式](https://tonyxu.io/zh/posts/2018/oauth2-pkce-flow/)
+
+> **2026-07 新增：Electron OAuth 安全清单**
+>
+> - `state` 必须随机且单次使用，callback 必须校验。
+> - localhost callback 使用随机端口，并尽量只监听 `127.0.0.1`。
+> - 自定义协议要考虑被其他应用抢注的风险。
+> - 不在 renderer、localStorage、日志、URL 中暴露 token。
+> - 打开外部链接前校验协议和 host，避免被恶意 URL 利用。
