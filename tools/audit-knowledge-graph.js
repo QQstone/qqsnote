@@ -59,11 +59,15 @@ function printReport(report) {
   console.log(`无分类文章: ${report.missingCategories}`);
   console.log(`孤立文章: ${report.isolatedPosts}`);
   console.log(`整理范围内孤立文章: ${report.curatedIsolated}`);
+  console.log(`整理范围内元数据问题: ${report.curatedMetadataIssues.length}`);
   console.log(`仅使用一次的标签: ${report.singletonTags}`);
   console.log(`连通分量: ${report.componentSizes.length}`);
   console.log(`最大连通分量: ${report.componentSizes[0] || 0}`);
 
   report.warnings.forEach(item => console.warn(`警告 [${item.code}]: ${item.message}`));
+  report.curatedMetadataIssues.forEach(item => {
+    console.warn(`警告 [curated-metadata]: ${item.source} tags=${item.tagCount} categories=${item.categoryCount}`);
+  });
   report.errors.forEach(item => console.error(`错误 [${item.code}]: ${item.message}`));
 }
 

@@ -87,3 +87,24 @@ test('readPost accepts Hexo singular category front matter', () => {
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test('auditGraph reports curated metadata outside the accepted shape', () => {
+  const report = auditGraph({
+    meta: { posts: 1, tags: 1, categories: 0, strongLinks: 0 },
+    nodes: [{
+      id: 'post:_posts/ROS.md',
+      type: 'post',
+      source: '_posts/ROS.md',
+      tags: ['ROS2'],
+      categories: []
+    }],
+    links: [],
+    diagnostics: []
+  }, { curatedSources: ['ROS'] });
+
+  assert.deepEqual(report.curatedMetadataIssues, [{
+    source: '_posts/ROS.md',
+    tagCount: 1,
+    categoryCount: 0
+  }]);
+});
