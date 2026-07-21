@@ -7,7 +7,9 @@ const {
   calculateFitTransform,
   filterGraph,
   getCategoryOptions,
-  getEdgeTypeCounts
+  getEdgeTypeCounts,
+  getScopedEdgeTypeCounts,
+  updateSearchState
 } = require('../source/js/knowledge-graph-model');
 
 function graphFixture() {
@@ -107,6 +109,19 @@ test('category options and edge counts come from graph data', () => {
   assert.deepEqual(getEdgeTypeCounts(graph), { strong: 1, tag: 3, category: 3 });
 });
 
+test('scoped edge counts reflect the current neighborhood before toggles', () => {
+  assert.equal(typeof getScopedEdgeTypeCounts, 'function');
+
+  const counts = getScopedEdgeTypeCounts(graphFixture(), {
+    activeEdgeTypes: new Set(['strong']),
+    category: '机器人',
+    query: '',
+    selectedId: null
+  });
+
+  assert.deepEqual(counts, { strong: 1, tag: 2, category: 2 });
+});
+
 test('calculateFitTransform frames complete rendered bounds', () => {
   const transform = calculateFitTransform(
     { x: 0, y: 0, width: 500, height: 200 },
@@ -117,4 +132,20 @@ test('calculateFitTransform frames complete rendered bounds', () => {
   assert.equal(transform.x, 24);
   assert.equal(transform.scale, 0.704);
   assert.equal(Math.abs(transform.y - 79.6) < Number.EPSILON * 100, true);
+});
+
+test('updateSearchState clears stale selection when search changes', () => {
+  assert.equal(typeof updateSearchState, 'function');
+
+  const state = updateSearchState({
+    query: 'angular',
+    selectedId: 'post:Angular.md',
+    hoveredId: 'post:Angular.md'
+  }, '');
+
+  assert.deepEqual(state, {
+    query: '',
+    selectedId: null,
+    hoveredId: null
+  });
 });

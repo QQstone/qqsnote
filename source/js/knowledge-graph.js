@@ -193,7 +193,6 @@
     const nodeLookup = new Map(allNodes.map(node => [node.id, node]));
     const searchIndex = allNodes.map(node => ({ id: node.id, label: node.label.toLowerCase() }));
     const categoryOptions = model.getCategoryOptions(data);
-    const edgeTypeCounts = model.getEdgeTypeCounts(data);
     const preferredCategory = categoryOptions.includes(data.meta.preferredCategory)
       ? data.meta.preferredCategory
       : model.ALL_CATEGORIES;
@@ -218,17 +217,20 @@
     }
 
     const edgeLabels = { strong: 'Strong', tag: 'Tags', category: 'Categories' };
-    toggleButtons.forEach(button => {
-      const edgeType = button.dataset.edgeType;
-      const count = edgeTypeCounts[edgeType] || 0;
-      button.textContent = `${edgeLabels[edgeType]} (${count})`;
-      button.disabled = count === 0;
-      if (count === 0) {
-        state.activeEdgeTypes.delete(edgeType);
-        button.classList.remove('is-active');
-        button.setAttribute('aria-pressed', 'false');
-      }
-    });
+
+    function refreshEdgeButtons() {
+      const counts = model.getScopedEdgeTypeCounts({ nodes: allNodes, links: allLinks }, state);
+
+      toggleButtons.forEach(button => {
+        const edgeType = button.dataset.edgeType;
+        const count = counts[edgeType] || 0;
+        const isActive = count > 0 && state.activeEdgeTypes.has(edgeType);
+        button.textContent = `${edgeLabels[edgeType]} (${count})`;
+        button.disabled = count === 0;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+    }
 
     const svg = window.d3.select(svgElement);
     const zoomSurface = svg.append('rect').attr('class', 'knowledge-graph-zoom-surface');
@@ -458,6 +460,7 @@
     }
 
     function render() {
+      refreshEdgeButtons();
       const graph = visibleGraph();
       visibleNodes = graph.nodes;
       visibleLinks = graph.links;
@@ -651,7 +654,7 @@
 
     if (searchInput) {
       searchInput.addEventListener('input', event => {
-        state.query = String(event.target.value || '').trim().toLowerCase();
+        Object.assign(state, model.updateSearchState(state, event.target.value));
         render();
       });
 

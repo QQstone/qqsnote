@@ -69,6 +69,25 @@ test('auditGraph treats invalid relations as warnings', () => {
   assert.equal(report.warnings.length, 1);
 });
 
+test('auditGraph reports taxonomy nodes that collide after normalization', () => {
+  const report = auditGraph({
+    nodes: [
+      { id: 'tag:CSS', type: 'tag', label: 'CSS' },
+      { id: 'tag:css', type: 'tag', label: 'css' },
+      { id: 'category:AI', type: 'category', label: 'AI' },
+      { id: 'category:ai', type: 'category', label: 'ai' }
+    ],
+    links: [],
+    diagnostics: []
+  });
+
+  assert.deepEqual(report.taxonomyDuplicates, [
+    { type: 'tag', normalized: 'css', labels: ['CSS', 'css'] },
+    { type: 'category', normalized: 'ai', labels: ['AI', 'ai'] }
+  ]);
+  assert.equal(report.warnings.filter(item => item.code === 'duplicate-taxonomy').length, 2);
+});
+
 test('readPost accepts Hexo singular category front matter', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'qqsnote-graph-audit-'));
   const filePath = path.join(dir, 'HomeAssistant.md');

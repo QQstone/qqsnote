@@ -61,6 +61,7 @@ function printReport(report) {
   console.log(`整理范围内孤立文章: ${report.curatedIsolated}`);
   console.log(`整理范围内元数据问题: ${report.curatedMetadataIssues.length}`);
   console.log(`仅使用一次的标签: ${report.singletonTags}`);
+  console.log(`规范化后重复分类/标签: ${report.taxonomyDuplicates.length}`);
   console.log(`连通分量: ${report.componentSizes.length}`);
   console.log(`最大连通分量: ${report.componentSizes[0] || 0}`);
 

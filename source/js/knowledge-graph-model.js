@@ -58,6 +58,15 @@
     };
   }
 
+  function updateSearchState(state, value) {
+    return {
+      ...state,
+      query: String(value || '').trim().toLowerCase(),
+      selectedId: null,
+      hoveredId: null
+    };
+  }
+
   function filterGraph(data, state) {
     const nodes = Array.isArray(data.nodes) ? data.nodes : [];
     const links = Array.isArray(data.links) ? data.links : [];
@@ -121,12 +130,24 @@
     };
   }
 
+  function getScopedEdgeTypeCounts(data, state) {
+    const allEdgeTypes = new Set((data.links || []).map(link => link.type));
+    const scopedGraph = filterGraph(data, {
+      ...state,
+      activeEdgeTypes: allEdgeTypes
+    });
+
+    return getEdgeTypeCounts(scopedGraph);
+  }
+
   return {
     ALL_CATEGORIES,
     calculateFitTransform,
     filterGraph,
     getCategoryOptions,
     getEdgeTypeCounts,
-    getLinkEndpoint
+    getLinkEndpoint,
+    getScopedEdgeTypeCounts,
+    updateSearchState
   };
 });
