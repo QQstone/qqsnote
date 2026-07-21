@@ -254,6 +254,7 @@
     let nodeSelection = nodeLayer.selectAll('circle');
     let labelSelection = labelLayer.selectAll('text');
     let shouldFitGraph = true;
+    let autoFitOnSimulationEnd = true;
     let ticksSinceRender = 0;
     let panState = null;
     let suppressNextClick = false;
@@ -346,26 +347,12 @@
 
     function fitGraph(duration) {
       if (!visibleNodes.length || !width || !height) return;
-
-      const xs = visibleNodes.map(node => node.x).filter(Number.isFinite);
-      const ys = visibleNodes.map(node => node.y).filter(Number.isFinite);
-
-      if (!xs.length || !ys.length) return;
-
-      const minX = Math.min(...xs);
-      const maxX = Math.max(...xs);
-      const minY = Math.min(...ys);
-      const maxY = Math.max(...ys);
-      const graphWidth = Math.max(1, maxX - minX);
-      const graphHeight = Math.max(1, maxY - minY);
-      const padding = 72;
-      const scale = Math.max(
-        0.12,
-        Math.min(2.2, Math.min((width - padding) / graphWidth, (height - padding) / graphHeight))
-      );
-      const translateX = width / 2 - scale * (minX + maxX) / 2;
-      const translateY = height / 2 - scale * (minY + maxY) / 2;
-      const transform = window.d3.zoomIdentity.translate(translateX, translateY).scale(scale);
+      const groupNode = rootGroup.node();
+      if (!groupNode || typeof groupNode.getBBox !== 'function') return;
+      const bounds = groupNode.getBBox();
+      if (!bounds.width || !bounds.height) return;
+      const fitted = model.calculateFitTransform(bounds, { width, height }, 72);
+      const transform = window.d3.zoomIdentity.translate(fitted.x, fitted.y).scale(fitted.scale);
 
       if (typeof duration === 'number' && duration > 0) {
         svg.transition().duration(duration).call(zoomBehavior.transform, transform);
@@ -384,6 +371,7 @@
       if (event.cancelable) event.preventDefault();
       event.stopPropagation();
       shouldFitGraph = false;
+      autoFitOnSimulationEnd = false;
       svg.interrupt();
 
       const delta = normalizeWheelDelta(event);
@@ -414,6 +402,7 @@
       if (event.button !== 0 || isNodePointerTarget(event)) return;
 
       shouldFitGraph = false;
+      autoFitOnSimulationEnd = false;
       svg.interrupt();
       panState = {
         pointerId: event.pointerId,
@@ -529,6 +518,7 @@
             .on('start', (event, node) => {
               if (event.sourceEvent) event.sourceEvent.stopPropagation();
               shouldFitGraph = false;
+              autoFitOnSimulationEnd = false;
               if (!event.active) simulation.alphaTarget(0.3).restart();
               node.fx = node.x;
               node.fy = node.y;
@@ -573,6 +563,7 @@
         .restart();
 
       shouldFitGraph = true;
+      autoFitOnSimulationEnd = true;
       ticksSinceRender = 0;
       renderPanel(panel, state.selectedId ? nodeLookup.get(state.selectedId) : null, data, adjacency, nodeLookup);
       refreshClasses();
@@ -600,6 +591,12 @@
           fitGraph(420);
         }
       }
+    });
+
+    simulation.on('end', () => {
+      if (!autoFitOnSimulationEnd) return;
+      autoFitOnSimulationEnd = false;
+      fitGraph(320);
     });
 
     svg
@@ -678,12 +675,16 @@
     }
 
     if (fitButton) {
-      fitButton.addEventListener('click', () => fitGraph(320));
+      fitButton.addEventListener('click', () => {
+        autoFitOnSimulationEnd = false;
+        fitGraph(320);
+      });
     }
 
     new ResizeObserver(() => {
       updateDimensions();
       shouldFitGraph = true;
+      autoFitOnSimulationEnd = true;
       ticksSinceRender = 0;
     }).observe(canvas);
 

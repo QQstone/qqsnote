@@ -42,6 +42,22 @@
     return counts;
   }
 
+  function calculateFitTransform(bounds, viewport, padding = 48) {
+    const graphWidth = Math.max(1, Number(bounds.width) || 0);
+    const graphHeight = Math.max(1, Number(bounds.height) || 0);
+    const availableWidth = Math.max(1, viewport.width - padding);
+    const availableHeight = Math.max(1, viewport.height - padding);
+    const scale = Math.max(0.12, Math.min(2.2, availableWidth / graphWidth, availableHeight / graphHeight));
+    const centerX = (Number(bounds.x) || 0) + graphWidth / 2;
+    const centerY = (Number(bounds.y) || 0) + graphHeight / 2;
+
+    return {
+      x: viewport.width / 2 - scale * centerX,
+      y: viewport.height / 2 - scale * centerY,
+      scale
+    };
+  }
+
   function filterGraph(data, state) {
     const nodes = Array.isArray(data.nodes) ? data.nodes : [];
     const links = Array.isArray(data.links) ? data.links : [];
@@ -107,6 +123,7 @@
 
   return {
     ALL_CATEGORIES,
+    calculateFitTransform,
     filterGraph,
     getCategoryOptions,
     getEdgeTypeCounts,

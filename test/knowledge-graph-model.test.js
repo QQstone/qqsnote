@@ -4,6 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const {
+  calculateFitTransform,
   filterGraph,
   getCategoryOptions,
   getEdgeTypeCounts
@@ -104,4 +105,16 @@ test('category options and edge counts come from graph data', () => {
   const graph = graphFixture();
   assert.deepEqual(getCategoryOptions(graph), ['机器人', '前端技术']);
   assert.deepEqual(getEdgeTypeCounts(graph), { strong: 1, tag: 3, category: 3 });
+});
+
+test('calculateFitTransform frames complete rendered bounds', () => {
+  const transform = calculateFitTransform(
+    { x: 0, y: 0, width: 500, height: 200 },
+    { width: 400, height: 300 },
+    48
+  );
+
+  assert.equal(transform.x, 24);
+  assert.equal(transform.scale, 0.704);
+  assert.equal(Math.abs(transform.y - 79.6) < Number.EPSILON * 100, true);
 });
