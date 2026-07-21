@@ -52,33 +52,65 @@
     return 0.13;
   }
 
+  function relationLabel(relation, isSource) {
+    const labels = {
+      relates: ['相关', '相关'],
+      prerequisite: ['前置知识', '后续应用'],
+      extends: ['延伸阅读', '前序文章'],
+      applies: ['应用知识', '被应用于'],
+      compares: ['对比', '对比']
+    };
+    const pair = labels[relation] || labels.relates;
+    return pair[isSource ? 0 : 1];
+  }
+
+  function relationItems(node, data, nodeLookup) {
+    if (!node || node.type !== 'post') return [];
+
+    return data.links
+      .filter(link => link.type === 'strong')
+      .map(link => {
+        const source = getLinkEndpoint(link.source);
+        const target = getLinkEndpoint(link.target);
+        if (source !== node.id && target !== node.id) return null;
+        const isSource = source === node.id;
+        const neighbor = nodeLookup.get(isSource ? target : source);
+        if (!neighbor || neighbor.type !== 'post') return null;
+        return {
+          label: relationLabel(link.relation || 'relates', isSource),
+          node: neighbor
+        };
+      })
+      .filter(Boolean);
+  }
+
   function defaultPanelHtml(data) {
     return `
-      <h2>Knowledge Graph</h2>
-      <p class="subtle">Posts, tags, categories, and explicit hidden links share one graph.</p>
+      <h2>知识图谱</h2>
+      <p class="subtle">文章、标签、分类与人工确认的语义关联。</p>
       <div class="metric-grid">
         <div class="metric">
-          <h3>Posts</h3>
+          <h3>文章</h3>
           <strong>${data.meta.posts}</strong>
         </div>
         <div class="metric">
-          <h3>Strong</h3>
+          <h3>强关联</h3>
           <strong>${data.meta.strongLinks}</strong>
         </div>
         <div class="metric">
-          <h3>Tags</h3>
+          <h3>标签</h3>
           <strong>${data.meta.tags}</strong>
         </div>
         <div class="metric">
-          <h3>Categories</h3>
+          <h3>分类</h3>
           <strong>${data.meta.categories}</strong>
         </div>
       </div>
-      <p class="subtle">Drag nodes, zoom the canvas, or search to focus a neighborhood.</p>
+      <p class="subtle">拖动节点、缩放画布或搜索以查看局部知识邻域。</p>
     `;
   }
 
-  function renderPanel(panel, node, data, adjacency) {
+  function renderPanel(panel, node, data, adjacency, nodeLookup) {
     if (!node) {
       panel.innerHTML = defaultPanelHtml(data);
       return;
@@ -87,21 +119,29 @@
     const neighbors = Array.from(adjacency.get(node.id) || []);
     const neighborPosts = neighbors.filter(id => id.startsWith('post:')).length;
     const nodeType = node.type === 'post'
-      ? 'Post'
+      ? '文章'
       : node.type === 'tag'
-        ? 'Tag'
-        : 'Category';
+        ? '标签'
+        : '分类';
 
     const tags = Array.isArray(node.tags) && node.tags.length
       ? `<div class="chip-row">${node.tags.map(tag => `<span class="chip">${escapeHtml(tag)}</span>`).join('')}</div>`
-      : '<p class="subtle">None</p>';
+      : '<p class="subtle">无</p>';
 
     const categories = Array.isArray(node.categories) && node.categories.length
       ? `<div class="chip-row">${node.categories.map(category => `<span class="chip">${escapeHtml(category)}</span>`).join('')}</div>`
-      : '<p class="subtle">None</p>';
+      : '<p class="subtle">无</p>';
 
     const linkMarkup = node.url
-      ? `<p><a href="${escapeHtml(node.url)}">Open article</a></p>`
+      ? `<p><a href="${escapeHtml(node.url)}">打开文章</a></p>`
+      : '';
+    const relations = relationItems(node, data, nodeLookup);
+    const relationMarkup = relations.length
+      ? `<div><h3>文章关系</h3><ul class="relation-list">${relations.map(item => `
+          <li>
+            <span class="relation-type">${escapeHtml(item.label)}</span>
+            <a href="${escapeHtml(item.node.url)}">${escapeHtml(item.node.label)}</a>
+          </li>`).join('')}</ul></div>`
       : '';
 
     panel.innerHTML = `
@@ -109,21 +149,22 @@
       <p class="subtle">${nodeType}</p>
       <div class="metric-grid">
         <div class="metric">
-          <h3>Degree</h3>
+          <h3>连接数</h3>
           <strong>${node.degree || 0}</strong>
         </div>
         <div class="metric">
-          <h3>Neighbors</h3>
+          <h3>相邻文章</h3>
           <strong>${neighborPosts}</strong>
         </div>
       </div>
       ${linkMarkup}
+      ${relationMarkup}
       <div>
-        <h3>Tags</h3>
+        <h3>标签</h3>
         ${tags}
       </div>
       <div>
-        <h3>Categories</h3>
+        <h3>分类</h3>
         ${categories}
       </div>
     `;
@@ -137,27 +178,57 @@
   function initGraph(app, data) {
     document.body.classList.add('knowledge-graph-view');
 
+    const model = window.KnowledgeGraphModel;
     const canvas = app.querySelector('[data-graph-canvas]');
     const svgElement = app.querySelector('[data-graph-svg]');
     const panel = app.querySelector('[data-graph-panel]');
     const emptyState = app.querySelector('[data-graph-empty]');
     const searchInput = app.querySelector('[data-graph-search]');
+    const categorySelect = app.querySelector('[data-graph-category]');
     const toggleButtons = Array.from(app.querySelectorAll('[data-edge-type]'));
     const fitButton = app.querySelector('[data-graph-fit]');
     const scaleIndicator = app.querySelector('[data-graph-scale]');
     const allNodes = data.nodes.map(node => ({ ...node }));
     const allLinks = data.links.map(link => ({ ...link }));
     const nodeLookup = new Map(allNodes.map(node => [node.id, node]));
-    const searchIndex = allNodes
-      .filter(node => node.type === 'post')
-      .map(node => ({ id: node.id, label: node.label.toLowerCase() }));
+    const searchIndex = allNodes.map(node => ({ id: node.id, label: node.label.toLowerCase() }));
+    const categoryOptions = model.getCategoryOptions(data);
+    const edgeTypeCounts = model.getEdgeTypeCounts(data);
+    const preferredCategory = categoryOptions.includes(data.meta.preferredCategory)
+      ? data.meta.preferredCategory
+      : model.ALL_CATEGORIES;
 
     const state = {
       activeEdgeTypes: new Set(EDGE_TYPES),
+      category: preferredCategory,
       query: '',
       selectedId: null,
       hoveredId: null
     };
+
+    if (categorySelect) {
+      const options = [
+        { value: model.ALL_CATEGORIES, label: '全部领域' },
+        ...categoryOptions.map(category => ({ value: category, label: category }))
+      ];
+      categorySelect.innerHTML = options
+        .map(option => `<option value="${escapeHtml(option.value)}">${escapeHtml(option.label)}</option>`)
+        .join('');
+      categorySelect.value = preferredCategory;
+    }
+
+    const edgeLabels = { strong: 'Strong', tag: 'Tags', category: 'Categories' };
+    toggleButtons.forEach(button => {
+      const edgeType = button.dataset.edgeType;
+      const count = edgeTypeCounts[edgeType] || 0;
+      button.textContent = `${edgeLabels[edgeType]} (${count})`;
+      button.disabled = count === 0;
+      if (count === 0) {
+        state.activeEdgeTypes.delete(edgeType);
+        button.classList.remove('is-active');
+        button.setAttribute('aria-pressed', 'false');
+      }
+    });
 
     const svg = window.d3.select(svgElement);
     const zoomSurface = svg.append('rect').attr('class', 'knowledge-graph-zoom-surface');
@@ -189,7 +260,7 @@
 
     function showSelectedNode(nodeId) {
       state.selectedId = nodeId || null;
-      renderPanel(panel, nodeId ? nodeLookup.get(nodeId) : null, data, adjacency);
+      renderPanel(panel, nodeId ? nodeLookup.get(nodeId) : null, data, adjacency, nodeLookup);
       refreshClasses();
     }
 
@@ -248,59 +319,7 @@
     }
 
     function visibleGraph() {
-      const activeLinks = allLinks.filter(link => state.activeEdgeTypes.has(link.type));
-      const nodeIds = new Set();
-      let filteredLinks = activeLinks;
-
-      if (state.query) {
-        const matchedIds = new Set(
-          searchIndex
-            .filter(item => item.label.includes(state.query))
-            .map(item => item.id)
-        );
-
-        filteredLinks = activeLinks.filter(link => {
-          const source = getLinkEndpoint(link.source);
-          const target = getLinkEndpoint(link.target);
-          return matchedIds.has(source) || matchedIds.has(target);
-        });
-
-        filteredLinks.forEach(link => {
-          nodeIds.add(getLinkEndpoint(link.source));
-          nodeIds.add(getLinkEndpoint(link.target));
-        });
-
-        matchedIds.forEach(id => nodeIds.add(id));
-      } else {
-        allNodes.forEach(node => nodeIds.add(node.id));
-        filteredLinks.forEach(link => {
-          nodeIds.add(getLinkEndpoint(link.source));
-          nodeIds.add(getLinkEndpoint(link.target));
-        });
-      }
-
-      if (state.selectedId) {
-        nodeIds.add(state.selectedId);
-        allLinks.forEach(link => {
-          const source = getLinkEndpoint(link.source);
-          const target = getLinkEndpoint(link.target);
-          if (source === state.selectedId || target === state.selectedId) {
-            if (state.activeEdgeTypes.has(link.type)) {
-              nodeIds.add(source);
-              nodeIds.add(target);
-            }
-          }
-        });
-      }
-
-      return {
-        nodes: allNodes.filter(node => nodeIds.has(node.id)),
-        links: filteredLinks.filter(link => {
-          const source = getLinkEndpoint(link.source);
-          const target = getLinkEndpoint(link.target);
-          return nodeIds.has(source) && nodeIds.has(target);
-        })
-      };
+      return model.filterGraph({ nodes: allNodes, links: allLinks }, state);
     }
 
     function updateDimensions() {
@@ -456,7 +475,7 @@
       adjacency = buildAdjacency(visibleLinks);
 
       if (!visibleNodes.length) {
-        createMessage(emptyState, 'No visible graph data for the current filters.');
+        createMessage(emptyState, '当前筛选条件下没有可显示的图谱数据。');
         linkSelection = linkLayer.selectAll('line').data([], () => '');
         linkSelection.exit().remove();
         nodeSelection = nodeLayer.selectAll('circle').data([], () => '');
@@ -465,7 +484,7 @@
         labelSelection.exit().remove();
         simulation.nodes([]);
         simulation.force('link', window.d3.forceLink([]).id(node => node.id));
-        renderPanel(panel, state.selectedId ? nodeLookup.get(state.selectedId) : null, data, adjacency);
+        renderPanel(panel, state.selectedId ? nodeLookup.get(state.selectedId) : null, data, adjacency, nodeLookup);
         return;
       }
 
@@ -474,7 +493,7 @@
 
       linkSelection = linkLayer
         .selectAll('line')
-        .data(visibleLinks, link => `${link.type}:${getLinkEndpoint(link.source)}:${getLinkEndpoint(link.target)}`);
+        .data(visibleLinks, link => `${link.type}:${getLinkEndpoint(link.source)}:${getLinkEndpoint(link.target)}:${link.relation || ''}`);
 
       linkSelection.exit().remove();
       linkSelection = linkSelection
@@ -504,12 +523,6 @@
         .on('click', function(event, node) {
           event.stopPropagation();
           showSelectedNode(node.id);
-        })
-        .on('dblclick', function(event, node) {
-          event.stopPropagation();
-          if (node.type === 'post' && node.url) {
-            window.location.href = node.url;
-          }
         })
         .call(
           window.d3.drag()
@@ -561,7 +574,7 @@
 
       shouldFitGraph = true;
       ticksSinceRender = 0;
-      renderPanel(panel, state.selectedId ? nodeLookup.get(state.selectedId) : null, data, adjacency);
+      renderPanel(panel, state.selectedId ? nodeLookup.get(state.selectedId) : null, data, adjacency, nodeLookup);
       refreshClasses();
     }
 
@@ -631,6 +644,14 @@
       });
     });
 
+    if (categorySelect) {
+      categorySelect.addEventListener('change', event => {
+        state.category = event.target.value;
+        state.selectedId = null;
+        render();
+      });
+    }
+
     if (searchInput) {
       searchInput.addEventListener('input', event => {
         state.query = String(event.target.value || '').trim().toLowerCase();
@@ -677,7 +698,12 @@
 
     const emptyState = app.querySelector('[data-graph-empty]');
     if (!window.d3) {
-      createMessage(emptyState, 'D3 failed to load, so the graph could not render.');
+      createMessage(emptyState, 'D3 加载失败，无法渲染知识图谱。');
+      return;
+    }
+
+    if (!window.KnowledgeGraphModel) {
+      createMessage(emptyState, '知识图谱过滤模型加载失败。');
       return;
     }
 
@@ -695,7 +721,7 @@
       const data = await response.json();
       initGraph(app, data);
     } catch (error) {
-      createMessage(emptyState, `Unable to load graph data: ${error.message}`);
+      createMessage(emptyState, `无法加载图谱数据：${error.message}`);
     }
   }
 

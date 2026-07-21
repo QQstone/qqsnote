@@ -3,7 +3,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const { buildGraphData } = require('../lib/knowledge-graph-builder');
+const {
+  buildGraphData,
+  readPackageAsset
+} = require('../lib/knowledge-graph-builder');
 
 function toNameList(model) {
   if (!model || typeof model.toArray !== 'function') return [];
@@ -52,8 +55,14 @@ hexo.extend.generator.register('knowledge_graph', function(locals) {
     hexo.log.warn(`[knowledge-graph] ${item.message}`);
   });
 
-  return [{
-    path: 'graph/knowledge-graph.json',
-    data: JSON.stringify(data)
-  }];
+  return [
+    {
+      path: 'graph/knowledge-graph.json',
+      data: JSON.stringify(data)
+    },
+    {
+      path: 'lib/d3.min.js',
+      data: readPackageAsset('d3', '../dist/d3.min.js')
+    }
+  ];
 });

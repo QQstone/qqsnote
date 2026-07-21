@@ -6,6 +6,10 @@ comments: false
 
 <div class="knowledge-graph-page" data-knowledge-graph data-graph-path="knowledge-graph.json">
   <div class="knowledge-graph-toolbar" aria-label="Knowledge graph controls">
+    <label class="knowledge-graph-domain">
+      <span>领域</span>
+      <select data-graph-category aria-label="选择知识领域"></select>
+    </label>
     <div class="knowledge-graph-toggle-group" role="group" aria-label="Graph edges">
       <button class="knowledge-graph-toggle is-active" type="button" data-edge-type="strong" aria-pressed="true">Strong</button>
       <button class="knowledge-graph-toggle is-active" type="button" data-edge-type="tag" aria-pressed="true">Tags</button>
@@ -14,7 +18,7 @@ comments: false
       <span class="knowledge-graph-scale" data-graph-scale>100%</span>
     </div>
     <label class="knowledge-graph-search">
-      <input type="search" placeholder="Search posts" aria-label="Search posts" data-graph-search>
+      <input type="search" placeholder="搜索文章、标签或分类" aria-label="搜索文章、标签或分类" data-graph-search>
     </label>
   </div>
 

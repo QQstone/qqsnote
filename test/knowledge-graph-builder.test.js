@@ -3,7 +3,10 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const { buildGraphData } = require('../lib/knowledge-graph-builder');
+const {
+  buildGraphData,
+  readPackageAsset
+} = require('../lib/knowledge-graph-builder');
 
 function post(source, title, tags = [], categories = [], graphBlock = '') {
   const basename = source.replace(/^_posts\//, '').replace(/\.md$/, '');
@@ -76,6 +79,13 @@ test('symmetric strong links are deduplicated while directed links are preserved
   const strong = data.links.filter(link => link.type === 'strong');
   assert.equal(strong.filter(link => link.relation === 'relates').length, 1);
   assert.equal(strong.filter(link => link.relation === 'extends').length, 2);
+});
+
+test('readPackageAsset returns the complete D3 bundle as text', () => {
+  const content = readPackageAsset('d3', '../dist/d3.min.js');
+  assert.equal(typeof content, 'string');
+  assert.equal(content.length > 200000, true);
+  assert.match(content, /d3js\.org v7\.9\.0/);
 });
 
 module.exports = { post };
