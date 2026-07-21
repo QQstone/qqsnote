@@ -2,7 +2,9 @@
 title: Halcon
 date: 2024-06-27 09:57:59
 tags:
-- 图像处理
+- Halcon
+- 机器视觉
+- 工业视觉
 categories: 
 - 图像处理
 ---

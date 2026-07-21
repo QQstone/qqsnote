@@ -2,8 +2,19 @@
 title: 具身智能
 date: 2026-04-17 13:41:01
 tags:
-- AI
+- 具身智能
+- 机器人
+- VLA
+- 学习笔记
+categories:
+- 人工智能
 ---
+<!-- graph-links:start
+[[EAI-hardwares|extends]]
+[[VLA|extends]]
+[[ROS|extends]]
+graph-links:end -->
+
 具身智能 Embodied Artificial Intelligence 不仅仅是人工智能+机器人， 而是人工智能通过物理本体与环境交互实现知行合一
 
 智能闭环核心要素：
@@ -473,4 +484,3 @@ RL/VLA
 + 各部分边界和状态
 + 数据的生产、流经、消费、同步
 + 状态机：状态 变化 异常恢复
-

@@ -2,10 +2,17 @@
 title: 相机标定
 date: 2022-02-18 10:23:25
 tags:
-- 算法 
+- 相机标定
+- OpenCV
+- 坐标变换
+- 机器视觉
 categories: 
-- 算法
+- 图像处理
 ---
+<!-- graph-links:start
+[[HandEye-Calibration|extends]]
+graph-links:end -->
+
 输入棋盘图片路径 棋盘角点数（横纵方格数减1）
 ```
 def calibratePos(imgPath, w, h):

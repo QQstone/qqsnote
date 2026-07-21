@@ -2,7 +2,18 @@
 title: 运动学
 date: 2026-05-09 09:54:24
 tags:
+- 运动学
+- 坐标变换
+- 机械臂
+- 学习笔记
+categories:
+- 机器人
 ---
+<!-- graph-links:start
+[[Quaternions|prerequisite]]
+[[TCP-Calibration|extends]]
+graph-links:end -->
+
 ## 六轴机械臂
 
 六轴机械臂之所以能在全球工业界如此普及，甚至成为工业自动化的“标准配置”和“万金油”，主要归功于它在运动能力、成本效益和技术成熟度三者之间达到了一个完美的平衡点

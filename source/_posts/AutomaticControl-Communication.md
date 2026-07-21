@@ -3,7 +3,17 @@ title: 自动化控制-通讯
 date: 2026-03-26 11:49:25
 tags:
 - 自动化控制
+- Modbus
+- RS-485
+- 工业通信
+categories:
+- 工业软件
 ---
+<!-- graph-links:start
+[[AutomaticControl-PLC|relates]]
+[[Industrial-Proportional-Valve-Control|relates]]
+graph-links:end -->
+
 串口 RS232 RS485 都是物理层标准 
 ![RS485](./AutomaticControl-Communication//RS485.png)
 
@@ -44,4 +54,3 @@ RS485使用差分信号区分逻辑(如A>B为逻辑0 反之为1) 使用缠绕双
 | 05 | 写单个线圈 | 写 | 0x (00001-) | 控制开关动作<br>远程启动/停止电机、强制置位继电器、开关阀门。 |
 | 06 | 写单个保持寄存器 | 写 | 4x (40001-) | 修改单个参数<br>修改变频器的频率设定、调整温控器的设定值。 |
 | 10 (16)| 写多个保持寄存器| 写 | 4x (40001-) | 批量下发配置<br>一次性写入一组PID参数、设置多段速运行指令，提高效率。 |
-

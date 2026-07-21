@@ -2,7 +2,7 @@
 title: URDF 与 OCCT 基础知识
 date: 2026-07-03 00:00:00
 tags:
-- Robotics
+- ROS2
 - URDF
 - OCCT
 - CAD
@@ -10,6 +10,11 @@ tags:
 categories:
 - 机器人
 ---
+<!-- graph-links:start
+[[ROS|prerequisite]]
+[[Kinematics|relates]]
+[[ThreeJS|relates]]
+graph-links:end -->
 
 ## 背景
 

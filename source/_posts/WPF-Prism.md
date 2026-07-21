@@ -2,6 +2,12 @@
 title: WPF Prism
 date: 2025-07-27 16:19:33
 tags:
+- WPF
+- Prism
+- MVVM
+- 上位机
+categories:
+- 工业软件
 ---
 安装依赖
 ```

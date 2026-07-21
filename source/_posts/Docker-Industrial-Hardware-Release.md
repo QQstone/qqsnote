@@ -7,7 +7,7 @@ tags:
 - Rust
 - 工业软件
 categories:
-- 容器
+- 工业软件
 ---
 
 ## 背景

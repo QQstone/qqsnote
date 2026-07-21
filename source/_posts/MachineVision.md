@@ -2,7 +2,19 @@
 title: 机器视觉
 date: 2025-03-05 11:13:13
 tags:
+- 机器视觉
+- OpenCV
+- 工业视觉
+- 学习笔记
+categories:
+- 图像处理
 ---
+<!-- graph-links:start
+[[OpenCV|extends]]
+[[Halcon|compares]]
+[[CameraCalibrate|extends]]
+graph-links:end -->
+
 机器视觉是人工智能除LLM外的另一个分支
 
 一、传统机器学习模型

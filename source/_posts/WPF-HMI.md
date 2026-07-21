@@ -2,7 +2,19 @@
 title: WPF 工业上位机
 date: 2026-05-08 11:23:24
 tags:
+- WPF
+- HMI
+- 工业软件
+- 上位机
+categories:
+- 工业软件
 ---
+<!-- graph-links:start
+[[WPF|prerequisite]]
+[[WPF-Prism|relates]]
+[[AutomaticControl-Communication|extends]]
+graph-links:end -->
+
 ## ✅ 应该掌握的（会用即可）
 
 这些是工业开发必需品：

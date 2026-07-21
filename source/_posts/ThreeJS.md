@@ -4,7 +4,17 @@ date: 2025-07-27 10:03:57
 tags:
 - Three.js
 - WebGL
+- 3D
+- 数据可视化
+categories:
+- 图形学
 ---
+<!-- graph-links:start
+[[ComputerGraphics|applies]]
+[[3d-force-graph|extends]]
+[[URDF-OCCT-Basics|relates]]
+graph-links:end -->
+
 #### Renderer
 
 init scene

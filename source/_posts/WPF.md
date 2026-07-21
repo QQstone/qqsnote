@@ -2,6 +2,11 @@
 title: WPF
 date: 2023-02-27 16:19:33
 tags:
+- WPF
+- .Net
+- 桌面应用
+categories:
+- 工业软件
 ---
 #### Application Window
 App.xmal

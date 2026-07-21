@@ -3,6 +3,8 @@ title: 图像分割
 date: 2022-09-08 20:05:51
 tags:
 - OpenCV
+- 图像分割
+- 计算机视觉
 categories: 
 - 图像处理
 ---

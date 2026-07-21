@@ -3,7 +3,18 @@ title: 计算机图形学
 date: 2024-11-05 10:57:13
 tags:
 - 图形学
+- 坐标变换
+- 3D
+- 学习笔记
+categories:
+- 图形学
 ---
+<!-- graph-links:start
+[[ThreeJS|extends]]
+[[openGL|extends]]
+[[vtk|relates]]
+graph-links:end -->
+
 #### RoadMap
 + 编程基础：C++， 设计模式 --> C++ STL
 + 图形管线：WebGL --> OpenGL

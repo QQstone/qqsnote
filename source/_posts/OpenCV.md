@@ -3,6 +3,8 @@ title: OpenCV
 date: 2022-06-27 22:34:15
 tags:
 - OpenCV
+- 计算机视觉
+- Python
 categories: 
 - 图像处理
 ---

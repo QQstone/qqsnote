@@ -3,6 +3,8 @@ title: Three.js WebGL OpenGL
 date: 2019-09-02 18:07:56
 tags:
 - WebGL
+- OpenGL
+- 图形学
 categories: 
 - 图形学
 ---
