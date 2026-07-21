@@ -1,25 +1,25 @@
-# Knowledge Graph Phase One Design
+# 知识图谱第一阶段设计规格
 
-## Goal
+## 目标
 
-Turn the existing site-wide tag visualization into a useful first-stage knowledge graph for the author's robotics-software transition. The first screen should expose a readable robotics neighborhood, while the full historical graph remains available on demand.
+将现有的全站标签可视化升级为对作者机器人软件转型真正有用的第一阶段知识图谱。首屏应展示清晰、可读的机器人知识邻域，同时保留按需查看完整历史图谱的能力。
 
-## Scope
+## 范围
 
-Phase one covers four connected changes:
+第一阶段包含四项相互关联的改动：
 
-1. Normalize taxonomy names and make explicit links stable and typed.
-2. Add a read-only audit command for graph quality.
-3. Make the graph open on a bounded domain view instead of all 402 posts.
-4. Curate metadata and explicit links for the highest-value robotics, machine-vision, industrial-software, and visualization notes.
+1. 规范分类和标签名称，并使显式关联具有稳定标识和关系类型。
+2. 增加只读的图谱质量审计命令。
+3. 默认打开一个有限的领域视图，而不是一次展示全部 402 篇文章。
+4. 为机器人、机器视觉、工业软件和可视化方向中价值最高的文章整理元数据和显式关联。
 
-It does not introduce automatic semantic extraction, embeddings, a graph database, article-body related-post widgets, or broad theme changes.
+本阶段不引入自动语义抽取、向量嵌入、图数据库、文章正文中的相关文章组件，也不进行大范围主题改造。
 
-## Data Model
+## 数据模型
 
-### Taxonomy
+### 分类和标签
 
-Categories represent stable domains. Phase one uses the existing categories where possible and adds `工业软件` where the existing taxonomy has no suitable domain.
+分类表示稳定的技术领域。第一阶段尽量沿用现有分类，并在现有体系没有合适领域时新增 `工业软件`：
 
 - `机器人`
 - `图像处理`
@@ -27,11 +27,11 @@ Categories represent stable domains. Phase one uses the existing categories wher
 - `人工智能`
 - `工业软件`
 
-Tags represent technologies and concepts. Each curated article has two to five canonical tags. Canonical spelling is configured under `knowledge_graph.tag_aliases` in `_config.yml`; comparison is case-insensitive and trimmed. Initial aliases merge the known duplicate families `CSS/css`, `AIGC/aigc`, `NSIS/nsis`, and `sqlServer/SQL_Server`.
+标签表示具体技术和概念。每篇经过整理的文章应包含 2 至 5 个规范标签。规范拼写配置在 `_config.yml` 的 `knowledge_graph.tag_aliases` 中；匹配时忽略大小写并清除首尾空格。首批别名将合并已知的 `CSS/css`、`AIGC/aigc`、`NSIS/nsis` 和 `sqlServer/SQL_Server` 等重复标签族。
 
-### Explicit links
+### 显式关联
 
-The existing hidden block remains backward compatible. Each entry accepts this phase-one syntax:
+沿用并兼容现有隐藏块，同时支持第一阶段新增的关系类型语法：
 
 ```text
 <!-- graph-links:start
@@ -40,73 +40,73 @@ The existing hidden block remains backward compatible. Each entry accepts this p
 graph-links:end -->
 ```
 
-The target is preferably a source filename without `.md`; title lookup remains a fallback for old content. Supported relations are:
+关联目标优先使用不含 `.md` 的源文件名；文章标题仅作为兼容旧内容的后备查找方式。支持以下关系：
 
-- `relates`: symmetric general relationship and the default for old entries.
-- `prerequisite`: the target is useful before the source article.
-- `extends`: the target continues or deepens the source article.
-- `applies`: the source applies concepts from the target.
-- `compares`: symmetric comparison.
+- `relates`：对称的普通关联，也是旧格式条目的默认值。
+- `prerequisite`：目标文章适合作为当前文章的前置知识。
+- `extends`：目标文章延续或深入当前文章。
+- `applies`：当前文章应用目标文章中的概念。
+- `compares`：两篇文章之间的对比关系。
 
-Generated strong links preserve `relation` and direction. Duplicate links use the source/target/relation tuple, so two articles may express distinct directed relationships without being silently collapsed.
+生成后的强关联保留 `relation` 字段和方向。重复判断使用来源、目标、关系类型三元组，因此两篇文章之间可以保留含义不同的有向关系，而不会被静默合并。
 
-## Architecture
+## 架构
 
-`lib/knowledge-graph.js` remains the shared parsing and normalization module. It gains typed-link parsing, taxonomy canonicalization, and reusable audit helpers.
+`lib/knowledge-graph.js` 继续作为共享的解析和规范化模块，新增带类型关联解析、分类标签规范化以及可复用的审计辅助函数。
 
-`scripts/knowledge-graph.js` remains the Hexo generator. It resolves explicit targets by stable source slug first, then title; emits relation metadata; canonicalizes tag and category nodes; and exposes audit counts in graph metadata.
+`scripts/knowledge-graph.js` 继续作为 Hexo 生成器。它优先通过稳定的源文件名解析显式关联，其次才使用标题；输出关系类型；规范化标签和分类节点；并在图谱元数据中输出审计统计。
 
-`tools/audit-knowledge-graph.js` reads the Markdown corpus without changing it. It reports missing taxonomy, isolated curated articles, singleton tags, duplicate normalized taxonomy, duplicate titles, unresolved explicit targets, and component statistics. It exits non-zero only for structural errors: unresolved links and ambiguous duplicate titles used by a title-based link.
+`tools/audit-knowledge-graph.js` 只读取 Markdown 文章，不修改文件。它报告缺失分类标签、整理范围内的孤立文章、仅使用一次的标签、规范化后重复的分类标签、重复标题、无法解析的显式关联以及连通分量统计。只有结构性错误才返回非零退出码：无法解析的关联，以及显式关联使用了存在歧义的重复标题。
 
-`tools/suggest-related-links.js` stays a manual assistant. It prints at most five suggestions by default, supports an explicit limit, and never writes all candidates without a per-candidate selection. The existing `--yes` shortcut is removed to prevent accidental graph inflation.
+`tools/suggest-related-links.js` 继续作为人工辅助工具。默认最多显示 5 条建议，支持显式指定数量限制，并且不允许未经逐项选择便写入全部候选。移除现有 `--yes` 快捷写入方式，防止意外制造大量无意义关联。
 
-## User Experience
+## 用户体验
 
-The toolbar gains a category selector populated from graph data. If `机器人` exists, it is selected initially; otherwise the graph opens on all categories. Selecting `全部领域` restores the site-wide graph.
+工具栏增加由图谱数据生成的分类选择器。如果存在 `机器人` 分类，则默认选中；否则默认选择全部分类。选择 `全部领域` 后可恢复完整的全站图谱。
 
-Only nodes incident to currently visible edges are rendered, plus matching or selected post nodes. Disabling an edge type therefore removes its orphan taxonomy nodes. Empty edge types are disabled and show their zero count. Search covers post, tag, and category labels and temporarily shows matching neighborhoods within the selected domain.
+只渲染与当前可见连线相连的节点，以及搜索命中或当前选中的文章节点。因此，关闭一种连线后，与该连线相关的孤立分类或标签节点也会消失。没有任何连线的类型按钮应禁用并显示数量为零。搜索范围覆盖文章、标签和分类名称，并在当前所选领域内临时展示匹配节点的邻域。
 
-The detail panel displays relation-aware neighboring articles. A normal click opens details; the explicit `Open article` action remains the navigation mechanism, avoiding reliance on an undiscoverable double-click.
+详情面板应按关系类型展示相邻文章。单击节点打开详情；保留明确的 `Open article` 操作作为文章跳转入口，不再依赖难以发现的双击行为。
 
-The D3 runtime is installed as a local dependency and copied into the generated site, removing the CDN as a single point of failure.
+D3 运行时改为本地依赖并复制到生成站点中，移除 CDN 这个单点故障来源。
 
-## Curated Content
+## 整理文章范围
 
-Phase one prioritizes roughly 25 anchor notes across four tracks:
+第一阶段优先整理约 25 篇核心文章，分为四条主线：
 
-- Robotics: ROS, URDF/OCCT, kinematics, quaternions, TCP calibration, hand-eye calibration, embodied-AI overview, hardware, and VLA.
-- Machine vision: machine vision, OpenCV, camera calibration, hand-eye calibration, Halcon, YOLO, and image segmentation.
-- Industrial software: WPF HMI, WPF, Prism, automation communication, PLC, proportional-valve control, and industrial hardware deployment.
-- Visualization: computer graphics, Three.js, WebGL/OpenGL, VTK, 3d-force-graph, and URDF/OCCT.
+- 机器人：ROS、URDF/OCCT、运动学、四元数、TCP 标定、手眼标定、具身智能概览、硬件和 VLA。
+- 机器视觉：机器视觉、OpenCV、相机标定、手眼标定、Halcon、YOLO 和图像分割。
+- 工业软件：WPF HMI、WPF、Prism、自动化通讯、PLC、比例阀控制和工业硬件部署。
+- 可视化：计算机图形学、Three.js、WebGL/OpenGL、VTK、3d-force-graph 和 URDF/OCCT。
 
-Metadata describes demonstrated subject matter, not mastery. Concept-only notes may use a `学习笔记` tag; project or implementation evidence must not be implied when absent.
+元数据只描述文章实际体现的主题，不代表作者已经掌握相关能力。只有概念内容的文章可以使用 `学习笔记` 标签；缺少项目或实现证据时，不得通过标签暗示具备项目经验。
 
-## Error Handling
+## 错误处理
 
-- Unknown relation names fall back to `relates` and are reported by the audit.
-- Unresolved links remain warnings during Hexo generation and errors in the audit command.
-- Duplicate titles do not fail generation when all explicit links use stable source slugs.
-- Missing or malformed graph data produces the existing visible empty state.
-- The category selector falls back to `全部领域` when its preferred category is unavailable.
+- 未知关系类型回退为 `relates`，并由审计命令报告。
+- Hexo 构建时继续将无法解析的关联记录为警告，审计命令则将其视为错误。
+- 当全部显式关联均使用稳定源文件名时，重复标题本身不导致生成失败。
+- 图谱数据缺失或格式错误时，继续使用现有的可见空状态提示。
+- 首选分类不存在时，分类选择器回退到 `全部领域`。
 
-## Testing
+## 测试
 
-Node's built-in test runner provides unit coverage without adding a test framework. Tests cover typed-link parsing, alias normalization, stable target resolution, relation preservation, duplicate handling, audit severity, suggestion limits, and view filtering through exported pure functions.
+使用 Node.js 内置测试运行器提供单元测试，不额外引入测试框架。测试覆盖带类型关联的解析、标签别名规范化、稳定目标解析、关系类型保留、重复关系处理、审计严重级别、推荐数量限制，以及通过导出的纯函数验证视图过滤行为。
 
-Verification consists of:
+验证步骤包括：
 
 1. `npm test`
 2. `npm run graph:audit`
 3. `npm run clean && npm run build`
-4. Desktop and mobile browser checks of the default robotics view, category switching, search, edge toggles, selection, and local D3 loading.
+4. 在桌面端和移动端浏览器检查默认机器人视图、分类切换、搜索、连线开关、节点选择以及本地 D3 加载。
 
-## Acceptance Criteria
+## 验收标准
 
-- The graph builds with zero unresolved-link warnings.
-- Known taxonomy duplicates collapse to one canonical node each.
-- The initial robotics view renders fewer than 80 nodes.
-- Disabling an edge type does not leave unrelated taxonomy nodes floating.
-- Curated robotics anchor notes have one domain category, two to five tags, and at least one meaningful explicit relationship where a related note exists.
-- The audit command reports zero isolated posts within the curated robotics anchor set.
-- No graph asset depends on an external CDN.
+- 图谱构建时不存在无法解析关联的警告。
+- 已知的重复标签族分别合并为单一规范节点。
+- 默认机器人视图渲染的节点少于 80 个。
+- 关闭某种连线后，不会留下与当前图谱无关的漂浮分类或标签节点。
+- 整理范围内的机器人核心文章包含 1 个领域分类、2 至 5 个标签，并在存在相关文章时至少包含 1 条有意义的显式关联。
+- 审计命令报告整理范围内的机器人核心文章不存在孤点。
+- 图谱资源不依赖任何外部 CDN。
 
