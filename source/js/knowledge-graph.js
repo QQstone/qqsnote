@@ -256,7 +256,6 @@
     let nodeSelection = nodeLayer.selectAll('circle');
     let labelSelection = labelLayer.selectAll('text');
     let shouldFitGraph = true;
-    let autoFitOnSimulationEnd = true;
     let ticksSinceRender = 0;
     let panState = null;
     let suppressNextClick = false;
@@ -373,7 +372,6 @@
       if (event.cancelable) event.preventDefault();
       event.stopPropagation();
       shouldFitGraph = false;
-      autoFitOnSimulationEnd = false;
       svg.interrupt();
 
       const delta = normalizeWheelDelta(event);
@@ -404,7 +402,6 @@
       if (event.button !== 0 || isNodePointerTarget(event)) return;
 
       shouldFitGraph = false;
-      autoFitOnSimulationEnd = false;
       svg.interrupt();
       panState = {
         pointerId: event.pointerId,
@@ -521,7 +518,6 @@
             .on('start', (event, node) => {
               if (event.sourceEvent) event.sourceEvent.stopPropagation();
               shouldFitGraph = false;
-              autoFitOnSimulationEnd = false;
               if (!event.active) simulation.alphaTarget(0.3).restart();
               node.fx = node.x;
               node.fy = node.y;
@@ -566,7 +562,6 @@
         .restart();
 
       shouldFitGraph = true;
-      autoFitOnSimulationEnd = true;
       ticksSinceRender = 0;
       renderPanel(panel, state.selectedId ? nodeLookup.get(state.selectedId) : null, data, adjacency, nodeLookup);
       refreshClasses();
@@ -594,12 +589,6 @@
           fitGraph(420);
         }
       }
-    });
-
-    simulation.on('end', () => {
-      if (!autoFitOnSimulationEnd) return;
-      autoFitOnSimulationEnd = false;
-      fitGraph(320);
     });
 
     svg
@@ -678,16 +667,12 @@
     }
 
     if (fitButton) {
-      fitButton.addEventListener('click', () => {
-        autoFitOnSimulationEnd = false;
-        fitGraph(320);
-      });
+      fitButton.addEventListener('click', () => fitGraph(320));
     }
 
     new ResizeObserver(() => {
       updateDimensions();
       shouldFitGraph = true;
-      autoFitOnSimulationEnd = true;
       ticksSinceRender = 0;
     }).observe(canvas);
 
