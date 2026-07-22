@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="背景与问题修正“AI Native 开发模式”这个说法容易变得空泛。如果只把它理解成“用 AI 写更多代码”，很可能会得到更快的技术债、更大的审查压力和更难追溯的生产事故。 更准确的问题应该是：  如何把 AI 作为受控的开发参与者嵌入软件开发生命周期，并用 DevOps 的反馈、自动化、度量、安全和治理机制，让 AI 生成的产出可验证、可追溯、可交付、可运维。  这篇笔记用于持续研究这个问题：如">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI Native DevOps与受控软件开发生命周期">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2026/06/30/AI-Native-DevOps-SDLC/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="背景与问题修正“AI Native 开发模式”这个说法容易变得空泛。如果只把它理解成“用 AI 写更多代码”，很可能会得到更快的技术债、更大的审查压力和更难追溯的生产事故。 更准确的问题应该是：  如何把 AI 作为受控的开发参与者嵌入软件开发生命周期，并用 DevOps 的反馈、自动化、度量、安全和治理机制，让 AI 生成的产出可验证、可追溯、可交付、可运维。  这篇笔记用于持续研究这个问题：如">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-06-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-04T06:19:02.558Z">
+<meta property="article:author" content="QQs">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="DevOps">
+<meta property="article:tag" content="SDLC">
+<meta property="article:tag" content="DevSecOps">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2026/06/30/AI-Native-DevOps-SDLC/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+
+  <title>AI Native DevOps与受控软件开发生命周期 | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-graph">
+
+    <a href="/qqsnote/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/06/30/AI-Native-DevOps-SDLC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AI Native DevOps与受控软件开发生命周期
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-06-30 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-30T00:00:00+08:00">2026-06-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-07-04 14:19:02" itemprop="dateModified" datetime="2026-07-04T14:19:02+08:00">2026-07-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">软件工程</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="背景与问题修正"><a href="#背景与问题修正" class="headerlink" title="背景与问题修正"></a>背景与问题修正</h2><p>“AI Native 开发模式”这个说法容易变得空泛。如果只把它理解成“用 AI 写更多代码”，很可能会得到更快的技术债、更大的审查压力和更难追溯的生产事故。</p>
+<p>更准确的问题应该是：</p>
+<blockquote>
+<p>如何把 AI 作为受控的开发参与者嵌入软件开发生命周期，并用 DevOps 的反馈、自动化、度量、安全和治理机制，让 AI 生成的产出可验证、可追溯、可交付、可运维。</p>
+</blockquote>
+<p>这篇笔记用于持续研究这个问题：如何在软件开发生命周期中同时追求 AI 自动化效率和工程受控性。</p>
+<p>资料快照日期：2026-06-30。后续涉及最新报告、工具能力、政策、模型版本或企业实践时，需要重新查证。</p>
+<h2 id="核心判断"><a href="#核心判断" class="headerlink" title="核心判断"></a>核心判断</h2><p>当前更稳妥的判断是：</p>
+<ol>
+<li>AI 不应被视为替代 SDLC 的捷径，而应被纳入 SDLC 的受控参与者。</li>
+<li>AI 会提高需求整理、代码生成、测试草稿、文档、Review 辅助和运维分析的吞吐量。</li>
+<li>吞吐提升后，瓶颈会转移到验证、审查、安全、可追溯、权限控制和生产化。</li>
+<li>DevOps 的价值不会因为 AI 降低，反而更重要，因为它提供反馈回路、自动化门禁、交付度量和生产证据。</li>
+<li>AI Native 的成熟度不应看“生成了多少代码”，而应看“AI 产出是否能被持续验证、审查、发布、回滚和审计”。</li>
+</ol>
+<p>一句话结论：</p>
+<blockquote>
+<p>AI Native 不是让 AI 绕过工程纪律，而是把 AI 产生的不确定性转化为可验证的软件交付证据。</p>
+</blockquote>
+<h2 id="事实基线"><a href="#事实基线" class="headerlink" title="事实基线"></a>事实基线</h2><p>截至本次整理，公开资料给出的方向大致一致：</p>
+<ul>
+<li>DORA 2025 报告强调，AI 更像组织能力的放大器，回报主要来自底层组织系统，而不是工具本身。</li>
+<li>DORA 关于 AI 张力的研究指出，AI 提升吞吐后，可能增加审查、验证和交付稳定性的压力。</li>
+<li>GitHub Octoverse 2025 显示，AI 相关开发活动已经进入主流软件生态，LLM SDK 使用和 agentic coding 迹象明显增长。</li>
+<li>NIST SSDF 要求把安全实践集成进每一种软件开发生命周期。</li>
+<li>NIST AI RMF 和 Generative AI Profile 提醒，AI 系统需要围绕治理、映射、度量和管理风险来设计。</li>
+<li>OWASP LLM Top 10 2025 把 Prompt Injection、敏感信息泄露、供应链、过度代理权等列为核心风险。</li>
+<li>SLSA 和 OpenSSF Scorecard 这类供应链安全实践，正在成为 AI 参与开发后的基础门槛。</li>
+</ul>
+<p>这些事实不支持一个简单结论：“AI 越多越好”。它们更支持另一个结论：AI 能力越强，工程控制系统越要强。</p>
+<h2 id="AI-Native-SDLC-框架"><a href="#AI-Native-SDLC-框架" class="headerlink" title="AI Native SDLC 框架"></a>AI Native SDLC 框架</h2><p>可以把 AI Native SDLC 拆成五个关键词：</p>
+<ul>
+<li>Intent：需求、约束、验收标准、风险等级先结构化。</li>
+<li>Context：AI 能访问受控的代码、文档、接口、日志、架构决策和规范。</li>
+<li>Agent：AI 可以生成、修改、测试、审查、总结，但权限分级、行为可审计。</li>
+<li>Evidence：每个产出都必须有测试、扫描、评审、运行证据支撑。</li>
+<li>Governance：人负责判断，流水线负责验证，平台负责权限和追踪。</li>
+</ul>
+<h3 id="需求阶段"><a href="#需求阶段" class="headerlink" title="需求阶段"></a>需求阶段</h3><p>AI 适合做：</p>
+<ul>
+<li>汇总用户反馈、issue、客服记录、事故记录和日志摘要。</li>
+<li>把自然语言想法转成用户故事、验收标准、边界条件和风险清单。</li>
+<li>对需求提出反例，例如权限、数据一致性、异常流、灰度发布、回滚方案。</li>
+</ul>
+<p>控制点：</p>
+<ul>
+<li>需求不能停留在 prompt。</li>
+<li>必须沉淀为 PRD、用户故事、验收标准、接口契约或 issue。</li>
+<li>关键需求必须明确非功能要求，例如安全、性能、可观测性、合规、兼容性和回滚。</li>
+</ul>
+<h3 id="设计阶段"><a href="#设计阶段" class="headerlink" title="设计阶段"></a>设计阶段</h3><p>AI 适合做：</p>
+<ul>
+<li>生成 ADR 备选方案。</li>
+<li>草拟接口、数据流、状态机、错误处理和威胁模型。</li>
+<li>对比不同架构方案的代价。</li>
+<li>检查方案是否遗漏安全、降级、可观测、迁移、回滚和运维入口。</li>
+</ul>
+<p>控制点：</p>
+<ul>
+<li>人类架构师或负责人必须做最终取舍。</li>
+<li>AI 生成的设计不能直接成为事实，必须经过约束核查。</li>
+<li>架构决策要留下 ADR 或设计记录，避免未来只剩一段聊天记录。</li>
+</ul>
+<h3 id="编码阶段"><a href="#编码阶段" class="headerlink" title="编码阶段"></a>编码阶段</h3><p>AI 适合做：</p>
+<ul>
+<li>生成样板代码。</li>
+<li>小范围重构。</li>
+<li>根据既有模式补全实现。</li>
+<li>生成单测草稿、mock、迁移脚本、CLI 工具和文档。</li>
+<li>解释陌生代码和调用链。</li>
+</ul>
+<p>控制点：</p>
+<ul>
+<li>PR 要小。</li>
+<li>强类型、lint、format、单测、集成测试必须进入默认流程。</li>
+<li>AI 生成代码不能绕过代码审查。</li>
+<li>对安全、权限、支付、生产数据、基础设施、机器人或工业设备控制相关代码，应提高审查等级。</li>
+</ul>
+<h3 id="Review-阶段"><a href="#Review-阶段" class="headerlink" title="Review 阶段"></a>Review 阶段</h3><p>AI 适合做：</p>
+<ul>
+<li>在作者侧提前检查代码风格、测试缺口、潜在 bug 和安全风险。</li>
+<li>总结 PR 变更范围。</li>
+<li>对比需求验收标准和实际实现。</li>
+<li>提醒破坏性变更、迁移风险和回滚遗漏。</li>
+</ul>
+<p>控制点：</p>
+<ul>
+<li>AI Review 不能替代人工 Review。</li>
+<li>人工 Review 应聚焦语义正确性、业务后果、架构一致性和风险判断。</li>
+<li>不应把 AI 接受率、AI 评论数量或代码行数当作质量指标。</li>
+</ul>
+<h3 id="测试阶段"><a href="#测试阶段" class="headerlink" title="测试阶段"></a>测试阶段</h3><p>AI 适合做：</p>
+<ul>
+<li>生成测试用例草稿。</li>
+<li>补充边界条件。</li>
+<li>生成 e2e 脚本、契约测试、mock 数据和回归用例。</li>
+<li>从事故复盘中提炼回归测试。</li>
+</ul>
+<p>控制点：</p>
+<ul>
+<li>不能让“AI 生成代码 + AI 生成测试”自证正确。</li>
+<li>关键路径的测试 oracle 必须由人或明确规格定义。</li>
+<li>CI 至少覆盖单测、集成测试、契约测试、e2e、静态检查和安全扫描中的必要部分。</li>
+</ul>
+<h3 id="DevSecOps-阶段"><a href="#DevSecOps-阶段" class="headerlink" title="DevSecOps 阶段"></a>DevSecOps 阶段</h3><p>AI 时代应把这些能力作为默认门禁：</p>
+<ul>
+<li>SAST：静态应用安全测试。</li>
+<li>SCA：开源依赖和漏洞扫描。</li>
+<li>secret scanning：密钥泄漏扫描。</li>
+<li>IaC scanning：基础设施即代码扫描。</li>
+<li>container scanning：镜像漏洞扫描。</li>
+<li>SBOM：软件物料清单。</li>
+<li>provenance：构建来源和制品可追溯。</li>
+<li>signed artifact：制品签名。</li>
+<li>policy as code：用规则控制发布、权限和例外。</li>
+</ul>
+<p>控制点：</p>
+<ul>
+<li>AI 生成代码进入同一质量门禁。</li>
+<li>不能为 AI 代码开“快速通道”。</li>
+<li>例外必须记录原因、负责人、过期时间和补偿措施。</li>
+</ul>
+<h3 id="发布阶段"><a href="#发布阶段" class="headerlink" title="发布阶段"></a>发布阶段</h3><p>AI 适合做：</p>
+<ul>
+<li>生成 release note。</li>
+<li>总结变更影响。</li>
+<li>草拟回滚预案。</li>
+<li>分析灰度数据和错误趋势。</li>
+</ul>
+<p>控制点：</p>
+<ul>
+<li>发布仍应依赖 feature flag、canary、blue-green、自动回滚和审计记录。</li>
+<li>高风险发布必须有人审批。</li>
+<li>AI 可以建议操作，但不应直接绕过流水线变更生产环境。</li>
+</ul>
+<h3 id="运维阶段"><a href="#运维阶段" class="headerlink" title="运维阶段"></a>运维阶段</h3><p>AI 适合做：</p>
+<ul>
+<li>日志摘要。</li>
+<li>告警聚类。</li>
+<li>runbook 推荐。</li>
+<li>事故复盘草稿。</li>
+<li>根因假设生成。</li>
+<li>用户影响范围分析。</li>
+</ul>
+<p>控制点：</p>
+<ul>
+<li>对生产写操作、删数据、扩缩容、权限变更、设备控制等动作，应默认 human-in-the-loop。</li>
+<li>AI 的操作建议要进入审计。</li>
+<li>事故复盘要区分事实、推断和行动项。</li>
+</ul>
+<h2 id="自动化与受控的边界"><a href="#自动化与受控的边界" class="headerlink" title="自动化与受控的边界"></a>自动化与受控的边界</h2><p>可以先按风险等级划分 AI 权限：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐自动化程度</th>
+<th>控制要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文档摘要、代码解释、测试草稿</td>
+<td>高</td>
+<td>保留来源和人工抽查</td>
+</tr>
+<tr>
+<td>样板代码、小型重构、非关键工具</td>
+<td>中高</td>
+<td>小 PR、CI、Review</td>
+</tr>
+<tr>
+<td>业务核心逻辑、权限、安全、支付</td>
+<td>中低</td>
+<td>强制人工审查、测试证据</td>
+</tr>
+<tr>
+<td>基础设施、生产发布、数据迁移</td>
+<td>低</td>
+<td>审批、回滚、审计</td>
+</tr>
+<tr>
+<td>删除生产数据、控制真实设备、改变权限边界</td>
+<td>极低</td>
+<td>默认禁止自动执行，必须人工确认</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>一个实用原则：</p>
+<blockquote>
+<p>AI 可以加速低风险、可回滚、可测试的事情；越接近生产状态、真实资产和不可逆操作，越需要人和平台门禁。</p>
+</blockquote>
+<h2 id="度量体系"><a href="#度量体系" class="headerlink" title="度量体系"></a>度量体系</h2><p>保留 DevOps 的核心指标：</p>
+<ul>
+<li>lead time：从提交到上线的时间。</li>
+<li>deployment frequency：部署频率。</li>
+<li>change failure rate：变更失败率。</li>
+<li>MTTR：平均恢复时间。</li>
+</ul>
+<p>增加 AI 时代指标：</p>
+<ul>
+<li>AI 代码返工率。</li>
+<li>AI 产出缺陷逃逸率。</li>
+<li>AI 参与 PR 的平均 Review 时长。</li>
+<li>PR 体积变化。</li>
+<li>关键路径测试覆盖率。</li>
+<li>CI 阻断原因分布。</li>
+<li>SAST/SCA/secret scanning 阻断数。</li>
+<li>SBOM 覆盖率。</li>
+<li>制品签名覆盖率。</li>
+<li>provenance 覆盖率。</li>
+<li>agent 权限违规次数。</li>
+<li>生产事故中 AI 参与代码的比例和原因。</li>
+</ul>
+<p>谨慎使用这些指标：</p>
+<ul>
+<li>AI 生成代码行数。</li>
+<li>Copilot/Cursor/Claude Code 接受率。</li>
+<li>prompt 次数。</li>
+<li>commit 数。</li>
+<li>PR 数量。</li>
+</ul>
+<p>这些指标可能说明活跃度，但不能直接说明软件质量和交付价值。</p>
+<h2 id="实践路线"><a href="#实践路线" class="headerlink" title="实践路线"></a>实践路线</h2><h3 id="2-到-4-周：建立基线"><a href="#2-到-4-周：建立基线" class="headerlink" title="2 到 4 周：建立基线"></a>2 到 4 周：建立基线</h3><p>目标：知道当前工程系统的真实状态。</p>
+<p>交付物：</p>
+<ul>
+<li>当前 DORA 指标快照。</li>
+<li>Review 时长和 PR 体积统计。</li>
+<li>CI 失败原因分类。</li>
+<li>缺陷逃逸和回滚记录。</li>
+<li>AI 使用规范初稿。</li>
+</ul>
+<p>验收标准：</p>
+<ul>
+<li>明确哪些场景允许 AI 参与。</li>
+<li>明确哪些数据不能进入外部模型。</li>
+<li>明确哪些操作必须人工审批。</li>
+<li>至少有一条从需求到发布的证据链样例。</li>
+</ul>
+<h3 id="1-到-2-个月：受控试点"><a href="#1-到-2-个月：受控试点" class="headerlink" title="1 到 2 个月：受控试点"></a>1 到 2 个月：受控试点</h3><p>目标：选一个低风险项目，把 AI 纳入完整 SDLC。</p>
+<p>适合试点的对象：</p>
+<ul>
+<li>内部工具。</li>
+<li>非核心服务。</li>
+<li>文档和测试补全。</li>
+<li>可回滚的小功能。</li>
+</ul>
+<p>交付物：</p>
+<ul>
+<li>AI 辅助需求、设计、编码、测试、Review、发布的完整样例。</li>
+<li>CI/CD 门禁。</li>
+<li>安全扫描。</li>
+<li>PR 模板。</li>
+<li>Review checklist。</li>
+<li>发布记录和回滚方案。</li>
+</ul>
+<p>验收标准：</p>
+<ul>
+<li>AI 参与的 PR 能通过统一门禁。</li>
+<li>人工 Review 负担没有失控。</li>
+<li>缺陷没有明显上升。</li>
+<li>产出可以被追溯到需求、测试和发布记录。</li>
+</ul>
+<h3 id="3-到-6-个月：建设-AI-Engineering-Platform"><a href="#3-到-6-个月：建设-AI-Engineering-Platform" class="headerlink" title="3 到 6 个月：建设 AI Engineering Platform"></a>3 到 6 个月：建设 AI Engineering Platform</h3><p>目标：让 AI 使用从个人技巧变成组织能力。</p>
+<p>交付物：</p>
+<ul>
+<li>代码知识库和文档索引。</li>
+<li>规范库和 prompt 模板。</li>
+<li>agent 权限模型。</li>
+<li>审计日志。</li>
+<li>制品 provenance。</li>
+<li>AI 使用成本和质量仪表盘。</li>
+<li>安全和合规策略。</li>
+</ul>
+<p>验收标准：</p>
+<ul>
+<li>不同团队可以复用同一套 AI 工程规范。</li>
+<li>AI 产出可审查、可追溯、可度量。</li>
+<li>高风险动作默认受控。</li>
+<li>平台能回答：谁让 AI 做了什么、用了什么上下文、改了什么、如何验证、何时发布、出了问题如何回滚。</li>
+</ul>
+<h2 id="与个人技术方向的关系"><a href="#与个人技术方向的关系" class="headerlink" title="与个人技术方向的关系"></a>与个人技术方向的关系</h2><p>对我这种从 Web/full-stack 向工业软件、机器人应用、数字孪生和 AI-assisted operations 转型的人来说，这个方向有现实价值。</p>
+<p>更强的定位不是“我会用 AI 写代码”，而是：</p>
+<blockquote>
+<p>我能把 AI、DevOps、工业系统状态、可观测性、权限控制和人机协同流程结合起来，构建可交付、可追溯、可运维的智能软件系统。</p>
+</blockquote>
+<p>这和工业机器人、机器视觉、数字孪生、设备状态平台、AI 运维助手都有连接点。尤其在真实设备和工业现场中，自动化不能脱离状态建模、权限、安全、审计、回滚和人工确认。</p>
+<h2 id="后续研究问题"><a href="#后续研究问题" class="headerlink" title="后续研究问题"></a>后续研究问题</h2><p>后续需要继续研究：</p>
+<ul>
+<li>企业如何定义 AI 生成代码的责任边界。</li>
+<li>AI agent 在 CI/CD 中应获得哪些最小权限。</li>
+<li>如何设计 agent 审计日志和 evidence trail。</li>
+<li>AI Review 如何避免制造噪音。</li>
+<li>AI 生成测试如何和人工定义的 oracle 结合。</li>
+<li>如何把 NIST SSDF、SLSA、OWASP LLM Top 10 落到日常开发流水线。</li>
+<li>如何在工业软件和机器人系统中设计 human-in-the-loop。</li>
+<li>如何度量 AI 对质量、交付速度和运维稳定性的真实影响。</li>
+</ul>
+<h2 id="持续研究日志"><a href="#持续研究日志" class="headerlink" title="持续研究日志"></a>持续研究日志</h2><h3 id="2026-06-30：初始判断"><a href="#2026-06-30：初始判断" class="headerlink" title="2026-06-30：初始判断"></a>2026-06-30：初始判断</h3><p>初始结论：AI Native 开发不应被理解成“AI 替代软件工程”，而应被理解成“AI 参与软件工程后，如何通过 SDLC、DevOps、DevSecOps 和治理机制把不确定产出变成可信交付”。</p>
+<p>当前最重要的实践问题不是 prompt，而是：</p>
+<ul>
+<li>上下文如何受控。</li>
+<li>权限如何分级。</li>
+<li>产出如何验证。</li>
+<li>证据如何保留。</li>
+<li>事故如何追溯。</li>
+<li>生产如何回滚。</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>DORA, 2025 State of DevOps Report: <a target="_blank" rel="noopener" href="https://dora.dev/research/2025/dora-report/">https://dora.dev/research/2025/dora-report/</a></li>
+<li>DORA, Balancing the Tensions of Speed and Stability in AI-assisted Software Development: <a target="_blank" rel="noopener" href="https://dora.dev/insights/balancing-ai-tensions/">https://dora.dev/insights/balancing-ai-tensions/</a></li>
+<li>GitHub Octoverse 2025: <a target="_blank" rel="noopener" href="https://github.blog/news-insights/octoverse/">https://github.blog/news-insights/octoverse/</a></li>
+<li>NIST Secure Software Development Framework, SP 800-218: <a target="_blank" rel="noopener" href="https://csrc.nist.gov/pubs/sp/800/218/final">https://csrc.nist.gov/pubs/sp/800/218/final</a></li>
+<li>NIST AI Risk Management Framework: <a target="_blank" rel="noopener" href="https://www.nist.gov/itl/ai-risk-management-framework">https://www.nist.gov/itl/ai-risk-management-framework</a></li>
+<li>OWASP Top 10 for LLM Applications 2025: <a target="_blank" rel="noopener" href="https://genai.owasp.org/llm-top-10/">https://genai.owasp.org/llm-top-10/</a></li>
+<li>SLSA: <a target="_blank" rel="noopener" href="https://slsa.dev/">https://slsa.dev/</a></li>
+<li>OpenSSF Scorecard: <a target="_blank" rel="noopener" href="https://scorecard.dev/">https://scorecard.dev/</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/qqsnote/tags/AI/" rel="tag"># AI</a>
+              <a href="/qqsnote/tags/DevOps/" rel="tag"># DevOps</a>
+              <a href="/qqsnote/tags/SDLC/" rel="tag"># SDLC</a>
+              <a href="/qqsnote/tags/DevSecOps/" rel="tag"># DevSecOps</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2026/06/23/Docker-Industrial-Hardware-Release/" rel="prev" title="Docker发布工业硬件项目的流程和误区">
+      <i class="fa fa-chevron-left"></i> Docker发布工业硬件项目的流程和误区
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2026/07/01/Docker-Web-Application-Release/" rel="next" title="常规Web应用的Docker发布流程">
+      常规Web应用的Docker发布流程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E4%B8%8E%E9%97%AE%E9%A2%98%E4%BF%AE%E6%AD%A3"><span class="nav-number">1.</span> <span class="nav-text">背景与问题修正</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%88%A4%E6%96%AD"><span class="nav-number">2.</span> <span class="nav-text">核心判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%AE%9E%E5%9F%BA%E7%BA%BF"><span class="nav-number">3.</span> <span class="nav-text">事实基线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AI-Native-SDLC-%E6%A1%86%E6%9E%B6"><span class="nav-number">4.</span> <span class="nav-text">AI Native SDLC 框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E9%98%B6%E6%AE%B5"><span class="nav-number">4.1.</span> <span class="nav-text">需求阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E9%98%B6%E6%AE%B5"><span class="nav-number">4.2.</span> <span class="nav-text">设计阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E9%98%B6%E6%AE%B5"><span class="nav-number">4.3.</span> <span class="nav-text">编码阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Review-%E9%98%B6%E6%AE%B5"><span class="nav-number">4.4.</span> <span class="nav-text">Review 阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5"><span class="nav-number">4.5.</span> <span class="nav-text">测试阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DevSecOps-%E9%98%B6%E6%AE%B5"><span class="nav-number">4.6.</span> <span class="nav-text">DevSecOps 阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E5%B8%83%E9%98%B6%E6%AE%B5"><span class="nav-number">4.7.</span> <span class="nav-text">发布阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E7%BB%B4%E9%98%B6%E6%AE%B5"><span class="nav-number">4.8.</span> <span class="nav-text">运维阶段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E4%B8%8E%E5%8F%97%E6%8E%A7%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">5.</span> <span class="nav-text">自动化与受控的边界</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%A6%E9%87%8F%E4%BD%93%E7%B3%BB"><span class="nav-number">6.</span> <span class="nav-text">度量体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5%E8%B7%AF%E7%BA%BF"><span class="nav-number">7.</span> <span class="nav-text">实践路线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%88%B0-4-%E5%91%A8%EF%BC%9A%E5%BB%BA%E7%AB%8B%E5%9F%BA%E7%BA%BF"><span class="nav-number">7.1.</span> <span class="nav-text">2 到 4 周：建立基线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%88%B0-2-%E4%B8%AA%E6%9C%88%EF%BC%9A%E5%8F%97%E6%8E%A7%E8%AF%95%E7%82%B9"><span class="nav-number">7.2.</span> <span class="nav-text">1 到 2 个月：受控试点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%88%B0-6-%E4%B8%AA%E6%9C%88%EF%BC%9A%E5%BB%BA%E8%AE%BE-AI-Engineering-Platform"><span class="nav-number">7.3.</span> <span class="nav-text">3 到 6 个月：建设 AI Engineering Platform</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E4%B8%AA%E4%BA%BA%E6%8A%80%E6%9C%AF%E6%96%B9%E5%90%91%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">8.</span> <span class="nav-text">与个人技术方向的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E7%BB%AD%E7%A0%94%E7%A9%B6%E9%97%AE%E9%A2%98"><span class="nav-number">9.</span> <span class="nav-text">后续研究问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%81%E7%BB%AD%E7%A0%94%E7%A9%B6%E6%97%A5%E5%BF%97"><span class="nav-number">10.</span> <span class="nav-text">持续研究日志</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2026-06-30%EF%BC%9A%E5%88%9D%E5%A7%8B%E5%88%A4%E6%96%AD"><span class="nav-number">10.1.</span> <span class="nav-text">2026-06-30：初始判断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">11.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">402</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">204</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3D/" style="font-size: 13.2px; color: #cfcfcf">3D</a> <a href="/qqsnote/tags/3DGS/" style="font-size: 12px; color: #ccc">3DGS</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 24px; color: #eee">AI</a> <a href="/qqsnote/tags/AI-Coding/" style="font-size: 12px; color: #ccc">AI Coding</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 28.8px; color: #fcfcfc">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.2px; color: #cfcfcf">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.2px; color: #f1f1f1">Azure</a> <a href="/qqsnote/tags/BVH/" style="font-size: 12px; color: #ccc">BVH</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C++</a> <a href="/qqsnote/tags/CAD/" style="font-size: 12px; color: #ccc">CAD</a> <a href="/qqsnote/tags/CI-CD/" style="font-size: 12px; color: #ccc">CI/CD</a> <a href="/qqsnote/tags/CSS/" style="font-size: 18px; color: #ddd">CSS</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/Context-Engineering/" style="font-size: 12px; color: #ccc">Context Engineering</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 18px; color: #ddd">DevOps</a> <a href="/qqsnote/tags/DevSecOps/" style="font-size: 12px; color: #ccc">DevSecOps</a> <a href="/qqsnote/tags/Digital-Twin/" style="font-size: 12px; color: #ccc">Digital Twin</a> <a href="/qqsnote/tags/Docker/" style="font-size: 18px; color: #ddd">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.6px; color: #d6d6d6">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.2px; color: #cfcfcf">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/GitHub/" style="font-size: 12px; color: #ccc">GitHub</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/HMI/" style="font-size: 12px; color: #ccc">HMI</a> <a href="/qqsnote/tags/Halcon/" style="font-size: 12px; color: #ccc">Halcon</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.2px; color: #cfcfcf">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 19.2px; color: #e0e0e0">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/Knowledge-Graph/" style="font-size: 12px; color: #ccc">Knowledge Graph</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.4px; color: #d3d3d3">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.8px; color: #ebebeb">Linux</a> <a href="/qqsnote/tags/MCP/" style="font-size: 12px; color: #ccc">MCP</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MVVM/" style="font-size: 12px; color: #ccc">MVVM</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.2px; color: #cfcfcf">Markdown</a> <a href="/qqsnote/tags/Modbus/" style="font-size: 12px; color: #ccc">Modbus</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 16.8px; color: #dadada">Node.js</a> <a href="/qqsnote/tags/OCCT/" style="font-size: 12px; color: #ccc">OCCT</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.2px; color: #cfcfcf">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 20.4px; color: #e4e4e4">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 14.4px; color: #d3d3d3">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PLC/" style="font-size: 13.2px; color: #cfcfcf">PLC</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Prism/" style="font-size: 12px; color: #ccc">Prism</a> <a href="/qqsnote/tags/Proxy/" style="font-size: 12px; color: #ccc">Proxy</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 25.2px; color: #f1f1f1">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/ROS2/" style="font-size: 14.4px; color: #d3d3d3">ROS2</a> <a href="/qqsnote/tags/RS-485/" style="font-size: 12px; color: #ccc">RS-485</a> <a href="/qqsnote/tags/React/" style="font-size: 20.4px; color: #e4e4e4">React</a> <a href="/qqsnote/tags/Rust/" style="font-size: 12px; color: #ccc">Rust</a> <a href="/qqsnote/tags/SDLC/" style="font-size: 12px; color: #ccc">SDLC</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.4px; color: #d3d3d3">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Squid/" style="font-size: 12px; color: #ccc">Squid</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 22.8px; color: #ebebeb">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.2px; color: #cfcfcf">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/URDF/" style="font-size: 12px; color: #ccc">URDF</a> <a href="/qqsnote/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/qqsnote/tags/VLA/" style="font-size: 13.2px; color: #cfcfcf">VLA</a> <a href="/qqsnote/tags/VTK/" style="font-size: 12px; color: #ccc">VTK</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 15.6px; color: #d6d6d6">WPF</a> <a href="/qqsnote/tags/Web/" style="font-size: 12px; color: #ccc">Web</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21.6px; color: #e7e7e7">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27.6px; color: #f8f8f8">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/dify/" style="font-size: 12px; color: #ccc">dify</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.2px; color: #cfcfcf">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 26.4px; color: #f5f5f5">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.2px; color: #cfcfcf">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 15.6px; color: #d6d6d6">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 18px; color: #ddd">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.4px; color: #d3d3d3">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14.4px; color: #d3d3d3">上位机</a> <a href="/qqsnote/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">传感器</a> <a href="/qqsnote/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/" style="font-size: 12px; color: #ccc">光线追踪</a> <a href="/qqsnote/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/" style="font-size: 14.4px; color: #d3d3d3">具身智能</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.6px; color: #d6d6d6">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.2px; color: #cfcfcf">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%9B%E5%85%83%E6%95%B0/" style="font-size: 12px; color: #ccc">四元数</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" style="font-size: 12px; color: #ccc">图像分割</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 20.4px; color: #e4e4e4">图形学</a> <a href="/qqsnote/tags/%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" style="font-size: 18px; color: #ddd">坐标变换</a> <a href="/qqsnote/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" style="font-size: 12px; color: #ccc">多模态</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.2px; color: #cfcfcf">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 21.6px; color: #e7e7e7">学习笔记</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89/" style="font-size: 13.2px; color: #cfcfcf">工业视觉</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" style="font-size: 14.4px; color: #d3d3d3">工业软件</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" style="font-size: 12px; color: #ccc">工业通信</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.4px; color: #d3d3d3">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.2px; color: #cfcfcf">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%89%8B%E7%9C%BC%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">手眼标定</a> <a href="/qqsnote/tags/%E6%89%A7%E8%A1%8C%E5%99%A8/" style="font-size: 12px; color: #ccc">执行器</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 15.6px; color: #d6d6d6">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%97%8B%E8%BD%AC/" style="font-size: 12px; color: #ccc">旋转</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 12px; color: #ccc">机器人</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A1%AC%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人硬件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%AF%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人软件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89/" style="font-size: 14.4px; color: #d3d3d3">机器视觉</a> <a href="/qqsnote/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 13.2px; color: #cfcfcf">机械臂</a> <a href="/qqsnote/tags/%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">标定</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/" style="font-size: 12px; color: #ccc">桌面应用</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E6%AF%94%E4%BE%8B%E9%98%80/" style="font-size: 12px; color: #ccc">比例阀</a> <a href="/qqsnote/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">深度学习</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.2px; color: #cfcfcf">环境变量</a> <a href="/qqsnote/tags/%E7%94%9F%E4%BF%A1%E5%88%86%E6%9E%90/" style="font-size: 12px; color: #ccc">生信分析</a> <a href="/qqsnote/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">目标检测</a> <a href="/qqsnote/tags/%E7%9B%B8%E6%9C%BA%E6%A0%87%E5%AE%9A/" style="font-size: 13.2px; color: #cfcfcf">相机标定</a> <a href="/qqsnote/tags/%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">碰撞检测</a> <a href="/qqsnote/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 12px; color: #ccc">神经网络</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14.4px; color: #d3d3d3">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%8E%A7%E5%88%B6/" style="font-size: 14.4px; color: #d3d3d3">自动化控制</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E5%89%AA%E8%BE%91/" style="font-size: 12px; color: #ccc">视频剪辑</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" style="font-size: 13.2px; color: #cfcfcf">计算机视觉</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 19.2px; color: #e0e0e0">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 18px; color: #ddd">读书</a> <a href="/qqsnote/tags/%E8%B4%A2%E7%BB%8F/" style="font-size: 12px; color: #ccc">财经</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

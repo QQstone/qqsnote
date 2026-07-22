@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="背景以前用 Docker 部署 Jenkins、MySQL 这类成熟 SaaS 服务时，主要工作是：  找到官方镜像 配置端口和 volume 设置环境变量 通过 docker run 或 docker compose 启动  这种经验很有价值，但它容易造成一个误解：Docker 只是把程序放进镜像里，然后到处运行。 对于工业硬件项目，这个理解不够。以这次项目为例，它不是单纯的 Web 服务，而是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker发布工业硬件项目的流程和误区">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2026/06/23/Docker-Industrial-Hardware-Release/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="背景以前用 Docker 部署 Jenkins、MySQL 这类成熟 SaaS 服务时，主要工作是：  找到官方镜像 配置端口和 volume 设置环境变量 通过 docker run 或 docker compose 启动  这种经验很有价值，但它容易造成一个误解：Docker 只是把程序放进镜像里，然后到处运行。 对于工业硬件项目，这个理解不够。以这次项目为例，它不是单纯的 Web 服务，而是">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-06-23T03:06:55.000Z">
+<meta property="article:modified_time" content="2026-07-21T10:20:51.210Z">
+<meta property="article:author" content="QQs">
+<meta property="article:tag" content="DevOps">
+<meta property="article:tag" content="工业软件">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Rust">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2026/06/23/Docker-Industrial-Hardware-Release/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+
+  <title>Docker发布工业硬件项目的流程和误区 | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-graph">
+
+    <a href="/qqsnote/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/06/23/Docker-Industrial-Hardware-Release/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Docker发布工业硬件项目的流程和误区
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-06-23 11:06:55" itemprop="dateCreated datePublished" datetime="2026-06-23T11:06:55+08:00">2026-06-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-07-21 18:20:51" itemprop="dateModified" datetime="2026-07-21T18:20:51+08:00">2026-07-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">工业软件</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>以前用 Docker 部署 Jenkins、MySQL 这类成熟 SaaS 服务时，主要工作是：</p>
+<ul>
+<li>找到官方镜像</li>
+<li>配置端口和 volume</li>
+<li>设置环境变量</li>
+<li>通过 <code>docker run</code> 或 <code>docker compose</code> 启动</li>
+</ul>
+<p>这种经验很有价值，但它容易造成一个误解：Docker 只是把程序放进镜像里，然后到处运行。</p>
+<p>对于工业硬件项目，这个理解不够。以这次项目为例，它不是单纯的 Web 服务，而是 Rust 后端、前端、工业硬件 SDK、机器人 bridge、动态库和现场网络共同组成的系统。Docker 发布的难点不在 Dockerfile 语法本身，而在下面这些东西是否一致：</p>
+<ul>
+<li>目标 OS</li>
+<li>CPU 架构</li>
+<li>原生 SDK</li>
+<li>动态库路径</li>
+<li>Cargo feature</li>
+<li>Python bridge 环境</li>
+<li>硬件访问方式</li>
+<li>运行时配置</li>
+<li>现场网络和权限</li>
+</ul>
+<h2 id="先给结论"><a href="#先给结论" class="headerlink" title="先给结论"></a>先给结论</h2><p>Docker 镜像不是跨平台安装包。Linux image 运行 Linux binary，Windows image 运行 Windows binary。</p>
+<p>当前项目快照中，根目录 Dockerfile 是 Linux 容器镜像，不是 Windows 发布包。它不能直接加载 Windows MechMind SDK DLL，也不能直接复用 Windows 上的 Python/Agilebot bridge 环境。</p>
+<p>如果目标环境是：</p>
+<ul>
+<li>Windows</li>
+<li>Agilebot</li>
+<li>MechMind</li>
+</ul>
+<p>更稳妥的第一条生产发布路线是 Windows 原生发布包，而不是先走 Docker。</p>
+<p>Docker 版本更适合单独作为 Linux 工控机部署线维护，前提是 MechMind Linux SDK、Agilebot bridge、网络发现和硬件访问都已经在容器内验证过。</p>
+<h2 id="常见误区"><a href="#常见误区" class="headerlink" title="常见误区"></a>常见误区</h2><h3 id="误区一：Docker-可以天然跨平台"><a href="#误区一：Docker-可以天然跨平台" class="headerlink" title="误区一：Docker 可以天然跨平台"></a>误区一：Docker 可以天然跨平台</h3><p>Docker 的跨平台能力经常被误解。</p>
+<p>容器共享宿主机内核，它不是完整虚拟机。Linux container 使用 Linux 内核，Windows container 使用 Windows 内核。</p>
+<p>在 Windows 上使用 Docker Desktop 跑 Linux container，本质上是运行在一个 Linux VM 里，不等于 Windows 原生环境。因此：</p>
+<ul>
+<li>Linux container 不能直接加载 Windows DLL</li>
+<li>Linux container 不能直接使用 Windows Python 虚拟环境</li>
+<li>Windows 上的 USB、GigE 相机发现、网卡广播、厂商服务发现，在 Linux VM 中可能有额外限制</li>
+</ul>
+<h3 id="误区二：编译通过就代表运行时可用"><a href="#误区二：编译通过就代表运行时可用" class="headerlink" title="误区二：编译通过就代表运行时可用"></a>误区二：编译通过就代表运行时可用</h3><p>工业项目经常依赖原生动态库。编译通过只说明构建阶段找到了头文件、链接库或 feature 配置，不代表运行时一定能找到对应动态库。</p>
+<p>例如：</p>
+<ul>
+<li>MechMind 是厂商 C++ SDK FFI，容器中必须安装对应平台的 SDK 和动态库</li>
+<li>ONNX Runtime 需要运行时动态库路径，启用 <code>onnx</code> feature 不等于容器内已经能加载 ONNX Runtime</li>
+<li>Python bridge 需要 Python 版本、依赖包、脚本路径和运行权限一致</li>
+</ul>
+<h3 id="误区三：镜像里有程序就能控制硬件"><a href="#误区三：镜像里有程序就能控制硬件" class="headerlink" title="误区三：镜像里有程序就能控制硬件"></a>误区三：镜像里有程序就能控制硬件</h3><p>硬件访问还涉及网络、权限和现场拓扑。</p>
+<p>相机、机器人、PLC、工控机之间通常依赖固定 IP、网段、广播发现、端口白名单、厂商守护进程和设备驱动。容器部署时，需要额外确认：</p>
+<ul>
+<li>容器网络模式是否能访问设备网段</li>
+<li>是否需要 <code>host</code> network</li>
+<li>是否需要挂载 USB 或设备节点</li>
+<li>是否需要厂商 license 或运行时服务</li>
+<li>容器内路径是否和配置文件一致</li>
+</ul>
+<h3 id="误区四：latest-可以作为生产版本"><a href="#误区四：latest-可以作为生产版本" class="headerlink" title="误区四：latest 可以作为生产版本"></a>误区四：<code>latest</code> 可以作为生产版本</h3><p><code>latest</code> 适合临时测试，不适合生产部署和回滚。</p>
+<p>生产版本应该使用不可变 tag，例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0.6.1-mechmind-a1b2c3d</span><br><span class="line">runtime-20260623-mechmind-a1b2c3d</span><br></pre></td></tr></table></figure>
+<p>至少应该能从 tag 中看出：</p>
+<ul>
+<li>业务版本</li>
+<li>feature profile</li>
+<li>git sha</li>
+</ul>
+<h2 id="发布前确认"><a href="#发布前确认" class="headerlink" title="发布前确认"></a>发布前确认</h2><h3 id="确认发布-profile"><a href="#确认发布-profile" class="headerlink" title="确认发布 profile"></a>确认发布 profile</h3><p>当前项目快照中，可以按下面方式理解 profile：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>profile</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>default</td>
+<td>当前 Dockerfile 默认，约等于 <code>step + onnx</code></td>
+</tr>
+<tr>
+<td>mechmind</td>
+<td>需要启用 <code>step,onnx,mechmind</code></td>
+</tr>
+<tr>
+<td>full</td>
+<td>会启用 <code>mechmind + galaxy + realsense + step + onnx</code>，不建议只为了 MechMind 直接用 full</td>
+</tr>
+<tr>
+<td>agilebot</td>
+<td>不是单独 Cargo feature，但需要 bridge 脚本、Python 环境和网络连通</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>这里要区分两件事：</p>
+<ul>
+<li>Cargo feature 决定 Rust 编译哪些能力</li>
+<li>运行时依赖决定服务启动后能不能真的连接设备</li>
+</ul>
+<p><code>agilebot-driver</code> 如果是常驻依赖，就不能按 feature 来理解。它真正的部署风险在 bridge 是否能运行、路径是否一致、机器人网络是否可达。</p>
+<h3 id="确认镜像目标平台"><a href="#确认镜像目标平台" class="headerlink" title="确认镜像目标平台"></a>确认镜像目标平台</h3><p>发布前先明确目标：</p>
+<ul>
+<li>Linux image：基于 Debian/Rust 构建 Linux binary</li>
+<li>Windows image：需要 Windows container base、MSVC Rust toolchain、Windows SDK 路径</li>
+<li>Windows 原生包：输出 <code>.exe</code>、SDK、配置模板和服务安装脚本</li>
+</ul>
+<p>当前项目已有的是 Linux image 路线，不等于已经有 Windows Docker 发布路线。</p>
+<h3 id="确认-Dockerfile-能力"><a href="#确认-Dockerfile-能力" class="headerlink" title="确认 Dockerfile 能力"></a>确认 Dockerfile 能力</h3><p>按这次 AI agent 对项目的描述，当前 Dockerfile 有几个重点：</p>
+<ul>
+<li>安装了基础构建依赖和 <code>ca-certificates</code></li>
+<li>没有安装 MechMind SDK</li>
+<li>没有安装 Agilebot bridge 的 Python 依赖</li>
+<li>没有把 feature 参数做成 <code>ARG</code></li>
+<li>固定执行 <code>cargo build --release --bin runtime-service --bin runtime-cli</code></li>
+<li>不会自动启用 <code>mechmind</code></li>
+</ul>
+<p>如果要让镜像支持不同发布 profile，Dockerfile 通常需要把 feature 做成构建参数：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ARG</span> CARGO_FEATURES=step,onnx</span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> cargo build --release \</span></span><br><span class="line"><span class="bash">  --bin runtime-service \</span></span><br><span class="line"><span class="bash">  --bin runtime-cli \</span></span><br><span class="line"><span class="bash">  --features <span class="string">&quot;<span class="variable">$&#123;CARGO_FEATURES&#125;</span>&quot;</span></span></span><br></pre></td></tr></table></figure>
+<p>如果启用 MechMind，还需要处理 SDK：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 示例：具体路径以厂商 Linux SDK 为准</span></span><br><span class="line"><span class="keyword">ENV</span> LD_LIBRARY_PATH=/opt/mechmind/lib:$&#123;LD_LIBRARY_PATH&#125;</span><br></pre></td></tr></table></figure>
+<p>这不是固定答案，只是提醒：原生 SDK 必须进入镜像或通过受控方式挂载，不能只改 Rust feature。</p>
+<h2 id="Docker-发布流程"><a href="#Docker-发布流程" class="headerlink" title="Docker 发布流程"></a>Docker 发布流程</h2><h3 id="1-冻结发布信息"><a href="#1-冻结发布信息" class="headerlink" title="1. 冻结发布信息"></a>1. 冻结发布信息</h3><p>发布负责人先记录：</p>
+<ul>
+<li>git commit sha</li>
+<li>业务版本号</li>
+<li>Cargo feature profile</li>
+<li>目标 OS</li>
+<li>目标 CPU 架构</li>
+<li>SDK 版本</li>
+<li>配置文件版本</li>
+<li>是否包含 Agilebot bridge</li>
+<li>是否包含 MechMind SDK</li>
+</ul>
+<p>这一步的目的不是写文档好看，而是为了出问题时能复现。</p>
+<h3 id="2-构建镜像"><a href="#2-构建镜像" class="headerlink" title="2. 构建镜像"></a>2. 构建镜像</h3><p>基础构建：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t microi-runtime:&lt;git-sha&gt; .</span><br></pre></td></tr></table></figure>
+<p>启用 MechMind 的构建可以类似：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker build \</span><br><span class="line">  --build-arg CARGO_FEATURES=<span class="string">&quot;step,onnx,mechmind&quot;</span> \</span><br><span class="line">  -t microi-runtime:0.6.1-mechmind-&lt;git-sha&gt; \</span><br><span class="line">  .</span><br></pre></td></tr></table></figure>
+<p>如果项目使用 GitLab CI，生产构建应优先使用 CI job，而不是个人电脑手工构建。CI 可以保证构建环境、镜像 tag、推送路径和日志可追溯。</p>
+<h3 id="3-推送-registry"><a href="#3-推送-registry" class="headerlink" title="3. 推送 registry"></a>3. 推送 registry</h3><p>CI 当前会推 GitLab registry：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$&#123;CI_REGISTRY_IMAGE&#125;:$&#123;CI_COMMIT_SHORT_SHA&#125;</span><br><span class="line">$&#123;CI_REGISTRY_IMAGE&#125;:latest</span><br></pre></td></tr></table></figure>
+<p>实际部署时不要只依赖 <code>latest</code>。建议至少保留：</p>
+<ul>
+<li>git sha tag</li>
+<li>业务版本 tag</li>
+<li>feature profile tag</li>
+</ul>
+<p>Harbor 可以作为基础镜像缓存或企业镜像仓库，但不改变一个原则：生产部署要使用不可变 tag。</p>
+<h3 id="4-准备部署配置"><a href="#4-准备部署配置" class="headerlink" title="4. 准备部署配置"></a>4. 准备部署配置</h3><p>容器通常需要暴露：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">50051 gRPC</span><br><span class="line">50052 HTTP / WebSocket / metrics</span><br></pre></td></tr></table></figure>
+<p>建议挂载配置：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/microi/runtime.toml</span><br></pre></td></tr></table></figure>
+<p>建议挂载运行数据和日志：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/var/run/microi</span><br><span class="line">/var/log/microi</span><br></pre></td></tr></table></figure>
+<p>常见环境变量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MICROI_CONFIG=/etc/microi/runtime.toml</span><br><span class="line">RUST_LOG=info,runtime_service=debug</span><br></pre></td></tr></table></figure>
+<p>配置文件要把路径写成容器内路径，而不是宿主机路径。</p>
+<h3 id="5-启动服务"><a href="#5-启动服务" class="headerlink" title="5. 启动服务"></a>5. 启动服务</h3><p>可以通过 compose 或现场部署系统启动。重点不是命令形式，而是启动前确认：</p>
+<ul>
+<li>image tag 是否正确</li>
+<li>config 是否是目标现场配置</li>
+<li>volume 是否挂载到正确路径</li>
+<li>网络模式是否能访问硬件设备</li>
+<li>SDK 动态库是否能被加载</li>
+<li>bridge 脚本是否在容器内可执行</li>
+</ul>
+<h3 id="6-验证服务"><a href="#6-验证服务" class="headerlink" title="6. 验证服务"></a>6. 验证服务</h3><p>验证要从只读能力开始，不要一上来发运动指令。</p>
+<p>基础检查：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://host:50052/api/status</span><br></pre></td></tr></table></figure>
+<p>继续确认：</p>
+<ul>
+<li>日志里 enabled features 是否包含目标 profile，例如 <code>mechmind</code></li>
+<li>设备列表中 Agilebot 和 MechMind 是否注册成功</li>
+<li>MechMind 是否能建立只读连接</li>
+<li>MechMind 是否能执行单帧 capture</li>
+<li>Agilebot 是否能读取状态</li>
+<li>WebSocket 或 HTTP 状态是否正常刷新</li>
+<li>metrics 或日志中是否出现 SDK 加载错误</li>
+</ul>
+<p>机器人验证顺序建议：</p>
+<ol>
+<li>服务启动</li>
+<li>只读状态读取</li>
+<li>设备连接状态</li>
+<li>坐标、限位、急停状态确认</li>
+<li>人工确认安全环境</li>
+<li>再考虑低风险运动命令</li>
+</ol>
+<h3 id="7-回滚"><a href="#7-回滚" class="headerlink" title="7. 回滚"></a>7. 回滚</h3><p>回滚应该切换 image tag，不要临时改容器内部文件。</p>
+<p>回滚后重新验证：</p>
+<ul>
+<li><code>/api/status</code></li>
+<li>设备注册</li>
+<li>MechMind capture</li>
+<li>Agilebot read-only state probe</li>
+<li>日志中的 feature profile 和 SDK 版本</li>
+</ul>
+<p>数据卷和现场配置一般不要跟着镜像回滚，除非本次发布明确包含配置 schema 变更，并且准备了配置回滚方案。</p>
+<h2 id="当前项目暴露出的维护点"><a href="#当前项目暴露出的维护点" class="headerlink" title="当前项目暴露出的维护点"></a>当前项目暴露出的维护点</h2><p>这次问答中提到两个很典型的 Docker 漂移问题：</p>
+<h3 id="compose-引用的-Dockerfile-路径漂移"><a href="#compose-引用的-Dockerfile-路径漂移" class="headerlink" title="compose 引用的 Dockerfile 路径漂移"></a>compose 引用的 Dockerfile 路径漂移</h3><p><code>deploy/docker-compose.yml</code> 引用的是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deploy/Dockerfile</span><br></pre></td></tr></table></figure>
+<p>但仓库实际只有根目录 Dockerfile。</p>
+<p>这类问题说明 compose 文件和真实构建入口已经漂移。发布负责人需要决定：</p>
+<ul>
+<li>把 Dockerfile 移到 <code>deploy/</code></li>
+<li>修改 compose 指向根目录 Dockerfile</li>
+<li>或者统一由 CI 构建镜像，compose 只负责拉取镜像</li>
+</ul>
+<h3 id="healthcheck-依赖镜像中不存在的工具"><a href="#healthcheck-依赖镜像中不存在的工具" class="headerlink" title="healthcheck 依赖镜像中不存在的工具"></a>healthcheck 依赖镜像中不存在的工具</h3><p>compose healthcheck 使用了 <code>curl</code>，但 runtime image 当前没有安装 <code>curl</code>。</p>
+<p>解决方式有两类：</p>
+<ul>
+<li>在 runtime image 中安装 <code>curl</code></li>
+<li>改用镜像内已经存在的健康检查工具或内置二进制</li>
+</ul>
+<p>健康检查不是装饰项。工业软件部署中，健康检查会影响重启、告警、回滚和现场判断。</p>
+<h2 id="Windows-Agilebot-MechMind-的推荐路线"><a href="#Windows-Agilebot-MechMind-的推荐路线" class="headerlink" title="Windows + Agilebot + MechMind 的推荐路线"></a>Windows + Agilebot + MechMind 的推荐路线</h2><p>如果目标是 Windows 现场，并且需要 Agilebot + MechMind，建议先做 Windows 原生发布包：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">runtime-service.exe</span><br><span class="line">runtime-cli.exe</span><br><span class="line">MechMind Windows SDK</span><br><span class="line">Agilebot bridge</span><br><span class="line">Python 运行环境或依赖锁定</span><br><span class="line">runtime.toml 配置模板</span><br><span class="line">Windows service 安装脚本</span><br><span class="line">日志目录</span><br><span class="line">版本说明</span><br><span class="line">回滚说明</span><br></pre></td></tr></table></figure>
+<p>这条路线更符合 Windows 厂商 SDK 和现场调试习惯。</p>
+<p>Docker 版本可以作为 Linux 工控机部署线维护，但要单独验证：</p>
+<ul>
+<li>MechMind Linux SDK</li>
+<li>Agilebot bridge 的 Linux 可用性</li>
+<li>容器网络访问设备的稳定性</li>
+<li>动态库路径</li>
+<li>Python 依赖</li>
+<li>权限、license 和现场网段</li>
+</ul>
+<p>不要把 Windows 原生部署和 Linux Docker 部署混成一个发布方案。</p>
+<h2 id="发布负责人检查清单"><a href="#发布负责人检查清单" class="headerlink" title="发布负责人检查清单"></a>发布负责人检查清单</h2><p>发布前：</p>
+<ul>
+<li>是否明确目标 OS 和 CPU 架构</li>
+<li>是否明确 Cargo features</li>
+<li>是否明确 SDK 版本</li>
+<li>是否明确 image tag</li>
+<li>是否避免只用 <code>latest</code></li>
+<li>是否确认 Dockerfile 安装了运行时依赖</li>
+<li>是否确认 compose 的 Dockerfile 路径正确</li>
+<li>是否确认 healthcheck 命令可用</li>
+<li>是否确认配置文件使用容器内路径</li>
+<li>是否确认硬件网络可达</li>
+</ul>
+<p>发布后：</p>
+<ul>
+<li>服务是否启动</li>
+<li><code>/api/status</code> 是否正常</li>
+<li>日志中 feature profile 是否正确</li>
+<li>动态库是否加载成功</li>
+<li>MechMind 是否能只读连接和 capture</li>
+<li>Agilebot 是否能只读读取状态</li>
+<li>前端或 API 是否能看到设备状态</li>
+<li>是否有明确回滚 tag</li>
+</ul>
+<h2 id="这件事的项目价值"><a href="#这件事的项目价值" class="headerlink" title="这件事的项目价值"></a>这件事的项目价值</h2><p>对工业软件和机器人应用开发来说，Docker 发布能力不是会写几行 Dockerfile，而是能把软件、SDK、设备、网络、配置和回滚组织成一条可靠发布链路。</p>
+<p>这类能力可以证明的不只是 DevOps 基础，而是系统集成能力：</p>
+<ul>
+<li>知道容器边界</li>
+<li>知道原生 SDK 的限制</li>
+<li>知道硬件访问不是普通 Web API</li>
+<li>知道 feature、配置和运行时依赖要对齐</li>
+<li>知道发布和回滚要可追溯</li>
+</ul>
+<p>这比单纯说“我部署过 Docker”更接近工业机器人项目里真正需要的工程能力。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/qqsnote/tags/DevOps/" rel="tag"># DevOps</a>
+              <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" rel="tag"># 工业软件</a>
+              <a href="/qqsnote/tags/Docker/" rel="tag"># Docker</a>
+              <a href="/qqsnote/tags/Rust/" rel="tag"># Rust</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2026/06/08/Industrial-Proportional-Valve-Control/" rel="prev" title="工业比例阀控制系统设计笔记">
+      <i class="fa fa-chevron-left"></i> 工业比例阀控制系统设计笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2026/06/30/AI-Native-DevOps-SDLC/" rel="next" title="AI Native DevOps与受控软件开发生命周期">
+      AI Native DevOps与受控软件开发生命周期 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E7%BB%99%E7%BB%93%E8%AE%BA"><span class="nav-number">2.</span> <span class="nav-text">先给结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E8%AF%AF%E5%8C%BA"><span class="nav-number">3.</span> <span class="nav-text">常见误区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AF%E5%8C%BA%E4%B8%80%EF%BC%9ADocker-%E5%8F%AF%E4%BB%A5%E5%A4%A9%E7%84%B6%E8%B7%A8%E5%B9%B3%E5%8F%B0"><span class="nav-number">3.1.</span> <span class="nav-text">误区一：Docker 可以天然跨平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AF%E5%8C%BA%E4%BA%8C%EF%BC%9A%E7%BC%96%E8%AF%91%E9%80%9A%E8%BF%87%E5%B0%B1%E4%BB%A3%E8%A1%A8%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8F%AF%E7%94%A8"><span class="nav-number">3.2.</span> <span class="nav-text">误区二：编译通过就代表运行时可用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AF%E5%8C%BA%E4%B8%89%EF%BC%9A%E9%95%9C%E5%83%8F%E9%87%8C%E6%9C%89%E7%A8%8B%E5%BA%8F%E5%B0%B1%E8%83%BD%E6%8E%A7%E5%88%B6%E7%A1%AC%E4%BB%B6"><span class="nav-number">3.3.</span> <span class="nav-text">误区三：镜像里有程序就能控制硬件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AF%E5%8C%BA%E5%9B%9B%EF%BC%9Alatest-%E5%8F%AF%E4%BB%A5%E4%BD%9C%E4%B8%BA%E7%94%9F%E4%BA%A7%E7%89%88%E6%9C%AC"><span class="nav-number">3.4.</span> <span class="nav-text">误区四：latest 可以作为生产版本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E5%B8%83%E5%89%8D%E7%A1%AE%E8%AE%A4"><span class="nav-number">4.</span> <span class="nav-text">发布前确认</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4%E5%8F%91%E5%B8%83-profile"><span class="nav-number">4.1.</span> <span class="nav-text">确认发布 profile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4%E9%95%9C%E5%83%8F%E7%9B%AE%E6%A0%87%E5%B9%B3%E5%8F%B0"><span class="nav-number">4.2.</span> <span class="nav-text">确认镜像目标平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4-Dockerfile-%E8%83%BD%E5%8A%9B"><span class="nav-number">4.3.</span> <span class="nav-text">确认 Dockerfile 能力</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B"><span class="nav-number">5.</span> <span class="nav-text">Docker 发布流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%86%BB%E7%BB%93%E5%8F%91%E5%B8%83%E4%BF%A1%E6%81%AF"><span class="nav-number">5.1.</span> <span class="nav-text">1. 冻结发布信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%9E%84%E5%BB%BA%E9%95%9C%E5%83%8F"><span class="nav-number">5.2.</span> <span class="nav-text">2. 构建镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%8E%A8%E9%80%81-registry"><span class="nav-number">5.3.</span> <span class="nav-text">3. 推送 registry</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%87%86%E5%A4%87%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE"><span class="nav-number">5.4.</span> <span class="nav-text">4. 准备部署配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1"><span class="nav-number">5.5.</span> <span class="nav-text">5. 启动服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E9%AA%8C%E8%AF%81%E6%9C%8D%E5%8A%A1"><span class="nav-number">5.6.</span> <span class="nav-text">6. 验证服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E5%9B%9E%E6%BB%9A"><span class="nav-number">5.7.</span> <span class="nav-text">7. 回滚</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%93%E5%89%8D%E9%A1%B9%E7%9B%AE%E6%9A%B4%E9%9C%B2%E5%87%BA%E7%9A%84%E7%BB%B4%E6%8A%A4%E7%82%B9"><span class="nav-number">6.</span> <span class="nav-text">当前项目暴露出的维护点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#compose-%E5%BC%95%E7%94%A8%E7%9A%84-Dockerfile-%E8%B7%AF%E5%BE%84%E6%BC%82%E7%A7%BB"><span class="nav-number">6.1.</span> <span class="nav-text">compose 引用的 Dockerfile 路径漂移</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#healthcheck-%E4%BE%9D%E8%B5%96%E9%95%9C%E5%83%8F%E4%B8%AD%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E5%B7%A5%E5%85%B7"><span class="nav-number">6.2.</span> <span class="nav-text">healthcheck 依赖镜像中不存在的工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows-Agilebot-MechMind-%E7%9A%84%E6%8E%A8%E8%8D%90%E8%B7%AF%E7%BA%BF"><span class="nav-number">7.</span> <span class="nav-text">Windows + Agilebot + MechMind 的推荐路线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E5%B8%83%E8%B4%9F%E8%B4%A3%E4%BA%BA%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="nav-number">8.</span> <span class="nav-text">发布负责人检查清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E4%BB%B6%E4%BA%8B%E7%9A%84%E9%A1%B9%E7%9B%AE%E4%BB%B7%E5%80%BC"><span class="nav-number">9.</span> <span class="nav-text">这件事的项目价值</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">402</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">204</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3D/" style="font-size: 13.2px; color: #cfcfcf">3D</a> <a href="/qqsnote/tags/3DGS/" style="font-size: 12px; color: #ccc">3DGS</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 24px; color: #eee">AI</a> <a href="/qqsnote/tags/AI-Coding/" style="font-size: 12px; color: #ccc">AI Coding</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 28.8px; color: #fcfcfc">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.2px; color: #cfcfcf">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.2px; color: #f1f1f1">Azure</a> <a href="/qqsnote/tags/BVH/" style="font-size: 12px; color: #ccc">BVH</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C++</a> <a href="/qqsnote/tags/CAD/" style="font-size: 12px; color: #ccc">CAD</a> <a href="/qqsnote/tags/CI-CD/" style="font-size: 12px; color: #ccc">CI/CD</a> <a href="/qqsnote/tags/CSS/" style="font-size: 18px; color: #ddd">CSS</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/Context-Engineering/" style="font-size: 12px; color: #ccc">Context Engineering</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 18px; color: #ddd">DevOps</a> <a href="/qqsnote/tags/DevSecOps/" style="font-size: 12px; color: #ccc">DevSecOps</a> <a href="/qqsnote/tags/Digital-Twin/" style="font-size: 12px; color: #ccc">Digital Twin</a> <a href="/qqsnote/tags/Docker/" style="font-size: 18px; color: #ddd">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.6px; color: #d6d6d6">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.2px; color: #cfcfcf">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/GitHub/" style="font-size: 12px; color: #ccc">GitHub</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/HMI/" style="font-size: 12px; color: #ccc">HMI</a> <a href="/qqsnote/tags/Halcon/" style="font-size: 12px; color: #ccc">Halcon</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.2px; color: #cfcfcf">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 19.2px; color: #e0e0e0">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/Knowledge-Graph/" style="font-size: 12px; color: #ccc">Knowledge Graph</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.4px; color: #d3d3d3">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.8px; color: #ebebeb">Linux</a> <a href="/qqsnote/tags/MCP/" style="font-size: 12px; color: #ccc">MCP</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MVVM/" style="font-size: 12px; color: #ccc">MVVM</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.2px; color: #cfcfcf">Markdown</a> <a href="/qqsnote/tags/Modbus/" style="font-size: 12px; color: #ccc">Modbus</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 16.8px; color: #dadada">Node.js</a> <a href="/qqsnote/tags/OCCT/" style="font-size: 12px; color: #ccc">OCCT</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.2px; color: #cfcfcf">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 20.4px; color: #e4e4e4">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 14.4px; color: #d3d3d3">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PLC/" style="font-size: 13.2px; color: #cfcfcf">PLC</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Prism/" style="font-size: 12px; color: #ccc">Prism</a> <a href="/qqsnote/tags/Proxy/" style="font-size: 12px; color: #ccc">Proxy</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 25.2px; color: #f1f1f1">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/ROS2/" style="font-size: 14.4px; color: #d3d3d3">ROS2</a> <a href="/qqsnote/tags/RS-485/" style="font-size: 12px; color: #ccc">RS-485</a> <a href="/qqsnote/tags/React/" style="font-size: 20.4px; color: #e4e4e4">React</a> <a href="/qqsnote/tags/Rust/" style="font-size: 12px; color: #ccc">Rust</a> <a href="/qqsnote/tags/SDLC/" style="font-size: 12px; color: #ccc">SDLC</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.4px; color: #d3d3d3">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Squid/" style="font-size: 12px; color: #ccc">Squid</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 22.8px; color: #ebebeb">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.2px; color: #cfcfcf">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/URDF/" style="font-size: 12px; color: #ccc">URDF</a> <a href="/qqsnote/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/qqsnote/tags/VLA/" style="font-size: 13.2px; color: #cfcfcf">VLA</a> <a href="/qqsnote/tags/VTK/" style="font-size: 12px; color: #ccc">VTK</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 15.6px; color: #d6d6d6">WPF</a> <a href="/qqsnote/tags/Web/" style="font-size: 12px; color: #ccc">Web</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21.6px; color: #e7e7e7">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27.6px; color: #f8f8f8">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/dify/" style="font-size: 12px; color: #ccc">dify</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.2px; color: #cfcfcf">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 26.4px; color: #f5f5f5">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.2px; color: #cfcfcf">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 15.6px; color: #d6d6d6">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 18px; color: #ddd">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.4px; color: #d3d3d3">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14.4px; color: #d3d3d3">上位机</a> <a href="/qqsnote/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">传感器</a> <a href="/qqsnote/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/" style="font-size: 12px; color: #ccc">光线追踪</a> <a href="/qqsnote/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/" style="font-size: 14.4px; color: #d3d3d3">具身智能</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.6px; color: #d6d6d6">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.2px; color: #cfcfcf">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%9B%E5%85%83%E6%95%B0/" style="font-size: 12px; color: #ccc">四元数</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" style="font-size: 12px; color: #ccc">图像分割</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 20.4px; color: #e4e4e4">图形学</a> <a href="/qqsnote/tags/%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" style="font-size: 18px; color: #ddd">坐标变换</a> <a href="/qqsnote/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" style="font-size: 12px; color: #ccc">多模态</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.2px; color: #cfcfcf">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 21.6px; color: #e7e7e7">学习笔记</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89/" style="font-size: 13.2px; color: #cfcfcf">工业视觉</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" style="font-size: 14.4px; color: #d3d3d3">工业软件</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" style="font-size: 12px; color: #ccc">工业通信</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.4px; color: #d3d3d3">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.2px; color: #cfcfcf">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%89%8B%E7%9C%BC%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">手眼标定</a> <a href="/qqsnote/tags/%E6%89%A7%E8%A1%8C%E5%99%A8/" style="font-size: 12px; color: #ccc">执行器</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 15.6px; color: #d6d6d6">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%97%8B%E8%BD%AC/" style="font-size: 12px; color: #ccc">旋转</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 12px; color: #ccc">机器人</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A1%AC%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人硬件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%AF%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人软件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89/" style="font-size: 14.4px; color: #d3d3d3">机器视觉</a> <a href="/qqsnote/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 13.2px; color: #cfcfcf">机械臂</a> <a href="/qqsnote/tags/%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">标定</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/" style="font-size: 12px; color: #ccc">桌面应用</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E6%AF%94%E4%BE%8B%E9%98%80/" style="font-size: 12px; color: #ccc">比例阀</a> <a href="/qqsnote/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">深度学习</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.2px; color: #cfcfcf">环境变量</a> <a href="/qqsnote/tags/%E7%94%9F%E4%BF%A1%E5%88%86%E6%9E%90/" style="font-size: 12px; color: #ccc">生信分析</a> <a href="/qqsnote/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">目标检测</a> <a href="/qqsnote/tags/%E7%9B%B8%E6%9C%BA%E6%A0%87%E5%AE%9A/" style="font-size: 13.2px; color: #cfcfcf">相机标定</a> <a href="/qqsnote/tags/%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">碰撞检测</a> <a href="/qqsnote/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 12px; color: #ccc">神经网络</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14.4px; color: #d3d3d3">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%8E%A7%E5%88%B6/" style="font-size: 14.4px; color: #d3d3d3">自动化控制</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E5%89%AA%E8%BE%91/" style="font-size: 12px; color: #ccc">视频剪辑</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" style="font-size: 13.2px; color: #cfcfcf">计算机视觉</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 19.2px; color: #e0e0e0">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 18px; color: #ddd">读书</a> <a href="/qqsnote/tags/%E8%B4%A2%E7%BB%8F/" style="font-size: 12px; color: #ccc">财经</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

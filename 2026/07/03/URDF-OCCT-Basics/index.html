@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="背景在机器人数字孪生、运动规划可视化、碰撞检测和工业仿真中，经常会遇到两类模型：  机器人结构模型：描述机器人有哪些连杆、关节、坐标系、关节轴、关节限位。 CAD 几何模型：描述零件真实形状、曲面、实体、装配关系、STEP&#x2F;IGES 等工程格式。  URDF 和 OCCT 分别对应这两类问题。 一句话理解：  URDF 负责“机器人是什么结构、怎么运动”；OCCT 负责“几何实体是什么形状、如何">
+<meta property="og:type" content="article">
+<meta property="og:title" content="URDF 与 OCCT 基础知识">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2026/07/03/URDF-OCCT-Basics/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="背景在机器人数字孪生、运动规划可视化、碰撞检测和工业仿真中，经常会遇到两类模型：  机器人结构模型：描述机器人有哪些连杆、关节、坐标系、关节轴、关节限位。 CAD 几何模型：描述零件真实形状、曲面、实体、装配关系、STEP&#x2F;IGES 等工程格式。  URDF 和 OCCT 分别对应这两类问题。 一句话理解：  URDF 负责“机器人是什么结构、怎么运动”；OCCT 负责“几何实体是什么形状、如何">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-07-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-21T10:20:51.212Z">
+<meta property="article:author" content="QQs">
+<meta property="article:tag" content="ROS2">
+<meta property="article:tag" content="URDF">
+<meta property="article:tag" content="OCCT">
+<meta property="article:tag" content="CAD">
+<meta property="article:tag" content="Digital Twin">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2026/07/03/URDF-OCCT-Basics/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+
+  <title>URDF 与 OCCT 基础知识 | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-graph">
+
+    <a href="/qqsnote/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/07/03/URDF-OCCT-Basics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          URDF 与 OCCT 基础知识
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-07-03 00:00:00" itemprop="dateCreated datePublished" datetime="2026-07-03T00:00:00+08:00">2026-07-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-07-21 18:20:51" itemprop="dateModified" datetime="2026-07-21T18:20:51+08:00">2026-07-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA/" itemprop="url" rel="index"><span itemprop="name">机器人</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <!-- graph-links:start
+[[ROS|prerequisite]]
+[[Kinematics|relates]]
+[[ThreeJS|relates]]
+graph-links:end -->
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在机器人数字孪生、运动规划可视化、碰撞检测和工业仿真中，经常会遇到两类模型：</p>
+<ul>
+<li><strong>机器人结构模型</strong>：描述机器人有哪些连杆、关节、坐标系、关节轴、关节限位。</li>
+<li><strong>CAD 几何模型</strong>：描述零件真实形状、曲面、实体、装配关系、STEP/IGES 等工程格式。</li>
+</ul>
+<p>URDF 和 OCCT 分别对应这两类问题。</p>
+<p>一句话理解：</p>
+<blockquote>
+<p>URDF 负责“机器人是什么结构、怎么运动”；OCCT 负责“几何实体是什么形状、如何加工和转换”。</p>
+</blockquote>
+<p>在机器人软件里，URDF 更偏机器人语义，OCCT 更偏 CAD 几何内核。</p>
+<h2 id="一、URDF-是什么"><a href="#一、URDF-是什么" class="headerlink" title="一、URDF 是什么"></a>一、URDF 是什么</h2><p>URDF 全称是 <strong>Unified Robot Description Format</strong>，是 ROS 生态中常用的机器人描述格式，本质是一个 XML 文件。</p>
+<p>它主要描述：</p>
+<ul>
+<li>机器人由哪些 <code>link</code> 组成。</li>
+<li><code>link</code> 之间通过哪些 <code>joint</code> 连接。</li>
+<li>每个关节的类型、轴向、限位和初始变换。</li>
+<li>每个 link 的视觉模型、碰撞模型和惯性参数。</li>
+</ul>
+<p>URDF 不是三维建模软件，也不是运动控制算法。它更像机器人系统中的“结构配置文件”。</p>
+<h2 id="二、URDF-的核心元素"><a href="#二、URDF-的核心元素" class="headerlink" title="二、URDF 的核心元素"></a>二、URDF 的核心元素</h2><h3 id="1-robot"><a href="#1-robot" class="headerlink" title="1. robot"></a>1. robot</h3><p><code>robot</code> 是根节点，表示一个机器人模型。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">robot</span> <span class="attr">name</span>=<span class="string">&quot;six_axis_robot&quot;</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">robot</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-link"><a href="#2-link" class="headerlink" title="2. link"></a>2. link</h3><p><code>link</code> 表示机器人上的刚体部件，例如：</p>
+<ul>
+<li>base_link</li>
+<li>shoulder_link</li>
+<li>upper_arm_link</li>
+<li>wrist_link</li>
+<li>tool0</li>
+</ul>
+<p>一个 link 可以包含三类信息：</p>
+<ul>
+<li><code>visual</code>：给人看的外观模型。</li>
+<li><code>collision</code>：给碰撞检测用的简化模型。</li>
+<li><code>inertial</code>：给动力学仿真用的质量、质心和惯性矩阵。</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">name</span>=<span class="string">&quot;base_link&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">visual</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">geometry</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">mesh</span> <span class="attr">filename</span>=<span class="string">&quot;package://robot_description/meshes/base.stl&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">geometry</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">visual</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">collision</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">geometry</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">mesh</span> <span class="attr">filename</span>=<span class="string">&quot;package://robot_description/meshes/base_collision.stl&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">geometry</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">collision</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">link</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-joint"><a href="#3-joint" class="headerlink" title="3. joint"></a>3. joint</h3><p><code>joint</code> 表示两个 link 之间的连接关系。</p>
+<p>常见关节类型：</p>
+<ul>
+<li><code>fixed</code>：固定连接。</li>
+<li><code>revolute</code>：有限角度旋转关节。</li>
+<li><code>continuous</code>：无限旋转关节。</li>
+<li><code>prismatic</code>：直线滑动关节。</li>
+<li><code>floating</code>：六自由度浮动关节。</li>
+<li><code>planar</code>：平面运动关节。</li>
+</ul>
+<p>六轴工业机器人通常主要由多个 <code>revolute</code> 关节组成。</p>
+<p>示例：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">joint</span> <span class="attr">name</span>=<span class="string">&quot;joint_1&quot;</span> <span class="attr">type</span>=<span class="string">&quot;revolute&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">parent</span> <span class="attr">link</span>=<span class="string">&quot;base_link&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">child</span> <span class="attr">link</span>=<span class="string">&quot;link_1&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">origin</span> <span class="attr">xyz</span>=<span class="string">&quot;0 0 0.35&quot;</span> <span class="attr">rpy</span>=<span class="string">&quot;0 0 0&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">axis</span> <span class="attr">xyz</span>=<span class="string">&quot;0 0 1&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">limit</span> <span class="attr">lower</span>=<span class="string">&quot;-3.14&quot;</span> <span class="attr">upper</span>=<span class="string">&quot;3.14&quot;</span> <span class="attr">effort</span>=<span class="string">&quot;150&quot;</span> <span class="attr">velocity</span>=<span class="string">&quot;2.5&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">joint</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>关键字段：</p>
+<ul>
+<li><code>parent</code>：父 link。</li>
+<li><code>child</code>：子 link。</li>
+<li><code>origin</code>：child frame 相对 parent frame 的初始变换。</li>
+<li><code>axis</code>：关节运动轴，在 joint frame 中表达。</li>
+<li><code>limit</code>：关节上下限、最大力矩、最大速度。</li>
+</ul>
+<h2 id="三、URDF-中的坐标系"><a href="#三、URDF-中的坐标系" class="headerlink" title="三、URDF 中的坐标系"></a>三、URDF 中的坐标系</h2><p>URDF 的关键不是“模型长什么样”，而是“坐标系如何连接”。</p>
+<p>一个典型链路可以理解为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">world</span><br><span class="line">  ↓</span><br><span class="line">base_link</span><br><span class="line">  ↓ joint_1</span><br><span class="line">link_1</span><br><span class="line">  ↓ joint_2</span><br><span class="line">link_2</span><br><span class="line">  ↓ ...</span><br><span class="line">tool0</span><br></pre></td></tr></table></figure>
+<p>每个 joint 的 <code>origin</code> 都是一段刚体变换。机器人正运动学就是把这些变换按链路顺序连乘：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">T_base_tool =</span><br><span class="line">T_base_link1(q1) ×</span><br><span class="line">T_link1_link2(q2) ×</span><br><span class="line">...</span><br><span class="line">T_linkN_tool(qN)</span><br></pre></td></tr></table></figure>
+<p>这也是 URDF 能服务于 TF、FK、可视化和碰撞检测的原因。</p>
+<h2 id="四、URDF-的视觉模型与碰撞模型"><a href="#四、URDF-的视觉模型与碰撞模型" class="headerlink" title="四、URDF 的视觉模型与碰撞模型"></a>四、URDF 的视觉模型与碰撞模型</h2><p>URDF 中的几何一般分为两套：</p>
+<h3 id="visual"><a href="#visual" class="headerlink" title="visual"></a>visual</h3><p>用于显示，模型可以比较精细，例如高面数 STL、DAE、OBJ。</p>
+<p>作用：</p>
+<ul>
+<li>RViz 显示</li>
+<li>Web3D 显示</li>
+<li>数字孪生展示</li>
+<li>Demo 演示</li>
+</ul>
+<h3 id="collision"><a href="#collision" class="headerlink" title="collision"></a>collision</h3><p>用于碰撞检测，模型通常要简化。</p>
+<p>原因：</p>
+<ul>
+<li>高精度 CAD 网格计算慢。</li>
+<li>碰撞检测更关注是否接触，不一定需要完整外观。</li>
+<li>工业场景通常需要稳定、快速、可解释。</li>
+</ul>
+<p>常见做法：</p>
+<ul>
+<li>用 box、cylinder、sphere 代替复杂零件。</li>
+<li>用低面数 mesh。</li>
+<li>把复杂 link 拆成多个简单 collision primitive。</li>
+</ul>
+<h2 id="五、URDF-的局限"><a href="#五、URDF-的局限" class="headerlink" title="五、URDF 的局限"></a>五、URDF 的局限</h2><p>URDF 很适合描述树状机器人结构，但也有明显局限：</p>
+<ul>
+<li>不擅长表达闭链结构。</li>
+<li>不适合直接表达复杂装配约束。</li>
+<li>不负责路径规划、控制算法和任务逻辑。</li>
+<li>XML 对大型模型可读性一般，通常会结合 xacro 模板生成。</li>
+<li>对工业机器人厂家私有参数、控制器语义、工艺坐标系表达有限。</li>
+</ul>
+<p>因此 URDF 更适合作为机器人软件的“结构中间层”，而不是完整的机器人产品数据模型。</p>
+<h2 id="六、OCCT-是什么"><a href="#六、OCCT-是什么" class="headerlink" title="六、OCCT 是什么"></a>六、OCCT 是什么</h2><p>OCCT 全称是 <strong>Open CASCADE Technology</strong>，是一个开源 CAD/CAM/CAE 几何建模内核。</p>
+<p>它擅长处理：</p>
+<ul>
+<li>B-Rep 实体建模</li>
+<li>曲线、曲面、拓扑结构</li>
+<li>STEP、IGES 等 CAD 格式导入导出</li>
+<li>布尔运算</li>
+<li>倒角、圆角、偏移</li>
+<li>网格剖分</li>
+<li>几何测量</li>
+<li>装配和形状遍历</li>
+</ul>
+<p>如果说 URDF 更像机器人结构描述文件，那么 OCCT 更像 CAD 软件背后的几何引擎。</p>
+<h2 id="七、OCCT-的核心概念"><a href="#七、OCCT-的核心概念" class="headerlink" title="七、OCCT 的核心概念"></a>七、OCCT 的核心概念</h2><h3 id="1-Geometry-与-Topology"><a href="#1-Geometry-与-Topology" class="headerlink" title="1. Geometry 与 Topology"></a>1. Geometry 与 Topology</h3><p>OCCT 中需要区分两个概念：</p>
+<ul>
+<li><strong>Geometry</strong>：数学几何，例如点、线、圆、曲线、平面、曲面。</li>
+<li><strong>Topology</strong>：拓扑结构，例如点、边、线框、面、壳、实体。</li>
+</ul>
+<p>简单理解：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Geometry：形状背后的数学定义</span><br><span class="line">Topology：这些几何对象如何连接成一个实体</span><br></pre></td></tr></table></figure>
+<p>例如一个圆柱体：</p>
+<ul>
+<li>Geometry 包含圆柱曲面、上下两个平面。</li>
+<li>Topology 包含 face、edge、wire、shell、solid。</li>
+</ul>
+<h3 id="2-Shape-层级"><a href="#2-Shape-层级" class="headerlink" title="2. Shape 层级"></a>2. Shape 层级</h3><p>OCCT 常见拓扑层级：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Vertex</span><br><span class="line">  ↓</span><br><span class="line">Edge</span><br><span class="line">  ↓</span><br><span class="line">Wire</span><br><span class="line">  ↓</span><br><span class="line">Face</span><br><span class="line">  ↓</span><br><span class="line">Shell</span><br><span class="line">  ↓</span><br><span class="line">Solid</span><br><span class="line">  ↓</span><br><span class="line">Compound</span><br></pre></td></tr></table></figure>
+<p>含义：</p>
+<ul>
+<li><code>Vertex</code>：点。</li>
+<li><code>Edge</code>：边。</li>
+<li><code>Wire</code>：边组成的闭合或非闭合线框。</li>
+<li><code>Face</code>：面。</li>
+<li><code>Shell</code>：多个面组成的壳。</li>
+<li><code>Solid</code>：封闭体。</li>
+<li><code>Compound</code>：多个 Shape 的组合。</li>
+</ul>
+<h3 id="3-B-Rep"><a href="#3-B-Rep" class="headerlink" title="3. B-Rep"></a>3. B-Rep</h3><p>B-Rep 是 Boundary Representation，边界表示法。</p>
+<p>它不是用三角面片直接表示实体，而是用边界曲面和拓扑关系表示实体。</p>
+<p>对比：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Mesh:</span><br><span class="line">  三角形 + 顶点</span><br><span class="line"></span><br><span class="line">B-Rep:</span><br><span class="line">  曲面 + 边界 + 拓扑关系</span><br></pre></td></tr></table></figure>
+<p>这也是 CAD 模型比普通游戏模型更适合工程计算的原因。</p>
+<h2 id="八、OCCT-常见能力"><a href="#八、OCCT-常见能力" class="headerlink" title="八、OCCT 常见能力"></a>八、OCCT 常见能力</h2><h3 id="1-读取-CAD-文件"><a href="#1-读取-CAD-文件" class="headerlink" title="1. 读取 CAD 文件"></a>1. 读取 CAD 文件</h3><p>OCCT 可以读取 STEP、IGES 等工程 CAD 格式。</p>
+<p>典型用途：</p>
+<ul>
+<li>导入机械臂零件 STEP 文件。</li>
+<li>导入夹具、工装、工件模型。</li>
+<li>提取装配体中的零件层级。</li>
+</ul>
+<h3 id="2-几何测量"><a href="#2-几何测量" class="headerlink" title="2. 几何测量"></a>2. 几何测量</h3><p>可用于计算：</p>
+<ul>
+<li>包围盒</li>
+<li>体积</li>
+<li>面积</li>
+<li>质心</li>
+<li>距离</li>
+<li>干涉关系</li>
+</ul>
+<p>这些能力在机器人仿真和工装布局中很有价值。</p>
+<h3 id="3-布尔运算"><a href="#3-布尔运算" class="headerlink" title="3. 布尔运算"></a>3. 布尔运算</h3><p>常见布尔操作：</p>
+<ul>
+<li>Fuse：并集。</li>
+<li>Cut：差集。</li>
+<li>Common：交集。</li>
+</ul>
+<p>在工装设计、碰撞空间构造、夹具简化时会用到。</p>
+<h3 id="4-网格剖分"><a href="#4-网格剖分" class="headerlink" title="4. 网格剖分"></a>4. 网格剖分</h3><p>机器人可视化和 Web3D 通常不能直接渲染 B-Rep，需要把 CAD 模型转成 mesh。</p>
+<p>流程大致是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">STEP / IGES</span><br><span class="line">    ↓</span><br><span class="line">OCCT 读取为 B-Rep Shape</span><br><span class="line">    ↓</span><br><span class="line">Mesh triangulation</span><br><span class="line">    ↓</span><br><span class="line">STL / OBJ / glTF</span><br><span class="line">    ↓</span><br><span class="line">Three.js / RViz / Web Viewer</span><br></pre></td></tr></table></figure>
+<h2 id="九、URDF-与-OCCT-的关系"><a href="#九、URDF-与-OCCT-的关系" class="headerlink" title="九、URDF 与 OCCT 的关系"></a>九、URDF 与 OCCT 的关系</h2><p>URDF 和 OCCT 不是同一层东西。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>URDF</th>
+<th>OCCT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>核心定位</td>
+<td>机器人结构描述</td>
+<td>CAD 几何建模内核</td>
+</tr>
+<tr>
+<td>主要数据</td>
+<td>link、joint、axis、limit、origin</td>
+<td>shape、face、edge、solid、surface</td>
+</tr>
+<tr>
+<td>文件形态</td>
+<td>XML</td>
+<td>C++ API / CAD 文件处理库</td>
+</tr>
+<tr>
+<td>常见输入</td>
+<td>STL、DAE、OBJ、xacro</td>
+<td>STEP、IGES、BREP</td>
+</tr>
+<tr>
+<td>常见输出</td>
+<td>机器人模型树</td>
+<td>B-Rep、mesh、测量结果</td>
+</tr>
+<tr>
+<td>适合问题</td>
+<td>FK、TF、可视化、碰撞配置</td>
+<td>CAD 导入、几何分析、网格转换</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>更合理的关系是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CAD / STEP</span><br><span class="line">    ↓</span><br><span class="line">OCCT</span><br><span class="line">    ↓</span><br><span class="line">几何清理、简化、剖分、导出 mesh</span><br><span class="line">    ↓</span><br><span class="line">STL / DAE / glTF</span><br><span class="line">    ↓</span><br><span class="line">URDF visual / collision</span><br><span class="line">    ↓</span><br><span class="line">机器人仿真 / 可视化 / 碰撞检测</span><br></pre></td></tr></table></figure>
+<p>也就是说：</p>
+<blockquote>
+<p>OCCT 可以帮助准备和处理 URDF 中引用的几何资源，但 URDF 负责表达机器人运动结构。</p>
+</blockquote>
+<h2 id="十、在机器人数字孪生中的使用方式"><a href="#十、在机器人数字孪生中的使用方式" class="headerlink" title="十、在机器人数字孪生中的使用方式"></a>十、在机器人数字孪生中的使用方式</h2><p>一个机器人数字孪生调试台可能包含这些模块：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">URDF</span><br><span class="line">  ↓</span><br><span class="line">解析 link / joint / limit / axis</span><br><span class="line">  ↓</span><br><span class="line">构建机器人层级树</span><br><span class="line">  ↓</span><br><span class="line">加载 mesh</span><br><span class="line">  ↓</span><br><span class="line">FK 更新 link transform</span><br><span class="line">  ↓</span><br><span class="line">Three.js 显示机器人姿态</span><br></pre></td></tr></table></figure>
+<p>如果引入 OCCT，则可以扩展 CAD 处理链路：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">STEP 工装模型</span><br><span class="line">  ↓</span><br><span class="line">OCCT 读取</span><br><span class="line">  ↓</span><br><span class="line">提取装配层级和包围盒</span><br><span class="line">  ↓</span><br><span class="line">生成可视化 mesh</span><br><span class="line">  ↓</span><br><span class="line">导入 Three.js 场景</span><br><span class="line">  ↓</span><br><span class="line">用于布局、干涉检查和碰撞区域显示</span><br></pre></td></tr></table></figure>
+<p>对 Web/可视化工程师来说，关键不是一开始就实现完整 CAD 内核，而是理解数据层次：</p>
+<ul>
+<li>URDF 提供机器人运动链。</li>
+<li>Mesh 提供可显示外观。</li>
+<li>Collision geometry 提供碰撞近似。</li>
+<li>OCCT 提供 CAD 到 mesh/测量/简化的工程能力。</li>
+</ul>
+<h2 id="十一、学习重点"><a href="#十一、学习重点" class="headerlink" title="十一、学习重点"></a>十一、学习重点</h2><h3 id="URDF-学习重点"><a href="#URDF-学习重点" class="headerlink" title="URDF 学习重点"></a>URDF 学习重点</h3><p>先掌握：</p>
+<ul>
+<li><code>link</code> / <code>joint</code> / <code>origin</code> / <code>axis</code> / <code>limit</code></li>
+<li>visual 和 collision 的区别</li>
+<li>base、flange、tool0、TCP 的关系</li>
+<li>URDF 到 TF tree 的转换</li>
+<li>URDF 与 FK 的关系</li>
+<li>xacro 的基本模板化能力</li>
+</ul>
+<p>再深入：</p>
+<ul>
+<li>inertial 参数</li>
+<li>Gazebo / ros2_control 扩展</li>
+<li>Mimic joint</li>
+<li>多机器人命名空间</li>
+<li>碰撞模型简化策略</li>
+</ul>
+<h3 id="OCCT-学习重点"><a href="#OCCT-学习重点" class="headerlink" title="OCCT 学习重点"></a>OCCT 学习重点</h3><p>先掌握：</p>
+<ul>
+<li>STEP / IGES / STL / glTF 的区别</li>
+<li>B-Rep 与 Mesh 的区别</li>
+<li>Shape、Face、Edge、Solid 的层级</li>
+<li>CAD 模型导入和遍历</li>
+<li>包围盒、体积、距离等基础测量</li>
+<li>CAD 到 mesh 的转换流程</li>
+</ul>
+<p>再深入：</p>
+<ul>
+<li>布尔运算</li>
+<li>曲面修复</li>
+<li>装配结构解析</li>
+<li>网格精度控制</li>
+<li>与碰撞检测库的衔接</li>
+</ul>
+<h2 id="十二、容易混淆的点"><a href="#十二、容易混淆的点" class="headerlink" title="十二、容易混淆的点"></a>十二、容易混淆的点</h2><h3 id="1-URDF-不是-CAD-格式"><a href="#1-URDF-不是-CAD-格式" class="headerlink" title="1. URDF 不是 CAD 格式"></a>1. URDF 不是 CAD 格式</h3><p>URDF 可以引用 mesh 文件，但它本身不是 CAD 文件。</p>
+<p>它关心的是机器人结构、关节、坐标系和运动关系。</p>
+<h3 id="2-STL-不是机器人模型"><a href="#2-STL-不是机器人模型" class="headerlink" title="2. STL 不是机器人模型"></a>2. STL 不是机器人模型</h3><p>STL 只是一堆三角面片，不知道哪个部分是 link，也不知道关节轴和关节限位。</p>
+<p>要让 STL 成为机器人模型的一部分，需要 URDF 提供结构语义。</p>
+<h3 id="3-CAD-高精度不等于仿真好用"><a href="#3-CAD-高精度不等于仿真好用" class="headerlink" title="3. CAD 高精度不等于仿真好用"></a>3. CAD 高精度不等于仿真好用</h3><p>CAD 模型通常过于复杂，直接用于实时可视化和碰撞检测会很慢。</p>
+<p>工程上经常需要：</p>
+<ul>
+<li>visual 模型适度降面。</li>
+<li>collision 模型大幅简化。</li>
+<li>保留关键外形，去掉螺丝孔、倒角、小特征。</li>
+</ul>
+<h3 id="4-坐标系比模型外观更重要"><a href="#4-坐标系比模型外观更重要" class="headerlink" title="4. 坐标系比模型外观更重要"></a>4. 坐标系比模型外观更重要</h3><p>机器人模型看起来对，不代表运动学一定对。</p>
+<p>更关键的是：</p>
+<ul>
+<li>joint origin 是否正确。</li>
+<li>joint axis 是否正确。</li>
+<li>mesh 坐标是否和 link frame 对齐。</li>
+<li>单位是否一致。</li>
+<li>tool0 / flange / TCP 是否区分清楚。</li>
+</ul>
+<h2 id="十三、最小实践建议"><a href="#十三、最小实践建议" class="headerlink" title="十三、最小实践建议"></a>十三、最小实践建议</h2><h3 id="练习一：读懂一个六轴机械臂-URDF"><a href="#练习一：读懂一个六轴机械臂-URDF" class="headerlink" title="练习一：读懂一个六轴机械臂 URDF"></a>练习一：读懂一个六轴机械臂 URDF</h3><p>交付物：</p>
+<ul>
+<li>画出 link-joint 树。</li>
+<li>标出 6 个 joint 的 axis。</li>
+<li>列出每个 joint 的 lower / upper / velocity。</li>
+<li>解释 base_link、flange、tool0 的关系。</li>
+</ul>
+<p>验收标准：</p>
+<ul>
+<li>能用自己的话解释每个 joint 的父子 link。</li>
+<li>能指出 TCP 位姿由哪些 transform 连乘得到。</li>
+<li>能说明 visual mesh 和 collision mesh 是否一致。</li>
+</ul>
+<p>面试价值：</p>
+<blockquote>
+<p>证明自己不是只会看 3D 模型，而是能理解机器人结构数据和坐标系。</p>
+</blockquote>
+<h3 id="练习二：CAD-到机器人可视化资源转换"><a href="#练习二：CAD-到机器人可视化资源转换" class="headerlink" title="练习二：CAD 到机器人可视化资源转换"></a>练习二：CAD 到机器人可视化资源转换</h3><p>交付物：</p>
+<ul>
+<li>找一个 STEP 零件。</li>
+<li>用 OCCT 或基于 OCCT 的工具读取。</li>
+<li>导出 STL/glTF。</li>
+<li>放入 Three.js 或 URDF visual 中显示。</li>
+</ul>
+<p>验收标准：</p>
+<ul>
+<li>模型单位正确。</li>
+<li>模型朝向正确。</li>
+<li>包围盒尺寸符合预期。</li>
+<li>文件体积和面数适合实时显示。</li>
+</ul>
+<p>面试价值：</p>
+<blockquote>
+<p>证明自己理解工业 CAD 资源如何进入机器人软件和 Web3D 可视化链路。</p>
+</blockquote>
+<h3 id="练习三：构建简化碰撞模型"><a href="#练习三：构建简化碰撞模型" class="headerlink" title="练习三：构建简化碰撞模型"></a>练习三：构建简化碰撞模型</h3><p>交付物：</p>
+<ul>
+<li>为一个复杂 link 建立简化 collision geometry。</li>
+<li>对比 visual mesh 和 collision mesh。</li>
+<li>记录简化前后的面数、包围盒和碰撞检测性能差异。</li>
+</ul>
+<p>验收标准：</p>
+<ul>
+<li>collision 模型不会明显漏掉关键外形。</li>
+<li>运行速度比高精度 mesh 更稳定。</li>
+<li>能解释为什么不能直接用完整 CAD 做实时碰撞。</li>
+</ul>
+<p>面试价值：</p>
+<blockquote>
+<p>证明自己具备工程取舍意识，而不是只追求模型精细。</p>
+</blockquote>
+<h2 id="十四、个人定位价值"><a href="#十四、个人定位价值" class="headerlink" title="十四、个人定位价值"></a>十四、个人定位价值</h2><p>对从 Web/可视化转向机器人软件来说，URDF 和 OCCT 很值得学习。</p>
+<p>原因是它们正好连接了几个关键能力：</p>
+<ul>
+<li>机器人结构建模</li>
+<li>坐标系和运动学</li>
+<li>CAD 工程数据</li>
+<li>Web3D 可视化</li>
+<li>数字孪生</li>
+<li>碰撞检测和仿真</li>
+</ul>
+<p>更现实的定位不是一开始就做底层控制算法，而是先成为能把机器人模型、CAD 资产、运动链路和可视化调试工具打通的人。</p>
+<p>这条路线与工业机器人数字孪生、运动规划可视化、机器视觉工位仿真和机器人系统集成都高度相关。</p>
+<h2 id="十五、总结"><a href="#十五、总结" class="headerlink" title="十五、总结"></a>十五、总结</h2><p>URDF 和 OCCT 解决的是机器人软件中的两个不同层次的问题。</p>
+<p>URDF 解决：</p>
+<ul>
+<li>机器人由哪些 link 和 joint 组成。</li>
+<li>关节如何运动。</li>
+<li>坐标系如何连接。</li>
+<li>可视化模型和碰撞模型如何挂到机器人结构上。</li>
+</ul>
+<p>OCCT 解决：</p>
+<ul>
+<li>CAD 几何如何读取。</li>
+<li>B-Rep 实体如何表达。</li>
+<li>STEP/IGES 如何转换成可渲染 mesh。</li>
+<li>几何如何测量、简化和处理。</li>
+</ul>
+<p>它们组合起来，可以形成一条很实用的工程链路：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">工业 CAD</span><br><span class="line">  ↓</span><br><span class="line">OCCT 几何处理</span><br><span class="line">  ↓</span><br><span class="line">Mesh 资源</span><br><span class="line">  ↓</span><br><span class="line">URDF 机器人结构</span><br><span class="line">  ↓</span><br><span class="line">FK / TF / 碰撞检测</span><br><span class="line">  ↓</span><br><span class="line">Web3D / RViz / 数字孪生</span><br></pre></td></tr></table></figure>
+<p>这也是机器人应用软件和工业数字孪生方向中非常值得补强的基础知识。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/qqsnote/tags/ROS2/" rel="tag"># ROS2</a>
+              <a href="/qqsnote/tags/URDF/" rel="tag"># URDF</a>
+              <a href="/qqsnote/tags/OCCT/" rel="tag"># OCCT</a>
+              <a href="/qqsnote/tags/CAD/" rel="tag"># CAD</a>
+              <a href="/qqsnote/tags/Digital-Twin/" rel="tag"># Digital Twin</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2026/07/01/Docker-Web-Application-Release/" rel="prev" title="常规Web应用的Docker发布流程">
+      <i class="fa fa-chevron-left"></i> 常规Web应用的Docker发布流程
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2026/07/03/Codebase-Memory-MCP/" rel="next" title="Codebase Memory MCP 调研笔记">
+      Codebase Memory MCP 调研笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81URDF-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">2.</span> <span class="nav-text">一、URDF 是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81URDF-%E7%9A%84%E6%A0%B8%E5%BF%83%E5%85%83%E7%B4%A0"><span class="nav-number">3.</span> <span class="nav-text">二、URDF 的核心元素</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-robot"><span class="nav-number">3.1.</span> <span class="nav-text">1. robot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-link"><span class="nav-number">3.2.</span> <span class="nav-text">2. link</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-joint"><span class="nav-number">3.3.</span> <span class="nav-text">3. joint</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81URDF-%E4%B8%AD%E7%9A%84%E5%9D%90%E6%A0%87%E7%B3%BB"><span class="nav-number">4.</span> <span class="nav-text">三、URDF 中的坐标系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81URDF-%E7%9A%84%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B%E4%B8%8E%E7%A2%B0%E6%92%9E%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.</span> <span class="nav-text">四、URDF 的视觉模型与碰撞模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#visual"><span class="nav-number">5.1.</span> <span class="nav-text">visual</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#collision"><span class="nav-number">5.2.</span> <span class="nav-text">collision</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81URDF-%E7%9A%84%E5%B1%80%E9%99%90"><span class="nav-number">6.</span> <span class="nav-text">五、URDF 的局限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81OCCT-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">7.</span> <span class="nav-text">六、OCCT 是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81OCCT-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">8.</span> <span class="nav-text">七、OCCT 的核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Geometry-%E4%B8%8E-Topology"><span class="nav-number">8.1.</span> <span class="nav-text">1. Geometry 与 Topology</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Shape-%E5%B1%82%E7%BA%A7"><span class="nav-number">8.2.</span> <span class="nav-text">2. Shape 层级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-B-Rep"><span class="nav-number">8.3.</span> <span class="nav-text">3. B-Rep</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81OCCT-%E5%B8%B8%E8%A7%81%E8%83%BD%E5%8A%9B"><span class="nav-number">9.</span> <span class="nav-text">八、OCCT 常见能力</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%AF%BB%E5%8F%96-CAD-%E6%96%87%E4%BB%B6"><span class="nav-number">9.1.</span> <span class="nav-text">1. 读取 CAD 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%87%A0%E4%BD%95%E6%B5%8B%E9%87%8F"><span class="nav-number">9.2.</span> <span class="nav-text">2. 几何测量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%B8%83%E5%B0%94%E8%BF%90%E7%AE%97"><span class="nav-number">9.3.</span> <span class="nav-text">3. 布尔运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%BD%91%E6%A0%BC%E5%89%96%E5%88%86"><span class="nav-number">9.4.</span> <span class="nav-text">4. 网格剖分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81URDF-%E4%B8%8E-OCCT-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">10.</span> <span class="nav-text">九、URDF 与 OCCT 的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E5%9C%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E6%95%B0%E5%AD%97%E5%AD%AA%E7%94%9F%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">11.</span> <span class="nav-text">十、在机器人数字孪生中的使用方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E5%AD%A6%E4%B9%A0%E9%87%8D%E7%82%B9"><span class="nav-number">12.</span> <span class="nav-text">十一、学习重点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#URDF-%E5%AD%A6%E4%B9%A0%E9%87%8D%E7%82%B9"><span class="nav-number">12.1.</span> <span class="nav-text">URDF 学习重点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OCCT-%E5%AD%A6%E4%B9%A0%E9%87%8D%E7%82%B9"><span class="nav-number">12.2.</span> <span class="nav-text">OCCT 学习重点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81%E5%AE%B9%E6%98%93%E6%B7%B7%E6%B7%86%E7%9A%84%E7%82%B9"><span class="nav-number">13.</span> <span class="nav-text">十二、容易混淆的点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-URDF-%E4%B8%8D%E6%98%AF-CAD-%E6%A0%BC%E5%BC%8F"><span class="nav-number">13.1.</span> <span class="nav-text">1. URDF 不是 CAD 格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-STL-%E4%B8%8D%E6%98%AF%E6%9C%BA%E5%99%A8%E4%BA%BA%E6%A8%A1%E5%9E%8B"><span class="nav-number">13.2.</span> <span class="nav-text">2. STL 不是机器人模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-CAD-%E9%AB%98%E7%B2%BE%E5%BA%A6%E4%B8%8D%E7%AD%89%E4%BA%8E%E4%BB%BF%E7%9C%9F%E5%A5%BD%E7%94%A8"><span class="nav-number">13.3.</span> <span class="nav-text">3. CAD 高精度不等于仿真好用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%9D%90%E6%A0%87%E7%B3%BB%E6%AF%94%E6%A8%A1%E5%9E%8B%E5%A4%96%E8%A7%82%E6%9B%B4%E9%87%8D%E8%A6%81"><span class="nav-number">13.4.</span> <span class="nav-text">4. 坐标系比模型外观更重要</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%89%E3%80%81%E6%9C%80%E5%B0%8F%E5%AE%9E%E8%B7%B5%E5%BB%BA%E8%AE%AE"><span class="nav-number">14.</span> <span class="nav-text">十三、最小实践建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E4%B8%80%EF%BC%9A%E8%AF%BB%E6%87%82%E4%B8%80%E4%B8%AA%E5%85%AD%E8%BD%B4%E6%9C%BA%E6%A2%B0%E8%87%82-URDF"><span class="nav-number">14.1.</span> <span class="nav-text">练习一：读懂一个六轴机械臂 URDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E4%BA%8C%EF%BC%9ACAD-%E5%88%B0%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%8F%AF%E8%A7%86%E5%8C%96%E8%B5%84%E6%BA%90%E8%BD%AC%E6%8D%A2"><span class="nav-number">14.2.</span> <span class="nav-text">练习二：CAD 到机器人可视化资源转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E4%B8%89%EF%BC%9A%E6%9E%84%E5%BB%BA%E7%AE%80%E5%8C%96%E7%A2%B0%E6%92%9E%E6%A8%A1%E5%9E%8B"><span class="nav-number">14.3.</span> <span class="nav-text">练习三：构建简化碰撞模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E5%9B%9B%E3%80%81%E4%B8%AA%E4%BA%BA%E5%AE%9A%E4%BD%8D%E4%BB%B7%E5%80%BC"><span class="nav-number">15.</span> <span class="nav-text">十四、个人定位价值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">16.</span> <span class="nav-text">十五、总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">402</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">204</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3D/" style="font-size: 13.2px; color: #cfcfcf">3D</a> <a href="/qqsnote/tags/3DGS/" style="font-size: 12px; color: #ccc">3DGS</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 24px; color: #eee">AI</a> <a href="/qqsnote/tags/AI-Coding/" style="font-size: 12px; color: #ccc">AI Coding</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 28.8px; color: #fcfcfc">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.2px; color: #cfcfcf">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.2px; color: #f1f1f1">Azure</a> <a href="/qqsnote/tags/BVH/" style="font-size: 12px; color: #ccc">BVH</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C++</a> <a href="/qqsnote/tags/CAD/" style="font-size: 12px; color: #ccc">CAD</a> <a href="/qqsnote/tags/CI-CD/" style="font-size: 12px; color: #ccc">CI/CD</a> <a href="/qqsnote/tags/CSS/" style="font-size: 18px; color: #ddd">CSS</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/Context-Engineering/" style="font-size: 12px; color: #ccc">Context Engineering</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 18px; color: #ddd">DevOps</a> <a href="/qqsnote/tags/DevSecOps/" style="font-size: 12px; color: #ccc">DevSecOps</a> <a href="/qqsnote/tags/Digital-Twin/" style="font-size: 12px; color: #ccc">Digital Twin</a> <a href="/qqsnote/tags/Docker/" style="font-size: 18px; color: #ddd">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.6px; color: #d6d6d6">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.2px; color: #cfcfcf">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/GitHub/" style="font-size: 12px; color: #ccc">GitHub</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/HMI/" style="font-size: 12px; color: #ccc">HMI</a> <a href="/qqsnote/tags/Halcon/" style="font-size: 12px; color: #ccc">Halcon</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.2px; color: #cfcfcf">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 19.2px; color: #e0e0e0">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/Knowledge-Graph/" style="font-size: 12px; color: #ccc">Knowledge Graph</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.4px; color: #d3d3d3">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.8px; color: #ebebeb">Linux</a> <a href="/qqsnote/tags/MCP/" style="font-size: 12px; color: #ccc">MCP</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MVVM/" style="font-size: 12px; color: #ccc">MVVM</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.2px; color: #cfcfcf">Markdown</a> <a href="/qqsnote/tags/Modbus/" style="font-size: 12px; color: #ccc">Modbus</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 16.8px; color: #dadada">Node.js</a> <a href="/qqsnote/tags/OCCT/" style="font-size: 12px; color: #ccc">OCCT</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.2px; color: #cfcfcf">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 20.4px; color: #e4e4e4">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 14.4px; color: #d3d3d3">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PLC/" style="font-size: 13.2px; color: #cfcfcf">PLC</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Prism/" style="font-size: 12px; color: #ccc">Prism</a> <a href="/qqsnote/tags/Proxy/" style="font-size: 12px; color: #ccc">Proxy</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 25.2px; color: #f1f1f1">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/ROS2/" style="font-size: 14.4px; color: #d3d3d3">ROS2</a> <a href="/qqsnote/tags/RS-485/" style="font-size: 12px; color: #ccc">RS-485</a> <a href="/qqsnote/tags/React/" style="font-size: 20.4px; color: #e4e4e4">React</a> <a href="/qqsnote/tags/Rust/" style="font-size: 12px; color: #ccc">Rust</a> <a href="/qqsnote/tags/SDLC/" style="font-size: 12px; color: #ccc">SDLC</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.4px; color: #d3d3d3">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Squid/" style="font-size: 12px; color: #ccc">Squid</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 22.8px; color: #ebebeb">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 13.2px; color: #cfcfcf">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/URDF/" style="font-size: 12px; color: #ccc">URDF</a> <a href="/qqsnote/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/qqsnote/tags/VLA/" style="font-size: 13.2px; color: #cfcfcf">VLA</a> <a href="/qqsnote/tags/VTK/" style="font-size: 12px; color: #ccc">VTK</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 15.6px; color: #d6d6d6">WPF</a> <a href="/qqsnote/tags/Web/" style="font-size: 12px; color: #ccc">Web</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21.6px; color: #e7e7e7">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27.6px; color: #f8f8f8">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/dify/" style="font-size: 12px; color: #ccc">dify</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.2px; color: #cfcfcf">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 26.4px; color: #f5f5f5">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.2px; color: #cfcfcf">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 15.6px; color: #d6d6d6">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 18px; color: #ddd">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.4px; color: #d3d3d3">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14.4px; color: #d3d3d3">上位机</a> <a href="/qqsnote/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">传感器</a> <a href="/qqsnote/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/" style="font-size: 12px; color: #ccc">光线追踪</a> <a href="/qqsnote/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/" style="font-size: 14.4px; color: #d3d3d3">具身智能</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.6px; color: #d6d6d6">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.2px; color: #cfcfcf">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%9B%E5%85%83%E6%95%B0/" style="font-size: 12px; color: #ccc">四元数</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" style="font-size: 12px; color: #ccc">图像分割</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 20.4px; color: #e4e4e4">图形学</a> <a href="/qqsnote/tags/%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" style="font-size: 18px; color: #ddd">坐标变换</a> <a href="/qqsnote/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" style="font-size: 12px; color: #ccc">多模态</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.2px; color: #cfcfcf">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 21.6px; color: #e7e7e7">学习笔记</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89/" style="font-size: 13.2px; color: #cfcfcf">工业视觉</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" style="font-size: 14.4px; color: #d3d3d3">工业软件</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" style="font-size: 12px; color: #ccc">工业通信</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.4px; color: #d3d3d3">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.2px; color: #cfcfcf">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%89%8B%E7%9C%BC%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">手眼标定</a> <a href="/qqsnote/tags/%E6%89%A7%E8%A1%8C%E5%99%A8/" style="font-size: 12px; color: #ccc">执行器</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 15.6px; color: #d6d6d6">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%97%8B%E8%BD%AC/" style="font-size: 12px; color: #ccc">旋转</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 12px; color: #ccc">机器人</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A1%AC%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人硬件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%AF%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人软件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89/" style="font-size: 14.4px; color: #d3d3d3">机器视觉</a> <a href="/qqsnote/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 13.2px; color: #cfcfcf">机械臂</a> <a href="/qqsnote/tags/%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">标定</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/" style="font-size: 12px; color: #ccc">桌面应用</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E6%AF%94%E4%BE%8B%E9%98%80/" style="font-size: 12px; color: #ccc">比例阀</a> <a href="/qqsnote/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">深度学习</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.2px; color: #cfcfcf">环境变量</a> <a href="/qqsnote/tags/%E7%94%9F%E4%BF%A1%E5%88%86%E6%9E%90/" style="font-size: 12px; color: #ccc">生信分析</a> <a href="/qqsnote/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">目标检测</a> <a href="/qqsnote/tags/%E7%9B%B8%E6%9C%BA%E6%A0%87%E5%AE%9A/" style="font-size: 13.2px; color: #cfcfcf">相机标定</a> <a href="/qqsnote/tags/%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">碰撞检测</a> <a href="/qqsnote/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 12px; color: #ccc">神经网络</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14.4px; color: #d3d3d3">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%8E%A7%E5%88%B6/" style="font-size: 14.4px; color: #d3d3d3">自动化控制</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E5%89%AA%E8%BE%91/" style="font-size: 12px; color: #ccc">视频剪辑</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" style="font-size: 13.2px; color: #cfcfcf">计算机视觉</a> <a href="/qqsnote/tags/%E8%AE%A4%E8%AF%81-%E6%8E%88%E6%9D%83/" style="font-size: 19.2px; color: #e0e0e0">认证&授权</a> <a href="/qqsnote/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px; color: #ccc">设计模式</a> <a href="/qqsnote/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 18px; color: #ddd">读书</a> <a href="/qqsnote/tags/%E8%B4%A2%E7%BB%8F/" style="font-size: 12px; color: #ccc">财经</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
