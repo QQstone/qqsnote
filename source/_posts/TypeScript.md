@@ -417,3 +417,186 @@ typescript的特点
     "react": "^17.0.1",
     "typescript": "4.1.3",
 ```
+
+<!-- interview-supplement-start -->
+## 面试补充（2026-07-22）
+
+> 本节为后续补充，用于资深软件工程师基础面试复习；上文保留原始笔记。现代 TypeScript 面试的重点不只是语法数量，而是能否说明类型保证的范围、设计稳定的边界，并识别类型看似正确但运行时不安全的代码。
+
+### TypeScript 提供什么保证
+
+TypeScript 在编译期分析 JavaScript 程序，主要价值是提前暴露不兼容的值、改善重构和编辑器反馈、用类型表达模块契约。它有三个必须主动说明的边界：
+
+1. TypeScript 默认采用结构化类型，能否赋值主要看成员结构，而不是是否显式声明“实现了某类型”。
+2. 类型系统为了兼容 JavaScript 和工程效率，并非完全 sound；类型断言、`any`、不准确的声明文件等都可能绕过检查。
+3. 类型通常会在编译后擦除。网络响应、文件、环境变量、消息队列和本地存储不会因为写了接口就自动通过运行时校验。
+
+资深回答不应只说“TypeScript 更安全”，而应说清楚：它提高了哪些阶段的安全性，哪些边界还需要运行时机制负责。
+
+### 结构化类型与额外属性检查
+
+只要源值至少具有目标类型要求的成员，通常就可以赋值：
+
+```ts
+type DeviceSummary = { id: string; online: boolean }
+
+const detail = { id: 'robot-01', online: true, vendor: 'demo' }
+const summary: DeviceSummary = detail
+```
+
+直接把“新鲜”对象字面量赋给 `DeviceSummary` 时，多出的 `vendor` 会触发 excess property check。这是一项帮助发现拼写和误传字段的附加检查，不代表 TypeScript 改成了名义类型，也不保证对象运行时只有声明的字段。
+
+结构化类型适合 JavaScript 的组合方式和测试替身，但公共接口过宽会让意外兼容更容易发生。确实需要区分相同结构的业务标识时，可以用 branded type 建立显式构造边界，而不是给所有字符串都起一个别名后误以为它们不可互换。
+
+### `any`、`unknown`、`never` 与 `void`
+
+| 类型 | 语义 | 工程边界 |
+| --- | --- | --- |
+| `any` | 关闭当前位置及传播路径上的大部分类型检查 | 只用于受控迁移或无法建模的旧边界，并尽快收窄 |
+| `unknown` | 值存在，但使用前必须证明其类型 | 外部输入、`catch` 值和不可信 JSON 的默认选择 |
+| `never` | 在当前控制流中不可能出现的值 | 穷尽性检查、永不返回的函数、被完全排除的联合分支 |
+| `void` | 调用方不应依赖返回值 | 常见于副作用函数；不等于该函数运行时一定返回 `undefined` |
+
+`unknown` 比 `any` 更适合系统边界，因为它迫使代码在读取属性或调用方法前做检查。`never` 不是“空值类型”，而是没有任何可能值的底类型。
+
+### 控制流收窄与判别联合
+
+TypeScript 会根据 `typeof`、`instanceof`、`in`、相等判断、真值判断和用户定义类型守卫收窄类型。领域状态适合使用判别联合，使非法状态较难表达：
+
+```ts
+type DeviceEvent =
+  | { type: 'connected'; deviceId: string }
+  | { type: 'alarm'; deviceId: string; code: number }
+
+function assertNever(value: never): never {
+  throw new Error(`Unhandled event: ${JSON.stringify(value)}`)
+}
+
+function describeEvent(event: DeviceEvent): string {
+  switch (event.type) {
+    case 'connected':
+      return `${event.deviceId} connected`
+    case 'alarm':
+      return `${event.deviceId} alarm ${event.code}`
+    default:
+      return assertNever(event)
+  }
+}
+```
+
+以后增加新的事件成员时，若 `switch` 没有处理它，默认分支的参数将不再是 `never`，编译器会提示遗漏。这个模式比到处写可选字段更能表达状态约束。
+
+用户定义类型守卫 `value is T` 是开发者向编译器作出的承诺。守卫实现若写错，TypeScript 不会自动证明其逻辑正确，因此关键验证器仍需要单元测试和边界样本。
+
+### 泛型、条件类型与映射类型
+
+泛型的目标是保存不同位置之间的类型关系，而不是把所有函数都写成 `<T>`。如果参数和返回值没有关系，或函数内部必须把 `T` 强制断言成某个具体类型，这个泛型往往没有提供真实价值。
+
+```ts
+function getById<T extends { id: string }>(items: readonly T[], id: string): T | undefined {
+  return items.find((item) => item.id === id)
+}
+```
+
+约束 `T extends { id: string }` 允许函数读取 `id`，同时保留调用方对象的其他具体字段。
+
+条件类型按条件选择类型，`infer` 可以从匹配结构中提取一部分；映射类型遍历键并系统地改变属性：
+
+```ts
+type ApiResult<T> =
+  | { ok: true; data: T }
+  | { ok: false; error: string }
+
+type SuccessData<T> = T extends { ok: true; data: infer Data } ? Data : never
+type Mutable<T> = { -readonly [Key in keyof T]: T[Key] }
+
+type DeviceResult = ApiResult<{ readonly id: string; readonly online: boolean }>
+type Device = SuccessData<DeviceResult>
+type EditableDevice = Mutable<Device>
+```
+
+当条件类型左侧是裸类型参数时，传入联合类型会逐成员分发，所以 `SuccessData<DeviceResult>` 会过滤失败分支并提取成功数据。若不希望分发，可以把两侧包在元组中，例如 `[T] extends [U]`。面试重点是能推导规则和解释用途，不是手写递归类型谜题。
+
+### 函数参数的方差直觉
+
+如果程序需要一个能处理所有 `DeviceEvent` 的回调，传入一个只会处理 `alarm` 的函数并不安全，因为调用者可能给它 `connected` 事件。函数参数类型因此呈逆变方向：消费者越通用，越能替代只消费窄类型的函数。
+
+在 `strictFunctionTypes` 下，普通函数属性会更严格地检查这一点。方法语法为兼容既有 JavaScript 仍存在双变行为，因此不要把“编译通过”当作所有回调替换都安全。设计事件总线和插件接口时，应让回调输入尽量精确，并用实际调用方式验证公共类型。
+
+### `as const`、`satisfies` 与类型断言
+
+- `as const` 阻止字面量被拓宽，并把对象属性和数组视为只读，适合定义有限状态和配置常量。
+- `satisfies` 检查表达式是否满足目标类型，同时尽量保留表达式自身更具体的推断结果，适合配置表和映射表。
+- `as SomeType` 是断言，表示开发者比编译器知道得更多；它不会转换数据，也不会生成运行时检查。
+
+```ts
+type DeviceConfig = { protocol: 'mqtt' | 'opcua'; retry: number }
+
+const config = {
+  protocol: 'mqtt',
+  retry: 3
+} satisfies DeviceConfig
+
+// config.protocol 仍保留为字面量类型 "mqtt"。
+```
+
+连续写 `value as unknown as Target` 通常意味着类型模型或边界适配存在问题。代码审查应追问证据来自哪里，而不是把断言当作修复编译错误的快捷方式。
+
+### 类型擦除与运行时校验
+
+下面的 `JointState` 只存在于编译阶段。`JSON.parse()` 的结果必须从 `unknown` 开始，通过运行时条件确认后才能进入可信领域模型：
+
+```ts
+type JointState = { positions: number[]; timestamp: number }
+
+function isJointState(value: unknown): value is JointState {
+  if (typeof value !== 'object' || value === null) return false
+  const candidate = value as Record<string, unknown>
+  return Array.isArray(candidate.positions) &&
+    candidate.positions.every((item) => typeof item === 'number') &&
+    typeof candidate.timestamp === 'number'
+}
+
+const message = '{"positions":[0,1.57],"timestamp":1721600000}'
+const payload: unknown = JSON.parse(message)
+if (!isJointState(payload)) throw new Error('Invalid joint state')
+```
+
+守卫内部的局部断言只是为了读取待检查字段，真正建立信任的是后续运行时条件。生产项目还要检查数组长度、数值是否有限、时间戳范围和业务约束。复杂 schema 可交给成熟校验库，但仍要定义失败策略、错误日志和兼容版本。
+
+工业设备消息尤其不能只靠接口：错误的关节数量、`NaN`、过期时间戳或越界命令即使“形状正确”也可能不满足安全要求。结构校验之后还应进入领域校验和安全门控。
+
+### 严格配置、公共类型与类型测试
+
+新项目通常应以 `strict: true` 为起点，并理解它启用的一组检查。大型代码库还可评估：
+
+- `noUncheckedIndexedAccess`：索引访问包含 `undefined`，迫使代码处理缺失键。
+- `exactOptionalPropertyTypes`：区分属性缺失与显式赋值 `undefined`。
+- `noImplicitOverride`：派生类覆盖成员时要求明确写 `override`。
+- `useUnknownInCatchVariables`：错误值先按 `unknown` 处理；它已包含在现代 `strict` 行为中。
+
+这些选项会增加迁移成本，应先统计错误类型、分模块推进，而不是在遗留项目中一次打开后用大量断言压回去。
+
+公共类型设计要控制稳定面：导出领域能力而非内部实现细节；避免把巨型对象类型传遍系统；为输入和输出分别建模；对库代码考虑声明文件产物和不同消费者的编译配置。类型测试可以用 `tsc --noEmit`、带预期错误的样例或专用类型断言工具，运行时行为仍由普通测试负责。
+
+`interface` 和 `type` 没有“一个更高级”的结论。`interface` 支持声明合并，适合可扩展对象契约；`type` 能表达联合、交叉、元组和条件类型。选择应服务于是否希望开放扩展以及需要表达什么形状。
+
+### 常见追问与回答边界
+
+**TypeScript 能否保证接口响应一定符合类型？**
+
+不能。类型在运行时通常不存在，服务端响应属于不可信输入，必须经过 schema 或显式验证后再进入领域代码。
+
+**`unknown` 为什么比 `any` 安全？**
+
+`any` 允许直接传播和操作；`unknown` 保留“目前不知道”的事实，要求使用前通过控制流检查收窄。
+
+**类型断言和类型转换有什么区别？**
+
+断言只改变编译器如何看待表达式，不改变运行时值。真正的转换会执行解析、规范化或构造新值，并可能失败。
+
+**高级类型越复杂，类型设计越好吗？**
+
+不一定。公共类型应优先清晰的错误信息、可维护性和编译性能。能用判别联合、泛型约束和少量工具类型表达清楚时，不应为了展示技巧引入递归类型体操。
+
+<!-- interview-supplement-end -->
