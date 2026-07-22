@@ -144,6 +144,12 @@ sudo rpm –ivh file.rpm
 sudo rpm –ivh https://example.com/file.rpm
 ```
 
+deb安装包
+
+```
+sudo dpkg -i <package_name.deb>
+```
+
 #### 查看系统版本
 
 ```
