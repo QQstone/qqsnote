@@ -316,7 +316,7 @@ Expected: exit code `0`, no diagnostics. This local verification path is not cop
 Run:
 
 ```bash
-node --test /tmp/flow-graph-tutorial-lab/src/flow/flow.test.ts
+node /tmp/flow-graph-tutorial-lab/src/flow/flow.test.ts
 ```
 
 Expected: `5` pass and `0` fail.
