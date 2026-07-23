@@ -179,6 +179,207 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/02/05/node-stream/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/02/05/node-stream/" class="post-title-link" itemprop="url">node.js stream</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-02-05 12:46:50" itemprop="dateCreated datePublished" datetime="2021-02-05T12:46:50+08:00">2021-02-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-07-23 14:45:10" itemprop="dateModified" datetime="2026-07-23T14:45:10+08:00">2026-07-23</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/36728655">Node.js Streams: Everything you need to know(译文)</a></p>
+<p>在 Node.js 中有四种基本的流类型：Readable（可读流），Writable（可写流），Duplex（双向流），Transform（转换流）。</p>
+<ul>
+<li>可读流是数据可以被消费的源的抽象。一个例子就是 fs.createReadStream 方法。</li>
+<li>可写流是数据可以被写入目标的抽象。一个例子就是 fs.createWriteStream 方法。</li>
+<li>双向流即是可读的也是可写的。一个例子是 TCP socket。</li>
+<li>转换流是基于双向流的，可以在读或者写的时候被用来更改或者转换数据。一个例子是 zlib.createGzip 使用 gzip 算法压缩数据。你可以将转换流想象成一个函数，它的输入是可写流，输出是可读流。你或许也听过将转换流成为“通过流（through streams）”。</li>
+</ul>
+<p>所有的流都是 EventEmitter 的实例。触发它们的事件可以读或者写入数据，然而，我们可以使用 pipe 方法消费流的数据。</p>
+<h4 id="从流到流"><a href="#从流到流" class="headerlink" title="从流到流"></a>从流到流</h4><!-- interview-supplement-start -->
+<h2 id="面试补充（2026-07-22）"><a href="#面试补充（2026-07-22）" class="headerlink" title="面试补充（2026-07-22）"></a>面试补充（2026-07-22）</h2><blockquote>
+<p>本节为后续补充，用于资深软件工程师基础面试复习；上文保留原始笔记。</p>
+</blockquote>
+<h3 id="流解决的是分段处理与速度匹配"><a href="#流解决的是分段处理与速度匹配" class="headerlink" title="流解决的是分段处理与速度匹配"></a>流解决的是分段处理与速度匹配</h3><p>Stream 不只是“读取大文件的 API”。它提供一套协议，让数据可以分段产生、转换和消费，并在上下游速度不一致时传递背压。</p>
+<p>与 <code>readFile()</code> 把完整文件读入内存相比，流式管道可以更早地产生首批输出，稳态内存通常与各阶段缓冲和并发量相关，而不是与整个文件大小线性增长。但这不是“流永远只占一个 chunk 的内存”：每个阶段都有缓冲，业务代码也可能缓存 chunk，错误的并发 Transform 仍会扩大内存。</p>
+<h3 id="四种流和两种模式"><a href="#四种流和两种模式" class="headerlink" title="四种流和两种模式"></a>四种流和两种模式</h3><ul>
+<li><code>Readable</code> 是数据源，例如文件读取、HTTP request 和查询结果游标。</li>
+<li><code>Writable</code> 是数据目标，例如文件写入、HTTP response 和压缩包输出。</li>
+<li><code>Duplex</code> 同时可读写，读写两侧相互独立，例如 TCP socket。</li>
+<li><code>Transform</code> 是一种 Duplex，输出由输入转换而来，例如 gzip、解码和逐行解析。</li>
+</ul>
+<p>默认模式处理 <code>Buffer</code>、<code>Uint8Array</code> 或字符串，<code>highWaterMark</code> 按字节相关单位工作。<code>objectMode</code> 可以传任意 JavaScript 值，此时 <code>highWaterMark</code> 计的是对象数量；一个对象可能非常大，所以“缓存 16 个对象”不代表内存很小。</p>
+<p>Readable 还可能处于 paused 或 flowing 状态。注册 <code>&#39;data&#39;</code> 监听、调用 <code>resume()</code> 或使用 <code>pipe()</code> 会影响消费方式。不要同时混用 <code>&#39;data&#39;</code>、<code>&#39;readable&#39;</code>、<code>pipe()</code> 和 async iterator 去竞争消费同一条流，除非清楚状态切换和数据所有权。</p>
+<h3 id="highWaterMark、write-与-drain"><a href="#highWaterMark、write-与-drain" class="headerlink" title="highWaterMark、write() 与 drain"></a><code>highWaterMark</code>、<code>write()</code> 与 <code>drain</code></h3><p><code>highWaterMark</code> 是内部缓冲达到何种程度后开始施加背压的阈值，不是硬内存上限，也不表示单个 chunk 一定小于该值。</p>
+<p><code>writable.write(chunk)</code> 返回 <code>false</code> 的含义是：当前缓冲已达到或超过阈值，生产者应停止继续写，等待 <code>&#39;drain&#39;</code> 后再恢复。返回值并不表示这次 chunk 写入失败；数据通常已进入内部缓冲。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; once &#125; <span class="keyword">from</span> <span class="string">&#x27;node:events&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">type</span> &#123; Writable &#125; <span class="keyword">from</span> <span class="string">&#x27;node:stream&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">writeAll</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  writable: Writable,</span></span></span><br><span class="line"><span class="function"><span class="params">  chunks: AsyncIterable&lt;Buffer&gt;</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">Promise</span>&lt;<span class="title">void</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> <span class="keyword">await</span> (<span class="keyword">const</span> chunk <span class="keyword">of</span> chunks) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!writable.write(chunk)) &#123;</span><br><span class="line">      <span class="keyword">await</span> once(writable, <span class="string">&#x27;drain&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> finish = once(writable, <span class="string">&#x27;finish&#x27;</span>)</span><br><span class="line">  writable.end()</span><br><span class="line">  <span class="keyword">await</span> finish</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>生产代码还要定义 error 和 abort 策略。若忽略 <code>false</code> 并持续写入，慢消费者前方的缓冲会不断积累，导致 RSS 增长、GC 压力、延迟扩大，最终可能进程退出。这个问题不是通过把 <code>highWaterMark</code> 调得更大就能根治；首先要让生产速度受消费能力约束。</p>
+<h3 id="pipe-与-pipeline"><a href="#pipe-与-pipeline" class="headerlink" title="pipe() 与 pipeline()"></a><code>pipe()</code> 与 <code>pipeline()</code></h3><p><code>readable.pipe(writable)</code> 会处理常见的暂停与恢复，但多段管道发生错误时，业务仍需正确销毁其他阶段并等待收尾。<code>pipeline()</code> 把完成、错误传播和销毁组合为一个操作，Promise 版本也便于与 <code>async/await</code> 集成：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createReadStream, createWriteStream &#125; <span class="keyword">from</span> <span class="string">&#x27;node:fs&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; pipeline &#125; <span class="keyword">from</span> <span class="string">&#x27;node:stream/promises&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; createGzip &#125; <span class="keyword">from</span> <span class="string">&#x27;node:zlib&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">await</span> pipeline(</span><br><span class="line">  createReadStream(<span class="string">&#x27;telemetry.ndjson&#x27;</span>),</span><br><span class="line">  createGzip(),</span><br><span class="line">  createWriteStream(<span class="string">&#x27;telemetry.ndjson.gz&#x27;</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>如果读取失败、压缩失败或写入失败，返回的 Promise 会 reject，管道中的相关流会被销毁。调用方仍要决定如何记录、重试、清理不完整输出，以及任务是否幂等。对长任务还可以给 <code>pipeline()</code> 传 <code>AbortSignal</code>，但取消后的业务状态仍需显式定义。</p>
+<p>不要只写：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source.pipe(transform).pipe(destination)</span><br></pre></td></tr></table></figure>
+<p>然后只在最后一个流监听 error。错误可能来自任一阶段；手工拼装时必须明确每个阶段的错误传播和资源清理。</p>
+<h3 id="Async-Iterator-与结束语义"><a href="#Async-Iterator-与结束语义" class="headerlink" title="Async Iterator 与结束语义"></a>Async Iterator 与结束语义</h3><p>Readable 支持 async iterator，适合用顺序控制流消费数据：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createReadStream &#125; <span class="keyword">from</span> <span class="string">&#x27;node:fs&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> input = createReadStream(<span class="string">&#x27;telemetry.ndjson&#x27;</span>, &#123; <span class="attr">encoding</span>: <span class="string">&#x27;utf8&#x27;</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> <span class="keyword">await</span> (<span class="keyword">const</span> chunk <span class="keyword">of</span> input) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(chunk.length)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>for await...of</code> 会配合 Readable 的背压逐步拉取数据，异常会从循环抛出。提前 <code>break</code> 时通常会销毁流；若业务要求保留流继续消费，需要使用支持的 iterator 选项并明确后续所有者，而不是依赖偶然行为。</p>
+<p>结束语义也必须区分：Readable 的 <code>&#39;end&#39;</code> 表示没有更多数据；Writable 的 <code>&#39;finish&#39;</code> 表示调用 <code>end()</code> 后数据已交给底层系统处理；<code>&#39;close&#39;</code> 表示资源关闭，不等于业务数据已经持久化。网络断开时还可能出现不完整消息，协议层需要帧边界、校验和重连策略。</p>
+<h3 id="大文件和实时消息的工程边界"><a href="#大文件和实时消息的工程边界" class="headerlink" title="大文件和实时消息的工程边界"></a>大文件和实时消息的工程边界</h3><p><strong>大文件上传或压缩</strong></p>
+<p>优先让请求体、校验、压缩和对象存储上传形成受背压约束的管道。限制总大小、单段大小、处理时间和并发数；即使采用流，也不能接受无限输入。失败后清理临时文件或未完成的 multipart upload。</p>
+<p><strong>逐行遥测处理</strong></p>
+<p>TCP 和文件 chunk 不等于业务消息，一条 NDJSON 或协议帧可能跨多个 chunk，也可能一个 chunk 包含多条消息。解析器要保留不完整尾部、限制单帧长度，并对坏数据定义丢弃、告警或断连策略。</p>
+<p><strong>机器人与工业消息</strong></p>
+<p>背压策略取决于语义：高频位姿展示可能只保留每台设备最新值；报警、审计和控制命令通常不能静默覆盖。系统需要为不同消息类别定义有界队列、采样、合并、落盘或拒绝策略，而不是只有一个全局缓冲区。</p>
+<p><strong>“流为什么更省内存”的量化回答</strong></p>
+<p>比较两种实现时，应测量相同文件、并发和处理链路下的峰值 RSS、<code>heapUsed</code>、external memory、吞吐量和尾延迟。流式方案的预期不是内存为常数零，而是内存不随单个完整输入线性膨胀，并在消费者变慢时能限制生产者。</p>
+<h3 id="常见追问与回答边界"><a href="#常见追问与回答边界" class="headerlink" title="常见追问与回答边界"></a>常见追问与回答边界</h3><p><strong><code>write()</code> 返回 <code>false</code> 是否表示写入失败？</strong></p>
+<p>不是。它表示数据已进入缓冲，但生产者应等待 <code>&#39;drain&#39;</code> 再继续。真正的写入失败通过 error 通道报告。</p>
+<p><strong>把 <code>highWaterMark</code> 调大是否一定提高吞吐量？</strong></p>
+<p>不一定。更大的缓冲可能减少部分调度，但会提高内存和排队延迟，也可能掩盖消费端瓶颈。应基于 chunk 大小、下游速度和测量调整。</p>
+<p><strong><code>pipe()</code> 已经有背压，为什么还需要 <code>pipeline()</code>？</strong></p>
+<p><code>pipeline()</code> 的主要增量是把整条链路的完成、错误传播和资源销毁收敛成一个可等待结果，而不是发明另一套背压。</p>
+<p><strong>使用 Stream 是否就不会内存泄漏？</strong></p>
+<p>不会。业务仍可能缓存 chunk、无限并发处理、忘记移除监听器或在错误后不销毁资源。Stream 提供协议，正确性取决于使用者是否遵守背压和生命周期。</p>
+<!-- interview-supplement-end -->
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/02/03/Azure-BlobStorage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/02/03/Azure-BlobStorage/" class="post-title-link" itemprop="url">Azure-BlobStorage</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-02-03 14:21:15" itemprop="dateCreated datePublished" datetime="2021-02-03T14:21:15+08:00">2021-02-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E4%BA%91%E5%B9%B3%E5%8F%B0/" itemprop="url" rel="index"><span itemprop="name">云平台</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Blob Storage存储资源的三个层次</p>
+<ul>
+<li>storage account 存储实例的顶级层次</li>
+<li>containers 相当于目录</li>
+<li>blob 文件实体<br><img src="https://docs.microsoft.com/zh-cn/azure/storage/blobs/media/storage-blobs-introduction/blob1.png" alt=""></li>
+</ul>
+<p>Azure 门户点击Storage Account，查看当前tenant的Storage Account，进入其中某个account, 关于存储，提供了一个<a target="_blank" rel="noopener" href="https://azure.microsoft.com/en-us/features/storage-explorer/">Explorer工具</a><br>左侧工具 Blob Services - Containers 创建容器csd-commom，（意外地发现之前做App Services备份地Deploy Packages在这里）<br>进入容器，可以直接使用页面提供的上传入口，上传可以填写一个folder，文件上传时自动使用该folder作为子目录<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/storage/blobs/storage-upload-process-images?tabs=dotnet">官方教程：使用 Azure 存储在云中上传图像数据</a><br>$blobStorageAccount（存储账户）<br>    $blobStorageAccount（容器）<br>myAppServicePlan（应用服务计划）<br>    myResourceGroup（资源组）<br>        $webapp（App Service）<a target="_blank" rel="noopener" href="https://github.com/Azure-Samples/storage-blob-upload-from-webapp.git">dotNet Blob Uploader</a></p>
+<p>YourStorageAccount — Settings — Access keys 查看账户密钥以及连接字符串</p>
+<p>dotNet Blob Client Package: Azure.Storage<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">using Azure.Storage;</span><br><span class="line">using Azure.Storage.Blobs;</span><br><span class="line">using Azure.Storage.Blobs.Models;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">public Task&lt;bool&gt; UploadFileToStorage(Stream fileStream)&#123;</span><br><span class="line">  &#x2F;&#x2F; Create a URI to the blob</span><br><span class="line">  Uri blobUri &#x3D; new Uri(&quot;https:&#x2F;&#x2F;&quot; +</span><br><span class="line">                        _storageConfig.AccountName +</span><br><span class="line">                        &quot;.blob.core.windows.net&#x2F;&quot; +</span><br><span class="line">                        _storageConfig.ImageContainer +</span><br><span class="line">                        &quot;&#x2F;&quot; + fileName);</span><br><span class="line">  &#x2F;&#x2F; connection credential</span><br><span class="line">  StorageSharedKeyCredential storageCredentials &#x3D;</span><br><span class="line">      new StorageSharedKeyCredential(_storageConfig.AccountName, _storageConfig.AccountKey);</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; Create the blob client.</span><br><span class="line">  BlobClient blobClient &#x3D; new BlobClient(blobUri, storageCredentials);</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; Upload the file</span><br><span class="line">  await blobClient.UploadAsync(fileStream);</span><br><span class="line"></span><br><span class="line">  return await Task.FromResult(true);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static async Task&lt;List&lt;string&gt;&gt; GetThumbNailUrls(AzureStorageConfig _storageConfig)</span><br><span class="line">&#123;</span><br><span class="line">    List&lt;string&gt; thumbnailUrls &#x3D; new List&lt;string&gt;();</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; Create BlobServiceClient from the account URI</span><br><span class="line">    BlobContainerClient container &#x3D; new BlobContainerClient(connectionString, _storageConfig.ThumbnailContainer);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; Get reference to the container</span><br><span class="line">    BlobContainerClient container &#x3D; blobServiceClient.GetBlobContainerClient(_storageConfig.ThumbnailContainer);</span><br><span class="line"></span><br><span class="line">    if (container.Exists())</span><br><span class="line">    &#123;</span><br><span class="line">        foreach (BlobItem blobItem in container.GetBlobs())</span><br><span class="line">        &#123;</span><br><span class="line">            thumbnailUrls.Add(container.Uri + &quot;&#x2F;&quot; + blobItem.Name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return await Task.FromResult(thumbnailUrls);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>Blob SDK for Node.js： <a target="_blank" rel="noopener" href="https://github.com/Azure/azure-sdk-for-js">@azure/storage-blob</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">const express &#x3D; require(&#39;express&#39;)</span><br><span class="line">const bodyParser &#x3D; require(&#39;body-parser&#39;)</span><br><span class="line">const multer &#x3D; require(&#39;multer&#39;)</span><br><span class="line">const _fs &#x3D; require(&#39;fs&#39;)</span><br><span class="line">const &#123; StorageSharedKeyCredential,</span><br><span class="line">    BlobServiceClient &#125; &#x3D; require(&#39;@azure&#x2F;storage-blob&#39;)</span><br><span class="line">const &#123;AbortController&#125; &#x3D; require(&#39;@azure&#x2F;abort-controller&#39;)</span><br><span class="line">const app &#x3D; express();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; init blob client</span><br><span class="line">const STORAGE_ACCOUNT_NAME &#x3D; &#39;YourResourceGroupName&#39;</span><br><span class="line">const CONTAINER_NAME &#x3D; &#39;BlobStorageContainerName&#39;</span><br><span class="line">const ACCOUNT_ACCESS_KEY &#x3D;&#39;****************************&#39;</span><br><span class="line">const ONE_MEGABYTE &#x3D; 1024 * 1024;</span><br><span class="line">const FOUR_MEGABYTES &#x3D; 4 * ONE_MEGABYTE;</span><br><span class="line">const ONE_MINUTE &#x3D; 60 * 1000;</span><br><span class="line">const aborter &#x3D; AbortController.timeout(30 * ONE_MINUTE);</span><br><span class="line">const credentials &#x3D; new StorageSharedKeyCredential(STORAGE_ACCOUNT_NAME, ACCOUNT_ACCESS_KEY);</span><br><span class="line"></span><br><span class="line">const blobServiceClient &#x3D; new BlobServiceClient(&#96;https:&#x2F;&#x2F;$&#123;STORAGE_ACCOUNT_NAME&#125;.blob.core.windows.net&#96;,credentials);</span><br><span class="line"></span><br><span class="line">const containerClient &#x3D; blobServiceClient.getContainerClient(CONTAINER_NAME);</span><br><span class="line">&#x2F;&#x2F;app.use(bodyParser.urlencoded(&#123; extended: false &#125;));</span><br><span class="line">const upload &#x3D; multer(&#123;dest:&#39;&#x2F;uploads&#39;&#125;)</span><br><span class="line">app.post(&#39;&#x2F;upload&#39;,upload.single(&#39;file&#39;), async (req,res)&#x3D;&gt;&#123;</span><br><span class="line">    var des_file &#x3D; __dirname + &#39;&#x2F;tmp&#x2F;&#39; +req.file.originalname;</span><br><span class="line">    const stream &#x3D; _fs.createReadStream(req.file.path)</span><br><span class="line">    const blobClient &#x3D; containerClient.getBlobClient(req.file.originalname);</span><br><span class="line">    const blockBlobClient &#x3D; blobClient.getBlockBlobClient();</span><br><span class="line">    const uploadOptions &#x3D; &#123;</span><br><span class="line">        bufferSize: FOUR_MEGABYTES,</span><br><span class="line">        maxBuffers: 5,</span><br><span class="line">    &#125;;</span><br><span class="line">    const result &#x3D; await blockBlobClient.uploadStream(</span><br><span class="line">        stream, </span><br><span class="line">        uploadOptions.bufferSize, </span><br><span class="line">        uploadOptions.maxBuffers,</span><br><span class="line">        aborter);</span><br><span class="line">    res.json(result)</span><br><span class="line">&#125;)</span><br><span class="line">const port &#x3D;process.env.PORT||3000;</span><br><span class="line">app.listen(port,()&#x3D;&gt;&#123;</span><br><span class="line">    console.log(&#39;server on port:&#39;, port)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/azure/storage/common/storage-samples-javascript?toc=/azure/storage/blobs/toc.json#blob-samples">Azure Blob js SDK</a></p>
+<p>—&gt;<a target="_blank" rel="noopener" href="https://github.com/QQstone/node_Blob_Uploader/blob/master/index.js">自己的栗子</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/02/01/httpupload/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -834,177 +1035,6 @@ HTML5 新元素<picture>支持指定多个资源以及媒体条件<figure class=
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/01/04/Azure-SQLDB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/01/04/Azure-SQLDB/" class="post-title-link" itemprop="url">Azure-SQLDB</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-04 13:49:37" itemprop="dateCreated datePublished" datetime="2021-01-04T13:49:37+08:00">2021-01-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E4%BA%91%E5%B9%B3%E5%8F%B0/" itemprop="url" rel="index"><span itemprop="name">云平台</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Azure SQL包括</p>
-<ul>
-<li>Azure SQL DB</li>
-<li>Azure MI (Managed Instance 与SQL Server功能一致的服务，用于云迁移方案)</li>
-<li>SQL Server in Azure VM<br>Azure SQL DB 和 Azure MI属于PaaS， SQL Server in Azure VM属于IaaS<h4 id="可用性功能"><a href="#可用性功能" class="headerlink" title="可用性功能"></a>可用性功能</h4>可用性区域和可用性组。较低服务层级中的数据库使用“不同但等效的机制”通过存储提供冗余。 内置逻辑可帮助防范单个计算机发生故障。 使用活动异地复制功能可以在灾难损毁整个区域时提供保护。<br>业务连续性和全局可伸缩性。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/12/18/eslint/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/12/18/eslint/" class="post-title-link" itemprop="url">ESLint</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-12-18 13:37:12" itemprop="dateCreated datePublished" datetime="2020-12-18T13:37:12+08:00">2020-12-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="安装并初始化既有项目"><a href="#安装并初始化既有项目" class="headerlink" title="安装并初始化既有项目"></a>安装并初始化既有项目</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm eslint --init</span><br></pre></td></tr></table></figure>
-<p>安装后自动运行cli提示，选择所需的运行环境(node.js vs browser),模块化风格(es import/export vs CommonJS),是否使用typescript等<br>之后会向package.json添加并安装@typescript-eslint/eslint-plugin eslint-plugin-react @typescript-eslint/parser eslint等</p>
-<p>配置cli(commandline interface)<br>package.json<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;lint&quot;: &quot;eslint --ext .js src&#x2F;&quot;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>Issue: ‘global’ is not defined<br>对于使用webpack打包的web app其编译环境是node.js的，因此可以配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;env&quot;: &#123;</span><br><span class="line">    &quot;browser&quot;: true,</span><br><span class="line">    &quot;node&quot;: true</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure><br><a target="_blank" rel="noopener" href="https://eslint.org/docs/user-guide/configuring#specifying-environments">ESLint：环境参数</a></p>
-</blockquote>
-<h4 id="Issues"><a href="#Issues" class="headerlink" title="Issues:"></a>Issues:</h4><blockquote>
-<p>Arrow function expected no return value. (consistent-return)</p>
-<p>141:7 error React Hook useEffect has a missing dependency: ‘render’. Either include it or remove the dependency array react-hooks/exhaustive-deps</p>
-</blockquote>
-<p>render 方法中包含state属性 应改为useCallback 加入依赖state属性， 然后把render加入报错的副作用的依赖中</p>
-<blockquote>
-<p>Expected ‘this’ to be used by class method ‘getValBetweenFms’. (class-methods-use-this)</p>
-</blockquote>
-<p>改为static方法</p>
-<blockquote>
-<p>Expected to return a value at the end of method ‘getValBetweenFms’. (consistent-return)</p>
-</blockquote>
-<p>函数在循环体中某条件达成时返回 运行时必定返回 但静态类型检查不通过 应在函数末尾return undefined</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1074,7 +1104,7 @@ HTML5 新元素<picture>支持指定多个资源以及媒体条件<figure class=
       <div class="site-state-item site-state-posts">
           <a href="/qqsnote/archives/">
         
-          <span class="site-state-item-count">403</span>
+          <span class="site-state-item-count">405</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1085,7 +1115,7 @@ HTML5 新元素<picture>支持指定多个资源以及媒体条件<figure class=
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/qqsnote/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">211</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1096,7 +1126,7 @@ HTML5 新元素<picture>支持指定多个资源以及媒体条件<figure class=
       </div>
 
       <div class="tag-cloud-tags">
-        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3D/" style="font-size: 13.2px; color: #cfcfcf">3D</a> <a href="/qqsnote/tags/3DGS/" style="font-size: 12px; color: #ccc">3DGS</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 24px; color: #eee">AI</a> <a href="/qqsnote/tags/AI-Coding/" style="font-size: 12px; color: #ccc">AI Coding</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 28.8px; color: #fcfcfc">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.2px; color: #cfcfcf">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.2px; color: #f1f1f1">Azure</a> <a href="/qqsnote/tags/BVH/" style="font-size: 12px; color: #ccc">BVH</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C++</a> <a href="/qqsnote/tags/CAD/" style="font-size: 12px; color: #ccc">CAD</a> <a href="/qqsnote/tags/CI-CD/" style="font-size: 12px; color: #ccc">CI/CD</a> <a href="/qqsnote/tags/CSS/" style="font-size: 18px; color: #ddd">CSS</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/Context-Engineering/" style="font-size: 12px; color: #ccc">Context Engineering</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 18px; color: #ddd">DevOps</a> <a href="/qqsnote/tags/DevSecOps/" style="font-size: 12px; color: #ccc">DevSecOps</a> <a href="/qqsnote/tags/Digital-Twin/" style="font-size: 12px; color: #ccc">Digital Twin</a> <a href="/qqsnote/tags/Docker/" style="font-size: 18px; color: #ddd">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.6px; color: #d6d6d6">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.2px; color: #cfcfcf">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Flow-Graph/" style="font-size: 13.2px; color: #cfcfcf">Flow Graph</a> <a href="/qqsnote/tags/GitHub/" style="font-size: 12px; color: #ccc">GitHub</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/HMI/" style="font-size: 12px; color: #ccc">HMI</a> <a href="/qqsnote/tags/Halcon/" style="font-size: 12px; color: #ccc">Halcon</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.2px; color: #cfcfcf">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 19.2px; color: #e0e0e0">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/Knowledge-Graph/" style="font-size: 12px; color: #ccc">Knowledge Graph</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.4px; color: #d3d3d3">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.8px; color: #ebebeb">Linux</a> <a href="/qqsnote/tags/MCP/" style="font-size: 12px; color: #ccc">MCP</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MVVM/" style="font-size: 12px; color: #ccc">MVVM</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.2px; color: #cfcfcf">Markdown</a> <a href="/qqsnote/tags/Modbus/" style="font-size: 12px; color: #ccc">Modbus</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 16.8px; color: #dadada">Node.js</a> <a href="/qqsnote/tags/OCCT/" style="font-size: 12px; color: #ccc">OCCT</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.2px; color: #cfcfcf">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 20.4px; color: #e4e4e4">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 14.4px; color: #d3d3d3">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PLC/" style="font-size: 13.2px; color: #cfcfcf">PLC</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Prism/" style="font-size: 12px; color: #ccc">Prism</a> <a href="/qqsnote/tags/Proxy/" style="font-size: 12px; color: #ccc">Proxy</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 25.2px; color: #f1f1f1">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/ROS2/" style="font-size: 14.4px; color: #d3d3d3">ROS2</a> <a href="/qqsnote/tags/RS-485/" style="font-size: 12px; color: #ccc">RS-485</a> <a href="/qqsnote/tags/React/" style="font-size: 20.4px; color: #e4e4e4">React</a> <a href="/qqsnote/tags/React-Flow/" style="font-size: 12px; color: #ccc">React Flow</a> <a href="/qqsnote/tags/Rust/" style="font-size: 12px; color: #ccc">Rust</a> <a href="/qqsnote/tags/SDLC/" style="font-size: 12px; color: #ccc">SDLC</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.4px; color: #d3d3d3">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Squid/" style="font-size: 12px; color: #ccc">Squid</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 22.8px; color: #ebebeb">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 14.4px; color: #d3d3d3">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/URDF/" style="font-size: 12px; color: #ccc">URDF</a> <a href="/qqsnote/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/qqsnote/tags/VLA/" style="font-size: 13.2px; color: #cfcfcf">VLA</a> <a href="/qqsnote/tags/VTK/" style="font-size: 12px; color: #ccc">VTK</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 15.6px; color: #d6d6d6">WPF</a> <a href="/qqsnote/tags/Web/" style="font-size: 12px; color: #ccc">Web</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21.6px; color: #e7e7e7">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27.6px; color: #f8f8f8">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/dify/" style="font-size: 12px; color: #ccc">dify</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.2px; color: #cfcfcf">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 26.4px; color: #f5f5f5">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.2px; color: #cfcfcf">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 15.6px; color: #d6d6d6">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 18px; color: #ddd">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.4px; color: #d3d3d3">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14.4px; color: #d3d3d3">上位机</a> <a href="/qqsnote/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">传感器</a> <a href="/qqsnote/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/" style="font-size: 12px; color: #ccc">光线追踪</a> <a href="/qqsnote/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/" style="font-size: 14.4px; color: #d3d3d3">具身智能</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.6px; color: #d6d6d6">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.2px; color: #cfcfcf">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%9B%E5%85%83%E6%95%B0/" style="font-size: 12px; color: #ccc">四元数</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" style="font-size: 12px; color: #ccc">图像分割</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 20.4px; color: #e4e4e4">图形学</a> <a href="/qqsnote/tags/%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" style="font-size: 18px; color: #ddd">坐标变换</a> <a href="/qqsnote/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" style="font-size: 12px; color: #ccc">多模态</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.2px; color: #cfcfcf">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 22.8px; color: #ebebeb">学习笔记</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E5%AE%89%E5%85%A8/" style="font-size: 12px; color: #ccc">工业安全</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89/" style="font-size: 14.4px; color: #d3d3d3">工业视觉</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" style="font-size: 14.4px; color: #d3d3d3">工业软件</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" style="font-size: 12px; color: #ccc">工业通信</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.4px; color: #d3d3d3">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.2px; color: #cfcfcf">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%89%8B%E7%9C%BC%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">手眼标定</a> <a href="/qqsnote/tags/%E6%89%A7%E8%A1%8C%E5%99%A8/" style="font-size: 12px; color: #ccc">执行器</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 15.6px; color: #d6d6d6">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%97%8B%E8%BD%AC/" style="font-size: 12px; color: #ccc">旋转</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 12px; color: #ccc">机器人</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A1%AC%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人硬件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%AF%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人软件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89/" style="font-size: 14.4px; color: #d3d3d3">机器视觉</a> <a href="/qqsnote/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 13.2px; color: #cfcfcf">机械臂</a> <a href="/qqsnote/tags/%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">标定</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/" style="font-size: 12px; color: #ccc">桌面应用</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E6%AF%94%E4%BE%8B%E9%98%80/" style="font-size: 12px; color: #ccc">比例阀</a> <a href="/qqsnote/tags/%E6%B5%81%E5%BC%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">流式处理</a> <a href="/qqsnote/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">深度学习</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.2px; color: #cfcfcf">环境变量</a> <a href="/qqsnote/tags/%E7%94%9F%E4%BF%A1%E5%88%86%E6%9E%90/" style="font-size: 12px; color: #ccc">生信分析</a> <a href="/qqsnote/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">目标检测</a> <a href="/qqsnote/tags/%E7%9B%B8%E6%9C%BA%E6%A0%87%E5%AE%9A/" style="font-size: 13.2px; color: #cfcfcf">相机标定</a> <a href="/qqsnote/tags/%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">碰撞检测</a> <a href="/qqsnote/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 12px; color: #ccc">神经网络</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14.4px; color: #d3d3d3">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%8E%A7%E5%88%B6/" style="font-size: 14.4px; color: #d3d3d3">自动化控制</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E5%89%AA%E8%BE%91/" style="font-size: 12px; color: #ccc">视频剪辑</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" style="font-size: 13.2px; color: #cfcfcf">计算机视觉</a>
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3D/" style="font-size: 13.29px; color: #d0d0d0">3D</a> <a href="/qqsnote/tags/3DGS/" style="font-size: 12px; color: #ccc">3DGS</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 23.57px; color: #ededed">AI</a> <a href="/qqsnote/tags/AI-Coding/" style="font-size: 12px; color: #ccc">AI Coding</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Agent/" style="font-size: 12px; color: #ccc">Agent</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 28.71px; color: #fbfbfb">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.29px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24.86px; color: #f0f0f0">Azure</a> <a href="/qqsnote/tags/BVH/" style="font-size: 12px; color: #ccc">BVH</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 15.86px; color: #d7d7d7">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 15.86px; color: #d7d7d7">C++</a> <a href="/qqsnote/tags/CAD/" style="font-size: 12px; color: #ccc">CAD</a> <a href="/qqsnote/tags/CI-CD/" style="font-size: 12px; color: #ccc">CI/CD</a> <a href="/qqsnote/tags/CSS/" style="font-size: 17.14px; color: #dbdbdb">CSS</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/Context-Engineering/" style="font-size: 12px; color: #ccc">Context Engineering</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 17.14px; color: #dbdbdb">DevOps</a> <a href="/qqsnote/tags/DevSecOps/" style="font-size: 12px; color: #ccc">DevSecOps</a> <a href="/qqsnote/tags/Digital-Twin/" style="font-size: 12px; color: #ccc">Digital Twin</a> <a href="/qqsnote/tags/Docker/" style="font-size: 17.14px; color: #dbdbdb">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.86px; color: #d7d7d7">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.29px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Flow-Graph/" style="font-size: 13.29px; color: #d0d0d0">Flow Graph</a> <a href="/qqsnote/tags/GitHub/" style="font-size: 12px; color: #ccc">GitHub</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/HMI/" style="font-size: 12px; color: #ccc">HMI</a> <a href="/qqsnote/tags/Halcon/" style="font-size: 12px; color: #ccc">Halcon</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.29px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 18.43px; color: #dedede">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/Knowledge-Graph/" style="font-size: 12px; color: #ccc">Knowledge Graph</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.57px; color: #d3d3d3">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.29px; color: #e9e9e9">Linux</a> <a href="/qqsnote/tags/MCP/" style="font-size: 12px; color: #ccc">MCP</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MVVM/" style="font-size: 12px; color: #ccc">MVVM</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.29px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/Modbus/" style="font-size: 12px; color: #ccc">Modbus</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 17.14px; color: #dbdbdb">Node.js</a> <a href="/qqsnote/tags/OCCT/" style="font-size: 12px; color: #ccc">OCCT</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.29px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 19.71px; color: #e2e2e2">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 14.57px; color: #d3d3d3">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PLC/" style="font-size: 13.29px; color: #d0d0d0">PLC</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Prism/" style="font-size: 12px; color: #ccc">Prism</a> <a href="/qqsnote/tags/Proxy/" style="font-size: 12px; color: #ccc">Proxy</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24.86px; color: #f0f0f0">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/ROS2/" style="font-size: 14.57px; color: #d3d3d3">ROS2</a> <a href="/qqsnote/tags/RS-485/" style="font-size: 12px; color: #ccc">RS-485</a> <a href="/qqsnote/tags/React/" style="font-size: 19.71px; color: #e2e2e2">React</a> <a href="/qqsnote/tags/React-Flow/" style="font-size: 12px; color: #ccc">React Flow</a> <a href="/qqsnote/tags/Rust/" style="font-size: 12px; color: #ccc">Rust</a> <a href="/qqsnote/tags/SDLC/" style="font-size: 12px; color: #ccc">SDLC</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.57px; color: #d3d3d3">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Squid/" style="font-size: 12px; color: #ccc">Squid</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 22.29px; color: #e9e9e9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 15.86px; color: #d7d7d7">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/URDF/" style="font-size: 12px; color: #ccc">URDF</a> <a href="/qqsnote/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/qqsnote/tags/VLA/" style="font-size: 13.29px; color: #d0d0d0">VLA</a> <a href="/qqsnote/tags/VTK/" style="font-size: 12px; color: #ccc">VTK</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/Vue-js/" style="font-size: 12px; color: #ccc">Vue.js</a> <a href="/qqsnote/tags/WPF/" style="font-size: 15.86px; color: #d7d7d7">WPF</a> <a href="/qqsnote/tags/Web/" style="font-size: 12px; color: #ccc">Web</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27.43px; color: #f8f8f8">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/dify/" style="font-size: 12px; color: #ccc">dify</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.29px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 26.14px; color: #f4f4f4">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.29px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 15.86px; color: #d7d7d7">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 17.14px; color: #dbdbdb">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.57px; color: #d3d3d3">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14.57px; color: #d3d3d3">上位机</a> <a href="/qqsnote/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">传感器</a> <a href="/qqsnote/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/" style="font-size: 12px; color: #ccc">光线追踪</a> <a href="/qqsnote/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/" style="font-size: 14.57px; color: #d3d3d3">具身智能</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.86px; color: #d7d7d7">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.29px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%9B%E5%85%83%E6%95%B0/" style="font-size: 12px; color: #ccc">四元数</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" style="font-size: 12px; color: #ccc">图像分割</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 19.71px; color: #e2e2e2">图形学</a> <a href="/qqsnote/tags/%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" style="font-size: 17.14px; color: #dbdbdb">坐标变换</a> <a href="/qqsnote/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" style="font-size: 12px; color: #ccc">多模态</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.29px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 22.29px; color: #e9e9e9">学习笔记</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E5%AE%89%E5%85%A8/" style="font-size: 12px; color: #ccc">工业安全</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89/" style="font-size: 14.57px; color: #d3d3d3">工业视觉</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" style="font-size: 14.57px; color: #d3d3d3">工业软件</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" style="font-size: 12px; color: #ccc">工业通信</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.57px; color: #d3d3d3">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.29px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%89%8B%E7%9C%BC%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">手眼标定</a> <a href="/qqsnote/tags/%E6%89%A7%E8%A1%8C%E5%99%A8/" style="font-size: 12px; color: #ccc">执行器</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 15.86px; color: #d7d7d7">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%97%8B%E8%BD%AC/" style="font-size: 12px; color: #ccc">旋转</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 12px; color: #ccc">机器人</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A1%AC%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人硬件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%AF%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人软件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89/" style="font-size: 14.57px; color: #d3d3d3">机器视觉</a> <a href="/qqsnote/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 13.29px; color: #d0d0d0">机械臂</a> <a href="/qqsnote/tags/%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">标定</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/" style="font-size: 12px; color: #ccc">桌面应用</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E6%AF%94%E4%BE%8B%E9%98%80/" style="font-size: 12px; color: #ccc">比例阀</a> <a href="/qqsnote/tags/%E6%B5%81%E5%BC%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">流式处理</a> <a href="/qqsnote/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">深度学习</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.29px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%94%9F%E4%BF%A1%E5%88%86%E6%9E%90/" style="font-size: 12px; color: #ccc">生信分析</a> <a href="/qqsnote/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">目标检测</a> <a href="/qqsnote/tags/%E7%9B%B8%E6%9C%BA%E6%A0%87%E5%AE%9A/" style="font-size: 13.29px; color: #d0d0d0">相机标定</a> <a href="/qqsnote/tags/%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">碰撞检测</a> <a href="/qqsnote/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 12px; color: #ccc">神经网络</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14.57px; color: #d3d3d3">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%8E%A7%E5%88%B6/" style="font-size: 14.57px; color: #d3d3d3">自动化控制</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E5%89%AA%E8%BE%91/" style="font-size: 12px; color: #ccc">视频剪辑</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a>
       </div>
     </div>
   </aside>

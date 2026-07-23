@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="先说结论：基础没有消失，资深标准正在变化Vibe Coding 降低了代码生成和 API 查询成本，但没有降低软件失败的代价。代码来得越快，审查边界、验证行为、定位故障和对结果负责越重要。 面试也不会整齐地从“八股”切换到 AI 协作。不同公司、岗位和面试官差异很大，标准化基础题仍是成本较低的筛选手段。对资深工程师，更常见的有效追问是：  为什么这个机制会产生当前现象？ 结论在哪些条件下失效？ 出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue、TypeScript 与 Node.js 资深工程师面试知识图谱">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2026/07/22/Vue-TypeScript-Node-Interview-Guide/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="先说结论：基础没有消失，资深标准正在变化Vibe Coding 降低了代码生成和 API 查询成本，但没有降低软件失败的代价。代码来得越快，审查边界、验证行为、定位故障和对结果负责越重要。 面试也不会整齐地从“八股”切换到 AI 协作。不同公司、岗位和面试官差异很大，标准化基础题仍是成本较低的筛选手段。对资深工程师，更常见的有效追问是：  为什么这个机制会产生当前现象？ 结论在哪些条件下失效？ 出">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-07-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-23T06:45:10.867Z">
+<meta property="article:author" content="QQs">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="TypeScript">
+<meta property="article:tag" content="面试">
+<meta property="article:tag" content="Vue.js">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2026/07/22/Vue-TypeScript-Node-Interview-Guide/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+
+  <title>Vue、TypeScript 与 Node.js 资深工程师面试知识图谱 | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-graph">
+
+    <a href="/qqsnote/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/07/22/Vue-TypeScript-Node-Interview-Guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vue、TypeScript 与 Node.js 资深工程师面试知识图谱
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-07-22 00:00:00" itemprop="dateCreated datePublished" datetime="2026-07-22T00:00:00+08:00">2026-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-07-23 14:45:10" itemprop="dateModified" datetime="2026-07-23T14:45:10+08:00">2026-07-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="先说结论：基础没有消失，资深标准正在变化"><a href="#先说结论：基础没有消失，资深标准正在变化" class="headerlink" title="先说结论：基础没有消失，资深标准正在变化"></a>先说结论：基础没有消失，资深标准正在变化</h2><p>Vibe Coding 降低了代码生成和 API 查询成本，但没有降低软件失败的代价。代码来得越快，审查边界、验证行为、定位故障和对结果负责越重要。</p>
+<p>面试也不会整齐地从“八股”切换到 AI 协作。不同公司、岗位和面试官差异很大，标准化基础题仍是成本较低的筛选手段。对资深工程师，更常见的有效追问是：</p>
+<ul>
+<li>为什么这个机制会产生当前现象？</li>
+<li>结论在哪些条件下失效？</li>
+<li>出现性能、并发或安全问题时怎样定位？</li>
+<li>为什么选择这个方案，替代方案有什么代价？</li>
+<li>这是生产经验、个人实验，还是根据原理作出的推断？</li>
+<li>AI 生成的代码看似能跑，怎样证明它可以进入系统？</li>
+</ul>
+<p>因此复习策略不是“继续背完所有题”或“以后全靠 AI”，而是：</p>
+<blockquote>
+<p>基础知识达到稳定过线水平，主要精力投入项目深挖、工程取舍、代码审查和验证证据。</p>
+</blockquote>
+<p>对已有 11 年 Web/full-stack 经验、正在转向机器人系统软件和工业可视化的工程师，Vue、TypeScript 与 Node.js 是能力底座和差异化资产，不应成为占满全部学习时间的舒适区。</p>
+<h2 id="四层知识地图"><a href="#四层知识地图" class="headerlink" title="四层知识地图"></a>四层知识地图</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>能力层</th>
+<th>掌握标准</th>
+<th>Vue / TypeScript / Node.js 示例</th>
+<th>复习策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>必须闭卷掌握</td>
+<td>能用自己的语言解释机制，并写出最小代码</td>
+<td>响应式与更新调度、控制流收窄与类型擦除、事件循环与错误传播</td>
+<td>周期性回忆，五分钟讲清，接受两层追问</td>
+</tr>
+<tr>
+<td>资深工程追问</td>
+<td>能联系故障、性能、安全、可靠性和架构边界</td>
+<td>更新风暴、异步竞态、运行时数据污染、事件循环阻塞、背压、优雅停机</td>
+<td>用真实项目或可复现实验回答，说明取舍和指标</td>
+</tr>
+<tr>
+<td>可以借助文档或 AI</td>
+<td>知道从哪里查、如何做最小实验确认</td>
+<td>冷门 API 参数、少用配置、精确守卫顺序、版本相关实现细节</td>
+<td>不长期背诵，面试前按职位描述定向恢复</td>
+</tr>
+<tr>
+<td>AI 代码审查能力</td>
+<td>能指出风险、修改理由和验证证据</td>
+<td>断言代替校验、资源泄漏、缺少超时、错误吞没、无界并发、错误权限假设</td>
+<td>保留 AI 初稿、审查记录、修复和测试结果</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="哪些内容不值得长期投入"><a href="#哪些内容不值得长期投入" class="headerlink" title="哪些内容不值得长期投入"></a>哪些内容不值得长期投入</h3><ul>
+<li>仅对某个旧版本成立、又能快速查询的执行顺序。</li>
+<li>为展示技巧而构造的 TypeScript 递归类型谜题。</li>
+<li>Vue 2 的冷门 API 和已经退出主流项目的配置细节。</li>
+<li>没有输入规模、环境和测量数据的性能结论。</li>
+<li>脱离业务不变量的“最佳实践”列表。</li>
+</ul>
+<p>这不表示这些内容永远不会被问到，而是它们不应挤占建立新职业证据的时间。遇到目标公司明确使用旧技术栈时，再进行定向准备。</p>
+<h2 id="三条专题主线"><a href="#三条专题主线" class="headerlink" title="三条专题主线"></a>三条专题主线</h2><ul>
+<li><a href="/qqsnote/2022/01/21/VueAdvance/" title="Vue 进阶与响应式机制">Vue 进阶与响应式机制</a></li>
+<li><a href="/qqsnote/2025/08/12/VueRouter/" title="Vue Router">Vue Router</a></li>
+<li><a href="/qqsnote/2019/05/20/TypeScript/" title="TypeScript 类型系统">TypeScript 类型系统</a></li>
+<li><a href="/qqsnote/2024/04/11/nodejs-runtime/" title="Node.js 运行时">Node.js 运行时</a></li>
+<li><a href="/qqsnote/2021/02/05/node-stream/" title="Node.js Stream">Node.js Stream</a></li>
+<li><a href="/qqsnote/2026/04/17/CareerPlan-EAI/" title="具身智能与机器人系统软件路线">具身智能与机器人系统软件路线</a>
+</li>
+</ul>
+<h3 id="Vue：从-API-使用推进到更新模型"><a href="#Vue：从-API-使用推进到更新模型" class="headerlink" title="Vue：从 API 使用推进到更新模型"></a>Vue：从 API 使用推进到更新模型</h3><p>闭卷掌握响应式依赖、更新调度、<code>computed</code>/<code>watch</code>、<code>key</code> 和组件状态所有权。资深追问集中在高频更新、异步竞态、组件边界、大列表和 Web3D 对象如何避免无意义深代理。</p>
+<p>目标不是背 Vue 源码函数名，而是能把一次状态写入追踪到 effect、scheduler、组件渲染和 DOM patch，并知道如何用 Vue Devtools 与浏览器 Performance 验证。</p>
+<h3 id="TypeScript：从“有类型”推进到可信边界"><a href="#TypeScript：从“有类型”推进到可信边界" class="headerlink" title="TypeScript：从“有类型”推进到可信边界"></a>TypeScript：从“有类型”推进到可信边界</h3><p>闭卷掌握结构化类型、<code>unknown</code>、判别联合、泛型关系、类型收窄和类型擦除。资深追问集中在公共 API 类型、方差、严格配置、声明文件、运行时输入和类型测试。</p>
+<p>看到 AI 生成的 <code>req.body as Command</code>、<code>response.json() as User</code> 时，应立即追问：数据由谁验证、验证了哪些业务约束、失败如何处理、类型断言的证据是什么。</p>
+<h3 id="Node-js：从“异步非阻塞”推进到服务可靠性"><a href="#Node-js：从“异步非阻塞”推进到服务可靠性" class="headerlink" title="Node.js：从“异步非阻塞”推进到服务可靠性"></a>Node.js：从“异步非阻塞”推进到服务可靠性</h3><p>闭卷掌握 V8/libuv/OS 的职责、事件循环稳定关系、I/O 与 CPU 任务边界、Stream 背压和错误传播。资深追问集中在尾延迟、事件循环阻塞、内存、超时取消、幂等、优雅停机和可观测性。</p>
+<p>回答“Node.js 是单线程”时必须说明指的是 JavaScript 执行模型，而不是整个运行时只有一个线程。回答“流省内存”时必须说明缓冲、背压、并发和测量条件。</p>
+<h3 id="仍需单独准备的通用基础"><a href="#仍需单独准备的通用基础" class="headerlink" title="仍需单独准备的通用基础"></a>仍需单独准备的通用基础</h3><p>这三条主线不能代替 JavaScript 语言、浏览器、网络、数据结构、数据库和系统设计。至少要能解释：</p>
+<ul>
+<li>作用域、闭包、原型、Promise、微任务和错误传播。</li>
+<li>浏览器渲染、布局绘制、事件、缓存、同源策略和常见安全边界。</li>
+<li>HTTP 方法语义、状态码、缓存、Cookie、认证与授权。</li>
+<li>常见数据结构复杂度、并发限制、数据库索引和事务边界。</li>
+</ul>
+<p>本轮文章不重复扩写这些主题，避免把索引变成无法复习的百科全书。</p>
+<h2 id="资深回答的六步结构"><a href="#资深回答的六步结构" class="headerlink" title="资深回答的六步结构"></a>资深回答的六步结构</h2><p>面对原理题或场景题，可以按六步组织，而不是一上来倾倒术语：</p>
+<ol>
+<li><strong>结论</strong>：先直接回答问题，限定讨论条件。</li>
+<li><strong>机制</strong>：说明关键数据流、控制流或类型关系。</li>
+<li><strong>场景</strong>：把机制放回输入规模、并发、生命周期和业务目标。</li>
+<li><strong>风险</strong>：指出错误、安全、性能、一致性和维护风险。</li>
+<li><strong>替代方案</strong>：比较至少一个可行替代，并说明采用成本。</li>
+<li><strong>验证与证据</strong>：给指标、profile、日志、测试、故障复盘或最小实验；没有生产经历时明确说是实验或推理。</li>
+</ol>
+<p>“我会使用虚拟列表”只是方案名称；“先证明 DOM 数量和 layout/paint 是主要瓶颈，再决定虚拟列表窗口、滚动定位和可访问性策略”才体现资深判断。</p>
+<h2 id="跨栈场景：机器人与工业设备状态平台"><a href="#跨栈场景：机器人与工业设备状态平台" class="headerlink" title="跨栈场景：机器人与工业设备状态平台"></a>跨栈场景：机器人与工业设备状态平台</h2><p><strong>问题：5,000 台设备高频更新，页面越来越卡，如何定位？</strong></p>
+<h3 id="1-先定义现象和目标"><a href="#1-先定义现象和目标" class="headerlink" title="1. 先定义现象和目标"></a>1. 先定义现象和目标</h3><p>确认是消息延迟、交互卡顿、图表掉帧还是内存上涨；记录设备数、每台更新频率、单条消息大小、允许的 UI 新鲜度和报警延迟。没有这些条件，“优化 Vue”没有明确目标。</p>
+<h3 id="2-把链路拆开测量"><a href="#2-把链路拆开测量" class="headerlink" title="2. 把链路拆开测量"></a>2. 把链路拆开测量</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">设备 / 模拟器</span><br><span class="line">  -&gt; Node.js 网关接收与解析</span><br><span class="line">  -&gt; 校验、聚合和消息分发</span><br><span class="line">  -&gt; WebSocket 客户端接收</span><br><span class="line">  -&gt; TypeScript 领域模型</span><br><span class="line">  -&gt; Vue 响应式状态与组件更新</span><br><span class="line">  -&gt; DOM / Canvas / WebGL 绘制</span><br></pre></td></tr></table></figure>
+<ul>
+<li>网关观察吞吐量、事件循环延迟、CPU、内存、队列深度和下游耗时。</li>
+<li>浏览器观察消息处理耗时、Long Task、Vue 组件更新、DOM 数量、layout/paint 和帧率。</li>
+<li>给消息加时间戳与 correlation ID，区分服务端积压、网络延迟和前端处理延迟。</li>
+</ul>
+<h3 id="3-分离采集频率与展示频率"><a href="#3-分离采集频率与展示频率" class="headerlink" title="3. 分离采集频率与展示频率"></a>3. 分离采集频率与展示频率</h3><p>设备数据可以高频到达，但人眼和 DOM 不需要逐条刷新。把数据写入有界缓冲，按 100 至 250 ms 合并为 UI 快照。位姿展示可按设备保留最新值；报警、审计和控制结果不能用同样策略静默覆盖。</p>
+<h3 id="4-守住类型和业务边界"><a href="#4-守住类型和业务边界" class="headerlink" title="4. 守住类型和业务边界"></a>4. 守住类型和业务边界</h3><p>WebSocket 数据先视为 <code>unknown</code>，验证消息类型、设备标识、时间戳、数值范围和版本，再转换为判别联合。TypeScript 接口不能代替这些检查。</p>
+<h3 id="5-根据证据选择优化"><a href="#5-根据证据选择优化" class="headerlink" title="5. 根据证据选择优化"></a>5. 根据证据选择优化</h3><ul>
+<li>Vue 更新过多：批量发布快照、稳定 props、减少无意义深响应。</li>
+<li>DOM 数量过多：虚拟滚动、分组展开或只展示视口数据。</li>
+<li>Canvas/WebGL 绘制过重：控制渲染频率、复用对象、减少材质和 draw call。</li>
+<li>主线程解析或计算过重：评估 Worker，并计入数据复制与调度成本。</li>
+<li>Node.js 消费跟不上：使用背压、有界并发、批处理、过载拒绝或分区扩展。</li>
+</ul>
+<h3 id="6-给出验收指标"><a href="#6-给出验收指标" class="headerlink" title="6. 给出验收指标"></a>6. 给出验收指标</h3><p>例如：在 5,000 台设备、每台每秒 10 条模拟遥测下，网关队列不持续增长；报警端到端 p99 小于约定阈值；页面交互无超过约定时长的 Long Task；稳态内存不随运行时间持续增长。具体阈值必须由业务和测试环境确定，不能把示例数字写成行业标准。</p>
+<h2 id="AI-生成代码审查练习"><a href="#AI-生成代码审查练习" class="headerlink" title="AI 生成代码审查练习"></a>AI 生成代码审查练习</h2><p>下面是一段表面上能工作的 AI 生成代码：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">app.post(<span class="string">&#x27;/devices/:id/command&#x27;</span>, <span class="keyword">async</span> (req, res) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> command = req.body <span class="keyword">as</span> RobotCommand</span><br><span class="line">  <span class="keyword">await</span> sendCommand(req.params.id, command)</span><br><span class="line">  res.json(&#123; <span class="attr">ok</span>: <span class="literal">true</span> &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>对于普通信息系统，这段代码已经缺少关键边界；对于机器人命令接口，直接上线更不可接受。</p>
+<h3 id="至少应发现的问题"><a href="#至少应发现的问题" class="headerlink" title="至少应发现的问题"></a>至少应发现的问题</h3><ol>
+<li><code>as RobotCommand</code> 只是类型断言，没有验证请求体结构、数值范围和命令版本。</li>
+<li>没有认证，也没有验证用户是否有权操作目标设备和当前空间。</li>
+<li>没有命令 allowlist、安全门控、设备状态检查和速度/工作空间限制。</li>
+<li>没有超时、取消和下游无响应时的行为定义。</li>
+<li>不清楚命令是否幂等；客户端重试可能造成第二次物理动作。</li>
+<li>没有 command ID、审计记录、操作者、批准信息和结果状态。</li>
+<li>async 失败如何进入 Express 错误边界不明确，可能产生未处理 rejection 或错误响应。</li>
+<li>没有同一设备的并发、顺序、状态冲突和急停优先级策略。</li>
+<li>HTTP 返回成功是否表示“已接收”“已规划”“已下发”还是“已执行完成”不明确。</li>
+<li>没有指标、trace 和安全事件日志，故障后无法还原链路。</li>
+</ol>
+<h3 id="修正方向"><a href="#修正方向" class="headerlink" title="修正方向"></a>修正方向</h3><p>安全的接口不是增加几个 <code>try/catch</code>。它至少需要如下分层：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HTTP 边界</span><br><span class="line">  -&gt; 认证与资源授权</span><br><span class="line">  -&gt; 运行时 schema + 领域约束校验</span><br><span class="line">  -&gt; command ID / 幂等与设备级并发策略</span><br><span class="line">  -&gt; 工作流和人工批准</span><br><span class="line">  -&gt; 确定性安全控制与硬件互锁</span><br><span class="line">  -&gt; 下发、反馈、超时与状态查询</span><br><span class="line">  -&gt; 审计、指标、日志和告警</span><br></pre></td></tr></table></figure>
+<p>LLM 可以生成 handler、schema 初稿和测试样例，但它不能从不存在的需求中推导出可信权限、设备安全状态和物理约束。工程师必须补齐系统保证，并通过测试、仿真、故障注入和现场安全流程验证。</p>
+<p>复习时应保留 AI 初稿、审查清单、修正后的代码与测试结果。这个过程比只展示“我用 AI 很快写完接口”更能证明新时代的工程能力。</p>
+<h2 id="面向当前职业转型的复习投入"><a href="#面向当前职业转型的复习投入" class="headerlink" title="面向当前职业转型的复习投入"></a>面向当前职业转型的复习投入</h2><p>以下比例针对“资深 Web/full-stack 工程师转向机器人系统软件、工业可视化和机器视觉”的当前阶段，不是所有读者的通用公式。</p>
+<h3 id="非求职冲刺期"><a href="#非求职冲刺期" class="headerlink" title="非求职冲刺期"></a>非求职冲刺期</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:right">投入</th>
+<th>方向</th>
+<th>交付物</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">45%</td>
+<td>机器人数字孪生、调试台、视觉引导或设备状态项目</td>
+<td>可运行 Demo、架构图、事件日志、失败案例和演示视频</td>
+</tr>
+<tr>
+<td style="text-align:right">25%</td>
+<td>C++、Python、Linux、坐标系、运动学和工业通信</td>
+<td>SDK 调用、坐标变换实验、协议模拟器、测试记录</td>
+</tr>
+<tr>
+<td style="text-align:right">15%</td>
+<td>JavaScript、Vue、TypeScript、Node.js 机制恢复</td>
+<td>机制卡、最小示例、两层追问答案</td>
+</tr>
+<tr>
+<td style="text-align:right">10%</td>
+<td>AI 辅助编码、代码审查、测试和验证</td>
+<td>AI 初稿、拒绝理由、修复 diff、自动化测试</td>
+</tr>
+<tr>
+<td style="text-align:right">5%</td>
+<td>项目复盘、简历叙事和口头表达</td>
+<td>STAR/架构复盘、三分钟与二十分钟两个版本</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>这个配置的理由是：Web 基础已经是优势，继续投入会提高熟练度，却不能单独证明机器人系统能力。当前更稀缺的是把 Web3D、实时数据、设备状态、视觉和安全约束整合成可检查的作品。</p>
+<h3 id="投递前六至八周"><a href="#投递前六至八周" class="headerlink" title="投递前六至八周"></a>投递前六至八周</h3><p>把通用编程基础、编码练习和模拟面试提高到总时间的 30% 至 35%，依据目标职位描述补齐算法、网络、数据库和目标语言；同时继续维护项目 Demo 和证据，不要在面试前把作品开发完全停掉。</p>
+<p>目标职位不同，权重也应调整：</p>
+<ul>
+<li>工业数字孪生 / 机器人可视化：Vue/Three.js、实时数据、性能和坐标系权重更高。</li>
+<li>机器人应用软件 / 系统集成：Node/Python/C++、设备协议、状态机、异常恢复权重更高。</li>
+<li>机器视觉应用：OpenCV、标定、PnP、手眼标定、部署与光学条件权重更高。</li>
+<li>纯 VLA、强化学习或控制算法岗位：当前仍是高跨度方向，不能用 Web 八股或 Agent 使用经验替代数学、训练和机器人实验能力。</li>
+</ul>
+<h2 id="分级自测题"><a href="#分级自测题" class="headerlink" title="分级自测题"></a>分级自测题</h2><h3 id="A-基础事实：能否直接回答"><a href="#A-基础事实：能否直接回答" class="headerlink" title="A. 基础事实：能否直接回答"></a>A. 基础事实：能否直接回答</h3><ul>
+<li>Vue 的 <code>computed</code> 与 <code>watch</code> 分别解决什么问题？</li>
+<li><code>key</code> 为什么首先是身份问题？</li>
+<li>TypeScript 的 <code>unknown</code> 和 <code>any</code> 有什么差别？</li>
+<li>类型断言为什么不能校验 JSON？</li>
+<li>Node.js 所谓“单线程”的边界是什么？</li>
+<li><code>writable.write()</code> 返回 <code>false</code> 表示什么？</li>
+</ul>
+<h3 id="B-机制解释：能否继续追问两层"><a href="#B-机制解释：能否继续追问两层" class="headerlink" title="B. 机制解释：能否继续追问两层"></a>B. 机制解释：能否继续追问两层</h3><ul>
+<li>一次 Vue 响应式写入怎样到达 DOM 更新？</li>
+<li>为什么从 <code>reactive</code> 直接解构可能丢失响应性？</li>
+<li>判别联合怎样与 <code>never</code> 形成穷尽性检查？</li>
+<li>Promise 微任务、<code>process.nextTick()</code> 和事件循环是什么关系？</li>
+<li><code>pipeline()</code> 比连续 <code>pipe()</code> 多承担了什么职责？</li>
+</ul>
+<h3 id="C-工程决策：能否比较方案"><a href="#C-工程决策：能否比较方案" class="headerlink" title="C. 工程决策：能否比较方案"></a>C. 工程决策：能否比较方案</h3><ul>
+<li>高频设备数据应该每条更新 UI、定时批量发布还是只保留最新值？不同消息是否应使用相同策略？</li>
+<li>什么情况下选择 Worker Threads，什么情况下选择独立进程或服务？</li>
+<li>运行时校验使用手写 guard 还是 schema 库，怎样决定？</li>
+<li>Vue 页面缓存解决了什么，数据缓存又由谁负责？</li>
+</ul>
+<h3 id="D-故障诊断：能否提供证据"><a href="#D-故障诊断：能否提供证据" class="headerlink" title="D. 故障诊断：能否提供证据"></a>D. 故障诊断：能否提供证据</h3><ul>
+<li>页面运行两小时后内存持续增长，先看哪些指标和 profile？</li>
+<li>Node.js 平均延迟正常但 p99 很高，怎样分层定位？</li>
+<li>路由参数切换后偶尔显示上一台设备，原因和修复是什么？</li>
+<li>AI 生成的重试逻辑导致设备动作重复，系统缺了哪些保证？</li>
+</ul>
+<h3 id="E-项目证据：能否诚实说明边界"><a href="#E-项目证据：能否诚实说明边界" class="headerlink" title="E. 项目证据：能否诚实说明边界"></a>E. 项目证据：能否诚实说明边界</h3><ul>
+<li>哪个项目证明你处理过实时数据、背压或高频渲染？</li>
+<li>哪个故障是你亲自定位的，最初假设与最终原因是否一致？</li>
+<li>哪些结论只有个人实验，还没有生产验证？</li>
+<li>如果重新设计当前项目，会保留和改变什么？</li>
+</ul>
+<h2 id="可执行复习清单"><a href="#可执行复习清单" class="headerlink" title="可执行复习清单"></a>可执行复习清单</h2><h3 id="机制卡"><a href="#机制卡" class="headerlink" title="机制卡"></a>机制卡</h3><ul>
+<li>[ ] 每张卡只覆盖一个机制，包含结论、运行过程、失败边界和最小实验。</li>
+<li>[ ] 能闭卷讲五分钟，并回答至少两层“为什么”和“什么时候失效”。</li>
+<li>[ ] 面试价值：通过基础筛选，避免资深候选人在核心原理上失速。</li>
+</ul>
+<h3 id="项目深挖包"><a href="#项目深挖包" class="headerlink" title="项目深挖包"></a>项目深挖包</h3><ul>
+<li>[ ] 准备架构图、关键接口、状态流、技术取舍、性能数据、测试和一次失败复盘。</li>
+<li>[ ] 能围绕同一项目接受二十分钟追问，而不是只复述产品功能。</li>
+<li>[ ] 面试价值：证明系统集成、正确性、可靠性、可观测性和交付能力。</li>
+</ul>
+<h3 id="AI-代码审查记录"><a href="#AI-代码审查记录" class="headerlink" title="AI 代码审查记录"></a>AI 代码审查记录</h3><ul>
+<li>[ ] 保留原始提示和生成代码，不把修正后的结果伪装成人工一次写成。</li>
+<li>[ ] 标出接受、拒绝和需要实验确认的部分，并写明证据。</li>
+<li>[ ] 用测试、静态检查、基准或故障注入验证修正结果。</li>
+<li>[ ] 面试价值：证明会使用 AI，同时保留工程判断和结果责任。</li>
+</ul>
+<h3 id="职业转型证据"><a href="#职业转型证据" class="headerlink" title="职业转型证据"></a>职业转型证据</h3><ul>
+<li>[ ] 至少完成一个机器人调试台、数字孪生或视觉引导工作流的可运行作品。</li>
+<li>[ ] README 说明数据流、状态、坐标系、安全边界、故障处理和测试策略。</li>
+<li>[ ] 明确区分已有 Web 工程证据、正在形成的机器人软件能力和尚未证明的算法能力。</li>
+<li>[ ] 面试价值：把“11 年 Web 工程师想转机器人”变成“能够交付面向机器人的软件系统，并持续补强机器人深度”。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/qqsnote/tags/Node-js/" rel="tag"># Node.js</a>
+              <a href="/qqsnote/tags/TypeScript/" rel="tag"># TypeScript</a>
+              <a href="/qqsnote/tags/%E9%9D%A2%E8%AF%95/" rel="tag"># 面试</a>
+              <a href="/qqsnote/tags/Vue-js/" rel="tag"># Vue.js</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2026/07/03/Codebase-Memory-MCP/" rel="prev" title="Codebase Memory MCP 调研笔记">
+      <i class="fa fa-chevron-left"></i> Codebase Memory MCP 调研笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/qqsnote/2026/07/22/ai-agent-multi-agent-planning-harness-2026/" rel="next" title="AI Agent工作模式与工具选型：从Skills、Harness到多智能体协作">
+      AI Agent工作模式与工具选型：从Skills、Harness到多智能体协作 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E8%AF%B4%E7%BB%93%E8%AE%BA%EF%BC%9A%E5%9F%BA%E7%A1%80%E6%B2%A1%E6%9C%89%E6%B6%88%E5%A4%B1%EF%BC%8C%E8%B5%84%E6%B7%B1%E6%A0%87%E5%87%86%E6%AD%A3%E5%9C%A8%E5%8F%98%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">先说结论：基础没有消失，资深标准正在变化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E5%B1%82%E7%9F%A5%E8%AF%86%E5%9C%B0%E5%9B%BE"><span class="nav-number">2.</span> <span class="nav-text">四层知识地图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%AA%E4%BA%9B%E5%86%85%E5%AE%B9%E4%B8%8D%E5%80%BC%E5%BE%97%E9%95%BF%E6%9C%9F%E6%8A%95%E5%85%A5"><span class="nav-number">2.1.</span> <span class="nav-text">哪些内容不值得长期投入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E6%9D%A1%E4%B8%93%E9%A2%98%E4%B8%BB%E7%BA%BF"><span class="nav-number">3.</span> <span class="nav-text">三条专题主线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Vue%EF%BC%9A%E4%BB%8E-API-%E4%BD%BF%E7%94%A8%E6%8E%A8%E8%BF%9B%E5%88%B0%E6%9B%B4%E6%96%B0%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.1.</span> <span class="nav-text">Vue：从 API 使用推进到更新模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TypeScript%EF%BC%9A%E4%BB%8E%E2%80%9C%E6%9C%89%E7%B1%BB%E5%9E%8B%E2%80%9D%E6%8E%A8%E8%BF%9B%E5%88%B0%E5%8F%AF%E4%BF%A1%E8%BE%B9%E7%95%8C"><span class="nav-number">3.2.</span> <span class="nav-text">TypeScript：从“有类型”推进到可信边界</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-js%EF%BC%9A%E4%BB%8E%E2%80%9C%E5%BC%82%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9E%E2%80%9D%E6%8E%A8%E8%BF%9B%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-number">3.3.</span> <span class="nav-text">Node.js：从“异步非阻塞”推进到服务可靠性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8D%E9%9C%80%E5%8D%95%E7%8B%AC%E5%87%86%E5%A4%87%E7%9A%84%E9%80%9A%E7%94%A8%E5%9F%BA%E7%A1%80"><span class="nav-number">3.4.</span> <span class="nav-text">仍需单独准备的通用基础</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%B7%B1%E5%9B%9E%E7%AD%94%E7%9A%84%E5%85%AD%E6%AD%A5%E7%BB%93%E6%9E%84"><span class="nav-number">4.</span> <span class="nav-text">资深回答的六步结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%A8%E6%A0%88%E5%9C%BA%E6%99%AF%EF%BC%9A%E6%9C%BA%E5%99%A8%E4%BA%BA%E4%B8%8E%E5%B7%A5%E4%B8%9A%E8%AE%BE%E5%A4%87%E7%8A%B6%E6%80%81%E5%B9%B3%E5%8F%B0"><span class="nav-number">5.</span> <span class="nav-text">跨栈场景：机器人与工业设备状态平台</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%85%88%E5%AE%9A%E4%B9%89%E7%8E%B0%E8%B1%A1%E5%92%8C%E7%9B%AE%E6%A0%87"><span class="nav-number">5.1.</span> <span class="nav-text">1. 先定义现象和目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%8A%8A%E9%93%BE%E8%B7%AF%E6%8B%86%E5%BC%80%E6%B5%8B%E9%87%8F"><span class="nav-number">5.2.</span> <span class="nav-text">2. 把链路拆开测量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%88%86%E7%A6%BB%E9%87%87%E9%9B%86%E9%A2%91%E7%8E%87%E4%B8%8E%E5%B1%95%E7%A4%BA%E9%A2%91%E7%8E%87"><span class="nav-number">5.3.</span> <span class="nav-text">3. 分离采集频率与展示频率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%AE%88%E4%BD%8F%E7%B1%BB%E5%9E%8B%E5%92%8C%E4%B8%9A%E5%8A%A1%E8%BE%B9%E7%95%8C"><span class="nav-number">5.4.</span> <span class="nav-text">4. 守住类型和业务边界</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%A0%B9%E6%8D%AE%E8%AF%81%E6%8D%AE%E9%80%89%E6%8B%A9%E4%BC%98%E5%8C%96"><span class="nav-number">5.5.</span> <span class="nav-text">5. 根据证据选择优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E7%BB%99%E5%87%BA%E9%AA%8C%E6%94%B6%E6%8C%87%E6%A0%87"><span class="nav-number">5.6.</span> <span class="nav-text">6. 给出验收指标</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AI-%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5%E7%BB%83%E4%B9%A0"><span class="nav-number">6.</span> <span class="nav-text">AI 生成代码审查练习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%B3%E5%B0%91%E5%BA%94%E5%8F%91%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">6.1.</span> <span class="nav-text">至少应发现的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%AD%A3%E6%96%B9%E5%90%91"><span class="nav-number">6.2.</span> <span class="nav-text">修正方向</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%BD%93%E5%89%8D%E8%81%8C%E4%B8%9A%E8%BD%AC%E5%9E%8B%E7%9A%84%E5%A4%8D%E4%B9%A0%E6%8A%95%E5%85%A5"><span class="nav-number">7.</span> <span class="nav-text">面向当前职业转型的复习投入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E6%B1%82%E8%81%8C%E5%86%B2%E5%88%BA%E6%9C%9F"><span class="nav-number">7.1.</span> <span class="nav-text">非求职冲刺期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%95%E9%80%92%E5%89%8D%E5%85%AD%E8%87%B3%E5%85%AB%E5%91%A8"><span class="nav-number">7.2.</span> <span class="nav-text">投递前六至八周</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%BA%A7%E8%87%AA%E6%B5%8B%E9%A2%98"><span class="nav-number">8.</span> <span class="nav-text">分级自测题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-%E5%9F%BA%E7%A1%80%E4%BA%8B%E5%AE%9E%EF%BC%9A%E8%83%BD%E5%90%A6%E7%9B%B4%E6%8E%A5%E5%9B%9E%E7%AD%94"><span class="nav-number">8.1.</span> <span class="nav-text">A. 基础事实：能否直接回答</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-%E6%9C%BA%E5%88%B6%E8%A7%A3%E9%87%8A%EF%BC%9A%E8%83%BD%E5%90%A6%E7%BB%A7%E7%BB%AD%E8%BF%BD%E9%97%AE%E4%B8%A4%E5%B1%82"><span class="nav-number">8.2.</span> <span class="nav-text">B. 机制解释：能否继续追问两层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-%E5%B7%A5%E7%A8%8B%E5%86%B3%E7%AD%96%EF%BC%9A%E8%83%BD%E5%90%A6%E6%AF%94%E8%BE%83%E6%96%B9%E6%A1%88"><span class="nav-number">8.3.</span> <span class="nav-text">C. 工程决策：能否比较方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-%E6%95%85%E9%9A%9C%E8%AF%8A%E6%96%AD%EF%BC%9A%E8%83%BD%E5%90%A6%E6%8F%90%E4%BE%9B%E8%AF%81%E6%8D%AE"><span class="nav-number">8.4.</span> <span class="nav-text">D. 故障诊断：能否提供证据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#E-%E9%A1%B9%E7%9B%AE%E8%AF%81%E6%8D%AE%EF%BC%9A%E8%83%BD%E5%90%A6%E8%AF%9A%E5%AE%9E%E8%AF%B4%E6%98%8E%E8%BE%B9%E7%95%8C"><span class="nav-number">8.5.</span> <span class="nav-text">E. 项目证据：能否诚实说明边界</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E6%89%A7%E8%A1%8C%E5%A4%8D%E4%B9%A0%E6%B8%85%E5%8D%95"><span class="nav-number">9.</span> <span class="nav-text">可执行复习清单</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%BA%E5%88%B6%E5%8D%A1"><span class="nav-number">9.1.</span> <span class="nav-text">机制卡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E6%B7%B1%E6%8C%96%E5%8C%85"><span class="nav-number">9.2.</span> <span class="nav-text">项目深挖包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AI-%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5%E8%AE%B0%E5%BD%95"><span class="nav-number">9.3.</span> <span class="nav-text">AI 代码审查记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%8C%E4%B8%9A%E8%BD%AC%E5%9E%8B%E8%AF%81%E6%8D%AE"><span class="nav-number">9.4.</span> <span class="nav-text">职业转型证据</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">405</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">211</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3D/" style="font-size: 13.29px; color: #d0d0d0">3D</a> <a href="/qqsnote/tags/3DGS/" style="font-size: 12px; color: #ccc">3DGS</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 23.57px; color: #ededed">AI</a> <a href="/qqsnote/tags/AI-Coding/" style="font-size: 12px; color: #ccc">AI Coding</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Agent/" style="font-size: 12px; color: #ccc">Agent</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 28.71px; color: #fbfbfb">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.29px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24.86px; color: #f0f0f0">Azure</a> <a href="/qqsnote/tags/BVH/" style="font-size: 12px; color: #ccc">BVH</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 15.86px; color: #d7d7d7">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 15.86px; color: #d7d7d7">C++</a> <a href="/qqsnote/tags/CAD/" style="font-size: 12px; color: #ccc">CAD</a> <a href="/qqsnote/tags/CI-CD/" style="font-size: 12px; color: #ccc">CI/CD</a> <a href="/qqsnote/tags/CSS/" style="font-size: 17.14px; color: #dbdbdb">CSS</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/Context-Engineering/" style="font-size: 12px; color: #ccc">Context Engineering</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 17.14px; color: #dbdbdb">DevOps</a> <a href="/qqsnote/tags/DevSecOps/" style="font-size: 12px; color: #ccc">DevSecOps</a> <a href="/qqsnote/tags/Digital-Twin/" style="font-size: 12px; color: #ccc">Digital Twin</a> <a href="/qqsnote/tags/Docker/" style="font-size: 17.14px; color: #dbdbdb">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.86px; color: #d7d7d7">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.29px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Flow-Graph/" style="font-size: 13.29px; color: #d0d0d0">Flow Graph</a> <a href="/qqsnote/tags/GitHub/" style="font-size: 12px; color: #ccc">GitHub</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/HMI/" style="font-size: 12px; color: #ccc">HMI</a> <a href="/qqsnote/tags/Halcon/" style="font-size: 12px; color: #ccc">Halcon</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.29px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 18.43px; color: #dedede">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/Knowledge-Graph/" style="font-size: 12px; color: #ccc">Knowledge Graph</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.57px; color: #d3d3d3">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.29px; color: #e9e9e9">Linux</a> <a href="/qqsnote/tags/MCP/" style="font-size: 12px; color: #ccc">MCP</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MVVM/" style="font-size: 12px; color: #ccc">MVVM</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.29px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/Modbus/" style="font-size: 12px; color: #ccc">Modbus</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 17.14px; color: #dbdbdb">Node.js</a> <a href="/qqsnote/tags/OCCT/" style="font-size: 12px; color: #ccc">OCCT</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.29px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 19.71px; color: #e2e2e2">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 14.57px; color: #d3d3d3">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PLC/" style="font-size: 13.29px; color: #d0d0d0">PLC</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Prism/" style="font-size: 12px; color: #ccc">Prism</a> <a href="/qqsnote/tags/Proxy/" style="font-size: 12px; color: #ccc">Proxy</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24.86px; color: #f0f0f0">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/ROS2/" style="font-size: 14.57px; color: #d3d3d3">ROS2</a> <a href="/qqsnote/tags/RS-485/" style="font-size: 12px; color: #ccc">RS-485</a> <a href="/qqsnote/tags/React/" style="font-size: 19.71px; color: #e2e2e2">React</a> <a href="/qqsnote/tags/React-Flow/" style="font-size: 12px; color: #ccc">React Flow</a> <a href="/qqsnote/tags/Rust/" style="font-size: 12px; color: #ccc">Rust</a> <a href="/qqsnote/tags/SDLC/" style="font-size: 12px; color: #ccc">SDLC</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.57px; color: #d3d3d3">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Squid/" style="font-size: 12px; color: #ccc">Squid</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 22.29px; color: #e9e9e9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 15.86px; color: #d7d7d7">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/URDF/" style="font-size: 12px; color: #ccc">URDF</a> <a href="/qqsnote/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/qqsnote/tags/VLA/" style="font-size: 13.29px; color: #d0d0d0">VLA</a> <a href="/qqsnote/tags/VTK/" style="font-size: 12px; color: #ccc">VTK</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/Vue-js/" style="font-size: 12px; color: #ccc">Vue.js</a> <a href="/qqsnote/tags/WPF/" style="font-size: 15.86px; color: #d7d7d7">WPF</a> <a href="/qqsnote/tags/Web/" style="font-size: 12px; color: #ccc">Web</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27.43px; color: #f8f8f8">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/dify/" style="font-size: 12px; color: #ccc">dify</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.29px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 26.14px; color: #f4f4f4">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.29px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 15.86px; color: #d7d7d7">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 17.14px; color: #dbdbdb">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.57px; color: #d3d3d3">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14.57px; color: #d3d3d3">上位机</a> <a href="/qqsnote/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">传感器</a> <a href="/qqsnote/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/" style="font-size: 12px; color: #ccc">光线追踪</a> <a href="/qqsnote/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/" style="font-size: 14.57px; color: #d3d3d3">具身智能</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.86px; color: #d7d7d7">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.29px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%9B%E5%85%83%E6%95%B0/" style="font-size: 12px; color: #ccc">四元数</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" style="font-size: 12px; color: #ccc">图像分割</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 19.71px; color: #e2e2e2">图形学</a> <a href="/qqsnote/tags/%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" style="font-size: 17.14px; color: #dbdbdb">坐标变换</a> <a href="/qqsnote/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" style="font-size: 12px; color: #ccc">多模态</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.29px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 22.29px; color: #e9e9e9">学习笔记</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E5%AE%89%E5%85%A8/" style="font-size: 12px; color: #ccc">工业安全</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89/" style="font-size: 14.57px; color: #d3d3d3">工业视觉</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" style="font-size: 14.57px; color: #d3d3d3">工业软件</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" style="font-size: 12px; color: #ccc">工业通信</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.57px; color: #d3d3d3">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.29px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%89%8B%E7%9C%BC%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">手眼标定</a> <a href="/qqsnote/tags/%E6%89%A7%E8%A1%8C%E5%99%A8/" style="font-size: 12px; color: #ccc">执行器</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 15.86px; color: #d7d7d7">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%97%8B%E8%BD%AC/" style="font-size: 12px; color: #ccc">旋转</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 12px; color: #ccc">机器人</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A1%AC%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人硬件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%AF%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人软件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89/" style="font-size: 14.57px; color: #d3d3d3">机器视觉</a> <a href="/qqsnote/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 13.29px; color: #d0d0d0">机械臂</a> <a href="/qqsnote/tags/%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">标定</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/" style="font-size: 12px; color: #ccc">桌面应用</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E6%AF%94%E4%BE%8B%E9%98%80/" style="font-size: 12px; color: #ccc">比例阀</a> <a href="/qqsnote/tags/%E6%B5%81%E5%BC%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">流式处理</a> <a href="/qqsnote/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">深度学习</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.29px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%94%9F%E4%BF%A1%E5%88%86%E6%9E%90/" style="font-size: 12px; color: #ccc">生信分析</a> <a href="/qqsnote/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">目标检测</a> <a href="/qqsnote/tags/%E7%9B%B8%E6%9C%BA%E6%A0%87%E5%AE%9A/" style="font-size: 13.29px; color: #d0d0d0">相机标定</a> <a href="/qqsnote/tags/%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">碰撞检测</a> <a href="/qqsnote/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 12px; color: #ccc">神经网络</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14.57px; color: #d3d3d3">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%8E%A7%E5%88%B6/" style="font-size: 14.57px; color: #d3d3d3">自动化控制</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E5%89%AA%E8%BE%91/" style="font-size: 12px; color: #ccc">视频剪辑</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

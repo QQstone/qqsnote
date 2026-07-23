@@ -179,6 +179,231 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/06/08/Squid-Github-Proxy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2026/06/08/Squid-Github-Proxy/" class="post-title-link" itemprop="url">Squid GitHub 局域网代理实践</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-06-08 10:55:50" itemprop="dateCreated datePublished" datetime="2026-06-08T10:55:50+08:00">2026-06-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-07-04 14:19:02" itemprop="dateModified" datetime="2026-07-04T14:19:02+08:00">2026-07-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>局域网内有些 PC 访问 GitHub repo 受限，但本机可以正常访问 GitHub。目标是在本机提供一个局域网 HTTP/HTTPS 正向代理，让其他电脑通过本机代理执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/xxx/yyy.git</span><br><span class="line">git fetch</span><br><span class="line">git pull</span><br></pre></td></tr></table></figure>
+<p>本机环境：</p>
+<ul>
+<li>Ubuntu 22.04</li>
+<li>本机局域网 IP：<code>192.168.111.231/24</code></li>
+<li>代理端口：<code>3128</code></li>
+<li>允许访问的网段：<code>192.168.111.0/24</code></li>
+</ul>
+<h2 id="为什么不用-Nginx"><a href="#为什么不用-Nginx" class="headerlink" title="为什么不用 Nginx"></a>为什么不用 Nginx</h2><p>Nginx 默认适合做 Web 服务和反向代理，例如把外部请求转发到某个内部 HTTP 服务。</p>
+<p>但是 GitHub repo 通常走 HTTPS，Git 客户端需要 HTTP 代理支持 <code>CONNECT</code> 方法来建立 HTTPS 隧道。标准 Nginx 不适合作为通用正向 HTTPS 代理，除非额外编译第三方模块，例如 <code>ngx_http_proxy_connect_module</code>。</p>
+<p>这个场景更适合使用 Squid：</p>
+<ul>
+<li>原生支持 HTTP/HTTPS 正向代理</li>
+<li>支持 <code>CONNECT</code></li>
+<li>支持 ACL 限制来源网段，避免变成开放代理</li>
+<li>日志和诊断能力更直接</li>
+</ul>
+<h2 id="安装-Squid"><a href="#安装-Squid" class="headerlink" title="安装 Squid"></a>安装 Squid</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install -y squid</span><br></pre></td></tr></table></figure>
+<p>安装后 Squid 的主配置文件在：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/squid/squid.conf</span><br></pre></td></tr></table></figure>
+<h2 id="配置正向代理"><a href="#配置正向代理" class="headerlink" title="配置正向代理"></a>配置正向代理</h2><p>先备份原配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cp /etc/squid/squid.conf /etc/squid/squid.conf.bak.codex-20260608-1022</span><br></pre></td></tr></table></figure>
+<p>将 <code>/etc/squid/squid.conf</code> 改成下面的最小配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># Squid forward proxy for LAN Git HTTPS access.</span><br><span class="line"># Host LAN address: 192.168.111.231&#x2F;24</span><br><span class="line"></span><br><span class="line">acl local_lan src 192.168.111.0&#x2F;24</span><br><span class="line">acl SSL_ports port 443</span><br><span class="line">acl Safe_ports port 80</span><br><span class="line">acl Safe_ports port 443</span><br><span class="line">acl CONNECT method CONNECT</span><br><span class="line"></span><br><span class="line">http_access deny !Safe_ports</span><br><span class="line">http_access deny CONNECT !SSL_ports</span><br><span class="line">http_access allow localhost</span><br><span class="line">http_access allow local_lan</span><br><span class="line">http_access deny all</span><br><span class="line"></span><br><span class="line">http_port 3128</span><br><span class="line"></span><br><span class="line">access_log &#x2F;var&#x2F;log&#x2F;squid&#x2F;access.log squid</span><br><span class="line">cache_log &#x2F;var&#x2F;log&#x2F;squid&#x2F;cache.log</span><br></pre></td></tr></table></figure>
+<p>关键点：</p>
+<ul>
+<li><code>acl local_lan src 192.168.111.0/24</code>：只允许当前局域网使用代理。</li>
+<li><code>acl SSL_ports port 443</code>：允许 HTTPS 目标端口。</li>
+<li><code>acl CONNECT method CONNECT</code>：识别 HTTPS 隧道请求。</li>
+<li><code>http_access deny CONNECT !SSL_ports</code>：只允许对安全端口做 <code>CONNECT</code>。</li>
+<li><code>http_access deny all</code>：最后兜底拒绝其他来源，避免开放代理。</li>
+</ul>
+<h2 id="校验配置并重启"><a href="#校验配置并重启" class="headerlink" title="校验配置并重启"></a>校验配置并重启</h2><p>配置写完后先检查语法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">squid -k parse -f /etc/squid/squid.conf</span><br></pre></td></tr></table></figure>
+<p>重启并设置开机启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl <span class="built_in">enable</span> --now squid</span><br><span class="line">sudo systemctl restart squid</span><br><span class="line">sudo systemctl status squid --no-pager</span><br></pre></td></tr></table></figure>
+<p>检查监听端口：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ss -ltnp</span><br></pre></td></tr></table></figure>
+<p>正常情况下可以看到：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LISTEN ... *:3128 ...</span><br></pre></td></tr></table></figure>
+<h2 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h2><p>这次实践中检查到 UFW 没有启用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/ufw/ufw.conf</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ENABLED&#x3D;no</span><br></pre></td></tr></table></figure>
+<p>所以没有额外添加防火墙规则。</p>
+<p>如果 UFW 是启用状态，可以放行当前局域网访问 <code>3128/tcp</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw allow from 192.168.111.0/24 to any port 3128 proto tcp</span><br></pre></td></tr></table></figure>
+<h2 id="本机验证"><a href="#本机验证" class="headerlink" title="本机验证"></a>本机验证</h2><p>通过本机回环地址验证：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -I --max-time 10 -x http://127.0.0.1:3128 https://github.com</span><br></pre></td></tr></table></figure>
+<p>通过本机局域网地址验证，模拟其他 PC 的访问方式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -I --max-time 10 -x http://192.168.111.231:3128 https://github.com</span><br></pre></td></tr></table></figure>
+<p>成功时会看到类似结果：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 Connection established</span><br><span class="line"></span><br><span class="line">HTTP/2 200</span><br><span class="line">server: github.com</span><br></pre></td></tr></table></figure>
+<p>再用 Git 验证 repo 访问：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git -c http.proxy=http://192.168.111.231:3128 \</span><br><span class="line">    -c https.proxy=http://192.168.111.231:3128 \</span><br><span class="line">    ls-remote https://github.com/git/git.git HEAD</span><br></pre></td></tr></table></figure>
+<p>成功结果：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">9ac3f193c05c2237e2b14ebaa1149e9fc8a1abe0 HEAD</span><br></pre></td></tr></table></figure>
+<h2 id="局域网客户端使用"><a href="#局域网客户端使用" class="headerlink" title="局域网客户端使用"></a>局域网客户端使用</h2><p>在其他 PC 上设置 Git 全局代理：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.proxy http://192.168.111.231:3128</span><br><span class="line">git config --global https.proxy http://192.168.111.231:3128</span><br></pre></td></tr></table></figure>
+<p>验证：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git ls-remote https://github.com/git/git.git HEAD</span><br></pre></td></tr></table></figure>
+<p>临时使用代理，不写入 Git 全局配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HTTPS_PROXY=http://192.168.111.231:3128 git <span class="built_in">clone</span> https://github.com/git/git.git</span><br></pre></td></tr></table></figure>
+<p>取消 Git 全局代理：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global --<span class="built_in">unset</span> http.proxy</span><br><span class="line">git config --global --<span class="built_in">unset</span> https.proxy</span><br></pre></td></tr></table></figure>
+<h2 id="日志排查"><a href="#日志排查" class="headerlink" title="日志排查"></a>日志排查</h2><p>查看 Squid 访问日志：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tail -f /var/<span class="built_in">log</span>/squid/access.log</span><br></pre></td></tr></table></figure>
+<p>查看 Squid 服务日志：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo journalctl -u squid -f</span><br></pre></td></tr></table></figure>
+<p>如果客户端无法访问，优先检查：</p>
+<ol>
+<li>客户端和代理机器是否在 <code>192.168.111.0/24</code> 网段。</li>
+<li>客户端能否 ping 到 <code>192.168.111.231</code>。</li>
+<li>代理机器 <code>3128</code> 是否在监听。</li>
+<li>Squid 日志里是否出现 <code>TCP_DENIED</code>。</li>
+<li>本机自己是否能访问 GitHub。</li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这个场景本质上是正向代理，不是反向代理。Nginx 可以做很多 Web 代理场景，但 GitHub HTTPS repo 访问需要稳定支持 <code>CONNECT</code>，所以 Squid 更直接。</p>
+<p>最终局域网电脑只需要把 Git 的 HTTP/HTTPS proxy 指向：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.111.231:3128</span><br></pre></td></tr></table></figure>
+<p>就可以通过本机访问 GitHub HTTPS repo。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/06/06/openGL-learnopengl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2026/06/06/openGL-learnopengl/" class="post-title-link" itemprop="url">Learn OpenGL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-06-06 11:23:21" itemprop="dateCreated datePublished" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">图形学</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>OpenGL自身是一个巨大的状态机(State Machine)：一系列的变量描述OpenGL此刻应当如何运行。OpenGL的状态通常被称为OpenGL上下文(Context)。我们通常使用如下途径去更改OpenGL状态：设置选项，操作缓冲。最后，我们使用当前OpenGL上下文来渲染。</p>
+<p>切换到绘制线段/图形 —&gt; 绘制参数 —&gt; 更新</p>
+<p>GLFW是一个专门针对OpenGL的C语言库，它提供了一些渲染物体所需的最低限度的接口。如创建窗口、处理输入（如键盘、鼠标、游戏手柄）以及管理 OpenGL 上下文，GLFW是开发 OpenGL 应用程序的常用工具之一</p>
+<p><a target="_blank" rel="noopener" href="https://www.glfw.org/docs/latest/window.html#window_hints">GLFW window hint 枚举</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/06/03/ROS2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1001,405 +1226,6 @@ graph-links:end -->
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/04/25/React-Zustand/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2026/04/25/React-Zustand/" class="post-title-link" itemprop="url">Zustand</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2026-04-25 10:26:54" itemprop="dateCreated datePublished" datetime="2026-04-25T10:26:54+08:00">2026-04-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/04/17/CareerPlan-EAI/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2026/04/17/CareerPlan-EAI/" class="post-title-link" itemprop="url">具身智能</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2026-04-17 13:41:01" itemprop="dateCreated datePublished" datetime="2026-04-17T13:41:01+08:00">2026-04-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-07-21 18:20:51" itemprop="dateModified" datetime="2026-07-21T18:20:51+08:00">2026-07-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <!-- graph-links:start
-[[EAI-hardwares|extends]]
-[[VLA|extends]]
-[[ROS|extends]]
-graph-links:end -->
-<p>具身智能 Embodied Artificial Intelligence 不仅仅是人工智能+机器人， 而是人工智能通过物理本体与环境交互实现知行合一</p>
-<p>智能闭环核心要素：</p>
-<ul>
-<li>具身本体:协作机械臂 四足/轮臂复合/人形机器人 无人驾驶汽车/无人机</li>
-<li>智能内核 依托大模型 世界模型 多模态技术</li>
-<li>环境交互 以第一人称视角与现实物理世界进行动态交互和自适应学习</li>
-</ul>
-<p>挑战</p>
-<ul>
-<li>sim-to-real gap 如硬件公差 环境误差 引起的累积误差</li>
-<li>数据的稀疏性 和 昂贵的试错 如自动驾驶的意外情况</li>
-<li>泛化能力</li>
-<li>安全性和不可解释性</li>
-</ul>
-<p>现阶段人形机器人从业公司运营路径：</p>
-<ul>
-<li>软硬件全栈 从AI大脑到硬件躯体全自主研发 通过技术闭环提升软硬协同能力 代表：Figure AI、智元机器人</li>
-<li>重硬件 核心优势在本体设计 运动控制算法 代表：宇树</li>
-<li>重软件 Physical Intelligence、Field AI、银河通用</li>
-</ul>
-<h2 id="基于真实情况的路线判断"><a href="#基于真实情况的路线判断" class="headerlink" title="基于真实情况的路线判断"></a>基于真实情况的路线判断</h2><p>当前事实：</p>
-<ul>
-<li>已经参与工业机器人项目</li>
-<li>有机会接触真实机器人、PLC、相机</li>
-<li>项目有关联 RL / VLA 库，但现阶段还没有真正落地</li>
-<li>自研运动控制库包含 FK、IK、碰撞检测、RRT、SafeTrajectoryBuilder</li>
-<li>C++、Python、Linux 有接触，但实际熟练度较低</li>
-<li>没有开发过产品级机器人/工业软件</li>
-<li>当前职责还不清晰，个人更想广泛接触整个系统</li>
-<li>可以接受 title 或薪资阶段性下降</li>
-</ul>
-<p>结论：</p>
-<p>当前项目不是传统上位机项目，而是有“上层智能库 + 自研运动规划/控制底座 + 硬件执行接口”的机器人系统。最短路径不是直接冲“VLA/强化学习算法工程师”，而是先把这条系统链路看懂，并把中层运动规划与落地层硬件执行转化为可证明的工程能力。</p>
-<p>推荐定位：</p>
-<blockquote>
-<p>Web/应用软件工程师 -&gt; 机器人系统软件工程师 -&gt; 具身智能落地 / 机器人平台 / 运动规划可视化工程师</p>
-</blockquote>
-<p>学习原则：</p>
-<ul>
-<li>每个知识点都要绑定真实对象：机器人、PLC点位、相机帧、坐标系、状态机、报警、日志</li>
-<li>不只写学习笔记，要沉淀现场图、数据流图、接口表、状态转移图、最小可运行Demo</li>
-<li>C++、Python、Linux 不需要先追求算法竞赛式熟练，而要先达到能读SDK、写调用示例、调接口、看日志、部署Demo</li>
-<li>机器视觉应提前进入主线，因为光学背景是差异化优势</li>
-<li>当前项目主线是自研运动控制库和硬件封装接口，ROS2 作为开源生态参考和求职加分项，不作为现场项目主线</li>
-<li>RL / VLA 是上层智能能力，现阶段作为系统分层认知和后续接入方向，不作为近期主要产出</li>
-<li>个人职责不清晰时，先做系统地图和调试工具，争取成为“看得懂全链路、能把问题定位清楚”的系统型工程师</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br></pre></td><td class="code"><pre><span class="line">mindmap</span><br><span class="line">  root((机器人系统软件 &#x2F; 具身智能落地工程师))</span><br><span class="line">    近期目标(0-3个月)</span><br><span class="line">      系统分层地图</span><br><span class="line">        RL VLA库位置</span><br><span class="line">        任务规划入口</span><br><span class="line">        运动规划链路</span><br><span class="line">        硬件执行接口</span><br><span class="line">      现场系统建模</span><br><span class="line">        机器人品牌与控制器</span><br><span class="line">        PLC点位表</span><br><span class="line">        相机数据输出</span><br><span class="line">        工艺状态流</span><br><span class="line">        安全与报警</span><br><span class="line">      工程基础补底</span><br><span class="line">        Linux常用命令</span><br><span class="line">        Python脚本与OpenCV</span><br><span class="line">        C++基础与CMake</span><br><span class="line">        调试与日志</span><br><span class="line">      自研运动控制库</span><br><span class="line">        自研运动控制库API</span><br><span class="line">        FK IK</span><br><span class="line">        碰撞检测</span><br><span class="line">        RRT</span><br><span class="line">        SafeTrajectoryBuilder</span><br><span class="line">      硬件封装与通信</span><br><span class="line">        硬件封装接口</span><br><span class="line">        机器人状态与命令</span><br><span class="line">        Modbus OPCUA MQTT基础</span><br><span class="line">      Web优势迁移</span><br><span class="line">        WebSocket实时通信</span><br><span class="line">        设备状态面板</span><br><span class="line">        运动规划日志回放</span><br><span class="line">        ThreeJS轨迹可视化</span><br><span class="line">    </span><br><span class="line">    中期目标(3-6个月)</span><br><span class="line">      运动规划调试工具</span><br><span class="line">        IK结果展示</span><br><span class="line">        碰撞检测结果</span><br><span class="line">        RRT路径显示</span><br><span class="line">        SafeTrajectory结果</span><br><span class="line">        失败原因记录</span><br><span class="line">      视觉-机器人链路</span><br><span class="line">        相机标定</span><br><span class="line">        手眼标定</span><br><span class="line">        OpenCV检测</span><br><span class="line">        图像坐标到机器人坐标</span><br><span class="line">      机器人数字孪生调试台</span><br><span class="line">        URDF模型加载</span><br><span class="line">        FK基础</span><br><span class="line">        TCP与工具坐标系</span><br><span class="line">        轨迹播放</span><br><span class="line">      现场Demo</span><br><span class="line">        PLC状态采集</span><br><span class="line">        相机帧展示</span><br><span class="line">        机器人状态可视化</span><br><span class="line">        报警与事件日志</span><br><span class="line">    </span><br><span class="line">    长期目标(6-12个月)</span><br><span class="line">      产品级意识</span><br><span class="line">        设备抽象</span><br><span class="line">        多状态机协同</span><br><span class="line">        异常恢复</span><br><span class="line">        权限与安全边界</span><br><span class="line">      上层智能接入</span><br><span class="line">        LLM任务描述</span><br><span class="line">        VLA输出理解</span><br><span class="line">        结构化动作意图</span><br><span class="line">        人工确认闭环</span><br><span class="line">        安全门控</span><br><span class="line">      系统集成能力</span><br><span class="line">        Linux部署</span><br><span class="line">        Docker容器化</span><br><span class="line">        数据库与时序日志</span><br><span class="line">        README与演示视频</span><br><span class="line">      进阶方向选择</span><br><span class="line">        机器人应用软件</span><br><span class="line">        工业数字孪生</span><br><span class="line">        机器视觉集成</span><br><span class="line">        AI辅助运维</span><br><span class="line">    </span><br><span class="line">    核心技能层(必学)</span><br><span class="line">      现场理解</span><br><span class="line">        设备边界</span><br><span class="line">        工艺流程</span><br><span class="line">        安全停机</span><br><span class="line">        异常处理</span><br><span class="line">      通讯协议</span><br><span class="line">        PLC点位读写</span><br><span class="line">        协议转换</span><br><span class="line">        实时数据流处理</span><br><span class="line">      Web技术栈</span><br><span class="line">        前端3D可视化</span><br><span class="line">        后端API开发</span><br><span class="line">        实时状态同步</span><br><span class="line">      机器人理论</span><br><span class="line">        自研控制接口</span><br><span class="line">        FK IK</span><br><span class="line">        碰撞检测</span><br><span class="line">        RRT</span><br><span class="line">        安全轨迹生成</span><br><span class="line">        坐标变换</span><br><span class="line">        运动学基础</span><br><span class="line">    </span><br><span class="line">    扩展技能层(选学)</span><br><span class="line">      机器视觉</span><br><span class="line">        标定</span><br><span class="line">        检测</span><br><span class="line">        视觉-控制闭环</span><br><span class="line">      运动控制</span><br><span class="line">        控制卡编程</span><br><span class="line">        MoveIt</span><br><span class="line">        轨迹规划概念</span><br><span class="line">      具身智能</span><br><span class="line">        RL VLA库阅读</span><br><span class="line">        数据采集链路</span><br><span class="line">        任务规划</span><br><span class="line">        模型输出安全约束</span><br><span class="line">      数据工程</span><br><span class="line">        时序数据库</span><br><span class="line">        数据可视化</span><br><span class="line">        运行回放</span><br><span class="line">      AI应用</span><br><span class="line">        RAG说明书问答</span><br><span class="line">        工具调用</span><br><span class="line">        人工确认闭环</span><br><span class="line">    </span><br><span class="line">    工具链</span><br><span class="line">      开发工具</span><br><span class="line">        VS Code&#x2F;Visual Studio</span><br><span class="line">        Git版本控制</span><br><span class="line">        Postman调试</span><br><span class="line">      调试工具</span><br><span class="line">        Wireshark抓包</span><br><span class="line">        串口调试助手</span><br><span class="line">        机器人仿真软件</span><br><span class="line">      部署工具</span><br><span class="line">        Docker&#x2F;K8s</span><br><span class="line">        CI&#x2F;CD流水线</span><br><span class="line">        云端部署</span><br><span class="line">    </span><br><span class="line">    学习路径</span><br><span class="line">      项目驱动</span><br><span class="line">        现场问题复现</span><br><span class="line">        完整Demo整合</span><br><span class="line">        可展示作品</span><br><span class="line">      车间实践</span><br><span class="line">        观察真实机器人</span><br><span class="line">        记录接口和状态</span><br><span class="line">        理解工艺痛点</span><br><span class="line">        与电气&#x2F;机械&#x2F;工艺工程师交流</span><br><span class="line">      开源参考</span><br><span class="line">        ROS2框架</span><br><span class="line">        MoveIt运动规划</span><br><span class="line">        工业软件源码</span><br></pre></td></tr></table></figure>
-<h2 id="机器人系统软件-具身智能落地学习路线"><a href="#机器人系统软件-具身智能落地学习路线" class="headerlink" title="机器人系统软件 / 具身智能落地学习路线"></a>机器人系统软件 / 具身智能落地学习路线</h2><blockquote>
-<p>目标角色：懂机器人系统分层、能读运动规划链路、会做调试工具和可视化、能把上层智能接到安全执行链路的复合型工程师。</p>
-<p>推荐定位：<strong>机器人系统软件 / 具身智能落地 / 运动规划可视化工程师</strong>。</p>
-</blockquote>
-<p>本路线的主线是：</p>
-<blockquote>
-<p>看懂 RL/VLA 上层库、自研运动规划库、硬件封装接口、PLC、相机、工作流状态之间的关系，并能把运动规划、轨迹、安全约束和现场状态用 3D 和实时 UI 表达出来。</p>
-</blockquote>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">阶段 1：看懂系统</span><br><span class="line">RL/VLA库位置 / 自研运动控制库 / 硬件接口 / PLC点位 / 相机输出</span><br><span class="line"></span><br><span class="line">阶段 2：做出可视化</span><br><span class="line">FK/IK / 碰撞检测 / RRT路径 / SafeTrajectory / WebSocket / 事件日志</span><br><span class="line"></span><br><span class="line">阶段 3：接近现场</span><br><span class="line">机器人动作 / PLC信号 / 相机帧 / workflow编排 / 异常恢复 / 安全门控</span><br><span class="line"></span><br><span class="line">阶段 4：形成作品</span><br><span class="line">运动规划调试台 / 机器人数字孪生 / 视觉引导Demo / LLM辅助运维</span><br></pre></td></tr></table></figure>
-<p>应用软件工程师 -&gt; 机器人系统软件工程师 -&gt; 具身智能落地/机器人平台/运动规划可视化工程师</p>
-<p>工艺流程（本质是finite state machine）数据流 应用开发<br>      ↓<br>运动规划 安全轨迹 硬件执行 可视化<br>      ↓<br>上层智能接入 系统整合 复杂系统表达</p>
-<p>这些title尽量不要作为长期目标：</p>
-<p>❌ 纯WPF工程师<br>❌ 传统MIS/后台系统开发<br>❌ 只写流程脚本的“工具人”<br>❌ 短期直接包装成VLA/强化学习/人形机器人控制算法工程师</p>
-<p>工业软件的本质： 数据采集 状态控制 实时性是与互联网软件的最大区别</p>
-<h2 id="工业系统知识自测"><a href="#工业系统知识自测" class="headerlink" title="工业系统知识自测"></a>工业系统知识自测</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>维度</th>
-<th>当前评价</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Web/应用软件工程</td>
-<td>A-</td>
-<td>11年经验是核心资产</td>
-</tr>
-<tr>
-<td>工业项目现场机会</td>
-<td>B</td>
-<td>已参与项目且能接触机器人、PLC、相机</td>
-</tr>
-<tr>
-<td>产品级机器人/工业软件经验</td>
-<td>C-</td>
-<td>尚未独立交付过产品级软件</td>
-</tr>
-<tr>
-<td>C++/Python/Linux</td>
-<td>C-</td>
-<td>有接触，但需要项目化补强</td>
-</tr>
-<tr>
-<td>工业通信/PLC</td>
-<td>C</td>
-<td>需要从点位表、读写、报警、状态模型开始</td>
-</tr>
-<tr>
-<td>自研运动控制库/硬件接口</td>
-<td>C+</td>
-<td>当前项目主线，包含 FK/IK/碰撞/RRT/SafeTrajectoryBuilder，需要从API、命令、状态、异常入手</td>
-</tr>
-<tr>
-<td>RL/VLA库关联理解</td>
-<td>C-</td>
-<td>项目有关联但未落地，先理解位置、输入输出、未来如何接入</td>
-</tr>
-<tr>
-<td>ROS2/开源机器人框架</td>
-<td>C-</td>
-<td>作为开源生态参考和求职加分项，不替代当前项目主线</td>
-</tr>
-<tr>
-<td>机器视觉/光学基础</td>
-<td>B</td>
-<td>光学背景有优势，但需要OpenCV/标定/手眼项目证明</td>
-</tr>
-<tr>
-<td>3D空间理解和可视化</td>
-<td>B+</td>
-<td>适合作为差异化作品方向</td>
-</tr>
-<tr>
-<td>机器人运动理解</td>
-<td>C+</td>
-<td>已开始学习FK/IK/TCP，但还需要Demo验证</td>
-</tr>
-<tr>
-<td>系统架构与状态机思维</td>
-<td>B</td>
-<td>和Web架构经验可迁移</td>
-</tr>
-<tr>
-<td>运动规划可视化潜力</td>
-<td>A-</td>
-<td>当前最值得主打的方向</td>
-</tr>
-<tr>
-<td>系统全局接触意愿</td>
-<td>A</td>
-<td>想广泛接触整个系统，但需要一个纵向作品承接</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="重要欠缺"><a href="#重要欠缺" class="headerlink" title="重要欠缺"></a>重要欠缺</h3><h4 id="1-工业通信"><a href="#1-工业通信" class="headerlink" title="1 工业通信"></a>1 工业通信</h4><p>可能出现：</p>
-<p>读写竞争<br>UI阻塞<br>状态撕裂</p>
-<p>所以真实系统里会有：</p>
-<p>缓冲区<br>消息队列<br>Dispatcher<br>事件总线</p>
-<p>学习产物：</p>
-<ul>
-<li>一份真实或脱敏的PLC点位表</li>
-<li>一个Modbus/OPC UA/MQTT模拟采集Demo</li>
-<li>一个设备状态面板</li>
-<li>一份异常与报警状态表</li>
-</ul>
-<h4 id="2-设备抽象"><a href="#2-设备抽象" class="headerlink" title="2 设备抽象"></a>2 设备抽象</h4><p>工业设备的本质是状态机, 多设备协调本质是多状态机协同</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Idle</span><br><span class="line">Running</span><br><span class="line">Waiting</span><br><span class="line">Error</span><br><span class="line">EmergencyStop</span><br></pre></td></tr></table></figure>
-<p>状态之间是转移、事件、异常恢复</p>
-<h4 id="3-数据流思维"><a href="#3-数据流思维" class="headerlink" title="3 数据流思维"></a>3 数据流思维</h4><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PLC</span><br><span class="line">→ 通信层</span><br><span class="line">→ 设备模型</span><br><span class="line">→ 状态机</span><br><span class="line">→ UI</span><br><span class="line">→ 3D场景</span><br></pre></td></tr></table></figure>
-<h4 id="4-工程语言和Linux"><a href="#4-工程语言和Linux" class="headerlink" title="4 工程语言和Linux"></a>4 工程语言和Linux</h4><p>当前不是缺少“会不会刷题”，而是缺少能在工业现场稳定调试的工程熟练度。</p>
-<p>优先补：</p>
-<ul>
-<li>Linux文件、进程、服务、日志、网络排查</li>
-<li>Python脚本、OpenCV、接口测试、数据处理</li>
-<li>C++基础、CMake、动态库、SDK调用、硬件接口封装</li>
-<li>Git分支、README、构建脚本、部署说明</li>
-</ul>
-<h4 id="5-自研运动规划库"><a href="#5-自研运动规划库" class="headerlink" title="5 自研运动规划库"></a>5 自研运动规划库</h4><p>这是当前项目中最有含金量的中层能力，不应只把它当作黑盒 SDK。</p>
-<p>需要拆清楚：</p>
-<ul>
-<li>FK：关节角如何变成 TCP 位姿</li>
-<li>IK：目标位姿如何变成关节解，失败原因是什么</li>
-<li>碰撞检测：障碍物、机器人模型、工作空间如何表示</li>
-<li>RRT：在哪些场景触发，路径如何采样和筛选</li>
-<li>SafeTrajectoryBuilder：如何把候选路径变成可执行安全轨迹</li>
-<li>硬件接口：轨迹如何下发，状态如何反馈，异常如何回滚</li>
-</ul>
-<p>学习产物：</p>
-<ul>
-<li>运动控制库 API 输入输出表</li>
-<li>规划失败原因表</li>
-<li>轨迹生成流程图</li>
-<li>一版运动规划调试/可视化工具</li>
-</ul>
-<h4 id="6-视觉和坐标系"><a href="#6-视觉和坐标系" class="headerlink" title="6 视觉和坐标系"></a>6 视觉和坐标系</h4><p>光学背景要转化成机器人项目价值，需要补齐：</p>
-<ul>
-<li>相机内参、畸变、外参</li>
-<li>手眼标定 AX=XB</li>
-<li>图像坐标、相机坐标、机器人基坐标、TCP坐标</li>
-<li>检测结果如何进入机器人动作流程</li>
-</ul>
-<h4 id="7-上层智能库"><a href="#7-上层智能库" class="headerlink" title="7 上层智能库"></a>7 上层智能库</h4><p>RL / VLA 库目前有关联但未落地，所以近期不要把它当成主要产出。</p>
-<p>正确读法：</p>
-<ul>
-<li>它在系统里属于上层智能或策略层</li>
-<li>需要看它输出的是自然语言、动作意图、目标位姿、轨迹片段还是策略参数</li>
-<li>它的输出必须经过结构化、约束检查、安全门控和人工确认</li>
-<li>真正执行仍要进入运动规划库和硬件接口</li>
-</ul>
-<p>近期目标不是训练 VLA，而是理解：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">LLM/VLA输出</span><br><span class="line">→ 结构化任务</span><br><span class="line">→ 安全检查</span><br><span class="line">→ 运动规划</span><br><span class="line">→ 轨迹执行</span><br><span class="line">→ 状态反馈</span><br></pre></td></tr></table></figure>
-<h2 id="T-型能力路线"><a href="#T-型能力路线" class="headerlink" title="T 型能力路线"></a>T 型能力路线</h2><p>横向广度：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">RL/VLA</span><br><span class="line">→ 任务规划</span><br><span class="line">→ 运动规划</span><br><span class="line">→ 碰撞检测</span><br><span class="line">→ 安全轨迹</span><br><span class="line">→ 硬件接口</span><br><span class="line">→ PLC/相机</span><br><span class="line">→ UI/日志/回放</span><br></pre></td></tr></table></figure>
-<p>纵向深度：</p>
-<blockquote>
-<p>运动规划调试台 / SafeTrajectoryBuilder Inspector</p>
-</blockquote>
-<p>这个纵向作品最适合当前背景：既能承接 Web3D 和工程化经验，又能深入 FK/IK、碰撞、RRT、安全轨迹和硬件状态。</p>
-<h2 id="12个月作品路线"><a href="#12个月作品路线" class="headerlink" title="12个月作品路线"></a>12个月作品路线</h2><h3 id="0-3个月：系统链路地图与运动库接口表"><a href="#0-3个月：系统链路地图与运动库接口表" class="headerlink" title="0-3个月：系统链路地图与运动库接口表"></a>0-3个月：系统链路地图与运动库接口表</h3><p>目标：看懂 RL/VLA 库、自研运动控制库、硬件接口、PLC、相机之间的边界。</p>
-<p>产物：</p>
-<ul>
-<li>设备拓扑图</li>
-<li>系统分层图</li>
-<li>自研运动控制库 API 输入输出表</li>
-<li>PLC点位表</li>
-<li>机器人状态字段表</li>
-<li>相机数据输出表</li>
-<li>运动规划失败原因表</li>
-</ul>
-<p>面试价值：</p>
-<p>证明自己不是只会前端页面，而是能读懂机器人系统链路和运动规划接口。</p>
-<h3 id="3-6个月：运动规划调试台"><a href="#3-6个月：运动规划调试台" class="headerlink" title="3-6个月：运动规划调试台"></a>3-6个月：运动规划调试台</h3><p>目标：把 FK/IK、碰撞检测、RRT、SafeTrajectoryBuilder 的结果放进一个可交互工具。</p>
-<p>产物：</p>
-<ul>
-<li>URDF/简化模型加载</li>
-<li>FK/IK结果展示</li>
-<li>碰撞检测结果显示</li>
-<li>RRT路径展示</li>
-<li>SafeTrajectory生成结果</li>
-<li>TCP和坐标系显示</li>
-<li>轨迹播放和失败日志</li>
-</ul>
-<p>面试价值：</p>
-<p>证明Web3D能力能迁移到机器人运动规划和调试工具，而不是普通后台系统。</p>
-<h3 id="6-12个月：视觉与上层智能接入Demo"><a href="#6-12个月：视觉与上层智能接入Demo" class="headerlink" title="6-12个月：视觉与上层智能接入Demo"></a>6-12个月：视觉与上层智能接入Demo</h3><p>目标：完成从相机或上层智能任务到机器人安全执行的最小闭环。</p>
-<p>产物：</p>
-<ul>
-<li>相机标定记录</li>
-<li>手眼标定流程说明</li>
-<li>OpenCV检测或识别</li>
-<li>坐标转换</li>
-<li>LLM/VLA输出到结构化任务的接口说明</li>
-<li>安全检查和人工确认流程</li>
-<li>PLC/机器人/相机/任务状态机</li>
-<li>Demo视频和README</li>
-</ul>
-<p>面试价值：</p>
-<p>证明光学背景、视觉算法、上层智能、运动规划和软件工程能组合成一个完整系统。</p>
-<h2 id="团队的生态位"><a href="#团队的生态位" class="headerlink" title="团队的生态位"></a>团队的生态位</h2><p>系统层工程师，把整个系统串起来的人</p>
-<p>机器人是： 机械 + 电气 + 控制 + AI + 软件 + 空间系统 的综合体。</p>
-<p>系统设计解决的问题</p>
-<ul>
-<li>各部分边界和状态</li>
-<li>数据的生产、流经、消费、同步</li>
-<li>状态机：状态 变化 异常恢复</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1469,7 +1295,7 @@ graph-links:end -->
       <div class="site-state-item site-state-posts">
           <a href="/qqsnote/archives/">
         
-          <span class="site-state-item-count">403</span>
+          <span class="site-state-item-count">405</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1480,7 +1306,7 @@ graph-links:end -->
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/qqsnote/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">211</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1491,7 +1317,7 @@ graph-links:end -->
       </div>
 
       <div class="tag-cloud-tags">
-        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3D/" style="font-size: 13.2px; color: #cfcfcf">3D</a> <a href="/qqsnote/tags/3DGS/" style="font-size: 12px; color: #ccc">3DGS</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 24px; color: #eee">AI</a> <a href="/qqsnote/tags/AI-Coding/" style="font-size: 12px; color: #ccc">AI Coding</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 28.8px; color: #fcfcfc">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.2px; color: #cfcfcf">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 25.2px; color: #f1f1f1">Azure</a> <a href="/qqsnote/tags/BVH/" style="font-size: 12px; color: #ccc">BVH</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 15.6px; color: #d6d6d6">C++</a> <a href="/qqsnote/tags/CAD/" style="font-size: 12px; color: #ccc">CAD</a> <a href="/qqsnote/tags/CI-CD/" style="font-size: 12px; color: #ccc">CI/CD</a> <a href="/qqsnote/tags/CSS/" style="font-size: 18px; color: #ddd">CSS</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/Context-Engineering/" style="font-size: 12px; color: #ccc">Context Engineering</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 18px; color: #ddd">DevOps</a> <a href="/qqsnote/tags/DevSecOps/" style="font-size: 12px; color: #ccc">DevSecOps</a> <a href="/qqsnote/tags/Digital-Twin/" style="font-size: 12px; color: #ccc">Digital Twin</a> <a href="/qqsnote/tags/Docker/" style="font-size: 18px; color: #ddd">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.6px; color: #d6d6d6">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.2px; color: #cfcfcf">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Flow-Graph/" style="font-size: 13.2px; color: #cfcfcf">Flow Graph</a> <a href="/qqsnote/tags/GitHub/" style="font-size: 12px; color: #ccc">GitHub</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/HMI/" style="font-size: 12px; color: #ccc">HMI</a> <a href="/qqsnote/tags/Halcon/" style="font-size: 12px; color: #ccc">Halcon</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.2px; color: #cfcfcf">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 19.2px; color: #e0e0e0">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/Knowledge-Graph/" style="font-size: 12px; color: #ccc">Knowledge Graph</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.4px; color: #d3d3d3">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.8px; color: #ebebeb">Linux</a> <a href="/qqsnote/tags/MCP/" style="font-size: 12px; color: #ccc">MCP</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MVVM/" style="font-size: 12px; color: #ccc">MVVM</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.2px; color: #cfcfcf">Markdown</a> <a href="/qqsnote/tags/Modbus/" style="font-size: 12px; color: #ccc">Modbus</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 16.8px; color: #dadada">Node.js</a> <a href="/qqsnote/tags/OCCT/" style="font-size: 12px; color: #ccc">OCCT</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.2px; color: #cfcfcf">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 20.4px; color: #e4e4e4">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 14.4px; color: #d3d3d3">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PLC/" style="font-size: 13.2px; color: #cfcfcf">PLC</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Prism/" style="font-size: 12px; color: #ccc">Prism</a> <a href="/qqsnote/tags/Proxy/" style="font-size: 12px; color: #ccc">Proxy</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 25.2px; color: #f1f1f1">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/ROS2/" style="font-size: 14.4px; color: #d3d3d3">ROS2</a> <a href="/qqsnote/tags/RS-485/" style="font-size: 12px; color: #ccc">RS-485</a> <a href="/qqsnote/tags/React/" style="font-size: 20.4px; color: #e4e4e4">React</a> <a href="/qqsnote/tags/React-Flow/" style="font-size: 12px; color: #ccc">React Flow</a> <a href="/qqsnote/tags/Rust/" style="font-size: 12px; color: #ccc">Rust</a> <a href="/qqsnote/tags/SDLC/" style="font-size: 12px; color: #ccc">SDLC</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.4px; color: #d3d3d3">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Squid/" style="font-size: 12px; color: #ccc">Squid</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 22.8px; color: #ebebeb">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 14.4px; color: #d3d3d3">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/URDF/" style="font-size: 12px; color: #ccc">URDF</a> <a href="/qqsnote/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/qqsnote/tags/VLA/" style="font-size: 13.2px; color: #cfcfcf">VLA</a> <a href="/qqsnote/tags/VTK/" style="font-size: 12px; color: #ccc">VTK</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/WPF/" style="font-size: 15.6px; color: #d6d6d6">WPF</a> <a href="/qqsnote/tags/Web/" style="font-size: 12px; color: #ccc">Web</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21.6px; color: #e7e7e7">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27.6px; color: #f8f8f8">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/dify/" style="font-size: 12px; color: #ccc">dify</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.2px; color: #cfcfcf">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 26.4px; color: #f5f5f5">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.2px; color: #cfcfcf">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 15.6px; color: #d6d6d6">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 18px; color: #ddd">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.4px; color: #d3d3d3">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14.4px; color: #d3d3d3">上位机</a> <a href="/qqsnote/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">传感器</a> <a href="/qqsnote/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/" style="font-size: 12px; color: #ccc">光线追踪</a> <a href="/qqsnote/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/" style="font-size: 14.4px; color: #d3d3d3">具身智能</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.6px; color: #d6d6d6">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.2px; color: #cfcfcf">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%9B%E5%85%83%E6%95%B0/" style="font-size: 12px; color: #ccc">四元数</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" style="font-size: 12px; color: #ccc">图像分割</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 20.4px; color: #e4e4e4">图形学</a> <a href="/qqsnote/tags/%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" style="font-size: 18px; color: #ddd">坐标变换</a> <a href="/qqsnote/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" style="font-size: 12px; color: #ccc">多模态</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.2px; color: #cfcfcf">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 22.8px; color: #ebebeb">学习笔记</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E5%AE%89%E5%85%A8/" style="font-size: 12px; color: #ccc">工业安全</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89/" style="font-size: 14.4px; color: #d3d3d3">工业视觉</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" style="font-size: 14.4px; color: #d3d3d3">工业软件</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" style="font-size: 12px; color: #ccc">工业通信</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.4px; color: #d3d3d3">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.2px; color: #cfcfcf">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%89%8B%E7%9C%BC%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">手眼标定</a> <a href="/qqsnote/tags/%E6%89%A7%E8%A1%8C%E5%99%A8/" style="font-size: 12px; color: #ccc">执行器</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 15.6px; color: #d6d6d6">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%97%8B%E8%BD%AC/" style="font-size: 12px; color: #ccc">旋转</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 12px; color: #ccc">机器人</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A1%AC%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人硬件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%AF%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人软件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89/" style="font-size: 14.4px; color: #d3d3d3">机器视觉</a> <a href="/qqsnote/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 13.2px; color: #cfcfcf">机械臂</a> <a href="/qqsnote/tags/%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">标定</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/" style="font-size: 12px; color: #ccc">桌面应用</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E6%AF%94%E4%BE%8B%E9%98%80/" style="font-size: 12px; color: #ccc">比例阀</a> <a href="/qqsnote/tags/%E6%B5%81%E5%BC%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">流式处理</a> <a href="/qqsnote/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">深度学习</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.2px; color: #cfcfcf">环境变量</a> <a href="/qqsnote/tags/%E7%94%9F%E4%BF%A1%E5%88%86%E6%9E%90/" style="font-size: 12px; color: #ccc">生信分析</a> <a href="/qqsnote/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">目标检测</a> <a href="/qqsnote/tags/%E7%9B%B8%E6%9C%BA%E6%A0%87%E5%AE%9A/" style="font-size: 13.2px; color: #cfcfcf">相机标定</a> <a href="/qqsnote/tags/%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">碰撞检测</a> <a href="/qqsnote/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 12px; color: #ccc">神经网络</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14.4px; color: #d3d3d3">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%8E%A7%E5%88%B6/" style="font-size: 14.4px; color: #d3d3d3">自动化控制</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E5%89%AA%E8%BE%91/" style="font-size: 12px; color: #ccc">视频剪辑</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a> <a href="/qqsnote/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 12px; color: #ccc">触发器</a> <a href="/qqsnote/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" style="font-size: 13.2px; color: #cfcfcf">计算机视觉</a>
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3D/" style="font-size: 13.29px; color: #d0d0d0">3D</a> <a href="/qqsnote/tags/3DGS/" style="font-size: 12px; color: #ccc">3DGS</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 23.57px; color: #ededed">AI</a> <a href="/qqsnote/tags/AI-Coding/" style="font-size: 12px; color: #ccc">AI Coding</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Agent/" style="font-size: 12px; color: #ccc">Agent</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 28.71px; color: #fbfbfb">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.29px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24.86px; color: #f0f0f0">Azure</a> <a href="/qqsnote/tags/BVH/" style="font-size: 12px; color: #ccc">BVH</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 15.86px; color: #d7d7d7">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 15.86px; color: #d7d7d7">C++</a> <a href="/qqsnote/tags/CAD/" style="font-size: 12px; color: #ccc">CAD</a> <a href="/qqsnote/tags/CI-CD/" style="font-size: 12px; color: #ccc">CI/CD</a> <a href="/qqsnote/tags/CSS/" style="font-size: 17.14px; color: #dbdbdb">CSS</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/Context-Engineering/" style="font-size: 12px; color: #ccc">Context Engineering</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 17.14px; color: #dbdbdb">DevOps</a> <a href="/qqsnote/tags/DevSecOps/" style="font-size: 12px; color: #ccc">DevSecOps</a> <a href="/qqsnote/tags/Digital-Twin/" style="font-size: 12px; color: #ccc">Digital Twin</a> <a href="/qqsnote/tags/Docker/" style="font-size: 17.14px; color: #dbdbdb">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.86px; color: #d7d7d7">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.29px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Flow-Graph/" style="font-size: 13.29px; color: #d0d0d0">Flow Graph</a> <a href="/qqsnote/tags/GitHub/" style="font-size: 12px; color: #ccc">GitHub</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/HMI/" style="font-size: 12px; color: #ccc">HMI</a> <a href="/qqsnote/tags/Halcon/" style="font-size: 12px; color: #ccc">Halcon</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.29px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 18.43px; color: #dedede">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/Knowledge-Graph/" style="font-size: 12px; color: #ccc">Knowledge Graph</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.57px; color: #d3d3d3">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.29px; color: #e9e9e9">Linux</a> <a href="/qqsnote/tags/MCP/" style="font-size: 12px; color: #ccc">MCP</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MVVM/" style="font-size: 12px; color: #ccc">MVVM</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.29px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/Modbus/" style="font-size: 12px; color: #ccc">Modbus</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 17.14px; color: #dbdbdb">Node.js</a> <a href="/qqsnote/tags/OCCT/" style="font-size: 12px; color: #ccc">OCCT</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.29px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 19.71px; color: #e2e2e2">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 14.57px; color: #d3d3d3">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PLC/" style="font-size: 13.29px; color: #d0d0d0">PLC</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Prism/" style="font-size: 12px; color: #ccc">Prism</a> <a href="/qqsnote/tags/Proxy/" style="font-size: 12px; color: #ccc">Proxy</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24.86px; color: #f0f0f0">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/ROS2/" style="font-size: 14.57px; color: #d3d3d3">ROS2</a> <a href="/qqsnote/tags/RS-485/" style="font-size: 12px; color: #ccc">RS-485</a> <a href="/qqsnote/tags/React/" style="font-size: 19.71px; color: #e2e2e2">React</a> <a href="/qqsnote/tags/React-Flow/" style="font-size: 12px; color: #ccc">React Flow</a> <a href="/qqsnote/tags/Rust/" style="font-size: 12px; color: #ccc">Rust</a> <a href="/qqsnote/tags/SDLC/" style="font-size: 12px; color: #ccc">SDLC</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.57px; color: #d3d3d3">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Squid/" style="font-size: 12px; color: #ccc">Squid</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 22.29px; color: #e9e9e9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 15.86px; color: #d7d7d7">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/URDF/" style="font-size: 12px; color: #ccc">URDF</a> <a href="/qqsnote/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/qqsnote/tags/VLA/" style="font-size: 13.29px; color: #d0d0d0">VLA</a> <a href="/qqsnote/tags/VTK/" style="font-size: 12px; color: #ccc">VTK</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/Vue-js/" style="font-size: 12px; color: #ccc">Vue.js</a> <a href="/qqsnote/tags/WPF/" style="font-size: 15.86px; color: #d7d7d7">WPF</a> <a href="/qqsnote/tags/Web/" style="font-size: 12px; color: #ccc">Web</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27.43px; color: #f8f8f8">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/dify/" style="font-size: 12px; color: #ccc">dify</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.29px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 26.14px; color: #f4f4f4">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.29px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 15.86px; color: #d7d7d7">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 17.14px; color: #dbdbdb">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.57px; color: #d3d3d3">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14.57px; color: #d3d3d3">上位机</a> <a href="/qqsnote/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">传感器</a> <a href="/qqsnote/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/" style="font-size: 12px; color: #ccc">光线追踪</a> <a href="/qqsnote/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/" style="font-size: 14.57px; color: #d3d3d3">具身智能</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.86px; color: #d7d7d7">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.29px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%9B%E5%85%83%E6%95%B0/" style="font-size: 12px; color: #ccc">四元数</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" style="font-size: 12px; color: #ccc">图像分割</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 19.71px; color: #e2e2e2">图形学</a> <a href="/qqsnote/tags/%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" style="font-size: 17.14px; color: #dbdbdb">坐标变换</a> <a href="/qqsnote/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" style="font-size: 12px; color: #ccc">多模态</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.29px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 22.29px; color: #e9e9e9">学习笔记</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E5%AE%89%E5%85%A8/" style="font-size: 12px; color: #ccc">工业安全</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89/" style="font-size: 14.57px; color: #d3d3d3">工业视觉</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" style="font-size: 14.57px; color: #d3d3d3">工业软件</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" style="font-size: 12px; color: #ccc">工业通信</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.57px; color: #d3d3d3">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.29px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%89%8B%E7%9C%BC%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">手眼标定</a> <a href="/qqsnote/tags/%E6%89%A7%E8%A1%8C%E5%99%A8/" style="font-size: 12px; color: #ccc">执行器</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 15.86px; color: #d7d7d7">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%97%8B%E8%BD%AC/" style="font-size: 12px; color: #ccc">旋转</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 12px; color: #ccc">机器人</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A1%AC%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人硬件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%AF%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人软件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89/" style="font-size: 14.57px; color: #d3d3d3">机器视觉</a> <a href="/qqsnote/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 13.29px; color: #d0d0d0">机械臂</a> <a href="/qqsnote/tags/%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">标定</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/" style="font-size: 12px; color: #ccc">桌面应用</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E6%AF%94%E4%BE%8B%E9%98%80/" style="font-size: 12px; color: #ccc">比例阀</a> <a href="/qqsnote/tags/%E6%B5%81%E5%BC%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">流式处理</a> <a href="/qqsnote/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">深度学习</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.29px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%94%9F%E4%BF%A1%E5%88%86%E6%9E%90/" style="font-size: 12px; color: #ccc">生信分析</a> <a href="/qqsnote/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">目标检测</a> <a href="/qqsnote/tags/%E7%9B%B8%E6%9C%BA%E6%A0%87%E5%AE%9A/" style="font-size: 13.29px; color: #d0d0d0">相机标定</a> <a href="/qqsnote/tags/%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">碰撞检测</a> <a href="/qqsnote/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 12px; color: #ccc">神经网络</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14.57px; color: #d3d3d3">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%8E%A7%E5%88%B6/" style="font-size: 14.57px; color: #d3d3d3">自动化控制</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E5%89%AA%E8%BE%91/" style="font-size: 12px; color: #ccc">视频剪辑</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a>
       </div>
     </div>
   </aside>
