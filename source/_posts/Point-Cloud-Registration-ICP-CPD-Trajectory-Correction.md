@@ -96,7 +96,7 @@ T_frame_tcp =
 - **源点集 source**：准备被变换的数据。
 - **目标点集 target**：希望源点集最终对齐到的参考。
 
-配准要寻找一个变换 `T_target_source`，使源点变换后尽量靠近目标点：
+配准要寻找一个变换，使源点变换后尽量靠近目标点。若 source 和 target 的坐标分别表达在两个不同 frame 中，可以写成：
 
 ```text
 p_target = T_target_source * p_source
@@ -110,6 +110,15 @@ p_target = T_target_source * p_source
 - 矩阵下标写成 `T_目标坐标系_源坐标系`。
 
 这套命名直接表达“把什么坐标变换到什么坐标”，比 `matrix1`、`offset` 或含义不清的 `registrationResult` 更不容易出错。
+
+但工业轨迹纠偏还有另一种常见数据组织：参考点云、实际点云和轨迹都已经表达在同一个机器人基坐标系 `base` 中，只是工件处于参考位姿和实际位姿。此时配准输出应理解为同一坐标基底下的**主动位移**：
+
+```text
+p_base_actual_placement
+= Delta_base_actual_from_reference * p_base_reference_placement
+```
+
+`T_target_source` 是“将 source frame 中的坐标改写到 target frame”；`Delta_base_actual_from_reference` 是“在 base 坐标中把几何从参考位姿主动移动到实际位姿”。两者都可能是 4x4 矩阵，数值形式也可能相同，但语义和后续组合公式不能混用。
 
 ### 1. 刚性、仿射与非刚性变换
 
@@ -153,18 +162,20 @@ p_target = R * p_source + t
 
 工业场景则更强调刚体假设：如果一个工件必须通过明显的非刚性变换才能与参考模型重合，它可能已经变形、扫描异常或选错型号，此时更合理的动作通常是拒绝轨迹纠偏并进入复核，而不是生成一条“跟随变形”的轨迹。
 
-## 四、坐标变换方向必须先验证
+## 四、坐标变换与主动位移必须分清
 
-假设参考工件坐标系中有一个点：
+### 1. 同一 base 中的参考位姿与实际位姿
+
+假设参考工件上的一个材料点在共同的 `base` 坐标中为：
 
 ```text
-p_reference = [100, 0, 0, 1]^T
+p_base_reference_placement = [100, 0, 0, 1]^T
 ```
 
-实际工件相对参考工件仅沿 Y 方向平移 20 mm：
+实际工件相对参考位姿仅沿 base 的 Y 方向平移 20 mm，主动位移为：
 
 ```text
-T_actual_reference =
+Delta_base_actual_from_reference =
 [1 0 0  0]
 [0 1 0 20]
 [0 0 1  0]
@@ -174,32 +185,66 @@ T_actual_reference =
 代入后应该得到：
 
 ```text
-p_actual = T_actual_reference * p_reference
-         = [100, 20, 0, 1]^T
+p_base_actual_placement
+= Delta_base_actual_from_reference * p_base_reference_placement
+= [100, 20, 0, 1]^T
 ```
 
-如果接口输出的矩阵代入已知点后没有落到实际点附近，它可能返回的是反方向 `T_reference_actual`。此时应显式求逆：
+如果接口输出的矩阵代入已知点后没有落到实际点附近，它可能返回了把 actual 配回 reference 的反向位移。此时应显式求逆：
 
 ```text
-T_actual_reference = inverse(T_reference_actual)
+Delta_base_actual_from_reference
+= inverse(Delta_base_reference_from_actual)
 ```
 
 不要只根据接口变量名猜方向，也不要因为叠加显示“差不多重合”就跳过数值验证。
 
-### 点、方向与位姿的变换不同
+### 2. 完整 frame 链如何得到纠偏量
+
+若系统明确保存了工件 frame 相对机器人 base 的两个位姿：
+
+```text
+T_base_reference_object
+T_base_actual_object
+```
+
+则在 base 坐标中把参考摆放移动到实际摆放的主动纠偏量为：
+
+```text
+Delta_base_actual_from_reference
+= T_base_actual_object * inverse(T_base_reference_object)
+```
+
+若名义 TCP 轨迹已经表达在 base 中：
+
+```text
+T_base_tcp_actual
+= Delta_base_actual_from_reference * T_base_tcp_reference
+```
+
+若轨迹原本表达在工件自身的局部坐标 `object` 中，工件移动并不会改变 `T_object_tcp`。此时应重新组合：
+
+```text
+T_base_tcp_actual = T_base_actual_object * T_object_tcp
+```
+
+不能再把纠偏矩阵左乘到 `T_object_tcp` 上，否则会重复或混淆 frame 变换。
+
+### 3. 点、方向与位姿的变换不同
 
 - 点的位置使用 `R p + t`。
 - 方向向量使用 `R v`，不能加平移。
 - 刚性变换下的单位法向量使用 `R n`。
-- 完整 TCP 位姿使用矩阵乘法：
+- 已在共同 base 中表达的完整 TCP 位姿使用主动位移左乘：
 
 ```text
-T_actual_tcp = T_actual_reference * T_reference_tcp
+T_base_tcp_actual
+= Delta_base_actual_from_reference * T_base_tcp_reference
 ```
 
 如果变换包含非均匀缩放，法向量应使用线性部分的逆转置再归一化。但工业刚体轨迹纠偏不应出现这种情况，因为期望的变换属于 `SE(3)`。
 
-后文将在这套约定上推导 ICP、比较 CPD，并用已知真值检查点云配准和轨迹纠偏是否真正正确。
+后文将在这套约定上推导 ICP、比较 CPD，并用已知主动位移真值检查点云配准和轨迹纠偏是否真正正确。
 
 ## 五、ICP 不是一个距离函数，而是一套迭代流程
 
@@ -459,19 +504,19 @@ point-to-plane ICP 在边缘、孔洞、薄壁或混合表面附近可能得到�
 
 ## 十、Open3D 实验：从已知真值到轨迹纠偏
 
-下面用 Open3D 构造一个可以自行验证的最小实验。它与真实项目的区别是：我们事先知道实际工件相对参考工件的真值变换，所以能计算旋转和平移误差，而不只是观察两个点云的颜色是否重合。
+下面用 Open3D 构造一个可以自行验证的最小实验。参考点云、实际点云和轨迹都表达在同一个合成 `base` 坐标中，我们事先知道把工件从参考摆放移动到实际摆放的主动位移真值，所以能计算旋转和平移误差，而不只是观察两个点云的颜色是否重合。
 
 安装依赖：
 
 ```bash
-python3 -m pip install numpy open3d
+python3 -m pip install "numpy>=1.24,<3" "open3d==0.19.0"
 ```
 
 实验中的长度单位统一为毫米。流程如下：
 
 ```text
 生成不对称参考工件
--> 施加已知 T_actual_reference
+-> 施加已知 Delta_base_actual_from_reference
 -> 加入噪声 局部缺失 离群点
 -> FPFH + RANSAC 粗配准
 -> point-to-plane ICP 精配准
@@ -491,6 +536,10 @@ import open3d as o3d
 
 SEED = 7
 VOXEL_SIZE_MM = 4.0
+MIN_FITNESS = 0.50
+MAX_ROTATION_ERROR_DEG = 5.0
+MAX_TRANSLATION_ERROR_MM = 8.0
+MAX_TRAJECTORY_POSITION_ERROR_MM = 10.0
 np.random.seed(SEED)
 o3d.utility.random.seed(SEED)
 rng = np.random.default_rng(SEED)
@@ -519,26 +568,26 @@ def make_asymmetric_workpiece() -> o3d.geometry.PointCloud:
 
 
 def make_transform(rotation_xyz_deg, translation_xyz) -> np.ndarray:
-    """Build T_target_source from XYZ Euler angles and translation."""
+    """Build a homogeneous rigid transform from XYZ Euler angles."""
     rotation_rad = np.radians(np.asarray(rotation_xyz_deg, dtype=float))
     rotation = o3d.geometry.get_rotation_matrix_from_xyz(rotation_rad)
 
-    transform_target_source = np.eye(4)
-    transform_target_source[:3, :3] = rotation
-    transform_target_source[:3, 3] = np.asarray(
+    transform = np.eye(4)
+    transform[:3, :3] = rotation
+    transform[:3, 3] = np.asarray(
         translation_xyz, dtype=float
     )
-    return transform_target_source
+    return transform
 
 
 def transform_points(
     points: np.ndarray,
-    transform_target_source: np.ndarray,
+    displacement_base: np.ndarray,
 ) -> np.ndarray:
-    """Apply p_target = T_target_source @ p_source to Nx3 points."""
+    """Actively displace Nx3 points within the same base frame."""
     homogeneous = np.c_[points, np.ones(len(points))]
     transformed = (
-        transform_target_source @ homogeneous.T
+        displacement_base @ homogeneous.T
     ).T
     return transformed[:, :3]
 
@@ -620,14 +669,14 @@ def global_registration(
 def refine_registration(
     reference_down,
     actual_down,
-    transform_actual_reference_initial,
+    displacement_base_initial,
     voxel_size,
 ):
     return o3d.pipelines.registration.registration_icp(
         reference_down,
         actual_down,
         voxel_size * 1.5,
-        transform_actual_reference_initial,
+        displacement_base_initial,
         o3d.pipelines.registration
         .TransformationEstimationPointToPlane(),
         o3d.pipelines.registration.ICPConvergenceCriteria(
@@ -663,7 +712,7 @@ def translation_error(
 
 
 def make_reference_trajectory():
-    """Return reference TCP poses expressed in the reference frame."""
+    """Return nominal reference-placement TCP poses in the base frame."""
     return [
         make_transform((180.0, 0.0, 0.0), (x, -8.0, 28.0))
         for x in (-35.0, 0.0, 35.0)
@@ -671,21 +720,21 @@ def make_reference_trajectory():
 
 
 def correct_trajectory(
-    reference_tcp_poses,
-    transform_actual_reference,
+    reference_base_tcp_poses,
+    displacement_base,
 ):
-    """Map complete TCP poses from reference into actual coordinates."""
+    """Actively displace complete base-frame TCP poses."""
     return [
-        transform_actual_reference @ pose
-        for pose in reference_tcp_poses
+        displacement_base @ pose
+        for pose in reference_base_tcp_poses
     ]
 
 
 def main():
     reference = make_asymmetric_workpiece()
 
-    # Ground truth: reference coordinates -> actual coordinates.
-    transform_actual_reference_true = make_transform(
+    # Ground truth active displacement within one common base frame.
+    displacement_base_true = make_transform(
         rotation_xyz_deg=(6.0, -4.0, 12.0),
         translation_xyz=(28.0, -18.0, 12.0),
     )
@@ -693,7 +742,7 @@ def main():
     reference_points = np.asarray(reference.points)
     actual_clean_points = transform_points(
         reference_points,
-        transform_actual_reference_true,
+        displacement_base_true,
     )
     actual = corrupt_actual_scan(actual_clean_points)
 
@@ -719,21 +768,21 @@ def main():
         coarse.transformation,
         VOXEL_SIZE_MM,
     )
-    transform_actual_reference_estimated = fine.transformation
+    displacement_base_estimated = fine.transformation
 
     rotation_error = rotation_error_deg(
-        transform_actual_reference_estimated[:3, :3],
-        transform_actual_reference_true[:3, :3],
+        displacement_base_estimated[:3, :3],
+        displacement_base_true[:3, :3],
     )
     position_error = translation_error(
-        transform_actual_reference_estimated,
-        transform_actual_reference_true,
+        displacement_base_estimated,
+        displacement_base_true,
     )
 
-    print("T_actual_reference true:")
-    print(transform_actual_reference_true)
-    print("T_actual_reference estimated:")
-    print(transform_actual_reference_estimated)
+    print("Delta_base actual-from-reference true:")
+    print(displacement_base_true)
+    print("Delta_base actual-from-reference estimated:")
+    print(displacement_base_estimated)
     print(f"fitness: {fine.fitness:.6f}")
     print(f"inlier RMSE: {fine.inlier_rmse:.6f} mm")
     print(f"rotation error: {rotation_error:.6f} deg")
@@ -742,11 +791,11 @@ def main():
     reference_trajectory = make_reference_trajectory()
     corrected_estimated = correct_trajectory(
         reference_trajectory,
-        transform_actual_reference_estimated,
+        displacement_base_estimated,
     )
     corrected_true = correct_trajectory(
         reference_trajectory,
-        transform_actual_reference_true,
+        displacement_base_true,
     )
 
     trajectory_position_errors = []
@@ -767,22 +816,42 @@ def main():
             )
         )
 
+    max_trajectory_position_error = max(
+        trajectory_position_errors
+    )
+    max_trajectory_rotation_error = max(
+        trajectory_rotation_errors
+    )
     print(
         "max trajectory position error: "
-        f"{max(trajectory_position_errors):.6f} mm"
+        f"{max_trajectory_position_error:.6f} mm"
     )
     print(
         "max trajectory rotation error: "
-        f"{max(trajectory_rotation_errors):.6f} deg"
+        f"{max_trajectory_rotation_error:.6f} deg"
     )
 
-    assert transform_actual_reference_estimated.shape == (4, 4)
-    assert np.isfinite(transform_actual_reference_estimated).all()
+    assert displacement_base_estimated.shape == (4, 4)
+    assert np.isfinite(displacement_base_estimated).all()
+
+    quality_passed = (
+        fine.fitness >= MIN_FITNESS
+        and rotation_error <= MAX_ROTATION_ERROR_DEG
+        and position_error <= MAX_TRANSLATION_ERROR_MM
+        and max_trajectory_position_error
+        <= MAX_TRAJECTORY_POSITION_ERROR_MM
+        and max_trajectory_rotation_error
+        <= MAX_ROTATION_ERROR_DEG
+    )
+    if not quality_passed:
+        raise RuntimeError(
+            "Registration failed the synthetic-data quality gates"
+        )
 
     # Save aligned data for optional offline inspection without opening a GUI.
     aligned_reference = copy.deepcopy(reference)
     aligned_reference.transform(
-        transform_actual_reference_estimated
+        displacement_base_estimated
     )
     o3d.io.write_point_cloud(
         "/tmp/aligned_reference.ply",
@@ -803,8 +872,8 @@ if __name__ == "__main__":
 - `reference` 是 source。
 - `actual` 是 target。
 - RANSAC 与 ICP 都接收 `(reference, actual)`。
-- 因此输出应是 `T_actual_reference`。
-- 纠偏公式是 `T_actual_tcp = T_actual_reference * T_reference_tcp`。
+- 两个点云都在同一个 `base` 坐标中，因此输出是主动位移 `Delta_base_actual_from_reference`。
+- 名义 TCP 也在 `base` 中，因此纠偏公式是 `T_base_tcp_actual = Delta_base_actual_from_reference * T_base_tcp_reference`。
 
 如果交换配准函数的 source 和 target，输出方向也会反过来。真实项目中应选一个已知参考点进行矩阵方向测试，并把测试写进自动化校验，而不是依赖人的记忆。
 
@@ -829,12 +898,14 @@ if __name__ == "__main__":
 - 工具轴仍保持旧方向。
 - 点位离工件坐标原点越远，位置误差通常越明显。
 
-完整位姿左乘同时更新位置和旋转：
+对于已在共同 `base` 中表达的名义轨迹，主动位移左乘会同时更新位置和旋转：
 
 ```text
-R_actual_tcp = R_actual_reference * R_reference_tcp
-t_actual_tcp = R_actual_reference * t_reference_tcp
-             + t_actual_reference
+R_base_tcp_actual
+= R_delta * R_base_tcp_reference
+
+t_base_tcp_actual
+= R_delta * t_base_tcp_reference + t_delta
 ```
 
 之后还应将笛卡尔位姿送入机器人模型或离线编程软件，检查可达性、关节限位、奇异点、碰撞和工艺约束。
@@ -846,7 +917,7 @@ t_actual_tcp = R_actual_reference * t_reference_tcp
 1. 保持噪声不变，把 `coarse.transformation` 替换为单位矩阵直接启动 ICP。
 2. 在 `corrupt_actual_scan` 中进一步裁掉实际点云，只保留一个近似平面区域。
 
-不要只看 Open3D 是否返回结果。比较估计矩阵与 `T_actual_reference_true` 的旋转、平移误差，并观察轨迹误差如何放大。具体数值会随 Open3D 版本、采样和 RANSAC 随机过程变化，因此重点是验证方法，而不是背诵某次运行结果。
+不要只看 Open3D 是否返回结果。比较估计矩阵与 `displacement_base_true` 的旋转、平移误差，并观察轨迹误差如何放大。代码中的阈值只用于拒绝合成实验中的明显错误解，不能作为生产阈值。具体数值会随 Open3D 版本、采样和 RANSAC 随机过程变化，因此重点是验证方法，而不是背诵某次运行结果。
 
 ## 十一、CPD：把点集配准看成概率估计
 
@@ -880,7 +951,7 @@ T(Y) = Y + G * W
 
 `G` 描述点之间的高斯核关系，`W` 是待估计的形变权重。`beta` 控制形变影响的空间尺度，`alpha` 控制正则化强度。不同库对参数的精确定义和默认值可能不同，应查对应版本文档。
 
-非刚性 CPD 的结果是每个移动点变换后的新位置或一个形变场，而不是唯一的 4x4 `T_actual_reference`。这正是它不能直接作为刚性工件轨迹纠偏矩阵的原因。
+非刚性 CPD 的结果是每个移动点变换后的新位置或一个形变场，而不是唯一的 4x4 主动位移 `Delta_base_actual_from_reference`。这正是它不能直接作为刚性工件轨迹纠偏量的原因。
 
 ### 2. ICP 与 CPD 对比
 
@@ -908,12 +979,15 @@ T(Y) = Y + G * W
 
 ## 十二、pycpd 实验：观察平滑局部形变
 
-下面生成一条类似牙弓的二维曲线，在右侧加入平滑局部形变、噪声和少量缺失点，再用 deformable CPD 对齐。二维示例更容易画图观察，CPD 的概率思想同样适用于三维点集。
+下面生成一条类似牙弓的二维曲线，在右侧加入平滑局部形变、噪声和少量缺失点。我们先用一个最小 point-to-point ICP 求单一刚体变换，再用 deformable CPD 对齐同一组数据。二维示例更容易观察刚性模型留下的结构化残差，CPD 的概率思想同样适用于三维点集。
 
 安装依赖：
 
 ```bash
-python3 -m pip install numpy matplotlib pycpd
+python3 -m pip install \
+  "numpy>=1.24,<3" \
+  "matplotlib>=3.7,<4" \
+  "pycpd==2.0.0"
 ```
 
 <!-- cpd-demo:start -->
@@ -960,10 +1034,71 @@ def nearest_neighbor_rmse(query_points, target_points):
     return float(np.sqrt(np.mean(nearest_distances ** 2)))
 
 
+def estimate_rigid_transform_2d(source_points, target_points):
+    """Estimate one no-scale 2D rigid update for known pairs."""
+    source_center = source_points.mean(axis=0)
+    target_center = target_points.mean(axis=0)
+    source_centered = source_points - source_center
+    target_centered = target_points - target_center
+
+    covariance = source_centered.T @ target_centered
+    u, _, vt = np.linalg.svd(covariance)
+    rotation = vt.T @ u.T
+    if np.linalg.det(rotation) < 0:
+        vt[-1, :] *= -1
+        rotation = vt.T @ u.T
+    translation = target_center - rotation @ source_center
+    return rotation, translation
+
+
+def rigid_icp_2d(
+    moving_points,
+    target_points,
+    max_iterations=80,
+    tolerance=1e-7,
+):
+    """Run a small O(MN) point-to-point ICP for comparison."""
+    registered = moving_points.copy()
+    previous_rmse = np.inf
+
+    for _ in range(max_iterations):
+        pairwise = np.linalg.norm(
+            registered[:, None, :] - target_points[None, :, :],
+            axis=2,
+        )
+        corresponding = target_points[pairwise.argmin(axis=1)]
+        rotation, translation = estimate_rigid_transform_2d(
+            registered,
+            corresponding,
+        )
+        registered = (
+            rotation @ registered.T
+        ).T + translation
+
+        current_rmse = nearest_neighbor_rmse(
+            registered,
+            target_points,
+        )
+        if abs(previous_rmse - current_rmse) < tolerance:
+            break
+        previous_rmse = current_rmse
+
+    return registered
+
+
 def main():
     moving_points, target_points = make_dental_arch_pair()
     before_rmse = nearest_neighbor_rmse(
         moving_points,
+        target_points,
+    )
+
+    rigid_points = rigid_icp_2d(
+        moving_points,
+        target_points,
+    )
+    rigid_rmse = nearest_neighbor_rmse(
+        rigid_points,
         target_points,
     )
 
@@ -976,13 +1111,14 @@ def main():
         tolerance=1e-6,
     )
     registered_points, _ = registration.register()
-    after_rmse = nearest_neighbor_rmse(
+    deformable_rmse = nearest_neighbor_rmse(
         registered_points,
         target_points,
     )
 
-    print(f"nearest-neighbor RMSE before: {before_rmse:.6f}")
-    print(f"nearest-neighbor RMSE after:  {after_rmse:.6f}")
+    print(f"nearest-neighbor RMSE before:       {before_rmse:.6f}")
+    print(f"nearest-neighbor RMSE rigid ICP:    {rigid_rmse:.6f}")
+    print(f"nearest-neighbor RMSE deform. CPD:  {deformable_rmse:.6f}")
     print(f"registered point array shape: {registered_points.shape}")
 
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -993,6 +1129,10 @@ def main():
     ax.scatter(
         target_points[:, 0], target_points[:, 1],
         s=20, label="target", alpha=0.75,
+    )
+    ax.scatter(
+        rigid_points[:, 0], rigid_points[:, 1],
+        s=12, label="rigid / ICP", alpha=0.75,
     )
     ax.scatter(
         registered_points[:, 0], registered_points[:, 1],
@@ -1015,7 +1155,9 @@ if __name__ == "__main__":
 ```
 <!-- cpd-demo:end -->
 
-这个实验中的最近邻 RMSE 只用于观察优化前后的变化，不是医学精度指标，也不是完整的配准评价：非刚性模型自由度较高，即使误差降低，也可能发生过拟合或不合理形变。
+刚性 ICP 只能整体旋转和平移牙弓，因此右侧的局部变化会留下结构化残差；deformable CPD 可以进一步弯曲点集，通常会降低拟合误差。这个对照说明的是变换模型能力不同，并不证明非刚性结果在业务上更正确。
+
+实验中的最近邻 RMSE 只用于观察三种状态的变化，不是医学精度指标，也不是完整的配准评价：非刚性模型自由度较高，即使误差降低，也可能发生过拟合或不合理形变。
 
 应进一步检查：
 
