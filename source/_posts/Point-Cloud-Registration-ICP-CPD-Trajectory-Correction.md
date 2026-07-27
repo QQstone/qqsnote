@@ -455,3 +455,394 @@ point-to-plane ICP 在边缘、孔洞、薄壁或混合表面附近可能得到�
 - **业务正确**：解的方向、精度、覆盖范围和工艺约束都通过独立验证。
 
 前两项都不能自动推出第三项。
+
+## 十、Open3D 实验：从已知真值到轨迹纠偏
+
+下面用 Open3D 构造一个可以自行验证的最小实验。它与真实项目的区别是：我们事先知道实际工件相对参考工件的真值变换，所以能计算旋转和平移误差，而不只是观察两个点云的颜色是否重合。
+
+安装依赖：
+
+```bash
+python3 -m pip install numpy open3d
+```
+
+实验中的长度单位统一为毫米。流程如下：
+
+```text
+生成不对称参考工件
+-> 施加已知 T_actual_reference
+-> 加入噪声 局部缺失 离群点
+-> FPFH + RANSAC 粗配准
+-> point-to-plane ICP 精配准
+-> 与真值比较
+-> 纠偏完整 TCP 位姿
+```
+
+为什么特意构造“不对称”工件？因为只有长方体、圆柱等高度对称结构时，某些旋转方向在几何上不可辨识。算法无法估计数据中不存在的信息。
+
+<!-- rigid-demo:start -->
+```python
+import copy
+
+import numpy as np
+import open3d as o3d
+
+
+SEED = 7
+VOXEL_SIZE_MM = 4.0
+np.random.seed(SEED)
+o3d.utility.random.seed(SEED)
+rng = np.random.default_rng(SEED)
+
+
+def make_asymmetric_workpiece() -> o3d.geometry.PointCloud:
+    """Create an asymmetric synthetic reference workpiece in millimeters."""
+    base = o3d.geometry.TriangleMesh.create_box(
+        width=120.0, height=70.0, depth=18.0
+    )
+    base.translate((-60.0, -35.0, -9.0))
+
+    boss = o3d.geometry.TriangleMesh.create_box(
+        width=32.0, height=24.0, depth=25.0
+    )
+    boss.translate((15.0, -12.0, 9.0))
+
+    cylinder = o3d.geometry.TriangleMesh.create_cylinder(
+        radius=9.0, height=30.0, resolution=40, split=4
+    )
+    cylinder.translate((-28.0, 17.0, 15.0))
+
+    mesh = base + boss + cylinder
+    mesh.compute_vertex_normals()
+    return mesh.sample_points_uniformly(number_of_points=8000)
+
+
+def make_transform(rotation_xyz_deg, translation_xyz) -> np.ndarray:
+    """Build T_target_source from XYZ Euler angles and translation."""
+    rotation_rad = np.radians(np.asarray(rotation_xyz_deg, dtype=float))
+    rotation = o3d.geometry.get_rotation_matrix_from_xyz(rotation_rad)
+
+    transform_target_source = np.eye(4)
+    transform_target_source[:3, :3] = rotation
+    transform_target_source[:3, 3] = np.asarray(
+        translation_xyz, dtype=float
+    )
+    return transform_target_source
+
+
+def transform_points(
+    points: np.ndarray,
+    transform_target_source: np.ndarray,
+) -> np.ndarray:
+    """Apply p_target = T_target_source @ p_source to Nx3 points."""
+    homogeneous = np.c_[points, np.ones(len(points))]
+    transformed = (
+        transform_target_source @ homogeneous.T
+    ).T
+    return transformed[:, :3]
+
+
+def corrupt_actual_scan(
+    clean_points: np.ndarray,
+) -> o3d.geometry.PointCloud:
+    """Add partial visibility, Gaussian noise, and uniform outliers."""
+    # Remove one side to simulate occlusion while retaining most geometry.
+    crop_limit = np.quantile(clean_points[:, 0], 0.90)
+    visible = clean_points[clean_points[:, 0] < crop_limit]
+    noisy = visible + rng.normal(0.0, 0.35, size=visible.shape)
+
+    lower = noisy.min(axis=0) - 15.0
+    upper = noisy.max(axis=0) + 15.0
+    outliers = rng.uniform(lower, upper, size=(250, 3))
+
+    actual = o3d.geometry.PointCloud()
+    actual.points = o3d.utility.Vector3dVector(
+        np.vstack([noisy, outliers])
+    )
+    return actual
+
+
+def preprocess(pcd, voxel_size):
+    down = pcd.voxel_down_sample(voxel_size)
+    down.estimate_normals(
+        o3d.geometry.KDTreeSearchParamHybrid(
+            radius=voxel_size * 2.5,
+            max_nn=40,
+        )
+    )
+    fpfh = o3d.pipelines.registration.compute_fpfh_feature(
+        down,
+        o3d.geometry.KDTreeSearchParamHybrid(
+            radius=voxel_size * 5.0,
+            max_nn=100,
+        ),
+    )
+    return down, fpfh
+
+
+def global_registration(
+    reference_down,
+    actual_down,
+    reference_fpfh,
+    actual_fpfh,
+    voxel_size,
+):
+    distance_threshold = voxel_size * 2.0
+    return (
+        o3d.pipelines.registration
+        .registration_ransac_based_on_feature_matching(
+            reference_down,
+            actual_down,
+            reference_fpfh,
+            actual_fpfh,
+            True,  # mutual_filter
+            distance_threshold,
+            o3d.pipelines.registration
+            .TransformationEstimationPointToPoint(False),
+            4,  # ransac_n
+            [
+                o3d.pipelines.registration
+                .CorrespondenceCheckerBasedOnEdgeLength(0.90),
+                o3d.pipelines.registration
+                .CorrespondenceCheckerBasedOnDistance(
+                    distance_threshold
+                ),
+            ],
+            o3d.pipelines.registration.RANSACConvergenceCriteria(
+                100_000,
+                0.999,
+            ),
+        )
+    )
+
+
+def refine_registration(
+    reference_down,
+    actual_down,
+    transform_actual_reference_initial,
+    voxel_size,
+):
+    return o3d.pipelines.registration.registration_icp(
+        reference_down,
+        actual_down,
+        voxel_size * 1.5,
+        transform_actual_reference_initial,
+        o3d.pipelines.registration
+        .TransformationEstimationPointToPlane(),
+        o3d.pipelines.registration.ICPConvergenceCriteria(
+            relative_fitness=1e-7,
+            relative_rmse=1e-7,
+            max_iteration=100,
+        ),
+    )
+
+
+def rotation_error_deg(
+    estimated_rotation,
+    true_rotation,
+) -> float:
+    delta = estimated_rotation @ true_rotation.T
+    cosine = np.clip(
+        (np.trace(delta) - 1.0) / 2.0,
+        -1.0,
+        1.0,
+    )
+    return float(np.degrees(np.arccos(cosine)))
+
+
+def translation_error(
+    estimated_transform,
+    true_transform,
+) -> float:
+    delta = (
+        estimated_transform[:3, 3]
+        - true_transform[:3, 3]
+    )
+    return float(np.linalg.norm(delta))
+
+
+def make_reference_trajectory():
+    """Return reference TCP poses expressed in the reference frame."""
+    return [
+        make_transform((180.0, 0.0, 0.0), (x, -8.0, 28.0))
+        for x in (-35.0, 0.0, 35.0)
+    ]
+
+
+def correct_trajectory(
+    reference_tcp_poses,
+    transform_actual_reference,
+):
+    """Map complete TCP poses from reference into actual coordinates."""
+    return [
+        transform_actual_reference @ pose
+        for pose in reference_tcp_poses
+    ]
+
+
+def main():
+    reference = make_asymmetric_workpiece()
+
+    # Ground truth: reference coordinates -> actual coordinates.
+    transform_actual_reference_true = make_transform(
+        rotation_xyz_deg=(6.0, -4.0, 12.0),
+        translation_xyz=(28.0, -18.0, 12.0),
+    )
+
+    reference_points = np.asarray(reference.points)
+    actual_clean_points = transform_points(
+        reference_points,
+        transform_actual_reference_true,
+    )
+    actual = corrupt_actual_scan(actual_clean_points)
+
+    reference_down, reference_fpfh = preprocess(
+        reference,
+        VOXEL_SIZE_MM,
+    )
+    actual_down, actual_fpfh = preprocess(
+        actual,
+        VOXEL_SIZE_MM,
+    )
+
+    coarse = global_registration(
+        reference_down,
+        actual_down,
+        reference_fpfh,
+        actual_fpfh,
+        VOXEL_SIZE_MM,
+    )
+    fine = refine_registration(
+        reference_down,
+        actual_down,
+        coarse.transformation,
+        VOXEL_SIZE_MM,
+    )
+    transform_actual_reference_estimated = fine.transformation
+
+    rotation_error = rotation_error_deg(
+        transform_actual_reference_estimated[:3, :3],
+        transform_actual_reference_true[:3, :3],
+    )
+    position_error = translation_error(
+        transform_actual_reference_estimated,
+        transform_actual_reference_true,
+    )
+
+    print("T_actual_reference true:")
+    print(transform_actual_reference_true)
+    print("T_actual_reference estimated:")
+    print(transform_actual_reference_estimated)
+    print(f"fitness: {fine.fitness:.6f}")
+    print(f"inlier RMSE: {fine.inlier_rmse:.6f} mm")
+    print(f"rotation error: {rotation_error:.6f} deg")
+    print(f"translation error: {position_error:.6f} mm")
+
+    reference_trajectory = make_reference_trajectory()
+    corrected_estimated = correct_trajectory(
+        reference_trajectory,
+        transform_actual_reference_estimated,
+    )
+    corrected_true = correct_trajectory(
+        reference_trajectory,
+        transform_actual_reference_true,
+    )
+
+    trajectory_position_errors = []
+    trajectory_rotation_errors = []
+    for estimated_pose, true_pose in zip(
+        corrected_estimated,
+        corrected_true,
+    ):
+        trajectory_position_errors.append(
+            np.linalg.norm(
+                estimated_pose[:3, 3] - true_pose[:3, 3]
+            )
+        )
+        trajectory_rotation_errors.append(
+            rotation_error_deg(
+                estimated_pose[:3, :3],
+                true_pose[:3, :3],
+            )
+        )
+
+    print(
+        "max trajectory position error: "
+        f"{max(trajectory_position_errors):.6f} mm"
+    )
+    print(
+        "max trajectory rotation error: "
+        f"{max(trajectory_rotation_errors):.6f} deg"
+    )
+
+    assert transform_actual_reference_estimated.shape == (4, 4)
+    assert np.isfinite(transform_actual_reference_estimated).all()
+
+    # Save aligned data for optional offline inspection without opening a GUI.
+    aligned_reference = copy.deepcopy(reference)
+    aligned_reference.transform(
+        transform_actual_reference_estimated
+    )
+    o3d.io.write_point_cloud(
+        "/tmp/aligned_reference.ply",
+        aligned_reference,
+    )
+    o3d.io.write_point_cloud("/tmp/actual_scan.ply", actual)
+
+
+if __name__ == "__main__":
+    main()
+```
+<!-- rigid-demo:end -->
+
+### 1. 代码中最值得检查的不是参数，而是方向
+
+在实验中：
+
+- `reference` 是 source。
+- `actual` 是 target。
+- RANSAC 与 ICP 都接收 `(reference, actual)`。
+- 因此输出应是 `T_actual_reference`。
+- 纠偏公式是 `T_actual_tcp = T_actual_reference * T_reference_tcp`。
+
+如果交换配准函数的 source 和 target，输出方向也会反过来。真实项目中应选一个已知参考点进行矩阵方向测试，并把测试写进自动化校验，而不是依赖人的记忆。
+
+### 2. 如何评价输出
+
+代码输出六类信息：
+
+- `fitness`：在最大对应距离内形成内点对应的源点比例。具体定义以库版本为准。
+- `inlier RMSE`：内点对应的均方根距离。
+- 旋转误差：估计旋转相对真值旋转的夹角。
+- 平移误差：估计平移与真值平移的欧氏距离。
+- 轨迹位置误差：估计矩阵和真值矩阵分别纠偏轨迹后的最大点位差。
+- 轨迹姿态误差：两组纠偏姿态间的最大旋转角差。
+
+合成数据有真值，真实生产扫描通常没有。生产验证需要独立于配准优化的证据，例如未参与配准的基准点、量块、孔中心、检测特征或外部测量系统。
+
+### 3. 为什么不能只修正 XYZ
+
+设实际工件相对参考工件旋转了 12 度。若只把配准平移量加到轨迹位置：
+
+- 轨迹点不会绕工件原点正确旋转。
+- 工具轴仍保持旧方向。
+- 点位离工件坐标原点越远，位置误差通常越明显。
+
+完整位姿左乘同时更新位置和旋转：
+
+```text
+R_actual_tcp = R_actual_reference * R_reference_tcp
+t_actual_tcp = R_actual_reference * t_reference_tcp
+             + t_actual_reference
+```
+
+之后还应将笛卡尔位姿送入机器人模型或离线编程软件，检查可达性、关节限位、奇异点、碰撞和工艺约束。
+
+### 4. 主动制造一次失败
+
+为了理解 ICP 的局部性，可以做两组对照：
+
+1. 保持噪声不变，把 `coarse.transformation` 替换为单位矩阵直接启动 ICP。
+2. 在 `corrupt_actual_scan` 中进一步裁掉实际点云，只保留一个近似平面区域。
+
+不要只看 Open3D 是否返回结果。比较估计矩阵与 `T_actual_reference_true` 的旋转、平移误差，并观察轨迹误差如何放大。具体数值会随 Open3D 版本、采样和 RANSAC 随机过程变化，因此重点是验证方法，而不是背诵某次运行结果。
