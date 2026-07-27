@@ -846,3 +846,182 @@ t_actual_tcp = R_actual_reference * t_reference_tcp
 2. 在 `corrupt_actual_scan` 中进一步裁掉实际点云，只保留一个近似平面区域。
 
 不要只看 Open3D 是否返回结果。比较估计矩阵与 `T_actual_reference_true` 的旋转、平移误差，并观察轨迹误差如何放大。具体数值会随 Open3D 版本、采样和 RANSAC 随机过程变化，因此重点是验证方法，而不是背诵某次运行结果。
+
+## 十一、CPD：把点集配准看成概率估计
+
+CPD 全称 **Coherent Point Drift，相干点漂移**。有时会被误写成 CDP，但算法名称和 Python 库名都是 CPD。
+
+ICP 在当前位姿下通常为源点寻找一个最近目标点，属于较“硬”的对应。CPD 的基本视角不同：
+
+- 把固定点集看成观测数据。
+- 把移动点集中的点看成高斯混合模型的质心。
+- 每个观测点可以以不同概率属于多个高斯分量。
+- 额外加入一个均匀分布分量吸收离群点。
+
+于是点集配准变成最大似然估计问题。CPD 常通过 EM（Expectation-Maximization）交替优化：
+
+1. **E 步**：在当前变换和方差下，计算固定点对各移动点的后验概率，可理解为软对应权重。
+2. **M 步**：在对应概率固定时，更新变换参数和噪声方差。
+
+“Coherent” 指非刚性版本不会让每个点完全独立乱跑，而是通过平滑正则约束，让邻近点倾向于一致移动，形成连续的形变场。
+
+### 1. CPD 的三种常见变换模型
+
+**Rigid CPD** 估计旋转、平移以及可选的统一尺度。若目标是严格刚体位姿，应明确关闭或检查尺度，避免把单位错误吸收到缩放中。
+
+**Affine CPD** 使用一个一般线性矩阵和平移，可以表达非均匀缩放与剪切。它不再保持刚体距离和角度。
+
+**Deformable CPD** 为不同位置估计平滑位移。常见表达可以概括为：
+
+```text
+T(Y) = Y + G * W
+```
+
+`G` 描述点之间的高斯核关系，`W` 是待估计的形变权重。`beta` 控制形变影响的空间尺度，`alpha` 控制正则化强度。不同库对参数的精确定义和默认值可能不同，应查对应版本文档。
+
+非刚性 CPD 的结果是每个移动点变换后的新位置或一个形变场，而不是唯一的 4x4 `T_actual_reference`。这正是它不能直接作为刚性工件轨迹纠偏矩阵的原因。
+
+### 2. ICP 与 CPD 对比
+
+| 维度 | ICP | CPD |
+| --- | --- | --- |
+| 对应关系 | 经典版本为最近邻硬对应 | 基于概率的软对应 |
+| 常见变换 | 刚性；也有多种扩展 | 刚性、仿射、非刚性 |
+| 初值依赖 | 经典 ICP 通常较强 | 仍受初值和参数影响，并非全局最优保证 |
+| 离群点 | 依赖阈值、裁剪或鲁棒核 | 概率模型可含离群分量 |
+| 局部结构 | point-to-plane、GICP 可利用法向或协方差 | 非刚性版本通过平滑核约束形变一致性 |
+| 计算成本 | 最近邻加局部优化，常较容易扩展到大点云 | 非刚性核计算可能较重，大点集需近似或降采样 |
+| 典型用途 | 工件位姿、扫描拼接、定位、里程计精配准 | 形状对应、软组织或统计形状分析、非刚性匹配 |
+| 能否给出刚性轨迹矩阵 | 刚性 ICP 可以 | 只有刚性 CPD 可以；非刚性 CPD 不可以 |
+
+不存在“CPD 一定比 ICP 高级”的结论。算法选择取决于对象是否真的会变形、业务需要单一位姿还是局部对应、数据规模、初值和验证方式。
+
+### 3. 口腔 Mesh 中如何理解两者
+
+对于两个治疗时期的口扫模型，可以把问题分成两层：
+
+1. 先基于稳定牙面做刚性配准，消除两次扫描的坐标差异。
+2. 在共同坐标下测量牙齿移动、咬合变化或软组织差异。
+
+若确实要建立非刚性表面对应，CPD 是可研究的方法之一。但要防止非刚性模型把需要测量的治疗变化“解释掉”。稳定区域、可动区域、缺失区域和正则参数都应由具体分析目标决定。医疗场景还涉及数据质量、临床验证和合规要求，下面的合成实验只用于理解算法行为。
+
+## 十二、pycpd 实验：观察平滑局部形变
+
+下面生成一条类似牙弓的二维曲线，在右侧加入平滑局部形变、噪声和少量缺失点，再用 deformable CPD 对齐。二维示例更容易画图观察，CPD 的概率思想同样适用于三维点集。
+
+安装依赖：
+
+```bash
+python3 -m pip install numpy matplotlib pycpd
+```
+
+<!-- cpd-demo:start -->
+```python
+import matplotlib
+matplotlib.use("Agg")
+
+import matplotlib.pyplot as plt
+import numpy as np
+from pycpd import DeformableRegistration
+
+
+SEED = 11
+rng = np.random.default_rng(SEED)
+
+
+def make_dental_arch_pair():
+    angles = np.linspace(0.10 * np.pi, 0.90 * np.pi, 90)
+    moving_points = np.column_stack(
+        [45.0 * np.cos(angles), 32.0 * np.sin(angles)]
+    )
+
+    target_full = moving_points.copy()
+    x = target_full[:, 0]
+    # A smooth, local treatment-like displacement on the right side.
+    local_weight = np.exp(-((x - 22.0) / 13.0) ** 2)
+    target_full[:, 0] += 3.5 * local_weight
+    target_full[:, 1] += 5.0 * local_weight
+    target_full += rng.normal(0.0, 0.20, target_full.shape)
+
+    # Simulate a small unobserved interval in the target scan.
+    keep = np.ones(len(target_full), dtype=bool)
+    keep[38:44] = False
+    target_points = target_full[keep]
+    return moving_points, target_points
+
+
+def nearest_neighbor_rmse(query_points, target_points):
+    pairwise = np.linalg.norm(
+        query_points[:, None, :] - target_points[None, :, :],
+        axis=2,
+    )
+    nearest_distances = pairwise.min(axis=1)
+    return float(np.sqrt(np.mean(nearest_distances ** 2)))
+
+
+def main():
+    moving_points, target_points = make_dental_arch_pair()
+    before_rmse = nearest_neighbor_rmse(
+        moving_points,
+        target_points,
+    )
+
+    registration = DeformableRegistration(
+        X=target_points,
+        Y=moving_points,
+        alpha=2.0,
+        beta=1.5,
+        max_iterations=100,
+        tolerance=1e-6,
+    )
+    registered_points, _ = registration.register()
+    after_rmse = nearest_neighbor_rmse(
+        registered_points,
+        target_points,
+    )
+
+    print(f"nearest-neighbor RMSE before: {before_rmse:.6f}")
+    print(f"nearest-neighbor RMSE after:  {after_rmse:.6f}")
+    print(f"registered point array shape: {registered_points.shape}")
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.scatter(
+        moving_points[:, 0], moving_points[:, 1],
+        s=16, label="moving / before", alpha=0.65,
+    )
+    ax.scatter(
+        target_points[:, 0], target_points[:, 1],
+        s=20, label="target", alpha=0.75,
+    )
+    ax.scatter(
+        registered_points[:, 0], registered_points[:, 1],
+        s=12, label="registered / CPD", alpha=0.85,
+    )
+    ax.set_aspect("equal", adjustable="box")
+    ax.set_xlabel("x (synthetic unit)")
+    ax.set_ylabel("y (synthetic unit)")
+    ax.legend()
+    ax.set_title("Deformable CPD on a synthetic dental arch")
+    fig.tight_layout()
+    fig.savefig("/tmp/cpd_registration.png", dpi=160)
+
+    assert registered_points.shape == moving_points.shape
+    assert np.isfinite(registered_points).all()
+
+
+if __name__ == "__main__":
+    main()
+```
+<!-- cpd-demo:end -->
+
+这个实验中的最近邻 RMSE 只用于观察优化前后的变化，不是医学精度指标，也不是完整的配准评价：非刚性模型自由度较高，即使误差降低，也可能发生过拟合或不合理形变。
+
+应进一步检查：
+
+- 稳定区域是否发生了不应有的变形。
+- 形变场是否平滑、可解释。
+- 缺失区域是否被错误拉伸。
+- 在未参与拟合的解剖标志点上误差如何。
+- 参数变化时结果是否稳定。
+
+对于刚性工业工件，如果只有 deformable CPD 才能获得较小残差，应优先调查工件变形、扫描标定、型号选择、单位和分割问题，而不是直接用变形结果修改机器人轨迹。
