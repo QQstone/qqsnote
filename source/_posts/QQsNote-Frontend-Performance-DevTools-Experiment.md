@@ -43,9 +43,11 @@ https://qqstone.github.io/qqsnote/
 | Network 缓存 | Disable cache |
 | 浏览器扩展 | 干净基线使用无痕窗口，扩展关闭 |
 
-这些设置适合第一次认识工具，但不代表真实用户环境。桌面设备、无降速和日本网络节点都会影响结果；Lighthouse 分数和加载时间只能解释这几次实验，不能直接当成网站长期 SLA。
+这些设置适合第一次认识工具，但不代表真实用户环境。桌面设备、无降速和日本网络节点（指 GitHub Pages CDN 边缘节点）都会影响结果；Lighthouse 分数和加载时间只能解释这几次实验，不能直接当成网站长期 SLA。
 
 ## 第一步：用 Lighthouse 建立基线
+
+Lighthouse 的 Performance 审计会在受控条件下重新加载页面，计算 FCP、LCP、TBT、CLS、Speed Index 等指标，并给出综合分数和可能的优化方向。它适合建立基线、比较改动前后和发现排查入口，但不能单独证明某条建议就是性能问题的根因。
 
 我先用同一 Chrome 环境连续运行三次 Desktop Performance 审计：
 
@@ -120,6 +122,8 @@ DevTools 中的 `Waiting for server response` 是理解 TTFB 的关键部分：�
 对静态托管在 GitHub Pages 的 QQsNote 来说，本次 `447.50 ms` 也只是当前节点和当前请求的一次观测。要判断真实用户的 TTFB，需要长期的 field data，而不是这一张截图。
 
 ## 第三步：第一次录制 Performance
+
+DevTools Performance 是手动录制与分析面板。它用时间轴展示页面加载期间的网络请求、帧、主线程任务、布局和绘制，适合继续定位“时间具体花在哪里”。它不像 Lighthouse 的 Performance 审计那样给出综合性能分数：Lighthouse 用于发现信号，DevTools Performance 用于查看执行细节和验证原因。
 
 接着在无痕窗口打开 Performance，使用 `Record and reload`，等待页面稳定后停止：
 
