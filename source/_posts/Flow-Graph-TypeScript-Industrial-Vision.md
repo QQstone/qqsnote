@@ -1,6 +1,7 @@
 ---
 title: Flow Graph 入门：用 TypeScript 实现工业视觉流程执行器
 date: 2026-07-22 21:30:00
+description: 用 TypeScript 实现一个带类型端口、拓扑校验、执行追踪和安全检查的最小工业视觉 Flow Graph，理解 DAG 执行器的核心边界。
 tags:
 - Flow Graph
 - TypeScript
