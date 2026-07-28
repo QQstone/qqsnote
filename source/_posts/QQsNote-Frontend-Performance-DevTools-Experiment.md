@@ -57,7 +57,7 @@ https://qqstone.github.io/qqsnote/
 
 三次结果没有完全相同。第 1 次 FCP 和 LCP 明显更快，但 Speed Index 反而更慢。这说明即使在同一台机器上，单次 Lighthouse 数字也有波动。我选择更接近中间结果的第 2 次作为截图，而不是挑分数最高的一次。
 
-{% asset_img lighthouse-live-overview.png "QQsNote 首页 Lighthouse 桌面端报告总览" %}
+{% asset_img lighthouse-live-overview.webp "QQsNote 首页 Lighthouse 桌面端报告总览" %}
 
 这张图先看五项指标，不需要一开始展开所有建议：
 
@@ -75,7 +75,7 @@ https://qqstone.github.io/qqsnote/
 
 第一次打开日常使用的 Chrome 录制时，Network 底部显示约 `3.7 MB transferred`，Performance 的 1st/3rd party 汇总里还出现了“沉浸式翻译”和 React Developer Tools。
 
-{% asset_img performance-extension-contaminated.png "浏览器扩展污染的第一次 Performance 录制" %}
+{% asset_img performance-extension-contaminated.webp "浏览器扩展污染的第一次 Performance 录制" %}
 
 图中“沉浸式翻译”占用了约 `596.5 ms` 主线程时间，Network 里还有一个约 `3.3 MB` 的 `content_main.js`。这些资源由浏览器扩展注入，不属于 QQsNote。如果直接根据这次录制优化网站，我会把扩展成本错算到站点头上。
 
@@ -85,7 +85,7 @@ https://qqstone.github.io/qqsnote/
 
 在无痕窗口中打开 Network，勾选 `Disable cache`，清空请求后刷新页面。这次列表里不再有翻译扩展脚本：
 
-{% asset_img network-live-waterfall.png "QQsNote 首页无扩展环境下的 Network 请求列表与瀑布" %}
+{% asset_img network-live-waterfall.webp "QQsNote 首页无扩展环境下的 Network 请求列表与瀑布" %}
 
 本次截图的底部汇总为：
 
@@ -98,11 +98,11 @@ https://qqstone.github.io/qqsnote/
 | Load | 1.47 s |
 | Finish | 1.64 s |
 
-`Transferred` 和 `Resources` 不相等并不矛盾。前者接近实际网络传输量，后者更接近资源解压或解码后的大小。主文档这一行显示约 `94.6 kB`，而生成的 HTML 原始内容约为 `440 kB`，主要差异来自传输压缩。
+`Transferred` 和 `Resources` 不相等并不矛盾。前者接近实际网络传输量，后者更接近资源内容解压后的大小。主文档这一行显示约 `94.6 kB`，而生成的 HTML 原始内容约为 `440 kB`，主要差异来自传输压缩。
 
 点击第一行 `qqsnote/` 主文档，再切换到 Timing：
 
-{% asset_img network-live-document-timing.png "QQsNote 主文档请求 Timing 与 TTFB" %}
+{% asset_img network-live-document-timing.webp "QQsNote 主文档请求 Timing 与 TTFB" %}
 
 这一次的时间分解是：
 
@@ -123,7 +123,7 @@ DevTools 中的 `Waiting for server response` 是理解 TTFB 的关键部分：�
 
 接着在无痕窗口打开 Performance，使用 `Record and reload`，等待页面稳定后停止：
 
-{% asset_img performance-live-overview.png "QQsNote 首页无扩展环境下的 Performance 页面加载轨迹" %}
+{% asset_img performance-live-overview.webp "QQsNote 首页无扩展环境下的 Performance 页面加载轨迹" %}
 
 我先只看四个区域：
 
@@ -140,7 +140,7 @@ DevTools 中的 `Waiting for server response` 是理解 TTFB 的关键部分：�
 
 查看 Hexo 生成结果后，原因很直接：NexT 在文章没有 `description` 或 `<!-- more -->` 时，会把完整正文放进首页。当前首页一次展示 10 篇文章，因此大量代码块和表格也被一起输出。
 
-其中《Flow Graph 入门：用 TypeScript 实现工业视觉流程执行器》单篇在首页 HTML 中约占 `118 kB`。我提出的假设是：
+优化前，《Flow Graph 入门：用 TypeScript 实现工业视觉流程执行器》在首页生成的 `<article>` 片段为 `136,972 B`；设置摘要后，该片段为 `2,969 B`，差值正好是后文实测的 `134,003 B`。我提出的假设是：
 
 > 如果只给这篇文章增加 `description`，NexT 会在首页显示摘要和“阅读全文”，从而减少首页 HTML 与 DOM 内容；详情页仍保留完整正文。
 
@@ -171,7 +171,7 @@ description: 用 TypeScript 实现一个带类型端口、拓扑校验、执行�
 
 首页文章数没有变化，说明前后页面组成一致。代码块、表格和标签减少，是因为 Flow Graph 完整正文不再进入首页。详情页少量字节变化来自明确的 description 替换了自动生成的描述；正文中的 TypeScript 示例和学习目标仍然存在。
 
-我还用相同的 Chrome、无缓存、无网络和 CPU 降速设置，各录制了一次本地页面：
+我还用相同的 Chrome、禁用缓存、网络和 CPU 均未降速的设置，各录制了一次本地页面：
 
 | 浏览器观测 | 优化前 | 优化后 | 变化 |
 | --- | ---: | ---: | ---: |
