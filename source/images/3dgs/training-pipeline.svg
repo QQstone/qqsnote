@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">3DGS 训练流程</title>
+  <desc id="desc">从多视图图像和 SfM 稀疏点云初始化 Gaussian，经可微光栅化、图像损失、参数更新和密度控制循环训练。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#355070"/>
+    </marker>
+    <style>
+      .node{fill:#eaf2f8;stroke:#355070;stroke-width:2}
+      .op{fill:#fff0df;stroke:#d97706;stroke-width:2}
+      .txt{font:18px sans-serif;fill:#1f2937;text-anchor:middle}
+      .small{font:15px sans-serif;fill:#4b5563;text-anchor:middle}
+      .arrow{stroke:#355070;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="360" fill="#ffffff"/>
+  <rect class="node" x="35" y="70" width="190" height="70" rx="14"/>
+  <text class="txt" x="130" y="100">多视图图像</text>
+  <text class="small" x="130" y="126">+ 相机位姿</text>
+  <rect class="node" x="275" y="70" width="190" height="70" rx="14"/>
+  <text class="txt" x="370" y="112">SfM 稀疏点云</text>
+  <rect class="node" x="515" y="70" width="200" height="70" rx="14"/>
+  <text class="txt" x="615" y="100">初始化</text>
+  <text class="txt" x="615" y="126">3D Gaussian</text>
+  <rect class="op" x="765" y="70" width="180" height="70" rx="14"/>
+  <text class="txt" x="855" y="112">可微光栅化</text>
+  <rect class="node" x="995" y="70" width="170" height="70" rx="14"/>
+  <text class="txt" x="1080" y="112">渲染图像</text>
+  <path class="arrow" d="M225 105H270"/>
+  <path class="arrow" d="M465 105H510"/>
+  <path class="arrow" d="M715 105H760"/>
+  <path class="arrow" d="M945 105H990"/>
+  <rect class="op" x="920" y="205" width="180" height="70" rx="14"/>
+  <text class="txt" x="1010" y="247">图像损失</text>
+  <rect class="op" x="650" y="205" width="180" height="70" rx="14"/>
+  <text class="txt" x="740" y="247">参数更新</text>
+  <rect class="op" x="375" y="205" width="190" height="70" rx="14"/>
+  <text class="txt" x="470" y="232">密度控制</text>
+  <text class="small" x="470" y="258">clone / split / prune</text>
+  <text class="small" x="285" y="244">位置梯度</text>
+  <path class="arrow" d="M1080 140V180H1010V200"/>
+  <path class="arrow" d="M920 240H835"/>
+  <path class="arrow" d="M650 240H570"/>
+  <path class="arrow" d="M375 240H335V175H615V145"/>
+  <text class="small" x="600" y="330">训练阶段循环；训练完成后直接进入实时光栅化渲染</text>
+</svg>
