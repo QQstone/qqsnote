@@ -24,7 +24,7 @@ NeRF 证明了一个重要事实：不一定要先恢复传统 Mesh，神经网�
 
 3DGS 换了一条路线：场景不再主要隐藏在神经网络权重中，而是由大量可学习的三维 Gaussian 椭球显式组成。训练阶段仍然可微，可以从图像误差反向调整这些 Gaussian；渲染阶段则把它们投影到屏幕上，利用 GPU 擅长的排序、光栅化和 Alpha 混合直接生成图像。
 
-![论文首页中的质量与速度对比](../images/3dgs/paper-teaser-comparison.png)
+![论文首页中的质量与速度对比](/qqsnote/images/3dgs/paper-teaser-comparison.png)
 
 *图 1：论文 Fig. 1 的结果区域。作者在同一示例上比较 Instant-NGP、Plenoxels、Mip-NeRF360 与 3DGS。图片来源：Kerbl et al., 2023。*
 
@@ -36,7 +36,7 @@ NeRF 证明了一个重要事实：不一定要先恢复传统 Mesh，神经网�
 
 原论文的输入不是“随便丢进去几张照片”这么简单，而是多视角图像、相机内参和外参，以及相机标定过程中由 Structure from Motion（SfM）顺便得到的稀疏点云。官方实现通常使用 COLMAP 完成特征匹配、相机位姿估计和稀疏重建。
 
-![3DGS 训练流程](../images/3dgs/training-pipeline.svg)
+![3DGS 训练流程](/qqsnote/images/3dgs/training-pipeline.svg)
 
 *图 2：根据原论文 Fig. 2 重绘的训练流程。*
 
@@ -84,7 +84,7 @@ $S$ 是由三个尺度构成的对角矩阵，$R$ 来自单位四元数表示的
 
 SfM 点云只覆盖容易匹配的图像特征，数量和密度远不足以直接渲染完整场景。3DGS 的关键不只是“优化已有点”，而是训练过程中不断改变 Gaussian 的数量。
 
-![3DGS 自适应密度控制](../images/3dgs/adaptive-density-control.svg)
+![3DGS 自适应密度控制](/qqsnote/images/3dgs/adaptive-density-control.svg)
 
 *图 3：根据原论文 Fig. 4 重绘的自适应密度控制。*
 
@@ -153,7 +153,7 @@ $c_i$ 是第 $i$ 个 Gaussian 在当前观察方向下的颜色，$\alpha_i$ 包
 
 表中的“模型参数内存”也不等于训练峰值显存。原论文指出，大场景训练峰值可能超过 20 GB；官方实现当前 README 为论文评测质量训练建议 24 GB 显存。优化器状态、梯度、临时排序缓冲和训练图像都会增加峰值占用。
 
-![各向异性与各向同性 Gaussian 的效果对比](../images/3dgs/anisotropic-vs-isotropic.png)
+![各向异性与各向同性 Gaussian 的效果对比](/qqsnote/images/3dgs/anisotropic-vs-isotropic.png)
 
 *图 4：论文 Fig. 10。Full 使用完整各向异性协方差，Isotropic 只优化统一半径；细结构和表面贴合能力明显不同。图片来源：Kerbl et al., 2023。*
 
@@ -220,7 +220,7 @@ python render.py -m <trained-model-directory>
 
 输入视角覆盖不足时，优化器只能利用有限图像猜测未观察区域。Gaussian 可能被拉成长条、变成粗大的色块，或者在相机附近形成漂浮物。视角离训练相机越远，错误通常越明显。
 
-![训练视角覆盖不足时的伪影](../images/3dgs/unseen-view-artifacts.png)
+![训练视角覆盖不足时的伪影](/qqsnote/images/3dgs/unseen-view-artifacts.png)
 
 *图 5：论文 Fig. 12 的对比区域。左侧 Mip-NeRF360 与右侧 3DGS 在训练视角重叠不足时都会出现不同形式的伪影。图片来源：Kerbl et al., 2023。*
 

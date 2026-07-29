@@ -299,8 +299,8 @@ test('3DGS article references exactly the five approved visual assets', () => {
     'training-pipeline.svg',
     'adaptive-density-control.svg'
   ];
-  for (const asset of assets) assert.equal(article.includes(`../images/3dgs/${asset}`), true);
-  assert.equal((article.match(/\.\.\/images\/3dgs\//g) || []).length, 5);
+  for (const asset of assets) assert.equal(article.includes(`/qqsnote/images/3dgs/${asset}`), true);
+  assert.equal((article.match(/\/qqsnote\/images\/3dgs\//g) || []).length, 5);
 });
 
 test('3DGS article includes formulas, experiment data, reproduction commands, and sources', () => {
