@@ -45,13 +45,14 @@ Use `apply_patch` to create `/tmp/qqsnote-harness-research/claims.md` with these
 
 | Claim | Source type | Required evidence | Status |
 | --- | --- | --- | --- |
-| Matt Pocock's current grill-me delegates to grilling; neither selected skill file mandates PLAN.md or SPEC.md | official source | exact current SKILL.md paths, commit/date, quoted rule | pending |
-| Current grill-me and Trellis brainstorm share or differ on question cadence, repository evidence lookup, artifact generation, and approval gate | official source | both current skill files, commit/date, four-dimension comparison | pending |
-| Trellis 0.6.10 documents or exposes a CLI path that imports arbitrary root PLAN.md/SPEC.md into its task/spec artifacts | official source + experiment | CLI help, docs, generated task structure, attempted supported command if present | pending |
+| Matt Pocock's observed grill-me delegates to grilling; neither selected skill file mandates PLAN.md, SPEC.md, another artifact, or a separate post-summary approval | official source | resolved default-branch tree/blob identities, observation date, repository pushed_at kept distinct from commit date, quoted rule | pending |
+| Current grill-me and Trellis brainstorm share or differ on question cadence, environment-answerable fact lookup, artifact guidance, and approval guidance | official source | both observed skill files, source identity boundary/date, four-dimension comparison | pending |
+| Trellis 0.6.10 official documentation or CLI reference documents a command that imports arbitrary root PLAN.md/SPEC.md into task/spec artifacts | official source | README, task/spec references, complete CLI help and source search | pending |
+| Trellis 0.6.10 initialized for Codex automatically detects and translates pre-existing root PLAN.md/SPEC.md into Trellis artifacts | experiment | sentinel fixtures, before/after trees and hashes, generated-artifact search, exit codes | pending |
 | The reference article's trellis start, /check-backend, /finish-work, and /record-session commands match Trellis 0.6.10 initialized for Codex | third-party experience + experiment | named article/date, CLI help, generated skills/commands, exact output | pending |
-| Trellis 0.6.10 generates Codex-specific adapter files | official source + experiment | repository templates plus exact generated paths | pending |
+| Trellis 0.6.10 contains Codex adapter/templates and emits Codex integration files when initialized for Codex | official source + experiment | repository templates plus exact generated paths | pending |
 | A controlled repeated-task comparison demonstrates that Trellis improves task success rate over native Codex with AGENTS.md and tests | independent comparison | matched tasks, fixed model/budget, acceptance results, maintenance cost | pending |
-| Trellis, GitHub Spec Kit, Superpowers, and native Codex differ in artifacts, persistent task state, enforcement, host binding, and exit cost | official source | versioned primary sources and fixed-dimension comparison | pending |
+| Trellis, GitHub Spec Kit, Superpowers, and native Codex have fully version-verified differences in artifacts, persistent state, workflow guidance, mechanical enforcement, host binding, and migration surface | official source | versioned primary sources and fixed-dimension comparison | pending |
 
 Status vocabulary: pending, supported, unsupported, inconclusive.
 
@@ -108,8 +109,8 @@ Expected ledger result:
 
 ```text
 original grill-me: thin entry into grilling; no mandated file artifact
-grilling: one question at a time, inspect facts first, decisions remain user-owned
-grill-me-codex: separate extension that defines PLAN.md and review logs
+grilling: one question at a time; look up environment-answerable facts; confirm shared understanding before action; no separate post-summary approval message
+grill-me-codex: hashed snapshot of a separate extension that defines PLAN.md and review logs; not a current-version fact without a full upstream pin
 ```
 
 - [ ] **Step 3: Verify Trellis current stable metadata and source behavior**
@@ -129,7 +130,7 @@ current Codex adapter files
 current documented platform count
 ```
 
-Expected: any mismatch with the June reference article is dated and described as version drift, not author error.
+Expected: any mismatch with the June reference article is dated and described as version drift, not author error. Describe brainstorm/check/finish behavior as instructions in host-agent templates; list script/hook effects separately as mechanical behavior only when an executable mechanism is present.
 
 - [ ] **Step 4: Verify current Codex capabilities using the openai-docs skill**
 
@@ -155,15 +156,17 @@ https://github.com/obra/superpowers
 Complete this comparison in the ledger:
 
 ```markdown
-| Option | Main artifacts | Persistent task state | Enforcement mechanism | Host binding | Exit cost |
-| --- | --- | --- | --- | --- | --- |
-| Trellis | | | | | |
-| GitHub Spec Kit | | | | | |
-| Superpowers | | | | | |
-| Native Codex + AGENTS.md | | | | | |
+Migration scenario: move committed project artifacts to native Codex + AGENTS.md while preserving requirements, tests, and useful Git/project history.
+
+| Option | Main artifacts | Persistent task state | Prompt/workflow guidance | Mechanical enforcement | Host binding | Migration surface (engineering judgment) |
+| --- | --- | --- | --- | --- | --- | --- |
+| Trellis | | | | | | |
+| GitHub Spec Kit | | | | | | |
+| Superpowers | | | | | | |
+| Native Codex + AGENTS.md | | | | | | |
 ```
 
-Expected: comparison stays limited to requirements alignment, spec/task governance, execution discipline, and verification.
+Expected: comparison stays limited to requirements alignment, spec/task governance, execution discipline, and verification. Label prompt text and skill templates as advisory guidance. Put only scripts, hooks, policy settings, CI, or commands with executable effects in mechanical enforcement. Describe what must be retained, translated, replaced, or removed instead of assigning low/medium/high exit-cost scores.
 
 ### Task 3: Create the disposable baseline project
 
@@ -281,28 +284,78 @@ Expected: one passing test and a clean lab worktree.
 - Create generated temporary: `/tmp/qqsnote-harness-lab/.trellis/**`
 - Create generated temporary: `/tmp/qqsnote-harness-lab/.codex/**` or the actual current Codex adapter path
 
-- [ ] **Step 1: Inspect installation commands before executing them**
+- [ ] **Step 1: Capture the pinned CLI identity, complete help, and import-related source evidence**
 
-Run the help commands with npm cache under `/tmp`:
+Run with the npm cache and all evidence under `/tmp`. Preserve complete stdout/stderr and the exit code for version, top-level help, and every subcommand listed by top-level help:
 
 ```bash
-npx --yes --cache /tmp/qqsnote-harness-lab/npm-cache skills@latest --help
-npx --yes --cache /tmp/qqsnote-harness-lab/npm-cache @mindfoldhq/trellis@0.6.10 --help
+set +e
+npx --yes --cache /tmp/qqsnote-harness-lab/npm-cache @mindfoldhq/trellis@0.6.10 --version > /tmp/qqsnote-harness-research/trellis-version.txt 2>&1
+printf '%s\n' "$?" > /tmp/qqsnote-harness-research/trellis-version.exit
+npx --yes --cache /tmp/qqsnote-harness-lab/npm-cache @mindfoldhq/trellis@0.6.10 --help > /tmp/qqsnote-harness-research/trellis-help-top.txt 2>&1
+printf '%s\n' "$?" > /tmp/qqsnote-harness-research/trellis-help-top.exit
+set -e
 ```
 
-Expected: record the supported non-interactive flags and actual Trellis command set. Do not reuse reference-article commands that are absent from help.
+Read `trellis-help-top.txt`, make an exact list of every displayed subcommand, and run `<subcommand> --help` once for each. At source snapshot time the candidates are `init`, `update`, `upgrade`, `uninstall`, `workflow`, `mem`, and `channel`, but the captured top-level output is authoritative. Save each complete output as `trellis-help-<subcommand>.txt` and its numeric exit code as `trellis-help-<subcommand>.exit`. Do the same for `skills@latest --help`.
 
-- [ ] **Step 2: Install grill-me and initialize Trellis for Codex**
+Fetch the already pinned npm package into the disposable area, parse `npm pack --json` structurally, extract it, and search the installed package sources and help captures:
+
+```bash
+mkdir -p /tmp/qqsnote-harness-lab/trellis-package
+npm pack --json --pack-destination /tmp/qqsnote-harness-lab/trellis-package @mindfoldhq/trellis@0.6.10 > /tmp/qqsnote-harness-research/trellis-pack.json
+node -e 'const fs=require("node:fs"); const j=JSON.parse(fs.readFileSync(process.argv[1],"utf8")); if(j.length!==1||!j[0].filename) throw new Error("unexpected npm pack result"); process.stdout.write(j[0].filename)' /tmp/qqsnote-harness-research/trellis-pack.json > /tmp/qqsnote-harness-research/trellis-pack-filename.txt
+mkdir -p /tmp/qqsnote-harness-lab/trellis-package/extracted
+tar -xzf "/tmp/qqsnote-harness-lab/trellis-package/$(cat /tmp/qqsnote-harness-research/trellis-pack-filename.txt)" -C /tmp/qqsnote-harness-lab/trellis-package/extracted
+set +e
+rg -n -i 'PLAN\.md|SPEC\.md|import|translate|convert|migrat|detect' /tmp/qqsnote-harness-lab/trellis-package/extracted /tmp/qqsnote-harness-research/trellis-help-*.txt > /tmp/qqsnote-harness-research/trellis-import-source-search.txt
+printf '%s\n' "$?" > /tmp/qqsnote-harness-research/trellis-import-source-search.exit
+set -e
+```
+
+Expected: Claim 3 records the complete documented CLI/reference result. Do not invent or run a guessed import command if neither help nor source exposes one.
+
+- [ ] **Step 2: Seed root PLAN/SPEC fixtures and record the pre-init tree**
+
+Use `apply_patch` to create root `PLAN.md` and `SPEC.md` before Trellis initialization. Include unique sentinel strings that cannot occur accidentally:
+
+```text
+ROOT_PLAN_SENTINEL_ALARM_ACK_20260730
+ROOT_SPEC_SENTINEL_ALARM_ACK_20260730
+```
+
+Record the project tree and SHA-256 manifest while pruning npm cache and the extracted package:
+
+```bash
+find . -path './npm-cache' -prune -o -path './trellis-package' -prune -o -type f -print | LC_ALL=C sort > /tmp/qqsnote-harness-research/lab-before-init.tree
+find . -path './npm-cache' -prune -o -path './trellis-package' -prune -o -type f -print0 | LC_ALL=C sort -z | xargs -0 sha256sum > /tmp/qqsnote-harness-research/lab-before-init.sha256
+```
+
+Expected: both root fixtures and their hashes appear in the pre-init evidence.
+
+- [ ] **Step 3: Install grill-me and initialize Trellis for Codex**
 
 Run the supported `skills add mattpocock/skills` flow and select only `grill-me` for Codex. Then run:
 
 ```bash
-npx --yes --cache /tmp/qqsnote-harness-lab/npm-cache @mindfoldhq/trellis@0.6.10 init --codex -u harness-lab
+set +e
+npx --yes --cache /tmp/qqsnote-harness-lab/npm-cache @mindfoldhq/trellis@0.6.10 init --codex -u harness-lab > /tmp/qqsnote-harness-research/trellis-init.txt 2>&1
+printf '%s\n' "$?" > /tmp/qqsnote-harness-research/trellis-init.exit
+set -e
+git status --short > /tmp/qqsnote-harness-research/lab-after-init.status
+find . -path './npm-cache' -prune -o -path './trellis-package' -prune -o -type f -print | LC_ALL=C sort > /tmp/qqsnote-harness-research/lab-after-init.tree
+find . -path './npm-cache' -prune -o -path './trellis-package' -prune -o -type f -print0 | LC_ALL=C sort -z | xargs -0 sha256sum > /tmp/qqsnote-harness-research/lab-after-init.sha256
+set +e
+rg -n 'ROOT_(PLAN|SPEC)_SENTINEL_ALARM_ACK_20260730|PLAN\.md|SPEC\.md' .trellis .codex > /tmp/qqsnote-harness-research/lab-after-init-import-search.txt 2>&1
+printf '%s\n' "$?" > /tmp/qqsnote-harness-research/lab-after-init-import-search.exit
+set -e
 ```
 
-Expected: record every generated path with `git status --short`; confirm that QQsNote itself remains unchanged.
+If the generated adapter root differs from `.codex/`, add its exact path to the search rather than assuming equivalence.
 
-- [ ] **Step 3: Run the requirement-alignment interview**
+Expected: record every generated path and exact Codex invocation/adapter name; confirm QQsNote itself remains unchanged. This is the first observation point for Claims 4, 5, and 6.
+
+- [ ] **Step 4: Run the requirement-alignment interview**
 
 Start from this intentionally incomplete request:
 
@@ -325,20 +378,46 @@ clear/resolve and persistence are out of scope
 
 Expected: identify which decisions were not present in the initial request and whether Trellis brainstorm would now ask the same questions.
 
-- [ ] **Step 4: Create and populate the current Trellis task artifacts**
+- [ ] **Step 5: Create the Trellis task, observe automatic translation, then populate artifacts manually if needed**
 
 Use the generated task script rather than an assumed top-level command:
 
 ```bash
-TASK_DIR=$(python3 ./.trellis/scripts/task.py create "Alarm acknowledgement" --slug alarm-ack)
-python3 ./.trellis/scripts/task.py init-context "$TASK_DIR" fullstack
+set +e
+python3 ./.trellis/scripts/task.py create "Alarm acknowledgement" --slug alarm-ack > /tmp/qqsnote-harness-research/task-create.txt 2>&1
+printf '%s\n' "$?" > /tmp/qqsnote-harness-research/task-create.exit
+set -e
+TASK_DIR=$(tail -n 1 /tmp/qqsnote-harness-research/task-create.txt)
+set +e
+python3 ./.trellis/scripts/task.py init-context "$TASK_DIR" fullstack > /tmp/qqsnote-harness-research/task-init-context.txt 2>&1
+printf '%s\n' "$?" > /tmp/qqsnote-harness-research/task-init-context.exit
+set -e
 ```
 
-Use `apply_patch` to write the confirmed decisions into `$TASK_DIR/prd.md`, the `acknowledge(id, { operatorId, note })` contract into `$TASK_DIR/design.md`, and the red-green-refactor steps into `$TASK_DIR/implement.md`. Add `AGENTS.md` and the task PRD to the generated implementation/check context files using the task script.
+Capture stdout/stderr and exit codes for both commands. Before manually copying any fixture content, record a third tree/SHA-256 manifest and search the generated task, `.trellis/`, `.codex/`, and extracted package source:
+
+```bash
+find . -path './npm-cache' -prune -o -path './trellis-package' -prune -o -type f -print | LC_ALL=C sort > /tmp/qqsnote-harness-research/lab-after-task-create.tree
+find . -path './npm-cache' -prune -o -path './trellis-package' -prune -o -type f -print0 | LC_ALL=C sort -z | xargs -0 sha256sum > /tmp/qqsnote-harness-research/lab-after-task-create.sha256
+set +e
+rg -n -i 'ROOT_(PLAN|SPEC)_SENTINEL_ALARM_ACK_20260730|PLAN\.md|SPEC\.md|import|translate|convert|migrat|detect' "$TASK_DIR" .trellis .codex /tmp/qqsnote-harness-lab/trellis-package/extracted > /tmp/qqsnote-harness-research/lab-after-task-create-import-search.txt 2>&1
+printf '%s\n' "$?" > /tmp/qqsnote-harness-research/lab-after-task-create-import-search.exit
+set -e
+```
+
+Classify Claim 4 using explicit evidence:
+
+```text
+automatic: generated Trellis artifacts contain the fixture sentinels without a manual copy/translation step
+manual: no automatic translation occurred, but the experiment explicitly maps accepted content into Trellis-native artifacts
+unsupported: no documented/import handler exists and any exposed supported attempt exits as unsupported; record the exact command and exit code
+```
+
+Claim 4 is supported only by the `automatic` result; a controlled `manual` or `unsupported` result makes the automatic-detection claim unsupported. If no supported import command exists, record that fact and do not invent one. Then use `apply_patch` to write the confirmed decisions into `$TASK_DIR/prd.md`, the `acknowledge(id, { operatorId, note })` contract into `$TASK_DIR/design.md`, and the red-green-refactor steps into `$TASK_DIR/implement.md`. Add `AGENTS.md` and the task PRD to the generated implementation/check context files using the task script. This manual mapping must be labeled as manual, never automatic.
 
 Expected: `task.py validate "$TASK_DIR"` succeeds and the task files contain no generic placeholders.
 
-- [ ] **Step 5: Write the failing acknowledgement tests**
+- [ ] **Step 6: Write the failing acknowledgement tests**
 
 Append tests covering:
 
@@ -358,7 +437,7 @@ npm test
 
 Expected: new tests fail because `acknowledge` is not implemented.
 
-- [ ] **Step 6: Implement the minimal state transition**
+- [ ] **Step 7: Implement the minimal state transition**
 
 Add `acknowledge(id, { operatorId, note = null })` to `AlarmStore`, preserving cloned return values and the injected clock.
 
@@ -370,13 +449,13 @@ npm test
 
 Expected: all baseline and acknowledgement tests pass.
 
-- [ ] **Step 7: Execute Trellis check and finish behavior**
+- [ ] **Step 8: Execute Trellis check and finish behavior**
 
-Follow the generated current-version check/finish skills, run `git diff --check`, `npm test`, and task validation. Record whether check, archive, journal, worktree, and spec promotion are automatic, prompted, or manual.
+Follow the generated current-version check/finish templates, run `git diff --check`, `npm test`, and task validation. Say that the templates **instruct the host agent** to inspect, fix findings, and rerun checks; separately record which scripts/hooks/commands actually execute changes. Record whether check, archive, journal, worktree, and spec promotion are automatic, prompted/advisory, or manual, with command exit codes.
 
 Expected: the ledger distinguishes observed behavior from README claims and from the June reference article.
 
-- [ ] **Step 8: Commit and measure the experiment**
+- [ ] **Step 9: Commit and measure the experiment**
 
 Run:
 
@@ -386,7 +465,7 @@ git commit -m "feat: add alarm acknowledgement"
 git status --short
 ```
 
-Because this is the disposable lab repository, stage every generated path so the experiment records the real footprint. Record changed-file count, Harness-file count, interview decisions, commands, test count, and manual interventions.
+Because this is the disposable lab repository, stage every generated path so the experiment records the real footprint. Record changed-file count, Harness-file count, interview decisions, commands, test count, manual interventions, and the final status handoff: Claim 3 from official help/source review; Claim 4 from sentinel translation observation; Claim 5 from help/generated invocation comparison; Claim 6 from exact emitted Codex adapter paths. Claim 7 remains inconclusive without a controlled repeated-task benchmark, and Claim 8 remains bounded by its pinned-source gaps.
 
 Expected: a clean lab repository or an explicit list of generated cache files that should not be committed.
 
@@ -427,10 +506,10 @@ Add these headings:
 Required findings:
 
 ```text
-original grill-me does not create PLAN.md by contract
-grill-me-codex is a separate extension
+observed original grill-me mandates no artifact and no separate post-summary approval message
+hashed grill-me-codex snapshot is a separate extension; do not present it as current upstream without a full commit pin
 current Trellis brainstorm overlap is stronger or weaker based on source
-PLAN/SPEC must be mapped into Trellis task/spec artifacts
+whether root PLAN/SPEC was automatically translated, manually mapped, or unsupported, based on Task 4 sentinels and exit codes
 code search belongs before and during implementation, not after Codex
 ```
 
@@ -475,7 +554,7 @@ Add:
 ## 六、Trellis、Spec Kit、Superpowers和原生Codex怎样选
 ```
 
-Use the fixed comparison dimensions from the claim ledger. Include Claude Code only as a compact differences note.
+Use the fixed comparison dimensions from the claim ledger: main artifacts, persistent state, prompt/workflow guidance, mechanical enforcement, host binding, and migration surface. State the migration scenario explicitly and preserve bounded cells. Include Claude Code only as a compact differences note.
 
 - [ ] **Step 6: Write the objective conclusion and development section**
 
