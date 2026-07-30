@@ -284,7 +284,7 @@ Expected: one passing test and a clean lab worktree.
 - Create generated temporary: `/tmp/qqsnote-harness-lab/.trellis/**`
 - Create generated temporary: `/tmp/qqsnote-harness-lab/.codex/**` or the actual current Codex adapter path
 
-- [ ] **Step 1: Capture the pinned CLI identity, complete help, and import-related source evidence**
+- [ ] **Step 1: Capture the pinned CLI identity, complete help, and artifact-translation source evidence**
 
 Run with the npm cache and all evidence under `/tmp`. Preserve complete stdout/stderr and the exit code for version, top-level help, and every subcommand listed by top-level help:
 
@@ -308,12 +308,18 @@ node -e 'const fs=require("node:fs"); const j=JSON.parse(fs.readFileSync(process
 mkdir -p /tmp/qqsnote-harness-lab/trellis-package/extracted
 tar -xzf "/tmp/qqsnote-harness-lab/trellis-package/$(cat /tmp/qqsnote-harness-research/trellis-pack-filename.txt)" -C /tmp/qqsnote-harness-lab/trellis-package/extracted
 set +e
-rg -n -i 'PLAN\.md|SPEC\.md|import|translate|convert|migrat|detect' /tmp/qqsnote-harness-lab/trellis-package/extracted /tmp/qqsnote-harness-research/trellis-help-*.txt > /tmp/qqsnote-harness-research/trellis-import-source-search.txt
-printf '%s\n' "$?" > /tmp/qqsnote-harness-research/trellis-import-source-search.exit
+rg -n -i 'PLAN\.md|SPEC\.md|prd\.md|design\.md|implement\.md|\.trellis/(tasks|spec)' /tmp/qqsnote-harness-lab/trellis-package/extracted /tmp/qqsnote-harness-research/trellis-help-*.txt > /tmp/qqsnote-harness-research/trellis-artifact-path-search.txt
+printf '%s\n' "$?" > /tmp/qqsnote-harness-research/trellis-artifact-path-search.exit
+rg -n '\.(command|addCommand)\(|new Command\(|registerCommand' /tmp/qqsnote-harness-lab/trellis-package/extracted > /tmp/qqsnote-harness-research/trellis-cli-command-registration.txt
+printf '%s\n' "$?" > /tmp/qqsnote-harness-research/trellis-cli-command-registration.exit
+rg -n -i '(\.command\(|\.name\(|addCommand|registerCommand).*(import|migrate|convert|translate)|(import|migrate|convert|translate)[-_ ]?(plan|spec|task|artifact)' /tmp/qqsnote-harness-lab/trellis-package/extracted /tmp/qqsnote-harness-research/trellis-help-*.txt > /tmp/qqsnote-harness-research/trellis-candidate-transfer-command-search.txt
+printf '%s\n' "$?" > /tmp/qqsnote-harness-research/trellis-candidate-transfer-command-search.exit
 set -e
 ```
 
-Expected: Claim 3 records the complete documented CLI/reference result. Do not invent or run a guessed import command if neither help nor source exposes one.
+Do not search for standalone generic `import`: ordinary JavaScript/TypeScript/Python module imports are irrelevant noise. The candidate-command search must require CLI registration context or a compound command identifier such as `import-plan`, `migrate-spec`, `convert-task`, or `translate-artifact`.
+
+Expected: Claim 3 records the complete documented CLI/reference result. Do not invent or run a guessed transfer command if neither help nor source exposes one.
 
 - [ ] **Step 2: Seed root PLAN/SPEC fixtures and record the pre-init tree**
 
@@ -346,8 +352,8 @@ git status --short > /tmp/qqsnote-harness-research/lab-after-init.status
 find . -path './npm-cache' -prune -o -path './trellis-package' -prune -o -type f -print | LC_ALL=C sort > /tmp/qqsnote-harness-research/lab-after-init.tree
 find . -path './npm-cache' -prune -o -path './trellis-package' -prune -o -type f -print0 | LC_ALL=C sort -z | xargs -0 sha256sum > /tmp/qqsnote-harness-research/lab-after-init.sha256
 set +e
-rg -n 'ROOT_(PLAN|SPEC)_SENTINEL_ALARM_ACK_20260730|PLAN\.md|SPEC\.md' .trellis .codex > /tmp/qqsnote-harness-research/lab-after-init-import-search.txt 2>&1
-printf '%s\n' "$?" > /tmp/qqsnote-harness-research/lab-after-init-import-search.exit
+rg -n 'ROOT_(PLAN|SPEC)_SENTINEL_ALARM_ACK_20260730|PLAN\.md|SPEC\.md|prd\.md|design\.md|implement\.md|\.trellis/(tasks|spec)' .trellis .codex > /tmp/qqsnote-harness-research/lab-after-init-artifact-search.txt 2>&1
+printf '%s\n' "$?" > /tmp/qqsnote-harness-research/lab-after-init-artifact-search.exit
 set -e
 ```
 
@@ -400,8 +406,8 @@ Capture stdout/stderr and exit codes for both commands. Before manually copying 
 find . -path './npm-cache' -prune -o -path './trellis-package' -prune -o -type f -print | LC_ALL=C sort > /tmp/qqsnote-harness-research/lab-after-task-create.tree
 find . -path './npm-cache' -prune -o -path './trellis-package' -prune -o -type f -print0 | LC_ALL=C sort -z | xargs -0 sha256sum > /tmp/qqsnote-harness-research/lab-after-task-create.sha256
 set +e
-rg -n -i 'ROOT_(PLAN|SPEC)_SENTINEL_ALARM_ACK_20260730|PLAN\.md|SPEC\.md|import|translate|convert|migrat|detect' "$TASK_DIR" .trellis .codex /tmp/qqsnote-harness-lab/trellis-package/extracted > /tmp/qqsnote-harness-research/lab-after-task-create-import-search.txt 2>&1
-printf '%s\n' "$?" > /tmp/qqsnote-harness-research/lab-after-task-create-import-search.exit
+rg -n -i 'ROOT_(PLAN|SPEC)_SENTINEL_ALARM_ACK_20260730|PLAN\.md|SPEC\.md|prd\.md|design\.md|implement\.md|\.trellis/(tasks|spec)' "$TASK_DIR" .trellis .codex > /tmp/qqsnote-harness-research/lab-after-task-create-artifact-search.txt 2>&1
+printf '%s\n' "$?" > /tmp/qqsnote-harness-research/lab-after-task-create-artifact-search.exit
 set -e
 ```
 
