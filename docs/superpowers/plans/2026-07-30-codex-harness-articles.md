@@ -45,13 +45,17 @@ Use `apply_patch` to create `/tmp/qqsnote-harness-research/claims.md` with these
 
 | Claim | Source type | Required evidence | Status |
 | --- | --- | --- | --- |
-| Original grill-me only invokes grilling and does not guarantee PLAN.md | official source | Matt Pocock SKILL.md files | pending |
-| grill-me and current Trellis brainstorm overlap | official source | both current skill files | pending |
-| Trellis accepts arbitrary PLAN.md/SPEC.md automatically | official source + experiment | CLI help, generated task structure | pending; expect unsupported |
-| Reference article commands still work on 2026-07-30 | experiment | exact command output | pending |
-| Trellis provides Codex-specific adapters | official source + experiment | repository templates and generated files | pending |
-| Trellis improves task success rate | independent comparison | controlled repeated tasks | unproven unless evidence found |
-| GitHub Spec Kit and Superpowers replace the same Trellis capabilities | official source | artifacts, state, enforcement comparison | pending |
+| Matt Pocock's current grill-me delegates to grilling; neither selected skill file mandates PLAN.md or SPEC.md | official source | exact current SKILL.md paths, commit/date, quoted rule | pending |
+| Current grill-me and Trellis brainstorm share or differ on question cadence, repository evidence lookup, artifact generation, and approval gate | official source | both current skill files, commit/date, four-dimension comparison | pending |
+| Trellis 0.6.10 documents or exposes a CLI path that imports arbitrary root PLAN.md/SPEC.md into its task/spec artifacts | official source + experiment | CLI help, docs, generated task structure, attempted supported command if present | pending |
+| The reference article's trellis start, /check-backend, /finish-work, and /record-session commands match Trellis 0.6.10 initialized for Codex | third-party experience + experiment | named article/date, CLI help, generated skills/commands, exact output | pending |
+| Trellis 0.6.10 generates Codex-specific adapter files | official source + experiment | repository templates plus exact generated paths | pending |
+| A controlled repeated-task comparison demonstrates that Trellis improves task success rate over native Codex with AGENTS.md and tests | independent comparison | matched tasks, fixed model/budget, acceptance results, maintenance cost | pending |
+| Trellis, GitHub Spec Kit, Superpowers, and native Codex differ in artifacts, persistent task state, enforcement, host binding, and exit cost | official source | versioned primary sources and fixed-dimension comparison | pending |
+
+Status vocabulary: pending, supported, unsupported, inconclusive.
+
+Observation date: 2026-07-30; versions/commits will be recorded as evidence is gathered.
 ```
 
 - [ ] **Step 3: Record the existing repository state**
