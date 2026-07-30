@@ -10,6 +10,8 @@ tags:
 
 本文区分**官方事实、他人经验、本地实验、工程判断**，最后核对时间为 **2026-07-30**。文中的一次实验只能说明这条流程如何运转、会生成什么、在哪里失效，不能当作工具提升任务成功率的 benchmark。
 
+概念分层和工具边界见 {% post_link ai-agent-multi-agent-planning-harness-2026 'AI Agent工程化地图' %}。本文只记录这条具体开发链路的复现与判断。
+
 为避免把不同强度的证据混在一起，正文使用以下标签：
 
 - **[官方事实]**：来自固定版本的仓库、包元数据或官方文档；若正文没有成功获取，会明确写成“本次未核验”。
@@ -179,6 +181,71 @@ archive 和 journal 脚本被显式调用后才产生机械效果，分别自动
 | **complex-long-running**：`grill-me when needed -> Trellis task/context -> Codex/check -> Git/CI -> archive` | 跨周、多人或多 Agent 交接，上下文分散，确实需要任务状态与 journal | `.trellis/tasks/`、必要 specs/context、产品代码、测试、journal | 按需 grilling；`task.py create/add-context/validate/start`；实现与检查；Git/CI；显式 archive、journal | 独立验证通过，工作代码已提交，任务归档且后续会话能从项目产物恢复意图 | 高：生成文件审查、版本升级、上下文清理、归档路径和许可证治理 |
 
 两个升级触发器最实用：第一，关键决策在对话结束后还要被别人使用；第二，任务的验证和上下文已经无法用一个 issue 加 CI 清楚表达。反过来，如果 PRD 没人读、journal 没人接续、任务一两个小时就结束，就停在 small 或 medium。
+
+### small：单会话小改动
+
+- **适用 / 不适用 / 升级：** 需求和验收已经明确、改动可在一个会话内完成时使用；若仍有会改变测试结果的产品决策，就先升级到 medium；不为跨周交接保留临时任务状态。
+- **文件职责：** `AGENTS.md` 只保存长期仓库规则；产品文件承载实现；测试文件承载可重复验收，不另建一次性 PRD。
+- **执行：** Codex 先读规则、现有实现和测试，再修改并运行仓库已有命令。本文所在 QQsNote 可直接执行：
+
+```bash
+npm test
+npm run build
+git diff --check
+git diff
+```
+
+- **退出 / 成本：** 测试和构建通过、diff 可解释且无待交接状态即结束；成本只有既有规则和 CI 的维护。
+- **Claude Code：** 复用相同的仓库文件和 shell 验证，只替换宿主 Agent 的调用入口；本次未取得当前官方正文，因此不补写未经核验的专用命令。
+
+### medium：短期分支上的明确功能
+
+- **适用 / 不适用 / 升级：** 有若干产品取舍或跨模块接口、但一个短期分支仍能承载时使用；如果状态要跨周、跨人员或跨 Agent 恢复，再升级到 complex-long-running。已有 issue 已完整承担规格职责时，不重复创建 `SPEC.md`。
+- **文件职责：** `SPEC.md` 只写需求、范围和验收；`PLAN.md` 只写实现顺序、依赖和验证；产品代码与测试分别承载行为和 oracle。两份文档完成后删除还是保留，应由仓库约定决定，避免出现第二事实源。
+- **执行：** 对齐未决项并写入 SPEC/PLAN，Codex 实现后运行本地 CI 等价命令，再由远端 CI 重放。QQsNote 的本地门禁是：
+
+```bash
+npm test
+npm run build
+git diff --check
+git diff
+```
+
+- **退出 / 成本：** 未决项归零、SPEC 与测试一致、本地门禁和远端 CI 通过、Git 历史可审查即结束；额外成本是保持计划、规格和代码同步。
+- **Claude Code：** 继续使用同一 SPEC/PLAN、测试和 CI；只替换规划与编码会话入口，不假设其当前原生命令与 Codex 等价。
+
+### complex-long-running：需要可恢复任务状态
+
+- **适用 / 不适用 / 降级：** 任务跨周、多人或多 Agent 交接，并且后续会话确实要消费 task/context/journal 时使用；若这些产物连续多个任务无人读取，就降回 medium 并移除冗余状态。
+- **文件职责：** task-local `prd.md` 保存本次需求和验收，`design.md` 保存技术契约，`implement.md` 保存执行步骤；JSONL 只列实现/检查需要的稳定 spec 或 research context；`.trellis/spec/` 只保存跨任务长期规则；journal 只记录跨会话过程和决策历史。
+- **执行：** 在完成需求对齐和手工产物映射后，使用 Trellis 脚本推进状态；不要把 task-local PRD 再自引用进 JSONL：
+
+```bash
+TASK_PATH="$(python3 ./.trellis/scripts/task.py create \
+  "Add alarm acknowledgement" --slug alarm-acknowledgement)"
+python3 ./.trellis/scripts/task.py add-context \
+  "$TASK_PATH" implement AGENTS.md "Repository rules"
+python3 ./.trellis/scripts/task.py add-context \
+  "$TASK_PATH" check AGENTS.md "Repository rules"
+python3 ./.trellis/scripts/task.py validate "$TASK_PATH"
+python3 ./.trellis/scripts/task.py start "$TASK_PATH"
+npm test
+git diff --check
+```
+
+实现、检查和 Git/CI 通过并提交代码后，再显式执行归档与 journal；脚本不会因为 skill 文本存在而自动运行：
+
+```bash
+COMMIT_SHA="$(git rev-parse HEAD)"
+python3 ./.trellis/scripts/task.py archive alarm-acknowledgement
+python3 ./.trellis/scripts/add_session.py \
+  --title "Alarm acknowledgement" \
+  --commit "$COMMIT_SHA" \
+  --summary "Implemented and independently verified alarm acknowledgement."
+```
+
+- **退出 / 成本：** 独立验证通过、代码已提交、任务已归档，且新会话能只凭仓库产物恢复意图才结束；成本包括生成文件审查、升级、上下文清理、归档和许可证治理。
+- **Claude Code：** Trellis 核心 task 脚本与仓库产物可以保持不变，但宿主 adapter、skill 名称和 hooks 必须按当前版本重新核验；本文不根据未取得的官方正文推定与 Codex 完全相同。
 
 ## 六、Trellis、Spec Kit、Superpowers和原生Codex怎样选
 
