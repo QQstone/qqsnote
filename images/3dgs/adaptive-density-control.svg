@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 460" role="img" aria-labelledby="title desc">
+  <title id="title">3DGS 自适应密度控制</title>
+  <desc id="desc">小 Gaussian 在欠重建区域被克隆，大 Gaussian 在过重建区域被拆分，同时删除低透明度 Gaussian。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#355070"/>
+    </marker>
+    <style>
+      .txt{font:19px sans-serif;fill:#1f2937}
+      .small{font:16px sans-serif;fill:#4b5563}
+      .arrow{stroke:#355070;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+      .old{fill:#8ecae6;stroke:#355070;stroke-width:2}
+      .new{fill:#fbbf77;stroke:#c2410c;stroke-width:2}
+      .target{fill:none;stroke:#6b7280;stroke-width:2;stroke-dasharray:8 6}
+    </style>
+  </defs>
+  <rect width="1200" height="460" fill="#fff"/>
+  <text class="txt" x="45" y="48">欠重建：克隆</text>
+  <text class="small" x="45" y="76">小 Gaussian + 大位置梯度</text>
+  <path class="target" d="M60 125 C170 75 300 85 390 135 C305 180 175 185 60 125Z"/>
+  <ellipse class="old" cx="180" cy="130" rx="45" ry="24" transform="rotate(-18 180 130)"/>
+  <path class="arrow" d="M250 130H455"/>
+  <text class="small" x="350" y="112">复制并沿梯度方向移动</text>
+  <ellipse class="old" cx="570" cy="130" rx="45" ry="24" transform="rotate(-18 570 130)"/>
+  <ellipse class="new" cx="690" cy="115" rx="45" ry="24" transform="rotate(-18 690 115)"/>
+  <text class="small" x="835" y="138">增加覆盖范围和 Gaussian 数量</text>
+  <line x1="40" y1="220" x2="1160" y2="220" stroke="#d1d5db"/>
+  <text class="txt" x="45" y="270">过重建：拆分</text>
+  <text class="small" x="45" y="298">大 Gaussian + 大位置梯度</text>
+  <path class="target" d="M60 350 C170 315 300 315 390 350 C300 385 170 390 60 350Z"/>
+  <ellipse class="old" cx="220" cy="350" rx="135" ry="48" transform="rotate(8 220 350)"/>
+  <path class="arrow" d="M380 350H515"/>
+  <text class="small" x="448" y="322" text-anchor="middle">拆成两个更小的 Gaussian</text>
+  <ellipse class="new" cx="620" cy="337" rx="68" ry="30" transform="rotate(8 620 337)"/>
+  <ellipse class="new" cx="755" cy="363" rx="68" ry="30" transform="rotate(8 755 363)"/>
+  <text class="small" x="930" y="300" text-anchor="middle">保持近似覆盖体积，提高局部表达能力</text>
+  <text class="small" x="600" y="438" text-anchor="middle">周期性删除低透明度 Gaussian，并抑制世界空间或屏幕空间中过大的 Gaussian</text>
+</svg>

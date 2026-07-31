@@ -179,6 +179,662 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/09/03/WebTest/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/09/03/WebTest/" class="post-title-link" itemprop="url">AI时代资深前端工程师的测试策略与常用工具</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-09-03 11:14:09" itemprop="dateCreated datePublished" datetime="2020-09-03T11:14:09+08:00">2020-09-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-07-27 00:00:00" itemprop="dateModified" datetime="2026-07-27T00:00:00+08:00">2026-07-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="先说结论：测试从失败风险开始，不从框架开始"><a href="#先说结论：测试从失败风险开始，不从框架开始" class="headerlink" title="先说结论：测试从失败风险开始，不从框架开始"></a>先说结论：测试从失败风险开始，不从框架开始</h2><p>资深工程师设计测试时，先问“哪些失败最昂贵、在哪一层能最低成本且稳定地发现”，再选择 Vitest、Jest、Testing Library、Playwright 或其他工具。测试金字塔、测试奖杯和覆盖率都是辅助模型，不能代替项目风险判断。</p>
+<p>测试的核心是 <strong>test oracle（测试预言）</strong>：系统出现什么可观察结果才算正确。AI 可以生成大量测试代码，却无法从缺失的需求中自动发明可信的权限规则、报警可靠性、命令状态语义或设备安全行为。如果 oracle 错了，测试执行得再快、覆盖率再高，也只是在稳定验证错误假设。</p>
+<p>Vibe Coding 更适合把测试中的机械工作自动化：生成 fixture、组合边界值、搭建 MSW handler、录制 E2E 步骤、整理失败和寻找未覆盖分支。工程师仍然负责失败风险、oracle、环境边界、发布门槛和测试维护成本。</p>
+<h2 id="三层掌握标准"><a href="#三层掌握标准" class="headerlink" title="三层掌握标准"></a>三层掌握标准</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>必须掌握或会用</th>
+<th>验证方式</th>
+<th>AI 的位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>必须闭卷掌握</td>
+<td>可观察行为、test oracle、测试边界、隔离与替身、异步结果、稳定性和失败定位</td>
+<td>面对一个需求能画出风险表，并说明为何选择单元、组件、集成或 E2E</td>
+<td>不能替代业务和安全语义</td>
+</tr>
+<tr>
+<td>会使用工具验证</td>
+<td>TypeScript/ESLint、Vitest/Jest、Testing Library、MSW/adapter、Playwright/Cypress、CI 报告</td>
+<td>测试失败能指出具体规则，能保留 trace、日志、截图或协议差异</td>
+<td>可执行和汇总，结果需人工复核</td>
+</tr>
+<tr>
+<td>可由 AI 初步完成</td>
+<td>用例与 fixture 初稿、边界数据、E2E 脚本、失败聚类、覆盖缺口和维护性建议</td>
+<td>审查断言、selector、数据来源、Mock 边界和失败价值</td>
+<td>加速生成与分类，不决定是否允许发布</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>不依赖 AI 时，至少要能独立写出一个纯逻辑测试、一个组件行为测试，并读懂一条浏览器 E2E 的失败证据。否则很难审查智能体生成的测试是否真正降低风险。</p>
+<h2 id="从风险映射到最低成本的测试层级"><a href="#从风险映射到最低成本的测试层级" class="headerlink" title="从风险映射到最低成本的测试层级"></a>从风险映射到最低成本的测试层级</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>风险或示例</th>
+<th>最低有效层级</th>
+<th>候选工具</th>
+<th>为什么不能只靠 E2E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>坐标转换、格式化、校验、设备状态机</td>
+<td>单元/属性或参数化测试</td>
+<td>Vitest、Jest</td>
+<td>浏览器链路反馈慢，难穷举边界和非法迁移</td>
+</tr>
+<tr>
+<td>按钮、表单、错误提示和键盘操作</td>
+<td>组件行为测试</td>
+<td>Vue/React Testing Library</td>
+<td>E2E 定位成本高，无法快速覆盖组件状态组合</td>
+</tr>
+<tr>
+<td>API 错误、超时和数据协议</td>
+<td>组件集成或 adapter 测试</td>
+<td>MSW、fake adapter、真实 schema 样本</td>
+<td>只在完整环境触发故障不稳定，难控制精确响应</td>
+</tr>
+<tr>
+<td>登录、关键任务创建、审批与结果查询</td>
+<td>少量关键 E2E</td>
+<td>Playwright、Cypress</td>
+<td>E2E 必要但昂贵；底层分支仍应由更快测试覆盖</td>
+</tr>
+<tr>
+<td>前后端字段和事件版本不兼容</td>
+<td>契约测试</td>
+<td>schema/OpenAPI/事件契约工具</td>
+<td>UI 成功路径可能碰巧没有触发不兼容字段</td>
+</tr>
+<tr>
+<td>CSS、主题、图表或三维视图异常</td>
+<td>视觉回归 + 关键语义断言</td>
+<td>Playwright/Cypress 截图、视觉平台</td>
+<td>像素差异有噪声，且截图不能证明交互和数据正确</td>
+</tr>
+<tr>
+<td>键盘、语义和读屏退化</td>
+<td>组件/E2E 无障碍检查 + 人工检查</td>
+<td>Testing Library、axe、浏览器工具</td>
+<td>自动规则只能发现部分问题，不能代替真实辅助技术体验</td>
+</tr>
+<tr>
+<td>资源、交互、内存或 Web3D 性能回归</td>
+<td>可重复性能场景</td>
+<td>Lighthouse、Playwright、Performance API、自定义采样</td>
+<td>常规功能 E2E 通过不表示性能预算达标</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>“越接近用户越好”与“单元测试越多越好”都过于绝对。合理分布取决于架构、失败成本、依赖数量、反馈速度、环境控制能力和 flaky 风险。同一条关键工作流通常需要少量 E2E 证明连接成立，再用更低层测试覆盖状态和错误组合。</p>
+<h2 id="常用工具怎样选择"><a href="#常用工具怎样选择" class="headerlink" title="常用工具怎样选择"></a>常用工具怎样选择</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>工具或层级</th>
+<th>适合解决</th>
+<th>选型边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TypeScript、ESLint</td>
+<td>类型关系、未处理分支、危险模式和一致性</td>
+<td>不能验证运行时 JSON、浏览器行为和业务结果</td>
+</tr>
+<tr>
+<td>Vitest</td>
+<td>Vite 项目的单元/组件测试，复用 Vite 解析与配置，兼容许多 Jest 风格 API</td>
+<td>不因为 API 熟悉就假设所有 Jest 插件和行为完全等价</td>
+</tr>
+<tr>
+<td>Jest</td>
+<td>已有成熟 Jest 生态、非 Vite 项目或迁移成本高的代码库</td>
+<td>为追新工具迁移不必然产生业务价值；先看速度、维护和插件依赖</td>
+</tr>
+<tr>
+<td>Testing Library</td>
+<td>从角色、名称、文本和用户交互验证 Vue/React 组件的可观察行为</td>
+<td>不是完整浏览器 E2E；仍需理解框架调度、DOM 环境和异步边界</td>
+</tr>
+<tr>
+<td>MSW 或受控 adapter</td>
+<td>在网络/SDK 边界提供真实协议形状、错误、超时和状态组合</td>
+<td>handler 仍可能偏离后端，需要契约样本或集成测试校准</td>
+</tr>
+<tr>
+<td>Playwright</td>
+<td>多浏览器上下文、隔离、并行、trace/video/screenshot 和现代 E2E</td>
+<td>测试数量、真实依赖和环境矩阵会提高时间与维护成本</td>
+</tr>
+<tr>
+<td>Cypress</td>
+<td>交互式调试、时间旅行体验和既有团队生态</td>
+<td>选型应看现有基础、目标浏览器、运行模型和团队排障效率</td>
+</tr>
+<tr>
+<td>契约/视觉/无障碍/性能测试</td>
+<td>处理特定高成本回归</td>
+<td>只有对应风险和负责人存在时才值得加入，不应为了工具齐全而堆叠</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Vitest 与 Jest、Playwright 与 Cypress 都不是“新工具必然替代旧工具”的关系。新项目可以按构建栈和团队经验选择；既有项目应先量化当前痛点、迁移成本和收益。Jasmine、Karma 等历史笔记仍可用于维护旧项目，但不再作为这篇总入口的默认工具链。</p>
+<h2 id="什么值得单元测试、组件测试和-E2E-测试"><a href="#什么值得单元测试、组件测试和-E2E-测试" class="headerlink" title="什么值得单元测试、组件测试和 E2E 测试"></a>什么值得单元测试、组件测试和 E2E 测试</h2><h3 id="单元测试：压缩规则和边界的反馈时间"><a href="#单元测试：压缩规则和边界的反馈时间" class="headerlink" title="单元测试：压缩规则和边界的反馈时间"></a>单元测试：压缩规则和边界的反馈时间</h3><p>纯函数、数据转换、校验、排序、权限判断、状态机和重试策略适合单元测试。它们输入输出明确，能够快速覆盖边界值和非法状态。若一个规则只能通过启动浏览器和后端才能测试，通常说明领域逻辑与框架或 I/O 绑得太紧。</p>
+<p>单元测试不要求“一个类就是一个单元”。更实用的边界是一项稳定行为。例如设备状态机从 <code>offline</code> 不能直接进入 <code>running</code>，测试应断言迁移结果，而不是私有方法的调用次数。</p>
+<h3 id="组件测试：验证用户可观察行为"><a href="#组件测试：验证用户可观察行为" class="headerlink" title="组件测试：验证用户可观察行为"></a>组件测试：验证用户可观察行为</h3><p>组件测试关注用户能看到和操作的结果：按钮是否可用、错误是否可理解、表单是否保留输入、键盘能否操作、加载与空状态是否正确。优先使用 role、label、可见文本等语义 selector；确实没有合适语义时再使用稳定的 <code>data-testid</code>。</p>
+<p>Vue 和 React 的调度方式不同，但 Testing Library 的原则相同：像用户一样查询和交互，等待可观察结果，不通过 <code>wrapper.vm</code>、组件私有状态或实现函数名定义 oracle。</p>
+<h3 id="集成测试：验证拥有的边界"><a href="#集成测试：验证拥有的边界" class="headerlink" title="集成测试：验证拥有的边界"></a>集成测试：验证拥有的边界</h3><p>前端通常需要验证 API schema、WebSocket 事件、缓存、路由和状态容器怎样连接。使用 MSW 或受控 adapter 可以准确构造成功、错误、超时、重复和乱序响应，同时避免 Mock <code>fetch</code>、Axios 私有实现或 SDK 内部调用。</p>
+<p>Mock server 仍可能与真实后端漂移。关键协议应由 OpenAPI/schema、生产样本脱敏回放、契约测试或受控环境集成校准。</p>
+<h3 id="E2E：证明关键链路在真实浏览器中连接成立"><a href="#E2E：证明关键链路在真实浏览器中连接成立" class="headerlink" title="E2E：证明关键链路在真实浏览器中连接成立"></a>E2E：证明关键链路在真实浏览器中连接成立</h3><p>E2E 适合登录、关键任务创建、审批、命令提交与状态反馈等少量高价值流程。它覆盖浏览器、路由、网络、存储和渲染的真实组合，但反馈慢、环境依赖多、失败定位成本高，不适合穷举所有状态机分支。</p>
+<p>稳定 E2E 需要确定数据、独立账号/空间、可重复清理、语义 selector 和明确等待条件。不要使用任意 <code>sleep(3000)</code> 猜测系统何时完成。</p>
+<h3 id="Snapshot-只在意图清晰时使用"><a href="#Snapshot-只在意图清晰时使用" class="headerlink" title="Snapshot 只在意图清晰时使用"></a>Snapshot 只在意图清晰时使用</h3><p>Snapshot 适合稳定的序列化结构、协议输出或需要审阅的有限 UI 片段。大范围组件 HTML snapshot 往往把大量无关变化混在一起，审核者容易直接更新文件而不理解行为。关键规则应使用有名字的显式断言。</p>
+<h2 id="Mock、异步与-flaky-test"><a href="#Mock、异步与-flaky-test" class="headerlink" title="Mock、异步与 flaky test"></a>Mock、异步与 flaky test</h2><h3 id="Mock-保留在自己拥有的接口"><a href="#Mock-保留在自己拥有的接口" class="headerlink" title="Mock 保留在自己拥有的接口"></a>Mock 保留在自己拥有的接口</h3><ul>
+<li>为时间、随机数、网络、存储和设备 SDK 定义小接口，在边界替换实现。</li>
+<li>优先模拟外部行为和协议结果，不逐层 Mock 每个内部函数。</li>
+<li>Mock 返回值必须符合真实 schema，并定期用契约或集成测试校准。</li>
+<li>如果修改一次内部重构会破坏大量测试，而用户行为没变，测试大概率耦合了实现。</li>
+</ul>
+<h3 id="异步测试等待结果，不等待猜测的时间"><a href="#异步测试等待结果，不等待猜测的时间" class="headerlink" title="异步测试等待结果，不等待猜测的时间"></a>异步测试等待结果，不等待猜测的时间</h3><p>Promise、框架更新、网络响应和 timer 是不同队列。等待页面出现 <code>role=&quot;alert&quot;</code>、按钮解除禁用或任务状态变为完成，比等待固定毫秒更稳定。只有“时间本身”是依赖时才使用 fake timer，例如退避、超时或倒计时；使用后还要恢复真实 timer，避免污染其他用例。</p>
+<p>对于无法取消的请求、组件卸载后的回调和快速切换 ID 的竞态，要设计能控制先后顺序的测试。测试不仅断言最终页面，还要证明旧响应不会覆盖新状态。</p>
+<h3 id="flaky-test-是待诊断缺陷，不是加重试即可"><a href="#flaky-test-是待诊断缺陷，不是加重试即可" class="headerlink" title="flaky test 是待诊断缺陷，不是加重试即可"></a>flaky test 是待诊断缺陷，不是加重试即可</h3><p>先把不稳定失败分类：</p>
+<ol>
+<li><strong>测试缺陷</strong>：任意 sleep、共享数据、选择器脆弱、清理不完整。</li>
+<li><strong>产品竞态</strong>：真实异步顺序、重复事件、状态所有权或取消逻辑有问题。</li>
+<li><strong>环境不稳定</strong>：浏览器、服务、网络、资源或执行机负载不受控。</li>
+<li><strong>真实间歇缺陷</strong>：只有特定时序或数据组合才出现的产品问题。</li>
+</ol>
+<p>自动重试可以收集更多证据，不能把红灯洗成绿灯。临时 quarantine 必须写明负责人、原因、失败证据和解除条件；长期隔离但无人处理，等于删除发布保护。</p>
+<h2 id="工业与机器人前端需要额外测试什么"><a href="#工业与机器人前端需要额外测试什么" class="headerlink" title="工业与机器人前端需要额外测试什么"></a>工业与机器人前端需要额外测试什么</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>风险</th>
+<th>需要验证的行为</th>
+<th>建议证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>设备/任务状态迁移</td>
+<td>非法迁移拒绝，断连后状态不伪装成运行中</td>
+<td>纯状态机用例、事件日志</td>
+</tr>
+<tr>
+<td>权限与二次确认</td>
+<td>无权限用户不可下发，危险操作需要正确确认</td>
+<td>组件/集成/E2E，服务端授权仍须独立验证</td>
+</tr>
+<tr>
+<td>WebSocket 乱序、重复和断连</td>
+<td>旧状态不覆盖新状态，重复消息幂等，重连后能核对状态</td>
+<td>MSW/adapter、录制事件回放</td>
+</tr>
+<tr>
+<td>报警与审计</td>
+<td>高频遥测采样时报警不被覆盖或静默丢失</td>
+<td>有界缓冲测试、计数与回放</td>
+</tr>
+<tr>
+<td>外部数据</td>
+<td>payload 作为 <code>unknown</code> 校验版本、类型、范围和设备 ID</td>
+<td>schema 样本、无效数据测试</td>
+</tr>
+<tr>
+<td>命令状态</td>
+<td>区分已接收、已批准、已下发、执行中、成功、失败和未知</td>
+<td>契约测试、状态机、浏览器 trace</td>
+</tr>
+<tr>
+<td>WebGL 画面</td>
+<td>canvas 非空、关键相机/选择交互正确、资源卸载后不持续增长</td>
+<td>screenshot + canvas 像素检查、renderer.info、生命周期测试</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>长会话队列和内存有上界，关键交互满足项目预算</td>
+<td>固定数据回放、Performance trace、回归报告</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>视觉回归只能说明像素发生变化，不能证明三维对象语义、坐标或设备状态正确。对 WebGL 应组合截图、canvas 像素非空检查、相机/拾取行为和领域数据断言，并固定 GPU/浏览器环境以控制噪声。</p>
+<p>普通浏览器测试默认连接 fake、模拟器或只读环境。未经明确环境门控、权限、确定性安全控制和人工批准流程，E2E 不得触发真实设备运动。浏览器自动化不是机器人安全系统。</p>
+<h2 id="Vibe-Coding-时代怎样让-AI-参与测试"><a href="#Vibe-Coding-时代怎样让-AI-参与测试" class="headerlink" title="Vibe Coding 时代怎样让 AI 参与测试"></a>Vibe Coding 时代怎样让 AI 参与测试</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>AI 可以起草或自动化</th>
+<th>工程师必须确认</th>
+<th>输出证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>根据需求草拟风险表和边界值</td>
+<td>需求是否完整，哪些失败影响发布或安全</td>
+<td>风险、来源、优先级和负责人</td>
+</tr>
+<tr>
+<td>生成 fixture、参数化数据、MSW handler</td>
+<td>数据隐私、schema 真实性和极端值含义</td>
+<td>fixture 来源、契约版本和失败样本</td>
+</tr>
+<tr>
+<td>生成组件/E2E 脚本和 selector 建议</td>
+<td>test oracle、关键旅程、语义 selector 和环境边界</td>
+<td>可运行测试、trace、截图和断言说明</td>
+</tr>
+<tr>
+<td>检查缺少断言、重复 setup 和实现耦合</td>
+<td>修改是否保留业务意图，是否误删必要隔离</td>
+<td>审查 diff 和前后失败行为</td>
+</tr>
+<tr>
+<td>聚类 CI 失败、重跑和摘要 flaky 模式</td>
+<td>测试缺陷、产品竞态、环境问题还是间歇缺陷</td>
+<td>原始日志、trace、出现频率和分类理由</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>给 AI 的输入至少包括业务规则、失败后果、现有边界、禁止副作用、环境和验收条件。只提供组件源码并要求“补齐全部测试”，得到的往往是覆盖率友好、oracle 薄弱的实现细节测试。</p>
+<p>智能体适合持续执行固定套件、收集 trace/video、比较失败和提出缺口；工程师需要抽查它是否通过放宽断言、增加重试、修改 fixture 或跳过用例来获得绿色结果。</p>
+<h2 id="AI-生成测试审查案例"><a href="#AI-生成测试审查案例" class="headerlink" title="AI 生成测试审查案例"></a>AI 生成测试审查案例</h2><p>以下测试可能迅速提高行覆盖率，却没有表达用户或业务风险：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">it(<span class="string">&#x27;works&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> wrapper = shallowMount(DevicePanel)</span><br><span class="line">  expect(wrapper.exists()).toBe(<span class="literal">true</span>)</span><br><span class="line">  expect(wrapper.html()).toMatchSnapshot()</span><br><span class="line">  expect(wrapper.vm.refresh).toBeDefined()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>至少存在四个问题：</p>
+<ul>
+<li><code>exists()</code> 只证明组件挂载，没有证明任何产品行为。</li>
+<li>大 snapshot 没有指出哪些变化是错误，容易被机械更新。</li>
+<li><code>wrapper.vm.refresh</code> 耦合私有实现，重构会失败，真实行为损坏却可能通过。</li>
+<li>没有加载、错误、超时、权限或重试路径，也没有清晰 test oracle。</li>
+</ul>
+<p>更有价值的测试从产品行为出发。下面使用 Vue Testing Library 与 MSW 风格 API；imports、server 生命周期和 matcher 配置需要按项目补齐：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">it(<span class="string">&#x27;shows a retry action when loading the device fails&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  server.use(http.get(<span class="string">&#x27;/api/devices/robot-1&#x27;</span>, <span class="function">() =&gt;</span> HttpResponse.error()))</span><br><span class="line">  render(DevicePanel, &#123; <span class="attr">props</span>: &#123; <span class="attr">deviceId</span>: <span class="string">&#x27;robot-1&#x27;</span> &#125; &#125;)</span><br><span class="line"></span><br><span class="line">  expect(<span class="keyword">await</span> screen.findByRole(<span class="string">&#x27;alert&#x27;</span>)).toHaveTextContent(<span class="string">&#x27;设备状态加载失败&#x27;</span>)</span><br><span class="line">  expect(screen.getByRole(<span class="string">&#x27;button&#x27;</span>, &#123; <span class="attr">name</span>: <span class="string">&#x27;重试&#x27;</span> &#125;)).toBeEnabled()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>这段示例仍不是完整测试，但 oracle 已经明确：加载失败时，用户看到可理解的报警，并能执行重试。React Testing Library 可以使用同样的 role-based 查询和行为断言；价值来自产品规则，不来自框架语法。</p>
+<p>下一步应继续验证点击重试后的请求和状态、重复点击策略、权限、超时与错误日志。AI 可以补初稿，但“失败时是否允许重试、重试是否有副作用”必须来自产品和系统约束。</p>
+<h2 id="CI-中怎样分层执行"><a href="#CI-中怎样分层执行" class="headerlink" title="CI 中怎样分层执行"></a>CI 中怎样分层执行</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>建议内容</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>本地 / pre-commit</td>
+<td>formatter、lint、受影响的单元与组件测试</td>
+<td>数秒到数分钟内发现低成本错误，不阻塞开发流</td>
+</tr>
+<tr>
+<td>Pull Request</td>
+<td>完整静态检查、单元/组件/集成、少量浏览器 smoke</td>
+<td>保护主要规则和关键连接，保留可定位报告</td>
+</tr>
+<tr>
+<td>受保护分支 / Nightly</td>
+<td>更广浏览器矩阵、视觉/无障碍/性能、长时间与故障场景</td>
+<td>承担耗时、噪声更高但有价值的回归</td>
+</tr>
+<tr>
+<td>Release / 受控环境</td>
+<td>契约、迁移、模拟器或硬件门控流程</td>
+<td>验证发布组合和高风险外部依赖</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>这不是必须照抄的流水线。小型库、普通内容站点和机器人调试平台的风险完全不同。CI 分层需要平衡反馈时间、执行成本、失败定位、环境稀缺性和发布后果。</p>
+<p>每个失败门槛都应有负责人和诊断产物。只输出“E2E failed”而没有 trace、网络日志、截图和版本信息，会把自动化节省的时间重新花在猜测上。</p>
+<h2 id="面试准备：讲风险和证据，不背-matcher"><a href="#面试准备：讲风险和证据，不背-matcher" class="headerlink" title="面试准备：讲风险和证据，不背 matcher"></a>面试准备：讲风险和证据，不背 matcher</h2><p>资深测试题可以统一使用：<strong>风险 -&gt; 测试层级 -&gt; oracle -&gt; 隔离方式 -&gt; 失败证据 -&gt; 维护取舍</strong>。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>面试问题</th>
+<th>回答重点</th>
+<th>不完整回答</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>如何测试一个复杂组件</td>
+<td>列出用户行为和错误状态，说明哪些纯逻辑先抽离，网络怎样控制，保留哪些浏览器验证</td>
+<td>“用 Jest 测方法、用 Cypress 测页面”</td>
+</tr>
+<tr>
+<td>单元、集成和 E2E 怎样分配</td>
+<td>按失败成本、依赖、反馈速度和 flaky 风险选择最低有效层级</td>
+<td>“遵循 70/20/10”</td>
+</tr>
+<tr>
+<td>Mock 何时有害</td>
+<td>偏离真实协议、耦合实现、把集成风险隐藏为绿色</td>
+<td>“单测必须隔离全部依赖”</td>
+</tr>
+<tr>
+<td>如何治理 flaky test</td>
+<td>分类原因、保存 trace、修复竞态/数据/环境，隔离有负责人和期限</td>
+<td>“失败就重跑三次”</td>
+</tr>
+<tr>
+<td>覆盖率有什么价值和限制</td>
+<td>帮助发现未执行代码，不能证明 oracle、边界和断言质量</td>
+<td>“达到 80% 就能发布”</td>
+</tr>
+<tr>
+<td>怎样审查 AI 生成测试</td>
+<td>检查风险来源、oracle、selector、Mock、失败是否有意义、是否通过放宽断言变绿</td>
+<td>“AI 能自动补全测试”</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>记住常用 matcher 和框架生命周期足以读写代码，不必把完整 API 当作面试主线。真正的追问通常是测试为何稳定、为何能发现目标故障、失败后怎样定位，以及维护成本是否匹配风险。</p>
+<h2 id="实践任务：关键工作流测试治理"><a href="#实践任务：关键工作流测试治理" class="headerlink" title="实践任务：关键工作流测试治理"></a>实践任务：关键工作流测试治理</h2><p>选择设备状态页、视觉任务页或机器人调试流程中的一条关键旅程。</p>
+<p><strong>交付物</strong></p>
+<ul>
+<li>一份包含失败后果、概率、检测层级和优先级的工作流风险表。</li>
+<li>设备/任务状态机的纯逻辑测试，以及一个 Vue 或 React 组件行为测试。</li>
+<li>一条 Playwright 或 Cypress 关键路径，保留失败 trace、截图和网络证据。</li>
+<li>断连、超时、重复/乱序消息用例，普通执行只连接 fake 或模拟器。</li>
+<li>CI 分层方案、一次 flaky test 复盘，以及 AI 初稿与人工审查 diff。</li>
+</ul>
+<p><strong>验收标准</strong></p>
+<ul>
+<li>每个重要失败能指出被破坏的业务规则，而不只是 DOM 或私有方法变化。</li>
+<li>测试之间数据隔离并能重复运行，没有任意固定 sleep。</li>
+<li>E2E 失败保留 trace 和环境版本，能够区分产品、测试和环境问题。</li>
+<li>覆盖率只作为辅助信号，不以降低断言或排除关键代码换取数字。</li>
+<li>涉及真实设备的动作默认关闭，并有独立受控流程。</li>
+</ul>
+<p><strong>面试价值</strong></p>
+<p>证明能够按风险设计单元、组件、集成和 E2E 边界，治理不稳定测试，并监督 AI 生成物，而不只是熟悉某个测试框架 API。</p>
+<p>性能回归的指标、实验和 trace 解释见 <a href="/qqsnote/2021/09/08/forntend-performance/" title="前端性能诊断与优化">前端性能诊断与优化</a>。</p>
+<h2 id="暂时不死磕什么"><a href="#暂时不死磕什么" class="headerlink" title="暂时不死磕什么"></a>暂时不死磕什么</h2><ul>
+<li>不背 Vitest/Jest/Jasmine 的所有 matcher、配置项和 CLI 参数。</li>
+<li>不追求 100% 覆盖率，也不为提高数字测试没有风险的 getter 和模板细节。</li>
+<li>不为每个分支创建 E2E；组合爆炸应优先在更低层覆盖。</li>
+<li>不给所有组件生成大 snapshot，并在失败时无脑更新。</li>
+<li>不为了工具热度迁移稳定套件，先量化反馈速度、维护成本和缺口。</li>
+<li>不断言私有方法、框架内部状态和调用次数，除非它们本身就是公开契约。</li>
+<li>不把普通浏览器自动化扩展成未经门控的真实设备控制。</li>
+</ul>
+<h2 id="自检清单"><a href="#自检清单" class="headerlink" title="自检清单"></a>自检清单</h2><ul>
+<li>[ ] 能从失败风险选择最低有效测试层级，而不是先报框架名。</li>
+<li>[ ] 能定义清晰 test oracle，并区分用户行为与实现细节。</li>
+<li>[ ] 能说明 Vitest/Jest、Playwright/Cypress 的条件化选型，而不是宣布唯一赢家。</li>
+<li>[ ] 能用语义 selector、可观察异步结果和受控 adapter 编写稳定测试。</li>
+<li>[ ] 能区分测试缺陷、产品竞态、环境问题和真实间歇缺陷。</li>
+<li>[ ] 能审查 AI 是否生成了空洞断言、失真的 Mock、任意 sleep 或放宽门槛。</li>
+<li>[ ] 能展示工业消息乱序、报警保留、命令状态或 WebGL 中至少一项领域风险测试。</li>
+<li>[ ] 能拿出 CI 失败证据、flaky 复盘和 AI 初稿到修正版的差异。</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://vitest.dev/">Vitest documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://jestjs.io/docs/getting-started">Jest documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://testing-library.com/docs/guiding-principles/">Testing Library: Guiding Principles</a></li>
+<li><a target="_blank" rel="noopener" href="https://mswjs.io/docs/">Mock Service Worker documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://playwright.dev/docs/intro">Playwright documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.cypress.io/">Cypress documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/dequelabs/axe-core">axe-core</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/articles/fast-and-reliable-end-to-end-testing-with-playwright">web.dev: Fast and reliable end-to-end testing with Playwright</a></li>
+</ul>
+<p>官方文档用于查询 API，项目风险表、失败 trace、真实契约和复盘用于决定测什么。两者不能互相替代。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/09/03/WebAPIs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/09/03/WebAPIs/" class="post-title-link" itemprop="url">原生Web API</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-09-03 11:13:45" itemprop="dateCreated datePublished" datetime="2020-09-03T11:13:45+08:00">2020-09-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="XMLHttpRequest"><a href="#XMLHttpRequest" class="headerlink" title="XMLHttpRequest"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest">XMLHttpRequest</a></h4><blockquote>
+<p>XMLHttpRequest 可以在不刷新页面的情况下请求特定 URL，获取数据。尽管名称如此，XMLHttpRequest 可以用于获取任何类型的数据，而不仅仅是 XML。它甚至支持 HTTP 以外的协议（包括 file:// 和 FTP），尽管可能受到更多出于安全等原因的限制。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function reqListener () &#123;</span><br><span class="line">  console.log(this.responseText);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var oReq &#x3D; new XMLHttpRequest();</span><br><span class="line">oReq.addEventListener(&quot;load&quot;, reqListener);</span><br><span class="line">oReq.open(&quot;GET&quot;, &quot;http:&#x2F;&#x2F;www.example.org&#x2F;getsomething&quot;);</span><br><span class="line">oReq.responseType &#x3D; &quot;json&quot;;</span><br><span class="line">oReq.send();</span><br></pre></td></tr></table></figure><br>发送<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var xhr &#x3D; new XMLHttpRequest;</span><br><span class="line">xhr.open(&quot;POST&quot;, url, false);</span><br><span class="line">xhr.send(data);</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h4 id="ResizeObserver"><a href="#ResizeObserver" class="headerlink" title="ResizeObserver"></a>ResizeObserver</h4><p>示例 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/ResizeObserver#%E7%A4%BA%E4%BE%8B">ResizeObserver</a><br>调用构造方法返回一个ResizeObserver对象，传入回调函数(entries)=&gt;{}，即当监听到目标width height改变时，执行该函数，参数entries为ResizeObserverEntry接口的集合，可以访问真正在观察的 Element 或 SVGElement 最新的大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">const observer &#x3D; new ResizeObserver(entries&#x3D;&gt;&#123;</span><br><span class="line">  for (let entry of entries) &#123;</span><br><span class="line">    if(entry.contentBoxSize) &#123; &#x2F;&#x2F; 内容盒尺寸</span><br><span class="line">      h1Elem.style.fontSize &#x3D; &#96;$&#123;Math.max(1.5, entry.contentBoxSize.inlineSize &#x2F; 200)&#125;rem&#96;; &#x2F;&#x2F; 前文某标题const h1Elem &#x3D; document.querySelector(&#39;h1&#39;);</span><br><span class="line">      pElem.style.fontSize &#x3D; &#96;$&#123;Math.max(1, entry.contentBoxSize.inlineSize &#x2F; 600)&#125;rem&#96;; &#x2F;&#x2F; 前文某段文字const pElem &#x3D; document.querySelector(&#39;p&#39;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      h1Elem.style.fontSize &#x3D; &#96;$&#123;Math.max(1.5, entry.contentRect.width &#x2F; 200)&#125;rem&#96;;</span><br><span class="line">      pElem.style.fontSize &#x3D; &#96;$&#123;Math.max(1, entry.contentRect.width &#x2F; 600)&#125;rem&#96;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h4 id="localStorage"><a href="#localStorage" class="headerlink" title="localStorage"></a>localStorage</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">localStorage.setItem(&#39;qqsCustomizedList&#39;， &#39;[&#39;id&#39;,&#39;name&#39;]&#39;)</span><br><span class="line">localStorage.getItem(&#39;qqsCustomizedList&#39;)</span><br><span class="line">localStorage.clear()</span><br></pre></td></tr></table></figure>
+<h4 id="关于内容盒和边框盒-存目"><a href="#关于内容盒和边框盒-存目" class="headerlink" title="关于内容盒和边框盒(存目)"></a>关于内容盒和边框盒(存目)</h4>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/08/31/ASPandSPA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2020/08/31/ASPandSPA/" class="post-title-link" itemprop="url">ASP和SPA</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-31 10:58:10" itemprop="dateCreated datePublished" datetime="2020-08-31T10:58:10+08:00">2020-08-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>课外：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/dotnet/architecture/modern-web-apps-azure/choose-between-traditional-web-and-single-page-apps">关于传统web app和SPA的选择</a></p>
+<p>将单页面应用植入到ASP.Net<br></p>
+<h4 id="方式一：项目模板和spa中间件："><a href="#方式一：项目模板和spa中间件：" class="headerlink" title="方式一：项目模板和spa中间件："></a>方式一：项目模板和spa中间件：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">% 安装spa template pack</span><br><span class="line">dotnet new -i Microsoft.DotNet.Web.Spa.ProjectTemplates</span><br><span class="line">% 使用模板创建项目 </span><br><span class="line">dotnet new --list</span><br><span class="line">dotnet new angular -n MyDotnetNgProject</span><br></pre></td></tr></table></figure>
+<p>angular is short for template”<span>ASP.NET</span> Core with Angular”, -n 指定项目名称，键入dotnet new —help查看选项参数说明。<br>项目大致结构<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">│   appsettings.json</span><br><span class="line">│   MyDotNetNgProject.csproj</span><br><span class="line">│   Program.cs</span><br><span class="line">│   Startup.cs</span><br><span class="line">├───ClientApp</span><br><span class="line">│   │   angular.json</span><br><span class="line">│   │   package.json</span><br><span class="line">│   │   tsconfig.json</span><br><span class="line">│   │   tslint.json</span><br><span class="line">│   ├───e2e</span><br><span class="line">│   │   └───src</span><br><span class="line">│   └───src</span><br><span class="line">│       ├───app</span><br><span class="line">│       │   ├───counter</span><br><span class="line">│       │   ├───fetch-data</span><br><span class="line">│       │   ├───home</span><br><span class="line">│       │   └───nav-menu</span><br><span class="line">│       ├───assets</span><br><span class="line">│       └───environments</span><br><span class="line">├───Controllers</span><br><span class="line">├───obj</span><br><span class="line">├───Pages</span><br><span class="line">├───Properties</span><br><span class="line">│       launchSettings.json</span><br><span class="line">└───wwwroot</span><br></pre></td></tr></table></figure><br>整个前端项目以ClientApp目录为根目录，在ASP的Startup.Configure中调用spa中间件,如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">app.UseSpa(spa &#x3D;&gt; &#123;</span><br><span class="line">    &#x2F;&#x2F; To learn more about options for serving an Angular SPA from ASP.NET Core,</span><br><span class="line">    &#x2F;&#x2F; see https:&#x2F;&#x2F;go.microsoft.com&#x2F;fwlink&#x2F;?linkid&#x3D;864501</span><br><span class="line"></span><br><span class="line">    spa.Options.SourcePath &#x3D; &quot;ClientApp&quot;;</span><br><span class="line"></span><br><span class="line">    if (env.IsDevelopment())</span><br><span class="line">    &#123;</span><br><span class="line">        spa.UseAngularCliServer(npmScript: &quot;start&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="方式二：前端发布到wwwroot，使用静态文件和默认页"><a href="#方式二：前端发布到wwwroot，使用静态文件和默认页" class="headerlink" title="方式二：前端发布到wwwroot，使用静态文件和默认页"></a>方式二：前端发布到wwwroot，使用静态文件和默认页</h4><p>Startup.cs<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public void Configure(IApplicationBuilder app, IWebHostEnvironment env)</span><br><span class="line">&#123;</span><br><span class="line">    app.UseDefaultFiles();</span><br><span class="line">    app.UseStaticFiles();</span><br><span class="line"></span><br><span class="line">    app.UseRouting();</span><br><span class="line">    app.UseEndpoints(endpoints &#x3D;&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        endpoints.MapControllerRoute(</span><br><span class="line">            name: &quot;default&quot;,</span><br><span class="line">            pattern: &quot;&#123;controller&#x3D;Home&#125;&#x2F;&#123;action&#x3D;Index&#125;&#x2F;&#123;id?&#125;&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>UseDefaultFiles的搜索规则是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">default.htm</span><br><span class="line">default.html</span><br><span class="line">index.htm</span><br><span class="line">index.html</span><br></pre></td></tr></table></figure><br>另外可以使用DefaultFilesOptions添加自定义默认页，详见 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/static-files?view=aspnetcore-3.1">ASP.NET Core 中的静态文件</a></p>
+<h4 id="Trouble-Shooting"><a href="#Trouble-Shooting" class="headerlink" title="Trouble Shooting"></a>Trouble Shooting</h4><blockquote>
+<p>Issue: The Angular CLI process did not start listening for requests within the timeout period of 0 seconds.</p>
+</blockquote>
+<p>当前的angular模板是基于Angular 8.2.12(记于2020.8.28)，在迁移ng9，ng10项目时出现上述问题。</p>
+<p>见<a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/issues/16961">issue#16961</a></p>
+<p>较深入的分析<a target="_blank" rel="noopener" href="https://github.com/dotnet/aspnetcore/issues/18062">issue#18062</a></p>
+<p>workaround: edit start script<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;start&quot;: &quot;echo start &amp;&amp; ng serve  --host 0.0.0.0&quot;,</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>路由问题</p>
+</blockquote>
+<h4 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h4><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-3.1">ASP.NET Core 上的单页面应用的身份验证简介</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet new angular -o AspNgIndividualAuthProj -au Individual</span><br></pre></td></tr></table></figure><br>Caution! 模板生成同时提供认证授权功能的应用，具体是使用一个叫<a target="_blank" rel="noopener" href="https://www.cnblogs.com/sheng-jie/p/9430920.html">IdentityServer</a>的框架，IdentityServer封装了提供重定向endpint，生成JWT令牌，校验令牌等功能。 通常情况下，后台服务应对接独立的SSO，下面的大部分内容对此的可参考性很有限</p>
+<h4 id="MSAL-Angular-Net-Core-AD-B2C"><a href="#MSAL-Angular-Net-Core-AD-B2C" class="headerlink" title="MSAL + Angular + .Net Core + AD B2C"></a>MSAL + Angular + .Net Core + AD B2C</h4><p>Microsoft Authentication Library(微软身份认证库MSAL)</p>
+<p>微软栗子真多—&gt; <a target="_blank" rel="noopener" href="https://github.com/Azure-Samples/active-directory-b2c-javascript-angular-spa">Azure-Sample</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i msal @azure&#x2F;msal-angular -save-dev</span><br></pre></td></tr></table></figure><br>引入MSAL模块 @app.module<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">import &#123; Configuration &#125; from &#39;msal&#39;;</span><br><span class="line">import &#123;</span><br><span class="line">  MsalModule,</span><br><span class="line">  MsalInterceptor,</span><br><span class="line">  MSAL_CONFIG,</span><br><span class="line">  MSAL_CONFIG_ANGULAR,</span><br><span class="line">  MsalService,</span><br><span class="line">  MsalAngularConfiguration</span><br><span class="line">&#125; from &#39;@azure&#x2F;msal-angular&#39;;</span><br><span class="line"></span><br><span class="line">import &#123; msalConfig, msalAngularConfig &#125; from &#39;.&#x2F;app-config&#39;;</span><br><span class="line">import &#123; AppRoutingModule &#125; from &#39;.&#x2F;app-routing.module&#39;;</span><br><span class="line">import &#123; ProfileComponent &#125; from &#39;.&#x2F;profile&#x2F;profile.component&#39;;</span><br><span class="line"></span><br><span class="line">function MSALConfigFactory(): Configuration &#123;</span><br><span class="line">  return msalConfig;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function MSALAngularConfigFactory(): MsalAngularConfiguration &#123;</span><br><span class="line">  return msalAngularConfig;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@NgModule(&#123;</span><br><span class="line">  declarations: [</span><br><span class="line">    AppComponent,</span><br><span class="line">    HomeComponent,</span><br><span class="line">    ProfileComponent,</span><br><span class="line">  ],</span><br><span class="line">  imports: [</span><br><span class="line">    ...</span><br><span class="line">    MsalModule</span><br><span class="line">  ],</span><br><span class="line">  providers: [</span><br><span class="line">    &#123;</span><br><span class="line">      provide: HTTP_INTERCEPTORS,</span><br><span class="line">      useClass: MsalInterceptor,</span><br><span class="line">      multi: true</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      provide: MSAL_CONFIG,</span><br><span class="line">      useFactory: MSALConfigFactory</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      provide: MSAL_CONFIG_ANGULAR,</span><br><span class="line">      useFactory: MSALAngularConfigFactory</span><br><span class="line">    &#125;,</span><br><span class="line">    MsalService</span><br><span class="line">  ],</span><br><span class="line">  bootstrap: [AppComponent]</span><br><span class="line">&#125;)</span><br><span class="line">export class AppModule &#123; &#125;</span><br></pre></td></tr></table></figure><br>另 使用oidc-client的栗子参考<a href="/qqsnote/2020/11/20/oidc-client/" title="oidc-client">oidc-client</a></p>
+<h4 id="关于-csproj"><a href="#关于-csproj" class="headerlink" title="关于.csproj"></a>关于.csproj</h4><p>参考：<a target="_blank" rel="noopener" href="https://blog.walterlv.com/post/understand-the-csproj.html">理解 C# 项目 csproj 文件格式的本质和编译流程</a><br><img src="https://blog.walterlv.com/static/posts/2018-05-07-08-41-22.png" alt=""></p>
+<ul>
+<li>PropertyGroup, 声明编译过程中用到的变量，如一些路径，所谓的group，为了增强可读性，而将一组变量放在一个PropertyGroup中，其他的再放一个PropertyGroup<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;PropertyGroup&gt;</span><br><span class="line">  ...</span><br><span class="line">  &lt;SpaRoot&gt;ClientApp\&lt;&#x2F;SpaRoot&gt;</span><br><span class="line">&lt;&#x2F;PropertyGroup&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>ItemGroup, 顾名思义，存放集合的项，一个group中各项属性名相同，可以认为是类型为XX(即属性名)的一个集合，下例是第三方的package，另外也可以放其他模块所需的任意内容，用相应的属性标识出<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;ItemGroup&gt;</span><br><span class="line">  &lt;PackageReference Include&#x3D;&quot;EntityFrameworkCore.SqlServer.HierarchyId&quot; Version&#x3D;&quot;1.1.1&quot; &#x2F;&gt;</span><br><span class="line">  &lt;PackageReference Include&#x3D;&quot;Microsoft.AspNetCore.Mvc.NewtonsoftJson&quot; Version&#x3D;&quot;3.1.2&quot; &#x2F;&gt;</span><br><span class="line">  &lt;PackageReference Include&#x3D;&quot;Microsoft.AspNetCore.SpaServices.Extensions&quot; Version&#x3D;&quot;3.1.7&quot; &#x2F;&gt;</span><br><span class="line">  &lt;PackageReference Include&#x3D;&quot;Microsoft.EntityFrameworkCore.SqlServer&quot; Version&#x3D;&quot;3.1.7&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;ItemGroup&gt;</span><br></pre></td></tr></table></figure></li>
+<li>Target<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">  &lt;Target Name&#x3D;&quot;DebugEnsureNodeEnv&quot; BeforeTargets&#x3D;&quot;Build&quot; Condition&#x3D;&quot; &#39;$(Configuration)&#39; &#x3D;&#x3D; &#39;Debug&#39; And !Exists(&#39;$(SpaRoot)node_modules&#39;) &quot;&gt;</span><br><span class="line">  &lt;!-- Ensure Node.js is installed --&gt;</span><br><span class="line">  &lt;Exec Command&#x3D;&quot;node --version&quot; ContinueOnError&#x3D;&quot;true&quot;&gt;</span><br><span class="line">    &lt;Output TaskParameter&#x3D;&quot;ExitCode&quot; PropertyName&#x3D;&quot;ErrorCode&quot; &#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;Exec&gt;</span><br><span class="line">  &lt;Error Condition&#x3D;&quot;&#39;$(ErrorCode)&#39; !&#x3D; &#39;0&#39;&quot; Text&#x3D;&quot;Node.js is required to build and run this project. To continue, please install Node.js from https:&#x2F;&#x2F;nodejs.org&#x2F;, and then restart your command prompt or IDE.&quot; &#x2F;&gt;</span><br><span class="line">  &lt;Message Importance&#x3D;&quot;high&quot; Text&#x3D;&quot;Restoring dependencies using &#39;npm&#39;. This may take several minutes...&quot; &#x2F;&gt;</span><br><span class="line">  &lt;Exec WorkingDirectory&#x3D;&quot;$(SpaRoot)&quot; Command&#x3D;&quot;npm install&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;Target&gt;</span><br><span class="line"></span><br><span class="line">&lt;Target Name&#x3D;&quot;PublishRunWebpack&quot; AfterTargets&#x3D;&quot;ComputeFilesToPublish&quot;&gt;</span><br><span class="line">  &lt;!-- As part of publishing, ensure the JS resources are freshly built in production mode --&gt;</span><br><span class="line">  &lt;Exec WorkingDirectory&#x3D;&quot;$(SpaRoot)&quot; Command&#x3D;&quot;npm install&quot; &#x2F;&gt;</span><br><span class="line">  &lt;Exec WorkingDirectory&#x3D;&quot;$(SpaRoot)&quot; Command&#x3D;&quot;npm run build -- --prod&quot; &#x2F;&gt;</span><br><span class="line">  &lt;Exec WorkingDirectory&#x3D;&quot;$(SpaRoot)&quot; Command&#x3D;&quot;npm run build:ssr -- --prod&quot; Condition&#x3D;&quot; &#39;$(BuildServerSideRenderer)&#39; &#x3D;&#x3D; &#39;true&#39; &quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">  &lt;!-- Include the newly-built files in the publish output --&gt;</span><br><span class="line">  &lt;ItemGroup&gt;</span><br><span class="line">    &lt;DistFiles Include&#x3D;&quot;$(SpaRoot)dist\**; $(SpaRoot)dist-server\**&quot; &#x2F;&gt;</span><br><span class="line">    &lt;DistFiles Include&#x3D;&quot;$(SpaRoot)node_modules\**&quot; Condition&#x3D;&quot;&#39;$(BuildServerSideRenderer)&#39; &#x3D;&#x3D; &#39;true&#39;&quot; &#x2F;&gt;</span><br><span class="line">    &lt;ResolvedFileToPublish Include&#x3D;&quot;@(DistFiles-&gt;&#39;%(FullPath)&#39;)&quot; Exclude&#x3D;&quot;@(ResolvedFileToPublish)&quot;&gt;</span><br><span class="line">      &lt;RelativePath&gt;%(DistFiles.Identity)&lt;&#x2F;RelativePath&gt;</span><br><span class="line">      &lt;CopyToPublishDirectory&gt;PreserveNewest&lt;&#x2F;CopyToPublishDirectory&gt;</span><br><span class="line">      &lt;ExcludeFromSingleFile&gt;true&lt;&#x2F;ExcludeFromSingleFile&gt;</span><br><span class="line">    &lt;&#x2F;ResolvedFileToPublish&gt;</span><br><span class="line">  &lt;&#x2F;ItemGroup&gt;</span><br><span class="line">&lt;&#x2F;Target&gt;</span><br></pre></td></tr></table></figure>
+上例是<span>ASP.NET</span> Core with Angular模板项目使用的build target，两种编译环境，而且其中还有条件语句，有点厉害</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/08/25/ddd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -923,234 +1579,6 @@ redux:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span c
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/22/WebDev-OtherStories/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/07/22/WebDev-OtherStories/" class="post-title-link" itemprop="url">WebDev_OtherStories</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-07-22 10:11:02" itemprop="dateCreated datePublished" datetime="2020-07-22T10:11:02+08:00">2020-07-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="js的特点"><a href="#js的特点" class="headerlink" title="js的特点"></a>js的特点</h4><blockquote>
-<p>the part that is good is not original, and the part that is original is not good.</p>
-</blockquote>
-<h4 id="关于浏览器"><a href="#关于浏览器" class="headerlink" title="关于浏览器"></a>关于浏览器</h4><p><a target="_blank" rel="noopener" href="https://juejin.im/post/5aa5cb846fb9a028e25d2fb1">从url到页面显示</a></p>
-<ul>
-<li>“user agent stylesheet”用户代理样式，浏览器默认样式，无法在开发者模式中修改</li>
-</ul>
-<h4 id="js-事件"><a href="#js-事件" class="headerlink" title="js 事件"></a>js 事件</h4><ul>
-<li>原生js并没有document.ready事件，<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000016574288">document.ready和window.onload</a></li>
-</ul>
-<h4 id="前后端分离和SPA"><a href="#前后端分离和SPA" class="headerlink" title="前后端分离和SPA"></a>前后端分离和SPA</h4><p>显然前后端分离不一定非要做成SPA，但是SPA被认为是前后端分离的最佳实践：<br>前后端分离的初衷是对后台服务的优化，即将静态资源的传输移出后台逻辑，分离后前后端之间的接口只提供数据。<br><br>SPA的出现是“复用一切可复用”的设计原则的体现，即根据交互仅对局部视图更新，其他部分复用。<br><br>也就是说，SPA和前后端分离同样是解决可复用内容（包括页面模板）的问题，如果你的产品有必要做这个问题的优化，那么前后端分离和SPA就自然而然地成为选择。</p>
-<h4 id="浏览器信息"><a href="#浏览器信息" class="headerlink" title="浏览器信息"></a>浏览器信息</h4><p>window.navigator.userAgent 参考<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/NavigatorID/userAgent">MDN Web API</a><br>输出如 “Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36”<br>Caution! 该属性可修改 无法确保准确性</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/22/WebDev-RoadMap/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/07/22/WebDev-RoadMap/" class="post-title-link" itemprop="url">Web开发学习路线</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-07-22 09:45:18" itemprop="dateCreated datePublished" datetime="2020-07-22T09:45:18+08:00">2020-07-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/web-developer-learn-path.html">web开发学习路线图</a></p>
-<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5ea39c93f265da47e84e8c8a">https://juejin.im/post/5ea39c93f265da47e84e8c8a</a></p>
-<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/javascript/">阮一峰博客</a></p>
-<h4 id="H5新增api"><a href="#H5新增api" class="headerlink" title="H5新增api"></a>H5新增api</h4><ul>
-<li>navigator.geolocation.getCurrentPosition(successCallback, errorCallback)</li>
-<li>dragable=true</li>
-<li>FileReader</li>
-<li>Storage</li>
-<li>等</li>
-</ul>
-<h4 id="js单线程、异步和任务队列"><a href="#js单线程、异步和任务队列" class="headerlink" title="js单线程、异步和任务队列"></a>js单线程、异步和任务队列</h4><blockquote>
-<p>避免修改dom引起的竞争</p>
-<p>JavaScript是单线程的，可是浏览器内部不是单线程的。一些I/O操作、dom操作、定时器的计时和事件监听由浏览器提供的其他线程来完成的</p>
-</blockquote>
-<p><img src="https://user-gold-cdn.xitu.io/2018/6/13/163f6b033cff7849?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="任务机制"></p>
-<p>对象放在heap（堆）里，常见的基础类型和函数放在stack（栈）里，函数执行的时候在栈里执行。其中会有异步操作，这些操作可能需要调用浏览器的其他线程去处理，操作结果由相应的回调函数响应，但是要先丢到任务队列中，等栈空了，则检查任务队列，将队列中的事件函数放到栈中执行。这个过程是循环不断地</p>
-<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/34499262">为什么函数调用是用栈实现的</a></p>
-<h4 id="自查"><a href="#自查" class="headerlink" title="自查"></a>自查</h4><img  src=http://www.plantuml.com/plantuml/svg/dLJBJjj05DtdAsQT1G62qiUAHoELgc6H5Bf0B8mp0gV4jZmJ6dPf8H2NLrvK1QLOGKKOMkAc4YMD4xx6OpihVg4s3KZ6cKszik-vr_VSSsRkECACXDCSdqmpOY08ti95qicH_L80E4ym28YyQttNxhx-HUv3H6bRzTm3q0U3uEMRs6jFz1vn2hyTaOkoqQtugwOI2LfHQvqqSnImbvFDxNDog0AZSs4rTU3BUyWDWldvPOn5z3mKIcLWYkE7M3ua2WY78a_7nfuDXoDFHaSYe-7XiU6HC9YCnaYfIugxzjc6lRE-i42ZTpUGgPpQsWaWbLtIhfBEFYtvasfLTV_qAMQLGQp4YPXMkAUGu-rUvOQ2HnCH2eBNHFZersxOlDgtpmgES7uoPkkNgLJCMfiKVllHsqw1tEJj-Yd9vsyxilTWN3lHwySix_tjdMnOdS-sLdBjMe480SGYv4ybEtchKRUAcxoO1ckCn7jw62tTlFfWrZVDum7iuf1XQHfQSi6i_Q21JPqqZem_ibLLNDzBgbbJUkLpSbcaMRBLDGz-Ebuxzq4pkZMhgb8oup2PoVgvJl1BcHL6-X-syMmAKI1xww8_YBvXw0Cacij0hscjbaETj0TSojbf9mmc1G4ZB34YY34OIXopCZljaCSl8EAMU7_LUxWeCkmxu4md3ZXTLzksTW1UGOH1J62N6VVLsJymyB1nYdkFDuwjNTfgZcRwq0oaUJw1H1S5Ku84_OKpGX8EKPMCPtZCfI68ygkS9F1foDEwHBEY1Fj7sMsQTERXNCcmLsghMxBqcbVzoo_ae-gzcb_NUuT5KjuX3PdarS0uv9Fz1VqN>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2020/07/21/Cross-Origin/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2020/07/21/Cross-Origin/" class="post-title-link" itemprop="url">跨域</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-07-21 12:55:46" itemprop="dateCreated datePublished" datetime="2020-07-21T12:55:46+08:00">2020-07-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="同源和跨域"><a href="#同源和跨域" class="headerlink" title="同源和跨域"></a>同源和跨域</h4><p>参考<a target="_blank" rel="noopener" href="https://code-maze.com/enabling-cors-in-asp-net-core/#whatiscors">Enabling CORS in ASP.NET Core</a></p>
-<p>同源策略（Same Origin Policy）Web应用程序安全模型中的概念，具有相同的URL方案（HTTP或HTTPS），相同的主机名（域名）和相同的端口号（应用程序相互通信的端点），则认为它们具有相同的来源。同源策略要求请求的客户端（httpclient）应与服务器应用属于同一源点</p>
-<blockquote>
-<p>如果两个URL具有相同的URL方案（HTTP或HTTPS），相同的主机名（域名）和相同的端口号（应用程序相互通信的端点），则认为它们具有相同的来源。禁止跨域访问，目的是为了隔离潜在的恶意脚本，以免破坏Web上的其他文档</p>
-</blockquote>
-<p>如果服务器允许来自Origin（<a target="_blank" rel="noopener" href="https://example.com）的跨域请求，则它将Access-Control-Allow-Origin标头设置为其值与请求中的源标头的值相匹配。如果服务器不包含此标头，则请求将失败。浏览器应接收响应数据，但是客户端不能访问该数据。">https://example.com）的跨域请求，则它将Access-Control-Allow-Origin标头设置为其值与请求中的源标头的值相匹配。如果服务器不包含此标头，则请求将失败。浏览器应接收响应数据，但是客户端不能访问该数据。</a></p>
-<p>Startup.cs<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public void ConfigureServices(IServiceCollection services)</span><br><span class="line">&#123;</span><br><span class="line">    services.AddCors();</span><br><span class="line">    services.AddMvc();</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">public void Configure(IApplicationBuilder app, IWebHostEnvironment env)&#123;</span><br><span class="line">    app.UseCors(x &#x3D;&gt; x</span><br><span class="line">    .AllowAnyOrigin()</span><br><span class="line">    .AllowAnyMethod()</span><br><span class="line">    .AllowAnyHeader());</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1220,7 +1648,7 @@ redux:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span c
       <div class="site-state-item site-state-posts">
           <a href="/qqsnote/archives/">
         
-          <span class="site-state-item-count">405</span>
+          <span class="site-state-item-count">408</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1231,7 +1659,7 @@ redux:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span c
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/qqsnote/tags/">
-        <span class="site-state-item-count">211</span>
+        <span class="site-state-item-count">226</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1242,7 +1670,7 @@ redux:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span c
       </div>
 
       <div class="tag-cloud-tags">
-        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3D/" style="font-size: 13.29px; color: #d0d0d0">3D</a> <a href="/qqsnote/tags/3DGS/" style="font-size: 12px; color: #ccc">3DGS</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 23.57px; color: #ededed">AI</a> <a href="/qqsnote/tags/AI-Coding/" style="font-size: 12px; color: #ccc">AI Coding</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Agent/" style="font-size: 12px; color: #ccc">Agent</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 28.71px; color: #fbfbfb">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.29px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24.86px; color: #f0f0f0">Azure</a> <a href="/qqsnote/tags/BVH/" style="font-size: 12px; color: #ccc">BVH</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 15.86px; color: #d7d7d7">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 15.86px; color: #d7d7d7">C++</a> <a href="/qqsnote/tags/CAD/" style="font-size: 12px; color: #ccc">CAD</a> <a href="/qqsnote/tags/CI-CD/" style="font-size: 12px; color: #ccc">CI/CD</a> <a href="/qqsnote/tags/CSS/" style="font-size: 17.14px; color: #dbdbdb">CSS</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/Context-Engineering/" style="font-size: 12px; color: #ccc">Context Engineering</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 17.14px; color: #dbdbdb">DevOps</a> <a href="/qqsnote/tags/DevSecOps/" style="font-size: 12px; color: #ccc">DevSecOps</a> <a href="/qqsnote/tags/Digital-Twin/" style="font-size: 12px; color: #ccc">Digital Twin</a> <a href="/qqsnote/tags/Docker/" style="font-size: 17.14px; color: #dbdbdb">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.86px; color: #d7d7d7">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.29px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Flow-Graph/" style="font-size: 13.29px; color: #d0d0d0">Flow Graph</a> <a href="/qqsnote/tags/GitHub/" style="font-size: 12px; color: #ccc">GitHub</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/HMI/" style="font-size: 12px; color: #ccc">HMI</a> <a href="/qqsnote/tags/Halcon/" style="font-size: 12px; color: #ccc">Halcon</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.29px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 18.43px; color: #dedede">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/Knowledge-Graph/" style="font-size: 12px; color: #ccc">Knowledge Graph</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.57px; color: #d3d3d3">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.29px; color: #e9e9e9">Linux</a> <a href="/qqsnote/tags/MCP/" style="font-size: 12px; color: #ccc">MCP</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MVVM/" style="font-size: 12px; color: #ccc">MVVM</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.29px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/Modbus/" style="font-size: 12px; color: #ccc">Modbus</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 17.14px; color: #dbdbdb">Node.js</a> <a href="/qqsnote/tags/OCCT/" style="font-size: 12px; color: #ccc">OCCT</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.29px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 19.71px; color: #e2e2e2">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 14.57px; color: #d3d3d3">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PLC/" style="font-size: 13.29px; color: #d0d0d0">PLC</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Prism/" style="font-size: 12px; color: #ccc">Prism</a> <a href="/qqsnote/tags/Proxy/" style="font-size: 12px; color: #ccc">Proxy</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24.86px; color: #f0f0f0">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/ROS2/" style="font-size: 14.57px; color: #d3d3d3">ROS2</a> <a href="/qqsnote/tags/RS-485/" style="font-size: 12px; color: #ccc">RS-485</a> <a href="/qqsnote/tags/React/" style="font-size: 19.71px; color: #e2e2e2">React</a> <a href="/qqsnote/tags/React-Flow/" style="font-size: 12px; color: #ccc">React Flow</a> <a href="/qqsnote/tags/Rust/" style="font-size: 12px; color: #ccc">Rust</a> <a href="/qqsnote/tags/SDLC/" style="font-size: 12px; color: #ccc">SDLC</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.57px; color: #d3d3d3">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Squid/" style="font-size: 12px; color: #ccc">Squid</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 22.29px; color: #e9e9e9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 15.86px; color: #d7d7d7">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/URDF/" style="font-size: 12px; color: #ccc">URDF</a> <a href="/qqsnote/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/qqsnote/tags/VLA/" style="font-size: 13.29px; color: #d0d0d0">VLA</a> <a href="/qqsnote/tags/VTK/" style="font-size: 12px; color: #ccc">VTK</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/Vue-js/" style="font-size: 12px; color: #ccc">Vue.js</a> <a href="/qqsnote/tags/WPF/" style="font-size: 15.86px; color: #d7d7d7">WPF</a> <a href="/qqsnote/tags/Web/" style="font-size: 12px; color: #ccc">Web</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27.43px; color: #f8f8f8">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/dify/" style="font-size: 12px; color: #ccc">dify</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.29px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 26.14px; color: #f4f4f4">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.29px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 15.86px; color: #d7d7d7">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 17.14px; color: #dbdbdb">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.57px; color: #d3d3d3">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14.57px; color: #d3d3d3">上位机</a> <a href="/qqsnote/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">传感器</a> <a href="/qqsnote/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/" style="font-size: 12px; color: #ccc">光线追踪</a> <a href="/qqsnote/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/" style="font-size: 14.57px; color: #d3d3d3">具身智能</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.86px; color: #d7d7d7">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.29px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%9B%E5%85%83%E6%95%B0/" style="font-size: 12px; color: #ccc">四元数</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" style="font-size: 12px; color: #ccc">图像分割</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 19.71px; color: #e2e2e2">图形学</a> <a href="/qqsnote/tags/%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" style="font-size: 17.14px; color: #dbdbdb">坐标变换</a> <a href="/qqsnote/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" style="font-size: 12px; color: #ccc">多模态</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.29px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 22.29px; color: #e9e9e9">学习笔记</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E5%AE%89%E5%85%A8/" style="font-size: 12px; color: #ccc">工业安全</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89/" style="font-size: 14.57px; color: #d3d3d3">工业视觉</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" style="font-size: 14.57px; color: #d3d3d3">工业软件</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" style="font-size: 12px; color: #ccc">工业通信</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.57px; color: #d3d3d3">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.29px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%89%8B%E7%9C%BC%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">手眼标定</a> <a href="/qqsnote/tags/%E6%89%A7%E8%A1%8C%E5%99%A8/" style="font-size: 12px; color: #ccc">执行器</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 15.86px; color: #d7d7d7">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%97%8B%E8%BD%AC/" style="font-size: 12px; color: #ccc">旋转</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 12px; color: #ccc">机器人</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A1%AC%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人硬件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%AF%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人软件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89/" style="font-size: 14.57px; color: #d3d3d3">机器视觉</a> <a href="/qqsnote/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 13.29px; color: #d0d0d0">机械臂</a> <a href="/qqsnote/tags/%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">标定</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/" style="font-size: 12px; color: #ccc">桌面应用</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E6%AF%94%E4%BE%8B%E9%98%80/" style="font-size: 12px; color: #ccc">比例阀</a> <a href="/qqsnote/tags/%E6%B5%81%E5%BC%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">流式处理</a> <a href="/qqsnote/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">深度学习</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.29px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%94%9F%E4%BF%A1%E5%88%86%E6%9E%90/" style="font-size: 12px; color: #ccc">生信分析</a> <a href="/qqsnote/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">目标检测</a> <a href="/qqsnote/tags/%E7%9B%B8%E6%9C%BA%E6%A0%87%E5%AE%9A/" style="font-size: 13.29px; color: #d0d0d0">相机标定</a> <a href="/qqsnote/tags/%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">碰撞检测</a> <a href="/qqsnote/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 12px; color: #ccc">神经网络</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14.57px; color: #d3d3d3">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%8E%A7%E5%88%B6/" style="font-size: 14.57px; color: #d3d3d3">自动化控制</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E5%89%AA%E8%BE%91/" style="font-size: 12px; color: #ccc">视频剪辑</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a>
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3D/" style="font-size: 13.38px; color: #d0d0d0">3D</a> <a href="/qqsnote/tags/3DGS/" style="font-size: 12px; color: #ccc">3DGS</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 25.85px; color: #f3f3f3">AI</a> <a href="/qqsnote/tags/AI-Coding/" style="font-size: 12px; color: #ccc">AI Coding</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Agent/" style="font-size: 13.38px; color: #d0d0d0">Agent</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 28.62px; color: #fbfbfb">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.38px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24.46px; color: #efefef">Azure</a> <a href="/qqsnote/tags/BVH/" style="font-size: 12px; color: #ccc">BVH</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 16.15px; color: #d8d8d8">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.15px; color: #d8d8d8">C++</a> <a href="/qqsnote/tags/CAD/" style="font-size: 12px; color: #ccc">CAD</a> <a href="/qqsnote/tags/CI-CD/" style="font-size: 12px; color: #ccc">CI/CD</a> <a href="/qqsnote/tags/CPD/" style="font-size: 12px; color: #ccc">CPD</a> <a href="/qqsnote/tags/CSS/" style="font-size: 17.54px; color: #dcdcdc">CSS</a> <a href="/qqsnote/tags/Chrome-DevTools/" style="font-size: 12px; color: #ccc">Chrome DevTools</a> <a href="/qqsnote/tags/Codex/" style="font-size: 12px; color: #ccc">Codex</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/Context-Engineering/" style="font-size: 12px; color: #ccc">Context Engineering</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 17.54px; color: #dcdcdc">DevOps</a> <a href="/qqsnote/tags/DevSecOps/" style="font-size: 12px; color: #ccc">DevSecOps</a> <a href="/qqsnote/tags/Digital-Twin/" style="font-size: 12px; color: #ccc">Digital Twin</a> <a href="/qqsnote/tags/Docker/" style="font-size: 17.54px; color: #dcdcdc">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.15px; color: #d8d8d8">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.38px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Flow-Graph/" style="font-size: 13.38px; color: #d0d0d0">Flow Graph</a> <a href="/qqsnote/tags/GitHub/" style="font-size: 12px; color: #ccc">GitHub</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/HMI/" style="font-size: 12px; color: #ccc">HMI</a> <a href="/qqsnote/tags/Halcon/" style="font-size: 12px; color: #ccc">Halcon</a> <a href="/qqsnote/tags/ICP/" style="font-size: 12px; color: #ccc">ICP</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.38px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 18.92px; color: #e0e0e0">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/Knowledge-Graph/" style="font-size: 12px; color: #ccc">Knowledge Graph</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.77px; color: #d4d4d4">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Lighthouse/" style="font-size: 12px; color: #ccc">Lighthouse</a> <a href="/qqsnote/tags/Linux/" style="font-size: 23.08px; color: #ebebeb">Linux</a> <a href="/qqsnote/tags/MCP/" style="font-size: 12px; color: #ccc">MCP</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MVVM/" style="font-size: 12px; color: #ccc">MVVM</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.38px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/Modbus/" style="font-size: 12px; color: #ccc">Modbus</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 17.54px; color: #dcdcdc">Node.js</a> <a href="/qqsnote/tags/OCCT/" style="font-size: 12px; color: #ccc">OCCT</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.38px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/Open3D/" style="font-size: 12px; color: #ccc">Open3D</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 20.31px; color: #e4e4e4">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 14.77px; color: #d4d4d4">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PLC/" style="font-size: 13.38px; color: #d0d0d0">PLC</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Playwright/" style="font-size: 12px; color: #ccc">Playwright</a> <a href="/qqsnote/tags/Prism/" style="font-size: 12px; color: #ccc">Prism</a> <a href="/qqsnote/tags/Proxy/" style="font-size: 12px; color: #ccc">Proxy</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 25.85px; color: #f3f3f3">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/ROS2/" style="font-size: 14.77px; color: #d4d4d4">ROS2</a> <a href="/qqsnote/tags/RS-485/" style="font-size: 12px; color: #ccc">RS-485</a> <a href="/qqsnote/tags/React/" style="font-size: 20.31px; color: #e4e4e4">React</a> <a href="/qqsnote/tags/React-Flow/" style="font-size: 12px; color: #ccc">React Flow</a> <a href="/qqsnote/tags/Rust/" style="font-size: 12px; color: #ccc">Rust</a> <a href="/qqsnote/tags/SDLC/" style="font-size: 12px; color: #ccc">SDLC</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.77px; color: #d4d4d4">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Squid/" style="font-size: 12px; color: #ccc">Squid</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 23.08px; color: #ebebeb">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 16.15px; color: #d8d8d8">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/URDF/" style="font-size: 12px; color: #ccc">URDF</a> <a href="/qqsnote/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/qqsnote/tags/VLA/" style="font-size: 13.38px; color: #d0d0d0">VLA</a> <a href="/qqsnote/tags/VTK/" style="font-size: 12px; color: #ccc">VTK</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/Vitest/" style="font-size: 12px; color: #ccc">Vitest</a> <a href="/qqsnote/tags/Vue-js/" style="font-size: 12px; color: #ccc">Vue.js</a> <a href="/qqsnote/tags/WPF/" style="font-size: 16.15px; color: #d8d8d8">WPF</a> <a href="/qqsnote/tags/Web/" style="font-size: 12px; color: #ccc">Web</a> <a href="/qqsnote/tags/Web-Vitals/" style="font-size: 12px; color: #ccc">Web Vitals</a> <a href="/qqsnote/tags/Web3D/" style="font-size: 12px; color: #ccc">Web3D</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21.69px; color: #e7e7e7">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 30px; color: #fff">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/dify/" style="font-size: 12px; color: #ccc">dify</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.38px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 27.23px; color: #f7f7f7">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.38px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.15px; color: #d8d8d8">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 17.54px; color: #dcdcdc">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.77px; color: #d4d4d4">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%89%E7%BB%B4%E9%87%8D%E5%BB%BA/" style="font-size: 12px; color: #ccc">三维重建</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14.77px; color: #d4d4d4">上位机</a> <a href="/qqsnote/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">传感器</a> <a href="/qqsnote/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/" style="font-size: 12px; color: #ccc">光线追踪</a> <a href="/qqsnote/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/" style="font-size: 14.77px; color: #d4d4d4">具身智能</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD/" style="font-size: 12px; color: #ccc">前端性能</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.15px; color: #d8d8d8">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.38px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%9B%E5%85%83%E6%95%B0/" style="font-size: 12px; color: #ccc">四元数</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" style="font-size: 12px; color: #ccc">图像分割</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 20.31px; color: #e4e4e4">图形学</a> <a href="/qqsnote/tags/%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" style="font-size: 17.54px; color: #dcdcdc">坐标变换</a> <a href="/qqsnote/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" style="font-size: 12px; color: #ccc">多模态</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.38px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 23.08px; color: #ebebeb">学习笔记</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E5%AE%89%E5%85%A8/" style="font-size: 12px; color: #ccc">工业安全</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89/" style="font-size: 16.15px; color: #d8d8d8">工业视觉</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" style="font-size: 14.77px; color: #d4d4d4">工业软件</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" style="font-size: 12px; color: #ccc">工业通信</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.77px; color: #d4d4d4">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.38px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%89%8B%E7%9C%BC%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">手眼标定</a> <a href="/qqsnote/tags/%E6%89%A7%E8%A1%8C%E5%99%A8/" style="font-size: 12px; color: #ccc">执行器</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 16.15px; color: #d8d8d8">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%96%B0%E8%A7%86%E8%A7%92%E5%90%88%E6%88%90/" style="font-size: 12px; color: #ccc">新视角合成</a> <a href="/qqsnote/tags/%E6%97%8B%E8%BD%AC/" style="font-size: 12px; color: #ccc">旋转</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 13.38px; color: #d0d0d0">机器人</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A1%AC%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人硬件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%AF%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人软件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89/" style="font-size: 14.77px; color: #d4d4d4">机器视觉</a> <a href="/qqsnote/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 13.38px; color: #d0d0d0">机械臂</a> <a href="/qqsnote/tags/%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">标定</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/" style="font-size: 12px; color: #ccc">桌面应用</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E6%AF%94%E4%BE%8B%E9%98%80/" style="font-size: 12px; color: #ccc">比例阀</a> <a href="/qqsnote/tags/%E6%B5%81%E5%BC%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">流式处理</a> <a href="/qqsnote/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 12px; color: #ccc">测试</a> <a href="/qqsnote/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">深度学习</a>
       </div>
     </div>
   </aside>

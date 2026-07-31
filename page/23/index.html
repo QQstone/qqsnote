@@ -179,6 +179,225 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/03/11/Grid/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/03/11/Grid/" class="post-title-link" itemprop="url">Grid</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-11 14:07:30" itemprop="dateCreated datePublished" datetime="2021-03-11T14:07:30+08:00">2021-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>如果说flex适合做一维(水平或竖直放向)元素的布局，那么grid就是做二维布局的，如字面意思，grid布局将平面划分成 m*n 的网格，子元素分布其中，以所处/所占的行和列的控制实现页面layout的划分<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class&#x3D;&quot;wrapper&quot;&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;one&quot;&gt;One&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;two&quot;&gt;Two&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;three&quot;&gt;Three&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;four&quot;&gt;Four&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;five&quot;&gt;Five&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;six&quot;&gt;Six&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">.wrapper &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: repeat(3, 1fr);</span><br><span class="line">  grid-gap: 10px;</span><br><span class="line">  grid-auto-rows: minmax(100px, auto);</span><br><span class="line">&#125;</span><br><span class="line">.one &#123;</span><br><span class="line">  grid-column: 1 &#x2F; 3;</span><br><span class="line">  grid-row: 1;</span><br><span class="line">&#125;</span><br><span class="line">.two &#123;</span><br><span class="line">  grid-column: 2 &#x2F; 4;</span><br><span class="line">  grid-row: 1 &#x2F; 3;</span><br><span class="line">&#125;</span><br><span class="line">.three &#123;</span><br><span class="line">  grid-row: 2 &#x2F; 5;</span><br><span class="line">  grid-column: 1;</span><br><span class="line">&#125;</span><br><span class="line">.four &#123;</span><br><span class="line">  grid-column: 3;</span><br><span class="line">  grid-row: 3;</span><br><span class="line">&#125;</span><br><span class="line">.five &#123;</span><br><span class="line">  grid-column: 2;</span><br><span class="line">  grid-row: 4;</span><br><span class="line">&#125;</span><br><span class="line">.six &#123;</span><br><span class="line">  grid-column: 3;</span><br><span class="line">  grid-row: 4;</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure><br>display: grid 或 inline-grid区分整个区域是否作为行内元素插入，不影响区域内的grid</p>
+<p>列划分：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grid-template-columns: 200px 500px 100px;</span><br><span class="line">grid-template-columns: repeat(4, 25%);</span><br><span class="line">grid-template-columns: 200px repeat(3, 1fr) 100px;</span><br></pre></td></tr></table></figure><br>注：fr是grid的特殊单位，可以从总分列去掉固定宽度列后均分剩余列<br>行划分grid-template-rows类似，也可以按比例划分剩余宽度</p>
+<p>间距：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grid-gap: 5px;</span><br><span class="line">grid-row-gap: 5px;</span><br><span class="line">grid-column-gap: 5px;</span><br></pre></td></tr></table></figure></p>
+<p>填充:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grid-template-columns: repeat(auto-fill, 200px);</span><br></pre></td></tr></table></figure><br>以200px为一列，根据区域宽度调整列数（响应式）</p>
+<p>区间：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grid-template-columns: 1fr 1fr minmax(300px, 2fr)</span><br></pre></td></tr></table></figure><br>第三个列宽最少也是要 300px，但是最大不能大于第一第二列宽的两倍。</p>
+<p>区域定义：（略）</p>
+<p>流：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grid-auto-flow: row;</span><br><span class="line">grid-auto-flow: row dense;</span><br><span class="line">grid-auto-flow: column;</span><br></pre></td></tr></table></figure><br>填充单元格的横纵顺序，如果遇到尺寸不够而挤到下一行的情况，dense可以使用合适的子元素填充前面的空余单元格</p>
+<p>对齐：<br>justify-item, align-item:父容器配置，分别控制子元素在所处单元格空间的对齐方向，两者默认是stretch撑满空间<br>可选值：start center end stretch</p>
+<p>justify-content, align-content:父容器配置，分别控制整个grid(父容器)在上层容器中的对齐方向，两者默认是start</p>
+<p>justify-self, align-self:子元素配置，控制自身在所处单元格空间的对齐方向与*-item一致</p>
+<p>隐式网格：<br>在超出grid-template-columns和grid-template-rows的定义之后应用的网格划分<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grid-template-columns: 200px 500px 100px;</span><br><span class="line">grid-template-rows: 100px 100px;</span><br><span class="line">grid-auto-rows: 50px;</span><br></pre></td></tr></table></figure></p>
+<p>指定坐标：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.item &#123;</span><br><span class="line">  grid-column-start: 3;</span><br><span class="line">  grid-column-end: 4;</span><br><span class="line">  grid-row-start: 1;</span><br><span class="line">  grid-row-end: 4;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/03/10/svg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/03/10/svg/" class="post-title-link" itemprop="url">svg</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-10 13:00:39" itemprop="dateCreated datePublished" datetime="2021-03-10T13:00:39+08:00">2021-03-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>svg 可缩放矢量图形(Scalable Vector Graphics), 使用xml格式定义图形，大概长这样子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;svg xmlns&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; version&#x3D;&quot;1.1&quot;&gt;</span><br><span class="line">  &lt;circle cx&#x3D;&quot;100&quot; cy&#x3D;&quot;50&quot; r&#x3D;&quot;40&quot; stroke&#x3D;&quot;black&quot; stroke-width&#x3D;&quot;2&quot; fill&#x3D;&quot;red&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;svg&gt;</span><br></pre></td></tr></table></figure><br>嵌入html中可以作为dom操作，在<a href="/qqsnote/2019/08/16/BasicDataVisualization/" title="数据可视化入门">数据可视化入门</a>中曾提到D3数据可视化库即使用svg进行动态渲染的</p>
+<p>对于简单的icon响应可以有<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    .toggle-btn &#123;</span><br><span class="line">        display: inline-block;</span><br><span class="line">        width: 40px;</span><br><span class="line">        height: 40px;</span><br><span class="line">        cursor: pointer;</span><br><span class="line">        color: #000;</span><br><span class="line">        background: #ccc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .toggle-btn&gt;input &#123;</span><br><span class="line">        width: 0;</span><br><span class="line">        height: 0;</span><br><span class="line">        opacity: 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .toggle-btn&gt;svg &#123;</span><br><span class="line">        width: 100%;</span><br><span class="line">        height: 100%;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    input:checked+svg circle &#123;</span><br><span class="line">        fill: blue</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line">&lt;label class&#x3D;&quot;toggle-btn&quot;&gt;</span><br><span class="line">    &lt;input type&#x3D;&quot;checkbox&quot;&gt;</span><br><span class="line">    &lt;svg xmlns&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; version&#x3D;&quot;1.1&quot;&gt;</span><br><span class="line">        &lt;circle cx&#x3D;&quot;20&quot; cy&#x3D;&quot;20&quot; r&#x3D;&quot;20&quot; stroke&#x3D;&quot;black&quot; stroke-width&#x3D;&quot;2&quot; fill&#x3D;&quot;none&quot; &#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;svg&gt;</span><br><span class="line">&lt;&#x2F;label&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="svg-react-loader"><a href="#svg-react-loader" class="headerlink" title="svg-react-loader"></a>svg-react-loader</h4><p>将.svg文件资源作为<strong>组件</strong>载入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import MyIcon from &#39;-!svg-react-loader!..&#x2F;..&#x2F;assets&#x2F;image&#x2F;icon.svg&#39;</span><br><span class="line">...</span><br><span class="line">return (&lt;&gt; &lt;MyIcon&gt; &lt;&gt;)</span><br></pre></td></tr></table></figure><br>作为资源路径<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import MyIcon from &#39;..&#x2F;..&#x2F;assets&#x2F;image&#x2F;icon.svg&#39;</span><br><span class="line">...</span><br><span class="line">return (&lt;img src&#x3D;&#123;MyIcon&#125; &#x2F;&gt;)</span><br></pre></td></tr></table></figure><br>作为inline element(原生React特性)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import &#123;ReactComponent as MyIcon&#125; from &#39;..&#x2F;..&#x2F;assets&#x2F;image&#x2F;icon.svg&#39;</span><br><span class="line">...</span><br><span class="line">return (&lt;div style&#x3D;&#123;&#123;color:&#39;red&#39;, cursor: &#39;pointer&#39;&#125;&#125;&gt;</span><br><span class="line">    &lt;MyIcon &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;div&gt;)</span><br></pre></td></tr></table></figure></p>
+<h4 id="ng-inline-svg"><a href="#ng-inline-svg" class="headerlink" title="ng-inline-svg"></a>ng-inline-svg</h4><p>shared.module.ts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import &#123; InlineSVGModule &#125; from &#39;ng-inline-svg&#39;</span><br><span class="line"></span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [...LibModules,</span><br><span class="line">        InlineSVGModule.forRoot()],</span><br><span class="line">    exports: [...MuiModules],</span><br><span class="line">    declarations:  [],</span><br><span class="line">    providers: [],</span><br><span class="line">&#125;)</span><br><span class="line">export class SharedModule &#123; &#125;</span><br></pre></td></tr></table></figure><br>mycomponent.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div [inlineSVG]&#x3D;&quot;&#39;assets&#x2F;image&#x2F;icon.svg&#39;&quot;&gt;&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="鼠标响应"><a href="#鼠标响应" class="headerlink" title="鼠标响应"></a>鼠标响应</h4><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/pointer-events">Web MDN: svg pointer-events</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/02/05/await2generator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/qqsnote/2021/02/05/await2generator/" class="post-title-link" itemprop="url">async await是generator的语法糖</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-02-05 13:43:55" itemprop="dateCreated datePublished" datetime="2021-02-05T13:43:55+08:00">2021-02-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>async await写一个训练过程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">async function practise() &#123;</span><br><span class="line">    console.log(&#39;训练开始...&#39;)</span><br><span class="line">    let result;</span><br><span class="line">    result &#x3D; await warmup(2)</span><br><span class="line">    if(result) console.log(&#39;热身完成。。&#39;)</span><br><span class="line">    result &#x3D; await squat(5)</span><br><span class="line">    if(result) console.log(&#39;深蹲完成。。&#39;)</span><br><span class="line">    result &#x3D; await boating(3)</span><br><span class="line">    if(result) console.log(&#39;划船完成。。&#39;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function warmup(time)&#123;</span><br><span class="line">    return new Promise((resolve, reject) &#x3D;&gt; &#123;</span><br><span class="line">        setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">            resolve(1);</span><br><span class="line">        &#125;, time*1000);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function squat(time)&#123;</span><br><span class="line">    return new Promise((resolve, reject) &#x3D;&gt; &#123;</span><br><span class="line">        setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">            resolve(1);</span><br><span class="line">        &#125;, time*1000);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function boating(time)&#123;</span><br><span class="line">    return new Promise((resolve, reject) &#x3D;&gt; &#123;</span><br><span class="line">        setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">            resolve(1);</span><br><span class="line">        &#125;, time*1000);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 执行这个‘训练’</span><br><span class="line">practise().then(res&#x3D;&gt;&#123;</span><br><span class="line">    console.log(&#39;完了&#39;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure><br>从输出结果上看，特点是按照顺序逐步完成某动作，似乎本身就是一个generator<br>于是把每个动作装到一个generator里<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function* practisePlan() &#123;</span><br><span class="line">    yield warmup(2)</span><br><span class="line">    yield squat(5)</span><br><span class="line">    yield boating(3)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>yield返回的是一个promise，promise ‘resolve’的情况下才会 ‘next’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">let practise &#x3D; function () &#123;</span><br><span class="line">    return new Promise((resolve, reject)&#x3D;&gt;&#123;</span><br><span class="line">        const plan &#x3D; practisePlan()</span><br><span class="line">        Promise.resolve(plan.next().value).then(result&#x3D;&gt;&#123;</span><br><span class="line">            if(result) console.log(&#39;热身完成。。&#39;)</span><br><span class="line">            return plan.next().value;</span><br><span class="line">        &#125;).then(result&#x3D;&gt;&#123;</span><br><span class="line">            if(result) console.log(&#39;深蹲完成。。&#39;)</span><br><span class="line">            return plan.next().value;</span><br><span class="line">        &#125;).then(result&#x3D;&gt;&#123;</span><br><span class="line">            if(result) console.log(&#39;划船完成。。&#39;)</span><br><span class="line">            resolve() &#x2F;&#x2F; &lt;--完了</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>再看循环中的async await的栗子 —-&gt; <a target="_blank" rel="noopener" href="https://blog.csdn.net/zhq2005095/article/details/89300225">S-为什么说 async/await是generator的语法糖？</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/02/05/node-stream/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -789,252 +1008,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/01/12/BidFrontEndTrend/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/01/12/BidFrontEndTrend/" class="post-title-link" itemprop="url">大前端</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-12 10:54:13" itemprop="dateCreated datePublished" datetime="2021-01-12T10:54:13+08:00">2021-01-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6908713513271689224">2020前端展望</a></p>
-<h4 id="跨端开发，混合应用，小程序等"><a href="#跨端开发，混合应用，小程序等" class="headerlink" title="跨端开发，混合应用，小程序等"></a>跨端开发，混合应用，小程序等</h4><h4 id="工程化"><a href="#工程化" class="headerlink" title="工程化"></a>工程化</h4><p><a target="_blank" rel="noopener" href="https://chinese.freecodecamp.org/news/front-end-engineering-tutorial/">FCC article：前端工程化</a></p>
-<ul>
-<li>编码规范</li>
-<li>repository规范</li>
-<li>ci/cd</li>
-<li>测试 单元测试 e2e</li>
-<li>性能</li>
-<li>数据上报 requestIdleCallback, restful api</li>
-<li>用户行为收集 metadata, page/input/click… —&gt; kafka Queue —&gt; ElasticSearch</li>
-</ul>
-<p>Tips<br><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000018271575">刷新/关闭页面前发请求</a><br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Navigator/sendBeacon">Navigator.sendBeacon(url, data)</a> 在页面unload时也可以调用</p>
-<h4 id="microservice和serverless"><a href="#microservice和serverless" class="headerlink" title="microservice和serverless"></a>microservice和serverless</h4><h4 id="Interview-T-stack"><a href="#Interview-T-stack" class="headerlink" title="Interview T-stack"></a>Interview T-stack</h4><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7031923575044964389">后端一次性给你10w条数据</a></p>
-<h4 id="网络延迟"><a href="#网络延迟" class="headerlink" title="网络延迟"></a>网络延迟</h4><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903827015991310">抓包工具 Fiddler4 配置移动设备抓取 Https 请求</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/01/08/ResponsiveWebDesign/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/01/08/ResponsiveWebDesign/" class="post-title-link" itemprop="url">响应式设计</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-08 15:47:35" itemprop="dateCreated datePublished" datetime="2021-01-08T15:47:35+08:00">2021-01-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://huaban.com/go/?pin_id=868642718" alt=""><br>移动端‘像素点’密度往往高于桌面显示器，而横纵比例较小，使用移动设备打开页面，可能因为宽度不足产生挤压变形，也可能因为自动像素缩放导致layout变形</p>
-<h4 id="视口-viewport"><a href="#视口-viewport" class="headerlink" title="视口(viewport)"></a>视口(viewport)</h4><p>在document形成的整个视图中，从一个虚拟的窗口观察，视口较小时，需要借助横纵滚动条才能浏览页面<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name&#x3D;”viewport” content&#x3D;”width&#x3D;device-width, initial-scale&#x3D;1, maximum-scale&#x3D;1″&gt;</span><br></pre></td></tr></table></figure><br>视口宽度为设备宽度，初始缩放比例为1，最大缩放比例为1<br>水平滚动条是极差的用户体验，将视口宽度设置为设备宽度，将页面样式调整到方便垂直滚动浏览</p>
-<ul>
-<li>请勿使用较大的固定宽度元素</li>
-<li>不要让内容依赖于特定值的视口宽度</li>
-<li>使用媒体查询为小屏幕和大屏幕应用不同样式<h4 id="Grid"><a href="#Grid" class="headerlink" title="Grid"></a>Grid</h4>如Bootstrap Grid水平分割若干份，计算并罗列每份宽度，使用百分比，block之间用float排列，行末清除浮动<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">.col-1 &#123;width: 8.33%;&#125;</span><br><span class="line">.col-2 &#123;width: 16.66%;&#125;</span><br><span class="line">.col-3 &#123;width: 25%;&#125;</span><br><span class="line">.col-4 &#123;width: 33.33%;&#125;</span><br><span class="line">.col-5 &#123;width: 41.66%;&#125;</span><br><span class="line">.col-6 &#123;width: 50%;&#125;</span><br><span class="line">.col-7 &#123;width: 58.33%;&#125;</span><br><span class="line">.col-8 &#123;width: 66.66%;&#125;</span><br><span class="line">.col-9 &#123;width: 75%;&#125;</span><br><span class="line">.col-10 &#123;width: 83.33%;&#125;</span><br><span class="line">.col-11 &#123;width: 91.66%;&#125;</span><br><span class="line">.col-12 &#123;width: 100%;&#125;</span><br><span class="line">[class*&#x3D;&quot;col-&quot;] &#123;</span><br><span class="line">  float: left;</span><br><span class="line">  padding: 15px;</span><br><span class="line">  border: 1px solid red;</span><br><span class="line">&#125;</span><br><span class="line">.row::after &#123;</span><br><span class="line">  content: &quot;&quot;;</span><br><span class="line">  clear: both;</span><br><span class="line">  display: table;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="Breakpoint"><a href="#Breakpoint" class="headerlink" title="Breakpoint"></a>Breakpoint</h4>设置一个边界，使用媒体查询，实现当宽度越过边界值时，触发从桌面屏幕layout到移动设备layout的跃变<h4 id="Images"><a href="#Images" class="headerlink" title="Images"></a>Images</h4>tip: 图片的拉伸是有限的，专业的做法是为不同设备提供不同的资源<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* For width smaller than 400px: *&#x2F;</span><br><span class="line">body &#123;</span><br><span class="line">  background-image: url(&#39;img_smallflower.jpg&#39;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;* For width 400px and larger: *&#x2F;</span><br><span class="line">@media only screen and (min-width: 400px) &#123;</span><br><span class="line">  body &#123;</span><br><span class="line">    background-image: url(&#39;img_flowers.jpg&#39;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-HTML5 新元素<picture>支持指定多个资源以及媒体条件<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;picture&gt;</span><br><span class="line">  &lt;source srcset&#x3D;&quot;img_smallflower.jpg&quot; media&#x3D;&quot;(max-width: 400px)&quot;&gt;</span><br><span class="line">  &lt;source srcset&#x3D;&quot;img_flowers.jpg&quot;&gt;</span><br><span class="line">  &lt;img src&#x3D;&quot;img_flowers.jpg&quot; alt&#x3D;&quot;Flowers&quot;&gt;</span><br><span class="line">&lt;&#x2F;picture&gt;</span><br></pre></td></tr></table></figure></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2021/01/07/Angular-Carousel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
-      <meta itemprop="name" content="QQs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QQs'Note">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/qqsnote/2021/01/07/Angular-Carousel/" class="post-title-link" itemprop="url">Angular-Carousel</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-07 12:39:28" itemprop="dateCreated datePublished" datetime="2021-01-07T12:39:28+08:00">2021-01-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-06-06 11:23:21" itemprop="dateModified" datetime="2026-06-06T11:23:21+08:00">2026-06-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/qqsnote/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Component, ContentChild, Input, TemplateRef &#125; from &quot;@angular&#x2F;core&quot;;</span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector:&#39;app-partner-carousel&#39;,</span><br><span class="line">    template:&#96;</span><br><span class="line">    &lt;div class&#x3D;&quot;carousel&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;btn-pre&quot; (click)&#x3D;&quot;carouselMove(&#39;LEFT&#39;)&quot; [hidden]&#x3D;&quot;carouselIndex&#x3D;&#x3D;&#x3D;0&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;slick-window&quot;&gt;</span><br><span class="line">        &lt;div class&#x3D;&quot;slick-container&quot; *ngIf&#x3D;&quot;data.length&gt;0&quot; [ngStyle]&#x3D;&quot;carouselAnimotion&quot;&gt;</span><br><span class="line">          &lt;span *ngFor&#x3D;&quot;let dataItem of data&quot;&gt;</span><br><span class="line">            &lt;ng-container</span><br><span class="line">            *ngIf&#x3D;&quot;dataItemTemplateRef&quot;</span><br><span class="line">            [ngTemplateOutlet]&#x3D;&quot;dataItemTemplateRef&quot;</span><br><span class="line">            [ngTemplateOutletContext]&#x3D;&quot;&#123;$implicit:dataItem&#125;&quot;&gt;&lt;&#x2F;ng-container&gt;</span><br><span class="line">          &lt;&#x2F;span&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;btn-next&quot; (click)&#x3D;&quot;carouselMove(&#39;RIGHT&#39;)&quot; [hidden]&#x3D;&quot;carouselIndex&gt;&#x3D;data.length-3&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &#96;,</span><br><span class="line">    styles:[&#96;.carousel&#123;display:flex&#125;&#96;,</span><br><span class="line">    &#96;.slick-window &#123;</span><br><span class="line">      position: relative;</span><br><span class="line">      width: 690px;</span><br><span class="line">      overflow: hidden;</span><br><span class="line">      transform: translateZ(0);</span><br><span class="line">    &#125;&#96;,</span><br><span class="line">    &#96;.slick-container&#123;</span><br><span class="line">      transform: translate3d(0px, 0px, 0px);</span><br><span class="line">      transition: 0.6s ease-in-out;</span><br><span class="line">      &#x2F;&#x2F; width: 1500px;</span><br><span class="line">      position: relative;</span><br><span class="line">      line-height: inherit;</span><br><span class="line">      margin-right: 45px;</span><br><span class="line">      overflow-y: hidden;</span><br><span class="line">    &#125;&#96;,</span><br><span class="line">    &#96;.slick-container&gt;span&#123;display:inline-block&#125;&#96;,</span><br><span class="line">    &#96;.btn-pre, .btn-next &#123;</span><br><span class="line">      &#x2F;&#x2F; width: 15px;</span><br><span class="line">      cursor: pointer;</span><br><span class="line">   &#125;&#96;,</span><br><span class="line">   &#96;.btn-pre::before, .btn-next::before &#123;</span><br><span class="line">      content: &#39;&#39;;</span><br><span class="line">      width: 0;</span><br><span class="line">      height: 0;</span><br><span class="line">      position: absolute;</span><br><span class="line">      top: 16px;</span><br><span class="line">      border-top: 22px solid transparent;</span><br><span class="line">      border-bottom: 22px solid transparent;</span><br><span class="line">   &#125;&#96;,</span><br><span class="line">   &#96;.btn-pre::before &#123;</span><br><span class="line">      border-right: 15px solid #ccc;</span><br><span class="line">      border-left: 0px solid transparent;</span><br><span class="line">      left: -15px;</span><br><span class="line">   &#125;&#96;,</span><br><span class="line">   &#96;.btn-next::before &#123;</span><br><span class="line">      border-right: 0px solid transparent;</span><br><span class="line">      border-left: 15px solid #ccc;</span><br><span class="line">   &#125;&#96;]</span><br><span class="line">&#125;)</span><br><span class="line">export class PartnerCarouselComponent&#123;</span><br><span class="line">  readonly slickWidth &#x3D; 230;</span><br><span class="line">  carouselAnimotion:any &#x3D; &#123;&#125;;</span><br><span class="line">  private _data:Array&lt;any&gt; &#x3D; [];</span><br><span class="line">  @Input() </span><br><span class="line">    set data(value:Array&lt;any&gt;)&#123;</span><br><span class="line">      this.carouselAnimotion.width &#x3D; &#96;$&#123;this.slickWidth * value.length&#125;px&#96;;</span><br><span class="line">      this._data &#x3D; value;</span><br><span class="line">    &#125;</span><br><span class="line">    get data()&#123;</span><br><span class="line">      return this._data;</span><br><span class="line">    &#125;</span><br><span class="line">    @ContentChild(&#39;dataItem&#39;, &#123;static:false&#125;) dataItemTemplateRef:TemplateRef&lt;any&gt;;</span><br><span class="line">    carouselIndex:number &#x3D; 0;</span><br><span class="line">    constructor()&#123;&#125;</span><br><span class="line"></span><br><span class="line">    carouselMove(orient: string) &#123;</span><br><span class="line">        let distance &#x3D; 0;</span><br><span class="line">        if (orient &#x3D;&#x3D;&#x3D; &#39;LEFT&#39;) &#123;</span><br><span class="line">          this.carouselIndex &#x3D; this.carouselIndex &gt; 3 ? this.carouselIndex -&#x3D; 3 : 0</span><br><span class="line">        &#125;</span><br><span class="line">        if (orient &#x3D;&#x3D;&#x3D; &#39;RIGHT&#39;) &#123;</span><br><span class="line">          this.carouselIndex &#x3D; this.carouselIndex &lt; this._data.length - 5 ? this.carouselIndex +&#x3D; 3 : this._data.length - 3;</span><br><span class="line">        &#125;</span><br><span class="line">        distance &#x3D; this.slickWidth * this.carouselIndex;</span><br><span class="line">        this.carouselAnimotion.transform &#x3D; &#96;translate3d(-$&#123;distance&#125;px, 0px, 0px)&#96;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="滑动原理"><a href="#滑动原理" class="headerlink" title="滑动原理"></a>滑动原理</h4><p>position: relative和transform: translateZ(0)将‘窗口’定位，其子元素是宽度超过屏幕宽度的所有滑块的集合，这个超长的‘胶片’用translate3d控制移动，使其某一格可以暴露在窗口中<br>移动的动画效果为 transition: 0.6s ease-in-out</p>
-<h4 id="循环体套用父元素模板"><a href="#循环体套用父元素模板" class="headerlink" title="循环体套用父元素模板"></a>循环体套用父元素模板</h4><p>子组件(Carousel)中，为每个item套用其宿主定义的template，这里用到了NgContainer和TemplateRef，NgContainer使组件可以内嵌视图模板，内嵌的内容（ng-template）用ViewChild读取，此处声明为dataItemTemplateRef，使用NgTemplateOutlet指令将dataItemTemplateRef插入到ng-content位置，同时可以用ngTemplateOutletContext指令为内嵌视图附加一个上下文对象，显然就是为传递循环体的item打造的。<br>使用#id指定要插入到ng-container的template<br><a target="_blank" rel="noopener" href="https://angular.cn/api/common/NgTemplateOutlet#example">官方示例</a>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;ng-container *ngTemplateOutlet&#x3D;&quot;greet&quot;&gt;&lt;&#x2F;ng-container&gt;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line">&lt;ng-container *ngTemplateOutlet&#x3D;&quot;eng; context: myContext&quot;&gt;&lt;&#x2F;ng-container&gt;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line">&lt;ng-container *ngTemplateOutlet&#x3D;&quot;svk; context: myContext&quot;&gt;&lt;&#x2F;ng-container&gt;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line"></span><br><span class="line">&lt;ng-template #greet&gt;&lt;span&gt;Hello&lt;&#x2F;span&gt;&lt;&#x2F;ng-template&gt;</span><br><span class="line">&lt;ng-template #eng let-name&gt;&lt;span&gt;Hello &#123;&#123;name&#125;&#125;!&lt;&#x2F;span&gt;&lt;&#x2F;ng-template&gt;</span><br><span class="line">&lt;ng-template #svk let-person&#x3D;&quot;localSk&quot;&gt;&lt;span&gt;Ahoj &#123;&#123;person&#125;&#125;!&lt;&#x2F;span&gt;&lt;&#x2F;ng-template&gt;</span><br></pre></td></tr></table></figure><br>其中 myContext = {$implicit: ‘World’, localSk: ‘Svet’};模板中用let-绑定上下文, $implicit(implicit 隐式的)指默认值，也就是例如let-keyXX=”parameterXX”的语法在缺省=”parameterXX”的表达下的值</p>
-<h4 id="响应式解决方案"><a href="#响应式解决方案" class="headerlink" title="响应式解决方案"></a>响应式解决方案</h4><p>npm install @angular/sdk<br>注意该package大版本跟随Angular版本<br><a target="_blank" rel="noopener" href="https://material.angular.io/cdk/layout/overview">Angular CDK Layout</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">constructor(private breakpointObserver: BreakpointObserver) &#123;</span><br><span class="line">    this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).subscribe(result &#x3D;&gt; &#123;</span><br><span class="line">      if (result.matches) &#123;</span><br><span class="line">        &#x2F;&#x2F; max-width: 959px</span><br><span class="line">        this.windowWidth &#x3D; &#123; width: &#96;$&#123;this.slickWidth&#125;px&#96; &#125;;</span><br><span class="line">        this.interval &#x3D; 1;</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        this.windowWidth &#x3D; &#123; width: &#96;$&#123;this.slickWidth * 3&#125;px&#96; &#125;;</span><br><span class="line">        this.interval &#x3D; 3;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1104,7 +1077,7 @@ HTML5 新元素<picture>支持指定多个资源以及媒体条件<figure class=
       <div class="site-state-item site-state-posts">
           <a href="/qqsnote/archives/">
         
-          <span class="site-state-item-count">405</span>
+          <span class="site-state-item-count">408</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1115,7 +1088,7 @@ HTML5 新元素<picture>支持指定多个资源以及媒体条件<figure class=
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/qqsnote/tags/">
-        <span class="site-state-item-count">211</span>
+        <span class="site-state-item-count">226</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1126,7 +1099,7 @@ HTML5 新元素<picture>支持指定多个资源以及媒体条件<figure class=
       </div>
 
       <div class="tag-cloud-tags">
-        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3D/" style="font-size: 13.29px; color: #d0d0d0">3D</a> <a href="/qqsnote/tags/3DGS/" style="font-size: 12px; color: #ccc">3DGS</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 23.57px; color: #ededed">AI</a> <a href="/qqsnote/tags/AI-Coding/" style="font-size: 12px; color: #ccc">AI Coding</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Agent/" style="font-size: 12px; color: #ccc">Agent</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 28.71px; color: #fbfbfb">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.29px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24.86px; color: #f0f0f0">Azure</a> <a href="/qqsnote/tags/BVH/" style="font-size: 12px; color: #ccc">BVH</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 15.86px; color: #d7d7d7">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 15.86px; color: #d7d7d7">C++</a> <a href="/qqsnote/tags/CAD/" style="font-size: 12px; color: #ccc">CAD</a> <a href="/qqsnote/tags/CI-CD/" style="font-size: 12px; color: #ccc">CI/CD</a> <a href="/qqsnote/tags/CSS/" style="font-size: 17.14px; color: #dbdbdb">CSS</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/Context-Engineering/" style="font-size: 12px; color: #ccc">Context Engineering</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 17.14px; color: #dbdbdb">DevOps</a> <a href="/qqsnote/tags/DevSecOps/" style="font-size: 12px; color: #ccc">DevSecOps</a> <a href="/qqsnote/tags/Digital-Twin/" style="font-size: 12px; color: #ccc">Digital Twin</a> <a href="/qqsnote/tags/Docker/" style="font-size: 17.14px; color: #dbdbdb">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 15.86px; color: #d7d7d7">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.29px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Flow-Graph/" style="font-size: 13.29px; color: #d0d0d0">Flow Graph</a> <a href="/qqsnote/tags/GitHub/" style="font-size: 12px; color: #ccc">GitHub</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/HMI/" style="font-size: 12px; color: #ccc">HMI</a> <a href="/qqsnote/tags/Halcon/" style="font-size: 12px; color: #ccc">Halcon</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.29px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 18.43px; color: #dedede">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/Knowledge-Graph/" style="font-size: 12px; color: #ccc">Knowledge Graph</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.57px; color: #d3d3d3">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Linux/" style="font-size: 22.29px; color: #e9e9e9">Linux</a> <a href="/qqsnote/tags/MCP/" style="font-size: 12px; color: #ccc">MCP</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MVVM/" style="font-size: 12px; color: #ccc">MVVM</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.29px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/Modbus/" style="font-size: 12px; color: #ccc">Modbus</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 17.14px; color: #dbdbdb">Node.js</a> <a href="/qqsnote/tags/OCCT/" style="font-size: 12px; color: #ccc">OCCT</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.29px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 19.71px; color: #e2e2e2">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 14.57px; color: #d3d3d3">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PLC/" style="font-size: 13.29px; color: #d0d0d0">PLC</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Prism/" style="font-size: 12px; color: #ccc">Prism</a> <a href="/qqsnote/tags/Proxy/" style="font-size: 12px; color: #ccc">Proxy</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 24.86px; color: #f0f0f0">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/ROS2/" style="font-size: 14.57px; color: #d3d3d3">ROS2</a> <a href="/qqsnote/tags/RS-485/" style="font-size: 12px; color: #ccc">RS-485</a> <a href="/qqsnote/tags/React/" style="font-size: 19.71px; color: #e2e2e2">React</a> <a href="/qqsnote/tags/React-Flow/" style="font-size: 12px; color: #ccc">React Flow</a> <a href="/qqsnote/tags/Rust/" style="font-size: 12px; color: #ccc">Rust</a> <a href="/qqsnote/tags/SDLC/" style="font-size: 12px; color: #ccc">SDLC</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.57px; color: #d3d3d3">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Squid/" style="font-size: 12px; color: #ccc">Squid</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 22.29px; color: #e9e9e9">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 15.86px; color: #d7d7d7">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/URDF/" style="font-size: 12px; color: #ccc">URDF</a> <a href="/qqsnote/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/qqsnote/tags/VLA/" style="font-size: 13.29px; color: #d0d0d0">VLA</a> <a href="/qqsnote/tags/VTK/" style="font-size: 12px; color: #ccc">VTK</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/Vue-js/" style="font-size: 12px; color: #ccc">Vue.js</a> <a href="/qqsnote/tags/WPF/" style="font-size: 15.86px; color: #d7d7d7">WPF</a> <a href="/qqsnote/tags/Web/" style="font-size: 12px; color: #ccc">Web</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21px; color: #e6e6e6">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 27.43px; color: #f8f8f8">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/dify/" style="font-size: 12px; color: #ccc">dify</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.29px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/http2/" style="font-size: 12px; color: #ccc">http2</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 26.14px; color: #f4f4f4">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.29px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 15.86px; color: #d7d7d7">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 17.14px; color: #dbdbdb">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.57px; color: #d3d3d3">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14.57px; color: #d3d3d3">上位机</a> <a href="/qqsnote/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">传感器</a> <a href="/qqsnote/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/" style="font-size: 12px; color: #ccc">光线追踪</a> <a href="/qqsnote/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/" style="font-size: 14.57px; color: #d3d3d3">具身智能</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 15.86px; color: #d7d7d7">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.29px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%9B%E5%85%83%E6%95%B0/" style="font-size: 12px; color: #ccc">四元数</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" style="font-size: 12px; color: #ccc">图像分割</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 19.71px; color: #e2e2e2">图形学</a> <a href="/qqsnote/tags/%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" style="font-size: 17.14px; color: #dbdbdb">坐标变换</a> <a href="/qqsnote/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" style="font-size: 12px; color: #ccc">多模态</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.29px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 22.29px; color: #e9e9e9">学习笔记</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E5%AE%89%E5%85%A8/" style="font-size: 12px; color: #ccc">工业安全</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89/" style="font-size: 14.57px; color: #d3d3d3">工业视觉</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" style="font-size: 14.57px; color: #d3d3d3">工业软件</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" style="font-size: 12px; color: #ccc">工业通信</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.57px; color: #d3d3d3">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.29px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%89%8B%E7%9C%BC%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">手眼标定</a> <a href="/qqsnote/tags/%E6%89%A7%E8%A1%8C%E5%99%A8/" style="font-size: 12px; color: #ccc">执行器</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 15.86px; color: #d7d7d7">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%97%8B%E8%BD%AC/" style="font-size: 12px; color: #ccc">旋转</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 12px; color: #ccc">机器人</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A1%AC%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人硬件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%AF%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人软件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89/" style="font-size: 14.57px; color: #d3d3d3">机器视觉</a> <a href="/qqsnote/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 13.29px; color: #d0d0d0">机械臂</a> <a href="/qqsnote/tags/%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">标定</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/" style="font-size: 12px; color: #ccc">桌面应用</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E6%AF%94%E4%BE%8B%E9%98%80/" style="font-size: 12px; color: #ccc">比例阀</a> <a href="/qqsnote/tags/%E6%B5%81%E5%BC%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">流式处理</a> <a href="/qqsnote/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">深度学习</a> <a href="/qqsnote/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 12px; color: #ccc">物联网</a> <a href="/qqsnote/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13.29px; color: #d0d0d0">环境变量</a> <a href="/qqsnote/tags/%E7%94%9F%E4%BF%A1%E5%88%86%E6%9E%90/" style="font-size: 12px; color: #ccc">生信分析</a> <a href="/qqsnote/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">目标检测</a> <a href="/qqsnote/tags/%E7%9B%B8%E6%9C%BA%E6%A0%87%E5%AE%9A/" style="font-size: 13.29px; color: #d0d0d0">相机标定</a> <a href="/qqsnote/tags/%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/" style="font-size: 12px; color: #ccc">碰撞检测</a> <a href="/qqsnote/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 12px; color: #ccc">神经网络</a> <a href="/qqsnote/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14.57px; color: #d3d3d3">算法</a> <a href="/qqsnote/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 12px; color: #ccc">编码规范</a> <a href="/qqsnote/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%8E%A7%E5%88%B6/" style="font-size: 14.57px; color: #d3d3d3">自动化控制</a> <a href="/qqsnote/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 12px; color: #ccc">英语</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E5%89%AA%E8%BE%91/" style="font-size: 12px; color: #ccc">视频剪辑</a> <a href="/qqsnote/tags/%E8%A7%86%E9%A2%91%E6%B5%81/" style="font-size: 12px; color: #ccc">视频流</a>
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3D/" style="font-size: 13.38px; color: #d0d0d0">3D</a> <a href="/qqsnote/tags/3DGS/" style="font-size: 12px; color: #ccc">3DGS</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 25.85px; color: #f3f3f3">AI</a> <a href="/qqsnote/tags/AI-Coding/" style="font-size: 12px; color: #ccc">AI Coding</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Agent/" style="font-size: 13.38px; color: #d0d0d0">Agent</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 28.62px; color: #fbfbfb">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.38px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24.46px; color: #efefef">Azure</a> <a href="/qqsnote/tags/BVH/" style="font-size: 12px; color: #ccc">BVH</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 16.15px; color: #d8d8d8">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.15px; color: #d8d8d8">C++</a> <a href="/qqsnote/tags/CAD/" style="font-size: 12px; color: #ccc">CAD</a> <a href="/qqsnote/tags/CI-CD/" style="font-size: 12px; color: #ccc">CI/CD</a> <a href="/qqsnote/tags/CPD/" style="font-size: 12px; color: #ccc">CPD</a> <a href="/qqsnote/tags/CSS/" style="font-size: 17.54px; color: #dcdcdc">CSS</a> <a href="/qqsnote/tags/Chrome-DevTools/" style="font-size: 12px; color: #ccc">Chrome DevTools</a> <a href="/qqsnote/tags/Codex/" style="font-size: 12px; color: #ccc">Codex</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/Context-Engineering/" style="font-size: 12px; color: #ccc">Context Engineering</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 17.54px; color: #dcdcdc">DevOps</a> <a href="/qqsnote/tags/DevSecOps/" style="font-size: 12px; color: #ccc">DevSecOps</a> <a href="/qqsnote/tags/Digital-Twin/" style="font-size: 12px; color: #ccc">Digital Twin</a> <a href="/qqsnote/tags/Docker/" style="font-size: 17.54px; color: #dcdcdc">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.15px; color: #d8d8d8">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.38px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Flow-Graph/" style="font-size: 13.38px; color: #d0d0d0">Flow Graph</a> <a href="/qqsnote/tags/GitHub/" style="font-size: 12px; color: #ccc">GitHub</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/HMI/" style="font-size: 12px; color: #ccc">HMI</a> <a href="/qqsnote/tags/Halcon/" style="font-size: 12px; color: #ccc">Halcon</a> <a href="/qqsnote/tags/ICP/" style="font-size: 12px; color: #ccc">ICP</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.38px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 18.92px; color: #e0e0e0">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/Knowledge-Graph/" style="font-size: 12px; color: #ccc">Knowledge Graph</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.77px; color: #d4d4d4">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Lighthouse/" style="font-size: 12px; color: #ccc">Lighthouse</a> <a href="/qqsnote/tags/Linux/" style="font-size: 23.08px; color: #ebebeb">Linux</a> <a href="/qqsnote/tags/MCP/" style="font-size: 12px; color: #ccc">MCP</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MVVM/" style="font-size: 12px; color: #ccc">MVVM</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.38px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/Modbus/" style="font-size: 12px; color: #ccc">Modbus</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 17.54px; color: #dcdcdc">Node.js</a> <a href="/qqsnote/tags/OCCT/" style="font-size: 12px; color: #ccc">OCCT</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.38px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/Open3D/" style="font-size: 12px; color: #ccc">Open3D</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 20.31px; color: #e4e4e4">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 14.77px; color: #d4d4d4">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PLC/" style="font-size: 13.38px; color: #d0d0d0">PLC</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Playwright/" style="font-size: 12px; color: #ccc">Playwright</a> <a href="/qqsnote/tags/Prism/" style="font-size: 12px; color: #ccc">Prism</a> <a href="/qqsnote/tags/Proxy/" style="font-size: 12px; color: #ccc">Proxy</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 25.85px; color: #f3f3f3">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/ROS2/" style="font-size: 14.77px; color: #d4d4d4">ROS2</a> <a href="/qqsnote/tags/RS-485/" style="font-size: 12px; color: #ccc">RS-485</a> <a href="/qqsnote/tags/React/" style="font-size: 20.31px; color: #e4e4e4">React</a> <a href="/qqsnote/tags/React-Flow/" style="font-size: 12px; color: #ccc">React Flow</a> <a href="/qqsnote/tags/Rust/" style="font-size: 12px; color: #ccc">Rust</a> <a href="/qqsnote/tags/SDLC/" style="font-size: 12px; color: #ccc">SDLC</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.77px; color: #d4d4d4">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Squid/" style="font-size: 12px; color: #ccc">Squid</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 23.08px; color: #ebebeb">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 16.15px; color: #d8d8d8">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/URDF/" style="font-size: 12px; color: #ccc">URDF</a> <a href="/qqsnote/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/qqsnote/tags/VLA/" style="font-size: 13.38px; color: #d0d0d0">VLA</a> <a href="/qqsnote/tags/VTK/" style="font-size: 12px; color: #ccc">VTK</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/Vitest/" style="font-size: 12px; color: #ccc">Vitest</a> <a href="/qqsnote/tags/Vue-js/" style="font-size: 12px; color: #ccc">Vue.js</a> <a href="/qqsnote/tags/WPF/" style="font-size: 16.15px; color: #d8d8d8">WPF</a> <a href="/qqsnote/tags/Web/" style="font-size: 12px; color: #ccc">Web</a> <a href="/qqsnote/tags/Web-Vitals/" style="font-size: 12px; color: #ccc">Web Vitals</a> <a href="/qqsnote/tags/Web3D/" style="font-size: 12px; color: #ccc">Web3D</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21.69px; color: #e7e7e7">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 30px; color: #fff">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/dify/" style="font-size: 12px; color: #ccc">dify</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.38px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 27.23px; color: #f7f7f7">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.38px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.15px; color: #d8d8d8">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 17.54px; color: #dcdcdc">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.77px; color: #d4d4d4">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%89%E7%BB%B4%E9%87%8D%E5%BB%BA/" style="font-size: 12px; color: #ccc">三维重建</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14.77px; color: #d4d4d4">上位机</a> <a href="/qqsnote/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">传感器</a> <a href="/qqsnote/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/" style="font-size: 12px; color: #ccc">光线追踪</a> <a href="/qqsnote/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/" style="font-size: 14.77px; color: #d4d4d4">具身智能</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD/" style="font-size: 12px; color: #ccc">前端性能</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.15px; color: #d8d8d8">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.38px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%9B%E5%85%83%E6%95%B0/" style="font-size: 12px; color: #ccc">四元数</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" style="font-size: 12px; color: #ccc">图像分割</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 20.31px; color: #e4e4e4">图形学</a> <a href="/qqsnote/tags/%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" style="font-size: 17.54px; color: #dcdcdc">坐标变换</a> <a href="/qqsnote/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" style="font-size: 12px; color: #ccc">多模态</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.38px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 23.08px; color: #ebebeb">学习笔记</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E5%AE%89%E5%85%A8/" style="font-size: 12px; color: #ccc">工业安全</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89/" style="font-size: 16.15px; color: #d8d8d8">工业视觉</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" style="font-size: 14.77px; color: #d4d4d4">工业软件</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" style="font-size: 12px; color: #ccc">工业通信</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.77px; color: #d4d4d4">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.38px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%89%8B%E7%9C%BC%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">手眼标定</a> <a href="/qqsnote/tags/%E6%89%A7%E8%A1%8C%E5%99%A8/" style="font-size: 12px; color: #ccc">执行器</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 16.15px; color: #d8d8d8">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%96%B0%E8%A7%86%E8%A7%92%E5%90%88%E6%88%90/" style="font-size: 12px; color: #ccc">新视角合成</a> <a href="/qqsnote/tags/%E6%97%8B%E8%BD%AC/" style="font-size: 12px; color: #ccc">旋转</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 13.38px; color: #d0d0d0">机器人</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A1%AC%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人硬件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%AF%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人软件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89/" style="font-size: 14.77px; color: #d4d4d4">机器视觉</a> <a href="/qqsnote/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 13.38px; color: #d0d0d0">机械臂</a> <a href="/qqsnote/tags/%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">标定</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/" style="font-size: 12px; color: #ccc">桌面应用</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E6%AF%94%E4%BE%8B%E9%98%80/" style="font-size: 12px; color: #ccc">比例阀</a> <a href="/qqsnote/tags/%E6%B5%81%E5%BC%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">流式处理</a> <a href="/qqsnote/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 12px; color: #ccc">测试</a> <a href="/qqsnote/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">深度学习</a>
       </div>
     </div>
   </aside>

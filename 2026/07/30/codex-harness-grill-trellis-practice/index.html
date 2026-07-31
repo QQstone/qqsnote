@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/qqsnote/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/qqsnote/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/qqsnote/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/qqsnote/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/qqsnote/css/main.css">
+
+
+<link rel="stylesheet" href="/qqsnote/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qqstone.github.io","root":"/qqsnote/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="本文区分官方事实、他人经验、本地实验、工程判断，最后核对时间为 2026-07-30。文中的一次实验只能说明这条流程如何运转、会生成什么、在哪里失效，不能当作工具提升任务成功率的 benchmark。 概念分层和工具边界见 AI Agent工程化地图。本文只记录这条具体开发链路的复现与判断。 为避免把不同强度的证据混在一起，正文使用以下标签：  [官方事实]：来自固定版本的仓库、包元数据或官方文档">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Grill-me × Trellis × Codex实践：项目级Harness如何落地">
+<meta property="og:url" content="http://qqstone.github.io/qqsnote/2026/07/30/codex-harness-grill-trellis-practice/index.html">
+<meta property="og:site_name" content="QQs&#39;Note">
+<meta property="og:description" content="本文区分官方事实、他人经验、本地实验、工程判断，最后核对时间为 2026-07-30。文中的一次实验只能说明这条流程如何运转、会生成什么、在哪里失效，不能当作工具提升任务成功率的 benchmark。 概念分层和工具边界见 AI Agent工程化地图。本文只记录这条具体开发链路的复现与判断。 为避免把不同强度的证据混在一起，正文使用以下标签：  [官方事实]：来自固定版本的仓库、包元数据或官方文档">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-07-30T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-31T05:50:29.055Z">
+<meta property="article:author" content="QQs">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="软件工程">
+<meta property="article:tag" content="Codex">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://qqstone.github.io/qqsnote/2026/07/30/codex-harness-grill-trellis-practice/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+
+  <title>Grill-me × Trellis × Codex实践：项目级Harness如何落地 | QQs'Note</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/qqsnote/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QQs'Note</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/qqsnote/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/qqsnote/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-graph">
+
+    <a href="/qqsnote/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://qqstone.github.io/qqsnote/2026/07/30/codex-harness-grill-trellis-practice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/qqsnote/images/avatar.gif">
+      <meta itemprop="name" content="QQs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QQs'Note">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Grill-me × Trellis × Codex实践：项目级Harness如何落地
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-07-30 20:00:00" itemprop="dateCreated datePublished" datetime="2026-07-30T20:00:00+08:00">2026-07-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-07-31 13:50:29" itemprop="dateModified" datetime="2026-07-31T13:50:29+08:00">2026-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文区分<strong>官方事实、他人经验、本地实验、工程判断</strong>，最后核对时间为 <strong>2026-07-30</strong>。文中的一次实验只能说明这条流程如何运转、会生成什么、在哪里失效，不能当作工具提升任务成功率的 benchmark。</p>
+<p>概念分层和工具边界见 <a href="/qqsnote/2026/07/22/ai-agent-multi-agent-planning-harness-2026/" title="AI Agent工程化地图">AI Agent工程化地图</a>。本文只记录这条具体开发链路的复现与判断。</p>
+<p>为避免把不同强度的证据混在一起，正文使用以下标签：</p>
+<ul>
+<li><strong>[官方事实]</strong>：来自固定版本的仓库、包元数据或官方文档；若正文没有成功获取，会明确写成“本次未核验”。</li>
+<li><strong>[他人经验]</strong>：来自参考文章的实践主张，不替代当前版本文档。</li>
+<li><strong>[本地实验]</strong>：来自可丢弃仓库复现或本地缓存源码静态核验；正文会注明具体方式，结论受实验设置限制。</li>
+<li><strong>[工程判断]</strong>：基于上述材料给出的采用建议，不是厂商承诺。</li>
+</ul>
+<h2 id="一、我为什么试这条链路"><a href="#一、我为什么试这条链路" class="headerlink" title="一、我为什么试这条链路"></a>一、我为什么试这条链路</h2><p>我关心的不是再给 Codex 叠一层提示词，而是一个更具体的问题：一句模糊需求进入仓库后，怎样留下足够稳定的需求、上下文、测试和 Git 证据，使下一次会话仍能继续工作？</p>
+<p>以“给设备告警增加确认功能”为例，真正影响实现的不是 <code>acknowledge()</code> 这个方法名，而是下面这些没有写进原需求的决策：谁能确认、操作人是否必填、重复请求是幂等还是冲突、时间从哪里来、未知告警怎样处理，以及本次是否顺带引入持久化。Codex 可以通过读仓库和追问补齐它们，但如果结果只留在对话里，长任务交接时仍会丢失。</p>
+<p><strong>[工程判断]</strong> 我把项目级 Harness 理解为三类东西的组合：</p>
+<ol>
+<li>约束 Agent 行为的仓库指令和 workflow guidance；</li>
+<li>跨会话保存意图与状态的项目文件；</li>
+<li>能独立运行的测试、校验脚本、CI 和 Git 记录。</li>
+</ol>
+<p>这三类东西的可信度不同。提示词告诉 Agent“应该做什么”，脚本和测试只有在被调用时才会产生机械结果，PRD 则只保存已经做出的决策。把它们统称为“自动化”会掩盖关键边界。</p>
+<h2 id="二、参考方案究竟主张什么"><a href="#二、参考方案究竟主张什么" class="headerlink" title="二、参考方案究竟主张什么"></a>二、参考方案究竟主张什么</h2><p><strong>[他人经验]</strong> 参考文章 <a target="_blank" rel="noopener" href="https://blog.wcxian.cc/posts/grill-x-trellis/">Grill x Trellis</a> 提议先用 Matt Pocock 的 <code>grill-me</code> 追问需求，再把共识转成 Trellis 的 PRD/Spec/Journal，最后由编码 Agent 实现、检查和收尾。它认为这种分工能覆盖从需求澄清到知识留存的生命周期，同时也承认 token 成本、团队纪律、回答质量、Spec 维护和版本变化会影响收益；对于一次性原型、很小的个人项目和边界明显的小改动，完整流程回报较低。</p>
+<p>这个思路有用，但需要先把“原版来源”“第三方扩展”和“当前 Trellis”拆开。</p>
+<p><strong>[官方事实]</strong> 在 2026-07-29 观察到的 <a target="_blank" rel="noopener" href="https://github.com/mattpocock/skills/tree/2ab958093e83e0ec752e6c1c5932da465bf23e0c">mattpocock/skills 固定树 <code>2ab9580</code></a> 中，<code>grill-me</code> 只委托进入 <code>grilling</code>。后者要求：每次只问一个问题、每个问题给出推荐、能从环境查到的事实先查、在采取行动前确认双方理解一致。这个原版没有强制生成根目录 <code>PLAN.md</code>、<code>SPEC.md</code>，也没有规定“总结之后必须再发一条单独批准消息”。</p>
+<p>网上还能找到 <code>chaseai-yt/grill-me-codex</code>。<strong>[本地实验]</strong> 本次做的是本地缓存源码静态核验：拿到的哈希缓存归档前缀为 <code>fe37a70</code>，归档 SHA-256 为 <code>668bd9ea4cae8991a402e5d69e8b8842b28db8eb99b95c1e087aa600ca8d7366</code>。源码指示 Agent 生成 <code>PLAN.md</code> 和 <code>PLAN-REVIEW-LOG.md</code>，并反复执行只读 Codex 审查；本次没有验证这些步骤的实际执行。它不是上面那个 Matt Pocock 原版，而且没有解析出完整上游 commit/date，因此不能用它的指示反推当前上游行为。</p>
+<p><strong>[官方事实]</strong> Trellis <code>0.6.10</code> 的 <code>brainstorm</code> 模板也要求每次只问一个由用户决定的问题，并先检查代码、测试、配置、文档、spec 和任务历史。它还指导 Agent 维护 <code>prd.md</code>，复杂任务补充 <code>design.md</code>、<code>implement.md</code>，汇总后等待后续显式批准，再调用任务启动脚本。这里的“指导”和“等待”是 prompt/workflow guidance，不是独立的审批事务引擎。</p>
+<p>所以两者的重叠点是<strong>提问节奏和先查仓库</strong>，差异是 Trellis 继续管理项目内产物、任务状态、检查和归档。它们不是两个必须串联的互补模块：当 PRD 已经覆盖未决事项时，再跑一轮 grilling 可能只是重复消耗；当需求仍含高代价决策时，grilling 才有增量价值。</p>
+<h2 id="三、先纠正几个版本与产物问题"><a href="#三、先纠正几个版本与产物问题" class="headerlink" title="三、先纠正几个版本与产物问题"></a>三、先纠正几个版本与产物问题</h2><p><strong>1. 平台数会随版本漂移。</strong> 参考文章在 2026-06-29 写的是 16 个平台；<strong>[官方事实]</strong> Trellis <code>v0.6.10</code> README 写的是 20 个。数字变化说明适配面在变，不证明不同 adapter 的功能完全对齐。</p>
+<p><strong>2. 稳定版与 beta 要分开。</strong> <strong>[官方事实]</strong> npm 快照显示 <code>@mindfoldhq/trellis</code> 稳定版为 <code>0.6.10</code>，发布时间 <code>2026-07-28T10:08:12.368Z</code>；beta 为 <code>0.7.0-beta.0</code>。<code>v0.6.10</code> 和观察时的 <code>main</code> 都解析到 <code>c94d6fc289b7a6fdd9480bdfae4d4639c9ac2d4c</code>。许可证元数据是 <code>AGPL-3.0-only</code>。<strong>[工程判断]</strong> 引入企业仓库前，应由团队评估分发和合规边界。</p>
+<p><strong>3. 根目录 PLAN/SPEC 不会自动变成 Trellis 任务。</strong> <strong>[本地实验]</strong> 初始化前，我在根 <code>PLAN.md</code> 和 <code>SPEC.md</code> 放入唯一 sentinel。<code>trellis init</code> 和任务创建后，sentinel 仍只存在于原文件。对 <code>0.6.10</code> 的完整顶层帮助、各子命令帮助和命令注册源码进行限定搜索，也没有发现导入任意根 <code>PLAN.md</code> / <code>SPEC.md</code> 的命令或处理器。后来的 <code>prd.md</code>、<code>design.md</code>、<code>implement.md</code> 都是手工映射，不是自动转换。</p>
+<p><strong>4. 当前 Codex 侧名称与旧文章不同。</strong> <strong>[本地实验]</strong> <code>0.6.10</code> 实际生成的 Codex skills 是 <code>trellis-start</code>、<code>trellis-check</code>、<code>trellis-finish-work</code>。没有生成 <code>trellis-record-session</code>；journal 记录被并入 finish 的指导流程。<code>trellis-check</code> 与 <code>trellis-finish-work</code> 也不是 shell executable，而是 Agent 读取的 skill。</p>
+<p><strong>5. 代码搜索不是最后追加的一站。</strong> <strong>[工程判断]</strong> 对仓库事实的检查应该发生在需求澄清、计划、实现之前和过程中。先查现有状态模型与测试，才能提出正确问题；改动时还要继续定位调用者、惯例和影响面；验证时再核对 diff。把搜索工具排成“Codex 写完之后才执行的 codebase-memory 阶段”，会让前面的规格建立在想象而不是代码上。</p>
+<h2 id="四、一次真实复现：设备告警确认功能"><a href="#四、一次真实复现：设备告警确认功能" class="headerlink" title="四、一次真实复现：设备告警确认功能"></a>四、一次真实复现：设备告警确认功能</h2><h3 id="1-基线与模糊需求"><a href="#1-基线与模糊需求" class="headerlink" title="1. 基线与模糊需求"></a>1. 基线与模糊需求</h3><p><strong>[本地实验]</strong> 我在一个小型 Node.js fixture 中使用这句起始需求：</p>
+<blockquote>
+<p>Add alarm acknowledgement so an operator can acknowledge an active device alarm.</p>
+</blockquote>
+<p>先读仓库得到四个事实：</p>
+<ul>
+<li><code>src/alarm-store.js</code> 用 <code>Map</code> 保存告警，初始 <code>status</code> 是 <code>active</code>，<code>acknowledgement</code> 是 <code>null</code>；</li>
+<li>时间由可注入的 ISO 时间函数提供；</li>
+<li><code>raise()</code> 和 <code>get()</code> 返回结构化克隆；</li>
+<li>基线只有 raise/get、拷贝隔离、重复 raise、缺失 get 四项测试，没有 clear/resolve 或持久化。</li>
+</ul>
+<p>安装步骤本身也留下了边界。<code>skills@1.5.21</code> 执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">skills add mattpocock/skills --skill grill-me --agent codex -y</span><br></pre></td></tr></table></figure>
+<p>因为无法解析 <code>github.com</code>，<strong>退出码是 1，网络安装没有成功</strong>。实验随后使用带 SHA-256 记录的 Matt Pocock 官方来源缓存作为 fallback。这个降级路径保证能复核采用了哪份文本，但不能写成“已成功安装 grill-me”。</p>
+<h3 id="2-grill-me实际问出了什么：规则驱动的预设决策记录"><a href="#2-grill-me实际问出了什么：规则驱动的预设决策记录" class="headerlink" title="2. grill-me实际问出了什么：规则驱动的预设决策记录"></a>2. grill-me实际问出了什么：规则驱动的预设决策记录</h3><p>前面的安装已经退出 1。下表八个问题是依照哈希缓存中的一次一问、先查环境等规则整理的；accepted answers 来自 Task 4 预设实验契约，不是一次成功安装后的自由访谈。本实验验证的是怎样把模糊请求映射成验收决策，不验证 <code>grill-me</code> 的自主问答效果。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>未决问题</th>
+<th>接受的决定</th>
+<th>对实现/测试的影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>哪些状态可确认</td>
+<td>只允许 active 告警</td>
+<td>不发明不存在的历史状态语义</td>
+</tr>
+<tr>
+<td>操作人身份</td>
+<td><code>operatorId</code> 必填且不能全是空白</td>
+<td>增加输入校验</td>
+</tr>
+<tr>
+<td>备注</td>
+<td>可选，缺省归一成 <code>null</code></td>
+<td>保持记录结构稳定</td>
+</tr>
+<tr>
+<td>审计字段</td>
+<td><code>&#123; operatorId, note, acknowledgedAt &#125;</code></td>
+<td>时间来自注入时钟</td>
+</tr>
+<tr>
+<td>同一操作人重试</td>
+<td>返回原告警，不再次读取时钟</td>
+<td>幂等且保留首次审计事实</td>
+</tr>
+<tr>
+<td>不同操作人再次确认</td>
+<td>拒绝</td>
+<td>不静默覆盖首次记录</td>
+</tr>
+<tr>
+<td>未知告警 ID</td>
+<td>拒绝</td>
+<td>确认不是 upsert</td>
+</tr>
+<tr>
+<td>clear/resolve 与持久化</td>
+<td>不在本次范围</td>
+<td>控制变更面</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>原始一句话只部分表达了“active-only”，没有定义校验、重试/冲突、记录结构、时钟来源、克隆边界和范围排除。<strong>[工程判断]</strong> 这类规则驱动澄清的潜在价值不在于问题数量，而在于把会改变测试 oracle 的用户决策提到写代码之前；这项价值仍需在真实交互中另行验证。</p>
+<p>这份预设记录覆盖了 Trellis brainstorm 和 grilling 共同关注的部分维度，但 prompt 执行不是确定性的。本次实验不能证明两者会逐字、按相同顺序问出这八题；当八项决定已经写入 PRD 后，Trellis 的收敛指导应只处理剩余缺口，这仍是预期的 Agent 行为，不是防重复的机械保证。</p>
+<h3 id="3-怎样交接给Trellis"><a href="#3-怎样交接给Trellis" class="headerlink" title="3. 怎样交接给Trellis"></a>3. 怎样交接给Trellis</h3><p>实验使用控制器提供的本地固定版 <code>@mindfoldhq/trellis@0.6.10</code>。推荐把命令中的路径按 <code>task.py create</code> 实际返回结果解析，不要假定日期目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">trellis init --codex -u harness-lab</span><br><span class="line">TASK_PATH=<span class="string">&quot;<span class="subst">$(python3 ./.trellis/scripts/task.py create <span class="string">&quot;Add alarm acknowledgement&quot;</span> --slug alarm-acknowledgement)</span>&quot;</span></span><br><span class="line">PRD_PATH=<span class="string">&quot;<span class="variable">$TASK_PATH</span>/prd.md&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 把八项决定手工写入 &quot;$PRD_PATH&quot;；复杂任务再维护 design.md / implement.md</span></span><br><span class="line">python3 ./.trellis/scripts/task.py add-context <span class="string">&quot;<span class="variable">$TASK_PATH</span>&quot;</span> implement AGENTS.md <span class="string">&quot;Repository rules&quot;</span></span><br><span class="line">python3 ./.trellis/scripts/task.py add-context <span class="string">&quot;<span class="variable">$TASK_PATH</span>&quot;</span> check AGENTS.md <span class="string">&quot;Repository rules&quot;</span></span><br><span class="line">python3 ./.trellis/scripts/task.py validate <span class="string">&quot;<span class="variable">$TASK_PATH</span>&quot;</span></span><br><span class="line">python3 ./.trellis/scripts/task.py start <span class="string">&quot;<span class="variable">$TASK_PATH</span>&quot;</span></span><br></pre></td></tr></table></figure>
+<p><code>prd.md</code>、<code>design.md</code>、<code>implement.md</code> 等任务产物留在任务目录内，由任务创建和后续手工维护，Trellis guidance 会单独读取它们；推荐命令不把 task-local PRD 再写入 JSONL context。</p>
+<p><strong>[本地实验]</strong> 结果是：<code>init</code> 退出 0，<code>task.py create</code> 退出 0；旧的 <code>task.py init-context</code> 退出 2，并明确提示它已在 <code>v0.5.0-beta.12</code> 移除。为了验证失败边界，本实验还额外把 <code>$PRD_PATH</code> 分别加入 implement/check；加上推荐路径中的两个 <code>AGENTS.md</code> context，共四次 <code>add-context</code>，每次都退出 0。随后 <code>validate</code> 和 <code>start</code> 也退出 0，任务状态从 <code>planning</code> 变为 <code>in_progress</code>。这个 task-local PRD 自引用是冗余配置，并在 archive 后变 stale，不是推荐命令。</p>
+<p>这里必须再次强调：根 PLAN/SPEC sentinel 没有被带入任务。八项预设决定是从规则驱动记录<strong>手工映射</strong>到 <code>prd.md</code> 的，不是自动转换。生成说明表示任务产物会被单独读取，JSONL 主要放 spec/research 上下文。</p>
+<h3 id="4-Codex怎样实现和验证"><a href="#4-Codex怎样实现和验证" class="headerlink" title="4. Codex怎样实现和验证"></a>4. Codex怎样实现和验证</h3><p>计划不是把 PRD 原样塞给 Codex 后等待结果，而是从可失败测试开始，并在实现中继续搜索现有 clone、错误和时间注入惯例：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">读 AGENTS.md、prd.md、现有 store 和测试</span><br><span class="line">  -&gt; 新增 5 个验收测试</span><br><span class="line">  -&gt; RED：确认失败原因是 acknowledge 缺失</span><br><span class="line">  -&gt; 实现最小状态转换</span><br><span class="line">  -&gt; GREEN：运行项目测试</span><br><span class="line">  -&gt; 查看 diff、任务上下文和范围</span><br><span class="line">  -&gt; 再运行测试与 whitespace check</span><br><span class="line">  -&gt; 提交产品变更</span><br><span class="line">  -&gt; 显式执行 archive 和 journal 脚本</span><br></pre></td></tr></table></figure>
+<p>RED 阶段，<code>npm test</code> 退出 1；直接运行同一测试文件得到 <strong>9 项中 4 pass、5 fail</strong>，五项新行为都因 <code>acknowledge</code> 不存在而失败。GREEN 和最终阶段，<code>npm test</code> 均退出 0，直接运行是 <strong>9/9 pass、0 fail</strong>。</p>
+<p><code>trellis-check</code> 提醒 Agent 看 diff、任务产物、spec 和项目检查，但测试之所以真正运行，是因为执行了 <code>npm test</code>。同理，<code>trellis-finish-work</code> 会提示当前任务还有未提交代码时停止；实验确实先提交功能，再显式调用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python3 ./.trellis/scripts/task.py archive alarm-acknowledgement</span><br><span class="line">python3 ./.trellis/scripts/add_session.py \</span><br><span class="line">  --title <span class="string">&quot;Alarm acknowledgement&quot;</span> \</span><br><span class="line">  --commit <span class="string">&quot;a6a6f92&quot;</span> \</span><br><span class="line">  --summary <span class="string">&quot;Added deterministic, idempotent alarm acknowledgement with conflict and validation tests.&quot;</span></span><br></pre></td></tr></table></figure>
+<p>archive 和 journal 脚本被显式调用后才产生机械效果，分别自动提交 <code>6556651</code> 和 <code>5737c20</code>。初始化和任务流程没有自动创建或切换 Git worktree，<code>worktree_path</code> 是 <code>null</code>；任务内容也没有自动提升到 <code>.trellis/spec/</code>。</p>
+<h3 id="5-生成了什么，付出了什么"><a href="#5-生成了什么，付出了什么" class="headerlink" title="5. 生成了什么，付出了什么"></a>5. 生成了什么，付出了什么</h3><p>功能提交 <code>a6a6f92</code> 共改变 <strong>115 个文件、增加 18,686 行</strong>：</p>
+<ul>
+<li><strong>111 个</strong> harness/config/generated 文件：<code>.agents/</code>、<code>.codex/</code>、<code>.trellis/</code> 和 <code>.gitattributes</code>；</li>
+<li><strong>2 个</strong>产品文件：<code>src/alarm-store.js</code>、<code>test/alarm-store.test.js</code>；</li>
+<li><strong>2 个</strong>实验 fixture：根 <code>PLAN.md</code>、<code>SPEC.md</code>。</li>
+</ul>
+<p>其中 emitted adapter files 共 <strong>54 个</strong>：<code>.agents/skills/</code> 下 46 个，<code>.codex/</code> 下 8 个（3 个 agent TOML、1 个 config、1 个 hooks JSON、3 个 hook Python）。这是一次 blank-template offline fallback 初始化的实测 footprint，不应外推成每个仓库每次都会产生相同行数。</p>
+<p>还观察到两个需要精确限定的失败：</p>
+<ol>
+<li>staged <code>git diff --cached --check</code> 退出 2，在 <strong>3 个未修改的 Trellis 生成文件</strong>中报告 <strong>4 条</strong>空白诊断：两个 EOF 多余空行和两处行尾空白。它说明生成产物也要进入 diff 门禁，不说明产品代码有这四个问题。</li>
+<li>归档前 task validation 退出 0；归档后退出 1。原因是实验手工把 task-local <code>prd.md</code> 自引用写入两个 JSONL，归档移动目录后保留了旧 active-task 路径。生成说明表示 task artifacts 本来会单独读取，因此这个结果受实验设置约束，不能单独证明 archive 存在缺陷。</li>
+</ol>
+<p><strong>[工程判断]</strong> 这笔账的核心不是“18,686 行太多”，而是这些文件是否换来了当前项目需要的跨会话状态。如果需求一天完成、一个人维护、CI 足够清晰，111 个框架文件会变成审查和升级成本；如果任务跨周、多人/多 Agent 交接，而且 PRD、context、journal 真会被使用，这些文件才可能有回报。</p>
+<h2 id="五、不同项目不要使用同一套流程"><a href="#五、不同项目不要使用同一套流程" class="headerlink" title="五、不同项目不要使用同一套流程"></a>五、不同项目不要使用同一套流程</h2><p>下面是我会实际采用的三层，而不是把 Trellis 设为默认前置条件：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>Trigger</th>
+<th>Files</th>
+<th>Commands</th>
+<th>Exit condition</th>
+<th>Maintenance cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>small</strong>：<code>AGENTS.md -&gt; Codex -&gt; verification -&gt; diff</code></td>
+<td>边界清楚、单会话可完成、影响面小</td>
+<td>现有 <code>AGENTS.md</code>、产品代码、测试</td>
+<td>读指令与代码；运行定向测试/构建；<code>git diff --check</code>、<code>git diff</code></td>
+<td>验收测试通过，diff 可解释，没有遗留状态需要交接</td>
+<td>低：维护仓库指令和既有 CI</td>
+</tr>
+<tr>
+<td><strong>medium</strong>：<code>alignment -&gt; SPEC/PLAN -&gt; Codex -&gt; CI</code></td>
+<td>有若干产品决策或跨模块改动，但任务仍能由一个短期分支承载</td>
+<td>轻量 <code>SPEC.md</code> / <code>PLAN.md</code> 或 issue、产品代码、测试</td>
+<td>一次一问澄清；写验收标准；Codex 实现；运行 CI</td>
+<td>未决项归零，规格与测试一致，CI 通过，Git 历史可审查</td>
+<td>中：规格要随变更更新，避免重复文档</td>
+</tr>
+<tr>
+<td><strong>complex-long-running</strong>：<code>grill-me when needed -&gt; Trellis task/context -&gt; Codex/check -&gt; Git/CI -&gt; archive</code></td>
+<td>跨周、多人或多 Agent 交接，上下文分散，确实需要任务状态与 journal</td>
+<td><code>.trellis/tasks/</code>、必要 specs/context、产品代码、测试、journal</td>
+<td>按需 grilling；<code>task.py create/add-context/validate/start</code>；实现与检查；Git/CI；显式 archive、journal</td>
+<td>独立验证通过，工作代码已提交，任务归档且后续会话能从项目产物恢复意图</td>
+<td>高：生成文件审查、版本升级、上下文清理、归档路径和许可证治理</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>两个升级触发器最实用：第一，关键决策在对话结束后还要被别人使用；第二，任务的验证和上下文已经无法用一个 issue 加 CI 清楚表达。反过来，如果 PRD 没人读、journal 没人接续、任务一两个小时就结束，就停在 small 或 medium。</p>
+<h3 id="small：单会话小改动"><a href="#small：单会话小改动" class="headerlink" title="small：单会话小改动"></a>small：单会话小改动</h3><ul>
+<li><strong>适用 / 不适用 / 升级：</strong> 需求和验收已经明确、改动可在一个会话内完成时使用；若仍有会改变测试结果的产品决策，就先升级到 medium；不为跨周交接保留临时任务状态。</li>
+<li><strong>文件职责：</strong> <code>AGENTS.md</code> 只保存长期仓库规则；产品文件承载实现；测试文件承载可重复验收，不另建一次性 PRD。</li>
+<li><strong>执行：</strong> Codex 先读规则、现有实现和测试，再修改并运行仓库已有命令。本文所在 QQsNote 可直接执行：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="built_in">test</span></span><br><span class="line">npm run build</span><br><span class="line">git diff --check</span><br><span class="line">git diff</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>退出 / 成本：</strong> 测试和构建通过、diff 可解释且无待交接状态即结束；成本只有既有规则和 CI 的维护。</li>
+<li><strong>Claude Code：</strong> 复用相同的仓库文件和 shell 验证，只替换宿主 Agent 的调用入口；本次未取得当前官方正文，因此不补写未经核验的专用命令。</li>
+</ul>
+<h3 id="medium：短期分支上的明确功能"><a href="#medium：短期分支上的明确功能" class="headerlink" title="medium：短期分支上的明确功能"></a>medium：短期分支上的明确功能</h3><ul>
+<li><strong>适用 / 不适用 / 升级：</strong> 有若干产品取舍或跨模块接口、但一个短期分支仍能承载时使用；如果状态要跨周、跨人员或跨 Agent 恢复，再升级到 complex-long-running。已有 issue 已完整承担规格职责时，不重复创建 <code>SPEC.md</code>。</li>
+<li><strong>文件职责：</strong> <code>SPEC.md</code> 只写需求、范围和验收；<code>PLAN.md</code> 只写实现顺序、依赖和验证；产品代码与测试分别承载行为和 oracle。两份文档完成后删除还是保留，应由仓库约定决定，避免出现第二事实源。</li>
+<li><strong>执行：</strong> 对齐未决项并写入 SPEC/PLAN，Codex 实现后运行本地 CI 等价命令，再由远端 CI 重放。QQsNote 的本地门禁是：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="built_in">test</span></span><br><span class="line">npm run build</span><br><span class="line">git diff --check</span><br><span class="line">git diff</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>退出 / 成本：</strong> 未决项归零、SPEC 与测试一致、本地门禁和远端 CI 通过、Git 历史可审查即结束；额外成本是保持计划、规格和代码同步。</li>
+<li><strong>Claude Code：</strong> 继续使用同一 SPEC/PLAN、测试和 CI；只替换规划与编码会话入口，不假设其当前原生命令与 Codex 等价。</li>
+</ul>
+<h3 id="complex-long-running：需要可恢复任务状态"><a href="#complex-long-running：需要可恢复任务状态" class="headerlink" title="complex-long-running：需要可恢复任务状态"></a>complex-long-running：需要可恢复任务状态</h3><ul>
+<li><strong>适用 / 不适用 / 降级：</strong> 任务跨周、多人或多 Agent 交接，并且后续会话确实要消费 task/context/journal 时使用；若这些产物连续多个任务无人读取，就降回 medium 并移除冗余状态。</li>
+<li><strong>文件职责：</strong> task-local <code>prd.md</code> 保存本次需求和验收，<code>design.md</code> 保存技术契约，<code>implement.md</code> 保存执行步骤；JSONL 只列实现/检查需要的稳定 spec 或 research context；<code>.trellis/spec/</code> 只保存跨任务长期规则；journal 只记录跨会话过程和决策历史。</li>
+<li><strong>执行：</strong> 在完成需求对齐和手工产物映射后，使用 Trellis 脚本推进状态；不要把 task-local PRD 再自引用进 JSONL：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">TASK_PATH=<span class="string">&quot;<span class="subst">$(python3 ./.trellis/scripts/task.py create \</span></span></span><br><span class="line"><span class="string"><span class="subst">  <span class="string">&quot;Add alarm acknowledgement&quot;</span> --slug alarm-acknowledgement)</span>&quot;</span></span><br><span class="line">python3 ./.trellis/scripts/task.py add-context \</span><br><span class="line">  <span class="string">&quot;<span class="variable">$TASK_PATH</span>&quot;</span> implement AGENTS.md <span class="string">&quot;Repository rules&quot;</span></span><br><span class="line">python3 ./.trellis/scripts/task.py add-context \</span><br><span class="line">  <span class="string">&quot;<span class="variable">$TASK_PATH</span>&quot;</span> check AGENTS.md <span class="string">&quot;Repository rules&quot;</span></span><br><span class="line">python3 ./.trellis/scripts/task.py validate <span class="string">&quot;<span class="variable">$TASK_PATH</span>&quot;</span></span><br><span class="line">python3 ./.trellis/scripts/task.py start <span class="string">&quot;<span class="variable">$TASK_PATH</span>&quot;</span></span><br><span class="line">npm <span class="built_in">test</span></span><br><span class="line">git diff --check</span><br></pre></td></tr></table></figure>
+<p>实现、检查和 Git/CI 通过并提交代码后，再显式执行归档与 journal；脚本不会因为 skill 文本存在而自动运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">COMMIT_SHA=<span class="string">&quot;<span class="subst">$(git rev-parse HEAD)</span>&quot;</span></span><br><span class="line">python3 ./.trellis/scripts/task.py archive alarm-acknowledgement</span><br><span class="line">python3 ./.trellis/scripts/add_session.py \</span><br><span class="line">  --title <span class="string">&quot;Alarm acknowledgement&quot;</span> \</span><br><span class="line">  --commit <span class="string">&quot;<span class="variable">$COMMIT_SHA</span>&quot;</span> \</span><br><span class="line">  --summary <span class="string">&quot;Implemented and independently verified alarm acknowledgement.&quot;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>退出 / 成本：</strong> 独立验证通过、代码已提交、任务已归档，且新会话能只凭仓库产物恢复意图才结束；成本包括生成文件审查、升级、上下文清理、归档和许可证治理。</li>
+<li><strong>Claude Code：</strong> Trellis 核心 task 脚本与仓库产物可以保持不变，但宿主 adapter、skill 名称和 hooks 必须按当前版本重新核验；本文不根据未取得的官方正文推定与 Codex 完全相同。</li>
+</ul>
+<h2 id="六、Trellis、Spec-Kit、Superpowers和原生Codex怎样选"><a href="#六、Trellis、Spec-Kit、Superpowers和原生Codex怎样选" class="headerlink" title="六、Trellis、Spec Kit、Superpowers和原生Codex怎样选"></a>六、Trellis、Spec Kit、Superpowers和原生Codex怎样选</h2><p>先限定迁移场景：将已经提交的项目迁回 <strong>native Codex + <code>AGENTS.md</code></strong>，同时保留 requirements、tests 和有用的 Git history。下表的 migration surface 是<strong>工程判断</strong>，不是评分。Trellis 固定在 <code>0.6.10</code>；Spec Kit、Superpowers 上游完整 commit/date，以及 Codex 当前官方正文，本次没有全部拿到，因此对应单元格保留 bounded/inconclusive，不能据此定量排名。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>固定维度</th>
+<th>Trellis 0.6.10</th>
+<th>GitHub Spec Kit</th>
+<th>Superpowers（本地缓存 <code>11c74d6b</code>）</th>
+<th>原生 Codex + <code>AGENTS.md</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Main artifacts</strong></td>
+<td><code>.trellis/spec/</code>；<code>task.json</code>、<code>prd.md</code>，可选 <code>design.md</code> / <code>implement.md</code>，JSONL context、journals</td>
+<td><strong>Bounded / inconclusive</strong>：候选 constitution 与 feature artifacts，本次未做固定 commit 核验</td>
+<td>已观察的 design/plan 文档、skills、测试与 Git 产物</td>
+<td><strong>Bounded / inconclusive</strong>：官方正文不可得，本次不声明等价的 PRD/journal 产物</td>
+</tr>
+<tr>
+<td><strong>Persistent state</strong></td>
+<td>task JSON + 仓库 journals</td>
+<td><strong>Bounded / inconclusive</strong>：未固定版本核验状态模型</td>
+<td>plan checklists + Git history；范围限于本地缓存</td>
+<td><strong>Bounded / inconclusive</strong>：background/resume 与项目状态正文未核验</td>
+</tr>
+<tr>
+<td><strong>Prompt/workflow guidance</strong></td>
+<td>生成模板指导 brainstorm、check、finish 和批准转换</td>
+<td><strong>Bounded / inconclusive</strong>：当前模板未固定版本核验</td>
+<td>缓存 skills 对规划、TDD、review、verification、subagent、worktree 给出命令式指导</td>
+<td>仓库指令和 Skills 是候选指导面，但<strong>当前官方正文未取回</strong></td>
+</tr>
+<tr>
+<td><strong>Mechanical enforcement</strong></td>
+<td><code>task.py</code> 可在显式调用时 create/validate/start/archive；journal 脚本可记录；模板文字本身仍是 advisory</td>
+<td><strong>Bounded / inconclusive</strong>：CLI/check 行为未固定版本核验</td>
+<td>测试和 Git 命令只有执行时才机械生效；本次缓存未建立独立 policy engine</td>
+<td>hooks、sandbox、approvals 是待核验候选面；<strong>本次不补写具体能力</strong></td>
+</tr>
+<tr>
+<td><strong>Host binding</strong></td>
+<td>共享 <code>.trellis/</code> core 加 host adapters；本次观察到 Codex adapter</td>
+<td><strong>Bounded / inconclusive</strong>：未固定版本核验</td>
+<td>harness-specific 安装，主体是 Markdown skill 内容</td>
+<td><strong>Bounded candidate</strong>：Codex 专用配置/钩子与纯 Markdown 指令的边界待官方正文核验</td>
+</tr>
+<tr>
+<td><strong>Migration surface</strong></td>
+<td>保留 requirements/tests/history；翻译有用 PRD/spec；替换或删除 task JSON/JSONL、journals、scripts、hooks、generated adapters</td>
+<td>先固定版本审计；保留仍有用的 Markdown spec/plan/task，替换或删除 <code>.specify/</code> 模板与命令</td>
+<td>保留 design/plans/tests/history；移除 plugin/skills，把仍需的流程写回 <code>AGENTS.md</code> 或原生 skills</td>
+<td>目标基线；只翻译来源系统仍有用的约定，继续保留 requirements/tests/history</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>选择时我会先问“需要保存哪一种状态”，而不是“哪个框架功能更多”：</p>
+<ul>
+<li>只需要稳定仓库约束和独立验证，原生 Codex + <code>AGENTS.md</code> 是最小基线；但本次官方正文获取失败，我不据此声称它复刻 Trellis journals 或任务状态。</li>
+<li>需要 feature spec 驱动流程时，Spec Kit 是候选；本次没有完成固定版本正文核验，先做小范围试用再决定目录约定。</li>
+<li>希望把设计、计划、TDD、review、verification 和 worktree 组织成一组 skills 时，Superpowers 本地缓存展示了这一路径；它的 workflow guidance 也不能代替测试执行。</li>
+<li>需要仓库内任务状态、JSONL context、归档和 journal，且愿意承担生成物与合规维护时，再选 Trellis。</li>
+</ul>
+<p>Claude Code 只补一条差异边界：本次列出了 Anthropic 关于 memory、skills、hooks、subagents、permissions、worktree workflow 的候选官方入口，但没有成功取得页面正文、最终跳转 URL 或 HTTP 状态。因此没有完成同版本核验，也不作 Claude Code 与 Codex/Trellis 的 parity 结论。</p>
+<h2 id="七、我的结论"><a href="#七、我的结论" class="headerlink" title="七、我的结论"></a>七、我的结论</h2><p><strong>这次实验证明了什么：</strong> 一句模糊告警需求可以经过八项决策变成明确测试；手工映射后的 Trellis task/context 能被 validate、start、archive 和 journal 脚本处理；Codex 在该 fixture 上完成了从 4 pass/5 fail 到 9/9 pass；同时我们测到了 adapter 数量、生成文件成本、advisory skill 与机械脚本的边界。</p>
+<p><strong>它没有证明什么：</strong> 没有 matched-task、固定模型/预算/仓库状态、多次重复和独立验收的对照实验，所以没有证明 Trellis 比原生 Codex + <code>AGENTS.md</code> 有更高成功率；没有证明两个 brainstorm 会稳定地产生相同问题；没有证明 PLAN/SPEC 会自动导入；没有证明 Codex、Claude Code、Spec Kit 和 Superpowers 在当前版本功能对等。</p>
+<p>我的采用规则是：先用需求、测试、CI 和 Git 建立可迁移的证据，再按交接压力增加 Harness。若任务边界明确、单会话结束、生成文件比产品 diff 大得多，直接跳过 Trellis。若已经引入但连续任务没有消费 task state/journal，升级频繁造成维护负担，或许可证/adapter 配置不适合仓库，就在保留 requirements、tests、Git history 后卸载它，并把仍有价值的规则收敛回 <code>AGENTS.md</code>。</p>
+<h2 id="八、这类项目层Harness会怎样发展"><a href="#八、这类项目层Harness会怎样发展" class="headerlink" title="八、这类项目层Harness会怎样发展"></a>八、这类项目层Harness会怎样发展</h2><p><strong>[工程判断]</strong> 我只做三个有证据约束的方向判断。</p>
+<p>第一，<strong>portable artifacts 会比专用命令更长寿</strong>。可读的 requirements、acceptance tests、ADR/plan 和 Git history 能跨 Agent 迁移；任务 JSON、hook 和 adapter 则需要版本化转换。Harness 应允许前者脱离框架继续使用。</p>
+<p>第二，<strong>independent verification 会成为中心，而不是收尾装饰</strong>。需求澄清和生成代码都可能来自同一个模型，不能让它们互相自证。可重复测试、静态检查、CI、diff review 和运行证据必须能由另一进程、另一 Agent 或人独立重放。</p>
+<p>第三，<strong>native-agent convergence 会压缩外置适配层的价值区间</strong>。当宿主逐步提供项目指令、skills、hooks、权限或任务执行接口时，Harness 的差异会更多落在可迁移状态模型和团队工作流，而不是命令包装数量。由于本次没有取回 Codex/Claude Code 当前官方正文，这里只表达架构方向，不声称具体产品已经完成收敛。</p>
+<h2 id="主要参考资料"><a href="#主要参考资料" class="headerlink" title="主要参考资料"></a>主要参考资料</h2><ul>
+<li>Purezento，<a target="_blank" rel="noopener" href="https://blog.wcxian.cc/posts/grill-x-trellis/">Grill x Trellis</a>，发布于 2026-06-29；本文只把它作为他人经验来源。</li>
+<li>Matt Pocock，<a target="_blank" rel="noopener" href="https://github.com/mattpocock/skills/tree/2ab958093e83e0ec752e6c1c5932da465bf23e0c">mattpocock/skills 固定树 <code>2ab958093e83e0ec752e6c1c5932da465bf23e0c</code></a>，观察于 2026-07-29。</li>
+<li>mindfold-ai，<a target="_blank" rel="noopener" href="https://github.com/mindfold-ai/Trellis/tree/c94d6fc289b7a6fdd9480bdfae4d4639c9ac2d4c">Trellis <code>v0.6.10</code> / <code>c94d6fc</code></a>，稳定版发布于 2026-07-28。</li>
+<li>GitHub，<a target="_blank" rel="noopener" href="https://github.com/github/spec-kit">github/spec-kit</a>；本次未完成固定版本正文核验，链接用于标识项目。</li>
+<li>obra，<a target="_blank" rel="noopener" href="https://github.com/obra/superpowers">obra/superpowers</a>；本文观察范围是本地缓存 <code>11c74d6b</code>，未解析为完整上游 commit/date。</li>
+<li>OpenAI Codex 官方入口：<a target="_blank" rel="noopener" href="https://developers.openai.com/codex/guides/agents-md">Repository instructions</a>、<a target="_blank" rel="noopener" href="https://developers.openai.com/codex/skills">Skills</a>、<a target="_blank" rel="noopener" href="https://developers.openai.com/codex/security">Security</a>；本次正文抓取返回 403 或未取得内容，因此仅列入口，不据此扩写能力。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/qqsnote/tags/AI/" rel="tag"># AI</a>
+              <a href="/qqsnote/tags/Agent/" rel="tag"># Agent</a>
+              <a href="/qqsnote/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag"># 软件工程</a>
+              <a href="/qqsnote/tags/Codex/" rel="tag"># Codex</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/qqsnote/2026/07/28/QQsNote-Frontend-Performance-DevTools-Experiment/" rel="prev" title="第一次用 Chrome DevTools 做前端性能实验：以 QQsNote 为例">
+      <i class="fa fa-chevron-left"></i> 第一次用 Chrome DevTools 做前端性能实验：以 QQsNote 为例
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%95%E8%BF%99%E6%9D%A1%E9%93%BE%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text">一、我为什么试这条链路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%8F%82%E8%80%83%E6%96%B9%E6%A1%88%E7%A9%B6%E7%AB%9F%E4%B8%BB%E5%BC%A0%E4%BB%80%E4%B9%88"><span class="nav-number">2.</span> <span class="nav-text">二、参考方案究竟主张什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%85%88%E7%BA%A0%E6%AD%A3%E5%87%A0%E4%B8%AA%E7%89%88%E6%9C%AC%E4%B8%8E%E4%BA%A7%E7%89%A9%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">三、先纠正几个版本与产物问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%B8%80%E6%AC%A1%E7%9C%9F%E5%AE%9E%E5%A4%8D%E7%8E%B0%EF%BC%9A%E8%AE%BE%E5%A4%87%E5%91%8A%E8%AD%A6%E7%A1%AE%E8%AE%A4%E5%8A%9F%E8%83%BD"><span class="nav-number">4.</span> <span class="nav-text">四、一次真实复现：设备告警确认功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E7%BA%BF%E4%B8%8E%E6%A8%A1%E7%B3%8A%E9%9C%80%E6%B1%82"><span class="nav-number">4.1.</span> <span class="nav-text">1. 基线与模糊需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-grill-me%E5%AE%9E%E9%99%85%E9%97%AE%E5%87%BA%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9A%E8%A7%84%E5%88%99%E9%A9%B1%E5%8A%A8%E7%9A%84%E9%A2%84%E8%AE%BE%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95"><span class="nav-number">4.2.</span> <span class="nav-text">2. grill-me实际问出了什么：规则驱动的预设决策记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%80%8E%E6%A0%B7%E4%BA%A4%E6%8E%A5%E7%BB%99Trellis"><span class="nav-number">4.3.</span> <span class="nav-text">3. 怎样交接给Trellis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Codex%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%AA%8C%E8%AF%81"><span class="nav-number">4.4.</span> <span class="nav-text">4. Codex怎样实现和验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E7%94%9F%E6%88%90%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%8C%E4%BB%98%E5%87%BA%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-number">4.5.</span> <span class="nav-text">5. 生成了什么，付出了什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E4%B8%8D%E5%90%8C%E9%A1%B9%E7%9B%AE%E4%B8%8D%E8%A6%81%E4%BD%BF%E7%94%A8%E5%90%8C%E4%B8%80%E5%A5%97%E6%B5%81%E7%A8%8B"><span class="nav-number">5.</span> <span class="nav-text">五、不同项目不要使用同一套流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#small%EF%BC%9A%E5%8D%95%E4%BC%9A%E8%AF%9D%E5%B0%8F%E6%94%B9%E5%8A%A8"><span class="nav-number">5.1.</span> <span class="nav-text">small：单会话小改动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#medium%EF%BC%9A%E7%9F%AD%E6%9C%9F%E5%88%86%E6%94%AF%E4%B8%8A%E7%9A%84%E6%98%8E%E7%A1%AE%E5%8A%9F%E8%83%BD"><span class="nav-number">5.2.</span> <span class="nav-text">medium：短期分支上的明确功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#complex-long-running%EF%BC%9A%E9%9C%80%E8%A6%81%E5%8F%AF%E6%81%A2%E5%A4%8D%E4%BB%BB%E5%8A%A1%E7%8A%B6%E6%80%81"><span class="nav-number">5.3.</span> <span class="nav-text">complex-long-running：需要可恢复任务状态</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81Trellis%E3%80%81Spec-Kit%E3%80%81Superpowers%E5%92%8C%E5%8E%9F%E7%94%9FCodex%E6%80%8E%E6%A0%B7%E9%80%89"><span class="nav-number">6.</span> <span class="nav-text">六、Trellis、Spec Kit、Superpowers和原生Codex怎样选</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%88%91%E7%9A%84%E7%BB%93%E8%AE%BA"><span class="nav-number">7.</span> <span class="nav-text">七、我的结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E8%BF%99%E7%B1%BB%E9%A1%B9%E7%9B%AE%E5%B1%82Harness%E4%BC%9A%E6%80%8E%E6%A0%B7%E5%8F%91%E5%B1%95"><span class="nav-number">8.</span> <span class="nav-text">八、这类项目层Harness会怎样发展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">9.</span> <span class="nav-text">主要参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">QQs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/qqsnote/archives/">
+        
+          <span class="site-state-item-count">408</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/qqsnote/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/qqsnote/tags/">
+        <span class="site-state-item-count">226</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <div class="tag-cloud-tags">
+        <a href="/qqsnote/tags/Net/" style="font-size: 30px; color: #fff">.Net</a> <a href="/qqsnote/tags/3D/" style="font-size: 13.38px; color: #d0d0d0">3D</a> <a href="/qqsnote/tags/3DGS/" style="font-size: 12px; color: #ccc">3DGS</a> <a href="/qqsnote/tags/3d-force-graph/" style="font-size: 12px; color: #ccc">3d-force-graph</a> <a href="/qqsnote/tags/4G/" style="font-size: 12px; color: #ccc">4G</a> <a href="/qqsnote/tags/AI/" style="font-size: 25.85px; color: #f3f3f3">AI</a> <a href="/qqsnote/tags/AI-Coding/" style="font-size: 12px; color: #ccc">AI Coding</a> <a href="/qqsnote/tags/AIGC/" style="font-size: 12px; color: #ccc">AIGC</a> <a href="/qqsnote/tags/Agent/" style="font-size: 13.38px; color: #d0d0d0">Agent</a> <a href="/qqsnote/tags/Android/" style="font-size: 12px; color: #ccc">Android</a> <a href="/qqsnote/tags/Angular/" style="font-size: 28.62px; color: #fbfbfb">Angular</a> <a href="/qqsnote/tags/Apache/" style="font-size: 13.38px; color: #d0d0d0">Apache</a> <a href="/qqsnote/tags/Azure/" style="font-size: 24.46px; color: #efefef">Azure</a> <a href="/qqsnote/tags/BVH/" style="font-size: 12px; color: #ccc">BVH</a> <a href="/qqsnote/tags/Babylon/" style="font-size: 12px; color: #ccc">Babylon</a> <a href="/qqsnote/tags/Blender/" style="font-size: 12px; color: #ccc">Blender</a> <a href="/qqsnote/tags/C/" style="font-size: 16.15px; color: #d8d8d8">C#</a> <a href="/qqsnote/tags/C/" style="font-size: 16.15px; color: #d8d8d8">C++</a> <a href="/qqsnote/tags/CAD/" style="font-size: 12px; color: #ccc">CAD</a> <a href="/qqsnote/tags/CI-CD/" style="font-size: 12px; color: #ccc">CI/CD</a> <a href="/qqsnote/tags/CPD/" style="font-size: 12px; color: #ccc">CPD</a> <a href="/qqsnote/tags/CSS/" style="font-size: 17.54px; color: #dcdcdc">CSS</a> <a href="/qqsnote/tags/Chrome-DevTools/" style="font-size: 12px; color: #ccc">Chrome DevTools</a> <a href="/qqsnote/tags/Codex/" style="font-size: 12px; color: #ccc">Codex</a> <a href="/qqsnote/tags/ComfyUI/" style="font-size: 12px; color: #ccc">ComfyUI</a> <a href="/qqsnote/tags/Context-Engineering/" style="font-size: 12px; color: #ccc">Context Engineering</a> <a href="/qqsnote/tags/DevOps/" style="font-size: 17.54px; color: #dcdcdc">DevOps</a> <a href="/qqsnote/tags/DevSecOps/" style="font-size: 12px; color: #ccc">DevSecOps</a> <a href="/qqsnote/tags/Digital-Twin/" style="font-size: 12px; color: #ccc">Digital Twin</a> <a href="/qqsnote/tags/Docker/" style="font-size: 17.54px; color: #dcdcdc">Docker</a> <a href="/qqsnote/tags/ES6/" style="font-size: 12px; color: #ccc">ES6</a> <a href="/qqsnote/tags/ESLint/" style="font-size: 12px; color: #ccc">ESLint</a> <a href="/qqsnote/tags/ElasticSearch/" style="font-size: 12px; color: #ccc">ElasticSearch</a> <a href="/qqsnote/tags/Electron/" style="font-size: 16.15px; color: #d8d8d8">Electron</a> <a href="/qqsnote/tags/ElementUI/" style="font-size: 12px; color: #ccc">ElementUI</a> <a href="/qqsnote/tags/EntityFramework/" style="font-size: 13.38px; color: #d0d0d0">EntityFramework</a> <a href="/qqsnote/tags/EventBus/" style="font-size: 12px; color: #ccc">EventBus</a> <a href="/qqsnote/tags/Excel/" style="font-size: 12px; color: #ccc">Excel</a> <a href="/qqsnote/tags/FastDFS/" style="font-size: 12px; color: #ccc">FastDFS</a> <a href="/qqsnote/tags/Figma/" style="font-size: 12px; color: #ccc">Figma</a> <a href="/qqsnote/tags/Flow-Graph/" style="font-size: 13.38px; color: #d0d0d0">Flow Graph</a> <a href="/qqsnote/tags/GitHub/" style="font-size: 12px; color: #ccc">GitHub</a> <a href="/qqsnote/tags/Go/" style="font-size: 12px; color: #ccc">Go</a> <a href="/qqsnote/tags/GraphQL/" style="font-size: 12px; color: #ccc">GraphQL</a> <a href="/qqsnote/tags/HMI/" style="font-size: 12px; color: #ccc">HMI</a> <a href="/qqsnote/tags/Halcon/" style="font-size: 12px; color: #ccc">Halcon</a> <a href="/qqsnote/tags/ICP/" style="font-size: 12px; color: #ccc">ICP</a> <a href="/qqsnote/tags/Jasmine/" style="font-size: 12px; color: #ccc">Jasmine</a> <a href="/qqsnote/tags/Java/" style="font-size: 13.38px; color: #d0d0d0">Java</a> <a href="/qqsnote/tags/Jenkins/" style="font-size: 18.92px; color: #e0e0e0">Jenkins</a> <a href="/qqsnote/tags/Jupyter/" style="font-size: 12px; color: #ccc">Jupyter</a> <a href="/qqsnote/tags/Knowledge-Graph/" style="font-size: 12px; color: #ccc">Knowledge Graph</a> <a href="/qqsnote/tags/LLM/" style="font-size: 14.77px; color: #d4d4d4">LLM</a> <a href="/qqsnote/tags/LOD/" style="font-size: 12px; color: #ccc">LOD</a> <a href="/qqsnote/tags/Lighthouse/" style="font-size: 12px; color: #ccc">Lighthouse</a> <a href="/qqsnote/tags/Linux/" style="font-size: 23.08px; color: #ebebeb">Linux</a> <a href="/qqsnote/tags/MCP/" style="font-size: 12px; color: #ccc">MCP</a> <a href="/qqsnote/tags/MQ/" style="font-size: 12px; color: #ccc">MQ</a> <a href="/qqsnote/tags/MVVM/" style="font-size: 12px; color: #ccc">MVVM</a> <a href="/qqsnote/tags/Markdown/" style="font-size: 13.38px; color: #d0d0d0">Markdown</a> <a href="/qqsnote/tags/Modbus/" style="font-size: 12px; color: #ccc">Modbus</a> <a href="/qqsnote/tags/MongoDB/" style="font-size: 12px; color: #ccc">MongoDB</a> <a href="/qqsnote/tags/Monorepo/" style="font-size: 12px; color: #ccc">Monorepo</a> <a href="/qqsnote/tags/MySQL/" style="font-size: 12px; color: #ccc">MySQL</a> <a href="/qqsnote/tags/NSIS/" style="font-size: 12px; color: #ccc">NSIS</a> <a href="/qqsnote/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/qqsnote/tags/NoSQL/" style="font-size: 12px; color: #ccc">NoSQL</a> <a href="/qqsnote/tags/Node-js/" style="font-size: 17.54px; color: #dcdcdc">Node.js</a> <a href="/qqsnote/tags/OCCT/" style="font-size: 12px; color: #ccc">OCCT</a> <a href="/qqsnote/tags/OData/" style="font-size: 13.38px; color: #d0d0d0">OData</a> <a href="/qqsnote/tags/Open3D/" style="font-size: 12px; color: #ccc">Open3D</a> <a href="/qqsnote/tags/OpenCV/" style="font-size: 20.31px; color: #e4e4e4">OpenCV</a> <a href="/qqsnote/tags/OpenGL/" style="font-size: 14.77px; color: #d4d4d4">OpenGL</a> <a href="/qqsnote/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/qqsnote/tags/PLC/" style="font-size: 13.38px; color: #d0d0d0">PLC</a> <a href="/qqsnote/tags/PWA/" style="font-size: 12px; color: #ccc">PWA</a> <a href="/qqsnote/tags/Playwright/" style="font-size: 12px; color: #ccc">Playwright</a> <a href="/qqsnote/tags/Prism/" style="font-size: 12px; color: #ccc">Prism</a> <a href="/qqsnote/tags/Proxy/" style="font-size: 12px; color: #ccc">Proxy</a> <a href="/qqsnote/tags/PyCharm/" style="font-size: 12px; color: #ccc">PyCharm</a> <a href="/qqsnote/tags/Python/" style="font-size: 25.85px; color: #f3f3f3">Python</a> <a href="/qqsnote/tags/R3F/" style="font-size: 12px; color: #ccc">R3F</a> <a href="/qqsnote/tags/ROS2/" style="font-size: 14.77px; color: #d4d4d4">ROS2</a> <a href="/qqsnote/tags/RS-485/" style="font-size: 12px; color: #ccc">RS-485</a> <a href="/qqsnote/tags/React/" style="font-size: 20.31px; color: #e4e4e4">React</a> <a href="/qqsnote/tags/React-Flow/" style="font-size: 12px; color: #ccc">React Flow</a> <a href="/qqsnote/tags/Rust/" style="font-size: 12px; color: #ccc">Rust</a> <a href="/qqsnote/tags/SDLC/" style="font-size: 12px; color: #ccc">SDLC</a> <a href="/qqsnote/tags/SQL/" style="font-size: 12px; color: #ccc">SQL</a> <a href="/qqsnote/tags/SQL-Server/" style="font-size: 14.77px; color: #d4d4d4">SQL_Server</a> <a href="/qqsnote/tags/ServiceWorker/" style="font-size: 12px; color: #ccc">ServiceWorker</a> <a href="/qqsnote/tags/Shell/" style="font-size: 12px; color: #ccc">Shell</a> <a href="/qqsnote/tags/Squid/" style="font-size: 12px; color: #ccc">Squid</a> <a href="/qqsnote/tags/StableDiffusion/" style="font-size: 12px; color: #ccc">StableDiffusion</a> <a href="/qqsnote/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a> <a href="/qqsnote/tags/Three-js/" style="font-size: 23.08px; color: #ebebeb">Three.js</a> <a href="/qqsnote/tags/TypeScript/" style="font-size: 16.15px; color: #d8d8d8">TypeScript</a> <a href="/qqsnote/tags/UE/" style="font-size: 12px; color: #ccc">UE</a> <a href="/qqsnote/tags/UI/" style="font-size: 12px; color: #ccc">UI</a> <a href="/qqsnote/tags/UML/" style="font-size: 12px; color: #ccc">UML</a> <a href="/qqsnote/tags/URDF/" style="font-size: 12px; color: #ccc">URDF</a> <a href="/qqsnote/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/qqsnote/tags/VLA/" style="font-size: 13.38px; color: #d0d0d0">VLA</a> <a href="/qqsnote/tags/VTK/" style="font-size: 12px; color: #ccc">VTK</a> <a href="/qqsnote/tags/Virtualbox/" style="font-size: 12px; color: #ccc">Virtualbox</a> <a href="/qqsnote/tags/Vitest/" style="font-size: 12px; color: #ccc">Vitest</a> <a href="/qqsnote/tags/Vue-js/" style="font-size: 12px; color: #ccc">Vue.js</a> <a href="/qqsnote/tags/WPF/" style="font-size: 16.15px; color: #d8d8d8">WPF</a> <a href="/qqsnote/tags/Web/" style="font-size: 12px; color: #ccc">Web</a> <a href="/qqsnote/tags/Web-Vitals/" style="font-size: 12px; color: #ccc">Web Vitals</a> <a href="/qqsnote/tags/Web3D/" style="font-size: 12px; color: #ccc">Web3D</a> <a href="/qqsnote/tags/WebGL/" style="font-size: 21.69px; color: #e7e7e7">WebGL</a> <a href="/qqsnote/tags/WebService/" style="font-size: 12px; color: #ccc">WebService</a> <a href="/qqsnote/tags/Web%E5%8D%8F%E8%AE%AE/" style="font-size: 12px; color: #ccc">Web协议</a> <a href="/qqsnote/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 30px; color: #fff">Web开发</a> <a href="/qqsnote/tags/Wechat/" style="font-size: 12px; color: #ccc">Wechat</a> <a href="/qqsnote/tags/YOLO/" style="font-size: 12px; color: #ccc">YOLO</a> <a href="/qqsnote/tags/aigc/" style="font-size: 12px; color: #ccc">aigc</a> <a href="/qqsnote/tags/auth/" style="font-size: 12px; color: #ccc">auth</a> <a href="/qqsnote/tags/axios/" style="font-size: 12px; color: #ccc">axios</a> <a href="/qqsnote/tags/canvas/" style="font-size: 12px; color: #ccc">canvas</a> <a href="/qqsnote/tags/css/" style="font-size: 12px; color: #ccc">css</a> <a href="/qqsnote/tags/dify/" style="font-size: 12px; color: #ccc">dify</a> <a href="/qqsnote/tags/express/" style="font-size: 12px; color: #ccc">express</a> <a href="/qqsnote/tags/ftp/" style="font-size: 12px; color: #ccc">ftp</a> <a href="/qqsnote/tags/git/" style="font-size: 13.38px; color: #d0d0d0">git</a> <a href="/qqsnote/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/qqsnote/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/qqsnote/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/qqsnote/tags/ionic/" style="font-size: 12px; color: #ccc">ionic</a> <a href="/qqsnote/tags/javascript/" style="font-size: 27.23px; color: #f7f7f7">javascript</a> <a href="/qqsnote/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/qqsnote/tags/langchain/" style="font-size: 12px; color: #ccc">langchain</a> <a href="/qqsnote/tags/login/" style="font-size: 12px; color: #ccc">login</a> <a href="/qqsnote/tags/loopback/" style="font-size: 12px; color: #ccc">loopback</a> <a href="/qqsnote/tags/ngrok/" style="font-size: 12px; color: #ccc">ngrok</a> <a href="/qqsnote/tags/npm/" style="font-size: 12px; color: #ccc">npm</a> <a href="/qqsnote/tags/nsis/" style="font-size: 13.38px; color: #d0d0d0">nsis</a> <a href="/qqsnote/tags/redis/" style="font-size: 12px; color: #ccc">redis</a> <a href="/qqsnote/tags/sqlServer/" style="font-size: 12px; color: #ccc">sqlServer</a> <a href="/qqsnote/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/qqsnote/tags/svg/" style="font-size: 12px; color: #ccc">svg</a> <a href="/qqsnote/tags/trea/" style="font-size: 12px; color: #ccc">trea</a> <a href="/qqsnote/tags/vtk/" style="font-size: 16.15px; color: #d8d8d8">vtk</a> <a href="/qqsnote/tags/vuejs/" style="font-size: 17.54px; color: #dcdcdc">vuejs</a> <a href="/qqsnote/tags/webassembly/" style="font-size: 14.77px; color: #d4d4d4">webassembly</a> <a href="/qqsnote/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/qqsnote/tags/websocket/" style="font-size: 12px; color: #ccc">websocket</a> <a href="/qqsnote/tags/windows/" style="font-size: 12px; color: #ccc">windows</a> <a href="/qqsnote/tags/yarn/" style="font-size: 12px; color: #ccc">yarn</a> <a href="/qqsnote/tags/%E4%B8%89%E7%BB%B4%E9%87%8D%E5%BB%BA/" style="font-size: 12px; color: #ccc">三维重建</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BC%A0/" style="font-size: 12px; color: #ccc">上传</a> <a href="/qqsnote/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14.77px; color: #d4d4d4">上位机</a> <a href="/qqsnote/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">传感器</a> <a href="/qqsnote/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/" style="font-size: 12px; color: #ccc">光线追踪</a> <a href="/qqsnote/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/" style="font-size: 14.77px; color: #d4d4d4">具身智能</a> <a href="/qqsnote/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 12px; color: #ccc">内网穿透</a> <a href="/qqsnote/tags/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD/" style="font-size: 12px; color: #ccc">前端性能</a> <a href="/qqsnote/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 16.15px; color: #d8d8d8">加密</a> <a href="/qqsnote/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 12px; color: #ccc">区块链</a> <a href="/qqsnote/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/" style="font-size: 13.38px; color: #d0d0d0">医学图像</a> <a href="/qqsnote/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 12px; color: #ccc">博弈论</a> <a href="/qqsnote/tags/%E5%9B%9B%E5%85%83%E6%95%B0/" style="font-size: 12px; color: #ccc">四元数</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" style="font-size: 12px; color: #ccc">图像分割</a> <a href="/qqsnote/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 20.31px; color: #e4e4e4">图形学</a> <a href="/qqsnote/tags/%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" style="font-size: 17.54px; color: #dcdcdc">坐标变换</a> <a href="/qqsnote/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" style="font-size: 12px; color: #ccc">多模态</a> <a href="/qqsnote/tags/%E5%A4%9A%E8%AF%AD%E8%A8%80/" style="font-size: 13.38px; color: #d0d0d0">多语言</a> <a href="/qqsnote/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 12px; color: #ccc">大模型</a> <a href="/qqsnote/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 12px; color: #ccc">存储过程</a> <a href="/qqsnote/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 23.08px; color: #ebebeb">学习笔记</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E5%AE%89%E5%85%A8/" style="font-size: 12px; color: #ccc">工业安全</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89/" style="font-size: 16.15px; color: #d8d8d8">工业视觉</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E8%BD%AF%E4%BB%B6/" style="font-size: 14.77px; color: #d4d4d4">工业软件</a> <a href="/qqsnote/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" style="font-size: 12px; color: #ccc">工业通信</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD/" style="font-size: 14.77px; color: #d4d4d4">性能</a> <a href="/qqsnote/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.38px; color: #d0d0d0">性能优化</a> <a href="/qqsnote/tags/%E6%88%90%E9%95%BF%E6%80%9D%E7%BB%B4/" style="font-size: 12px; color: #ccc">成长思维</a> <a href="/qqsnote/tags/%E6%89%8B%E7%9C%BC%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">手眼标定</a> <a href="/qqsnote/tags/%E6%89%A7%E8%A1%8C%E5%99%A8/" style="font-size: 12px; color: #ccc">执行器</a> <a href="/qqsnote/tags/%E6%91%84%E5%BD%B1/" style="font-size: 12px; color: #ccc">摄影</a> <a href="/qqsnote/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px; color: #ccc">操作系统</a> <a href="/qqsnote/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" style="font-size: 12px; color: #ccc">数字签名</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 16.15px; color: #d8d8d8">数据可视化</a> <a href="/qqsnote/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%94%81/" style="font-size: 12px; color: #ccc">数据库锁</a> <a href="/qqsnote/tags/%E6%96%B0%E8%A7%86%E8%A7%92%E5%90%88%E6%88%90/" style="font-size: 12px; color: #ccc">新视角合成</a> <a href="/qqsnote/tags/%E6%97%8B%E8%BD%AC/" style="font-size: 12px; color: #ccc">旋转</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 13.38px; color: #d0d0d0">机器人</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A1%AC%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人硬件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%AF%E4%BB%B6/" style="font-size: 12px; color: #ccc">机器人软件</a> <a href="/qqsnote/tags/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89/" style="font-size: 14.77px; color: #d4d4d4">机器视觉</a> <a href="/qqsnote/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 13.38px; color: #d0d0d0">机械臂</a> <a href="/qqsnote/tags/%E6%A0%87%E5%AE%9A/" style="font-size: 12px; color: #ccc">标定</a> <a href="/qqsnote/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 12px; color: #ccc">树莓派</a> <a href="/qqsnote/tags/%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/" style="font-size: 12px; color: #ccc">桌面应用</a> <a href="/qqsnote/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 12px; color: #ccc">正则表达式</a> <a href="/qqsnote/tags/%E6%AF%94%E4%BE%8B%E9%98%80/" style="font-size: 12px; color: #ccc">比例阀</a> <a href="/qqsnote/tags/%E6%B5%81%E5%BC%8F%E5%A4%84%E7%90%86/" style="font-size: 12px; color: #ccc">流式处理</a> <a href="/qqsnote/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 12px; color: #ccc">测试</a> <a href="/qqsnote/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">深度学习</a>
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/qqsnote/lib/anime.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.min.js"></script>
+  <script src="/qqsnote/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/qqsnote/js/utils.js"></script>
+
+<script src="/qqsnote/js/motion.js"></script>
+
+
+<script src="/qqsnote/js/schemes/muse.js"></script>
+
+
+<script src="/qqsnote/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/qqsnote/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
