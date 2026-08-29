@@ -17,3 +17,7 @@ graph-links:end -->
 Tsai-Lenz HandEye(蔡-伦兹手眼标定 Eye-in-Hand) Calibration 
 
 AX=XB
+
+标定残差
+
+校验和重新标定条件

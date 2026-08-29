@@ -7,6 +7,7 @@ tags:
 categories: 
 - Robotics
 ---
+## 安装ROS2
 
 #### 安装环境
 
@@ -196,3 +197,14 @@ sudo -v
 #### 当前状态
 
 截至 2026-06-03：已完成系统检查和安装方案记录；因为 sudo 需要本机密码，ROS2 尚未实际安装完成。
+
+## ROS2核心
+
+#### node
+
+```bash
+ros2 node list
+ros2 run turtlesim turtlesim_node
+
+ros2 run example_parameters_rclcpp parameters_basic --ros-args -p rcl_log_level:=10
+```
