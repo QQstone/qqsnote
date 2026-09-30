@@ -130,6 +130,89 @@ sudo apt install python-is-python3
 
 唉，行吧。。
 
+#### venv：给每个项目准备独立的 Python 环境
+
+假设项目 A 需要旧版 NumPy，项目 B 需要新版 NumPy。如果都往同一个 Python 环境里安装，升级 B 的依赖就可能让 A 跑不起来。**venv 是 Python 3 自带的虚拟环境工具，让每个项目拥有独立的第三方包安装目录。**
+
+对前端开发者，可以把它类比为项目各自的 `node_modules`，但 venv 还提供该环境的 Python 解释器入口。Python 不会因为你 `cd` 到项目目录，就自动使用其中的虚拟环境，需要激活环境或指定解释器路径。
+
+几个名字不要混淆：
+
+| 名称 | 作用 |
+| --- | --- |
+| `python` | 解释器，负责运行代码 |
+| `venv` | 创建虚拟环境的工具 |
+| `.venv` / `venv` | 虚拟环境文件夹的常见名字，可以自定义 |
+| `pip` | 把第三方包安装到某个 Python 环境里 |
+| `requirements.txt` | 记录需要安装的包，便于重建环境 |
+
+**创建 → 激活 → 安装 → 运行 → 退出**
+
+先进入自己的项目目录。Linux / macOS 的 bash、zsh 使用：
+
+```bash
+python3 -m venv .venv           # 创建环境，通常只需执行一次
+source .venv/bin/activate      # 在当前终端激活
+```
+
+Windows PowerShell 使用（已安装 Python 和 py 启动器）：
+
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+Windows CMD 中创建命令相同，激活命令改为 `.venv\Scripts\activate.bat`。如果 PowerShell 阻止运行激活脚本，也可以直接使用下文的解释器路径，无需调整执行策略。
+
+激活后，以下命令在上述终端中通用：
+
+```bash
+python -m pip install requests
+python -c "import requests; print(requests.__version__)"
+python -m pip freeze > requirements.txt
+deactivate
+```
+
+这里 `freeze` 用于记录练习项目的依赖，会覆盖同名文件；`deactivate` 退出环境，不会删除已安装的包。有现成项目时，按其文档执行 `python -m pip install -r requirements.txt` 安装依赖，再用 `python 脚本名.py` 启动。不要随意覆盖项目已有的依赖清单。
+
+**激活到底做了什么？**
+
+主要是把环境的 `bin`（Windows 为 `Scripts`）目录放到当前终端的 `PATH` 前面，让 `python`、`pip` 优先指向这个环境。它不会替换系统 Python，也不会影响其他已经打开的终端；新开终端通常需要重新激活。
+
+`python -m pip` 表示“用当前这个 Python 运行 pip”，比单独写 `pip` 更容易避免装到别的解释器里。同理，`python -m venv` 就是用指定的 Python 运行 venv 模块。
+
+激活只是方便操作，也可以直接指定环境中的 Python：
+
+```bash
+# Linux / macOS：不激活也能安装和运行
+.venv/bin/python -m pip install requests
+.venv/bin/python -c "import requests; print(requests.__version__)"
+```
+
+Windows 把上面的 `.venv/bin/python` 换成 `.\.venv\Scripts\python.exe` 即可。
+
+**如何确认用对了环境？**
+
+```bash
+python -c "import sys; print(sys.executable)"
+python -m pip --version
+```
+
+两条命令显示的路径都应落在项目的 `.venv` 内。如果“明明安装了却提示 `ModuleNotFoundError`”，先检查这些路径；VS Code / PyCharm 中运行代码时，也要选择同一个环境的解释器。
+
+**几个常见边界**
+
+- **Python 版本由创建时的解释器决定。** 用已安装的 `python3.12 -m venv .venv` 创建的就是 Python 3.12 环境；venv 不会自动下载其他版本，也不能把已有环境直接切成另一版本。
+- **venv 不是虚拟机。** 默认隔离第三方 Python 包，不隔离操作系统、文件访问或 GPU 驱动；使用 PyTorch 时仍需检查驱动与所装版本的兼容性。
+- **Conda 也能管理环境。** 它还能安装不同版本的 Python 和一些非 Python 依赖。普通项目可先用 venv；项目要求 Conda 时按其文档操作，入门时不必叠加两套环境。
+- **环境可以重建，不适合直接搬家。** 将 `.venv/` 加入项目的 `.gitignore`，代码和数据放在环境目录外。换电脑或项目路径后，用对应 Python 重新创建，再安装依赖；不要只拷贝虚拟环境文件夹。
+- **`pip freeze` 不是完整系统快照。** 它记录当前环境的包及版本，包含间接依赖；Python 版本、系统库和 GPU 驱动仍需另行记录。
+- **Ubuntu 提示缺少 `ensurepip` / venv 支持时**，默认 Python 可先执行 `sudo apt install python3-venv`；使用额外安装的 Python 版本时需安装与之匹配的 venv 包，再重新创建环境。遇到 `externally-managed-environment` 时，通常也应先创建虚拟环境再安装项目依赖。
+
+实践时，可在自己的 OpenCV 小项目中提交脚本和依赖清单，在 README 记录 Python 版本与运行步骤。验收标准是新建环境后能按步骤运行；面试时可用它说明如何隔离依赖、定位解释器混用问题。
+
+参考：[Python 官方 venv 文档](https://docs.python.org/zh-cn/3/library/venv.html)。
+
 #### pip 升级issue
 
 ```

@@ -67,8 +67,17 @@ set COMMANDLINE_ARGS= --lowvram --no-half --precision full --no-half-vae --opt-s
 call webui.bat
 ```
 
+这里的 `VENV_DIR` 是 AUTOMATIC1111 WebUI 启动脚本使用的变量，用来指定 **Python 虚拟环境目录**，不是 Python 自身的配置项。基础用法见 {% post_link BasicPython-0 'Python 编程基础：venv 虚拟环境' %} 中的 venv 小节。
+
+- `set PYTHON=`：未指定解释器路径，由启动脚本寻找 Python；需要指定时可写成 `set "PYTHON=C:\Python310\python.exe"`（路径仅为示例，版本按所用 WebUI 的要求选择）。
+- `set VENV_DIR=`：在常见的 AUTOMATIC1111 Windows 启动脚本中，留空通常使用项目下的 `venv` 目录，并不表示禁用虚拟环境；具体以当前版本的 `webui.bat` 为准。
+- 启动脚本通常会创建并使用该环境，将 PyTorch 等依赖安装进去。手动补装包时，也应使用该环境，例如 `venv\Scripts\python.exe -m pip show torch` 可以检查其中的 PyTorch。
+
 > No python at "D:\Program Files\Anaconda3\env\py310\Python.exe"
-删除项目env下除Libs外的所有文件 重新执行webui.bat
+
+通常表示创建虚拟环境时依赖的 Python 已被删除或移动，例如原来的 Conda 环境不存在了。venv 仍依赖基础 Python 安装，不能当作可随意移动的独立软件包。
+
+先关闭 WebUI，确认符合项目要求的 Python 可运行，并在 `webui-user.bat` 中设置正确的 `PYTHON` 路径；然后将实际的虚拟环境目录（默认 `venv`，自定义时检查 `VENV_DIR`）改名备份，再运行 `webui.bat` 让它重新创建并安装依赖。模型、输出图片和插件源码应保留在各自目录中；不要只保留旧环境里的 `Lib` 或 `Libs`，混用新旧环境文件可能继续产生依赖问题。
 
 #### 资源
 

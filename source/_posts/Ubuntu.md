@@ -66,3 +66,15 @@ apt install python-is-python3
 ```
 
 .codex等以.开头的目录或文件默认隐藏 在文件管理器中按Ctrl+H切换显示隐藏
+
+重启不显示grub引导菜单问题 
+
+```
+sudo nano /etc/default/grub
+```
+
+注释掉hidden这一行
+
+```
+# GRUB_TIMEOUT_STYLE=hidden
+```
